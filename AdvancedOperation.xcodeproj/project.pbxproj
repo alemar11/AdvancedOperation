@@ -11,9 +11,9 @@
 		234130BC1F96076A002BE7FC /* AdvancedOperation.h in Headers */ = {isa = PBXBuildFile; fileRef = 2341308A1F9605F5002BE7FC /* AdvancedOperation.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		234130BD1F96076D002BE7FC /* AdvancedOperation.h in Headers */ = {isa = PBXBuildFile; fileRef = 2341308A1F9605F5002BE7FC /* AdvancedOperation.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		234130BE1F960770002BE7FC /* AdvancedOperation.h in Headers */ = {isa = PBXBuildFile; fileRef = 2341308A1F9605F5002BE7FC /* AdvancedOperation.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		2372B4331F960DBA00189A32 /* AdvancedOperation_iOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 234130871F9605F5002BE7FC /* AdvancedOperation_iOS.framework */; };
-		2372B4421F960DCB00189A32 /* AdvancedOperation_tvOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 234130A71F9606B8002BE7FC /* AdvancedOperation_tvOS.framework */; };
-		2372B4511F960DD700189A32 /* AdvancedOperation_tvOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 234130A71F9606B8002BE7FC /* AdvancedOperation_tvOS.framework */; };
+		2372B4331F960DBA00189A32 /* AdvancedOperation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 234130871F9605F5002BE7FC /* AdvancedOperation.framework */; };
+		2372B4421F960DCB00189A32 /* AdvancedOperation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 234130A71F9606B8002BE7FC /* AdvancedOperation.framework */; };
+		2372B4511F960DD700189A32 /* AdvancedOperation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 234130A71F9606B8002BE7FC /* AdvancedOperation.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -41,12 +41,12 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		234130871F9605F5002BE7FC /* AdvancedOperation_iOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = AdvancedOperation_iOS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		234130871F9605F5002BE7FC /* AdvancedOperation.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = AdvancedOperation.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		2341308A1F9605F5002BE7FC /* AdvancedOperation.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AdvancedOperation.h; sourceTree = "<group>"; };
 		2341308B1F9605F5002BE7FC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		2341309A1F960691002BE7FC /* AdvancedOperation_macOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = AdvancedOperation_macOS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		234130A71F9606B8002BE7FC /* AdvancedOperation_tvOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = AdvancedOperation_tvOS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		234130B41F9606CD002BE7FC /* AdvancedOperation_watchOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = AdvancedOperation_watchOS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		2341309A1F960691002BE7FC /* AdvancedOperation.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = AdvancedOperation.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		234130A71F9606B8002BE7FC /* AdvancedOperation.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = AdvancedOperation.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		234130B41F9606CD002BE7FC /* AdvancedOperation.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = AdvancedOperation.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		234130B71F9606CD002BE7FC /* Info-tvOS.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Info-tvOS.plist"; sourceTree = "<group>"; };
 		2372B42E1F960DBA00189A32 /* AdvancedOperation Tests iOS.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "AdvancedOperation Tests iOS.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2372B4321F960DBA00189A32 /* Info-Tests.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Info-Tests.plist"; sourceTree = "<group>"; };
@@ -87,7 +87,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2372B4331F960DBA00189A32 /* AdvancedOperation_iOS.framework in Frameworks */,
+				2372B4331F960DBA00189A32 /* AdvancedOperation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -95,7 +95,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2372B4421F960DCB00189A32 /* AdvancedOperation_tvOS.framework in Frameworks */,
+				2372B4421F960DCB00189A32 /* AdvancedOperation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -103,7 +103,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2372B4511F960DD700189A32 /* AdvancedOperation_tvOS.framework in Frameworks */,
+				2372B4511F960DD700189A32 /* AdvancedOperation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -123,10 +123,10 @@
 		234130881F9605F5002BE7FC /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				234130871F9605F5002BE7FC /* AdvancedOperation_iOS.framework */,
-				2341309A1F960691002BE7FC /* AdvancedOperation_macOS.framework */,
-				234130A71F9606B8002BE7FC /* AdvancedOperation_tvOS.framework */,
-				234130B41F9606CD002BE7FC /* AdvancedOperation_watchOS.framework */,
+				234130871F9605F5002BE7FC /* AdvancedOperation.framework */,
+				2341309A1F960691002BE7FC /* AdvancedOperation.framework */,
+				234130A71F9606B8002BE7FC /* AdvancedOperation.framework */,
+				234130B41F9606CD002BE7FC /* AdvancedOperation.framework */,
 				2372B42E1F960DBA00189A32 /* AdvancedOperation Tests iOS.xctest */,
 				2372B43D1F960DCB00189A32 /* AdvancedOperation Tests tvOS.xctest */,
 				2372B44C1F960DD600189A32 /* AdvancedOperation Tests macOS.xctest */,
@@ -212,7 +212,7 @@
 			);
 			name = "AdvancedOperation iOS";
 			productName = AdvancedOperation;
-			productReference = 234130871F9605F5002BE7FC /* AdvancedOperation_iOS.framework */;
+			productReference = 234130871F9605F5002BE7FC /* AdvancedOperation.framework */;
 			productType = "com.apple.product-type.framework";
 		};
 		234130991F960691002BE7FC /* AdvancedOperation macOS */ = {
@@ -230,7 +230,7 @@
 			);
 			name = "AdvancedOperation macOS";
 			productName = AdvancedOperation;
-			productReference = 2341309A1F960691002BE7FC /* AdvancedOperation_macOS.framework */;
+			productReference = 2341309A1F960691002BE7FC /* AdvancedOperation.framework */;
 			productType = "com.apple.product-type.framework";
 		};
 		234130A61F9606B8002BE7FC /* AdvancedOperation tvOS */ = {
@@ -248,7 +248,7 @@
 			);
 			name = "AdvancedOperation tvOS";
 			productName = AdvancedOperation;
-			productReference = 234130A71F9606B8002BE7FC /* AdvancedOperation_tvOS.framework */;
+			productReference = 234130A71F9606B8002BE7FC /* AdvancedOperation.framework */;
 			productType = "com.apple.product-type.framework";
 		};
 		234130B31F9606CD002BE7FC /* AdvancedOperation watchOS */ = {
@@ -266,7 +266,7 @@
 			);
 			name = "AdvancedOperation watchOS";
 			productName = AdvancedOperation;
-			productReference = 234130B41F9606CD002BE7FC /* AdvancedOperation_watchOS.framework */;
+			productReference = 234130B41F9606CD002BE7FC /* AdvancedOperation.framework */;
 			productType = "com.apple.product-type.framework";
 		};
 		2372B42D1F960DBA00189A32 /* AdvancedOperation Tests iOS */ = {
@@ -638,7 +638,7 @@
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = org.tinrobots.AdvancedOperation;
-				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				PRODUCT_NAME = AdvancedOperation;
 				SKIP_INSTALL = YES;
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -659,7 +659,7 @@
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = org.tinrobots.AdvancedOperation;
-				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				PRODUCT_NAME = AdvancedOperation;
 				SKIP_INSTALL = YES;
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -682,7 +682,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.13;
 				PRODUCT_BUNDLE_IDENTIFIER = org.tinrobots.AdvancedOperation;
-				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				PRODUCT_NAME = AdvancedOperation;
 				SDKROOT = macosx;
 				SKIP_INSTALL = YES;
 				SWIFT_VERSION = 4.0;
@@ -705,7 +705,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.13;
 				PRODUCT_BUNDLE_IDENTIFIER = org.tinrobots.AdvancedOperation;
-				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				PRODUCT_NAME = AdvancedOperation;
 				SDKROOT = macosx;
 				SKIP_INSTALL = YES;
 				SWIFT_VERSION = 4.0;
@@ -725,7 +725,7 @@
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = org.tinrobots.AdvancedOperation;
-				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				PRODUCT_NAME = AdvancedOperation;
 				SDKROOT = appletvos;
 				SKIP_INSTALL = YES;
 				SWIFT_VERSION = 4.0;
@@ -747,7 +747,7 @@
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = org.tinrobots.AdvancedOperation;
-				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				PRODUCT_NAME = AdvancedOperation;
 				SDKROOT = appletvos;
 				SKIP_INSTALL = YES;
 				SWIFT_VERSION = 4.0;
@@ -770,7 +770,7 @@
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = org.tinrobots.AdvancedOperation;
-				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				PRODUCT_NAME = AdvancedOperation;
 				SDKROOT = watchos;
 				SKIP_INSTALL = YES;
 				SWIFT_VERSION = 4.0;
@@ -793,7 +793,7 @@
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = org.tinrobots.AdvancedOperation;
-				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				PRODUCT_NAME = AdvancedOperation;
 				SDKROOT = watchos;
 				SKIP_INSTALL = YES;
 				SWIFT_VERSION = 4.0;
