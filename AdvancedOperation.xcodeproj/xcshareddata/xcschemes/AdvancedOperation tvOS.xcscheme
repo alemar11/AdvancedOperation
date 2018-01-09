@@ -15,7 +15,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "234130A61F9606B8002BE7FC"
-               BuildableName = "AdvancedOperation_tvOS.framework"
+               BuildableName = "AdvancedOperation.framework"
                BlueprintName = "AdvancedOperation tvOS"
                ReferencedContainer = "container:AdvancedOperation.xcodeproj">
             </BuildableReference>
@@ -26,10 +26,33 @@
       buildConfiguration = "Debug"
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
+      enableAddressSanitizer = "YES"
+      enableASanStackUseAfterReturn = "YES"
+      enableUBSanitizer = "YES"
       language = ""
-      shouldUseLaunchSchemeArgsEnv = "YES">
+      shouldUseLaunchSchemeArgsEnv = "YES"
+      codeCoverageEnabled = "YES">
       <Testables>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "2372B43C1F960DCB00189A32"
+               BuildableName = "AdvancedOperation Tests tvOS.xctest"
+               BlueprintName = "AdvancedOperation Tests tvOS"
+               ReferencedContainer = "container:AdvancedOperation.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
+      <MacroExpansion>
+         <BuildableReference
+            BuildableIdentifier = "primary"
+            BlueprintIdentifier = "234130A61F9606B8002BE7FC"
+            BuildableName = "AdvancedOperation.framework"
+            BlueprintName = "AdvancedOperation tvOS"
+            ReferencedContainer = "container:AdvancedOperation.xcodeproj">
+         </BuildableReference>
+      </MacroExpansion>
       <AdditionalOptions>
       </AdditionalOptions>
    </TestAction>
@@ -48,7 +71,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "234130A61F9606B8002BE7FC"
-            BuildableName = "AdvancedOperation_tvOS.framework"
+            BuildableName = "AdvancedOperation.framework"
             BlueprintName = "AdvancedOperation tvOS"
             ReferencedContainer = "container:AdvancedOperation.xcodeproj">
          </BuildableReference>
@@ -66,7 +89,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "234130A61F9606B8002BE7FC"
-            BuildableName = "AdvancedOperation_tvOS.framework"
+            BuildableName = "AdvancedOperation.framework"
             BlueprintName = "AdvancedOperation tvOS"
             ReferencedContainer = "container:AdvancedOperation.xcodeproj">
          </BuildableReference>

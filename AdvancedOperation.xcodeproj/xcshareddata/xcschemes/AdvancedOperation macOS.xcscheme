@@ -15,7 +15,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "234130991F960691002BE7FC"
-               BuildableName = "AdvancedOperation_macOS.framework"
+               BuildableName = "AdvancedOperation.framework"
                BlueprintName = "AdvancedOperation macOS"
                ReferencedContainer = "container:AdvancedOperation.xcodeproj">
             </BuildableReference>
@@ -26,10 +26,33 @@
       buildConfiguration = "Debug"
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
+      enableAddressSanitizer = "YES"
+      enableASanStackUseAfterReturn = "YES"
+      enableUBSanitizer = "YES"
       language = ""
-      shouldUseLaunchSchemeArgsEnv = "YES">
+      shouldUseLaunchSchemeArgsEnv = "YES"
+      codeCoverageEnabled = "YES">
       <Testables>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "2372B44B1F960DD600189A32"
+               BuildableName = "AdvancedOperation Tests macOS.xctest"
+               BlueprintName = "AdvancedOperation Tests macOS"
+               ReferencedContainer = "container:AdvancedOperation.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
+      <MacroExpansion>
+         <BuildableReference
+            BuildableIdentifier = "primary"
+            BlueprintIdentifier = "234130991F960691002BE7FC"
+            BuildableName = "AdvancedOperation.framework"
+            BlueprintName = "AdvancedOperation macOS"
+            ReferencedContainer = "container:AdvancedOperation.xcodeproj">
+         </BuildableReference>
+      </MacroExpansion>
       <AdditionalOptions>
       </AdditionalOptions>
    </TestAction>
@@ -48,7 +71,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "234130991F960691002BE7FC"
-            BuildableName = "AdvancedOperation_macOS.framework"
+            BuildableName = "AdvancedOperation.framework"
             BlueprintName = "AdvancedOperation macOS"
             ReferencedContainer = "container:AdvancedOperation.xcodeproj">
          </BuildableReference>
@@ -66,7 +89,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "234130991F960691002BE7FC"
-            BuildableName = "AdvancedOperation_macOS.framework"
+            BuildableName = "AdvancedOperation.framework"
             BlueprintName = "AdvancedOperation macOS"
             ReferencedContainer = "container:AdvancedOperation.xcodeproj">
          </BuildableReference>
