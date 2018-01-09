@@ -11,12 +11,19 @@
 		234130BC1F96076A002BE7FC /* AdvancedOperation.h in Headers */ = {isa = PBXBuildFile; fileRef = 2341308A1F9605F5002BE7FC /* AdvancedOperation.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		234130BD1F96076D002BE7FC /* AdvancedOperation.h in Headers */ = {isa = PBXBuildFile; fileRef = 2341308A1F9605F5002BE7FC /* AdvancedOperation.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		234130BE1F960770002BE7FC /* AdvancedOperation.h in Headers */ = {isa = PBXBuildFile; fileRef = 2341308A1F9605F5002BE7FC /* AdvancedOperation.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		23725076200522820000A442 /* AdvancedOperation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2341309A1F960691002BE7FC /* AdvancedOperation.framework */; };
 		2372B4331F960DBA00189A32 /* AdvancedOperation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 234130871F9605F5002BE7FC /* AdvancedOperation.framework */; };
 		2372B4421F960DCB00189A32 /* AdvancedOperation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 234130A71F9606B8002BE7FC /* AdvancedOperation.framework */; };
-		2372B4511F960DD700189A32 /* AdvancedOperation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 234130A71F9606B8002BE7FC /* AdvancedOperation.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		23725077200522820000A442 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 2341307E1F9605F5002BE7FC /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 234130991F960691002BE7FC;
+			remoteInfo = "AdvancedOperation macOS";
+		};
 		2372B4341F960DBA00189A32 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 2341307E1F9605F5002BE7FC /* Project object */;
@@ -25,13 +32,6 @@
 			remoteInfo = "AdvancedOperation iOS";
 		};
 		2372B4431F960DCB00189A32 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 2341307E1F9605F5002BE7FC /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 234130A61F9606B8002BE7FC;
-			remoteInfo = "AdvancedOperation tvOS";
-		};
-		2372B4521F960DD700189A32 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 2341307E1F9605F5002BE7FC /* Project object */;
 			proxyType = 1;
@@ -48,10 +48,10 @@
 		234130A71F9606B8002BE7FC /* AdvancedOperation.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = AdvancedOperation.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		234130B41F9606CD002BE7FC /* AdvancedOperation.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = AdvancedOperation.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		234130B71F9606CD002BE7FC /* Info-tvOS.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Info-tvOS.plist"; sourceTree = "<group>"; };
+		23725071200522820000A442 /* AdvancedOperation Tests macOS.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "AdvancedOperation Tests macOS.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2372B42E1F960DBA00189A32 /* AdvancedOperation Tests iOS.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "AdvancedOperation Tests iOS.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2372B4321F960DBA00189A32 /* Info-Tests.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Info-Tests.plist"; sourceTree = "<group>"; };
 		2372B43D1F960DCB00189A32 /* AdvancedOperation Tests tvOS.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "AdvancedOperation Tests tvOS.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
-		2372B44C1F960DD600189A32 /* AdvancedOperation Tests macOS.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "AdvancedOperation Tests macOS.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -83,6 +83,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		2372506E200522820000A442 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				23725076200522820000A442 /* AdvancedOperation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		2372B42B1F960DBA00189A32 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -96,14 +104,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				2372B4421F960DCB00189A32 /* AdvancedOperation.framework in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		2372B4491F960DD600189A32 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				2372B4511F960DD700189A32 /* AdvancedOperation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -129,7 +129,7 @@
 				234130B41F9606CD002BE7FC /* AdvancedOperation.framework */,
 				2372B42E1F960DBA00189A32 /* AdvancedOperation Tests iOS.xctest */,
 				2372B43D1F960DCB00189A32 /* AdvancedOperation Tests tvOS.xctest */,
-				2372B44C1F960DD600189A32 /* AdvancedOperation Tests macOS.xctest */,
+				23725071200522820000A442 /* AdvancedOperation Tests macOS.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -269,6 +269,24 @@
 			productReference = 234130B41F9606CD002BE7FC /* AdvancedOperation.framework */;
 			productType = "com.apple.product-type.framework";
 		};
+		23725070200522820000A442 /* AdvancedOperation Tests macOS */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 23725079200522820000A442 /* Build configuration list for PBXNativeTarget "AdvancedOperation Tests macOS" */;
+			buildPhases = (
+				2372506D200522820000A442 /* Sources */,
+				2372506E200522820000A442 /* Frameworks */,
+				2372506F200522820000A442 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				23725078200522820000A442 /* PBXTargetDependency */,
+			);
+			name = "AdvancedOperation Tests macOS";
+			productName = "AdvancedOperation Tests macOS";
+			productReference = 23725071200522820000A442 /* AdvancedOperation Tests macOS.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 		2372B42D1F960DBA00189A32 /* AdvancedOperation Tests iOS */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 2372B4381F960DBA00189A32 /* Build configuration list for PBXNativeTarget "AdvancedOperation Tests iOS" */;
@@ -305,31 +323,13 @@
 			productReference = 2372B43D1F960DCB00189A32 /* AdvancedOperation Tests tvOS.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		2372B44B1F960DD600189A32 /* AdvancedOperation Tests macOS */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 2372B4541F960DD700189A32 /* Build configuration list for PBXNativeTarget "AdvancedOperation Tests macOS" */;
-			buildPhases = (
-				2372B4481F960DD600189A32 /* Sources */,
-				2372B4491F960DD600189A32 /* Frameworks */,
-				2372B44A1F960DD600189A32 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				2372B4531F960DD700189A32 /* PBXTargetDependency */,
-			);
-			name = "AdvancedOperation Tests macOS";
-			productName = "AdvancedOperation Tests macOS";
-			productReference = 2372B44C1F960DD600189A32 /* AdvancedOperation Tests macOS.xctest */;
-			productType = "com.apple.product-type.bundle.unit-test";
-		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
 		2341307E1F9605F5002BE7FC /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastSwiftUpdateCheck = 0910;
+				LastSwiftUpdateCheck = 0920;
 				LastUpgradeCheck = 0910;
 				ORGANIZATIONNAME = Tinrobots;
 				TargetAttributes = {
@@ -349,15 +349,15 @@
 						CreatedOnToolsVersion = 9.1;
 						ProvisioningStyle = Automatic;
 					};
+					23725070200522820000A442 = {
+						CreatedOnToolsVersion = 9.2;
+						ProvisioningStyle = Automatic;
+					};
 					2372B42D1F960DBA00189A32 = {
 						CreatedOnToolsVersion = 9.1;
 						ProvisioningStyle = Automatic;
 					};
 					2372B43C1F960DCB00189A32 = {
-						CreatedOnToolsVersion = 9.1;
-						ProvisioningStyle = Automatic;
-					};
-					2372B44B1F960DD600189A32 = {
 						CreatedOnToolsVersion = 9.1;
 						ProvisioningStyle = Automatic;
 					};
@@ -381,7 +381,7 @@
 				234130B31F9606CD002BE7FC /* AdvancedOperation watchOS */,
 				2372B42D1F960DBA00189A32 /* AdvancedOperation Tests iOS */,
 				2372B43C1F960DCB00189A32 /* AdvancedOperation Tests tvOS */,
-				2372B44B1F960DD600189A32 /* AdvancedOperation Tests macOS */,
+				23725070200522820000A442 /* AdvancedOperation Tests macOS */,
 			);
 		};
 /* End PBXProject section */
@@ -415,6 +415,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		2372506F200522820000A442 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		2372B42C1F960DBA00189A32 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -423,13 +430,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		2372B43B1F960DCB00189A32 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		2372B44A1F960DD600189A32 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -467,6 +467,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		2372506D200522820000A442 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		2372B42A1F960DBA00189A32 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -481,16 +488,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		2372B4481F960DD600189A32 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		23725078200522820000A442 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 234130991F960691002BE7FC /* AdvancedOperation macOS */;
+			targetProxy = 23725077200522820000A442 /* PBXContainerItemProxy */;
+		};
 		2372B4351F960DBA00189A32 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 234130861F9605F5002BE7FC /* AdvancedOperation iOS */;
@@ -500,11 +505,6 @@
 			isa = PBXTargetDependency;
 			target = 234130A61F9606B8002BE7FC /* AdvancedOperation tvOS */;
 			targetProxy = 2372B4431F960DCB00189A32 /* PBXContainerItemProxy */;
-		};
-		2372B4531F960DD700189A32 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 234130A61F9606B8002BE7FC /* AdvancedOperation tvOS */;
-			targetProxy = 2372B4521F960DD700189A32 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -802,6 +802,38 @@
 			};
 			name = Release;
 		};
+		2372507A200522820000A442 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = "Support/Info-Tests.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.13;
+				PRODUCT_BUNDLE_IDENTIFIER = "org.tinrobots.AdvancedOperation-Tests-macOS";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_VERSION = 4.0;
+			};
+			name = Debug;
+		};
+		2372507B200522820000A442 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = "Support/Info-Tests.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.13;
+				PRODUCT_BUNDLE_IDENTIFIER = "org.tinrobots.AdvancedOperation-Tests-macOS";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_VERSION = 4.0;
+			};
+			name = Release;
+		};
 		2372B4361F960DBA00189A32 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -860,40 +892,6 @@
 			};
 			name = Release;
 		};
-		2372B4551F960DD700189A32 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_IDENTITY = "";
-				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = "";
-				INFOPLIST_FILE = "Support/Info-Tests.plist";
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "org.tinrobots.AdvancedOperation-Tests-macOS";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = appletvos;
-				SWIFT_VERSION = 4.0;
-				TARGETED_DEVICE_FAMILY = 3;
-				TVOS_DEPLOYMENT_TARGET = 11.1;
-			};
-			name = Debug;
-		};
-		2372B4561F960DD700189A32 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_IDENTITY = "";
-				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = "";
-				INFOPLIST_FILE = "Support/Info-Tests.plist";
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "org.tinrobots.AdvancedOperation-Tests-macOS";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = appletvos;
-				SWIFT_VERSION = 4.0;
-				TARGETED_DEVICE_FAMILY = 3;
-				TVOS_DEPLOYMENT_TARGET = 11.1;
-			};
-			name = Release;
-		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -942,6 +940,15 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
+		23725079200522820000A442 /* Build configuration list for PBXNativeTarget "AdvancedOperation Tests macOS" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				2372507A200522820000A442 /* Debug */,
+				2372507B200522820000A442 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		2372B4381F960DBA00189A32 /* Build configuration list for PBXNativeTarget "AdvancedOperation Tests iOS" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
@@ -956,15 +963,6 @@
 			buildConfigurations = (
 				2372B4461F960DCB00189A32 /* Debug */,
 				2372B4471F960DCB00189A32 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		2372B4541F960DD700189A32 /* Build configuration list for PBXNativeTarget "AdvancedOperation Tests macOS" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				2372B4551F960DD700189A32 /* Debug */,
-				2372B4561F960DD700189A32 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

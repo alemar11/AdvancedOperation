@@ -37,7 +37,7 @@
             skipped = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "2372B44B1F960DD600189A32"
+               BlueprintIdentifier = "23725070200522820000A442"
                BuildableName = "AdvancedOperation Tests macOS.xctest"
                BlueprintName = "AdvancedOperation Tests macOS"
                ReferencedContainer = "container:AdvancedOperation.xcodeproj">
