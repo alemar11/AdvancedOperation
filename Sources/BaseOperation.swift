@@ -23,4 +23,50 @@
 
 class BaseOperation: Operation {
 
+  private var _isExecuting = false
+  private var _isFinished = false
+  
+  override var isExecuting: Bool {
+    get { return _isExecuting }
+    set {
+      let key = #keyPath(Operation.isExecuting)
+      //let key = "isExecuting"
+      willChangeValue(forKey: key)
+      _isExecuting = newValue
+      didChangeValue(forKey: key)
+    }
+  }
+
+  override var isFinished: Bool {
+    get { return _isFinished }
+    set {
+      let key = "isFinished"
+      willChangeValue(forKey: key)
+      _isFinished = newValue
+      didChangeValue(forKey: key)
+    }
+  }
+
+  open func execute() {
+    fatalError("abstract")
+  }
+
+  // Because we have overridden the start() function and specifically not called super.start() the NSOperation will continue to reside in the queue, “running”, as far as the NSOperationQueue is concerned until I set the finished property to true.
+  open override func start() {
+    //    guard !isExecuting || !isCancelled else { return }
+    //    self.isExecuting = true
+
+    //https://stackoverflow.com/questions/3859631/subclassing-nsoperation-to-be-concurrent-and-cancellable
+    super.start()
+  }
+
+  open override func main() {
+    guard isExecuting || !isCancelled else { return }
+    //execution block
+
+  }
+
+  open override func cancel() {
+    super.cancel()
+  }
 }
