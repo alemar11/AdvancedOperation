@@ -24,12 +24,12 @@
 import Foundation
 
 
-/// `AdvancedOperation` that will simply wait for a given time interval, or until a specific `Date`.
+/// An `AdvancedOperation` that will simply wait for a given time interval, or until a specific `Date`.
 /// If the interval is negative, or the `Date` is in the past, then this operation immediately finishes.
 class DelayedOperation: AdvancedOperation {
 
   private let queue: DispatchQueue
-  private let block: () -> Void //TODO: useless? maybe this operation should be a delay only operation
+  private let block: () -> Void //TODO: useless? maybe this operation should be a delay only operation, renamedinto DelayedOperation
 
   // MARK: Types
   private enum Delay {
