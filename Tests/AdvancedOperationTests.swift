@@ -24,9 +24,9 @@
 import XCTest
 @testable import AdvancedOperation
 
-class AsyncOperationTests: XCTestCase {
+class AdvancedOperationTests: XCTestCase {
 
-  private class SleepyOperation: AsyncOperation {
+  private class SleepyAsyncOperation: AdvancedOperation {
 
     override func execute() {
       DispatchQueue.global().async { [weak weakSelf = self] in
@@ -44,40 +44,56 @@ class AsyncOperationTests: XCTestCase {
 
   }
 
-    func testStandardFlow() {
-      let exp = expectation(description: "\(#function)\(#line)")
-
-      let operation = SleepyOperation()
-      operation.completionBlock = { exp.fulfill() }
-
-      //let observer = operation.observe(\.isCancelled) { (operation, change) in print(change) }
-
-      XCTAssertTrue(operation.isReady)
-      XCTAssertFalse(operation.isExecuting)
-      XCTAssertFalse(operation.isCancelled)
-      XCTAssertFalse(operation.isFinished)
-
-      operation.start()
-      XCTAssertFalse(operation.isReady)
-      XCTAssertTrue(operation.isExecuting)
-      XCTAssertFalse(operation.isCancelled)
-      XCTAssertFalse(operation.isFinished)
-
-      operation.cancel()
-      XCTAssertFalse(operation.isReady)
-      XCTAssertTrue(operation.isCancelled)
-      sleep(3)
-      XCTAssertTrue(operation.isFinished)
-      XCTAssertFalse(operation.isExecuting)
-
-      wait(for: [exp], timeout: 10)
-      //waitForExpectations(timeout: 10, handler: nil)
+  private class SleepyOperation: AdvancedOperation {
+    enum Error: Swift.Error { case test }
+    
+    override func execute() {
+      sleep(1)
+      self.finish(errors: [Error.test])
     }
+  }
+
+  func testErrors() {
+    let operation = SleepyOperation()
+    operation.start()
+    XCTAssertEqual(operation.errors.count, 1)
+  }
+
+  func testStandardFlow() {
+    let exp = expectation(description: "\(#function)\(#line)")
+
+    let operation = SleepyAsyncOperation()
+    operation.completionBlock = { exp.fulfill() }
+
+    //let observer = operation.observe(\.isCancelled) { (operation, change) in print(change) }
+
+    XCTAssertTrue(operation.isReady)
+    XCTAssertFalse(operation.isExecuting)
+    XCTAssertFalse(operation.isCancelled)
+    XCTAssertFalse(operation.isFinished)
+
+    operation.start()
+    XCTAssertFalse(operation.isReady)
+    XCTAssertTrue(operation.isExecuting)
+    XCTAssertFalse(operation.isCancelled)
+    XCTAssertFalse(operation.isFinished)
+
+    operation.cancel()
+    XCTAssertFalse(operation.isReady)
+    XCTAssertTrue(operation.isCancelled)
+    sleep(3)
+    XCTAssertTrue(operation.isFinished)
+    XCTAssertFalse(operation.isExecuting)
+
+    wait(for: [exp], timeout: 10)
+    XCTAssertEqual(operation.errors.count, 0)
+    //waitForExpectations(timeout: 10, handler: nil)
+  }
 
   func testBailingOutEarly() {
     //let exp = expectation(description: "\(#function)\(#line)")
     
-    let operation = SleepyOperation()
+    let operation = SleepyAsyncOperation()
     operation.completionBlock = {
       //exp.fulfill()
     }
@@ -103,10 +119,41 @@ class AsyncOperationTests: XCTestCase {
     XCTAssertFalse(operation.isExecuting)
 
     operation.waitUntilFinished()
+    XCTAssertEqual(operation.errors.count, 0)
     //wait(for: [exp], timeout: 10)
     //waitForExpectations(timeout: 10, handler: nil)
   }
 
+  func testObservers() {
 
+    class Observer: OperationObserving {
+
+      var didStartCount = 0
+      var didFinishCount = 0
+
+      func operationDidStart(operation: AdvancedOperation) {
+        didStartCount += 1
+      }
+
+      func operationDidFinish(operation: AdvancedOperation, errors: [Error]) {
+        didFinishCount += 1
+      }
+
+    }
+
+    let exp = expectation(description: "\(#function)\(#line)")
+    let observer = Observer()
+    let operation = SleepyAsyncOperation()
+    operation.addObserver(observer: observer)
+
+    operation.completionBlock = { exp.fulfill() }
+
+    operation.start()
+
+    wait(for: [exp], timeout: 10)
+    XCTAssertEqual(observer.didStartCount, 1)
+    XCTAssertEqual(observer.didFinishCount, 1)
+    XCTAssertEqual(operation.errors.count, 0)
+  }
 
 }

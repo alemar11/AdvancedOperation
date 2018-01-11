@@ -12,15 +12,15 @@
 		234130BD1F96076D002BE7FC /* AdvancedOperation.h in Headers */ = {isa = PBXBuildFile; fileRef = 2341308A1F9605F5002BE7FC /* AdvancedOperation.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		234130BE1F960770002BE7FC /* AdvancedOperation.h in Headers */ = {isa = PBXBuildFile; fileRef = 2341308A1F9605F5002BE7FC /* AdvancedOperation.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		23725076200522820000A442 /* AdvancedOperation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2341309A1F960691002BE7FC /* AdvancedOperation.framework */; };
-		2372507D200524860000A442 /* AsyncOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2372507C200524860000A442 /* AsyncOperation.swift */; };
-		2372507E200524860000A442 /* AsyncOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2372507C200524860000A442 /* AsyncOperation.swift */; };
-		2372507F200524860000A442 /* AsyncOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2372507C200524860000A442 /* AsyncOperation.swift */; };
-		23725080200524860000A442 /* AsyncOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2372507C200524860000A442 /* AsyncOperation.swift */; };
+		2372507D200524860000A442 /* AdvancedOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2372507C200524860000A442 /* AdvancedOperation.swift */; };
+		2372507E200524860000A442 /* AdvancedOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2372507C200524860000A442 /* AdvancedOperation.swift */; };
+		2372507F200524860000A442 /* AdvancedOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2372507C200524860000A442 /* AdvancedOperation.swift */; };
+		23725080200524860000A442 /* AdvancedOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2372507C200524860000A442 /* AdvancedOperation.swift */; };
 		2372B4331F960DBA00189A32 /* AdvancedOperation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 234130871F9605F5002BE7FC /* AdvancedOperation.framework */; };
 		2372B4421F960DCB00189A32 /* AdvancedOperation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 234130A71F9606B8002BE7FC /* AdvancedOperation.framework */; };
-		23F24D1E200771FA00B25A03 /* AsyncOperationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23F24D1D200771FA00B25A03 /* AsyncOperationTests.swift */; };
-		23F24D1F200771FA00B25A03 /* AsyncOperationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23F24D1D200771FA00B25A03 /* AsyncOperationTests.swift */; };
-		23F24D20200771FA00B25A03 /* AsyncOperationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23F24D1D200771FA00B25A03 /* AsyncOperationTests.swift */; };
+		23F24D1E200771FA00B25A03 /* AdvancedOperationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23F24D1D200771FA00B25A03 /* AdvancedOperationTests.swift */; };
+		23F24D1F200771FA00B25A03 /* AdvancedOperationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23F24D1D200771FA00B25A03 /* AdvancedOperationTests.swift */; };
+		23F24D20200771FA00B25A03 /* AdvancedOperationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23F24D1D200771FA00B25A03 /* AdvancedOperationTests.swift */; };
 		23F24D22200799B800B25A03 /* Operation+Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23F24D21200799B800B25A03 /* Operation+Utils.swift */; };
 		23F24D23200799B800B25A03 /* Operation+Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23F24D21200799B800B25A03 /* Operation+Utils.swift */; };
 		23F24D24200799B800B25A03 /* Operation+Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23F24D21200799B800B25A03 /* Operation+Utils.swift */; };
@@ -32,6 +32,10 @@
 		23F24D2C2007A33F00B25A03 /* DelayedOperationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23F24D2B2007A33F00B25A03 /* DelayedOperationTests.swift */; };
 		23F24D2D2007A33F00B25A03 /* DelayedOperationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23F24D2B2007A33F00B25A03 /* DelayedOperationTests.swift */; };
 		23F24D2E2007A33F00B25A03 /* DelayedOperationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23F24D2B2007A33F00B25A03 /* DelayedOperationTests.swift */; };
+		23F24D302007B0D200B25A03 /* OperationObserving.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23F24D2F2007B0D200B25A03 /* OperationObserving.swift */; };
+		23F24D312007B0D200B25A03 /* OperationObserving.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23F24D2F2007B0D200B25A03 /* OperationObserving.swift */; };
+		23F24D322007B0D200B25A03 /* OperationObserving.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23F24D2F2007B0D200B25A03 /* OperationObserving.swift */; };
+		23F24D332007B0D200B25A03 /* OperationObserving.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23F24D2F2007B0D200B25A03 /* OperationObserving.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -67,15 +71,16 @@
 		234130B41F9606CD002BE7FC /* AdvancedOperation.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = AdvancedOperation.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		234130B71F9606CD002BE7FC /* Info-tvOS.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Info-tvOS.plist"; sourceTree = "<group>"; };
 		23725071200522820000A442 /* AdvancedOperation Tests macOS.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "AdvancedOperation Tests macOS.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
-		2372507C200524860000A442 /* AsyncOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsyncOperation.swift; sourceTree = "<group>"; };
+		2372507C200524860000A442 /* AdvancedOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdvancedOperation.swift; sourceTree = "<group>"; };
 		237250812005258D0000A442 /* IDETemplateMacros.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = IDETemplateMacros.plist; path = AdvancedOperation.xcodeproj/xcshareddata/IDETemplateMacros.plist; sourceTree = SOURCE_ROOT; };
 		2372B42E1F960DBA00189A32 /* AdvancedOperation Tests iOS.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "AdvancedOperation Tests iOS.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2372B4321F960DBA00189A32 /* Info-Tests.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Info-Tests.plist"; sourceTree = "<group>"; };
 		2372B43D1F960DCB00189A32 /* AdvancedOperation Tests tvOS.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "AdvancedOperation Tests tvOS.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
-		23F24D1D200771FA00B25A03 /* AsyncOperationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsyncOperationTests.swift; sourceTree = "<group>"; };
+		23F24D1D200771FA00B25A03 /* AdvancedOperationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdvancedOperationTests.swift; sourceTree = "<group>"; };
 		23F24D21200799B800B25A03 /* Operation+Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Operation+Utils.swift"; sourceTree = "<group>"; };
 		23F24D2620079CDE00B25A03 /* DelayedOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DelayedOperation.swift; sourceTree = "<group>"; };
 		23F24D2B2007A33F00B25A03 /* DelayedOperationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DelayedOperationTests.swift; sourceTree = "<group>"; };
+		23F24D2F2007B0D200B25A03 /* OperationObserving.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OperationObserving.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -161,9 +166,10 @@
 		234130921F960612002BE7FC /* Sources */ = {
 			isa = PBXGroup;
 			children = (
-				2372507C200524860000A442 /* AsyncOperation.swift */,
+				2372507C200524860000A442 /* AdvancedOperation.swift */,
 				23F24D21200799B800B25A03 /* Operation+Utils.swift */,
 				23F24D2620079CDE00B25A03 /* DelayedOperation.swift */,
+				23F24D2F2007B0D200B25A03 /* OperationObserving.swift */,
 			);
 			path = Sources;
 			sourceTree = "<group>";
@@ -171,7 +177,7 @@
 		234130931F960618002BE7FC /* Tests */ = {
 			isa = PBXGroup;
 			children = (
-				23F24D1D200771FA00B25A03 /* AsyncOperationTests.swift */,
+				23F24D1D200771FA00B25A03 /* AdvancedOperationTests.swift */,
 				23F24D2B2007A33F00B25A03 /* DelayedOperationTests.swift */,
 			);
 			path = Tests;
@@ -481,8 +487,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				23F24D2720079CDE00B25A03 /* DelayedOperation.swift in Sources */,
-				2372507D200524860000A442 /* AsyncOperation.swift in Sources */,
+				2372507D200524860000A442 /* AdvancedOperation.swift in Sources */,
 				23F24D22200799B800B25A03 /* Operation+Utils.swift in Sources */,
+				23F24D302007B0D200B25A03 /* OperationObserving.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -491,8 +498,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				23F24D2820079CDE00B25A03 /* DelayedOperation.swift in Sources */,
-				2372507E200524860000A442 /* AsyncOperation.swift in Sources */,
+				2372507E200524860000A442 /* AdvancedOperation.swift in Sources */,
 				23F24D23200799B800B25A03 /* Operation+Utils.swift in Sources */,
+				23F24D312007B0D200B25A03 /* OperationObserving.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -501,8 +509,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				23F24D2920079CDE00B25A03 /* DelayedOperation.swift in Sources */,
-				2372507F200524860000A442 /* AsyncOperation.swift in Sources */,
+				2372507F200524860000A442 /* AdvancedOperation.swift in Sources */,
 				23F24D24200799B800B25A03 /* Operation+Utils.swift in Sources */,
+				23F24D322007B0D200B25A03 /* OperationObserving.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -511,8 +520,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				23F24D2A20079CDE00B25A03 /* DelayedOperation.swift in Sources */,
-				23725080200524860000A442 /* AsyncOperation.swift in Sources */,
+				23725080200524860000A442 /* AdvancedOperation.swift in Sources */,
 				23F24D25200799B800B25A03 /* Operation+Utils.swift in Sources */,
+				23F24D332007B0D200B25A03 /* OperationObserving.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -521,7 +531,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				23F24D2E2007A33F00B25A03 /* DelayedOperationTests.swift in Sources */,
-				23F24D20200771FA00B25A03 /* AsyncOperationTests.swift in Sources */,
+				23F24D20200771FA00B25A03 /* AdvancedOperationTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -530,7 +540,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				23F24D2C2007A33F00B25A03 /* DelayedOperationTests.swift in Sources */,
-				23F24D1E200771FA00B25A03 /* AsyncOperationTests.swift in Sources */,
+				23F24D1E200771FA00B25A03 /* AdvancedOperationTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -539,7 +549,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				23F24D2D2007A33F00B25A03 /* DelayedOperationTests.swift in Sources */,
-				23F24D1F200771FA00B25A03 /* AsyncOperationTests.swift in Sources */,
+				23F24D1F200771FA00B25A03 /* AdvancedOperationTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

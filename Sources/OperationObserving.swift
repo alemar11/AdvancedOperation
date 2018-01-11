@@ -21,26 +21,15 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-extension Operation {
+import Foundation
 
-  /// Adds a completion block to be executed after the `Operation` enters the "finished" state.
-  func addCompletionBlock(block: @escaping () -> Void) {
-    if let existingBlock = completionBlock {
+/// The protocol that types may implement if they wish to be notified of significant operation lifecycle events.
+public protocol OperationObserving {
 
-      // If there is already a completion block, they are chained together.
-      completionBlock = {
-        existingBlock()
-        block()
-      }
-    } else {
-      completionBlock = block
-    }
-  }
+  /// Invoked immediately prior to the `Operation`'s `execute()` method.
+  func operationDidStart(operation: AdvancedOperation)
 
-  /// Adds multiple dependencies to the operation.
-  func addDependencies(dependencies: [Operation]) {
-    for dependency in dependencies {
-      addDependency(dependency)
-    }
-  }
+  /// Invoked as an `Operation` finishes, along with any errors produced during execution (or readiness evaluation).
+  func operationDidFinish(operation: AdvancedOperation, errors: [Error])
+
 }

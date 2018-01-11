@@ -24,9 +24,9 @@
 import Foundation
 
 
-/// `AsyncOperation` that will simply wait for a given time interval, or until a specific `Date`.
+/// `AdvancedOperation` that will simply wait for a given time interval, or until a specific `Date`.
 /// If the interval is negative, or the `Date` is in the past, then this operation immediately finishes.
-class DelayedOperation: AsyncOperation {
+class DelayedOperation: AdvancedOperation {
 
   private let queue: DispatchQueue
   private let block: () -> Void //TODO: useless? maybe this operation should be a delay only operation

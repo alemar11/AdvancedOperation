@@ -21,16 +21,17 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-public class AsyncOperation : Operation {
+public class AdvancedOperation : Operation {
 
   // MARK: - State
 
-  // TODO: remove isAsynchronous and rename AsyncOperation to AdvancedOperation
-  public override var isAsynchronous: Bool { return true } // When you add an operation to an operation queue, the queue ignores the value of the isAsynchronous
-
+  //  public override var isAsynchronous: Bool { return true } // When you add an operation to an operation queue, the queue ignores the value of the isAsynchronous
+  
   public override var isExecuting: Bool { return _executing }
   public override var isFinished: Bool { return _finished }
   public override var isReady: Bool { return _ready }
+
+  private(set) var errors = [Error]()
 
   private var _executing = false {
     willSet {
@@ -75,7 +76,6 @@ public class AsyncOperation : Operation {
     // Bail out early if cancelled.
     guard !isCancelled else {
       _finished = true // this will fire the completionBlock via KVO
-      //completionBlock?()
       return
     }
 
@@ -84,6 +84,9 @@ public class AsyncOperation : Operation {
     _executing = true
     _finished = false
 
+    for observer in observers {
+      observer.operationDidStart(operation: self)
+    }
     execute()
   }
 
@@ -91,13 +94,34 @@ public class AsyncOperation : Operation {
     fatalError("Subclasses must implement `execute`.")
   }
 
-  private var _internalErrors = [Error]()
-
   public func finish(errors: [Error] = []) {
     //guard isExecuting else { return }
+    self.errors.append(contentsOf: errors)
+
+    for observer in observers {
+      observer.operationDidFinish(operation: self, errors: self.errors)
+    }
+
     _executing = false
     _finished = true
-    _internalErrors.append(contentsOf: errors)
+  }
+
+  // MARK: Observer
+
+  private(set) var observers = [OperationObserving]()
+
+  public func addObserver(observer: OperationObserving) {
+    assert(!isExecuting, "Cannot modify observers after execution has begun.")
+
+    observers.append(observer)
+  }
+
+  // MARK: Dependencies
+
+  override public func addDependency(_ operation: Operation) {
+    assert(!isExecuting, "Dependencies cannot be modified after execution has begun.")
+
+    super.addDependency(operation)
   }
 
 }
