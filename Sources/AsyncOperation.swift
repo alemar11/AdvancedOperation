@@ -72,8 +72,8 @@ public class AsyncOperation : Operation {
 
     // Bail out early if cancelled.
     guard !isCancelled else {
-      _finished = true
-      completionBlock?()
+      _finished = true // this will fire the completionBlock via KVO
+      //completionBlock?()
       return
     }
 
