@@ -29,7 +29,7 @@ import Foundation
 class DelayedOperation: AsyncOperation {
 
   private let queue: DispatchQueue
-  private let block: () -> Void
+  private let block: () -> Void //TODO: useless? maybe this operation should be a delay only operation
 
   // MARK: Types
   private enum Delay {
