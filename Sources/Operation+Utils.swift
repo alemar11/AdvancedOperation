@@ -25,20 +25,25 @@ extension Operation {
 
   /// Adds a completion block to be executed after the `Operation` enters the "finished" state.
   func addCompletionBlock(block: @escaping () -> Void) {
-    if let existingBlock = completionBlock {
+    assert(!isExecuting, "The completion block cannot be modified after execution has begun.")
 
+    if let existingBlock = completionBlock {
       // If there is already a completion block, they are chained together.
       completionBlock = {
         existingBlock()
         block()
       }
+
     } else {
       completionBlock = block
     }
+    
   }
 
   /// Adds multiple dependencies to the operation.
   func addDependencies(dependencies: [Operation]) {
+    assert(!isExecuting, "Dependencies cannot be modified after execution has begun.")
+
     for dependency in dependencies {
       addDependency(dependency)
     }
