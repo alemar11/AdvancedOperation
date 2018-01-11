@@ -91,7 +91,15 @@ public class AdvancedOperation : Operation {
   }
 
   public func execute() {
-    fatalError("Subclasses must implement `execute`.")
+    fatalError("\(type(of: self)) must override `execute()`.")
+  }
+
+  func cancel(error: Error? = nil) {
+    if let error = error {
+      errors.append(error)
+    }
+
+    cancel()
   }
 
   public func finish(errors: [Error] = []) {

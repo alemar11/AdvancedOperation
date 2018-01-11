@@ -53,12 +53,6 @@ class AdvancedOperationTests: XCTestCase {
     }
   }
 
-  func testErrors() {
-    let operation = SleepyOperation()
-    operation.start()
-    XCTAssertEqual(operation.errors.count, 1)
-  }
-
   func testStandardFlow() {
     let exp = expectation(description: "\(#function)\(#line)")
 
@@ -154,6 +148,35 @@ class AdvancedOperationTests: XCTestCase {
     XCTAssertEqual(observer.didStartCount, 1)
     XCTAssertEqual(observer.didFinishCount, 1)
     XCTAssertEqual(operation.errors.count, 0)
+  }
+
+  func testCancelWithErrors() {
+    let exp = expectation(description: "\(#function)\(#line)")
+
+    let operation = SleepyAsyncOperation()
+    operation.completionBlock = { exp.fulfill() }
+    operation.start()
+    XCTAssertFalse(operation.isReady)
+    XCTAssertTrue(operation.isExecuting)
+    XCTAssertFalse(operation.isCancelled)
+    XCTAssertFalse(operation.isFinished)
+
+    operation.cancel(error: SleepyOperation.Error.test)
+    XCTAssertFalse(operation.isReady)
+    XCTAssertTrue(operation.isCancelled)
+    sleep(3)
+    XCTAssertTrue(operation.isFinished)
+    XCTAssertFalse(operation.isExecuting)
+
+
+    wait(for: [exp], timeout: 10)
+    XCTAssertEqual(operation.errors.count, 1)
+  }
+
+  func testFinishWithErrors() {
+    let operation = SleepyOperation()
+    operation.start()
+    XCTAssertEqual(operation.errors.count, 1)
   }
 
 }

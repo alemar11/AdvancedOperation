@@ -36,6 +36,14 @@
 		23F24D312007B0D200B25A03 /* OperationObserving.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23F24D2F2007B0D200B25A03 /* OperationObserving.swift */; };
 		23F24D322007B0D200B25A03 /* OperationObserving.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23F24D2F2007B0D200B25A03 /* OperationObserving.swift */; };
 		23F24D332007B0D200B25A03 /* OperationObserving.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23F24D2F2007B0D200B25A03 /* OperationObserving.swift */; };
+		23F24D352007BC2100B25A03 /* AdvancedOperationQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23F24D342007BC2100B25A03 /* AdvancedOperationQueue.swift */; };
+		23F24D362007BC2100B25A03 /* AdvancedOperationQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23F24D342007BC2100B25A03 /* AdvancedOperationQueue.swift */; };
+		23F24D372007BC2100B25A03 /* AdvancedOperationQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23F24D342007BC2100B25A03 /* AdvancedOperationQueue.swift */; };
+		23F24D382007BC2100B25A03 /* AdvancedOperationQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23F24D342007BC2100B25A03 /* AdvancedOperationQueue.swift */; };
+		23F24D3A2007C03D00B25A03 /* BlockObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23F24D392007C03D00B25A03 /* BlockObserver.swift */; };
+		23F24D3B2007C03D00B25A03 /* BlockObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23F24D392007C03D00B25A03 /* BlockObserver.swift */; };
+		23F24D3C2007C03D00B25A03 /* BlockObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23F24D392007C03D00B25A03 /* BlockObserver.swift */; };
+		23F24D3D2007C03D00B25A03 /* BlockObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23F24D392007C03D00B25A03 /* BlockObserver.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -81,6 +89,8 @@
 		23F24D2620079CDE00B25A03 /* DelayedOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DelayedOperation.swift; sourceTree = "<group>"; };
 		23F24D2B2007A33F00B25A03 /* DelayedOperationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DelayedOperationTests.swift; sourceTree = "<group>"; };
 		23F24D2F2007B0D200B25A03 /* OperationObserving.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OperationObserving.swift; sourceTree = "<group>"; };
+		23F24D342007BC2100B25A03 /* AdvancedOperationQueue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdvancedOperationQueue.swift; sourceTree = "<group>"; };
+		23F24D392007C03D00B25A03 /* BlockObserver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockObserver.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -170,6 +180,8 @@
 				23F24D21200799B800B25A03 /* Operation+Utils.swift */,
 				23F24D2620079CDE00B25A03 /* DelayedOperation.swift */,
 				23F24D2F2007B0D200B25A03 /* OperationObserving.swift */,
+				23F24D342007BC2100B25A03 /* AdvancedOperationQueue.swift */,
+				23F24D392007C03D00B25A03 /* BlockObserver.swift */,
 			);
 			path = Sources;
 			sourceTree = "<group>";
@@ -490,6 +502,8 @@
 				2372507D200524860000A442 /* AdvancedOperation.swift in Sources */,
 				23F24D22200799B800B25A03 /* Operation+Utils.swift in Sources */,
 				23F24D302007B0D200B25A03 /* OperationObserving.swift in Sources */,
+				23F24D352007BC2100B25A03 /* AdvancedOperationQueue.swift in Sources */,
+				23F24D3A2007C03D00B25A03 /* BlockObserver.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -501,6 +515,8 @@
 				2372507E200524860000A442 /* AdvancedOperation.swift in Sources */,
 				23F24D23200799B800B25A03 /* Operation+Utils.swift in Sources */,
 				23F24D312007B0D200B25A03 /* OperationObserving.swift in Sources */,
+				23F24D362007BC2100B25A03 /* AdvancedOperationQueue.swift in Sources */,
+				23F24D3B2007C03D00B25A03 /* BlockObserver.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -512,6 +528,8 @@
 				2372507F200524860000A442 /* AdvancedOperation.swift in Sources */,
 				23F24D24200799B800B25A03 /* Operation+Utils.swift in Sources */,
 				23F24D322007B0D200B25A03 /* OperationObserving.swift in Sources */,
+				23F24D372007BC2100B25A03 /* AdvancedOperationQueue.swift in Sources */,
+				23F24D3C2007C03D00B25A03 /* BlockObserver.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -523,6 +541,8 @@
 				23725080200524860000A442 /* AdvancedOperation.swift in Sources */,
 				23F24D25200799B800B25A03 /* Operation+Utils.swift in Sources */,
 				23F24D332007B0D200B25A03 /* OperationObserving.swift in Sources */,
+				23F24D382007BC2100B25A03 /* AdvancedOperationQueue.swift in Sources */,
+				23F24D3D2007C03D00B25A03 /* BlockObserver.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
