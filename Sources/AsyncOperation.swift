@@ -57,7 +57,7 @@ public class AsyncOperation : Operation {
     }
   }
 
-  // MARK: - Initializers
+  // MARK: Initialization
 
   public override init() {
     super.init()

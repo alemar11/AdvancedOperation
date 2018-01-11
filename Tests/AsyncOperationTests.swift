@@ -46,6 +46,7 @@ class AsyncOperationTests: XCTestCase {
 
     func testStandardFlow() {
       let exp = expectation(description: "\(#function)\(#line)")
+
       let operation = SleepyOperation()
       operation.completionBlock = { exp.fulfill() }
 
@@ -72,9 +73,12 @@ class AsyncOperationTests: XCTestCase {
     }
 
   func testBailingOutEarly() {
-    let exp = expectation(description: "\(#function)\(#line)")
+    //let exp = expectation(description: "\(#function)\(#line)")
+    
     let operation = SleepyOperation()
-    operation.completionBlock = { exp.fulfill() }
+    operation.completionBlock = {
+      //exp.fulfill()
+    }
 
     XCTAssertTrue(operation.isReady)
     XCTAssertFalse(operation.isExecuting)
@@ -96,7 +100,8 @@ class AsyncOperationTests: XCTestCase {
     XCTAssertTrue(operation.isFinished)
     XCTAssertFalse(operation.isExecuting)
 
-    wait(for: [exp], timeout: 10)
+    operation.waitUntilFinished()
+    //wait(for: [exp], timeout: 10)
     //waitForExpectations(timeout: 10, handler: nil)
   }
 
