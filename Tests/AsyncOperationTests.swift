@@ -50,6 +50,8 @@ class AsyncOperationTests: XCTestCase {
       let operation = SleepyOperation()
       operation.completionBlock = { exp.fulfill() }
 
+      //let observer = operation.observe(\.isCancelled) { (operation, change) in print(change) }
+
       XCTAssertTrue(operation.isReady)
       XCTAssertFalse(operation.isExecuting)
       XCTAssertFalse(operation.isCancelled)

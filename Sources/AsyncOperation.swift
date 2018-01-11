@@ -91,10 +91,13 @@ public class AsyncOperation : Operation {
     fatalError("Subclasses must implement `execute`.")
   }
 
-  public func finish() {
+  private var _internalErrors = [Error]()
+
+  public func finish(errors: [Error] = []) {
     //guard isExecuting else { return }
     _executing = false
     _finished = true
+    _internalErrors.append(contentsOf: errors)
   }
 
 }
