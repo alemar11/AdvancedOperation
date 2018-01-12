@@ -70,7 +70,7 @@ class DelayOperation: AdvancedOperation {
     super.init()
   }
   
-  override func execute() {
+  override func main() {
     guard delay.seconds > 0 else { return finish() }
     
     let when = DispatchTime.now() + Double(Int64(delay.seconds * Double(NSEC_PER_SEC))) / Double(NSEC_PER_SEC)

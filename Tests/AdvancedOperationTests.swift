@@ -28,7 +28,7 @@ class AdvancedOperationTests: XCTestCase {
 
   private class SleepyAsyncOperation: AdvancedOperation {
 
-    override func execute() {
+    override func main() {
       DispatchQueue.global().async { [weak weakSelf = self] in
         guard let strongSelf = weakSelf else { return self.finish() }
 
@@ -47,7 +47,7 @@ class AdvancedOperationTests: XCTestCase {
   private class SleepyOperation: AdvancedOperation {
     enum Error: Swift.Error { case test }
     
-    override func execute() {
+    override func main() {
       sleep(1)
       self.finish(errors: [Error.test])
     }

@@ -87,11 +87,15 @@ public class AdvancedOperation : Operation {
     for observer in observers {
       observer.operationDidStart(operation: self)
     }
-    execute()
+
+    //Thread.detachNewThreadSelector(#selector(main), toTarget: self, with: nil)
+    // https://developer.apple.com/library/content/documentation/General/Conceptual/ConcurrencyProgrammingGuide/OperationObjects/OperationObjects.html#//apple_ref/doc/uid/TP40008091-CH101-SW16
+    main()
+
   }
 
-  public func execute() {
-    fatalError("\(type(of: self)) must override `execute()`.")
+  public override func main() {
+    fatalError("\(type(of: self)) must override `main()`.")
   }
 
   func cancel(error: Error? = nil) {
