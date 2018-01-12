@@ -26,64 +26,61 @@ import Foundation
 
 /// An `AdvancedOperation` that will simply wait for a given time interval, or until a specific `Date`.
 /// If the interval is negative, or the `Date` is in the past, then this operation immediately finishes.
-class DelayedOperation: AdvancedOperation {
-
+class DelayOperation: AdvancedOperation {
+  
   private let queue: DispatchQueue
-  private let block: () -> Void //TODO: useless? maybe this operation should be a delay only operation, renamedinto DelayedOperation
-
+  
   // MARK: Types
   private enum Delay {
     case interval(TimeInterval)
     case date(Date)
-
+    
     /// Returns the delay in seconds.
     var seconds: TimeInterval {
       let interval: TimeInterval
-
+      
       switch self {
       case .interval(let theInterval):
         interval = theInterval
-
+        
       case .date(let date):
         interval = date.timeIntervalSinceNow
       }
       return interval
     }
   }
-
+  
   // MARK: Properties
-
+  
   private let delay: Delay
-
+  
   // MARK: Initialization
-
-  init(interval: TimeInterval, queue: DispatchQueue = .global(qos: .default), block: @escaping () -> Void = {}) {
+  
+  init(interval: TimeInterval, queue: DispatchQueue = .global(qos: .default)) {
     self.delay = .interval(interval)
-    self.block = block
     self.queue = queue
     
     super.init()
   }
-
-  init(until date: Date, queue: DispatchQueue = .global(qos: .default), block: @escaping () -> Void = {}) {
+  
+  init(until date: Date, queue: DispatchQueue = .global(qos: .default)) {
     self.delay = .date(date)
-    self.block = block
     self.queue = queue
-
+    
     super.init()
   }
-
+  
   override func execute() {
     guard delay.seconds > 0 else { return finish() }
     
     let when = DispatchTime.now() + Double(Int64(delay.seconds * Double(NSEC_PER_SEC))) / Double(NSEC_PER_SEC)
-
+    
     queue.asyncAfter(deadline: when) {
-      guard !self.isCancelled else { return self.finish() }
-
-      self.block()
-      self.finish()
+      if !self.isCancelled {
+        return self.finish()
+      }
+      
     }
   }
-
+  
 }
