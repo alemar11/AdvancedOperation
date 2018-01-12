@@ -39,8 +39,8 @@ class DelayOperation: AdvancedOperation {
       let interval: TimeInterval
       
       switch self {
-      case .interval(let theInterval):
-        interval = theInterval
+      case .interval(let seconds):
+        interval = seconds
         
       case .date(let date):
         interval = date.timeIntervalSinceNow
