@@ -25,7 +25,7 @@ public class AdvancedOperation : Operation {
 
   // MARK: - State
 
-  //  public override var isAsynchronous: Bool { return true } // When you add an operation to an operation queue, the queue ignores the value of the isAsynchronous
+    public override var isAsynchronous: Bool { return true } // When you add an operation to an operation queue, the queue ignores the value of the isAsynchronous
   
   public override var isExecuting: Bool { return _executing }
   public override var isFinished: Bool { return _finished }

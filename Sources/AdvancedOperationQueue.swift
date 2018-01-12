@@ -56,9 +56,10 @@ class AdvancedOperationQueue: OperationQueue {
     }
 
     if wait {
-      for operation in operations {
-        operation.waitUntilFinished() //TODO: does this start the operation?
-      }
+      waitUntilAllOperationsAreFinished()
+//      for operation in operations {
+//        operation.waitUntilFinished()
+//      }
     }
   }
 
