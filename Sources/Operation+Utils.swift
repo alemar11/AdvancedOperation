@@ -21,6 +21,8 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
+import Foundation
+
 extension Operation {
 
   /// Adds a completion block to be executed after the `Operation` enters the "finished" state.

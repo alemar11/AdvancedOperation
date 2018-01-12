@@ -21,9 +21,11 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
+import Foundation
+
 @objc protocol AdvancedOperationQueueDelegate: NSObjectProtocol {
   @objc optional func operationQueue(operationQueue: AdvancedOperationQueue, willAddOperation operation: Operation)
-  @objc optional func operationQueue(operationQueue: AdvancedOperationQueue, operationDidFinish operation: Operation, withErrors errors: [NSError])
+  @objc optional func operationQueue(operationQueue: AdvancedOperationQueue, operationDidFinish operation: Operation, withErrors errors: [Error])
 }
 
  /// `AdvancedOperationQueue` is an `NSOperationQueue` subclass that implements a large number of "extra features" related to the `Operation` class:
