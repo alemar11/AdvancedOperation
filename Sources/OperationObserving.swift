@@ -35,3 +35,12 @@ public protocol OperationObserving {
   func operationDidFinish(operation: AdvancedOperation, errors: [Error])
 
 }
+
+/*
+ TODO: better state manag.
+ func operationWillExecute(operation: AdvancedOperation)
+ func operationDidExecute(operation: AdvancedOperation, errors: [Error])
+ 
+ func operationWillCancel(operation: AdvancedOperation)
+ func operationDidCancel(operation: AdvancedOperation, errors: [Error])
+*/
