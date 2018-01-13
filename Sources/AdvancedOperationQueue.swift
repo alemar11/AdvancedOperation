@@ -23,46 +23,76 @@
 
 import Foundation
 
-@objc protocol AdvancedOperationQueueDelegate: NSObjectProtocol {
-  @objc optional func operationQueue(operationQueue: AdvancedOperationQueue, willAddOperation operation: Operation)
-  @objc optional func operationQueue(operationQueue: AdvancedOperationQueue, operationDidFinish operation: Operation, withErrors errors: [Error])
+
+protocol AdvancedOperationQueueDelegate: class {
+  func operationQueue(operationQueue: AdvancedOperationQueue, willAddOperation operation: Operation)
+  func operationQueue(operationQueue: AdvancedOperationQueue, operationDidStart operation: Operation)
+  func operationQueue(operationQueue: AdvancedOperationQueue, operationDidCancel operation: Operation, withError errors: [Error])
+  func operationQueue(operationQueue: AdvancedOperationQueue, operationDidFinish operation: Operation, withErrors errors: [Error])
 }
 
- /// `AdvancedOperationQueue` is an `NSOperationQueue` subclass that implements a large number of "extra features" related to the `Operation` class:
+extension AdvancedOperationQueueDelegate {
+  func operationQueue(operationQueue: AdvancedOperationQueue, willAddOperation operation: Operation) {}
+  func operationQueue(operationQueue: AdvancedOperationQueue, operationDidStart operation: Operation) {}
+  func operationQueue(operationQueue: AdvancedOperationQueue, operationDidCancel operation: Operation, withError errors: [Error]) {}
+  func operationQueue(operationQueue: AdvancedOperationQueue, operationDidFinish operation: Operation, withErrors errors: [Error]) {}
+}
 
- /// - Notifying a delegate of all operation completion
- /// - TODO
- /// - TODO
+/// `AdvancedOperationQueue` is an `NSOperationQueue` subclass that implements a large number of "extra features" related to the `Operation` class:
+
+/// - Notifying a delegate of all operation completion
+/// - TODO
+/// - TODO
 class AdvancedOperationQueue: OperationQueue {
-   weak var delegate: AdvancedOperationQueueDelegate?
-
+  
+  weak var delegate: AdvancedOperationQueueDelegate?
+  
   override func addOperation(_ operation: Operation) {
-  if let operation = operation as? AdvancedOperation { // AdvancedOperations
-
-
-  } else { // regular Operations
-
-     // For regular `Operation`s, we'll manually call out to the queue's delegate we don't want to just capture "operation" because that would lead to the operation strongly referencing itself and that's the pure definition of a memory leak.
-    operation.addCompletionBlock { [weak self, weak operation] in
-      guard let queue = self, let operation = operation else { return }
-      queue.delegate?.operationQueue?(operationQueue: queue, operationDidFinish: operation, withErrors: [])
+    
+    if let operation = operation as? AdvancedOperation { /// AdvancedOperation
+      
+      let observer = BlockObserver.init(startHandler: { [weak self] (operation) in
+        guard let `self` = self else { return }
+        self.delegate?.operationQueue(operationQueue: self, operationDidStart: operation)
+        
+      }, cancelHandler: { [weak self] (operation, errors) in
+        guard let `self` = self else { return }
+        self.delegate?.operationQueue(operationQueue: self, operationDidCancel: operation, withError: operation.errors)
+        
+      }, finishHandler: { [weak self] (operation, errors) in
+        guard let `self` = self else { return }
+        self.delegate?.operationQueue(operationQueue: self, operationDidFinish: operation, withErrors: operation.errors)
+        
+      })
+      
+      operation.addObserver(observer: observer)
+      
+    } else { /// Operation
+      
+      // For regular `Operation`s, we'll manually call out to the queue's delegate we don't want to just capture "operation" because that would lead to the operation strongly referencing itself and that's the pure definition of a memory leak.
+      operation.addCompletionBlock { [weak self, weak operation] in
+        guard let queue = self, let operation = operation else { return }
+        queue.delegate?.operationQueue(operationQueue: queue, operationDidFinish: operation, withErrors: [])
+      }
     }
-    }
-
+    
+    delegate?.operationQueue(operationQueue: self, willAddOperation: operation)
+    super.addOperation(operation)
+    
   }
-
+  
   override func addOperations(_ operations: [Operation], waitUntilFinished wait: Bool) {
-
+    
     for operation in operations {
       addOperation(operation)
     }
-
+    
     if wait {
       waitUntilAllOperationsAreFinished()
-//      for operation in operations {
-//        operation.waitUntilFinished()
-//      }
+      //      for operation in operations {
+      //        operation.waitUntilFinished()
+      //      }
     }
   }
-
+  
 }

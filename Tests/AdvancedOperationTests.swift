@@ -1,4 +1,4 @@
-// 
+//
 // AdvancedOperation
 //
 // Copyright © 2016-2018 Tinrobots.
@@ -25,33 +25,6 @@ import XCTest
 @testable import AdvancedOperation
 
 class AdvancedOperationTests: XCTestCase {
-  
-  private class SleepyAsyncOperation: AdvancedOperation {
-    
-    override func main() {
-      DispatchQueue.global().async { [weak weakSelf = self] in
-        guard let strongSelf = weakSelf else { return self.finish() }
-        
-        if strongSelf.isCancelled { strongSelf.finish() }
-        sleep(2)
-        if strongSelf.isCancelled { strongSelf.finish() }
-        sleep(3)
-        
-        strongSelf.finish()
-      }
-      
-    }
-    
-  }
-  
-  private class SleepyOperation: AdvancedOperation {
-    enum Error: Swift.Error { case test }
-    
-    override func main() {
-      sleep(1)
-      self.finish(errors: [Error.test])
-    }
-  }
   
   func testStart() {
     let exp = expectation(description: "\(#function)\(#line)")

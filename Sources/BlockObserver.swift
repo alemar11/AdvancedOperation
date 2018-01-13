@@ -29,12 +29,12 @@ struct BlockObserver: OperationObserving {
   // MARK: Properties
 
   private let startHandler: ((AdvancedOperation) -> Void)?
-  private let produceHandler: ((AdvancedOperation, Operation) -> Void)?
+  private let cancelHandler: ((AdvancedOperation, [Error]) -> Void)?
   private let finishHandler: ((AdvancedOperation, [Error]) -> Void)?
 
-  init(startHandler: ((AdvancedOperation) -> Void)? = nil, produceHandler: ((AdvancedOperation, Operation) -> Void)? = nil, finishHandler: ((AdvancedOperation, [Error]) -> Void)? = nil) {
+  init(startHandler: ((AdvancedOperation) -> Void)? = nil, cancelHandler: ((AdvancedOperation, [Error]) -> Void)? = nil, finishHandler: ((AdvancedOperation, [Error]) -> Void)? = nil) {
     self.startHandler = startHandler
-    self.produceHandler = produceHandler
+    self.cancelHandler = cancelHandler
     self.finishHandler = finishHandler
   }
 
@@ -44,12 +44,8 @@ struct BlockObserver: OperationObserving {
     startHandler?(operation)
   }
 
-//  func operation(operation: AdvancedOperation, didProduceOperation newOperation: Operation) {
-//    produceHandler?(operation, newOperation)
-//  }
-
   func operationDidCancel(operation: AdvancedOperation, errors: [Error]) {
-    //finishHandler?(operation, errors)
+    cancelHandler?(operation, errors)
   }
   
   func operationDidFinish(operation: AdvancedOperation, errors: [Error]) {
