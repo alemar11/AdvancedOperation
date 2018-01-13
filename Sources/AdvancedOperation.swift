@@ -109,7 +109,7 @@ public class AdvancedOperation : Operation {
 
   // MARK: - Methods
 
-  public override func start() {
+  public final override func start() {
     _ready = false
 
     // Bail out early if cancelled.
