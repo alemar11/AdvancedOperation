@@ -104,7 +104,6 @@ public class AdvancedOperation : Operation {
     }
     
     stateObservers = [cancelObserver, executeObserver, finishObserver]
-    
     _ready = true
   }
 
