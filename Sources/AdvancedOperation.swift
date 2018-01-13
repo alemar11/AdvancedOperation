@@ -63,7 +63,9 @@ public class AdvancedOperation : Operation {
   }
   
   private lazy var stateObservers: [NSKeyValueObservation] = {
-    let cancelObserver = self.observe(\.isCancelled, options: .new) { [weak self] (operation, change) in
+    //TODO: add the prior value and check if it's different from new
+    
+    let cancelObserver = observe(\.isCancelled, options: .new) { [weak self] (operation, change) in
       guard let `self` = self else { return }
       guard let cancelled = change.newValue else { return }
       
@@ -74,7 +76,7 @@ public class AdvancedOperation : Operation {
       }
     }
     
-    let executeObserver = self.observe(\.isExecuting, options: .new) { [weak self] (operation, change) in
+    let executeObserver = observe(\.isExecuting, options: .new) { [weak self] (operation, change) in
       guard let `self` = self else { return }
       guard let executed = change.newValue else { return }
       
@@ -85,7 +87,7 @@ public class AdvancedOperation : Operation {
       }
     }
     
-    let finishObserver = self.observe(\.isFinished, options: .new) { [weak self] (operation, change) in
+    let finishObserver = observe(\.isFinished, options: .new) { [weak self] (operation, change) in
       guard let `self` = self else { return }
       guard let finished = change.newValue else { return }
       
@@ -130,7 +132,6 @@ public class AdvancedOperation : Operation {
     //Thread.detachNewThreadSelector(#selector(main), toTarget: self, with: nil)
     // https://developer.apple.com/library/content/documentation/General/Conceptual/ConcurrencyProgrammingGuide/OperationObjects/OperationObjects.html#//apple_ref/doc/uid/TP40008091-CH101-SW16
     main()
-
   }
 
   public override func main() {

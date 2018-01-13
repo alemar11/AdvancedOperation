@@ -26,60 +26,76 @@ import XCTest
 
 class AdvancedOperationQueueTests: XCTestCase {
   
-    func testQueueWithAdvancedOperations() {
-      let queue = AdvancedOperationQueue()
-      let delegate = QueueDelegate()
-      queue.delegate = delegate
-      
-      let operationOne = SleepyAsyncOperation()
-      let operationTwo = SleepyAsyncOperation()
-      let operationThree = SleepyAsyncOperation()
-      let operationFour = DelayOperation(interval: 1)
-      
-      var addCount = 0
-      delegate.addOperationHandler = { (queue, operation) in
-          XCTAssertTrue(queue == queue)
-        switch addCount {
-        case 0:
-          XCTAssertTrue(operation == operationOne)
-        case 1:
-           XCTAssertTrue(operation == operationTwo)
-        case 2:
-           XCTAssertTrue(operation == operationThree)
-        case 3:
-          XCTAssertTrue(operation == operationFour)
-        default:
-          XCTFail("Added too many operations.")
-        }
-        addCount += 1
+  func testQueueWithAdvancedOperations() {
+    let queue = AdvancedOperationQueue()
+    let delegate = QueueDelegate()
+    
+    queue.delegate = delegate
+    
+    /*
+     queue.isSuspended = true
+     print(queue.isSuspended)
+     */
+    
+    let operationOne = SleepyAsyncOperation()
+    let operationTwo = SleepyAsyncOperation()
+    let operationThree = SleepyAsyncOperation()
+    let operationFour = DelayOperation(interval: 1)
+    
+    var addCount = 0
+    delegate.addOperationHandler = { (queue, operation) in
+      XCTAssertTrue(queue == queue)
+      switch addCount {
+      case 0:
+        XCTAssertTrue(operation == operationOne)
+      case 1:
+        XCTAssertTrue(operation == operationTwo)
+      case 2:
+        XCTAssertTrue(operation == operationThree)
+      case 3:
+        XCTAssertTrue(operation == operationFour)
+      default:
+        XCTFail("Added too many operations.")
       }
-      
-      var startCount = 0
-      delegate.startOperationHandler = { (queue, operation) in
-        XCTAssertTrue(queue == queue)
-        startCount += 1
-      }
-      
-      var finishCount = 0
-      delegate.finishOperationHandler = { (queue, operation, errors) in
-        XCTAssertTrue(queue == queue)
-        XCTAssertEqual(errors.count, 0)
-        finishCount += 1
-      }
-      
-      var cancelCount = 0
-      delegate.cancelOperationHandler = { (queue, operation, errors) in
-        XCTAssertTrue(queue == queue)
-        XCTAssertEqual(errors.count, 0)
-        cancelCount += 1
-      }
-      
-      queue.addOperations([operationOne, operationTwo, operationThree, operationFour], waitUntilFinished: true)
-      XCTAssertEqual(addCount, 4)
-      XCTAssertEqual(startCount, 4)
-      XCTAssertEqual(finishCount, 4)
-      XCTAssertEqual(cancelCount, 0)
-      
+      addCount += 1
     }
+    
+    var startCount = 0
+    delegate.startOperationHandler = { (queue, operation) in
+      XCTAssertTrue(queue == queue)
+      startCount += 1
+    }
+    
+    var finishCount = 0
+    delegate.finishOperationHandler = { (queue, operation, errors) in
+      XCTAssertTrue(queue == queue)
+      XCTAssertEqual(errors.count, 0)
+      finishCount += 1
+    }
+    
+    var cancelCount = 0
+    delegate.cancelOperationHandler = { (queue, operation, errors) in
+      XCTAssertTrue(queue == queue)
+      XCTAssertEqual(errors.count, 0)
+      cancelCount += 1
+    }
+    
+    //queue.addOperations([operationOne, operationTwo, operationThree, operationFour], waitUntilFinished: true)
+    
+    /*
+     queue.addOperation(operationOne)
+     queue.addOperation(operationTwo)
+     queue.addOperation(operationThree)
+     queue.addOperation(operationFour)
+     queue.isSuspended = false
+     //this setup needs an expectation
+     */
+    
+    XCTAssertEqual(addCount, 4)
+    XCTAssertEqual(startCount, 4)
+    XCTAssertEqual(finishCount, 4)
+    XCTAssertEqual(cancelCount, 0)
+    
+  }
   
 }
