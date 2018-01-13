@@ -23,7 +23,6 @@
 
 import Foundation
 
-
 protocol AdvancedOperationQueueDelegate: class {
   func operationQueue(operationQueue: AdvancedOperationQueue, willAddOperation operation: Operation)
   func operationQueue(operationQueue: AdvancedOperationQueue, operationDidStart operation: Operation)
