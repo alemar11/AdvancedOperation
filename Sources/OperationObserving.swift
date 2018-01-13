@@ -29,6 +29,8 @@ public protocol OperationObserving {
   /// Invoked immediately prior to the `Operation`'s `execute()` method.
   func operationDidStart(operation: AdvancedOperation)
 
+  func operationDidCancel(operation: AdvancedOperation, errors: [Error])
+  
   /// Invoked as an `Operation` finishes, along with any errors produced during execution (or readiness evaluation).
   func operationDidFinish(operation: AdvancedOperation, errors: [Error])
 

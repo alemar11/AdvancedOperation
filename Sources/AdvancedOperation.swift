@@ -61,11 +61,49 @@ public class AdvancedOperation : Operation {
       didChangeValue(forKey: #keyPath(Operation.isReady))
     }
   }
+  
+  private var stateObservers: [NSKeyValueObservation]
 
   // MARK: Initialization
 
   public override init() {
+    stateObservers = [NSKeyValueObservation]()
     super.init()
+    
+    let cancelObserver = self.observe(\.isCancelled, options: .new) { [weak self] (operation, change) in
+      guard let `self` = self else { return }
+      guard let cancelled = change.newValue else { return }
+      
+      if cancelled {
+        for observer in self.observers {
+          observer.operationDidCancel(operation: self, errors: self.errors)
+        }
+      }
+    }
+    
+    let executeObserver = self.observe(\.isExecuting, options: .new) { [weak self] (operation, change) in
+      guard let `self` = self else { return }
+      guard let executed = change.newValue else { return }
+      
+      if executed {
+        for observer in self.observers {
+          observer.operationDidStart(operation: self)
+        }
+      }
+    }
+    
+    let finishObserver = self.observe(\.isFinished, options: .new) { [weak self] (operation, change) in
+      guard let `self` = self else { return }
+      guard let finished = change.newValue else { return }
+      
+      if finished {
+        for observer in self.observers {
+          observer.operationDidFinish(operation: self, errors: self.errors)
+        }
+      }
+    }
+    
+    stateObservers = [cancelObserver, executeObserver, finishObserver]
     
     _ready = true
   }
@@ -86,9 +124,9 @@ public class AdvancedOperation : Operation {
     _executing = true
     _finished = false
 
-    for observer in observers {
-      observer.operationDidStart(operation: self)
-    }
+//    for observer in observers {
+//      observer.operationDidStart(operation: self)
+//    }
 
     //Thread.detachNewThreadSelector(#selector(main), toTarget: self, with: nil)
     // https://developer.apple.com/library/content/documentation/General/Conceptual/ConcurrencyProgrammingGuide/OperationObjects/OperationObjects.html#//apple_ref/doc/uid/TP40008091-CH101-SW16
@@ -112,9 +150,9 @@ public class AdvancedOperation : Operation {
     //guard isExecuting else { return }
     self.errors.append(contentsOf: errors)
 
-    for observer in observers {
-      observer.operationDidFinish(operation: self, errors: self.errors)
-    }
+//    for observer in observers {
+//      observer.operationDidFinish(operation: self, errors: self.errors)
+//    }
 
     _executing = false
     _finished = true

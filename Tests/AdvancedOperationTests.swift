@@ -148,6 +148,7 @@ class AdvancedOperationTests: XCTestCase {
 
       var didStartCount = 0
       var didFinishCount = 0
+      var didCancelCount = 0
 
       func operationDidStart(operation: AdvancedOperation) {
         didStartCount += 1
@@ -155,6 +156,10 @@ class AdvancedOperationTests: XCTestCase {
 
       func operationDidFinish(operation: AdvancedOperation, errors: [Error]) {
         didFinishCount += 1
+      }
+      
+      func operationDidCancel(operation: AdvancedOperation, errors: [Error]) {
+        didCancelCount += 1
       }
 
     }
@@ -171,6 +176,7 @@ class AdvancedOperationTests: XCTestCase {
     wait(for: [exp], timeout: 10)
     XCTAssertEqual(observer.didStartCount, 1)
     XCTAssertEqual(observer.didFinishCount, 1)
+     XCTAssertEqual(observer.didCancelCount, 0)
     XCTAssertEqual(operation.errors.count, 0)
   }
 

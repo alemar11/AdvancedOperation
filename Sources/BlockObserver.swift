@@ -48,6 +48,10 @@ struct BlockObserver: OperationObserving {
 //    produceHandler?(operation, newOperation)
 //  }
 
+  func operationDidCancel(operation: AdvancedOperation, errors: [Error]) {
+    //finishHandler?(operation, errors)
+  }
+  
   func operationDidFinish(operation: AdvancedOperation, errors: [Error]) {
     finishHandler?(operation, errors)
   }
