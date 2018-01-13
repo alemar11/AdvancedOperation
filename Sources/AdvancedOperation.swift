@@ -62,14 +62,7 @@ public class AdvancedOperation : Operation {
     }
   }
   
-  private var stateObservers: [NSKeyValueObservation]
-
-  // MARK: Initialization
-
-  public override init() {
-    stateObservers = [NSKeyValueObservation]()
-    super.init()
-    
+  private lazy var stateObservers: [NSKeyValueObservation] = {
     let cancelObserver = self.observe(\.isCancelled, options: .new) { [weak self] (operation, change) in
       guard let `self` = self else { return }
       guard let cancelled = change.newValue else { return }
@@ -103,7 +96,14 @@ public class AdvancedOperation : Operation {
       }
     }
     
-    stateObservers = [cancelObserver, executeObserver, finishObserver]
+    return [cancelObserver, executeObserver, finishObserver]
+  }()
+
+  // MARK: Initialization
+
+  public override init() {
+    super.init()
+    _ = stateObservers // warming up the observers
     _ready = true
   }
 

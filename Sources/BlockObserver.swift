@@ -51,4 +51,5 @@ struct BlockObserver: OperationObserving {
   func operationDidFinish(operation: AdvancedOperation, errors: [Error]) {
     finishHandler?(operation, errors)
   }
+  
 }
