@@ -83,6 +83,7 @@ class AdvancedOperationQueueTests: XCTestCase {
     //queue.addOperations([operationOne, operationTwo, operationThree, operationFour], waitUntilFinished: true)
     
     /*
+     //TODO: new test with this setup
      queue.addOperation(operationOne)
      queue.addOperation(operationTwo)
      queue.addOperation(operationThree)
