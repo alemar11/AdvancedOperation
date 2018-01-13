@@ -101,6 +101,7 @@
 		23856170200A6E9A0061BAA1 /* GroupOperationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupOperationTests.swift; sourceTree = "<group>"; };
 		23856174200A87070061BAA1 /* AdvancedOperationQueueTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdvancedOperationQueueTests.swift; sourceTree = "<group>"; };
 		23856178200A873C0061BAA1 /* Mocks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Mocks.swift; sourceTree = "<group>"; };
+		2385617C200A8DC50061BAA1 /* Package.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Package.swift; sourceTree = SOURCE_ROOT; };
 		23F24D1D200771FA00B25A03 /* AdvancedOperationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdvancedOperationTests.swift; sourceTree = "<group>"; };
 		23F24D21200799B800B25A03 /* Operation+Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Operation+Utils.swift"; sourceTree = "<group>"; };
 		23F24D2620079CDE00B25A03 /* DelayOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DelayOperation.swift; sourceTree = "<group>"; };
@@ -219,6 +220,7 @@
 		234130941F96061E002BE7FC /* Support */ = {
 			isa = PBXGroup;
 			children = (
+				2385617C200A8DC50061BAA1 /* Package.swift */,
 				237250812005258D0000A442 /* IDETemplateMacros.plist */,
 				2341308A1F9605F5002BE7FC /* AdvancedOperation.h */,
 				2372B4321F960DBA00189A32 /* Info-Tests.plist */,
