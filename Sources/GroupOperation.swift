@@ -35,7 +35,7 @@ class GroupOperation: AdvancedOperation {
     }
     return operation
   }()
-
+  
   
   convenience init(operations: Operation...) {
     self.init(operations: operations)
@@ -53,8 +53,20 @@ class GroupOperation: AdvancedOperation {
   }
   
   override final func cancel() {
-    underlyingOperationQueue.cancelAllOperations()
+    // cancels all the operations except the internal finishing one.
+    for operation in underlyingOperationQueue.operations {
+      if (operation !== finishingOperation) {
+        operation.cancel()
+      }
+    }
     super.cancel()
+  }
+  
+  override final func cancel(error: Error?) {
+    if let error = error {
+      errors.append(error)
+    }
+    cancel()
   }
   
   override final func main() {
@@ -67,14 +79,14 @@ class GroupOperation: AdvancedOperation {
   }
   
   /// `suspended` equal to false in order to start any added group operations.
-//  public var isSuspended: Bool {
-//    get {
-//      return underlyingQueue.isSuspended
-//    }
-//    set(newIsSuspended) {
-//      underlyingQueue.isSuspended = newIsSuspended
-//    }
-//  }
+  //  public var isSuspended: Bool {
+  //    get {
+  //      return underlyingQueue.isSuspended
+  //    }
+  //    set(newIsSuspended) {
+  //      underlyingQueue.isSuspended = newIsSuspended
+  //    }
+  //  }
   
   /// Accesses the group operation queue's quality of service. It defaults to background quality.
   public final override var qualityOfService: QualityOfService {
@@ -97,18 +109,6 @@ class GroupOperation: AdvancedOperation {
     }
   }
   
-  
-  /// Waits until all the group's operations are finished.
-  ///
-  /// Does *not* automatically resume the group's operation queue. Waiting for
-  /// the group operations makes no sense when the queue is suspended. The
-  /// operation will wait forever unless empty. Empty queues will not wait
-  /// because all its operations have finished, because there are none
-  /// remaining.
-//  public func waitUntilAllOperationsAreFinished() {
-//    underlyingQueue.waitUntilAllOperationsAreFinished()
-//  }
-  
   //TODO: isSuspended  / maxConcurrentOperationCount
   
 }
@@ -130,14 +130,13 @@ extension GroupOperation: AdvancedOperationQueueDelegate {
   func operationQueue(operationQueue: AdvancedOperationQueue, operationWillPerform operation: Operation) {}
   
   func operationQueue(operationQueue: AdvancedOperationQueue, operationDidPerform operation: Operation, withErrors errors: [Error]) {
-   self.errors.append(contentsOf: errors)
+    self.errors.append(contentsOf: errors)
   }
   
   func operationQueue(operationQueue: AdvancedOperationQueue, operationWillCancel operation: Operation, withErrors errors: [Error]) {}
   
   func operationQueue(operationQueue: AdvancedOperationQueue, operationDidCancel operation: Operation, withErrors errors: [Error]) {
     self.errors.append(contentsOf: errors)
-//    cancel()
   }
   
 }
