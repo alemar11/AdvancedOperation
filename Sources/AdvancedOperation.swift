@@ -85,10 +85,6 @@ public class AdvancedOperation : Operation {
     _executing = true
     _finished = false
 
-//    for observer in observers {
-//      observer.operationDidStart(operation: self)
-//    }
-
     //Thread.detachNewThreadSelector(#selector(main), toTarget: self, with: nil)
     // https://developer.apple.com/library/content/documentation/General/Conceptual/ConcurrencyProgrammingGuide/OperationObjects/OperationObjects.html#//apple_ref/doc/uid/TP40008091-CH101-SW16
     willExecute()

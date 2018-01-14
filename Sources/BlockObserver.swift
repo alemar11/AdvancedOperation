@@ -48,7 +48,7 @@ struct BlockObserver: OperationObserving {
   }
   
   func operationWillCancel(operation: AdvancedOperation, errors: [Error]) {
-    
+    //TODO: is it needed?
   }
 
   func operationDidCancel(operation: AdvancedOperation, errors: [Error]) {
