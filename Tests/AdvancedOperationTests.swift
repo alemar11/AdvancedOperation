@@ -116,7 +116,7 @@ class AdvancedOperationTests: XCTestCase {
   }
   
   fileprivate class Observer: OperationObserving {
-    
+  
     var didStartCount = 0
     var didFinishCount = 0
     var didCancelCount = 0

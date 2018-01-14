@@ -23,16 +23,50 @@
 
 import Foundation
 
+//extension NSLock {
+//  func withCriticalScope<T>(block: () -> T) -> T {
+//    lock()
+//    let value = block()
+//    unlock()
+//    return value
+//  }
+//}
+
 class GroupOperation: AdvancedOperation {
   
   public let underlyingOperationQueue = AdvancedOperationQueue()
   
-  private lazy var startingOperation = BlockOperation(block: {})
+  private lazy var startingOperation = BlockOperation(block: {
+    print("\n\n----------------- START")
+  })
   
+//  private let lock = NSLock()
+//  private var _aggregateErrors = [Error]()
+//
+//  private(set) var aggregateErrors: [Error] {
+//    get {
+//      return internalQueue.sync { _aggregateErrors }
+//    }
+//    set(newErrors) {
+//      internalQueue.sync {
+//        _aggregateErrors = newErrors
+//      }
+//    }
+//  }
+  
+  private(set) var aggregateErrors = [Error]()
+  
+  private let internalQueue = DispatchQueue(label: "com.alessandromarzoli.dahlia.CallersResultsCache")
+  
+
+  
+  
+  //private lazy var finishingOperation = BlockOperation(block: {})
   private lazy var finishingOperation: BlockOperation = {
     return BlockOperation { [weak self] in
       guard let `self` = self else { return }
       self.finish()
+      print("\n\n----------------- END")
     }
   }()
   
@@ -48,12 +82,16 @@ class GroupOperation: AdvancedOperation {
     underlyingOperationQueue.addOperation(startingOperation)
     
     for operation in operations {
+      finishingOperation.addDependency(operation)
+      operation.addDependency(startingOperation)
       underlyingOperationQueue.addOperation(operation)
     }
+    
   }
   
   override final func cancel() {
     // cancels all the operations except the internal finishing one.
+    //TODO: add startingOperation? in the if block?
     for operation in underlyingOperationQueue.operations {
       if (operation !== finishingOperation) {
         operation.cancel()
@@ -62,21 +100,34 @@ class GroupOperation: AdvancedOperation {
     super.cancel()
   }
   
-  override final func cancel(error: Error?) {
-    if let error = error {
-      errors.append(error)
-    }
-    cancel()
-  }
+  //  override final func cancel(error: Error? = nil) {
+  ////    if let error = error {
+  ////      errors.append(error)
+  ////    }
+  ////    cancel()
+  //
+  //    // cancels all the operations except the internal finishing one.
+  //    for operation in underlyingOperationQueue.operations {
+  //      if (operation !== finishingOperation) {
+  //        operation.cancel()
+  //      }
+  //    }
+  //    super.cancel(error: error)
+  //
+  //  }
+  
+  
   
   override final func main() {
     underlyingOperationQueue.isSuspended = false
     underlyingOperationQueue.addOperation(finishingOperation)
   }
   
-  func addOperation(operation: Operation) {
-    underlyingOperationQueue.addOperation(operation)
-  }
+  //TODO: test
+//  func addOperation(operation: Operation) {
+//    finishingOperation.addDependency(operation)
+//    underlyingOperationQueue.addOperation(operation)
+//  }
   
   /// `suspended` equal to false in order to start any added group operations.
   //  public var isSuspended: Bool {
@@ -116,27 +167,41 @@ class GroupOperation: AdvancedOperation {
 extension GroupOperation: AdvancedOperationQueueDelegate {
   
   func operationQueue(operationQueue: AdvancedOperationQueue, willAddOperation operation: Operation) {
-    if operation !== finishingOperation { // avoid deadlock
-      finishingOperation.addDependency(operation)
-    }
-    
-    if operation !== startingOperation {
-      operation.addDependency(startingOperation)
-    }
+    //    if operation !== finishingOperation { // avoid deadlock
+    //      finishingOperation.addDependency(operation)
+    //    }
+    //
+    //    if operation !== startingOperation {
+    //      operation.addDependency(startingOperation)
+    //    }
   }
   
   func operationQueue(operationQueue: AdvancedOperationQueue, didAddOperation operation: Operation) {}
   
-  func operationQueue(operationQueue: AdvancedOperationQueue, operationWillPerform operation: Operation) {}
-  
-  func operationQueue(operationQueue: AdvancedOperationQueue, operationDidPerform operation: Operation, withErrors errors: [Error]) {
-    self.errors.append(contentsOf: errors)
+  func operationQueue(operationQueue: AdvancedOperationQueue, operationWillPerform operation: Operation) {
+    print("an operation will perform: \(type(of: operation))")
   }
   
-  func operationQueue(operationQueue: AdvancedOperationQueue, operationWillCancel operation: Operation, withErrors errors: [Error]) {}
+  func operationQueue(operationQueue: AdvancedOperationQueue, operationDidPerform operation: Operation, withErrors errors: [Error]) {
+    // --> these callback works well only with AdvancedOperationQueue
+    if operation === finishingOperation {
+      
+    } else if operation == startingOperation {
+      
+    //} else if operation is AdvancedOperation {
+    } else {
+      aggregateErrors.append(contentsOf: errors)
+      print(aggregateErrors.count)
+      print("an operation has finished: \(type(of: operation))")
+    }
+  }
+  
+  func operationQueue(operationQueue: AdvancedOperationQueue, operationWillCancel operation: Operation, withErrors errors: [Error]) {
+    print("operationWillCancel: \(type(of: operation))")
+  }
   
   func operationQueue(operationQueue: AdvancedOperationQueue, operationDidCancel operation: Operation, withErrors errors: [Error]) {
-    self.errors.append(contentsOf: errors)
+    print("operationDidCancel: \(type(of: operation))")
   }
   
 }

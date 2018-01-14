@@ -24,15 +24,25 @@
 import Foundation
 @testable import AdvancedOperation
 
+internal enum MockError: Swift.Error {
+  case test
+}
+
 internal class SleepyAsyncOperation: AdvancedOperation {
   
   override func main() {
     DispatchQueue.global().async { [weak weakSelf = self] in
       guard let strongSelf = weakSelf else { return self.finish() }
       
-      if strongSelf.isCancelled { strongSelf.finish() }
+      if strongSelf.isCancelled {
+        strongSelf.finish()
+        return
+      }
       sleep(2)
-      if strongSelf.isCancelled { strongSelf.finish() }
+      if strongSelf.isCancelled {
+        strongSelf.finish()
+        return
+      }
       sleep(3)
       
       strongSelf.finish()
@@ -52,7 +62,7 @@ internal class SleepyOperation: AdvancedOperation {
 }
 
 internal class QueueDelegate: AdvancedOperationQueueDelegate {
-  
+
   //TODO: renaming all the handlers
   
   var addOperationHandler: ((AdvancedOperationQueue, Operation) -> Void)? = nil
