@@ -28,31 +28,38 @@ struct BlockObserver: OperationObserving {
   
   // MARK: Properties
 
-  private let startHandler: ((AdvancedOperation) -> Void)?
-  private let cancelHandler: ((AdvancedOperation, [Error]) -> Void)?
-  private let finishHandler: ((AdvancedOperation, [Error]) -> Void)?
-
-  init(startHandler: ((AdvancedOperation) -> Void)? = nil, cancelHandler: ((AdvancedOperation, [Error]) -> Void)? = nil, finishHandler: ((AdvancedOperation, [Error]) -> Void)? = nil) {
-    self.startHandler = startHandler
-    self.cancelHandler = cancelHandler
-    self.finishHandler = finishHandler
-  }
-
-  // MARK: OperationObserving
-  func operationWillExecute(operation: AdvancedOperation) {
-    startHandler?(operation)
+  private let willPerform: ((AdvancedOperation) -> Void)?
+  private let didPerform: ((AdvancedOperation, [Error]) -> Void)?
+  private let willCancel: ((AdvancedOperation, [Error]) -> Void)?
+  private let didCancel: ((AdvancedOperation, [Error]) -> Void)?
+  
+  
+  init(willPerform: ((AdvancedOperation) -> Void)? = nil,
+       willCancel: ((AdvancedOperation, [Error]) -> Void)? = nil,
+       didCancel: ((AdvancedOperation, [Error]) -> Void)? = nil,
+       didPerform: ((AdvancedOperation, [Error]) -> Void)?) {
+    self.willPerform = willPerform
+    self.didPerform = didPerform
+    self.willCancel = willCancel
+    self.didCancel = didCancel
   }
   
-  func operationDidExecute(operation: AdvancedOperation, errors: [Error]) {
-     finishHandler?(operation, errors)
+  // MARK: OperationObserving
+  
+  func operationWillPerform(operation: AdvancedOperation) {
+    willPerform?(operation)
+  }
+  
+  func operationDidPerform(operation: AdvancedOperation, errors: [Error]) {
+    didPerform?(operation, errors)
   }
   
   func operationWillCancel(operation: AdvancedOperation, errors: [Error]) {
-    //TODO: is it needed?
+    willCancel?(operation, errors)
   }
 
   func operationDidCancel(operation: AdvancedOperation, errors: [Error]) {
-    cancelHandler?(operation, errors)
+    didCancel?(operation, errors)
   }
     
 }

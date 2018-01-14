@@ -53,6 +53,8 @@ internal class SleepyOperation: AdvancedOperation {
 
 internal class QueueDelegate: AdvancedOperationQueueDelegate {
   
+  //TODO: renaming all the handlers
+  
   var addOperationHandler: ((AdvancedOperationQueue, Operation) -> Void)? = nil
   var startOperationHandler: ((AdvancedOperationQueue, Operation) -> Void)? = nil
   var cancelOperationHandler: ((AdvancedOperationQueue, Operation, [Error]) -> Void)? = nil
@@ -62,16 +64,19 @@ internal class QueueDelegate: AdvancedOperationQueueDelegate {
     self.addOperationHandler?(operationQueue, operation)
   }
   
-  func operationQueue(operationQueue: AdvancedOperationQueue, operationWillExecute operation: Operation) {
+  func operationQueue(operationQueue: AdvancedOperationQueue, operationWillPerform operation: Operation) {
     self.startOperationHandler?(operationQueue, operation)
+  }
+  
+  func operationQueue(operationQueue: AdvancedOperationQueue, operationDidPerform operation: Operation, withErrors errors: [Error]) {
+    self.finishOperationHandler?(operationQueue, operation, errors)
+  }
+  
+  func operationQueue(operationQueue: AdvancedOperationQueue, operationWillCancel operation: Operation, withErrors errors: [Error]) {
+    
   }
   
   func operationQueue(operationQueue: AdvancedOperationQueue, operationDidCancel operation: Operation, withErrors errors: [Error]) {
     self.cancelOperationHandler?(operationQueue, operation, errors)
   }
-  
-  func operationQueue(operationQueue: AdvancedOperationQueue, operationDidExecute operation: Operation, withErrors errors: [Error]) {
-    self.finishOperationHandler?(operationQueue, operation, errors)
-  }
-  
 }

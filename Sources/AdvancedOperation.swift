@@ -129,13 +129,13 @@ public class AdvancedOperation : Operation {
   
   private func willExecute() {
     for observer in observers {
-      observer.operationWillExecute(operation: self)
+      observer.operationWillPerform(operation: self)
     }
   }
   
   private func didExecute() {
     for observer in observers {
-      observer.operationDidExecute(operation: self, errors: errors)
+      observer.operationDidPerform(operation: self, errors: errors)
     }
   }
   

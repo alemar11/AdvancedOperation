@@ -25,18 +25,14 @@ import Foundation
 
 protocol AdvancedOperationQueueDelegate: class {
   func operationQueue(operationQueue: AdvancedOperationQueue, willAddOperation operation: Operation)
-  func operationQueue(operationQueue: AdvancedOperationQueue, operationWillExecute operation: Operation)
-  func operationQueue(operationQueue: AdvancedOperationQueue, operationDidExecute operation: Operation, withErrors errors: [Error])
+  func operationQueue(operationQueue: AdvancedOperationQueue, operationWillPerform operation: Operation)
+  func operationQueue(operationQueue: AdvancedOperationQueue, operationDidPerform operation: Operation, withErrors errors: [Error])
   func operationQueue(operationQueue: AdvancedOperationQueue, operationWillCancel operation: Operation, withErrors errors: [Error])
   func operationQueue(operationQueue: AdvancedOperationQueue, operationDidCancel operation: Operation, withErrors errors: [Error])
 }
 
 extension AdvancedOperationQueueDelegate {
-  func operationQueue(operationQueue: AdvancedOperationQueue, willAddOperation operation: Operation) {}
-  func operationQueue(operationQueue: AdvancedOperationQueue, operationWillExecute operation: Operation) {}
-  func operationQueue(operationQueue: AdvancedOperationQueue, operationDidExecute operation: Operation, withErrors errors: [Error]) {}
   func operationQueue(operationQueue: AdvancedOperationQueue, operationWillCancel operation: Operation, withErrors errors: [Error]) {}
-  func operationQueue(operationQueue: AdvancedOperationQueue, operationDidCancel operation: Operation, withErrors errors: [Error]) {}
 }
 
 /// `AdvancedOperationQueue` is an `NSOperationQueue` subclass that implements a large number of "extra features" related to the `Operation` class:
@@ -52,17 +48,21 @@ class AdvancedOperationQueue: OperationQueue {
     
     if let operation = operation as? AdvancedOperation { /// AdvancedOperation
       
-      let observer = BlockObserver.init(startHandler: { [weak self] (operation) in
+      let observer = BlockObserver.init(willPerform: { [weak self] (operation) in
         guard let `self` = self else { return }
-        self.delegate?.operationQueue(operationQueue: self, operationWillExecute: operation)
+        self.delegate?.operationQueue(operationQueue: self, operationWillPerform: operation)
         
-      }, cancelHandler: { [weak self] (operation, errors) in
+      }, willCancel: { [weak self] (operation, errors) in
+        guard let `self` = self else { return }
+        self.delegate?.operationQueue(operationQueue: self, operationWillCancel: operation, withErrors: operation.errors)
+        
+      }, didCancel: { [weak self] (operation, errors) in
         guard let `self` = self else { return }
         self.delegate?.operationQueue(operationQueue: self, operationDidCancel: operation, withErrors: operation.errors)
         
-      }, finishHandler: { [weak self] (operation, errors) in
+      }, didPerform: { [weak self] (operation, errors) in
         guard let `self` = self else { return }
-        self.delegate?.operationQueue(operationQueue: self, operationDidExecute: operation, withErrors: operation.errors)
+        self.delegate?.operationQueue(operationQueue: self, operationDidPerform: operation, withErrors: operation.errors)
         
       })
       
@@ -73,7 +73,7 @@ class AdvancedOperationQueue: OperationQueue {
       // For regular `Operation`s, we'll manually call out to the queue's delegate we don't want to just capture "operation" because that would lead to the operation strongly referencing itself and that's the pure definition of a memory leak.
       operation.addCompletionBlock { [weak self, weak operation] in
         guard let queue = self, let operation = operation else { return }
-        queue.delegate?.operationQueue(operationQueue: queue, operationDidExecute: operation, withErrors: [])
+        queue.delegate?.operationQueue(operationQueue: queue, operationDidPerform: operation, withErrors: [])
       }
     }
     

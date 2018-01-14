@@ -121,11 +121,11 @@ class AdvancedOperationTests: XCTestCase {
     var didFinishCount = 0
     var didCancelCount = 0
     
-    func operationWillExecute(operation: AdvancedOperation) {
+    func operationWillPerform(operation: AdvancedOperation) {
       didStartCount += 1
     }
     
-    func operationDidExecute(operation: AdvancedOperation, errors: [Error]) {
+    func operationDidPerform(operation: AdvancedOperation, errors: [Error]) {
       didFinishCount += 1
     }
     
