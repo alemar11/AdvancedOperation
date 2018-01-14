@@ -110,7 +110,8 @@ public class AdvancedOperation : Operation {
   }
 
   public func finish(errors: [Error] = []) {
-    //guard isExecuting else { return }
+    guard isExecuting else { return } //sanity check
+    
     self.errors.append(contentsOf: errors)
     _executing = false
     _finished = true
@@ -127,12 +128,14 @@ public class AdvancedOperation : Operation {
     observers.append(observer)
   }
   
+  //TODO: rename in willPerform
   private func willExecute() {
     for observer in observers {
       observer.operationWillPerform(operation: self)
     }
   }
   
+  //TODO: rename in didPerform
   private func didExecute() {
     for observer in observers {
       observer.operationDidPerform(operation: self, errors: errors)

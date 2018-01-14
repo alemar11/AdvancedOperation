@@ -34,17 +34,17 @@ internal class SleepyAsyncOperation: AdvancedOperation {
     DispatchQueue.global().async { [weak weakSelf = self] in
       guard let strongSelf = weakSelf else { return self.finish() }
       
+      sleep(1)
       if strongSelf.isCancelled {
-        strongSelf.finish()
-        return
+        return strongSelf.finish()
       }
+      
       sleep(2)
       if strongSelf.isCancelled {
-        strongSelf.finish()
-        return
+        return strongSelf.finish()
       }
-      sleep(3)
       
+      sleep(3)
       strongSelf.finish()
     }
     

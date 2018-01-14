@@ -72,11 +72,10 @@ class AdvancedOperationTests: XCTestCase {
     operation.cancel()
     XCTAssertFalse(operation.isReady)
     XCTAssertTrue(operation.isCancelled)
-    sleep(3)
-    XCTAssertTrue(operation.isFinished)
-    XCTAssertFalse(operation.isExecuting)
     
     wait(for: [exp], timeout: 10)
+    XCTAssertTrue(operation.isFinished)
+    XCTAssertFalse(operation.isExecuting)
     XCTAssertEqual(operation.errors.count, 0)
     //waitForExpectations(timeout: 10, handler: nil)
   }
@@ -105,18 +104,17 @@ class AdvancedOperationTests: XCTestCase {
     operation.cancel()
     XCTAssertFalse(operation.isReady)
     XCTAssertTrue(operation.isCancelled)
-    sleep(3)
-    XCTAssertTrue(operation.isFinished)
-    XCTAssertFalse(operation.isExecuting)
     
     operation.waitUntilFinished()
-    XCTAssertEqual(operation.errors.count, 0)
     //wait(for: [exp], timeout: 10)
     //waitForExpectations(timeout: 10, handler: nil)
+    XCTAssertTrue(operation.isFinished)
+    XCTAssertFalse(operation.isExecuting)
+    XCTAssertEqual(operation.errors.count, 0)
   }
   
   fileprivate class Observer: OperationObserving {
-  
+    
     var didStartCount = 0
     var didFinishCount = 0
     var didCancelCount = 0
@@ -141,43 +139,48 @@ class AdvancedOperationTests: XCTestCase {
   
   func testObservers() {
     
-    do {
-      let exp = expectation(description: "\(#function)\(#line)")
-      let observer = Observer()
-      let operation = SleepyAsyncOperation()
-      operation.addObserver(observer: observer)
-      
-      operation.completionBlock = { exp.fulfill() }
-      
-      operation.start()
-      
-      wait(for: [exp], timeout: 10)
-      XCTAssertEqual(observer.didStartCount, 1)
-      XCTAssertEqual(observer.didFinishCount, 1)
-      XCTAssertEqual(observer.didCancelCount, 0)
-      XCTAssertEqual(operation.errors.count, 0)
-    }
+    let exp = expectation(description: "\(#function)\(#line)")
+    let observer = Observer()
+    let operation = SleepyAsyncOperation()
+    operation.addObserver(observer: observer)
     
+    operation.completionBlock = { exp.fulfill() }
     
+    operation.start()
     
-    do {
-      
-      let exp = expectation(description: "\(#function)\(#line)")
-      let observer = Observer()
-      let operation = SleepyAsyncOperation()
-      operation.addObserver(observer: observer)
-      
-      operation.completionBlock = { exp.fulfill() }
-      
-      operation.start()
-      operation.cancel()
-      wait(for: [exp], timeout: 10)
-      XCTAssertEqual(observer.didStartCount, 1)
-      XCTAssertEqual(observer.didFinishCount, 1)
-      XCTAssertEqual(observer.didCancelCount, 1)
-      XCTAssertEqual(operation.errors.count, 0)
-    }
+    wait(for: [exp], timeout: 10)
+    
+    sleep(10) // make sure there are no other effects
+    
+    XCTAssertEqual(observer.didStartCount, 1)
+    XCTAssertEqual(observer.didFinishCount, 1)
+    XCTAssertEqual(observer.didCancelCount, 0)
+    XCTAssertEqual(operation.errors.count, 0)
+    
   }
+  
+  
+  func testObserversWithACancelCommand() {
+    
+    let exp = expectation(description: "\(#function)\(#line)")
+    let observer = Observer()
+    let operation = SleepyAsyncOperation()
+    operation.addObserver(observer: observer)
+    
+    operation.completionBlock = { exp.fulfill() }
+    
+    operation.start()
+    operation.cancel()
+    wait(for: [exp], timeout: 10)
+    
+    sleep(10) // make sure there are no other effects
+    
+    XCTAssertEqual(observer.didStartCount, 1)
+    XCTAssertEqual(observer.didFinishCount, 1)
+    XCTAssertEqual(observer.didCancelCount, 1)
+    XCTAssertEqual(operation.errors.count, 0)
+  }
+  
   
   func testCancelWithErrors() {
     let exp = expectation(description: "\(#function)\(#line)")
@@ -193,12 +196,10 @@ class AdvancedOperationTests: XCTestCase {
     operation.cancel(error: SleepyOperation.Error.test)
     XCTAssertFalse(operation.isReady)
     XCTAssertTrue(operation.isCancelled)
-    sleep(3)
-    XCTAssertTrue(operation.isFinished)
-    XCTAssertFalse(operation.isExecuting)
-    
     
     wait(for: [exp], timeout: 10)
+    XCTAssertTrue(operation.isFinished)
+    XCTAssertFalse(operation.isExecuting)
     XCTAssertEqual(operation.errors.count, 1)
   }
   
