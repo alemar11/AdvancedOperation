@@ -163,6 +163,8 @@ class GroupOperationTests: XCTestCase {
       XCTAssertTrue(operation.isFinished)
       if let advancedOperation = operation as? AdvancedOperation {
         XCTAssertEqual(advancedOperation.errors.count, 0)
+      } else if let groupOperation = operation as? GroupOperation {
+        XCTAssertEqual(groupOperation.aggregateErrors.count, 0)
       }
     }
   }
