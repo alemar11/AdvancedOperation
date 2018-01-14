@@ -80,7 +80,7 @@ class AdvancedOperationQueueTests: XCTestCase {
       cancelCount += 1
     }
     
-    //queue.addOperations([operationOne, operationTwo, operationThree, operationFour], waitUntilFinished: true)
+    queue.addOperations([operationOne, operationTwo, operationThree, operationFour], waitUntilFinished: true)
     
     /*
      //TODO: new test with this setup

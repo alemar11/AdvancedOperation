@@ -11,6 +11,10 @@
 		234130BC1F96076A002BE7FC /* AdvancedOperation.h in Headers */ = {isa = PBXBuildFile; fileRef = 2341308A1F9605F5002BE7FC /* AdvancedOperation.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		234130BD1F96076D002BE7FC /* AdvancedOperation.h in Headers */ = {isa = PBXBuildFile; fileRef = 2341308A1F9605F5002BE7FC /* AdvancedOperation.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		234130BE1F960770002BE7FC /* AdvancedOperation.h in Headers */ = {isa = PBXBuildFile; fileRef = 2341308A1F9605F5002BE7FC /* AdvancedOperation.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		23665C0F200B6E4800A6C921 /* kvo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23665C0E200B6E4800A6C921 /* kvo.swift */; };
+		23665C10200B6E4800A6C921 /* kvo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23665C0E200B6E4800A6C921 /* kvo.swift */; };
+		23665C11200B6E4800A6C921 /* kvo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23665C0E200B6E4800A6C921 /* kvo.swift */; };
+		23665C12200B6E4800A6C921 /* kvo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23665C0E200B6E4800A6C921 /* kvo.swift */; };
 		23725076200522820000A442 /* AdvancedOperation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2341309A1F960691002BE7FC /* AdvancedOperation.framework */; };
 		2372507D200524860000A442 /* AdvancedOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2372507C200524860000A442 /* AdvancedOperation.swift */; };
 		2372507E200524860000A442 /* AdvancedOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2372507C200524860000A442 /* AdvancedOperation.swift */; };
@@ -91,6 +95,7 @@
 		234130A71F9606B8002BE7FC /* AdvancedOperation.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = AdvancedOperation.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		234130B41F9606CD002BE7FC /* AdvancedOperation.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = AdvancedOperation.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		234130B71F9606CD002BE7FC /* Info-tvOS.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Info-tvOS.plist"; sourceTree = "<group>"; };
+		23665C0E200B6E4800A6C921 /* kvo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = kvo.swift; sourceTree = "<group>"; };
 		23725071200522820000A442 /* AdvancedOperation Tests macOS.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "AdvancedOperation Tests macOS.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2372507C200524860000A442 /* AdvancedOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdvancedOperation.swift; sourceTree = "<group>"; };
 		237250812005258D0000A442 /* IDETemplateMacros.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = IDETemplateMacros.plist; path = AdvancedOperation.xcodeproj/xcshareddata/IDETemplateMacros.plist; sourceTree = SOURCE_ROOT; };
@@ -201,6 +206,7 @@
 				23F24D342007BC2100B25A03 /* AdvancedOperationQueue.swift */,
 				23F24D392007C03D00B25A03 /* BlockObserver.swift */,
 				2385616B200A6BF80061BAA1 /* GroupOperation.swift */,
+				23665C0E200B6E4800A6C921 /* kvo.swift */,
 			);
 			path = Sources;
 			sourceTree = "<group>";
@@ -525,6 +531,7 @@
 				2372507D200524860000A442 /* AdvancedOperation.swift in Sources */,
 				23F24D22200799B800B25A03 /* Operation+Utils.swift in Sources */,
 				23F24D302007B0D200B25A03 /* OperationObserving.swift in Sources */,
+				23665C0F200B6E4800A6C921 /* kvo.swift in Sources */,
 				2385616C200A6BF80061BAA1 /* GroupOperation.swift in Sources */,
 				23F24D352007BC2100B25A03 /* AdvancedOperationQueue.swift in Sources */,
 				23F24D3A2007C03D00B25A03 /* BlockObserver.swift in Sources */,
@@ -539,6 +546,7 @@
 				2372507E200524860000A442 /* AdvancedOperation.swift in Sources */,
 				23F24D23200799B800B25A03 /* Operation+Utils.swift in Sources */,
 				23F24D312007B0D200B25A03 /* OperationObserving.swift in Sources */,
+				23665C10200B6E4800A6C921 /* kvo.swift in Sources */,
 				2385616D200A6BF80061BAA1 /* GroupOperation.swift in Sources */,
 				23F24D362007BC2100B25A03 /* AdvancedOperationQueue.swift in Sources */,
 				23F24D3B2007C03D00B25A03 /* BlockObserver.swift in Sources */,
@@ -553,6 +561,7 @@
 				2372507F200524860000A442 /* AdvancedOperation.swift in Sources */,
 				23F24D24200799B800B25A03 /* Operation+Utils.swift in Sources */,
 				23F24D322007B0D200B25A03 /* OperationObserving.swift in Sources */,
+				23665C11200B6E4800A6C921 /* kvo.swift in Sources */,
 				2385616E200A6BF80061BAA1 /* GroupOperation.swift in Sources */,
 				23F24D372007BC2100B25A03 /* AdvancedOperationQueue.swift in Sources */,
 				23F24D3C2007C03D00B25A03 /* BlockObserver.swift in Sources */,
@@ -567,6 +576,7 @@
 				23725080200524860000A442 /* AdvancedOperation.swift in Sources */,
 				23F24D25200799B800B25A03 /* Operation+Utils.swift in Sources */,
 				23F24D332007B0D200B25A03 /* OperationObserving.swift in Sources */,
+				23665C12200B6E4800A6C921 /* kvo.swift in Sources */,
 				2385616F200A6BF80061BAA1 /* GroupOperation.swift in Sources */,
 				23F24D382007BC2100B25A03 /* AdvancedOperationQueue.swift in Sources */,
 				23F24D3D2007C03D00B25A03 /* BlockObserver.swift in Sources */,

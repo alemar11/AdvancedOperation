@@ -23,36 +23,43 @@
 
 import Foundation
 
-/// The `BlockObserver` is a way to attach arbitrary blocks to significant events in an `Operation`'s lifecycle.
-struct BlockObserver: OperationObserving {
-  
-  // MARK: Properties
-
-  private let startHandler: ((AdvancedOperation) -> Void)?
-  private let cancelHandler: ((AdvancedOperation, [Error]) -> Void)?
-  private let finishHandler: ((AdvancedOperation, [Error]) -> Void)?
-
-  init(startHandler: ((AdvancedOperation) -> Void)? = nil, cancelHandler: ((AdvancedOperation, [Error]) -> Void)? = nil, finishHandler: ((AdvancedOperation, [Error]) -> Void)? = nil) {
-    self.startHandler = startHandler
-    self.cancelHandler = cancelHandler
-    self.finishHandler = finishHandler
-  }
-
-  // MARK: OperationObserving
-  func operationWillExecute(operation: AdvancedOperation) {
-    startHandler?(operation)
-  }
-  
-  func operationDidExecute(operation: AdvancedOperation, errors: [Error]) {
-     finishHandler?(operation, errors)
-  }
-  
-  func operationWillCancel(operation: AdvancedOperation, errors: [Error]) {
-    
-  }
-
-  func operationDidCancel(operation: AdvancedOperation, errors: [Error]) {
-    cancelHandler?(operation, errors)
-  }
-    
-}
+/*
+ private lazy var stateObservers: [NSKeyValueObservation] = {
+ //TODO: add the prior value and check if it's different from new
+ 
+ let cancelObserver = observe(\.isCancelled, options: .new) { [weak self] (operation, change) in
+ guard let `self` = self else { return }
+ guard let cancelled = change.newValue else { return }
+ 
+ if cancelled {
+ for observer in self.observers {
+ observer.operationDidCancel(operation: self, errors: self.errors)
+ }
+ }
+ }
+ 
+ let executeObserver = observe(\.isExecuting, options: .new) { [weak self] (operation, change) in
+ guard let `self` = self else { return }
+ guard let executed = change.newValue else { return }
+ 
+ if executed {
+ for observer in self.observers {
+ observer.operationDidStart(operation: self)
+ }
+ }
+ }
+ 
+ let finishObserver = observe(\.isFinished, options: .new) { [weak self] (operation, change) in
+ guard let `self` = self else { return }
+ guard let finished = change.newValue else { return }
+ 
+ if finished {
+ for observer in self.observers {
+ observer.operationDidFinish(operation: self, errors: self.errors)
+ }
+ }
+ }
+ 
+ return [cancelObserver, executeObserver, finishObserver]
+ }()
+ */

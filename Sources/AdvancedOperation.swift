@@ -62,50 +62,10 @@ public class AdvancedOperation : Operation {
     }
   }
   
-  private lazy var stateObservers: [NSKeyValueObservation] = {
-    //TODO: add the prior value and check if it's different from new
-    
-    let cancelObserver = observe(\.isCancelled, options: .new) { [weak self] (operation, change) in
-      guard let `self` = self else { return }
-      guard let cancelled = change.newValue else { return }
-      
-      if cancelled {
-        for observer in self.observers {
-          observer.operationDidCancel(operation: self, errors: self.errors)
-        }
-      }
-    }
-    
-    let executeObserver = observe(\.isExecuting, options: .new) { [weak self] (operation, change) in
-      guard let `self` = self else { return }
-      guard let executed = change.newValue else { return }
-      
-      if executed {
-        for observer in self.observers {
-          observer.operationDidStart(operation: self)
-        }
-      }
-    }
-    
-    let finishObserver = observe(\.isFinished, options: .new) { [weak self] (operation, change) in
-      guard let `self` = self else { return }
-      guard let finished = change.newValue else { return }
-      
-      if finished {
-        for observer in self.observers {
-          observer.operationDidFinish(operation: self, errors: self.errors)
-        }
-      }
-    }
-    
-    return [cancelObserver, executeObserver, finishObserver]
-  }()
-
   // MARK: Initialization
 
   public override init() {
     super.init()
-    _ = stateObservers // warming up the observers
     _ready = true
   }
 
@@ -131,6 +91,7 @@ public class AdvancedOperation : Operation {
 
     //Thread.detachNewThreadSelector(#selector(main), toTarget: self, with: nil)
     // https://developer.apple.com/library/content/documentation/General/Conceptual/ConcurrencyProgrammingGuide/OperationObjects/OperationObjects.html#//apple_ref/doc/uid/TP40008091-CH101-SW16
+    willExecute()
     main()
   }
 
@@ -145,17 +106,19 @@ public class AdvancedOperation : Operation {
 
     cancel()
   }
+  
+  public override func cancel() {
+    willCancel()
+    super.cancel()
+    didCancel()
+  }
 
   public func finish(errors: [Error] = []) {
     //guard isExecuting else { return }
     self.errors.append(contentsOf: errors)
-
-//    for observer in observers {
-//      observer.operationDidFinish(operation: self, errors: self.errors)
-//    }
-
     _executing = false
     _finished = true
+    didExecute()
   }
 
   // MARK: Observer
@@ -166,6 +129,30 @@ public class AdvancedOperation : Operation {
     assert(!isExecuting, "Cannot modify observers after execution has begun.")
 
     observers.append(observer)
+  }
+  
+  private func willExecute() {
+    for observer in observers {
+      observer.operationWillExecute(operation: self)
+    }
+  }
+  
+  private func didExecute() {
+    for observer in observers {
+      observer.operationDidExecute(operation: self, errors: errors)
+    }
+  }
+  
+  private func willCancel() {
+    for observer in observers {
+      observer.operationWillCancel(operation: self, errors: errors)
+    }
+  }
+  
+  private func didCancel() {
+    for observer in observers {
+      observer.operationDidCancel(operation: self, errors: errors)
+    }
   }
 
   // MARK: Dependencies
