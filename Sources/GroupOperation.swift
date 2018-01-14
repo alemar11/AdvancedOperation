@@ -28,12 +28,12 @@ class GroupOperation: AdvancedOperation {
   public let underlyingOperationQueue = AdvancedOperationQueue()
   
   private lazy var startingOperation = BlockOperation(block: {})
+  
   private lazy var finishingOperation: BlockOperation = {
-    let operation = BlockOperation { [weak self] in
+    return BlockOperation { [weak self] in
       guard let `self` = self else { return }
       self.finish()
     }
-    return operation
   }()
   
   
