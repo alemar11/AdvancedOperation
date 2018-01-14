@@ -25,7 +25,7 @@ import Foundation
 
 class GroupOperation: AdvancedOperation {
   
-  public let underlyingQueue = AdvancedOperationQueue()
+  public let underlyingOperationQueue = AdvancedOperationQueue()
   
   private lazy var startingOperation = BlockOperation(block: {})
   private lazy var finishingOperation: BlockOperation = {
@@ -43,27 +43,27 @@ class GroupOperation: AdvancedOperation {
   
   init(operations: [Operation]) {
     super.init()
-    underlyingQueue.isSuspended = true
-    underlyingQueue.delegate = self
-    underlyingQueue.addOperation(startingOperation)
+    underlyingOperationQueue.isSuspended = true
+    underlyingOperationQueue.delegate = self
+    underlyingOperationQueue.addOperation(startingOperation)
     
     for operation in operations {
-      underlyingQueue.addOperation(operation)
+      underlyingOperationQueue.addOperation(operation)
     }
   }
   
   override final func cancel() {
-    underlyingQueue.cancelAllOperations()
+    underlyingOperationQueue.cancelAllOperations()
     super.cancel()
   }
   
   override final func main() {
-    underlyingQueue.isSuspended = false
-    underlyingQueue.addOperation(finishingOperation)
+    underlyingOperationQueue.isSuspended = false
+    underlyingOperationQueue.addOperation(finishingOperation)
   }
   
   func addOperation(operation: Operation) {
-    underlyingQueue.addOperation(operation)
+    underlyingOperationQueue.addOperation(operation)
   }
   
   /// `suspended` equal to false in order to start any added group operations.
@@ -76,15 +76,24 @@ class GroupOperation: AdvancedOperation {
 //    }
 //  }
   
-  /// Accesses the group operation queue's quality of service. It defaults to
-  /// background quality.
-  public override var qualityOfService: QualityOfService {
+  /// Accesses the group operation queue's quality of service. It defaults to background quality.
+  public final override var qualityOfService: QualityOfService {
     //TODO: kvo?
     get {
-      return underlyingQueue.qualityOfService
+      return _qualityOfService
     }
-    set(newUnderlyingQualityOfService) {
-      underlyingQueue.qualityOfService = newUnderlyingQualityOfService
+    set(newQualityOfService) {
+      _qualityOfService = newQualityOfService
+      underlyingOperationQueue.qualityOfService = _qualityOfService
+    }
+  }
+  
+  private var _qualityOfService = QualityOfService.default {
+    willSet {
+      willChangeValue(forKey: #keyPath(Operation.qualityOfService))
+    }
+    didSet {
+      didChangeValue(forKey: #keyPath(Operation.qualityOfService))
     }
   }
   
@@ -100,6 +109,8 @@ class GroupOperation: AdvancedOperation {
 //    underlyingQueue.waitUntilAllOperationsAreFinished()
 //  }
   
+  //TODO: isSuspended  / maxConcurrentOperationCount
+  
 }
 
 extension GroupOperation: AdvancedOperationQueueDelegate {
@@ -114,24 +125,19 @@ extension GroupOperation: AdvancedOperationQueueDelegate {
     }
   }
   
-  func operationQueue(operationQueue: AdvancedOperationQueue, didAddOperation operation: Operation) {
-    
-  }
+  func operationQueue(operationQueue: AdvancedOperationQueue, didAddOperation operation: Operation) {}
   
-  func operationQueue(operationQueue: AdvancedOperationQueue, operationWillPerform operation: Operation) {
-    
-  }
+  func operationQueue(operationQueue: AdvancedOperationQueue, operationWillPerform operation: Operation) {}
   
   func operationQueue(operationQueue: AdvancedOperationQueue, operationDidPerform operation: Operation, withErrors errors: [Error]) {
-    
+   self.errors.append(contentsOf: errors)
   }
   
-  func operationQueue(operationQueue: AdvancedOperationQueue, operationWillCancel operation: Operation, withErrors errors: [Error]) {
-    
-  }
+  func operationQueue(operationQueue: AdvancedOperationQueue, operationWillCancel operation: Operation, withErrors errors: [Error]) {}
   
   func operationQueue(operationQueue: AdvancedOperationQueue, operationDidCancel operation: Operation, withErrors errors: [Error]) {
-    
+    self.errors.append(contentsOf: errors)
+//    cancel()
   }
   
 }
