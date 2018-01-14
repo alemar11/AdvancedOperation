@@ -25,6 +25,7 @@ import Foundation
 
 protocol AdvancedOperationQueueDelegate: class {
   func operationQueue(operationQueue: AdvancedOperationQueue, willAddOperation operation: Operation)
+  func operationQueue(operationQueue: AdvancedOperationQueue, didAddOperation operation: Operation)
   func operationQueue(operationQueue: AdvancedOperationQueue, operationWillPerform operation: Operation)
   func operationQueue(operationQueue: AdvancedOperationQueue, operationDidPerform operation: Operation, withErrors errors: [Error])
   func operationQueue(operationQueue: AdvancedOperationQueue, operationWillCancel operation: Operation, withErrors errors: [Error])
@@ -79,6 +80,7 @@ class AdvancedOperationQueue: OperationQueue {
     
     delegate?.operationQueue(operationQueue: self, willAddOperation: operation)
     super.addOperation(operation)
+    delegate?.operationQueue(operationQueue: self, didAddOperation: operation)
     
   }
   
@@ -90,9 +92,9 @@ class AdvancedOperationQueue: OperationQueue {
     
     if wait {
       waitUntilAllOperationsAreFinished()
-      //      for operation in operations {
-      //        operation.waitUntilFinished()
-      //      }
+//            for operation in operations {
+//              operation.waitUntilFinished()
+//            }
     }
   }
   

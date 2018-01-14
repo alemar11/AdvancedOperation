@@ -25,8 +25,9 @@ import Foundation
 
 class GroupOperation: AdvancedOperation {
   
-  public let underlyingQueue = OperationQueue()
+  public let underlyingQueue = AdvancedOperationQueue()
   
+  private lazy var startingOperation = BlockOperation(block: {})
   private lazy var finishingOperation: BlockOperation = {
     let operation = BlockOperation { [weak self] in
       guard let `self` = self else { return }
@@ -43,12 +44,12 @@ class GroupOperation: AdvancedOperation {
   init(operations: [Operation]) {
     super.init()
     underlyingQueue.isSuspended = true
+    underlyingQueue.delegate = self
+    underlyingQueue.addOperation(startingOperation)
     
     for operation in operations {
       underlyingQueue.addOperation(operation)
-      finishingOperation.addDependency(operation)
     }
-  
   }
   
   override final func cancel() {
@@ -78,6 +79,7 @@ class GroupOperation: AdvancedOperation {
   /// Accesses the group operation queue's quality of service. It defaults to
   /// background quality.
   public override var qualityOfService: QualityOfService {
+    //TODO: kvo?
     get {
       return underlyingQueue.qualityOfService
     }
@@ -97,5 +99,39 @@ class GroupOperation: AdvancedOperation {
 //  public func waitUntilAllOperationsAreFinished() {
 //    underlyingQueue.waitUntilAllOperationsAreFinished()
 //  }
+  
+}
+
+extension GroupOperation: AdvancedOperationQueueDelegate {
+  
+  func operationQueue(operationQueue: AdvancedOperationQueue, willAddOperation operation: Operation) {
+    if operation !== finishingOperation { // avoid deadlock
+      finishingOperation.addDependency(operation)
+    }
+    
+    if operation !== startingOperation {
+      operation.addDependency(startingOperation)
+    }
+  }
+  
+  func operationQueue(operationQueue: AdvancedOperationQueue, didAddOperation operation: Operation) {
+    
+  }
+  
+  func operationQueue(operationQueue: AdvancedOperationQueue, operationWillPerform operation: Operation) {
+    
+  }
+  
+  func operationQueue(operationQueue: AdvancedOperationQueue, operationDidPerform operation: Operation, withErrors errors: [Error]) {
+    
+  }
+  
+  func operationQueue(operationQueue: AdvancedOperationQueue, operationWillCancel operation: Operation, withErrors errors: [Error]) {
+    
+  }
+  
+  func operationQueue(operationQueue: AdvancedOperationQueue, operationDidCancel operation: Operation, withErrors errors: [Error]) {
+    
+  }
   
 }

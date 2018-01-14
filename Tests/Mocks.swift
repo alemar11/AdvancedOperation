@@ -64,6 +64,10 @@ internal class QueueDelegate: AdvancedOperationQueueDelegate {
     self.addOperationHandler?(operationQueue, operation)
   }
   
+  func operationQueue(operationQueue: AdvancedOperationQueue, didAddOperation operation: Operation) {
+    
+  }
+  
   func operationQueue(operationQueue: AdvancedOperationQueue, operationWillPerform operation: Operation) {
     self.startOperationHandler?(operationQueue, operation)
   }
