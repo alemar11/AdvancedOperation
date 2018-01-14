@@ -185,14 +185,16 @@ extension GroupOperation: AdvancedOperationQueueDelegate {
   func operationQueue(operationQueue: AdvancedOperationQueue, operationDidPerform operation: Operation, withErrors errors: [Error]) {
     // --> these callback works well only with AdvancedOperationQueue
     if operation === finishingOperation {
-      
+      //TODO:
+      // it seems that sometimes the finish is called before all the other operations callbacks
+      // possible solution: create an AdvancedBlockOperation to use here for the start and finish blocks
+      // we will call finish ONLY when the current operation == finishOperation
     } else if operation == startingOperation {
       
     //} else if operation is AdvancedOperation {
     } else {
       aggregateErrors.append(contentsOf: errors)
-      print(aggregateErrors.count)
-      print("an operation has finished: \(type(of: operation))")
+      print("an operation has finished: \(type(of: operation)) with: \(aggregateErrors.count) aggregate errors and \(errors.count) errors")
     }
   }
   

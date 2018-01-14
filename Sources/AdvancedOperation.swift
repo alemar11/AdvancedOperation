@@ -113,9 +113,9 @@ public class AdvancedOperation : Operation {
     guard isExecuting else { return } //sanity check
     
     self.errors.append(contentsOf: errors)
+    didExecute() // the operation isn't really finished until all observers are notified
     _executing = false
     _finished = true
-    didExecute()
   }
 
   // MARK: Observer

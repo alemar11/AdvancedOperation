@@ -47,7 +47,8 @@ class GroupOperationTests: XCTestCase {
     XCTAssertTrue(group.isFinished)
   }
   
-  func testOneOperationCancelled() {
+  func testZ_OneOperationCancelled() {
+    print("🚩🚩🚩🚩🚩🚩🚩🚩🚩🚩")
     let exp1 = expectation(description: "\(#function)\(#line)")
     let operationOne = SleepyAsyncOperation()
     operationOne.addCompletionBlock { exp1.fulfill() }
@@ -61,7 +62,7 @@ class GroupOperationTests: XCTestCase {
     group.addCompletionBlock {
       exp3.fulfill()
     }
-    
+   
     group.start()
     operationOne.cancel(error: MockError.test)
     wait(for: [exp1, exp2, exp3], timeout: 10)
@@ -77,8 +78,9 @@ class GroupOperationTests: XCTestCase {
     XCTAssertFalse(group.isExecuting)
     XCTAssertFalse(group.isCancelled)
     XCTAssertTrue(group.isFinished)
-    XCTAssertEqual(group.aggregateErrors.count, 1)
+    XCTAssertEqual(group.aggregateErrors.count, 1) //it seems that sometimes the wait finishes before che operationDidPerform callback
     XCTAssertEqual(group.errors.count, 0)
+     print("🚩🚩🚩🚩🚩🚩🚩🚩🚩🚩")
   }
   
   func testGroupOperationCancelled() {
