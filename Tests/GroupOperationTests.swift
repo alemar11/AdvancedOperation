@@ -79,7 +79,7 @@ class GroupOperationTests: XCTestCase {
     XCTAssertFalse(group.isCancelled)
     XCTAssertTrue(group.isFinished)
     XCTAssertEqual(group.aggregateErrors.count, 1) //it seems that sometimes the wait finishes before che operationDidPerform callback
-    XCTAssertEqual(group.errors.count, 0)
+    XCTAssertEqual(group.errors.count, 1)
      print("🚩🚩🚩🚩🚩🚩🚩🚩🚩🚩")
   }
   

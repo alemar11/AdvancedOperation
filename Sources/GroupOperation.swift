@@ -65,7 +65,7 @@ class GroupOperation: AdvancedOperation {
   private lazy var finishingOperation: BlockOperation = {
     return BlockOperation { [weak self] in
       guard let `self` = self else { return }
-      self.finish()
+      self.finish(errors: self.aggregateErrors)
       print("\n\n----------------- END")
     }
   }()
