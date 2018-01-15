@@ -28,13 +28,13 @@ public protocol OperationObserving {
   /// Invoked immediately prior to the `Operation`'s `main()` method (it's started but not yet executed).
   func operationWillPerform(operation: AdvancedOperation)
   /// Invoked as an `Operation` finishes, along with any errors produced during execution.
-  func operationDidPerform(operation: AdvancedOperation, errors: [Error])
+  func operationDidPerform(operation: AdvancedOperation, withErrors errors: [Error])
   /// Invoked when an `Operation` is going to be cancelled, along with any errors produced during execution.
-  func operationWillCancel(operation: AdvancedOperation, errors: [Error])
+  func operationWillCancel(operation: AdvancedOperation, withErrors errors: [Error])
   /// Invoked as an `Operation` is cancelled, along with any errors produced during execution.
-  func operationDidCancel(operation: AdvancedOperation, errors: [Error])
+  func operationDidCancel(operation: AdvancedOperation, withErrors errors: [Error])
 }
 
 public extension OperationObserving {
-  func operationWillCancel(operation: AdvancedOperation, errors: [Error]) {}
+  func operationWillCancel(operation: AdvancedOperation, withErrors errors: [Error]) {}
 }

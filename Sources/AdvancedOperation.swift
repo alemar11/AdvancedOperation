@@ -137,19 +137,19 @@ public class AdvancedOperation : Operation {
   
   private func didPerform() {
     for observer in observers {
-      observer.operationDidPerform(operation: self, errors: errors)
+      observer.operationDidPerform(operation: self, withErrors: errors)
     }
   }
   
   private func willCancel() {
     for observer in observers {
-      observer.operationWillCancel(operation: self, errors: errors)
+      observer.operationWillCancel(operation: self, withErrors: errors)
     }
   }
   
   private func didCancel() {
     for observer in observers {
-      observer.operationDidCancel(operation: self, errors: errors)
+      observer.operationDidCancel(operation: self, withErrors: errors)
     }
   }
 

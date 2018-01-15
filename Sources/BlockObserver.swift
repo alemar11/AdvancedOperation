@@ -50,15 +50,15 @@ struct BlockObserver: OperationObserving {
     willPerform?(operation)
   }
   
-  func operationDidPerform(operation: AdvancedOperation, errors: [Error]) {
+  func operationDidPerform(operation: AdvancedOperation, withErrors errors: [Error]) {
     didPerform?(operation, errors)
   }
   
-  func operationWillCancel(operation: AdvancedOperation, errors: [Error]) {
+  func operationWillCancel(operation: AdvancedOperation, withErrors errors: [Error]) {
     willCancel?(operation, errors)
   }
 
-  func operationDidCancel(operation: AdvancedOperation, errors: [Error]) {
+  func operationDidCancel(operation: AdvancedOperation, withErrors errors: [Error]) {
     didCancel?(operation, errors)
   }
     
