@@ -25,7 +25,7 @@ import Foundation
 
 class GroupOperation: AdvancedOperation {
   
-  private(set) var aggregatedErrors = [Error]()
+  private(set) var aggregatedErrors = [Error]() //TODO: make this private only
   
   private let underlyingOperationQueue = AdvancedOperationQueue()
   
@@ -69,24 +69,6 @@ class GroupOperation: AdvancedOperation {
     }
     super.cancel()
   }
-  
-  //  override final func cancel(error: Error? = nil) {
-  ////    if let error = error {
-  ////      errors.append(error)
-  ////    }
-  ////    cancel()
-  //
-  //    // cancels all the operations except the internal finishing one.
-  //    for operation in underlyingOperationQueue.operations {
-  //      if (operation !== finishingOperation) {
-  //        operation.cancel()
-  //      }
-  //    }
-  //    super.cancel(error: error)
-  //
-  //  }
-  
-  
   
   override final func main() {
     underlyingOperationQueue.isSuspended = false
