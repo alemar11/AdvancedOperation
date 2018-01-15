@@ -23,15 +23,6 @@
 
 import Foundation
 
-//extension NSLock {
-//  func withCriticalScope<T>(block: () -> T) -> T {
-//    lock()
-//    let value = block()
-//    unlock()
-//    return value
-//  }
-//}
-
 class GroupOperation: AdvancedOperation {
   
   public let underlyingOperationQueue = AdvancedOperationQueue()
@@ -39,29 +30,10 @@ class GroupOperation: AdvancedOperation {
   private lazy var startingOperation = BlockOperation(block: {
     print("\n\n----------------- START")
   })
-  
-//  private let lock = NSLock()
-//  private var _aggregateErrors = [Error]()
-//
-//  private(set) var aggregateErrors: [Error] {
-//    get {
-//      return internalQueue.sync { _aggregateErrors }
-//    }
-//    set(newErrors) {
-//      internalQueue.sync {
-//        _aggregateErrors = newErrors
-//      }
-//    }
-//  }
-  
-  private(set) var aggregateErrors = [Error]()
-  
-  private let internalQueue = DispatchQueue(label: "com.alessandromarzoli.dahlia.CallersResultsCache")
-  
 
   
-  
-  //private lazy var finishingOperation = BlockOperation(block: {})
+  private(set) var aggregateErrors = [Error]()
+
   private lazy var finishingOperation: BlockOperation = {
     return BlockOperation { [weak self] in
       guard let `self` = self else { return }
