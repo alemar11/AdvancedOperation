@@ -83,6 +83,42 @@ class GroupOperationTests: XCTestCase {
      print("🚩🚩🚩🚩🚩🚩🚩🚩🚩🚩")
   }
   
+  func testOneBlockOperationCancelled() {
+    print("🚩🚩🚩🚩🚩🚩🚩🚩🚩🚩")
+    let exp1 = expectation(description: "\(#function)\(#line)")
+    let operationOne = SleepyAsyncOperation()
+    operationOne.addCompletionBlock { exp1.fulfill() }
+    
+    let exp2 = expectation(description: "\(#function)\(#line)")
+    let operationTwo =  BlockOperation(block: { sleep(1)})
+    operationTwo.addCompletionBlock { exp2.fulfill() }
+    
+    let exp3 = expectation(description: "\(#function)\(#line)")
+    let group = GroupOperation(operations: operationOne, operationTwo)
+    group.addCompletionBlock {
+      exp3.fulfill()
+    }
+    
+    group.start()
+    operationTwo.cancel()
+    wait(for: [exp1, exp2, exp3], timeout: 10)
+    
+    XCTAssertFalse(operationOne.isExecuting)
+    XCTAssertFalse(operationOne.isCancelled)
+    XCTAssertTrue(operationOne.isFinished)
+    
+    XCTAssertFalse(operationTwo.isExecuting)
+    XCTAssertTrue(operationTwo.isCancelled)
+    XCTAssertTrue(operationTwo.isFinished)
+    
+    XCTAssertFalse(group.isExecuting)
+    XCTAssertFalse(group.isCancelled)
+    XCTAssertTrue(group.isFinished)
+    XCTAssertEqual(group.aggregatedErrors.count, 0)
+    XCTAssertEqual(group.errors.count, 0)
+    print("🚩🚩🚩🚩🚩🚩🚩🚩🚩🚩")
+  }
+  
   func testGroupOperationCancelled() {
     let exp1 = expectation(description: "\(#function)\(#line)")
     let operation1 =  BlockOperation(block: { sleep(2)})
