@@ -139,21 +139,7 @@ class GroupOperation: AdvancedOperation {
 
 extension GroupOperation: AdvancedOperationQueueDelegate {
   
-  func operationQueue(operationQueue: AdvancedOperationQueue, willAddOperation operation: Operation) {
-    //    if operation !== finishingOperation { // avoid deadlock
-    //      finishingOperation.addDependency(operation)
-    //    }
-    //
-    //    if operation !== startingOperation {
-    //      operation.addDependency(startingOperation)
-    //    }
-  }
-  
   func operationQueue(operationQueue: AdvancedOperationQueue, didAddOperation operation: Operation) {}
-  
-  func operationQueue(operationQueue: AdvancedOperationQueue, operationWillPerform operation: Operation) {
-    print("an operation will perform: \(type(of: operation))")
-  }
   
   func operationQueue(operationQueue: AdvancedOperationQueue, operationDidPerform operation: Operation, withErrors errors: [Error]) {
     // --> these callback works well only with AdvancedOperationQueue
@@ -169,10 +155,6 @@ extension GroupOperation: AdvancedOperationQueueDelegate {
       aggregatedErrors.append(contentsOf: errors)
       print("an operation has finished: \(type(of: operation)) with: \(aggregatedErrors.count) aggregate errors and \(errors.count) errors")
     }
-  }
-  
-  func operationQueue(operationQueue: AdvancedOperationQueue, operationWillCancel operation: Operation, withErrors errors: [Error]) {
-    print("operationWillCancel: \(type(of: operation))")
   }
   
   func operationQueue(operationQueue: AdvancedOperationQueue, operationDidCancel operation: Operation, withErrors errors: [Error]) {
