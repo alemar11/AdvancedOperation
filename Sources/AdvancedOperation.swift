@@ -33,7 +33,7 @@ public class AdvancedOperation : Operation {
   public override var isFinished: Bool { return _finished }
   public override var isReady: Bool { return _ready }
 
-  internal(set) var errors = [Error]() //TODO: create an internal appendErrors func and keep this var private(set)
+  private(set) var errors = [Error]()
 
   private var _executing = false {
     willSet {
