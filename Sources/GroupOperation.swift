@@ -32,13 +32,13 @@ class GroupOperation: AdvancedOperation {
   })
 
   
-  private(set) var aggregateErrors = [Error]()
+  private(set) var aggregatedErrors = [Error]()
 
   private lazy var finishingOperation: BlockOperation = {
     return BlockOperation { [weak self] in
       guard let `self` = self else { return }
       self.underlyingOperationQueue.isSuspended = true
-      self.finish(errors: self.aggregateErrors)
+      self.finish(errors: self.aggregatedErrors)
       print("\n\n----------------- END")
     }
   }()
@@ -166,8 +166,8 @@ extension GroupOperation: AdvancedOperationQueueDelegate {
       
     //} else if operation is AdvancedOperation {
     } else {
-      aggregateErrors.append(contentsOf: errors)
-      print("an operation has finished: \(type(of: operation)) with: \(aggregateErrors.count) aggregate errors and \(errors.count) errors")
+      aggregatedErrors.append(contentsOf: errors)
+      print("an operation has finished: \(type(of: operation)) with: \(aggregatedErrors.count) aggregate errors and \(errors.count) errors")
     }
   }
   

@@ -78,7 +78,7 @@ class GroupOperationTests: XCTestCase {
     XCTAssertFalse(group.isExecuting)
     XCTAssertFalse(group.isCancelled)
     XCTAssertTrue(group.isFinished)
-    XCTAssertEqual(group.aggregateErrors.count, 1) //it seems that sometimes the wait finishes before che operationDidPerform callback
+    XCTAssertEqual(group.aggregatedErrors.count, 1) //it seems that sometimes the wait finishes before che operationDidPerform callback
     XCTAssertEqual(group.errors.count, 1)
      print("🚩🚩🚩🚩🚩🚩🚩🚩🚩🚩")
   }
@@ -143,7 +143,7 @@ class GroupOperationTests: XCTestCase {
       XCTAssertTrue(operation.isFinished)
       if let groupOperation = operation as? GroupOperation {
         XCTAssertEqual(groupOperation.errors.count, 1)
-        XCTAssertEqual(groupOperation.aggregateErrors.count, 0)
+        XCTAssertEqual(groupOperation.aggregatedErrors.count, 0)
       } else if let advancedOperation = operation as? AdvancedOperation {
         XCTAssertEqual(advancedOperation.errors.count, 0)
       }
@@ -166,7 +166,7 @@ class GroupOperationTests: XCTestCase {
       if let advancedOperation = operation as? AdvancedOperation {
         XCTAssertEqual(advancedOperation.errors.count, 0)
       } else if let groupOperation = operation as? GroupOperation {
-        XCTAssertEqual(groupOperation.aggregateErrors.count, 0)
+        XCTAssertEqual(groupOperation.aggregatedErrors.count, 0)
       }
     }
   }
