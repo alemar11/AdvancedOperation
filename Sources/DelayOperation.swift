@@ -72,8 +72,13 @@ class DelayOperation: AdvancedOperation {
   override func main() {
     guard delay.seconds > 0 else { return finish() }
     
+
+    //TODO: check this implementation, https://stackoverflow.com/questions/37801436/how-do-i-write-dispatch-after-gcd-in-swift-3-and-4
+//    queue.asyncAfter(deadline: .now() + .seconds(Int(delay.seconds))) {
+//
+//    }
+   
     let when = DispatchTime.now() + Double(Int64(delay.seconds * Double(NSEC_PER_SEC))) / Double(NSEC_PER_SEC)
-    
     queue.asyncAfter(deadline: when) {
       if !self.isCancelled {
         return self.finish()
