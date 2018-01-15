@@ -76,7 +76,7 @@ public class AdvancedOperation : Operation {
 
     // Bail out early if cancelled.
     guard !isCancelled else {
-      didExecute()
+      didPerform()
       _finished = true // this will fire the completionBlock via KVO
       return
     }
@@ -88,7 +88,7 @@ public class AdvancedOperation : Operation {
 
     //Thread.detachNewThreadSelector(#selector(main), toTarget: self, with: nil)
     // https://developer.apple.com/library/content/documentation/General/Conceptual/ConcurrencyProgrammingGuide/OperationObjects/OperationObjects.html#//apple_ref/doc/uid/TP40008091-CH101-SW16
-    willExecute()
+    willPerform()
     main()
   }
 
@@ -114,7 +114,7 @@ public class AdvancedOperation : Operation {
     guard isExecuting else { return } //sanity check
     
     self.errors.append(contentsOf: errors)
-    didExecute() // the operation isn't really finished until all observers are notified
+    didPerform() // the operation isn't really finished until all observers are notified
     _executing = false
     _finished = true
   }
@@ -129,15 +129,13 @@ public class AdvancedOperation : Operation {
     observers.append(observer)
   }
   
-  //TODO: rename in willPerform
-  private func willExecute() {
+  private func willPerform() {
     for observer in observers {
       observer.operationWillPerform(operation: self)
     }
   }
   
-  //TODO: rename in didPerform
-  private func didExecute() {
+  private func didPerform() {
     for observer in observers {
       observer.operationDidPerform(operation: self, errors: errors)
     }
