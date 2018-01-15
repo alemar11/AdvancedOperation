@@ -25,24 +25,21 @@ import Foundation
 
 class GroupOperation: AdvancedOperation {
   
-  public let underlyingOperationQueue = AdvancedOperationQueue()
-  
-  private lazy var startingOperation = BlockOperation(block: {
-    print("\n\n----------------- START")
-  })
-
-  
   private(set) var aggregatedErrors = [Error]()
-
+  
+  private let underlyingOperationQueue = AdvancedOperationQueue()
+  
+  private lazy var startingOperation = BlockOperation(block: {})
+  
   private lazy var finishingOperation: BlockOperation = {
     return BlockOperation { [weak self] in
       guard let `self` = self else { return }
       self.underlyingOperationQueue.isSuspended = true
       self.finish(errors: self.aggregatedErrors)
-      print("\n\n----------------- END")
     }
   }()
   
+  // MARK: Initialization
   
   convenience init(operations: Operation...) {
     self.init(operations: operations)
@@ -97,10 +94,10 @@ class GroupOperation: AdvancedOperation {
   }
   
   //TODO: test
-//  func addOperation(operation: Operation) {
-//    finishingOperation.addDependency(operation)
-//    underlyingOperationQueue.addOperation(operation)
-//  }
+  //  func addOperation(operation: Operation) {
+  //    finishingOperation.addDependency(operation)
+  //    underlyingOperationQueue.addOperation(operation)
+  //  }
   
   /// `suspended` equal to false in order to start any added group operations.
   //  public var isSuspended: Bool {
@@ -142,23 +139,11 @@ extension GroupOperation: AdvancedOperationQueueDelegate {
   func operationQueue(operationQueue: AdvancedOperationQueue, didAddOperation operation: Operation) {}
   
   func operationQueue(operationQueue: AdvancedOperationQueue, operationDidPerform operation: Operation, withErrors errors: [Error]) {
-    // --> these callback works well only with AdvancedOperationQueue
-    if operation === finishingOperation {
-      //TODO:
-      // it seems that sometimes the finish is called before all the other operations callbacks
-      // possible solution: create an AdvancedBlockOperation to use here for the start and finish blocks
-      // we will call finish ONLY when the current operation == finishOperation
-    } else if operation == startingOperation {
-      
-    //} else if operation is AdvancedOperation {
-    } else {
+    if operation !== finishingOperation || operation !== startingOperation {
       aggregatedErrors.append(contentsOf: errors)
-      print("an operation has finished: \(type(of: operation)) with: \(aggregatedErrors.count) aggregate errors and \(errors.count) errors")
     }
   }
   
-  func operationQueue(operationQueue: AdvancedOperationQueue, operationDidCancel operation: Operation, withErrors errors: [Error]) {
-    print("operationDidCancel: \(type(of: operation))")
-  }
-  
+  func operationQueue(operationQueue: AdvancedOperationQueue, operationDidCancel operation: Operation, withErrors errors: [Error]) {}
+
 }
