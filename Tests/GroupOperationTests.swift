@@ -28,15 +28,15 @@ class GroupOperationTests: XCTestCase {
   
   func testFlow() {
     let exp1 = expectation(description: "\(#function)\(#line)")
-    let operationOne = SleepyAsyncOperation()
-    operationOne.addCompletionBlock { exp1.fulfill() }
+    let operation1 = SleepyAsyncOperation()
+    operation1.addCompletionBlock { exp1.fulfill() }
     
     let exp2 = expectation(description: "\(#function)\(#line)")
-    let operationTwo =  BlockOperation(block: { sleep(1)})
-    operationTwo.addCompletionBlock { exp2.fulfill() }
+    let operation2 =  BlockOperation(block: { sleep(1)})
+    operation2.addCompletionBlock { exp2.fulfill() }
     
     let exp3 = expectation(description: "\(#function)\(#line)")
-    let group = GroupOperation(operations: operationOne, operationTwo)
+    let group = GroupOperation(operations: operation1, operation2)
     group.addCompletionBlock { exp3.fulfill() }
     
     group.start()
@@ -50,30 +50,30 @@ class GroupOperationTests: XCTestCase {
   func testOneOperationCancelled() {
     print("🚩🚩🚩🚩🚩🚩🚩🚩🚩🚩")
     let exp1 = expectation(description: "\(#function)\(#line)")
-    let operationOne = SleepyAsyncOperation()
-    operationOne.addCompletionBlock { exp1.fulfill() }
+    let operation1 = SleepyAsyncOperation()
+    operation1.addCompletionBlock { exp1.fulfill() }
     
     let exp2 = expectation(description: "\(#function)\(#line)")
-    let operationTwo =  BlockOperation(block: { sleep(1)})
-    operationTwo.addCompletionBlock { exp2.fulfill() }
+    let operation2 =  BlockOperation(block: { sleep(1)})
+    operation2.addCompletionBlock { exp2.fulfill() }
     
     let exp3 = expectation(description: "\(#function)\(#line)")
-    let group = GroupOperation(operations: operationOne, operationTwo)
+    let group = GroupOperation(operations: operation1, operation2)
     group.addCompletionBlock {
       exp3.fulfill()
     }
    
     group.start()
-    operationOne.cancel(error: MockError.test)
+    operation1.cancel(error: MockError.test)
     wait(for: [exp1, exp2, exp3], timeout: 10)
     
-    XCTAssertFalse(operationOne.isExecuting)
-    XCTAssertTrue(operationOne.isCancelled)
-     XCTAssertTrue(operationOne.isFinished)
+    XCTAssertFalse(operation1.isExecuting)
+    XCTAssertTrue(operation1.isCancelled)
+     XCTAssertTrue(operation1.isFinished)
     
-    XCTAssertFalse(operationTwo.isExecuting)
-    XCTAssertFalse(operationTwo.isCancelled)
-    XCTAssertTrue(operationTwo.isFinished)
+    XCTAssertFalse(operation2.isExecuting)
+    XCTAssertFalse(operation2.isCancelled)
+    XCTAssertTrue(operation2.isFinished)
     
     XCTAssertFalse(group.isExecuting)
     XCTAssertFalse(group.isCancelled)
@@ -86,30 +86,30 @@ class GroupOperationTests: XCTestCase {
   func testOneBlockOperationCancelled() {
     print("🚩🚩🚩🚩🚩🚩🚩🚩🚩🚩")
     let exp1 = expectation(description: "\(#function)\(#line)")
-    let operationOne = SleepyAsyncOperation()
-    operationOne.addCompletionBlock { exp1.fulfill() }
+    let operation1 = SleepyAsyncOperation()
+    operation1.addCompletionBlock { exp1.fulfill() }
     
     let exp2 = expectation(description: "\(#function)\(#line)")
-    let operationTwo =  BlockOperation(block: { sleep(1)})
-    operationTwo.addCompletionBlock { exp2.fulfill() }
+    let operation2 =  BlockOperation(block: { sleep(1)})
+    operation2.addCompletionBlock { exp2.fulfill() }
     
     let exp3 = expectation(description: "\(#function)\(#line)")
-    let group = GroupOperation(operations: operationOne, operationTwo)
+    let group = GroupOperation(operations: operation1, operation2)
     group.addCompletionBlock {
       exp3.fulfill()
     }
     
     group.start()
-    operationTwo.cancel()
+    operation2.cancel()
     wait(for: [exp1, exp2, exp3], timeout: 10)
     
-    XCTAssertFalse(operationOne.isExecuting)
-    XCTAssertFalse(operationOne.isCancelled)
-    XCTAssertTrue(operationOne.isFinished)
+    XCTAssertFalse(operation1.isExecuting)
+    XCTAssertFalse(operation1.isCancelled)
+    XCTAssertTrue(operation1.isFinished)
     
-    XCTAssertFalse(operationTwo.isExecuting)
-    XCTAssertTrue(operationTwo.isCancelled)
-    XCTAssertTrue(operationTwo.isFinished)
+    XCTAssertFalse(operation2.isExecuting)
+    XCTAssertTrue(operation2.isCancelled)
+    XCTAssertTrue(operation2.isFinished)
     
     XCTAssertFalse(group.isExecuting)
     XCTAssertFalse(group.isCancelled)

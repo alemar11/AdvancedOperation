@@ -37,23 +37,23 @@ class AdvancedOperationQueueTests: XCTestCase {
      print(queue.isSuspended)
      */
     
-    let operationOne = SleepyAsyncOperation()
-    let operationTwo = SleepyAsyncOperation()
-    let operationThree = SleepyAsyncOperation()
-    let operationFour = DelayOperation(interval: 1)
+    let operation1 = SleepyAsyncOperation()
+    let operation2 = SleepyAsyncOperation()
+    let operation3 = SleepyAsyncOperation()
+    let operation4 = DelayOperation(interval: 1)
     
     var addCount = 0
     delegate.addOperationHandler = { (queue, operation) in
       XCTAssertTrue(queue == queue)
       switch addCount {
       case 0:
-        XCTAssertTrue(operation == operationOne)
+        XCTAssertTrue(operation == operation1)
       case 1:
-        XCTAssertTrue(operation == operationTwo)
+        XCTAssertTrue(operation == operation2)
       case 2:
-        XCTAssertTrue(operation == operationThree)
+        XCTAssertTrue(operation == operation3)
       case 3:
-        XCTAssertTrue(operation == operationFour)
+        XCTAssertTrue(operation == operation4)
       default:
         XCTFail("Added too many operations.")
       }
@@ -80,14 +80,14 @@ class AdvancedOperationQueueTests: XCTestCase {
       cancelCount += 1
     }
     
-    queue.addOperations([operationOne, operationTwo, operationThree, operationFour], waitUntilFinished: true)
+    queue.addOperations([operation1, operation2, operation3, operation4], waitUntilFinished: true)
     
     /*
      //TODO: new test with this setup
-     queue.addOperation(operationOne)
-     queue.addOperation(operationTwo)
-     queue.addOperation(operationThree)
-     queue.addOperation(operationFour)
+     queue.addOperation(operation1)
+     queue.addOperation(operation2)
+     queue.addOperation(operation3)
+     queue.addOperation(operation4)
      queue.isSuspended = false
      //this setup needs an expectation
      */
