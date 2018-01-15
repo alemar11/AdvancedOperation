@@ -47,7 +47,7 @@ class GroupOperationTests: XCTestCase {
     XCTAssertTrue(group.isFinished)
   }
   
-  func testZ_OneOperationCancelled() {
+  func testOneOperationCancelled() {
     print("🚩🚩🚩🚩🚩🚩🚩🚩🚩🚩")
     let exp1 = expectation(description: "\(#function)\(#line)")
     let operationOne = SleepyAsyncOperation()
