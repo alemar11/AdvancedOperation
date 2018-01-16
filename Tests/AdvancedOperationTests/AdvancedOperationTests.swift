@@ -28,9 +28,9 @@ extension AdvancedOperationTests {
   //TODO: complete this list
   static var allTests = [
     ("testStart", testStart),
-    ("testCancel", testCancel),
-    ("testBailingOutEarly", testBailingOutEarly),
-    ("testObservers", testObservers)
+    //("testCancel", testCancel),
+    //("testBailingOutEarly", testBailingOutEarly),
+    //("testObservers", testObservers)
   ]
 }
 
