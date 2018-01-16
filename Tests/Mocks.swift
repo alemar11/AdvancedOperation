@@ -30,20 +30,29 @@ internal enum MockError: Swift.Error {
 
 internal class SleepyAsyncOperation: AdvancedOperation {
 
-  //TODO: add initializers
+  private let interval1: UInt32
+  private let interval2: UInt32
+  private let interval3: UInt32
+  
+  init(interval1: UInt32 = 1, interval2: UInt32 = 2, interval3: UInt32 = 1) {
+    self.interval1 = interval1
+    self.interval2 = interval2
+    self.interval3 = interval3
+    super.init()
+  }
 
   override func main() {
     DispatchQueue.global().async { [weak weakSelf = self] in
       guard let strongSelf = weakSelf else { return self.finish() }
       if strongSelf.isCancelled { return strongSelf.finish() }
       
-      sleep(1)
+      sleep(self.interval1)
       if strongSelf.isCancelled { return strongSelf.finish() }
       
-      sleep(2)
+      sleep(self.interval2)
       if strongSelf.isCancelled { return strongSelf.finish()}
       
-      sleep(3)
+      sleep(self.interval3)
       strongSelf.finish()
     }
     
