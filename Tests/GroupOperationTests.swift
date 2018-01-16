@@ -1,4 +1,4 @@
-// 
+//
 // AdvancedOperation
 //
 // Copyright © 2016-2018 Tinrobots.
@@ -61,14 +61,14 @@ class GroupOperationTests: XCTestCase {
     group.addCompletionBlock {
       expectation3.fulfill()
     }
-   
+    
     group.start()
     operation1.cancel(error: MockError.test)
     wait(for: [expectation1, expectation2, expectation3], timeout: 10)
     
     XCTAssertFalse(operation1.isExecuting)
     XCTAssertTrue(operation1.isCancelled)
-     XCTAssertTrue(operation1.isFinished)
+    XCTAssertTrue(operation1.isFinished)
     
     XCTAssertFalse(operation2.isExecuting)
     XCTAssertFalse(operation2.isCancelled)
@@ -77,7 +77,7 @@ class GroupOperationTests: XCTestCase {
     XCTAssertFalse(group.isExecuting)
     XCTAssertFalse(group.isCancelled)
     XCTAssertTrue(group.isFinished)
-    XCTAssertEqual(group.aggregatedErrors.count, 1) //it seems that sometimes the wait finishes before che operationDidPerform callback
+    XCTAssertEqual(group.aggregatedErrors.count, 1)
     XCTAssertEqual(group.errors.count, 1)
   }
   
@@ -87,7 +87,7 @@ class GroupOperationTests: XCTestCase {
     operation1.addCompletionBlock { expectation1.fulfill() }
     
     let expectation2 = expectation(description: "\(#function)\(#line)")
-    let operation2 =  BlockOperation(block: { sleep(1)})
+    let operation2 =  BlockOperation(block: { sleep(1)} )
     operation2.addCompletionBlock { expectation2.fulfill() }
     
     let expectation3 = expectation(description: "\(#function)\(#line)")
@@ -202,5 +202,39 @@ class GroupOperationTests: XCTestCase {
       }
     }
   }
+  
+  func testNestedGroupOperations() {
+    let operation1 = BlockOperation(block: { })
+    let operation2 = BlockOperation(block: { sleep(2) })
+    let group1 = GroupOperation(operations: [operation1, operation2])
+    
+    let operation3 = SleepyOperation()
+    let operation4 = SleepyAsyncOperation(interval1: 1, interval2: 1, interval3: 1)
+    let operation5 = BlockOperation(block: { sleep(1) })
+    let group2 = GroupOperation(operations: operation3, operation4, operation5)
+    
+    let operation6 = SleepyAsyncOperation(interval1: 0, interval2: 0, interval3: 1)
+    
+    let group = GroupOperation(operations: group1, group2, operation6)
+    let exepectation1 = expectation(description: "\(#function)\(#line)")
+    group.addCompletionBlock {
+      exepectation1.fulfill()
+    }
+    
+    group.start()
+    wait(for: [exepectation1], timeout: 10)
+    
+    XCTAssertFalse(group.isCancelled)
+    XCTAssertFalse(group.isExecuting)
+    XCTAssertTrue(group.isFinished)
+  }
+  
+  /**
+   TODO:
+   - failing nested group operation
+   - cancelled group operation
+   - cancelled nested group operation
+   **/
+  
   
 }
