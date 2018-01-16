@@ -26,7 +26,7 @@ import Foundation
 /// The `BlockObserver` is a way to attach arbitrary blocks to significant events in an `Operation`'s lifecycle.
 struct BlockObserver: OperationObserving {
   
-  // MARK: Properties
+  // MARK: - Properties
 
   private let willPerform: ((AdvancedOperation) -> Void)?
   private let didPerform: ((AdvancedOperation, [Error]) -> Void)?
@@ -44,7 +44,7 @@ struct BlockObserver: OperationObserving {
     self.didCancel = didCancel
   }
   
-  // MARK: OperationObserving
+  // MARK: - OperationObserving
   
   func operationWillPerform(operation: AdvancedOperation) {
     willPerform?(operation)

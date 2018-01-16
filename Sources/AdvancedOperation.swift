@@ -62,7 +62,7 @@ public class AdvancedOperation : Operation {
     }
   }
   
-  // MARK: Initialization
+  // MARK: - Initialization
 
   public override init() {
     super.init()
@@ -119,7 +119,7 @@ public class AdvancedOperation : Operation {
     _finished = true
   }
 
-  // MARK: Observer
+  // MARK: - Observer
 
   private(set) var observers = [OperationObserving]()
 
@@ -153,7 +153,7 @@ public class AdvancedOperation : Operation {
     }
   }
 
-  // MARK: Dependencies
+  // MARK: - Dependencies
 
   override public func addDependency(_ operation: Operation) {
     assert(!isExecuting, "Dependencies cannot be modified after execution has begun.")
