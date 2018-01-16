@@ -22,6 +22,7 @@
 // SOFTWARE.
 
 import Foundation
+import Dispatch
 
 /// An `AdvancedOperation` that will simply wait for a given time interval, or until a specific `Date`.
 /// If the interval is negative, or the `Date` is in the past, then this operation immediately finishes.
