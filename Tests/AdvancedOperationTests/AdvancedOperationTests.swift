@@ -53,17 +53,22 @@ class AdvancedOperationTests: XCTestCase {
     XCTAssertFalse(operation.isCancelled)
     XCTAssertFalse(operation.isFinished)
     
-    //wait(for: [exp], timeout: 10)
-    
-    waitForExpectations(timeout: 3) { (error) in
-      print("")
+    func evaluate(operation: AdvancedOperation) {
+      XCTAssertEqual(operation.errors.count, 0)
+      XCTAssertFalse(operation.isReady)
+      XCTAssertFalse(operation.isExecuting)
+      XCTAssertFalse(operation.isCancelled)
+      XCTAssertTrue(operation.isFinished)
     }
     
-    XCTAssertEqual(operation.errors.count, 0)
-    XCTAssertFalse(operation.isReady)
-    XCTAssertFalse(operation.isExecuting)
-    XCTAssertFalse(operation.isCancelled)
-    XCTAssertTrue(operation.isFinished)
+    #if os(Linux)
+      waitForExpectations(timeout: 10) { (error) in
+        evaluate(operation: operation)
+      }
+    #else
+      wait(for: [exp], timeout: 10)
+      evaluate(operation: operation)
+    #endif
     
   }
   
