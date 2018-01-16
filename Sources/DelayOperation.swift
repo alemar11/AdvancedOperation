@@ -25,11 +25,15 @@ import Foundation
 
 /// An `AdvancedOperation` that will simply wait for a given time interval, or until a specific `Date`.
 /// If the interval is negative, or the `Date` is in the past, then this operation immediately finishes.
-class DelayOperation: AdvancedOperation {
+final class DelayOperation: AdvancedOperation {
   
+  // MARK: - Properties
+  
+  private let delay: Delay
   private let queue: DispatchQueue
   
-  // MARK: Types
+  // MARK: - Types
+  
   private enum Delay {
     case interval(TimeInterval)
     case date(Date)
@@ -49,11 +53,7 @@ class DelayOperation: AdvancedOperation {
     }
   }
   
-  // MARK: Properties
-  
-  private let delay: Delay
-  
-  // MARK: Initialization
+  // MARK: - Initialization
   
   init(interval: TimeInterval, queue: DispatchQueue = .global(qos: .default)) {
     self.delay = .interval(interval)
@@ -69,22 +69,17 @@ class DelayOperation: AdvancedOperation {
     super.init()
   }
   
+  // MARK: - Methods
+  
   override func main() {
     guard delay.seconds > 0 else { return finish() }
     
-
-    //TODO: check this implementation, https://stackoverflow.com/questions/37801436/how-do-i-write-dispatch-after-gcd-in-swift-3-and-4
-//    queue.asyncAfter(deadline: .now() + .seconds(Int(delay.seconds))) {
-//
-//    }
-   
-    let when = DispatchTime.now() + Double(Int64(delay.seconds * Double(NSEC_PER_SEC))) / Double(NSEC_PER_SEC)
-    queue.asyncAfter(deadline: when) {
+    queue.asyncAfter(deadline: .now() + delay.seconds) {
       if !self.isCancelled {
         return self.finish()
       }
-      
     }
+    
   }
   
 }
