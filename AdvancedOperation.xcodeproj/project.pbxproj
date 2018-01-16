@@ -6,6 +6,20 @@
 	objectVersion = 48;
 	objects = {
 
+/* Begin PBXAggregateTarget section */
+		230B47F8200EA87900F46852 /* SwiftLint */ = {
+			isa = PBXAggregateTarget;
+			buildConfigurationList = 230B47FB200EA87900F46852 /* Build configuration list for PBXAggregateTarget "SwiftLint" */;
+			buildPhases = (
+				230B47FC200EA89600F46852 /* SwiftLint */,
+			);
+			dependencies = (
+			);
+			name = SwiftLint;
+			productName = SwiftLint;
+		};
+/* End PBXAggregateTarget section */
+
 /* Begin PBXBuildFile section */
 		2341308C1F9605F5002BE7FC /* AdvancedOperation.h in Headers */ = {isa = PBXBuildFile; fileRef = 2341308A1F9605F5002BE7FC /* AdvancedOperation.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		234130BC1F96076A002BE7FC /* AdvancedOperation.h in Headers */ = {isa = PBXBuildFile; fileRef = 2341308A1F9605F5002BE7FC /* AdvancedOperation.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -410,6 +424,10 @@
 				LastUpgradeCheck = 0910;
 				ORGANIZATIONNAME = Tinrobots;
 				TargetAttributes = {
+					230B47F8200EA87900F46852 = {
+						CreatedOnToolsVersion = 9.2;
+						ProvisioningStyle = Automatic;
+					};
 					234130861F9605F5002BE7FC = {
 						CreatedOnToolsVersion = 9.1;
 						LastSwiftMigration = 0920;
@@ -466,6 +484,7 @@
 				2372B42D1F960DBA00189A32 /* AdvancedOperation Tests iOS */,
 				2372B43C1F960DCB00189A32 /* AdvancedOperation Tests tvOS */,
 				23725070200522820000A442 /* AdvancedOperation Tests macOS */,
+				230B47F8200EA87900F46852 /* SwiftLint */,
 			);
 		};
 /* End PBXProject section */
@@ -521,6 +540,23 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		230B47FC200EA89600F46852 /* SwiftLint */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = SwiftLint;
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "if which swiftlint >/dev/null; then\nswiftlint\nelse\necho \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		234130821F9605F5002BE7FC /* Sources */ = {
@@ -640,6 +676,22 @@
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
+		230B47F9200EA87900F46852 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		230B47FA200EA87900F46852 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
 		2341308D1F9605F5002BE7FC /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -1053,6 +1105,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		230B47FB200EA87900F46852 /* Build configuration list for PBXAggregateTarget "SwiftLint" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				230B47F9200EA87900F46852 /* Debug */,
+				230B47FA200EA87900F46852 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		234130811F9605F5002BE7FC /* Build configuration list for PBXProject "AdvancedOperation" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (

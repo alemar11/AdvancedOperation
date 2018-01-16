@@ -39,7 +39,7 @@ extension Operation {
     } else {
       completionBlock = block
     }
-    
+
   }
 
   /// Adds multiple dependencies to the operation.

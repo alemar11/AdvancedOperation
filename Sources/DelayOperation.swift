@@ -26,60 +26,60 @@ import Foundation
 /// An `AdvancedOperation` that will simply wait for a given time interval, or until a specific `Date`.
 /// If the interval is negative, or the `Date` is in the past, then this operation immediately finishes.
 final class DelayOperation: AdvancedOperation {
-  
+
   // MARK: - Properties
-  
+
   private let delay: Delay
   private let queue: DispatchQueue
-  
+
   // MARK: - Types
-  
+
   private enum Delay {
     case interval(TimeInterval)
     case date(Date)
-    
+
     /// Returns the delay in seconds.
     var seconds: TimeInterval {
       let interval: TimeInterval
-      
+
       switch self {
       case .interval(let seconds):
         interval = seconds
-        
+
       case .date(let date):
         interval = date.timeIntervalSinceNow
       }
       return interval
     }
   }
-  
+
   // MARK: - Initialization
-  
+
   init(interval: TimeInterval, queue: DispatchQueue = .global(qos: .default)) {
     self.delay = .interval(interval)
     self.queue = queue
-    
+
     super.init()
   }
-  
+
   init(until date: Date, queue: DispatchQueue = .global(qos: .default)) {
     self.delay = .date(date)
     self.queue = queue
-    
+
     super.init()
   }
-  
+
   // MARK: - Methods
-  
+
   override func main() {
     guard delay.seconds > 0 else { return finish() }
-    
+
     queue.asyncAfter(deadline: .now() + delay.seconds) {
       if !self.isCancelled {
         return self.finish()
       }
     }
-    
+
   }
-  
+
 }

@@ -23,12 +23,12 @@
 
 import Foundation
 
-public class AdvancedOperation : Operation {
+public class AdvancedOperation: Operation {
 
   // MARK: - State
 
   //public override var isAsynchronous: Bool { return true } // When you add an operation to an operation queue, the queue ignores the value of the isAsynchronous
-  
+
   public override var isExecuting: Bool { return _executing }
   public override var isFinished: Bool { return _finished }
   public override var isReady: Bool { return _ready }
@@ -61,7 +61,7 @@ public class AdvancedOperation : Operation {
       didChangeValue(forKey: #keyPath(Operation.isReady))
     }
   }
-  
+
   // MARK: - Initialization
 
   public override init() {
@@ -103,7 +103,7 @@ public class AdvancedOperation : Operation {
 
     cancel()
   }
-  
+
   public override func cancel() {
     willCancel()
     super.cancel()
@@ -112,7 +112,7 @@ public class AdvancedOperation : Operation {
 
   public func finish(errors: [Error] = []) {
     guard isExecuting else { return } //sanity check
-    
+
     self.errors.append(contentsOf: errors)
     didPerform() // the operation isn't really finished until all observers are notified
     _executing = false
@@ -128,25 +128,25 @@ public class AdvancedOperation : Operation {
 
     observers.append(observer)
   }
-  
+
   private func willPerform() {
     for observer in observers {
       observer.operationWillPerform(operation: self)
     }
   }
-  
+
   private func didPerform() {
     for observer in observers {
       observer.operationDidPerform(operation: self, withErrors: errors)
     }
   }
-  
+
   private func willCancel() {
     for observer in observers {
       observer.operationWillCancel(operation: self, withErrors: errors)
     }
   }
-  
+
   private func didCancel() {
     for observer in observers {
       observer.operationDidCancel(operation: self, withErrors: errors)
@@ -162,4 +162,3 @@ public class AdvancedOperation : Operation {
   }
 
 }
-
