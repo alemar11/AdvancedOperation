@@ -94,12 +94,10 @@ class AdvancedOperationQueueTests: XCTestCase {
   //TODO: most of the callbacks can only be activated by subclassed of AdvancedOperation
   func testQueueWithAdvancedOperations2() {
     let queue = AdvancedOperationQueue()
-    
     let delegate = QueueDelegate()
     
     queue.delegate = delegate
     queue.isSuspended = true
-    
     
     let operation1 = SleepyOperation()
     let operation2 = SleepyAsyncOperation(interval1: 0, interval2: 1, interval3: 0)
