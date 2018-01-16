@@ -24,6 +24,16 @@
 import XCTest
 @testable import AdvancedOperation
 
+extension AdvancedOperationTests {
+  //TODO: complete this list
+  static var allTests = [
+    ("testStart", testStart),
+    ("testCancel", testCancel),
+    ("testBailingOutEarly", testBailingOutEarly),
+    ("testObservers", testObservers)
+  ]
+}
+
 class AdvancedOperationTests: XCTestCase {
   
   func testStart() {

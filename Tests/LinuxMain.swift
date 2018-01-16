@@ -1,4 +1,6 @@
 import XCTest
 @testable import AdvancedOperationTests
 
-XCTMain([])
+XCTMain([
+  testCase(AdvancedOperationTests.allTests)
+  ])
