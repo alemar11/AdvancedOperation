@@ -66,8 +66,6 @@ class AdvancedOperationQueueTests: XCTestCase {
     delegate.willPerformOperationHandler = { (queue, operation) in
       lock.lock()
       startCount += 1
-      print(startCount)
-      print("\n start: ✅ \(operation)")
       XCTAssertTrue(queue == queue)
       lock.unlock()
     }
@@ -76,8 +74,6 @@ class AdvancedOperationQueueTests: XCTestCase {
     delegate.didPerformOperationHandler = { (queue, operation, errors) in
       lock.lock()
       finishCount += 1
-      print(finishCount)
-      print("\n finish: ➡️ \(operation)")
       XCTAssertTrue(queue == queue)
       XCTAssertEqual(errors.count, 0)
       lock.unlock()
@@ -87,7 +83,6 @@ class AdvancedOperationQueueTests: XCTestCase {
     delegate.didCancelOperationHandler = { (queue, operation, errors) in
       lock.lock()
       cancelCount += 1
-      print(cancelCount)
       XCTAssertTrue(queue == queue)
       XCTAssertEqual(errors.count, 0)
       lock.unlock()
