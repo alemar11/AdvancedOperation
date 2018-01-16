@@ -22,6 +22,7 @@
 // SOFTWARE.
 
 import Foundation
+import Dispatch
 @testable import AdvancedOperation
 
 internal enum MockError: Swift.Error {
