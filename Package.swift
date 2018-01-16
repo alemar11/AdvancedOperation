@@ -10,7 +10,7 @@ let package = Package(
   ],
   targets: [
     .target(name: "AdvancedOperation", path: "Sources"),
-    .testTarget(name: "AdvancedOperationTests", dependencies: ["AdvancedOperation"], path: "Tests")
+    .testTarget(name: "AdvancedOperationTests", dependencies: ["AdvancedOperation"])
   ],
   swiftLanguageVersions: [4]
 )

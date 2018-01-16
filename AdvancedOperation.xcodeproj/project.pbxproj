@@ -186,6 +186,18 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		230B47FD200EABEE00F46852 /* AdvancedOperationTests */ = {
+			isa = PBXGroup;
+			children = (
+				23F24D1D200771FA00B25A03 /* AdvancedOperationTests.swift */,
+				23F24D2B2007A33F00B25A03 /* DelayOperationTests.swift */,
+				23856170200A6E9A0061BAA1 /* GroupOperationTests.swift */,
+				23856174200A87070061BAA1 /* AdvancedOperationQueueTests.swift */,
+				23856178200A873C0061BAA1 /* Mocks.swift */,
+			);
+			path = AdvancedOperationTests;
+			sourceTree = "<group>";
+		};
 		2341307D1F9605F5002BE7FC = {
 			isa = PBXGroup;
 			children = (
@@ -228,11 +240,7 @@
 		234130931F960618002BE7FC /* Tests */ = {
 			isa = PBXGroup;
 			children = (
-				23F24D1D200771FA00B25A03 /* AdvancedOperationTests.swift */,
-				23F24D2B2007A33F00B25A03 /* DelayOperationTests.swift */,
-				23856170200A6E9A0061BAA1 /* GroupOperationTests.swift */,
-				23856174200A87070061BAA1 /* AdvancedOperationQueueTests.swift */,
-				23856178200A873C0061BAA1 /* Mocks.swift */,
+				230B47FD200EABEE00F46852 /* AdvancedOperationTests */,
 			);
 			path = Tests;
 			sourceTree = "<group>";
