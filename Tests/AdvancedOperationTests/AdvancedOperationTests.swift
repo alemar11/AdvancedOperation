@@ -55,6 +55,7 @@ class AdvancedOperationTests: XCTestCase {
     
     func evaluate(operation: AdvancedOperation) {
       XCTAssertEqual(operation.errors.count, 0)
+      //TODO: this state could be a separate function
       XCTAssertFalse(operation.isReady)
       XCTAssertFalse(operation.isExecuting)
       XCTAssertFalse(operation.isCancelled)
@@ -63,6 +64,7 @@ class AdvancedOperationTests: XCTestCase {
     
     #if os(Linux)
       waitForExpectations(timeout: 10) { (error) in
+        XCTAssertNil(error)
         evaluate(operation: operation)
       }
     #else
