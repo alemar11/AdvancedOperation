@@ -97,10 +97,10 @@ class AdvancedOperationQueue: OperationQueue {
     }
     
     if wait {
-      waitUntilAllOperationsAreFinished()
-//            for operation in operations {
-//              operation.waitUntilFinished()
-//            }
+      //waitUntilAllOperationsAreFinished()
+            for operation in operations {
+              operation.waitUntilFinished()
+            }
     }
   }
   

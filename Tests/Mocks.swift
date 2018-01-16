@@ -32,7 +32,9 @@ internal class SleepyAsyncOperation: AdvancedOperation {
   
   override func main() {
     DispatchQueue.global().async { [weak weakSelf = self] in
-      guard let strongSelf = weakSelf else { return self.finish() }
+      guard let strongSelf = weakSelf else {
+        return self.finish()
+      }
       
       sleep(1)
       if strongSelf.isCancelled {
@@ -62,35 +64,30 @@ internal class SleepyOperation: AdvancedOperation {
 }
 
 internal class QueueDelegate: AdvancedOperationQueueDelegate {
-
-  //TODO: renaming all the handlers
   
-  var addOperationHandler: ((AdvancedOperationQueue, Operation) -> Void)? = nil
-  var startOperationHandler: ((AdvancedOperationQueue, Operation) -> Void)? = nil
-  var cancelOperationHandler: ((AdvancedOperationQueue, Operation, [Error]) -> Void)? = nil
-  var finishOperationHandler: ((AdvancedOperationQueue, Operation, [Error]) -> Void)? = nil
+  var willAddOperationHandler: ((AdvancedOperationQueue, Operation) -> Void)? = nil
+  var willPerformOperationHandler: ((AdvancedOperationQueue, Operation) -> Void)? = nil
+  var didCancelOperationHandler: ((AdvancedOperationQueue, Operation, [Error]) -> Void)? = nil
+  var didPerformOperationHandler: ((AdvancedOperationQueue, Operation, [Error]) -> Void)? = nil
   
   func operationQueue(operationQueue: AdvancedOperationQueue, willAddOperation operation: Operation) {
-    self.addOperationHandler?(operationQueue, operation)
+    self.willAddOperationHandler?(operationQueue, operation)
   }
   
-  func operationQueue(operationQueue: AdvancedOperationQueue, didAddOperation operation: Operation) {
-    
-  }
+  func operationQueue(operationQueue: AdvancedOperationQueue, didAddOperation operation: Operation) {}
   
   func operationQueue(operationQueue: AdvancedOperationQueue, operationWillPerform operation: Operation) {
-    self.startOperationHandler?(operationQueue, operation)
+    self.willPerformOperationHandler?(operationQueue, operation)
   }
   
   func operationQueue(operationQueue: AdvancedOperationQueue, operationDidPerform operation: Operation, withErrors errors: [Error]) {
-    self.finishOperationHandler?(operationQueue, operation, errors)
+    self.didPerformOperationHandler?(operationQueue, operation, errors)
   }
   
-  func operationQueue(operationQueue: AdvancedOperationQueue, operationWillCancel operation: Operation, withErrors errors: [Error]) {
-    
-  }
+  func operationQueue(operationQueue: AdvancedOperationQueue, operationWillCancel operation: Operation, withErrors errors: [Error]) {}
   
   func operationQueue(operationQueue: AdvancedOperationQueue, operationDidCancel operation: Operation, withErrors errors: [Error]) {
-    self.cancelOperationHandler?(operationQueue, operation, errors)
+    self.didCancelOperationHandler?(operationQueue, operation, errors)
   }
+
 }

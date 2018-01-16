@@ -118,14 +118,19 @@ class GroupOperation: AdvancedOperation {
 
 extension GroupOperation: AdvancedOperationQueueDelegate {
   
-  func operationQueue(operationQueue: AdvancedOperationQueue, didAddOperation operation: Operation) {}
-  
+  func operationQueue(operationQueue: AdvancedOperationQueue, willAddOperation operation: Operation)  {}
+  func operationQueue(operationQueue: AdvancedOperationQueue, didAddOperation operation: Operation)  {}
+
+  //TODO: add will/did remove operation?
+
+  func operationQueue(operationQueue: AdvancedOperationQueue, operationWillPerform operation: Operation)  {}
   func operationQueue(operationQueue: AdvancedOperationQueue, operationDidPerform operation: Operation, withErrors errors: [Error]) {
     if operation !== finishingOperation || operation !== startingOperation {
       aggregatedErrors.append(contentsOf: errors)
     }
   }
-  
-  func operationQueue(operationQueue: AdvancedOperationQueue, operationDidCancel operation: Operation, withErrors errors: [Error]) {}
+
+  func operationQueue(operationQueue: AdvancedOperationQueue, operationWillCancel operation: Operation, withErrors errors: [Error])  {}
+  func operationQueue(operationQueue: AdvancedOperationQueue, operationDidCancel operation: Operation, withErrors errors: [Error])  {}
 
 }

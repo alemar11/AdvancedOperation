@@ -43,7 +43,7 @@ class AdvancedOperationQueueTests: XCTestCase {
     let operation4 = DelayOperation(interval: 1)
     
     var addCount = 0
-    delegate.addOperationHandler = { (queue, operation) in
+    delegate.willAddOperationHandler = { (queue, operation) in
       XCTAssertTrue(queue == queue)
       switch addCount {
       case 0:
@@ -59,29 +59,42 @@ class AdvancedOperationQueueTests: XCTestCase {
       }
       addCount += 1
     }
-    
+
+    let lock = NSLock()
+
     var startCount = 0
-    delegate.startOperationHandler = { (queue, operation) in
-      XCTAssertTrue(queue == queue)
+    delegate.willPerformOperationHandler = { (queue, operation) in
+      lock.lock()
       startCount += 1
+      print(startCount)
+      print("\n start: ✅ \(operation)")
+      XCTAssertTrue(queue == queue)
+      lock.unlock()
     }
-    
+
     var finishCount = 0
-    delegate.finishOperationHandler = { (queue, operation, errors) in
-      XCTAssertTrue(queue == queue)
-      XCTAssertEqual(errors.count, 0)
+    delegate.didPerformOperationHandler = { (queue, operation, errors) in
+      lock.lock()
       finishCount += 1
-    }
-    
-    var cancelCount = 0
-    delegate.cancelOperationHandler = { (queue, operation, errors) in
+      print(finishCount)
+      print("\n finish: ➡️ \(operation)")
       XCTAssertTrue(queue == queue)
       XCTAssertEqual(errors.count, 0)
+      lock.unlock()
+    }
+
+    var cancelCount = 0
+    delegate.didCancelOperationHandler = { (queue, operation, errors) in
+      lock.lock()
       cancelCount += 1
+      print(cancelCount)
+      XCTAssertTrue(queue == queue)
+      XCTAssertEqual(errors.count, 0)
+      lock.unlock()
     }
     
     queue.addOperations([operation1, operation2, operation3, operation4], waitUntilFinished: true)
-    
+
     /*
      //TODO: new test with this setup
      queue.addOperation(operation1)
