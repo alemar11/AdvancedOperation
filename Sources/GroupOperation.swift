@@ -101,12 +101,12 @@ class GroupOperation: AdvancedOperation {
     }
   }
 
-  private var _qualityOfService = QualityOfService.default {
+  private var _qualityOfService = QualityOfService.default {    
     willSet {
-      willChangeValue(forKey: #keyPath(Operation.qualityOfService))
+      willChangeValue(forKey: KVO.qualityOfService)
     }
     didSet {
-      didChangeValue(forKey: #keyPath(Operation.qualityOfService))
+      didChangeValue(forKey: KVO.qualityOfService)
     }
   }
 

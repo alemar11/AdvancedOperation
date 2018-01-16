@@ -35,30 +35,68 @@ public class AdvancedOperation: Operation {
 
   private(set) var errors = [Error]()
 
+  internal enum KVO {
+    static var isExecuting: String {
+      #if os(Linux)
+        let key = "isExecuting"
+      #else
+        let key = #keyPath(Operation.isExecuting)
+      #endif
+      return key
+    }
+    
+    static var isFinished: String {
+      #if os(Linux)
+        let key = "isFinished"
+      #else
+        let key = #keyPath(Operation.isFinished)
+      #endif
+      return key
+    }
+    
+    static var isReady: String {
+      #if os(Linux)
+        let key = "isReady"
+      #else
+        let key = #keyPath(Operation.isReady)
+      #endif
+      return key
+    }
+    
+    static var qualityOfService: String {
+      #if os(Linux)
+        let key = "qualityOfService"
+      #else
+        let key = #keyPath(Operation.qualityOfService)
+      #endif
+      return key
+    }
+  }
+  
   private var _executing = false {
     willSet {
-      willChangeValue(forKey: #keyPath(Operation.isExecuting))
+      willChangeValue(forKey: KVO.isExecuting)
     }
     didSet {
-      didChangeValue(forKey: #keyPath(Operation.isExecuting))
+      didChangeValue(forKey: KVO.isExecuting)
     }
   }
 
   private var _finished = false {
     willSet {
-      willChangeValue(forKey: #keyPath(Operation.isFinished))
+      willChangeValue(forKey: KVO.isFinished)
     }
     didSet {
-      didChangeValue(forKey: #keyPath(Operation.isFinished))
+      didChangeValue(forKey: KVO.isFinished)
     }
   }
 
   private var _ready = false {
     willSet {
-      willChangeValue(forKey: #keyPath(Operation.isReady))
+      willChangeValue(forKey: KVO.isReady)
     }
     didSet {
-      didChangeValue(forKey: #keyPath(Operation.isReady))
+      didChangeValue(forKey: KVO.isReady)
     }
   }
 
