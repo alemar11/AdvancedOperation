@@ -53,7 +53,12 @@ class AdvancedOperationTests: XCTestCase {
     XCTAssertFalse(operation.isCancelled)
     XCTAssertFalse(operation.isFinished)
     
-    wait(for: [exp], timeout: 10)
+    //wait(for: [exp], timeout: 10)
+    
+    waitForExpectations(timeout: 3) { (error) in
+      print("")
+    }
+    
     XCTAssertEqual(operation.errors.count, 0)
     XCTAssertFalse(operation.isReady)
     XCTAssertFalse(operation.isExecuting)

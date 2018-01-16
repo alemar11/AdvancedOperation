@@ -40,10 +40,7 @@ class GroupOperationTests: XCTestCase {
     group.addCompletionBlock { expectation3.fulfill() }
     
     group.start()
-    //wait(for: [expectation1, expectation2, expectation3], timeout: 10)
-    waitForExpectations(timeout: 3) { (error) in
-      print("")
-    }
+    wait(for: [expectation1, expectation2, expectation3], timeout: 10)
     
     XCTAssertFalse(group.isExecuting)
     XCTAssertFalse(group.isCancelled)
