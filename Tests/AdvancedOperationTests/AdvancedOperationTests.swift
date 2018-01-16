@@ -72,6 +72,8 @@ class AdvancedOperationTests: XCTestCase {
     
   }
   
+  #if !os(Linux)
+  
   func testCancel() {
     let exp = expectation(description: "\(#function)\(#line)")
     
@@ -233,5 +235,7 @@ class AdvancedOperationTests: XCTestCase {
     wait(for: [expectation1], timeout: 5)
     XCTAssertEqual(operation.errors.count, 2)
   }
+  
+  #endif
   
 }
