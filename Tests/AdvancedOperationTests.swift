@@ -150,7 +150,7 @@ class AdvancedOperationTests: XCTestCase {
     
     wait(for: [exp], timeout: 10)
     
-    sleep(10) // make sure there are no other effects
+    sleep(5) // make sure there are no other effects
     
     XCTAssertEqual(observer.didStartCount, 1)
     XCTAssertEqual(observer.didFinishCount, 1)
@@ -173,7 +173,7 @@ class AdvancedOperationTests: XCTestCase {
     operation.cancel()
     wait(for: [exp], timeout: 10)
     
-    sleep(10) // make sure there are no other effects
+    sleep(5) // make sure there are no other effects
     
     XCTAssertEqual(observer.didStartCount, 1)
     XCTAssertEqual(observer.didFinishCount, 1)
