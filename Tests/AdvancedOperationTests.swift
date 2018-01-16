@@ -193,7 +193,7 @@ class AdvancedOperationTests: XCTestCase {
     XCTAssertFalse(operation.isCancelled)
     XCTAssertFalse(operation.isFinished)
     
-    operation.cancel(error: SleepyOperation.Error.test)
+    operation.cancel(error: MockError.test)
     XCTAssertFalse(operation.isReady)
     XCTAssertTrue(operation.isCancelled)
     
@@ -204,9 +204,14 @@ class AdvancedOperationTests: XCTestCase {
   }
   
   func testFinishWithErrors() {
-    let operation = SleepyOperation()
+    let operation = FailingOperation()
+    let expectation1 = expectation(description: "\(#function)\(#line)")
+    
+    operation.addCompletionBlock { expectation1.fulfill() }
     operation.start()
-    XCTAssertEqual(operation.errors.count, 1)
+    
+    wait(for: [expectation1], timeout: 5)
+    XCTAssertEqual(operation.errors.count, 2)
   }
   
 }

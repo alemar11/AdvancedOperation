@@ -26,6 +26,7 @@ import Foundation
 
 internal enum MockError: Swift.Error {
   case test
+  case failed
 }
 
 internal class SleepyAsyncOperation: AdvancedOperation {
@@ -61,11 +62,18 @@ internal class SleepyAsyncOperation: AdvancedOperation {
 }
 
 internal class SleepyOperation: AdvancedOperation {
-  enum Error: Swift.Error { case test }
   
   override func main() {
     sleep(1)
-    self.finish(errors: [Error.test])
+    self.finish()
+  }
+}
+
+internal class FailingOperation: AdvancedOperation {
+  override func main() {
+    DispatchQueue.global().asyncAfter(deadline: .now() + 2.0) {
+      self.finish(errors: [MockError.failed, MockError.test])
+    }
   }
 }
 
