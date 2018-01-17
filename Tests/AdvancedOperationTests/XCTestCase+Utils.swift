@@ -76,7 +76,7 @@ extension XCTestCase {
       else { return recordFailure(withDescription: "Operation is not in executing state.", inFile: file, atLine: _line, expected: true) }
 
     guard operation.errors.count == errors.count
-      else { return recordFailure(withDescription: "Operation has \(operation.errors.count) errors, expected: \(errors.count)", inFile: file, atLine: line, expected: true) }
+      else { return recordFailure(withDescription: "Operation has \(operation.errors.count) errors, expected: \(errors.count)", inFile: file, atLine: _line, expected: true) }
   }
 
   /// AdvancedOperation finished due to a cancel command.
@@ -96,7 +96,7 @@ extension XCTestCase {
       else { return recordFailure(withDescription: "Operation is not in finished state.", inFile: file, atLine: _line, expected: true) }
 
     guard operation.errors.count == errors.count
-      else { return recordFailure(withDescription: "Operation has \(operation.errors.count) errors, expected: \(errors.count)", inFile: file, atLine: line, expected: true) }
+      else { return recordFailure(withDescription: "Operation has \(operation.errors.count) errors, expected: \(errors.count)", inFile: file, atLine: _line, expected: true) }
   }
 
 }
