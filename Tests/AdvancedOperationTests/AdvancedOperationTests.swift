@@ -41,14 +41,14 @@ class AdvancedOperationTests: XCTestCase {
     
     let operation = SleepyAsyncOperation()
     operation.completionBlock = { expectation1.fulfill() }
-    
-    OperationState.ready.evaluate(operation: operation)
+
+    XCTAssertOperationReady(operation: operation)
     
     operation.start()
-    OperationState.started.evaluate(operation: operation)
+    XCTAssertOperationExecuting(operation: operation)
     
     waitForExpectations(timeout: 10)
-    OperationState.finished(errors: []).evaluate(operation: operation)
+    XCTAssertOperationFinished(operation: operation)
   }
   
   #if !os(Linux)
@@ -59,35 +59,35 @@ class AdvancedOperationTests: XCTestCase {
     let operation = SleepyAsyncOperation()
     operation.completionBlock = { expectation1.fulfill() }
     
-    OperationState.ready.evaluate(operation: operation)
+    XCTAssertOperationReady(operation: operation)
     
     operation.start()
-    OperationState.started.evaluate(operation: operation)
+    XCTAssertOperationExecuting(operation: operation)
     
     operation.cancel()
     XCTAssertFalse(operation.isReady)
     XCTAssertTrue(operation.isCancelled)
 
     waitForExpectations(timeout: 10)
-    OperationState.cancelled(error: nil).evaluate(operation: operation)
+    XCTAssertOperationCancelled(operation: operation)
   }
   
   func testBailingOutEarly() {
     let operation = SleepyAsyncOperation()
 
-    OperationState.ready.evaluate(operation: operation)
+    XCTAssertOperationReady(operation: operation)
     
     operation.cancel()
     
     operation.start()
-    OperationState.cancelled(error: nil).evaluate(operation: operation)
+     XCTAssertOperationCancelled(operation: operation)
     
     operation.cancel()
     XCTAssertFalse(operation.isReady)
     XCTAssertTrue(operation.isCancelled)
     
     operation.waitUntilFinished()
-    OperationState.cancelled(error: nil).evaluate(operation: operation)
+    XCTAssertOperationCancelled(operation: operation)
   }
   
   fileprivate class Observer: OperationObserving {
@@ -161,7 +161,7 @@ class AdvancedOperationTests: XCTestCase {
   
   func testCancelWithErrors() {
     let exp = expectation(description: "\(#function)\(#line)")
-    
+
     let operation = SleepyAsyncOperation()
     operation.completionBlock = { exp.fulfill() }
     operation.start()

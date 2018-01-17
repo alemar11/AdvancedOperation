@@ -42,8 +42,7 @@ class DelayOperationTests: XCTestCase {
     
     operation.start()
     waitForExpectations(timeout: 3)
-    XCTAssertFalse(operation.isCancelled)
-    XCTAssertTrue(operation.isFinished)
+    XCTAssertOperationFinished(operation: operation)
   }
   
   func testNegativeInterval() {
@@ -54,7 +53,7 @@ class DelayOperationTests: XCTestCase {
     operation.start()
     waitForExpectations(timeout: 3)
     XCTAssertFalse(operation.isCancelled)
-    XCTAssertTrue(operation.isFinished)
+    XCTAssertOperationFinished(operation: operation)
   }
   
   func testBailingOutEarly() {
@@ -71,8 +70,7 @@ class DelayOperationTests: XCTestCase {
     operation.cancel()
     operation.start()
     waitForExpectations(timeout: 3)
-    XCTAssertTrue(operation.isCancelled)
-    XCTAssertTrue(operation.isFinished)
+    XCTAssertOperationCancelled(operation: operation)
   }
   
 }
