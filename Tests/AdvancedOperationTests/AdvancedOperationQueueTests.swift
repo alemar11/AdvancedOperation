@@ -176,7 +176,7 @@ class AdvancedOperationQueueTests: XCTestCase {
     queue.addOperation(operation4)
     queue.isSuspended = false
     
-    wait(for: [expectation1, expectation2, expectation3, expectation4], timeout: 20)
+    waitForExpectations(timeout: 10)
     
     XCTAssertEqual(addCount, 4)
     XCTAssertEqual(startCount, 4)

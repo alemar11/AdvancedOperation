@@ -41,7 +41,7 @@ class DelayOperationTests: XCTestCase {
     }
     
     operation.start()
-    wait(for: [exp], timeout: 3)
+    waitForExpectations(timeout: 3)
     XCTAssertFalse(operation.isCancelled)
     XCTAssertTrue(operation.isFinished)
   }
@@ -52,7 +52,7 @@ class DelayOperationTests: XCTestCase {
     operation.completionBlock = { exp.fulfill() }
     
     operation.start()
-    wait(for: [exp], timeout: 3)
+    waitForExpectations(timeout: 3)
     XCTAssertFalse(operation.isCancelled)
     XCTAssertTrue(operation.isFinished)
   }
@@ -70,7 +70,7 @@ class DelayOperationTests: XCTestCase {
     
     operation.cancel()
     operation.start()
-    wait(for: [exp], timeout: 3)
+    waitForExpectations(timeout: 3)
     XCTAssertTrue(operation.isCancelled)
     XCTAssertTrue(operation.isFinished)
   }

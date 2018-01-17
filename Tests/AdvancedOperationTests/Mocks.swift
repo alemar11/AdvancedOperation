@@ -23,9 +23,48 @@
 
 import Foundation
 import Dispatch
+import XCTest
 @testable import AdvancedOperation
 
-internal enum MockError: Swift.Error {
+internal enum OperationState {
+  case ready
+  case started
+  case cancelled(error: Error?)
+  case finished(errors: [Error])
+
+  func evaluate(operation: AdvancedOperation) {
+    switch self {
+    case .ready:
+      XCTAssertTrue(operation.isReady)
+      XCTAssertFalse(operation.isExecuting)
+      XCTAssertFalse(operation.isCancelled)
+      XCTAssertFalse(operation.isFinished)
+      
+    case .started:
+      XCTAssertFalse(operation.isReady)
+      XCTAssertTrue(operation.isExecuting)
+      XCTAssertFalse(operation.isCancelled)
+      XCTAssertFalse(operation.isFinished)
+
+    case .cancelled(error: let error):
+      XCTAssertFalse(operation.isReady)
+      XCTAssertTrue(operation.isCancelled)
+      XCTAssertFalse(operation.isExecuting)
+      XCTAssertTrue(operation.isFinished)
+      XCTAssertEqual(operation.errors.count, (error == nil) ? 0 : 1)
+
+    case .finished(errors: let errors):
+      XCTAssertFalse(operation.isReady)
+      XCTAssertFalse(operation.isExecuting)
+      XCTAssertFalse(operation.isCancelled)
+      XCTAssertTrue(operation.isFinished)
+      XCTAssertEqual(operation.errors.count, errors.count)
+
+    }
+  }
+}
+
+internal enum MockError: Swift.Error, Equatable {
   case test
   case failed
 }

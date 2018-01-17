@@ -42,7 +42,7 @@ class GroupOperationTests: XCTestCase {
     group.addCompletionBlock { expectation3.fulfill() }
     
     group.start()
-    wait(for: [expectation1, expectation2, expectation3], timeout: 10)
+    waitForExpectations(timeout: 10)
     
     XCTAssertFalse(group.isExecuting)
     XCTAssertFalse(group.isCancelled)
@@ -66,7 +66,7 @@ class GroupOperationTests: XCTestCase {
     
     group.start()
     operation1.cancel(error: MockError.test)
-    wait(for: [expectation1, expectation2, expectation3], timeout: 10)
+    waitForExpectations(timeout: 10)
     
     XCTAssertFalse(operation1.isExecuting)
     XCTAssertTrue(operation1.isCancelled)
@@ -100,7 +100,7 @@ class GroupOperationTests: XCTestCase {
     
     group.start()
     operation2.cancel()
-    wait(for: [expectation1, expectation2, expectation3], timeout: 10)
+    waitForExpectations(timeout: 10)
     
     XCTAssertFalse(operation1.isExecuting)
     XCTAssertFalse(operation1.isCancelled)
@@ -137,7 +137,7 @@ class GroupOperationTests: XCTestCase {
     group.start()
     group.cancel()
     
-    wait(for: [expectation1, expectation2, expectation3, expectation4], timeout: 6)
+    waitForExpectations(timeout: 10)
     
     for operation in [operation1, operation2, operation3, group] {
       XCTAssertFalse(operation.isExecuting)
@@ -169,7 +169,7 @@ class GroupOperationTests: XCTestCase {
     group.start()
     group.cancel(error: MockError.test)
     
-    wait(for: [expectation1, expectation2, expectation3, expectation4], timeout: 6)
+    waitForExpectations(timeout: 10)
     
     for operation in [operation1, operation2, operation3, group] {
       XCTAssertFalse(operation.isExecuting)
@@ -224,7 +224,7 @@ class GroupOperationTests: XCTestCase {
     }
     
     group.start()
-    wait(for: [exepectation1], timeout: 10)
+    waitForExpectations(timeout: 10)
     
     XCTAssertFalse(group.isCancelled)
     XCTAssertFalse(group.isExecuting)

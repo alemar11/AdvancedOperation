@@ -37,104 +37,57 @@ extension AdvancedOperationTests {
 class AdvancedOperationTests: XCTestCase {
   
   func testStart() {
-    let exp = expectation(description: "\(#function)\(#line)")
+    let expectation1 = expectation(description: "\(#function)\(#line)")
     
     let operation = SleepyAsyncOperation()
-    operation.completionBlock = { exp.fulfill() }
+    operation.completionBlock = { expectation1.fulfill() }
     
-    XCTAssertTrue(operation.isReady)
-    XCTAssertFalse(operation.isExecuting)
-    XCTAssertFalse(operation.isCancelled)
-    XCTAssertFalse(operation.isFinished)
+    OperationState.ready.evaluate(operation: operation)
     
     operation.start()
-    XCTAssertFalse(operation.isReady)
-    XCTAssertTrue(operation.isExecuting)
-    XCTAssertFalse(operation.isCancelled)
-    XCTAssertFalse(operation.isFinished)
+    OperationState.started.evaluate(operation: operation)
     
-    func evaluate(operation: AdvancedOperation) {
-      XCTAssertEqual(operation.errors.count, 0)
-      //TODO: this state could be a separate function
-      XCTAssertFalse(operation.isReady)
-      XCTAssertFalse(operation.isExecuting)
-      XCTAssertFalse(operation.isCancelled)
-      XCTAssertTrue(operation.isFinished)
-    }
-    
-    #if os(Linux)
-      waitForExpectations(timeout: 10) { (error) in
-        XCTAssertNil(error)
-        evaluate(operation: operation)
-      }
-    #else
-      wait(for: [exp], timeout: 10)
-      evaluate(operation: operation)
-    #endif
-    
+    waitForExpectations(timeout: 10)
+    OperationState.finished(errors: []).evaluate(operation: operation)
   }
   
   #if !os(Linux)
   
   func testCancel() {
-    let exp = expectation(description: "\(#function)\(#line)")
+    let expectation1 = expectation(description: "\(#function)\(#line)")
     
     let operation = SleepyAsyncOperation()
-    operation.completionBlock = { exp.fulfill() }
+    operation.completionBlock = { expectation1.fulfill() }
     
-    XCTAssertTrue(operation.isReady)
-    XCTAssertFalse(operation.isExecuting)
-    XCTAssertFalse(operation.isCancelled)
-    XCTAssertFalse(operation.isFinished)
+    OperationState.ready.evaluate(operation: operation)
     
     operation.start()
-    XCTAssertFalse(operation.isReady)
-    XCTAssertTrue(operation.isExecuting)
-    XCTAssertFalse(operation.isCancelled)
-    XCTAssertFalse(operation.isFinished)
+    OperationState.started.evaluate(operation: operation)
     
     operation.cancel()
     XCTAssertFalse(operation.isReady)
     XCTAssertTrue(operation.isCancelled)
-    
-    wait(for: [exp], timeout: 10)
-    XCTAssertTrue(operation.isFinished)
-    XCTAssertFalse(operation.isExecuting)
-    XCTAssertEqual(operation.errors.count, 0)
-    //waitForExpectations(timeout: 10, handler: nil)
+
+    waitForExpectations(timeout: 10)
+    OperationState.cancelled(error: nil).evaluate(operation: operation)
   }
   
   func testBailingOutEarly() {
-    //let exp = expectation(description: "\(#function)\(#line)")
-    
     let operation = SleepyAsyncOperation()
-    operation.completionBlock = {
-      //exp.fulfill()
-    }
-    
-    XCTAssertTrue(operation.isReady)
-    XCTAssertFalse(operation.isExecuting)
-    XCTAssertFalse(operation.isCancelled)
-    XCTAssertFalse(operation.isFinished)
+
+    OperationState.ready.evaluate(operation: operation)
     
     operation.cancel()
     
     operation.start()
-    XCTAssertFalse(operation.isReady)
-    XCTAssertFalse(operation.isExecuting)
-    XCTAssertTrue(operation.isCancelled)
-    XCTAssertTrue(operation.isFinished)
+    OperationState.cancelled(error: nil).evaluate(operation: operation)
     
     operation.cancel()
     XCTAssertFalse(operation.isReady)
     XCTAssertTrue(operation.isCancelled)
     
     operation.waitUntilFinished()
-    //wait(for: [exp], timeout: 10)
-    //waitForExpectations(timeout: 10, handler: nil)
-    XCTAssertTrue(operation.isFinished)
-    XCTAssertFalse(operation.isExecuting)
-    XCTAssertEqual(operation.errors.count, 0)
+    OperationState.cancelled(error: nil).evaluate(operation: operation)
   }
   
   fileprivate class Observer: OperationObserving {
@@ -172,7 +125,7 @@ class AdvancedOperationTests: XCTestCase {
     
     operation.start()
     
-    wait(for: [exp], timeout: 10)
+    waitForExpectations(timeout: 10)
     
     sleep(5) // make sure there are no other effects
     
@@ -195,7 +148,7 @@ class AdvancedOperationTests: XCTestCase {
     
     operation.start()
     operation.cancel()
-    wait(for: [exp], timeout: 10)
+    waitForExpectations(timeout: 10)
     
     sleep(5) // make sure there are no other effects
     
@@ -221,7 +174,7 @@ class AdvancedOperationTests: XCTestCase {
     XCTAssertFalse(operation.isReady)
     XCTAssertTrue(operation.isCancelled)
     
-    wait(for: [exp], timeout: 10)
+    waitForExpectations(timeout: 10)
     XCTAssertTrue(operation.isFinished)
     XCTAssertFalse(operation.isExecuting)
     XCTAssertEqual(operation.errors.count, 1)
@@ -234,7 +187,7 @@ class AdvancedOperationTests: XCTestCase {
     operation.addCompletionBlock { expectation1.fulfill() }
     operation.start()
     
-    wait(for: [expectation1], timeout: 5)
+    waitForExpectations(timeout: 10)
     XCTAssertEqual(operation.errors.count, 2)
   }
   
