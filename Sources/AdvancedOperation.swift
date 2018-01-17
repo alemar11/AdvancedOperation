@@ -37,28 +37,28 @@ public class AdvancedOperation: Operation {
   
   private var _executing = false {
     willSet {
-      willChangeValue(forKey: KVO.isExecuting)
+      willChangeValue(forKey: ObservableKey.isExecuting)
     }
     didSet {
-      didChangeValue(forKey: KVO.isExecuting)
+      didChangeValue(forKey: ObservableKey.isExecuting)
     }
   }
   
   private var _finished = false {
     willSet {
-      willChangeValue(forKey: KVO.isFinished)
+      willChangeValue(forKey: ObservableKey.isFinished)
     }
     didSet {
-      didChangeValue(forKey: KVO.isFinished)
+      didChangeValue(forKey: ObservableKey.isFinished)
     }
   }
   
   private var _ready = false {
     willSet {
-      willChangeValue(forKey: KVO.isReady)
+      willChangeValue(forKey: ObservableKey.isReady)
     }
     didSet {
-      didChangeValue(forKey: KVO.isReady)
+      didChangeValue(forKey: ObservableKey.isReady)
     }
   }
   
@@ -165,7 +165,7 @@ public class AdvancedOperation: Operation {
 }
 
 internal extension AdvancedOperation {
-  internal enum KVO {
+  internal enum ObservableKey {
     static var isExecuting: String {
       #if os(Linux)
         let key = "isExecuting"

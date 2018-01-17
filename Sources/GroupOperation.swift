@@ -108,10 +108,10 @@ class GroupOperation: AdvancedOperation {
 
   private var _qualityOfService = QualityOfService.default {    
     willSet {
-      willChangeValue(forKey: KVO.qualityOfService)
+      willChangeValue(forKey: ObservableKey.qualityOfService)
     }
     didSet {
-      didChangeValue(forKey: KVO.qualityOfService)
+      didChangeValue(forKey: ObservableKey.qualityOfService)
     }
   }
 
