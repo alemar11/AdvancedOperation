@@ -28,81 +28,108 @@ import Dispatch
 internal enum MockError: Swift.Error, Equatable {
   case test
   case failed
-}
+  case cancelled(date: Date)
+  case generic(date: Date)
 
-internal class SleepyAsyncOperation: AdvancedOperation {
-
-  private let interval1: UInt32
-  private let interval2: UInt32
-  private let interval3: UInt32
-  
-  init(interval1: UInt32 = 1, interval2: UInt32 = 2, interval3: UInt32 = 1) {
-    self.interval1 = interval1
-    self.interval2 = interval2
-    self.interval3 = interval3
-    super.init()
-  }
-
-  override func main() {
-    DispatchQueue.global().async { [weak weakSelf = self] in
-      guard let strongSelf = weakSelf else { return self.finish() }
-      if strongSelf.isCancelled { return strongSelf.finish() }
-      
-      sleep(self.interval1)
-      if strongSelf.isCancelled { return strongSelf.finish() }
-      
-      sleep(self.interval2)
-      if strongSelf.isCancelled { return strongSelf.finish()}
-      
-      sleep(self.interval3)
-      strongSelf.finish()
+  static func ==(lhs: MockError, rhs: MockError) -> Bool {
+    switch (lhs, rhs) {
+    case (.test, .test):
+      return true
+    case (.failed, .failed):
+      return true
+    case (let .cancelled(dateLhs), let .cancelled(dateRhs)):
+      return dateLhs == dateRhs
+    case (let .generic(dateLhs), let .generic(dateRhs)):
+      return dateLhs == dateRhs
+    default:
+      return false
     }
-    
-  }
-  
-}
 
-internal class SleepyOperation: AdvancedOperation {
-  
-  override func main() {
-    sleep(1)
-    self.finish()
   }
 }
 
-internal class FailingOperation: AdvancedOperation {
-  override func main() {
-    DispatchQueue.global().asyncAfter(deadline: .now() + 2.0) {
-      self.finish(errors: [MockError.failed, MockError.test])
+  internal class SleepyAsyncOperation: AdvancedOperation {
+
+    private let interval1: UInt32
+    private let interval2: UInt32
+    private let interval3: UInt32
+
+    init(interval1: UInt32 = 1, interval2: UInt32 = 2, interval3: UInt32 = 1) {
+      self.interval1 = interval1
+      self.interval2 = interval2
+      self.interval3 = interval3
+      super.init()
+    }
+
+    override func main() {
+      DispatchQueue.global().async { [weak weakSelf = self] in
+        guard let strongSelf = weakSelf else { return self.finish() }
+        if strongSelf.isCancelled { return strongSelf.finish() }
+
+        sleep(self.interval1)
+        if strongSelf.isCancelled { return strongSelf.finish() }
+
+        sleep(self.interval2)
+        if strongSelf.isCancelled { return strongSelf.finish()}
+
+        sleep(self.interval3)
+        strongSelf.finish()
+      }
+
+    }
+
+  }
+
+  internal class SleepyOperation: AdvancedOperation {
+
+    override func main() {
+      sleep(1)
+      self.finish()
     }
   }
-}
 
-internal class QueueDelegate: AdvancedOperationQueueDelegate {
-  
-  var willAddOperationHandler: ((AdvancedOperationQueue, Operation) -> Void)? = nil
-  var willPerformOperationHandler: ((AdvancedOperationQueue, Operation) -> Void)? = nil
-  var didCancelOperationHandler: ((AdvancedOperationQueue, Operation, [Error]) -> Void)? = nil
-  var didPerformOperationHandler: ((AdvancedOperationQueue, Operation, [Error]) -> Void)? = nil
-  
-  func operationQueue(operationQueue: AdvancedOperationQueue, willAddOperation operation: Operation) {
-    self.willAddOperationHandler?(operationQueue, operation)
+  internal class FailingOperation: AdvancedOperation {
+
+    private let defaultErrors: [Error]
+
+    init(errors: [MockError] = [MockError.failed, MockError.test]) {
+      self.defaultErrors = errors
+      super.init()
+    }
+
+    override func main() {
+      DispatchQueue.global().asyncAfter(deadline: .now() + 2.0) { [weak weakSelf = self] in
+        guard let strongSelf = weakSelf else { return self.finish() }
+        strongSelf.finish(errors: strongSelf.defaultErrors)
+      }
+    }
   }
-  
-  func operationQueue(operationQueue: AdvancedOperationQueue, didAddOperation operation: Operation) {}
-  
-  func operationQueue(operationQueue: AdvancedOperationQueue, operationWillPerform operation: Operation) {
-    self.willPerformOperationHandler?(operationQueue, operation)
-  }
-  
-  func operationQueue(operationQueue: AdvancedOperationQueue, operationDidPerform operation: Operation, withErrors errors: [Error]) {
-    self.didPerformOperationHandler?(operationQueue, operation, errors)
-  }
-  
-  func operationQueue(operationQueue: AdvancedOperationQueue, operationWillCancel operation: Operation, withErrors errors: [Error]) {}
-  
-  func operationQueue(operationQueue: AdvancedOperationQueue, operationDidCancel operation: Operation, withErrors errors: [Error]) {
-    self.didCancelOperationHandler?(operationQueue, operation, errors)
-  }
+
+  internal class QueueDelegate: AdvancedOperationQueueDelegate {
+
+    var willAddOperationHandler: ((AdvancedOperationQueue, Operation) -> Void)? = nil
+    var willPerformOperationHandler: ((AdvancedOperationQueue, Operation) -> Void)? = nil
+    var didCancelOperationHandler: ((AdvancedOperationQueue, Operation, [Error]) -> Void)? = nil
+    var didPerformOperationHandler: ((AdvancedOperationQueue, Operation, [Error]) -> Void)? = nil
+
+    func operationQueue(operationQueue: AdvancedOperationQueue, willAddOperation operation: Operation) {
+      self.willAddOperationHandler?(operationQueue, operation)
+    }
+
+    func operationQueue(operationQueue: AdvancedOperationQueue, didAddOperation operation: Operation) {}
+
+    func operationQueue(operationQueue: AdvancedOperationQueue, operationWillPerform operation: Operation) {
+      self.willPerformOperationHandler?(operationQueue, operation)
+    }
+
+    func operationQueue(operationQueue: AdvancedOperationQueue, operationDidPerform operation: Operation, withErrors errors: [Error]) {
+      self.didPerformOperationHandler?(operationQueue, operation, errors)
+    }
+
+    func operationQueue(operationQueue: AdvancedOperationQueue, operationWillCancel operation: Operation, withErrors errors: [Error]) {}
+
+    func operationQueue(operationQueue: AdvancedOperationQueue, operationDidCancel operation: Operation, withErrors errors: [Error]) {
+      self.didCancelOperationHandler?(operationQueue, operation, errors)
+    }
 
 }

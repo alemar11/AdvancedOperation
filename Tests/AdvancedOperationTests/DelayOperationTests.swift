@@ -29,7 +29,7 @@ import XCTest
 class DelayOperationTests: XCTestCase {
   
   func testStandardFlow() {
-    let exp = expectation(description: "\(#function)\(#line)")
+    let expectation1 = expectation(description: "\(#function)\(#line)")
     
     let start = Date()
     let operation = DelayOperation(interval: 2)
@@ -37,7 +37,7 @@ class DelayOperationTests: XCTestCase {
     operation.completionBlock = {
       let seconds = Date().timeIntervalSince(start)
       XCTAssertTrue(seconds > 2 && seconds < 3)
-      exp.fulfill()
+      expectation1.fulfill()
     }
     
     operation.start()
@@ -46,9 +46,9 @@ class DelayOperationTests: XCTestCase {
   }
   
   func testNegativeInterval() {
-    let exp = expectation(description: "\(#function)\(#line)")
+    let expectation1 = expectation(description: "\(#function)\(#line)")
     let operation = DelayOperation(interval: -2)
-    operation.completionBlock = { exp.fulfill() }
+    operation.completionBlock = { expectation1.fulfill() }
     
     operation.start()
     waitForExpectations(timeout: 3)
@@ -57,14 +57,14 @@ class DelayOperationTests: XCTestCase {
   }
   
   func testBailingOutEarly() {
-    let exp = expectation(description: "\(#function)\(#line)")
+    let expectation1 = expectation(description: "\(#function)\(#line)")
     
     let start = Date()
     let operation = DelayOperation(interval: 2)
     operation.completionBlock = {
       let seconds = Date().timeIntervalSince(start)
       XCTAssertTrue(seconds > 0 && seconds < 1)
-      exp.fulfill()
+      expectation1.fulfill()
     }
     
     operation.cancel()
