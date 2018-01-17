@@ -25,7 +25,22 @@ import Foundation
 
 class GroupOperation: AdvancedOperation {
 
-  private(set) var aggregatedErrors = [Error]() //TODO: make this private only
+  private let lock: NSLock = NSLock()
+
+  private var _aggregatedErrors = [Error]()
+  private(set) var aggregatedErrors: [Error] {
+    get {
+      lock.lock()
+      let result = _aggregatedErrors
+      lock.unlock()
+      return result
+    }
+    set(value) {
+      lock.lock()
+      _aggregatedErrors = value
+      lock.unlock()
+    }
+  }
 
   private let underlyingOperationQueue = AdvancedOperationQueue()
 
@@ -79,16 +94,6 @@ class GroupOperation: AdvancedOperation {
   //    underlyingOperationQueue.addOperation(operation)
   //  }
 
-  /// `suspended` equal to false in order to start any added group operations.
-  //  public var isSuspended: Bool {
-  //    get {
-  //      return underlyingQueue.isSuspended
-  //    }
-  //    set(newIsSuspended) {
-  //      underlyingQueue.isSuspended = newIsSuspended
-  //    }
-  //  }
-
   /// Accesses the group operation queue's quality of service. It defaults to background quality.
   public final override var qualityOfService: QualityOfService {
     //TODO: kvo?
@@ -124,7 +129,7 @@ extension GroupOperation: AdvancedOperationQueueDelegate {
   func operationQueue(operationQueue: AdvancedOperationQueue, operationWillPerform operation: Operation) {}
   func operationQueue(operationQueue: AdvancedOperationQueue, operationDidPerform operation: Operation, withErrors errors: [Error]) {
     guard !errors.isEmpty else { return }
-    
+
     if operation !== finishingOperation || operation !== startingOperation {
       aggregatedErrors.append(contentsOf: errors)
     }
