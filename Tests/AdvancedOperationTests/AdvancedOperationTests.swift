@@ -153,31 +153,6 @@ class AdvancedOperationTests: XCTestCase {
     operation.waitUntilFinished()
     XCTAssertOperationCancelled(operation: operation)
   }
-
-  //TODO: move this out
-  fileprivate class Observer: OperationObserving {
-    
-    var didStartCount = 0
-    var didFinishCount = 0
-    var didCancelCount = 0
-    
-    func operationWillPerform(operation: AdvancedOperation) {
-      didStartCount += 1
-    }
-    
-    func operationDidPerform(operation: AdvancedOperation, withErrors errors: [Error]) {
-      didFinishCount += 1
-    }
-    
-    func operationWillCancel(operation: AdvancedOperation, withErrors errors: [Error]) {
-      //
-    }
-    
-    func operationDidCancel(operation: AdvancedOperation, withErrors errors: [Error]) {
-      didCancelCount += 1
-    }
-    
-  }
   
   func testObservers() {
     
@@ -255,5 +230,5 @@ class AdvancedOperationTests: XCTestCase {
     waitForExpectations(timeout: 10)
     XCTAssertEqual(operation.errors.count, 2)
   }
-  
+
 }
