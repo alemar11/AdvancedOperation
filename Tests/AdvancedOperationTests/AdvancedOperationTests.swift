@@ -25,14 +25,20 @@ import XCTest
 @testable import AdvancedOperation
 
 extension AdvancedOperationTests {
-  //TODO: complete this list
+
   static var allTests = [
     ("testStart", testStart),
-    ("testMultipleStart", testMultipleStart)
-    //("testCancel", testCancel),
-    //("testBailingOutEarly", testBailingOutEarly),
-    //("testObservers", testObservers)
+    ("testMultipleStart", testMultipleStart),
+    ("testCancel", testCancel),
+    ("testMultipleCancel", testMultipleCancel),
+    ("testMultipleCancelWithError", testMultipleCancelWithError),
+    ("testBailingOutEarly", testBailingOutEarly),
+    ("testObserversWithCancelCommand", testObserversWithCancelCommand),
+    ("testObservers", testObservers),
+    ("testCancelWithErrors", testCancelWithErrors),
+    ("testFinishWithErrors", testFinishWithErrors)
   ]
+
 }
 
 class AdvancedOperationTests: XCTestCase {
@@ -68,11 +74,7 @@ class AdvancedOperationTests: XCTestCase {
     waitForExpectations(timeout: 10)
     XCTAssertOperationFinished(operation: operation)
   }
-  
-  
-  
-  #if !os(Linux)
-  
+
   func testCancel() {
     let expectation1 = expectation(description: "\(#function)\(#line)")
     
@@ -151,7 +153,8 @@ class AdvancedOperationTests: XCTestCase {
     operation.waitUntilFinished()
     XCTAssertOperationCancelled(operation: operation)
   }
-  
+
+  //TODO: move this out
   fileprivate class Observer: OperationObserving {
     
     var didStartCount = 0
@@ -199,7 +202,7 @@ class AdvancedOperationTests: XCTestCase {
   }
   
   
-  func testObserversWithACancelCommand() {
+  func testObserversWithCancelCommand() {
     
     let exp = expectation(description: "\(#function)\(#line)")
     let observer = Observer()
