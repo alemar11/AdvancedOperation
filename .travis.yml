@@ -34,6 +34,25 @@ matrix:
         - swift build
         - swift test
 
+    # Ubuntu Trusty 14.04: Swift 4.1 Tests - DEVELOPMENT
+    - os: linux
+      dist: trusty
+      sudo: required
+      language: generic
+      before_install:
+        - sudo apt-get install clang libicu-dev libcurl4-openssl-dev wget unzip -y
+        - wget https://swift.org/builds/development/ubuntu1404/swift-DEVELOPMENT-SNAPSHOT-2018-01-15-a/swift-DEVELOPMENT-SNAPSHOT-2018-01-15-a-ubuntu14.04.tar.gz
+        - tar zxf swift-DEVELOPMENT*.tar.gz && rm -rf swift-DEVELOPMENT*.tar.gz
+        - sudo mv swift-DEVELOPMENT* /swift-DEVELOPMENT
+        - echo "export PATH=/swift-DEVELOPMENT/usr/bin:\"\${PATH}\"" >> ~/.bashrc
+        - source ~/.bashrc
+      #install: eval "$(curl -sL https://swiftenv.fuller.li/install.sh)"
+      script:
+        - set -o pipefail  
+        - swift --version
+        - swift build
+        - swift test    
+
     # macOS: Swift Tests, CocoaPods and SwiftLint
     - os: osx
       osx_image: xcode9.2
