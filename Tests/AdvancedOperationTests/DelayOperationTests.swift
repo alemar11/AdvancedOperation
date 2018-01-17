@@ -21,10 +21,18 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#if !os(Linux)
-
 import XCTest
 @testable import AdvancedOperation
+
+extension DelayOperationTests {
+  
+  static var DelayOperationTests = [
+    ("testStandardFlow", testStandardFlow),
+    ("testNegativeInterval", testNegativeInterval),
+    ("testBailingOutEarly", testBailingOutEarly)
+  ]
+  
+}
 
 class DelayOperationTests: XCTestCase {
   
@@ -33,7 +41,7 @@ class DelayOperationTests: XCTestCase {
     
     let start = Date()
     let operation = DelayOperation(interval: 2)
-
+    
     operation.completionBlock = {
       let seconds = Date().timeIntervalSince(start)
       XCTAssertTrue(seconds > 2 && seconds < 3)
@@ -74,5 +82,3 @@ class DelayOperationTests: XCTestCase {
   }
   
 }
-
-#endif
