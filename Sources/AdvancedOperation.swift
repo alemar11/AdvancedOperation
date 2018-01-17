@@ -72,17 +72,18 @@ public class AdvancedOperation: Operation {
   // MARK: - Methods
   
   public final override func start() {
-    _ready = false
     
     // Bail out early if cancelled.
     guard !isCancelled else {
+       _ready = false
       didPerform()
       _finished = true // this will fire the completionBlock via KVO
       return
     }
     
     guard !isExecuting else { return }
-    
+
+    _ready = false
     _executing = true
     _finished = false
     
