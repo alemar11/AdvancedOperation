@@ -100,8 +100,8 @@ class GroupOperation: AdvancedOperation {
     get {
       return _qualityOfService
     }
-    set(newQualityOfService) {
-      _qualityOfService = newQualityOfService
+    set(value) {
+      _qualityOfService = value
       underlyingOperationQueue.qualityOfService = _qualityOfService
     }
   }
