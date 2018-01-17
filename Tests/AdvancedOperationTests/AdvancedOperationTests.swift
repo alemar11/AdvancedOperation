@@ -30,12 +30,12 @@ extension AdvancedOperationTests {
     ("testStart", testStart),
     ("testMultipleStart", testMultipleStart),
     ("testCancel", testCancel),
-//    ("testMultipleCancel", testMultipleCancel),
-//    ("testMultipleCancelWithError", testMultipleCancelWithError),
-//    ("testBailingOutEarly", testBailingOutEarly),
-//    ("testObserversWithCancelCommand", testObserversWithCancelCommand),
-//    ("testObservers", testObservers),
-//    ("testCancelWithErrors", testCancelWithErrors),
+    ("testMultipleCancel", testMultipleCancel),
+    ("testMultipleCancelWithError", testMultipleCancelWithError),
+    ("testBailingOutEarly", testBailingOutEarly),
+    ("testObserversWithCancelCommand", testObserversWithCancelCommand),
+    ("testObservers", testObservers),
+    ("testCancelWithErrors", testCancelWithErrors),
     ("testFinishWithErrors", testFinishWithErrors)
   ]
 
