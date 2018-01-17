@@ -82,15 +82,19 @@ class AdvancedOperationTests: XCTestCase {
     operation.completionBlock = { expectation1.fulfill() }
     
     XCTAssertOperationReady(operation: operation)
-    
+
+    print("\n start")
     operation.start()
     XCTAssertOperationExecuting(operation: operation)
-    
+
+    print("\n cancel")
     operation.cancel()
     XCTAssertFalse(operation.isReady)
     XCTAssertTrue(operation.isCancelled)
-    
+
+    print("\n wait")
     waitForExpectations(timeout: 10)
+    print("\n assert")
     XCTAssertOperationCancelled(operation: operation)
   }
   
