@@ -71,7 +71,7 @@ class AdvancedOperationQueue: OperationQueue {
         guard let `self` = self else { return }
         self.delegate?.operationQueue(operationQueue: self, operationDidPerform: operation, withErrors: operation.errors)
 
-      })
+      } )
 
       operation.addObserver(observer: observer)
 

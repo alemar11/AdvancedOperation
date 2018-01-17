@@ -28,7 +28,7 @@ class GroupOperation: AdvancedOperation {
   private let lock: NSLock = NSLock()
 
   private var _aggregatedErrors = [Error]()
-  private(set) var aggregatedErrors: [Error] {
+  internal var aggregatedErrors: [Error] {
     get {
       lock.lock()
       let result = _aggregatedErrors
@@ -44,7 +44,7 @@ class GroupOperation: AdvancedOperation {
 
   private let underlyingOperationQueue = AdvancedOperationQueue()
 
-  private lazy var startingOperation = BlockOperation(block: {})
+  private lazy var startingOperation = BlockOperation(block: {} )
 
   private lazy var finishingOperation: BlockOperation = {
     return BlockOperation { [weak self] in
