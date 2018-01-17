@@ -155,13 +155,12 @@ class AdvancedOperationTests: XCTestCase {
   }
   
   func testObservers() {
-    
-    let exp = expectation(description: "\(#function)\(#line)")
+    let expectation1 = expectation(description: "\(#function)\(#line)")
     let observer = Observer()
     let operation = SleepyAsyncOperation()
     operation.addObserver(observer: observer)
     
-    operation.completionBlock = { exp.fulfill() }
+    operation.completionBlock = { expectation1.fulfill() }
     
     operation.start()
     
@@ -178,13 +177,12 @@ class AdvancedOperationTests: XCTestCase {
   
   
   func testObserversWithCancelCommand() {
-    
-    let exp = expectation(description: "\(#function)\(#line)")
+    let expectation1 = expectation(description: "\(#function)\(#line)")
     let observer = Observer()
     let operation = SleepyAsyncOperation()
     operation.addObserver(observer: observer)
     
-    operation.completionBlock = { exp.fulfill() }
+    operation.completionBlock = { expectation1.fulfill() }
     
     operation.start()
     operation.cancel()
@@ -200,24 +198,20 @@ class AdvancedOperationTests: XCTestCase {
   
   
   func testCancelWithErrors() {
-    let exp = expectation(description: "\(#function)\(#line)")
-    
+    let expectation1 = expectation(description: "\(#function)\(#line)")
     let operation = SleepyAsyncOperation()
-    operation.completionBlock = { exp.fulfill() }
+
+    operation.completionBlock = { expectation1.fulfill() }
     operation.start()
-    XCTAssertFalse(operation.isReady)
-    XCTAssertTrue(operation.isExecuting)
-    XCTAssertFalse(operation.isCancelled)
-    XCTAssertFalse(operation.isFinished)
+
+    XCTAssertOperationExecuting(operation: operation)
     
     operation.cancel(error: MockError.test)
     XCTAssertFalse(operation.isReady)
     XCTAssertTrue(operation.isCancelled)
     
     waitForExpectations(timeout: 10)
-    XCTAssertTrue(operation.isFinished)
-    XCTAssertFalse(operation.isExecuting)
-    XCTAssertEqual(operation.errors.count, 1)
+    XCTAssertOperationCancelled(operation: operation, errors: [MockError.test])
   }
   
   func testFinishWithErrors() {
