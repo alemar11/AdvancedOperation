@@ -29,7 +29,7 @@ extension AdvancedOperationTests {
   static var allTests = [
     ("testStart", testStart),
     ("testMultipleStart", testMultipleStart),
-//    ("testCancel", testCancel),
+    ("testCancel", testCancel),
 //    ("testMultipleCancel", testMultipleCancel),
 //    ("testMultipleCancelWithError", testMultipleCancelWithError),
 //    ("testBailingOutEarly", testBailingOutEarly),
