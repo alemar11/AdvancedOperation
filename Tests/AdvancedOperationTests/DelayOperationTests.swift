@@ -26,7 +26,7 @@ import XCTest
 
 extension DelayOperationTests {
   
-  static var DelayOperationTests = [
+  static var allTests = [
     ("testStandardFlow", testStandardFlow),
     ("testNegativeInterval", testNegativeInterval),
     ("testBailingOutEarly", testBailingOutEarly)
