@@ -123,6 +123,8 @@ extension GroupOperation: AdvancedOperationQueueDelegate {
 
   func operationQueue(operationQueue: AdvancedOperationQueue, operationWillPerform operation: Operation) {}
   func operationQueue(operationQueue: AdvancedOperationQueue, operationDidPerform operation: Operation, withErrors errors: [Error]) {
+    guard !errors.isEmpty else { return }
+    
     if operation !== finishingOperation || operation !== startingOperation {
       aggregatedErrors.append(contentsOf: errors)
     }
