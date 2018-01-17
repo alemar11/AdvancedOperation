@@ -30,7 +30,7 @@ extension XCTestCase {
   func XCTAssertOperationReady(operation: AdvancedOperation, file: String = #file, line: Int = #line) {
 
     #if os(Linux)
-      let _line = UInt(line)
+      let _line = line
     #else
       let _line = line
     #endif
@@ -46,7 +46,7 @@ extension XCTestCase {
   func XCTAssertOperationExecuting(operation: AdvancedOperation, file: String = #file, line: Int = #line) {
 
     #if os(Linux)
-      let _line = UInt(line)
+      let _line = line
     #else
       let _line = line
     #endif
@@ -63,7 +63,7 @@ extension XCTestCase {
   func XCTAssertOperationCancelled(operation: AdvancedOperation, errors: [Error] = [], file: String = #file, line: Int = #line) {
 
     #if os(Linux)
-      let _line = UInt(line)
+      let _line = line
     #else
       let _line = line
     #endif
@@ -83,7 +83,7 @@ extension XCTestCase {
   func XCTAssertOperationFinished(operation: AdvancedOperation, errors: [Error] = [], file: String = #file, line: Int = #line) {
 
     #if os(Linux)
-      let _line = UInt(line)
+      let _line = line
     #else
       let _line = line
     #endif
