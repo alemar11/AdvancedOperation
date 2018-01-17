@@ -98,7 +98,7 @@ public class AdvancedOperation: Operation {
   }
   
   func cancel(error: Error? = nil) {
-    if let error = error {
+    if let error = error, !isCancelled {
       errors.append(error)
     }
     
