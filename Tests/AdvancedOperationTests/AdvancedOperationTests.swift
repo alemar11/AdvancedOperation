@@ -32,10 +32,10 @@ extension AdvancedOperationTests {
 //    ("testCancel", testCancel),
 //    ("testMultipleCancel", testMultipleCancel),
 //    ("testMultipleCancelWithError", testMultipleCancelWithError),
-//    ("testBailingOutEarly", testBailingOutEarly),
+    ("testBailingOutEarly", testBailingOutEarly),
 //    ("testObserversWithCancelCommand", testObserversWithCancelCommand),
 //    ("testObservers", testObservers),
-    ("testCancelWithErrors", testCancelWithErrors),
+//    ("testCancelWithErrors", testCancelWithErrors),
     ("testFinishWithErrors", testFinishWithErrors)
   ]
 
