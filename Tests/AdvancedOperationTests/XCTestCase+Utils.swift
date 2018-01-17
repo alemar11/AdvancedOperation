@@ -28,31 +28,52 @@ import XCTest
 extension XCTestCase {
 
   func XCTAssertOperationReady(operation: AdvancedOperation, file: String = #file, line: Int = #line) {
+
+    #if os(Linux)
+      let _line = UInt(line)
+    #else
+      let _line = line
+    #endif
+
     guard
       operation.isReady,
       !operation.isExecuting,
       !operation.isCancelled,
       !operation.isFinished
-      else { return recordFailure(withDescription: "Operation is not in ready state.", inFile: file, atLine: line, expected: true) }
+      else { return recordFailure(withDescription: "Operation is not in ready state.", inFile: file, atLine: _line, expected: true) }
   }
 
   func XCTAssertOperationExecuting(operation: AdvancedOperation, file: String = #file, line: Int = #line) {
+
+    #if os(Linux)
+      let _line = UInt(line)
+    #else
+      let _line = line
+    #endif
+
     guard
       !operation.isReady,
       operation.isExecuting,
       !operation.isCancelled,
       !operation.isFinished
-      else { return recordFailure(withDescription: "Operation is not in executing state.", inFile: file, atLine: line, expected: true) }
+      else { return recordFailure(withDescription: "Operation is not in executing state.", inFile: file, atLine: _line, expected: true) }
   }
 
   /// AdvancedOperation finished due to a cancel command.
   func XCTAssertOperationCancelled(operation: AdvancedOperation, errors: [Error] = [], file: String = #file, line: Int = #line) {
+
+    #if os(Linux)
+      let _line = UInt(line)
+    #else
+      let _line = line
+    #endif
+
     guard
       !operation.isReady,
       !operation.isExecuting,
       operation.isCancelled,
       operation.isFinished
-      else { return recordFailure(withDescription: "Operation is not in executing state.", inFile: file, atLine: line, expected: true) }
+      else { return recordFailure(withDescription: "Operation is not in executing state.", inFile: file, atLine: _line, expected: true) }
 
     guard operation.errors.count == errors.count
       else { return recordFailure(withDescription: "Operation has \(operation.errors.count) errors, expected: \(errors.count)", inFile: file, atLine: line, expected: true) }
@@ -60,12 +81,19 @@ extension XCTestCase {
 
   /// AdvancedOperation finished due to a cancel command.
   func XCTAssertOperationFinished(operation: AdvancedOperation, errors: [Error] = [], file: String = #file, line: Int = #line) {
+
+    #if os(Linux)
+      let _line = UInt(line)
+    #else
+      let _line = line
+    #endif
+
     guard
       !operation.isReady,
       !operation.isExecuting,
       !operation.isCancelled,
       operation.isFinished
-      else { return recordFailure(withDescription: "Operation is not in finished state.", inFile: file, atLine: line, expected: true) }
+      else { return recordFailure(withDescription: "Operation is not in finished state.", inFile: file, atLine: _line, expected: true) }
 
     guard operation.errors.count == errors.count
       else { return recordFailure(withDescription: "Operation has \(operation.errors.count) errors, expected: \(errors.count)", inFile: file, atLine: line, expected: true) }
