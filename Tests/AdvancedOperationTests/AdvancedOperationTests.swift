@@ -256,6 +256,4 @@ class AdvancedOperationTests: XCTestCase {
     XCTAssertEqual(operation.errors.count, 2)
   }
   
-  #endif
-  
 }
