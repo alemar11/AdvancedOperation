@@ -53,7 +53,7 @@ public class AdvancedOperation: Operation {
     }
   }
   
-  private var _ready = false {
+  private var _ready = false { //TODO: check ready state
     willSet {
       willChangeValue(forKey: ObservableKey.isReady)
     }
