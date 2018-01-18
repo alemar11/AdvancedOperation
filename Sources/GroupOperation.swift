@@ -68,9 +68,7 @@ public final class GroupOperation: AdvancedOperation {
     underlyingOperationQueue.addOperation(startingOperation)
 
     for operation in operations {
-      finishingOperation.addDependency(operation)
-      operation.addDependency(startingOperation)
-      underlyingOperationQueue.addOperation(operation)
+      addOperation(operation: operation)
     }
 
   }
@@ -90,6 +88,8 @@ public final class GroupOperation: AdvancedOperation {
 
   //TODO: test
   public func addOperation(operation: Operation) {
+    assert(!finishingOperation.isCancelled || !finishingOperation.isFinished, "The GroupOperation is finishing and cannot accept more operations.")
+
     finishingOperation.addDependency(operation)
     operation.addDependency(startingOperation)
     underlyingOperationQueue.addOperation(operation)
