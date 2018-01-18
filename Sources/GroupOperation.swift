@@ -23,7 +23,7 @@
 
 import Foundation
 
-class GroupOperation: AdvancedOperation {
+public final class GroupOperation: AdvancedOperation {
 
   private let lock: NSLock = NSLock()
 
@@ -56,12 +56,13 @@ class GroupOperation: AdvancedOperation {
 
   // MARK: Initialization
 
-  convenience init(operations: Operation...) {
+  public convenience init(operations: Operation...) {
     self.init(operations: operations)
   }
 
-  init(operations: [Operation]) {
+  public init(operations: [Operation]) {
     super.init()
+    
     underlyingOperationQueue.isSuspended = true
     underlyingOperationQueue.delegate = self
     underlyingOperationQueue.addOperation(startingOperation)
@@ -74,25 +75,25 @@ class GroupOperation: AdvancedOperation {
 
   }
 
-  override final func cancel() {
-    // cancels all the operations except the internal finishing one.
-    //TODO: add startingOperation? in the if block?
+  public override final func cancel() {
+    // Cancels all the operations except the (internal) finishing one.
     for operation in underlyingOperationQueue.operations where operation !== finishingOperation {
-        operation.cancel()
+      operation.cancel()
     }
     super.cancel()
   }
 
-  override final func main() {
+  public final override func main() {
     underlyingOperationQueue.isSuspended = false
     underlyingOperationQueue.addOperation(finishingOperation)
   }
 
   //TODO: test
-  //  func addOperation(operation: Operation) {
-  //    finishingOperation.addDependency(operation)
-  //    underlyingOperationQueue.addOperation(operation)
-  //  }
+  public func addOperation(operation: Operation) {
+    finishingOperation.addDependency(operation)
+    operation.addDependency(startingOperation)
+    underlyingOperationQueue.addOperation(operation)
+  }
 
   /// Accesses the group operation queue's quality of service. It defaults to background quality.
   public final override var qualityOfService: QualityOfService {
@@ -123,8 +124,6 @@ extension GroupOperation: AdvancedOperationQueueDelegate {
 
   func operationQueue(operationQueue: AdvancedOperationQueue, willAddOperation operation: Operation) {}
   func operationQueue(operationQueue: AdvancedOperationQueue, didAddOperation operation: Operation) {}
-
-  //TODO: add will/did remove operation?
 
   func operationQueue(operationQueue: AdvancedOperationQueue, operationWillPerform operation: Operation) {}
   func operationQueue(operationQueue: AdvancedOperationQueue, operationDidPerform operation: Operation, withErrors errors: [Error]) {

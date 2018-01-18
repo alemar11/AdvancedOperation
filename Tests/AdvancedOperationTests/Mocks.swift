@@ -97,7 +97,7 @@ internal class SleepyOperation: AdvancedOperation {
   }
 }
 
-internal class FailingOperation: AdvancedOperation {
+internal class FailingAsyncOperation: AdvancedOperation {
 
   private let defaultErrors: [Error]
 
@@ -116,20 +116,21 @@ internal class FailingOperation: AdvancedOperation {
 
 internal class Observer: OperationObserving {
 
-  var didStartCount = 0
-  var didFinishCount = 0
+  var willPerformCount = 0
+  var didPerformCount = 0
+  var willCancelCount = 0
   var didCancelCount = 0
 
   func operationWillPerform(operation: AdvancedOperation) {
-    didStartCount += 1
+    willPerformCount += 1
   }
 
   func operationDidPerform(operation: AdvancedOperation, withErrors errors: [Error]) {
-    didFinishCount += 1
+    didPerformCount += 1
   }
 
   func operationWillCancel(operation: AdvancedOperation, withErrors errors: [Error]) {
-    //
+    willCancelCount += 1
   }
 
   func operationDidCancel(operation: AdvancedOperation, withErrors errors: [Error]) {
@@ -142,8 +143,8 @@ internal class QueueDelegate: AdvancedOperationQueueDelegate {
 
   var willAddOperationHandler: ((AdvancedOperationQueue, Operation) -> Void)? = nil
   var willPerformOperationHandler: ((AdvancedOperationQueue, Operation) -> Void)? = nil
-  var didCancelOperationHandler: ((AdvancedOperationQueue, Operation, [Error]) -> Void)? = nil
   var didPerformOperationHandler: ((AdvancedOperationQueue, Operation, [Error]) -> Void)? = nil
+  var didCancelOperationHandler: ((AdvancedOperationQueue, Operation, [Error]) -> Void)? = nil
 
   func operationQueue(operationQueue: AdvancedOperationQueue, willAddOperation operation: Operation) {
     self.willAddOperationHandler?(operationQueue, operation)
