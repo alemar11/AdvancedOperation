@@ -37,7 +37,7 @@ class AdvancedOperationQueueTests: XCTestCase {
   
   func testQueueWithAdvancedOperations() {
     let queue = AdvancedOperationQueue()
-    let delegate = QueueDelegate()
+    let delegate = MockOperationQueueDelegate()
     
     queue.delegate = delegate
     
@@ -75,7 +75,7 @@ class AdvancedOperationQueueTests: XCTestCase {
     }
     
     var finishCount = 0
-    delegate.didPerformOperationHandler = { (queue, operation, errors) in
+    delegate.didFinishOperationHandler = { (queue, operation, errors) in
       lock.lock()
       finishCount += 1
       XCTAssertTrue(queue == queue)
@@ -104,7 +104,7 @@ class AdvancedOperationQueueTests: XCTestCase {
   //TODO: rename
   func testQueueWithAdvancedOperations2() {
     let queue = AdvancedOperationQueue()
-    let delegate = QueueDelegate()
+    let delegate = MockOperationQueueDelegate()
     
     queue.delegate = delegate
     queue.isSuspended = true
@@ -148,7 +148,7 @@ class AdvancedOperationQueueTests: XCTestCase {
     }
     
     var finishCount = 0
-    delegate.didPerformOperationHandler = { (queue, operation, errors) in
+    delegate.didFinishOperationHandler = { (queue, operation, errors) in
       lock.lock()
       finishCount += 1
       XCTAssertTrue(queue == queue)

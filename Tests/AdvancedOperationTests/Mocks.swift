@@ -25,6 +25,8 @@ import Foundation
 import Dispatch
 @testable import AdvancedOperation
 
+// MARK: - Error
+
 internal enum MockError: Swift.Error, Equatable {
   case test
   case failed
@@ -47,6 +49,8 @@ internal enum MockError: Swift.Error, Equatable {
 
   }
 }
+
+// MARK: - AdvancedOperation
 
 internal class SleepyAsyncOperation: AdvancedOperation {
 
@@ -114,6 +118,8 @@ internal class FailingAsyncOperation: AdvancedOperation {
   }
 }
 
+// MARK: - OperationObserving
+
 internal class MockObserver: OperationObserving {
 
   var identifier = UUID().uuidString
@@ -143,12 +149,13 @@ internal class MockObserver: OperationObserving {
 
 }
 
-internal class QueueDelegate: AdvancedOperationQueueDelegate {
+// MARK: - AdvancedOperationQueueDelegate
 
-  //TODO: rename
+internal class MockOperationQueueDelegate: AdvancedOperationQueueDelegate {
+
   var willAddOperationHandler: ((AdvancedOperationQueue, Operation) -> Void)? = nil
   var willPerformOperationHandler: ((AdvancedOperationQueue, Operation) -> Void)? = nil
-  var didPerformOperationHandler: ((AdvancedOperationQueue, Operation, [Error]) -> Void)? = nil
+  var didFinishOperationHandler: ((AdvancedOperationQueue, Operation, [Error]) -> Void)? = nil
   var didCancelOperationHandler: ((AdvancedOperationQueue, Operation, [Error]) -> Void)? = nil
 
   func operationQueue(operationQueue: AdvancedOperationQueue, willAddOperation operation: Operation) {
@@ -162,7 +169,7 @@ internal class QueueDelegate: AdvancedOperationQueueDelegate {
   }
 
   func operationQueue(operationQueue: AdvancedOperationQueue, operationDidFinish operation: Operation, withErrors errors: [Error]) {
-    self.didPerformOperationHandler?(operationQueue, operation, errors)
+    self.didFinishOperationHandler?(operationQueue, operation, errors)
   }
 
   func operationQueue(operationQueue: AdvancedOperationQueue, operationWillCancel operation: Operation, withErrors errors: [Error]) {}
