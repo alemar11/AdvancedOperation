@@ -25,9 +25,13 @@ import Foundation
 
 public final class GroupOperation: AdvancedOperation {
 
+  // MARK: - Properties
+
   private let lock: NSLock = NSLock()
 
   private var _aggregatedErrors = [Error]()
+
+  /// Stores all of the `AdvancedOperation` errors during the execution.
   internal var aggregatedErrors: [Error] {
     get {
       lock.lock()
@@ -42,10 +46,26 @@ public final class GroupOperation: AdvancedOperation {
     }
   }
 
+  private var _qualityOfService = QualityOfService.default
+
+  /// Accesses the group operation queue's quality of service. It defaults to background quality.
+  public final override var qualityOfService: QualityOfService {
+    get {
+      return _qualityOfService
+    }
+    set(value) {
+      _qualityOfService = value
+      underlyingOperationQueue.qualityOfService = _qualityOfService
+    }
+  }
+
+  /// Internal `AdvancedOperationQueue`.
   private let underlyingOperationQueue = AdvancedOperationQueue()
 
+  /// Internal starting operation.
   private lazy var startingOperation = BlockOperation(block: {} )
 
+  /// Inernal finishin operation.
   private lazy var finishingOperation: BlockOperation = {
     return BlockOperation { [weak self] in
       guard let `self` = self else { return }
@@ -54,7 +74,7 @@ public final class GroupOperation: AdvancedOperation {
     }
   }()
 
-  // MARK: Initialization
+  // MARK: - Initialization
 
   public convenience init(operations: Operation...) {
     self.init(operations: operations)
@@ -73,6 +93,7 @@ public final class GroupOperation: AdvancedOperation {
 
   }
 
+  /// Cancels the execution of every operation.
   public override final func cancel() {
     // Cancels all the operations except the (internal) finishing one.
     for operation in underlyingOperationQueue.operations where operation !== finishingOperation {
@@ -93,27 +114,6 @@ public final class GroupOperation: AdvancedOperation {
     finishingOperation.addDependency(operation)
     operation.addDependency(startingOperation)
     underlyingOperationQueue.addOperation(operation)
-  }
-
-  /// Accesses the group operation queue's quality of service. It defaults to background quality.
-  public final override var qualityOfService: QualityOfService {
-    //TODO: kvo?
-    get {
-      return _qualityOfService
-    }
-    set(value) {
-      _qualityOfService = value
-      underlyingOperationQueue.qualityOfService = _qualityOfService
-    }
-  }
-
-  private var _qualityOfService = QualityOfService.default {    
-    willSet {
-      willChangeValue(forKey: ObservableKey.qualityOfService)
-    }
-    didSet {
-      didChangeValue(forKey: ObservableKey.qualityOfService)
-    }
   }
 
   //TODO: isSuspended  / maxConcurrentOperationCount
