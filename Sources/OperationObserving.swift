@@ -32,7 +32,7 @@ public protocol OperationObserving {
   /// Invoked as an `Operation` finishes, along with any errors produced during execution.
   func operationDidFinish(operation: Operation, withErrors errors: [Error])
   /// Invoked when an `Operation` is going to be cancelled, along with any errors produced during execution.
-  func operationWillCancel(operation: Operation, withErrors errors: [Error])
+  func operationWillCancel(operation: Operation, withErrors errors: [Error]) //TODO: remove this func
   /// Invoked as an `Operation` is cancelled, along with any errors produced during execution.
   func operationDidCancel(operation: Operation, withErrors errors: [Error])
 }
