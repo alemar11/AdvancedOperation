@@ -42,8 +42,8 @@ import Foundation
 class OperationKeyValueObserver: NSObject {
   let operation: Operation
   
-  private var _external = [OperationObserving]()
-  private var observers = [NSKeyValueObservation]()
+  private var observers = [OperationObserving]()
+  private var keyValueObservers = [NSKeyValueObservation]()
   
   init(operation: Operation) {
     self.operation = operation
@@ -61,13 +61,13 @@ class OperationKeyValueObserver: NSObject {
       
       if change.isPrior {
         guard let old = change.oldValue, old == true else { return }
-        for observer in self._external {
+        for observer in self.observers {
           //willCancel
         }
         //will
       } else {
         guard let old = change.oldValue, let new = change.newValue, old == true, new == false else { return }
-        for observer in self._external {
+        for observer in self.observers {
           //observer.operationDidCancel(operation: self.operation, withErrors: [])
         }
       }
@@ -75,7 +75,7 @@ class OperationKeyValueObserver: NSObject {
       
     }
     
-    observers.append(contentsOf: [cancel])
+    keyValueObservers.append(contentsOf: [cancel])
   }
   
 }
