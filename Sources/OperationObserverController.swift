@@ -54,16 +54,18 @@ import Foundation
 //
         if (old == false && new == true) {
           for observer in self.observers {
-            observer.operationWillPerform(operation: operation)
+            observer.operationDidStart(operation: operation)
           }
-        } else if operation.isCancelled && old == false && new == false {
-          for observer in self.observers {
-            observer.operationWillPerform(operation: operation)
-          }
-        } else {
-          print(operation)
-          print("")
         }
+
+//        else if operation.isCancelled && old == false && new == false {
+//          for observer in self.observers {
+//            observer.operationDidStart(operation: operation)
+//          }
+//        } else {
+//          print(operation)
+//          print("")
+//        }
 
 //        guard let old = change.oldValue, old == false else { return }
 //        guard let new = change.newValue, new == true else { return }
@@ -89,7 +91,7 @@ import Foundation
         }
 
         for observer in self.observers {
-          observer.operationDidPerform(operation: operation, withErrors: errors)
+          observer.operationDidFinish(operation: operation, withErrors: errors)
         }
 
       }

@@ -33,7 +33,6 @@ class OperationKeyValueObserverTests: XCTestCase {
     let expectation1 = expectation(description: "\(#function)\(#line)")
     
     keyValueObserver.registerObserver(observer)
-    
     operation.addCompletionBlock { expectation1.fulfill() }
     operation.start()
     
@@ -51,7 +50,6 @@ class OperationKeyValueObserverTests: XCTestCase {
     let expectation1 = expectation(description: "\(#function)\(#line)")
     
     keyValueObserver.registerObserver(observer)
-    
     operation.addCompletionBlock { expectation1.fulfill() }
     operation.start()
     operation.start()
@@ -70,7 +68,6 @@ class OperationKeyValueObserverTests: XCTestCase {
     let expectation1 = expectation(description: "\(#function)\(#line)")
     
     keyValueObserver.registerObserver(observer)
-    
     operation.addCompletionBlock { expectation1.fulfill() }
     operation.start()
     operation.cancel()
@@ -90,7 +87,6 @@ class OperationKeyValueObserverTests: XCTestCase {
       let expectation1 = expectation(description: "\(#function)\(#line)")
       
       keyValueObserver.registerObserver(observer)
-      
       operation.addCompletionBlock { expectation1.fulfill() }
       operation.cancel()
       operation.cancel()
@@ -100,19 +96,16 @@ class OperationKeyValueObserverTests: XCTestCase {
       XCTAssertEqual(observer.willCancelCount, 1)
       XCTAssertEqual(observer.didCancelCount, 1)
       XCTAssertEqual(observer.didPerformCount, 1)
-      //XCTAssertEqual(observer.willPerformCount, 1) //TODO: fix this
+      XCTAssertEqual(observer.willPerformCount, 0) // stopped, before execution
     }
     
     do {
-      let operation = BlockOperation(block: {
-        sleep(1)
-      })
+      let operation = BlockOperation(block: { sleep(1) })
       let keyValueObserver = OperationObserverController(operation: operation)
       let observer = MockObserver()
       let expectation1 = expectation(description: "\(#function)\(#line)")
       
       keyValueObserver.registerObserver(observer)
-      
       operation.addCompletionBlock { expectation1.fulfill() }
       operation.cancel()
       operation.cancel()
@@ -122,7 +115,7 @@ class OperationKeyValueObserverTests: XCTestCase {
       XCTAssertEqual(observer.willCancelCount, 1)
       XCTAssertEqual(observer.didCancelCount, 1)
       XCTAssertEqual(observer.didPerformCount, 1)
-      //XCTAssertEqual(observer.willPerformCount, 1) //TODO: fix this
+      XCTAssertEqual(observer.willPerformCount, 0) // stopped, before execution
     }
   }
   
@@ -133,7 +126,6 @@ class OperationKeyValueObserverTests: XCTestCase {
     let expectation1 = expectation(description: "\(#function)\(#line)")
     
     keyValueObserver.registerObserver(observer)
-    
     operation.addCompletionBlock { expectation1.fulfill() }
     operation.start()
     operation.cancel()

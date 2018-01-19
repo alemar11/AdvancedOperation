@@ -28,15 +28,16 @@ public protocol OperationObserving {
   /// An unique identifier
   var identifier: String { get set }
   /// Invoked immediately prior to the `Operation`'s `main()` method (it's started but not yet executed).
-  func operationWillPerform(operation: Operation)
+  func operationDidStart(operation: Operation)
   /// Invoked as an `Operation` finishes, along with any errors produced during execution.
-  func operationDidPerform(operation: Operation, withErrors errors: [Error])
+  func operationDidFinish(operation: Operation, withErrors errors: [Error])
   /// Invoked when an `Operation` is going to be cancelled, along with any errors produced during execution.
   func operationWillCancel(operation: Operation, withErrors errors: [Error])
   /// Invoked as an `Operation` is cancelled, along with any errors produced during execution.
   func operationDidCancel(operation: Operation, withErrors errors: [Error])
 }
 
-public extension OperationObserving {
-  func operationWillCancel(operation: Operation, withErrors errors: [Error]) {}
-}
+//public extension OperationObserving {
+//  func operationWillCancel(operation: Operation, withErrors errors: [Error]) {}
+//}
+

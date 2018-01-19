@@ -115,17 +115,21 @@ internal class FailingAsyncOperation: AdvancedOperation {
 }
 
 internal class MockObserver: OperationObserving {
+
+  //TODO: rename these vars
   var identifier = UUID().uuidString
   var willPerformCount = 0
   var didPerformCount = 0
   var willCancelCount = 0
   var didCancelCount = 0
 
-  func operationWillPerform(operation: Operation) {
+  func operationDidStart(operation: Operation) {
+    assert(operation.isExecuting)
     willPerformCount += 1
   }
 
-  func operationDidPerform(operation: Operation, withErrors errors: [Error]) {
+  func operationDidFinish(operation: Operation, withErrors errors: [Error]) {
+    assert(operation.isFinished)
     didPerformCount += 1
   }
 
@@ -134,6 +138,7 @@ internal class MockObserver: OperationObserving {
   }
 
   func operationDidCancel(operation: Operation, withErrors errors: [Error]) {
+    assert(operation.isCancelled)
     didCancelCount += 1
   }
 

@@ -28,6 +28,7 @@ struct BlockObserver: OperationObserving {
 
   // MARK: - Properties
   var identifier = UUID().uuidString
+  //TODO: rename these vars
   private let willPerform: ((Operation) -> Void)?
   private let didPerform: ((Operation, [Error]) -> Void)?
   private let willCancel: ((Operation, [Error]) -> Void)?
@@ -45,11 +46,11 @@ struct BlockObserver: OperationObserving {
 
   // MARK: - OperationObserving
 
-  func operationWillPerform(operation: Operation) {
+  func operationDidStart(operation: Operation) {
     willPerform?(operation)
   }
 
-  func operationDidPerform(operation: Operation, withErrors errors: [Error]) {
+  func operationDidFinish(operation: Operation, withErrors errors: [Error]) {
     didPerform?(operation, errors)
   }
 
