@@ -101,6 +101,7 @@ class AdvancedOperationQueueTests: XCTestCase {
   }
   
   //TODO: most of the callbacks can only be activated by subclassed of AdvancedOperation
+  //TODO: rename
   func testQueueWithAdvancedOperations2() {
     let queue = AdvancedOperationQueue()
     let delegate = QueueDelegate()
