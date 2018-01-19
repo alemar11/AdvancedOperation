@@ -37,6 +37,8 @@ import Foundation
  completionBlock - readable and writable
  **/
 
+#if !os(Linux)
+
 class OperationKeyValueObserver: NSObject {
   let operation: Operation
   
@@ -78,6 +80,7 @@ class OperationKeyValueObserver: NSObject {
   
 }
 
+#endif
 /*
  private lazy var stateObservers: [NSKeyValueObservation] = {
  //TODO: add the prior value and check if it's different from new
