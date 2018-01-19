@@ -51,3 +51,48 @@ extension Operation {
     }
   }
 }
+
+// MARK: - KVO
+
+internal extension Operation {
+
+  internal enum ObservableKey {
+    static var isExecuting: String {
+      #if os(Linux)
+        let key = "isExecuting"
+      #else
+        let key = #keyPath(Operation.isExecuting)
+      #endif
+      return key
+    }
+
+    static var isFinished: String {
+      #if os(Linux)
+        let key = "isFinished"
+      #else
+        let key = #keyPath(Operation.isFinished)
+      #endif
+      return key
+    }
+
+    static var isReady: String {
+      #if os(Linux)
+        let key = "isReady"
+      #else
+        let key = #keyPath(Operation.isReady)
+      #endif
+      return key
+    }
+
+    //TODO: remove this one
+    static var qualityOfService: String {
+      #if os(Linux)
+        let key = "qualityOfService"
+      #else
+        let key = #keyPath(Operation.qualityOfService)
+      #endif
+      return key
+    }
+  }
+
+}
