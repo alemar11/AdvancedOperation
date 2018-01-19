@@ -125,8 +125,8 @@ extension GroupOperation: AdvancedOperationQueueDelegate {
   func operationQueue(operationQueue: AdvancedOperationQueue, willAddOperation operation: Operation) {}
   func operationQueue(operationQueue: AdvancedOperationQueue, didAddOperation operation: Operation) {}
 
-  func operationQueue(operationQueue: AdvancedOperationQueue, operationWillPerform operation: Operation) {}
-  func operationQueue(operationQueue: AdvancedOperationQueue, operationDidPerform operation: Operation, withErrors errors: [Error]) {
+  func operationQueue(operationQueue: AdvancedOperationQueue, operationDidStart operation: Operation) {}
+  func operationQueue(operationQueue: AdvancedOperationQueue, operationDidFinish operation: Operation, withErrors errors: [Error]) {
     guard !errors.isEmpty else { return }
 
     if operation !== finishingOperation || operation !== startingOperation {

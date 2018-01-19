@@ -157,11 +157,11 @@ internal class QueueDelegate: AdvancedOperationQueueDelegate {
 
   func operationQueue(operationQueue: AdvancedOperationQueue, didAddOperation operation: Operation) {}
 
-  func operationQueue(operationQueue: AdvancedOperationQueue, operationWillPerform operation: Operation) {
+  func operationQueue(operationQueue: AdvancedOperationQueue, operationDidStart operation: Operation) {
     self.willPerformOperationHandler?(operationQueue, operation)
   }
 
-  func operationQueue(operationQueue: AdvancedOperationQueue, operationDidPerform operation: Operation, withErrors errors: [Error]) {
+  func operationQueue(operationQueue: AdvancedOperationQueue, operationDidFinish operation: Operation, withErrors errors: [Error]) {
     self.didPerformOperationHandler?(operationQueue, operation, errors)
   }
 
