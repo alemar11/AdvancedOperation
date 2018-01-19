@@ -59,7 +59,7 @@ class AdvancedOperationQueueTests: XCTestCase {
       case 3:
         XCTAssertTrue(operation == operation4)
       default:
-        XCTFail("Added too many operations.")
+        XCTFail("Added too many operations: \(addCount).")
       }
       addCount += 1
     }
