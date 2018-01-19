@@ -53,7 +53,7 @@ class AdvancedOperationQueue: OperationQueue {
 
     if let operation = operation as? AdvancedOperation { /// AdvancedOperation
 
-      let observer = BlockObserver.init(willPerform: { [weak self] (operation) in
+      let observer = BlockObserver(willPerform: { [weak self] (operation) in
         guard let `self` = self else { return }
         self.delegate?.operationQueue(operationQueue: self, operationDidStart: operation)
 
@@ -79,6 +79,7 @@ class AdvancedOperationQueue: OperationQueue {
       // to just capture "operation" because that would lead to the operation strongly referencing itself and that's the pure definition of a memory leak.
       operation.addCompletionBlock { [weak self, weak operation] in
         guard let queue = self, let operation = operation else { return }
+
         queue.delegate?.operationQueue(operationQueue: queue, operationDidFinish: operation, withErrors: [])
       }
     }
