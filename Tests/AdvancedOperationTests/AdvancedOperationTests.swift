@@ -31,6 +31,8 @@ extension AdvancedOperationTests {
     ("testMultipleStart", testMultipleStart),
     ("testCancel", testCancel),
     ("testMultipleCancel", testMultipleCancel),
+    ("testMultipleStartAndCancel", testMultipleStartAndCancel),
+    ("testMultipleStartAndCancelWithErrors", testMultipleStartAndCancelWithErrors),
     ("testMultipleCancelWithError", testMultipleCancelWithError),
     ("testBailingOutEarly", testBailingOutEarly),
     ("testObserversWithCancelCommand", testObserversWithCancelCommand),
@@ -113,6 +115,52 @@ class AdvancedOperationTests: XCTestCase {
     
     waitForExpectations(timeout: 10)
     XCTAssertOperationCancelled(operation: operation)
+  }
+
+  func testMultipleStartAndCancel() {
+    let expectation1 = expectation(description: "\(#function)\(#line)")
+
+    let operation = SleepyAsyncOperation()
+    operation.completionBlock = { expectation1.fulfill() }
+
+    XCTAssertOperationReady(operation: operation)
+
+    operation.start()
+    XCTAssertOperationExecuting(operation: operation)
+
+    operation.cancel()
+    operation.start()
+    XCTAssertFalse(operation.isExecuting)
+    operation.cancel(error: MockError.test)
+    operation.cancel(error: MockError.failed)
+    XCTAssertFalse(operation.isReady)
+    XCTAssertTrue(operation.isCancelled)
+
+    waitForExpectations(timeout: 10)
+    XCTAssertOperationCancelled(operation: operation)
+  }
+
+  func testMultipleStartAndCancelWithErrors() {
+    let expectation1 = expectation(description: "\(#function)\(#line)")
+
+    let operation = SleepyAsyncOperation()
+    operation.completionBlock = { expectation1.fulfill() }
+
+    XCTAssertOperationReady(operation: operation)
+
+    operation.start()
+    XCTAssertOperationExecuting(operation: operation)
+
+    operation.cancel(error: MockError.test)
+    operation.start()
+    XCTAssertFalse(operation.isExecuting)
+    operation.cancel()
+    operation.cancel(error: MockError.failed)
+    XCTAssertFalse(operation.isReady)
+    XCTAssertTrue(operation.isCancelled)
+
+    waitForExpectations(timeout: 10)
+    XCTAssertOperationCancelled(operation: operation, errors: [MockError.test])
   }
   
   func testMultipleCancelWithError() {

@@ -83,6 +83,7 @@ public class AdvancedOperation: Operation {
     guard !isCancelled else {
        _ready = false
       //didPerform()
+      _executing = false
       _finished = true // this will fire the completionBlock via KVO
       return
     }
