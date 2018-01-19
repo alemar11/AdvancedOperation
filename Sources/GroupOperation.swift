@@ -65,7 +65,7 @@ public final class GroupOperation: AdvancedOperation {
   /// Internal starting operation.
   private lazy var startingOperation = BlockOperation(block: {} )
 
-  /// Inernal finishin operation.
+  /// Internal finishing operation.
   private lazy var finishingOperation: BlockOperation = {
     return BlockOperation { [weak self] in
       guard let `self` = self else { return }
