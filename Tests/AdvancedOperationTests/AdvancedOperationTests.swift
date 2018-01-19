@@ -204,7 +204,7 @@ class AdvancedOperationTests: XCTestCase {
   
   func testObservers() {
     let expectation1 = expectation(description: "\(#function)\(#line)")
-    let observer = Observer()
+    let observer = MockObserver()
     let operation = SleepyAsyncOperation()
     operation.addObserver(observer: observer)
     
@@ -226,7 +226,7 @@ class AdvancedOperationTests: XCTestCase {
   
   func testObserversWithCancelCommand() {
     let expectation1 = expectation(description: "\(#function)\(#line)")
-    let observer = Observer()
+    let observer = MockObserver()
     let operation = SleepyAsyncOperation()
     operation.addObserver(observer: observer)
     

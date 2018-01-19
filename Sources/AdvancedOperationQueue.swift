@@ -59,15 +59,15 @@ class AdvancedOperationQueue: OperationQueue {
 
       }, willCancel: { [weak self] (operation, errors) in
         guard let `self` = self else { return }
-        self.delegate?.operationQueue(operationQueue: self, operationWillCancel: operation, withErrors: operation.errors)
+        self.delegate?.operationQueue(operationQueue: self, operationWillCancel: operation, withErrors: errors)
 
       }, didCancel: { [weak self] (operation, errors) in
         guard let `self` = self else { return }
-        self.delegate?.operationQueue(operationQueue: self, operationDidCancel: operation, withErrors: operation.errors)
+        self.delegate?.operationQueue(operationQueue: self, operationDidCancel: operation, withErrors: errors)
 
       }, didPerform: { [weak self] (operation, errors) in
         guard let `self` = self else { return }
-        self.delegate?.operationQueue(operationQueue: self, operationDidPerform: operation, withErrors: operation.errors)
+        self.delegate?.operationQueue(operationQueue: self, operationDidPerform: operation, withErrors: errors)
 
       } )
 
@@ -96,6 +96,7 @@ class AdvancedOperationQueue: OperationQueue {
     }
 
     if wait {
+      //TODO: use this method?
       //waitUntilAllOperationsAreFinished()
             for operation in operations {
               operation.waitUntilFinished()

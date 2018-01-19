@@ -25,16 +25,18 @@ import Foundation
 
 /// The protocol that types may implement if they wish to be notified of significant operation lifecycle events.
 public protocol OperationObserving {
+  /// An unique identifier
+  var identifier: String { get set }
   /// Invoked immediately prior to the `Operation`'s `main()` method (it's started but not yet executed).
-  func operationWillPerform(operation: AdvancedOperation)
+  func operationWillPerform(operation: Operation)
   /// Invoked as an `Operation` finishes, along with any errors produced during execution.
-  func operationDidPerform(operation: AdvancedOperation, withErrors errors: [Error])
+  func operationDidPerform(operation: Operation, withErrors errors: [Error])
   /// Invoked when an `Operation` is going to be cancelled, along with any errors produced during execution.
-  func operationWillCancel(operation: AdvancedOperation, withErrors errors: [Error])
+  func operationWillCancel(operation: Operation, withErrors errors: [Error])
   /// Invoked as an `Operation` is cancelled, along with any errors produced during execution.
-  func operationDidCancel(operation: AdvancedOperation, withErrors errors: [Error])
+  func operationDidCancel(operation: Operation, withErrors errors: [Error])
 }
 
 public extension OperationObserving {
-  func operationWillCancel(operation: AdvancedOperation, withErrors errors: [Error]) {}
+  func operationWillCancel(operation: Operation, withErrors errors: [Error]) {}
 }
