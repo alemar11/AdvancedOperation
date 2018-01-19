@@ -40,6 +40,9 @@ public class AdvancedOperation: Operation {
       willChangeValue(forKey: ObservableKey.isExecuting)
     }
     didSet {
+      if (_executing) {
+        willPerform()
+      }
       didChangeValue(forKey: ObservableKey.isExecuting)
     }
   }
@@ -49,6 +52,9 @@ public class AdvancedOperation: Operation {
       willChangeValue(forKey: ObservableKey.isFinished)
     }
     didSet {
+      if (_finished) {
+        didPerform()
+      }
       didChangeValue(forKey: ObservableKey.isFinished)
     }
   }
@@ -76,7 +82,7 @@ public class AdvancedOperation: Operation {
     // Bail out early if cancelled.
     guard !isCancelled else {
        _ready = false
-      didPerform()
+      //didPerform()
       _finished = true // this will fire the completionBlock via KVO
       return
     }
@@ -89,7 +95,7 @@ public class AdvancedOperation: Operation {
     
     //Thread.detachNewThreadSelector(#selector(main), toTarget: self, with: nil)
     // https://developer.apple.com/library/content/documentation/General/Conceptual/ConcurrencyProgrammingGuide/OperationObjects/OperationObjects.html#//apple_ref/doc/uid/TP40008091-CH101-SW16
-    willPerform()
+    //willPerform()
     main()
   }
   
@@ -115,7 +121,7 @@ public class AdvancedOperation: Operation {
     guard isExecuting else { return } //sanity check
     
     self.errors.append(contentsOf: errors)
-    didPerform() // the operation isn't really finished until all observers are notified
+    //didPerform() // the operation isn't really finished until all observers are notified
     _executing = false
     _finished = true
   }
