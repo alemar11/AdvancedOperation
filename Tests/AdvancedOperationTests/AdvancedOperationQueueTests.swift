@@ -21,10 +21,17 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#if !os(Linux)
-
 import XCTest
 @testable import AdvancedOperation
+
+extension AdvancedOperationQueueTests {
+
+  static var allTests = [
+    ("testQueueWithAdvancedOperations", testQueueWithAdvancedOperations),
+    ("testQueueWithAdvancedOperations2", testQueueWithAdvancedOperations2)
+  ]
+
+}
 
 class AdvancedOperationQueueTests: XCTestCase {
   
@@ -185,5 +192,3 @@ class AdvancedOperationQueueTests: XCTestCase {
   }
   
 }
-
-#endif
