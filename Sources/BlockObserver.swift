@@ -27,39 +27,40 @@ import Foundation
 struct BlockObserver: OperationObserving {
 
   // MARK: - Properties
-  var identifier = UUID().uuidString
-  //TODO: rename these vars
-  private let willPerform: ((Operation) -> Void)?
-  private let didPerform: ((Operation, [Error]) -> Void)?
-  private let willCancel: ((Operation, [Error]) -> Void)?
-  private let didCancel: ((Operation, [Error]) -> Void)?
 
-  init(willPerform: ((Operation) -> Void)? = nil,
+  var identifier = UUID().uuidString
+
+  private let didStartHandler: ((Operation) -> Void)?
+  private let didFinishHandler: ((Operation, [Error]) -> Void)?
+  private let willCancelHandler: ((Operation, [Error]) -> Void)?
+  private let didCancelHandler: ((Operation, [Error]) -> Void)?
+
+  init(didStart: ((Operation) -> Void)? = nil,
        willCancel: ((Operation, [Error]) -> Void)? = nil,
        didCancel: ((Operation, [Error]) -> Void)? = nil,
-       didPerform: ((Operation, [Error]) -> Void)?) {
-    self.willPerform = willPerform
-    self.didPerform = didPerform
-    self.willCancel = willCancel
-    self.didCancel = didCancel
+       didFinish: ((Operation, [Error]) -> Void)?) {
+    self.didStartHandler = didStart
+    self.didFinishHandler = didFinish
+    self.willCancelHandler = willCancel
+    self.didCancelHandler = didCancel
   }
 
   // MARK: - OperationObserving
 
   func operationDidStart(operation: Operation) {
-    willPerform?(operation)
+    didStartHandler?(operation)
   }
 
   func operationDidFinish(operation: Operation, withErrors errors: [Error]) {
-    didPerform?(operation, errors)
+    didFinishHandler?(operation, errors)
   }
 
   func operationWillCancel(operation: Operation, withErrors errors: [Error]) {
-    willCancel?(operation, errors)
+    willCancelHandler?(operation, errors)
   }
 
   func operationDidCancel(operation: Operation, withErrors errors: [Error]) {
-    didCancel?(operation, errors)
+    didCancelHandler?(operation, errors)
   }
 
 }

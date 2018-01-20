@@ -53,7 +53,7 @@ class AdvancedOperationQueue: OperationQueue {
 
     if let operation = operation as? AdvancedOperation { /// AdvancedOperation
 
-      let observer = BlockObserver(willPerform: { [weak self] (operation) in
+      let observer = BlockObserver(didStart: { [weak self] (operation) in
         guard let `self` = self else { return }
         self.delegate?.operationQueue(operationQueue: self, operationDidStart: operation)
 
@@ -65,7 +65,7 @@ class AdvancedOperationQueue: OperationQueue {
         guard let `self` = self else { return }
         self.delegate?.operationQueue(operationQueue: self, operationDidCancel: operation, withErrors: errors)
 
-      }, didPerform: { [weak self] (operation, errors) in
+      }, didFinish: { [weak self] (operation, errors) in
         guard let `self` = self else { return }
         self.delegate?.operationQueue(operationQueue: self, operationDidFinish: operation, withErrors: errors)
 
