@@ -168,8 +168,7 @@ class AdvancedOperationQueueTests: XCTestCase {
       XCTAssertEqual(errors.count, 0)
       lock.unlock()
     }
-    
-    
+
     queue.addOperation(operation1)
     queue.addOperation(operation2)
     queue.addOperation(operation3)
