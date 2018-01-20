@@ -55,7 +55,7 @@ extension XCTestCase {
       !operation.isExecuting,
       operation.isCancelled,
       operation.isFinished
-      else { return recordFailure(withDescription: "Operation is not in executing state.", inFile: file, atLine: line, expected: true) }
+      else { return recordFailure(withDescription: "Operation is not in cancelled state.", inFile: file, atLine: line, expected: true) }
 
     guard operation.errors.count == errors.count
       else { return recordFailure(withDescription: "Operation has \(operation.errors.count) errors, expected: \(errors.count)", inFile: file, atLine: line, expected: true) }

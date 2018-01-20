@@ -51,3 +51,85 @@ extension Operation {
     }
   }
 }
+
+// MARK: - KVO
+
+internal extension Operation {
+
+  internal enum ObservableKey {
+
+    static var isCancelled: String {
+      #if os(Linux)
+        let key = "isCancelled"
+      #else
+        let key = #keyPath(Operation.isCancelled)
+      #endif
+      return key
+    }
+
+    static var isAsynchronous: String {
+      #if os(Linux)
+        let key = "isAsynchronous"
+      #else
+        let key = #keyPath(Operation.isAsynchronous)
+      #endif
+      return key
+    }
+
+    static var isExecuting: String {
+      #if os(Linux)
+        let key = "isExecuting"
+      #else
+        let key = #keyPath(Operation.isExecuting)
+      #endif
+      return key
+    }
+
+    static var isFinished: String {
+      #if os(Linux)
+        let key = "isFinished"
+      #else
+        let key = #keyPath(Operation.isFinished)
+      #endif
+      return key
+    }
+
+    static var isReady: String {
+      #if os(Linux)
+        let key = "isReady"
+      #else
+        let key = #keyPath(Operation.isReady)
+      #endif
+      return key
+    }
+
+    static var dependencies: String {
+      #if os(Linux)
+        let key = "dependencies"
+      #else
+        let key = #keyPath(Operation.dependencies)
+      #endif
+      return key
+    }
+
+    static var queuePriority: String {
+      #if os(Linux)
+        let key = "queuePriority"
+      #else
+        let key = #keyPath(Operation.queuePriority)
+      #endif
+      return key
+    }
+
+    static var completionBlock: String {
+      #if os(Linux)
+        let key = "queuePriority"
+      #else
+        let key = #keyPath(Operation.completionBlock)
+      #endif
+      return key
+    }
+
+  }
+
+}

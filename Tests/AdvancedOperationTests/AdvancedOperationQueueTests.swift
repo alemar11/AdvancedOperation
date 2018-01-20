@@ -21,16 +21,23 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#if !os(Linux)
-
 import XCTest
 @testable import AdvancedOperation
+
+extension AdvancedOperationQueueTests {
+
+  static var allTests = [
+    ("testQueueWithAdvancedOperations", testQueueWithAdvancedOperations),
+    ("testQueueWithAdvancedOperations2", testQueueWithAdvancedOperations2)
+  ]
+
+}
 
 class AdvancedOperationQueueTests: XCTestCase {
   
   func testQueueWithAdvancedOperations() {
     let queue = AdvancedOperationQueue()
-    let delegate = QueueDelegate()
+    let delegate = MockOperationQueueDelegate()
     
     queue.delegate = delegate
     
@@ -52,7 +59,7 @@ class AdvancedOperationQueueTests: XCTestCase {
       case 3:
         XCTAssertTrue(operation == operation4)
       default:
-        XCTFail("Added too many operations.")
+        XCTFail("Added too many operations: \(addCount).")
       }
       addCount += 1
     }
@@ -68,7 +75,7 @@ class AdvancedOperationQueueTests: XCTestCase {
     }
     
     var finishCount = 0
-    delegate.didPerformOperationHandler = { (queue, operation, errors) in
+    delegate.didFinishOperationHandler = { (queue, operation, errors) in
       lock.lock()
       finishCount += 1
       XCTAssertTrue(queue == queue)
@@ -94,9 +101,10 @@ class AdvancedOperationQueueTests: XCTestCase {
   }
   
   //TODO: most of the callbacks can only be activated by subclassed of AdvancedOperation
+  //TODO: rename
   func testQueueWithAdvancedOperations2() {
     let queue = AdvancedOperationQueue()
-    let delegate = QueueDelegate()
+    let delegate = MockOperationQueueDelegate()
     
     queue.delegate = delegate
     queue.isSuspended = true
@@ -140,7 +148,7 @@ class AdvancedOperationQueueTests: XCTestCase {
     }
     
     var finishCount = 0
-    delegate.didPerformOperationHandler = { (queue, operation, errors) in
+    delegate.didFinishOperationHandler = { (queue, operation, errors) in
       lock.lock()
       finishCount += 1
       XCTAssertTrue(queue == queue)
@@ -184,5 +192,3 @@ class AdvancedOperationQueueTests: XCTestCase {
   }
   
 }
-
-#endif

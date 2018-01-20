@@ -40,6 +40,9 @@ public class AdvancedOperation: Operation {
       willChangeValue(forKey: ObservableKey.isExecuting)
     }
     didSet {
+      if (_executing) {
+        willPerform()
+      }
       didChangeValue(forKey: ObservableKey.isExecuting)
     }
   }
@@ -49,11 +52,14 @@ public class AdvancedOperation: Operation {
       willChangeValue(forKey: ObservableKey.isFinished)
     }
     didSet {
+      if (_finished) {
+        didPerform()
+      }
       didChangeValue(forKey: ObservableKey.isFinished)
     }
   }
   
-  private var _ready = false {
+  private var _ready = false { //TODO: check ready state
     willSet {
       willChangeValue(forKey: ObservableKey.isReady)
     }
@@ -76,7 +82,10 @@ public class AdvancedOperation: Operation {
     // Bail out early if cancelled.
     guard !isCancelled else {
        _ready = false
-      didPerform()
+      //didPerform()
+      if (_executing) {
+      _executing = false
+      }
       _finished = true // this will fire the completionBlock via KVO
       return
     }
@@ -89,7 +98,7 @@ public class AdvancedOperation: Operation {
     
     //Thread.detachNewThreadSelector(#selector(main), toTarget: self, with: nil)
     // https://developer.apple.com/library/content/documentation/General/Conceptual/ConcurrencyProgrammingGuide/OperationObjects/OperationObjects.html#//apple_ref/doc/uid/TP40008091-CH101-SW16
-    willPerform()
+    //willPerform()
     main()
   }
   
@@ -115,7 +124,7 @@ public class AdvancedOperation: Operation {
     guard isExecuting else { return } //sanity check
     
     self.errors.append(contentsOf: errors)
-    didPerform() // the operation isn't really finished until all observers are notified
+    //didPerform() // the operation isn't really finished until all observers are notified
     _executing = false
     _finished = true
   }
@@ -132,13 +141,13 @@ public class AdvancedOperation: Operation {
   
   private func willPerform() {
     for observer in observers {
-      observer.operationWillPerform(operation: self)
+      observer.operationDidStart(operation: self)
     }
   }
   
   private func didPerform() {
     for observer in observers {
-      observer.operationDidPerform(operation: self, withErrors: errors)
+      observer.operationDidFinish(operation: self, withErrors: errors)
     }
   }
   
@@ -162,45 +171,5 @@ public class AdvancedOperation: Operation {
     super.addDependency(operation)
   }
   
-}
-
-internal extension AdvancedOperation {
-  internal enum ObservableKey {
-    static var isExecuting: String {
-      #if os(Linux)
-        let key = "isExecuting"
-      #else
-        let key = #keyPath(Operation.isExecuting)
-      #endif
-      return key
-    }
-    
-    static var isFinished: String {
-      #if os(Linux)
-        let key = "isFinished"
-      #else
-        let key = #keyPath(Operation.isFinished)
-      #endif
-      return key
-    }
-    
-    static var isReady: String {
-      #if os(Linux)
-        let key = "isReady"
-      #else
-        let key = #keyPath(Operation.isReady)
-      #endif
-      return key
-    }
-    
-    static var qualityOfService: String {
-      #if os(Linux)
-        let key = "qualityOfService"
-      #else
-        let key = #keyPath(Operation.qualityOfService)
-      #endif
-      return key
-    }
-  }
 }
 

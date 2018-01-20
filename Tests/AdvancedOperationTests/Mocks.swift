@@ -25,6 +25,8 @@ import Foundation
 import Dispatch
 @testable import AdvancedOperation
 
+// MARK: - Error
+
 internal enum MockError: Swift.Error, Equatable {
   case test
   case failed
@@ -47,6 +49,8 @@ internal enum MockError: Swift.Error, Equatable {
 
   }
 }
+
+// MARK: - AdvancedOperation
 
 internal class SleepyAsyncOperation: AdvancedOperation {
 
@@ -97,7 +101,7 @@ internal class SleepyOperation: AdvancedOperation {
   }
 }
 
-internal class FailingOperation: AdvancedOperation {
+internal class FailingAsyncOperation: AdvancedOperation {
 
   private let defaultErrors: [Error]
 
@@ -114,36 +118,45 @@ internal class FailingOperation: AdvancedOperation {
   }
 }
 
-internal class Observer: OperationObserving {
+// MARK: - OperationObserving
 
+internal class MockObserver: OperationObserving {
+
+  var identifier = UUID().uuidString
   var didStartCount = 0
   var didFinishCount = 0
+  var willCancelCount = 0
   var didCancelCount = 0
 
-  func operationWillPerform(operation: AdvancedOperation) {
+  func operationDidStart(operation: Operation) {
+    assert(operation.isExecuting)
     didStartCount += 1
   }
 
-  func operationDidPerform(operation: AdvancedOperation, withErrors errors: [Error]) {
+  func operationDidFinish(operation: Operation, withErrors errors: [Error]) {
+    assert(operation.isFinished)
     didFinishCount += 1
   }
 
-  func operationWillCancel(operation: AdvancedOperation, withErrors errors: [Error]) {
-    //
+  func operationWillCancel(operation: Operation, withErrors errors: [Error]) {
+    willCancelCount += 1
   }
 
-  func operationDidCancel(operation: AdvancedOperation, withErrors errors: [Error]) {
+  func operationDidCancel(operation: Operation, withErrors errors: [Error]) {
+    assert(operation.isCancelled)
     didCancelCount += 1
   }
 
 }
 
-internal class QueueDelegate: AdvancedOperationQueueDelegate {
+// MARK: - AdvancedOperationQueueDelegate
+
+internal class MockOperationQueueDelegate: AdvancedOperationQueueDelegate {
 
   var willAddOperationHandler: ((AdvancedOperationQueue, Operation) -> Void)? = nil
   var willPerformOperationHandler: ((AdvancedOperationQueue, Operation) -> Void)? = nil
+  var didFinishOperationHandler: ((AdvancedOperationQueue, Operation, [Error]) -> Void)? = nil
   var didCancelOperationHandler: ((AdvancedOperationQueue, Operation, [Error]) -> Void)? = nil
-  var didPerformOperationHandler: ((AdvancedOperationQueue, Operation, [Error]) -> Void)? = nil
 
   func operationQueue(operationQueue: AdvancedOperationQueue, willAddOperation operation: Operation) {
     self.willAddOperationHandler?(operationQueue, operation)
@@ -151,12 +164,12 @@ internal class QueueDelegate: AdvancedOperationQueueDelegate {
 
   func operationQueue(operationQueue: AdvancedOperationQueue, didAddOperation operation: Operation) {}
 
-  func operationQueue(operationQueue: AdvancedOperationQueue, operationWillPerform operation: Operation) {
+  func operationQueue(operationQueue: AdvancedOperationQueue, operationDidStart operation: Operation) {
     self.willPerformOperationHandler?(operationQueue, operation)
   }
 
-  func operationQueue(operationQueue: AdvancedOperationQueue, operationDidPerform operation: Operation, withErrors errors: [Error]) {
-    self.didPerformOperationHandler?(operationQueue, operation, errors)
+  func operationQueue(operationQueue: AdvancedOperationQueue, operationDidFinish operation: Operation, withErrors errors: [Error]) {
+    self.didFinishOperationHandler?(operationQueue, operation, errors)
   }
 
   func operationQueue(operationQueue: AdvancedOperationQueue, operationWillCancel operation: Operation, withErrors errors: [Error]) {}

@@ -27,16 +27,17 @@ import Foundation
 struct BlockObserver: OperationObserving {
 
   // MARK: - Properties
+  var identifier = UUID().uuidString
+  //TODO: rename these vars
+  private let willPerform: ((Operation) -> Void)?
+  private let didPerform: ((Operation, [Error]) -> Void)?
+  private let willCancel: ((Operation, [Error]) -> Void)?
+  private let didCancel: ((Operation, [Error]) -> Void)?
 
-  private let willPerform: ((AdvancedOperation) -> Void)?
-  private let didPerform: ((AdvancedOperation, [Error]) -> Void)?
-  private let willCancel: ((AdvancedOperation, [Error]) -> Void)?
-  private let didCancel: ((AdvancedOperation, [Error]) -> Void)?
-
-  init(willPerform: ((AdvancedOperation) -> Void)? = nil,
-       willCancel: ((AdvancedOperation, [Error]) -> Void)? = nil,
-       didCancel: ((AdvancedOperation, [Error]) -> Void)? = nil,
-       didPerform: ((AdvancedOperation, [Error]) -> Void)?) {
+  init(willPerform: ((Operation) -> Void)? = nil,
+       willCancel: ((Operation, [Error]) -> Void)? = nil,
+       didCancel: ((Operation, [Error]) -> Void)? = nil,
+       didPerform: ((Operation, [Error]) -> Void)?) {
     self.willPerform = willPerform
     self.didPerform = didPerform
     self.willCancel = willCancel
@@ -45,19 +46,19 @@ struct BlockObserver: OperationObserving {
 
   // MARK: - OperationObserving
 
-  func operationWillPerform(operation: AdvancedOperation) {
+  func operationDidStart(operation: Operation) {
     willPerform?(operation)
   }
 
-  func operationDidPerform(operation: AdvancedOperation, withErrors errors: [Error]) {
+  func operationDidFinish(operation: Operation, withErrors errors: [Error]) {
     didPerform?(operation, errors)
   }
 
-  func operationWillCancel(operation: AdvancedOperation, withErrors errors: [Error]) {
+  func operationWillCancel(operation: Operation, withErrors errors: [Error]) {
     willCancel?(operation, errors)
   }
 
-  func operationDidCancel(operation: AdvancedOperation, withErrors errors: [Error]) {
+  func operationDidCancel(operation: Operation, withErrors errors: [Error]) {
     didCancel?(operation, errors)
   }
 

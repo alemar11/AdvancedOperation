@@ -3,5 +3,6 @@ import XCTest
 
 XCTMain([
   testCase(AdvancedOperationTests.allTests),
-  testCase(DelayOperationTests.allTests)
+  testCase(DelayOperationTests.allTests),
+  testCase(AdvancedOperationQueueTests.allTests)
   ])

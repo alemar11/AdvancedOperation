@@ -31,6 +31,8 @@ extension AdvancedOperationTests {
     ("testMultipleStart", testMultipleStart),
     ("testCancel", testCancel),
     ("testMultipleCancel", testMultipleCancel),
+    ("testMultipleStartAndCancel", testMultipleStartAndCancel),
+    ("testMultipleStartAndCancelWithErrors", testMultipleStartAndCancelWithErrors),
     ("testMultipleCancelWithError", testMultipleCancelWithError),
     ("testBailingOutEarly", testBailingOutEarly),
     ("testObserversWithCancelCommand", testObserversWithCancelCommand),
@@ -114,6 +116,52 @@ class AdvancedOperationTests: XCTestCase {
     waitForExpectations(timeout: 10)
     XCTAssertOperationCancelled(operation: operation)
   }
+
+  func testMultipleStartAndCancel() {
+    let expectation1 = expectation(description: "\(#function)\(#line)")
+
+    let operation = SleepyAsyncOperation()
+    operation.completionBlock = { expectation1.fulfill() }
+
+    XCTAssertOperationReady(operation: operation)
+
+    operation.start()
+    XCTAssertOperationExecuting(operation: operation)
+
+    operation.cancel()
+    operation.start()
+    XCTAssertFalse(operation.isExecuting)
+    operation.cancel(error: MockError.test)
+    operation.cancel(error: MockError.failed)
+    XCTAssertFalse(operation.isReady)
+    XCTAssertTrue(operation.isCancelled)
+
+    waitForExpectations(timeout: 10)
+    XCTAssertOperationCancelled(operation: operation)
+  }
+
+  func testMultipleStartAndCancelWithErrors() {
+    let expectation1 = expectation(description: "\(#function)\(#line)")
+
+    let operation = SleepyAsyncOperation()
+    operation.completionBlock = { expectation1.fulfill() }
+
+    XCTAssertOperationReady(operation: operation)
+
+    operation.start()
+    XCTAssertOperationExecuting(operation: operation)
+
+    operation.cancel(error: MockError.test)
+    operation.start()
+    XCTAssertFalse(operation.isExecuting)
+    operation.cancel()
+    operation.cancel(error: MockError.failed)
+    XCTAssertFalse(operation.isReady)
+    XCTAssertTrue(operation.isCancelled)
+
+    waitForExpectations(timeout: 10)
+    XCTAssertOperationCancelled(operation: operation, errors: [MockError.test])
+  }
   
   func testMultipleCancelWithError() {
     let expectation1 = expectation(description: "\(#function)\(#line)")
@@ -156,7 +204,7 @@ class AdvancedOperationTests: XCTestCase {
   
   func testObservers() {
     let expectation1 = expectation(description: "\(#function)\(#line)")
-    let observer = Observer()
+    let observer = MockObserver()
     let operation = SleepyAsyncOperation()
     operation.addObserver(observer: observer)
     
@@ -178,7 +226,7 @@ class AdvancedOperationTests: XCTestCase {
   
   func testObserversWithCancelCommand() {
     let expectation1 = expectation(description: "\(#function)\(#line)")
-    let observer = Observer()
+    let observer = MockObserver()
     let operation = SleepyAsyncOperation()
     operation.addObserver(observer: observer)
     
@@ -215,7 +263,7 @@ class AdvancedOperationTests: XCTestCase {
   }
   
   func testFinishWithErrors() {
-    let operation = FailingOperation()
+    let operation = FailingAsyncOperation()
     let expectation1 = expectation(description: "\(#function)\(#line)")
     
     operation.addCompletionBlock { expectation1.fulfill() }

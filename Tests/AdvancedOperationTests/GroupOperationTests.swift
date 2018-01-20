@@ -267,7 +267,7 @@
       let group1 = GroupOperation(operations: operation1, operation2)
 
       let operation3 = SleepyAsyncOperation()
-      let operation4 = FailingOperation(errors: errors)
+      let operation4 = FailingAsyncOperation(errors: errors)
       let group2 = GroupOperation(operations: operation3, operation4)
 
       let group = GroupOperation(operations: group1, group2)
@@ -290,7 +290,7 @@
       let group1 = GroupOperation(operations: operation1, operation2)
 
       let operation3 = SleepyAsyncOperation()
-      let operation4 = FailingOperation(errors: errors)
+      let operation4 = FailingAsyncOperation(errors: errors)
       let group2 = GroupOperation(operations: operation3, operation4)
 
       let group = GroupOperation(operations: group1, group2)
@@ -311,12 +311,12 @@
       let errors1 = [MockError.test, MockError.failed, MockError.failed]
       let errors2 = [MockError.test, MockError.generic(date: Date()), MockError.generic(date: Date())]
 
-      let operation1 = FailingOperation(errors: errors1)
+      let operation1 = FailingAsyncOperation(errors: errors1)
       let operation2 = SleepyOperation()
       let group1 = GroupOperation(operations: operation1, operation2)
 
       let operation3 = SleepyAsyncOperation()
-      let operation4 = FailingOperation(errors: errors2)
+      let operation4 = FailingAsyncOperation(errors: errors2)
       let group2 = GroupOperation(operations: operation3, operation4)
 
       let group = GroupOperation(operations: group1, group2)

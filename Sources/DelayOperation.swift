@@ -33,7 +33,7 @@ final class DelayOperation: AdvancedOperation {
   private let delay: Delay
   private let queue: DispatchQueue
 
-  // MARK: - Types
+  // MARK: - Delay Types
 
   private enum Delay {
     case interval(TimeInterval)
