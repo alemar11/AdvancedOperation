@@ -39,7 +39,7 @@ public class AdvancedOperation: Operation {
       willChangeValue(forKey: ObservableKey.isExecuting)
     }
     didSet {
-      if (_executing) {
+      if _executing {
         willPerform()
       }
       didChangeValue(forKey: ObservableKey.isExecuting)
@@ -51,7 +51,7 @@ public class AdvancedOperation: Operation {
       willChangeValue(forKey: ObservableKey.isFinished)
     }
     didSet {
-      if (_finished) {
+      if _finished {
         didPerform()
       }
       didChangeValue(forKey: ObservableKey.isFinished)
@@ -71,7 +71,7 @@ public class AdvancedOperation: Operation {
     // Bail out early if cancelled.
     guard !isCancelled else {
       //didPerform()
-      if (_executing) {
+      if _executing {
       _executing = false
       }
       _finished = true // this will fire the completionBlock via KVO
@@ -159,4 +159,3 @@ public class AdvancedOperation: Operation {
   }
 
 }
-

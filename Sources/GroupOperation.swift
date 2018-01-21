@@ -63,7 +63,7 @@ public final class GroupOperation: AdvancedOperation {
   private let underlyingOperationQueue = AdvancedOperationQueue()
 
   /// Internal starting operation.
-  private lazy var startingOperation = BlockOperation(block: {} )
+  private lazy var startingOperation = BlockOperation(block: { })
 
   /// Internal finishing operation.
   private lazy var finishingOperation: BlockOperation = {

@@ -45,4 +45,3 @@ public protocol OperationObserving {
 //public extension OperationObserving {
 //  func operationWillCancel(operation: Operation, withErrors errors: [Error]) {}
 //}
-

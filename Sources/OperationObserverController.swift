@@ -23,7 +23,7 @@
 
 #if !os(Linux)
 
-import Foundation
+  import Foundation
 
   public class OperationObserverController {
     let operation: Operation
@@ -51,30 +51,28 @@ import Foundation
         guard let `self` = self else { return }
         guard let old = change.oldValue else { return }
         guard let new = change.newValue else { return }
-//
-        if (old == false && new == true) {
+        //
+        if old == false && new == true {
           for observer in self.observers {
             observer.operationDidStart(operation: operation)
           }
         }
 
-//        else if operation.isCancelled && old == false && new == false {
-//          for observer in self.observers {
-//            observer.operationDidStart(operation: operation)
-//          }
-//        } else {
-//          print(operation)
-//          print("")
-//        }
+        //        else if operation.isCancelled && old == false && new == false {
+        //          for observer in self.observers {
+        //            observer.operationDidStart(operation: operation)
+        //          }
+        //        } else {
+        //          print(operation)
+        //          print("")
+        //        }
 
-//        guard let old = change.oldValue, old == false else { return }
-//        guard let new = change.newValue, new == true else { return }
-//
-//        for observer in self.observers {
-//          observer.operationWillPerform(operation: operation)
-//        }
-
-
+        //        guard let old = change.oldValue, old == false else { return }
+        //        guard let new = change.newValue, new == true else { return }
+        //
+        //        for observer in self.observers {
+        //          observer.operationWillPerform(operation: operation)
+        //        }
 
       }
 
@@ -136,10 +134,8 @@ import Foundation
 
     /// Removes an observer with a specified `identifier`.
     public func removeObserver(withIdentifier identifier: String) {
-      for (index, observer) in observers.enumerated() {
-        if observer.identifier == identifier {
-          observers.remove(at: index)
-        }
+      for (index, observer) in observers.enumerated() where observer.identifier == identifier {
+        observers.remove(at: index)
       }
     }
 
@@ -151,7 +147,8 @@ import Foundation
 /// OperationQueue
 
 /**
- The NSOperationQueue class is key-value coding (KVC) and key-value observing (KVO) compliant. You can observe these properties as desired to control other parts of your application. To observe the properties, use the following key paths::
+ The NSOperationQueue class is key-value coding (KVC) and key-value observing (KVO) compliant.
+ You can observe these properties as desired to control other parts of your application. To observe the properties, use the following key paths::
  operations - read-only
  operationCount - read-only
  maxConcurrentOperationCount - readable and writable
