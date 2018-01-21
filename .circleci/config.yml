@@ -34,8 +34,8 @@ jobs:
         - tar xvzf redis-2.4.18.tar.gz
         - cd redis-2.4.18 && make
 
-    # steps:
-    #   - checkout
+    steps:
+        - checkout
     #   - run: 
     #       name: Install Dependencies
     #       command: sudo apt-get install clang libicu-dev libcurl4-openssl-dev wget unzip -y
