@@ -34,8 +34,8 @@ jobs:
         - wget https://swift.org/builds/development/ubuntu1404/swift-DEVELOPMENT-SNAPSHOT-2018-01-15-a/swift-DEVELOPMENT-SNAPSHOT-2018-01-15-a-ubuntu14.04.tar.gz
 
     steps:
-        - checkout
-        - run: 
+      - checkout
+      - run: 
           name: Install Dependencies
           command: sudo apt-get install clang libicu-dev libcurl4-openssl-dev wget unzip -y
     #   - run:
