@@ -27,7 +27,7 @@ jobs:
 
   linux_swift_dev_snapshot:
     docker:
-      - image: ubuntu:14.04
+      - image: docker pull circleci/python
     dependencies:
       pre:
         - wget http://redis.googlecode.com/files/redis-2.4.18.tar.gz
