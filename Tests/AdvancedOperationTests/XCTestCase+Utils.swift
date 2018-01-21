@@ -35,7 +35,7 @@ extension XCTestCase {
       !operation.isExecuting,
       !operation.isCancelled,
       !operation.isFinished
-      else { return recordFailure(withDescription: "Operation is not in ready state.", inFile: file, atLine: line, expected: true) }
+      else { return recordFailure(withDescription: "Operation cannot be started.", inFile: file, atLine: line, expected: true) }
   }
 
   /// Asserts that the AdvancedOperation is currently executing.
@@ -46,7 +46,7 @@ extension XCTestCase {
       operation.isExecuting,
       !operation.isCancelled,
       !operation.isFinished
-      else { return recordFailure(withDescription: "Operation is not in executing state.", inFile: file, atLine: line, expected: true) }
+      else { return recordFailure(withDescription: "Operation is not executing.", inFile: file, atLine: line, expected: true) }
   }
 
   /// Asserts that the AdvancedOperation has finished due to a cancel command.
@@ -57,7 +57,7 @@ extension XCTestCase {
       !operation.isExecuting,
       operation.isCancelled,
       operation.isFinished
-      else { return recordFailure(withDescription: "Operation is not in cancelled state.", inFile: file, atLine: line, expected: true) }
+      else { return recordFailure(withDescription: "Operation is not cancelled.", inFile: file, atLine: line, expected: true) }
 
     guard operation.errors.count == errors.count
       else { return recordFailure(withDescription: "Operation has \(operation.errors.count) errors, expected: \(errors.count)", inFile: file, atLine: line, expected: true) }
@@ -71,7 +71,7 @@ extension XCTestCase {
       !operation.isExecuting,
       !operation.isCancelled,
       operation.isFinished
-      else { return recordFailure(withDescription: "Operation is not in finished state.", inFile: file, atLine: line, expected: true) }
+      else { return recordFailure(withDescription: "Operation is not finished.", inFile: file, atLine: line, expected: true) }
 
     guard operation.errors.count == errors.count
       else { return recordFailure(withDescription: "Operation has \(operation.errors.count) errors, expected: \(errors.count)", inFile: file, atLine: line, expected: true) }
