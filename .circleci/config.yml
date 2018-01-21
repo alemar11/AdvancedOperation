@@ -53,6 +53,12 @@ jobs:
       - run: 
           name: Finish
           command: source ~/.bashrc 
+      - run: 
+          name: Swift Test
+          command: swift test
+      - run:
+          name: Swift build Release
+          command: swift build -c release -Xswiftc -static-stdlib
 
 workflows:
   version: 2
