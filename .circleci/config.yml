@@ -49,7 +49,7 @@ jobs:
           command: sudo mv swift-DEVELOPMENT* /swift-DEVELOPMENT
       - run: 
           name: Export
-          command: echo "export PATH=/swift-DEVELOPMENT/usr/bin:\"\${PATH}\"" >> ~/.bashrc
+          command: sudo echo "export PATH=/swift-DEVELOPMENT/usr/bin:\"\${PATH}\"" >> ~/.bashrc
       - run: 
           name: Finish Swift setup
           command: source ~/.bashrc 
