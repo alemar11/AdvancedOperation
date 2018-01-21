@@ -23,7 +23,16 @@ jobs:
           command: swift test
       - run:
           name: Swift build Release
-          command: swift build -c release -Xswiftc -static-stdlib       
+          command: swift build -c release -Xswiftc -static-stdlib
+  linux_swift_dev_snapshot:
+    steps:
+      - checkout
+      - run: 
+          name: Dependencies
+          command: sudo apt-get install clang libicu-dev libcurl4-openssl-dev wget unzip -y
+      # - run:
+      #     name: Swift build Release
+      #     command: swift build -c release -Xswiftc -static-stdlib              
 
 workflows:
   version: 2
@@ -31,3 +40,4 @@ workflows:
     jobs:
       - linux_swift_4
       - linux_swift_4.0.3
+      - linux_swift_dev_snapshot.0.3
