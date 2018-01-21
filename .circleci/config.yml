@@ -27,40 +27,13 @@ jobs:
 
   linux_swift_dev_snapshot:
     docker:
-      - image: circleci/python:3.6.2-stretch-browsers
-    dependencies:
-      pre:
-        - sudo apt-get install clang libicu-dev libcurl4-openssl-dev wget unzip -y
-        - wget https://swift.org/builds/development/ubuntu1404/swift-DEVELOPMENT-SNAPSHOT-2018-01-15-a/swift-DEVELOPMENT-SNAPSHOT-2018-01-15-a-ubuntu14.04.tar.gz
-
-    steps:
-      - checkout
+      - image: norionomura/swift:swift-4.1-branch
       - run: 
-          name: Install Dependencies
-          command: sudo apt-get install clang libicu-dev libcurl4-openssl-dev wget unzip -y
+          name: Swift Test
+          command: swift test
       - run:
-          name: Download Swift snapshot
-          command: wget https://swift.org/builds/development/ubuntu1404/swift-DEVELOPMENT-SNAPSHOT-2018-01-15-a/swift-DEVELOPMENT-SNAPSHOT-2018-01-15-a-ubuntu14.04.tar.gz             
-      - run: 
-          name: Untar Swift snapshot
-          command: tar zxf swift-DEVELOPMENT*.tar.gz && rm -rf swift-DEVELOPMENT*.tar.gz
-      - run: 
-          name: Move Swift snapshot
-          command: sudo mv swift-DEVELOPMENT* /swift-DEVELOPMENT
-      - run: 
-          name: Export
-          command: sudo echo "export PATH=/swift-DEVELOPMENT/usr/bin:\"\${PATH}\"" >> ~/.bashrc
-      - run: 
-          name: Finish Swift setup
-          command: source ~/.bashrc 
-      - run: echo ${PATH}
-      - run: swift -v
-      # - run: 
-      #     name: Swift Test
-      #     command: swift test
-      # - run:
-      #     name: Swift build Release
-      #     command: swift build -c release -Xswiftc -static-stdlib
+          name: Swift build Release
+          command: swift build -c release -Xswiftc -static-stdlib
 
 workflows:
   version: 2
