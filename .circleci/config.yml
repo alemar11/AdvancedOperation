@@ -28,6 +28,8 @@ jobs:
   linux_swift_dev_snapshot:
     docker:
       - image: norionomura/swift:swift-4.1-branch
+    steps:
+      - checkout
       - run: 
           name: Swift Test
           command: swift test
