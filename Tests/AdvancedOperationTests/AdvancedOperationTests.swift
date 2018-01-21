@@ -38,7 +38,8 @@ extension AdvancedOperationTests {
     ("testObserversWithCancelCommand", testObserversWithCancelCommand),
     ("testObservers", testObservers),
     ("testCancelWithErrors", testCancelWithErrors),
-    ("testFinishWithErrors", testFinishWithErrors)
+    ("testFinishWithErrors", testFinishWithErrors),
+    ("testReadiness", testReadiness)
   ]
 
 }
