@@ -27,7 +27,7 @@ jobs:
 
   linux_swift_dev_snapshot:
     docker:
-      - image: docker pull circleci/python
+      - image: circleci/python:3.6.2-stretch-browsers
     dependencies:
       pre:
         - wget http://redis.googlecode.com/files/redis-2.4.18.tar.gz
