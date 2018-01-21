@@ -51,7 +51,7 @@ class AdvancedOperationTests: XCTestCase {
     let operation = SleepyAsyncOperation()
     operation.completionBlock = { expectation1.fulfill() }
     
-    XCTAssertOperationReady(operation: operation)
+    XCTAssertOperationCanBeStarted(operation: operation)
     
     operation.start()
     XCTAssertOperationExecuting(operation: operation)
@@ -66,7 +66,7 @@ class AdvancedOperationTests: XCTestCase {
     let operation = SleepyAsyncOperation()
     operation.completionBlock = { expectation1.fulfill() }
     
-    XCTAssertOperationReady(operation: operation)
+    XCTAssertOperationCanBeStarted(operation: operation)
     
     operation.start()
     operation.start()
@@ -83,13 +83,13 @@ class AdvancedOperationTests: XCTestCase {
     let operation = SleepyAsyncOperation()
     operation.completionBlock = { expectation1.fulfill() }
     
-    XCTAssertOperationReady(operation: operation)
+    XCTAssertOperationCanBeStarted(operation: operation)
 
     operation.start()
     XCTAssertOperationExecuting(operation: operation)
 
     operation.cancel()
-    XCTAssertFalse(operation.isReady)
+    XCTAssertTrue(operation.isReady)
     XCTAssertTrue(operation.isCancelled)
 
     waitForExpectations(timeout: 10)
@@ -102,7 +102,7 @@ class AdvancedOperationTests: XCTestCase {
     let operation = SleepyAsyncOperation()
     operation.completionBlock = { expectation1.fulfill() }
     
-    XCTAssertOperationReady(operation: operation)
+    XCTAssertOperationCanBeStarted(operation: operation)
     
     operation.start()
     XCTAssertOperationExecuting(operation: operation)
@@ -110,7 +110,7 @@ class AdvancedOperationTests: XCTestCase {
     operation.cancel()
     operation.cancel(error: MockError.test)
     operation.cancel(error: MockError.failed)
-    XCTAssertFalse(operation.isReady)
+    XCTAssertTrue(operation.isReady)
     XCTAssertTrue(operation.isCancelled)
     
     waitForExpectations(timeout: 10)
@@ -123,7 +123,7 @@ class AdvancedOperationTests: XCTestCase {
     let operation = SleepyAsyncOperation()
     operation.completionBlock = { expectation1.fulfill() }
 
-    XCTAssertOperationReady(operation: operation)
+    XCTAssertOperationCanBeStarted(operation: operation)
 
     operation.start()
     XCTAssertOperationExecuting(operation: operation)
@@ -133,7 +133,7 @@ class AdvancedOperationTests: XCTestCase {
     XCTAssertFalse(operation.isExecuting)
     operation.cancel(error: MockError.test)
     operation.cancel(error: MockError.failed)
-    XCTAssertFalse(operation.isReady)
+    XCTAssertTrue(operation.isReady)
     XCTAssertTrue(operation.isCancelled)
 
     waitForExpectations(timeout: 10)
@@ -146,7 +146,7 @@ class AdvancedOperationTests: XCTestCase {
     let operation = SleepyAsyncOperation()
     operation.completionBlock = { expectation1.fulfill() }
 
-    XCTAssertOperationReady(operation: operation)
+    XCTAssertOperationCanBeStarted(operation: operation)
 
     operation.start()
     XCTAssertOperationExecuting(operation: operation)
@@ -156,7 +156,7 @@ class AdvancedOperationTests: XCTestCase {
     XCTAssertFalse(operation.isExecuting)
     operation.cancel()
     operation.cancel(error: MockError.failed)
-    XCTAssertFalse(operation.isReady)
+    XCTAssertTrue(operation.isReady)
     XCTAssertTrue(operation.isCancelled)
 
     waitForExpectations(timeout: 10)
@@ -169,7 +169,7 @@ class AdvancedOperationTests: XCTestCase {
     let operation = SleepyAsyncOperation()
     operation.completionBlock = { expectation1.fulfill() }
     
-    XCTAssertOperationReady(operation: operation)
+    XCTAssertOperationCanBeStarted(operation: operation)
     
     operation.start()
     XCTAssertOperationExecuting(operation: operation)
@@ -178,7 +178,7 @@ class AdvancedOperationTests: XCTestCase {
     operation.cancel(error: error)
     operation.cancel(error: MockError.test)
     operation.cancel(error: MockError.failed)
-    XCTAssertFalse(operation.isReady)
+    XCTAssertTrue(operation.isReady)
     XCTAssertTrue(operation.isCancelled)
     
     waitForExpectations(timeout: 10)
@@ -188,14 +188,14 @@ class AdvancedOperationTests: XCTestCase {
   func testBailingOutEarly() {
     let operation = SleepyAsyncOperation()
     
-    XCTAssertOperationReady(operation: operation)
+    XCTAssertOperationCanBeStarted(operation: operation)
     
     operation.cancel()
     operation.start()
     XCTAssertOperationCancelled(operation: operation)
     
     operation.cancel()
-    XCTAssertFalse(operation.isReady)
+    XCTAssertTrue(operation.isReady)
     XCTAssertTrue(operation.isCancelled)
     
     operation.waitUntilFinished()
@@ -243,8 +243,7 @@ class AdvancedOperationTests: XCTestCase {
     XCTAssertEqual(observer.didCancelCount, 1)
     XCTAssertEqual(operation.errors.count, 0)
   }
-  
-  
+
   func testCancelWithErrors() {
     let expectation1 = expectation(description: "\(#function)\(#line)")
     let operation = SleepyAsyncOperation()
@@ -255,7 +254,7 @@ class AdvancedOperationTests: XCTestCase {
     XCTAssertOperationExecuting(operation: operation)
     
     operation.cancel(error: MockError.test)
-    XCTAssertFalse(operation.isReady)
+    XCTAssertTrue(operation.isReady)
     XCTAssertTrue(operation.isCancelled)
     
     waitForExpectations(timeout: 10)
@@ -271,6 +270,31 @@ class AdvancedOperationTests: XCTestCase {
     
     waitForExpectations(timeout: 10)
     XCTAssertEqual(operation.errors.count, 2)
+  }
+
+  // The readiness of operations is determined by their dependencies on other operations and potentially by custom conditions that you define.
+  func testReadiness() {
+    // Given
+    let operation1 = SleepyAsyncOperation()
+    let expectation1 = expectation(description: "\(#function)\(#line)")
+    operation1.addCompletionBlock { expectation1.fulfill() }
+    XCTAssertTrue(operation1.isReady)
+
+    let operation2 = BlockOperation(block: {} )
+    let expectation2 = expectation(description: "\(#function)\(#line)")
+    operation2.addExecutionBlock { expectation2.fulfill() }
+
+    // When
+    operation1.addDependency(operation2)
+    XCTAssertFalse(operation1.isReady)
+
+    // Then
+    operation2.start()
+    XCTAssertTrue(operation1.isReady)
+    operation1.start()
+    waitForExpectations(timeout: 5)
+    XCTAssertTrue(operation1.isReady)
+
   }
 
 }

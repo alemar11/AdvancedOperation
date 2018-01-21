@@ -27,7 +27,8 @@ import XCTest
 
 extension XCTestCase {
 
-  func XCTAssertOperationReady(operation: AdvancedOperation, file: String = #file, line: Int = #line) {
+  /// Asserts that the AdvancedOperation can be started anytime.
+  func XCTAssertOperationCanBeStarted(operation: AdvancedOperation, file: String = #file, line: Int = #line) {
 
     guard
       operation.isReady,
@@ -37,21 +38,22 @@ extension XCTestCase {
       else { return recordFailure(withDescription: "Operation is not in ready state.", inFile: file, atLine: line, expected: true) }
   }
 
+  /// Asserts that the AdvancedOperation is currently executing.
   func XCTAssertOperationExecuting(operation: AdvancedOperation, file: String = #file, line: Int = #line) {
 
     guard
-      !operation.isReady,
+      operation.isReady,
       operation.isExecuting,
       !operation.isCancelled,
       !operation.isFinished
       else { return recordFailure(withDescription: "Operation is not in executing state.", inFile: file, atLine: line, expected: true) }
   }
 
-  /// AdvancedOperation finished due to a cancel command.
+  /// Asserts that the AdvancedOperation has finished due to a cancel command.
   func XCTAssertOperationCancelled(operation: AdvancedOperation, errors: [Error] = [], file: String = #file, line: Int = #line) {
 
     guard
-      !operation.isReady,
+      operation.isReady,
       !operation.isExecuting,
       operation.isCancelled,
       operation.isFinished
@@ -61,11 +63,11 @@ extension XCTestCase {
       else { return recordFailure(withDescription: "Operation has \(operation.errors.count) errors, expected: \(errors.count)", inFile: file, atLine: line, expected: true) }
   }
 
-  /// AdvancedOperation finished due to a cancel command.
+  /// Asserts that the AdvancedOperation has finished.
   func XCTAssertOperationFinished(operation: AdvancedOperation, errors: [Error] = [], file: String = #file, line: Int = #line) {
 
     guard
-      !operation.isReady,
+      operation.isReady,
       !operation.isExecuting,
       !operation.isCancelled,
       operation.isFinished

@@ -31,8 +31,7 @@ public class AdvancedOperation: Operation {
   
   public override var isExecuting: Bool { return _executing }
   public override var isFinished: Bool { return _finished }
-  public override var isReady: Bool { return _ready }
-  
+
   private(set) var errors = [Error]()
   
   private var _executing = false {
@@ -58,21 +57,11 @@ public class AdvancedOperation: Operation {
       didChangeValue(forKey: ObservableKey.isFinished)
     }
   }
-  
-  private var _ready = false { //TODO: check ready state
-    willSet {
-      willChangeValue(forKey: ObservableKey.isReady)
-    }
-    didSet {
-      didChangeValue(forKey: ObservableKey.isReady)
-    }
-  }
-  
+
   // MARK: - Initialization
   
   public override init() {
     super.init()
-    _ready = true
   }
   
   // MARK: - Methods
@@ -81,7 +70,6 @@ public class AdvancedOperation: Operation {
     
     // Bail out early if cancelled.
     guard !isCancelled else {
-       _ready = false
       //didPerform()
       if (_executing) {
       _executing = false
@@ -92,7 +80,6 @@ public class AdvancedOperation: Operation {
     
     guard !isExecuting else { return }
 
-    _ready = false
     _executing = true
     _finished = false
     
