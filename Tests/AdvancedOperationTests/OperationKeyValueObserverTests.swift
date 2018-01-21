@@ -24,6 +24,8 @@
 import XCTest
 @testable import AdvancedOperation
 
+#if !os(Linux)
+
 class OperationKeyValueObserverTests: XCTestCase {
 
   func testStart() {
@@ -139,3 +141,5 @@ class OperationKeyValueObserverTests: XCTestCase {
   }
 
 }
+
+#endif
