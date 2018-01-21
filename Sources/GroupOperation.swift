@@ -1,4 +1,4 @@
-// 
+//
 // AdvancedOperation
 //
 // Copyright © 2016-2018 Tinrobots.
@@ -82,7 +82,7 @@ public final class GroupOperation: AdvancedOperation {
 
   public init(operations: [Operation]) {
     super.init()
-    
+
     underlyingOperationQueue.isSuspended = true
     underlyingOperationQueue.delegate = self
     underlyingOperationQueue.addOperation(startingOperation)

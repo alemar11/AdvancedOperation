@@ -1,4 +1,4 @@
-// 
+//
 // AdvancedOperation
 //
 // Copyright © 2016-2018 Tinrobots.
@@ -25,48 +25,48 @@ import XCTest
 @testable import AdvancedOperation
 
 extension DelayOperationTests {
-  
+
   static var allTests = [
     ("testStandardFlow", testStandardFlow),
     ("testNegativeInterval", testNegativeInterval),
     ("testBailingOutEarly", testBailingOutEarly)
   ]
-  
+
 }
 
 class DelayOperationTests: XCTestCase {
-  
+
   func testStandardFlow() {
     let expectation1 = expectation(description: "\(#function)\(#line)")
-    
+
     let start = Date()
     let operation = DelayOperation(interval: 2)
-    
+
     operation.completionBlock = {
       let seconds = Date().timeIntervalSince(start)
       XCTAssertTrue(seconds > 2 && seconds < 3)
       expectation1.fulfill()
     }
-    
+
     operation.start()
     waitForExpectations(timeout: 3)
     XCTAssertOperationFinished(operation: operation)
   }
-  
+
   func testNegativeInterval() {
     let expectation1 = expectation(description: "\(#function)\(#line)")
     let operation = DelayOperation(interval: -2)
     operation.completionBlock = { expectation1.fulfill() }
-    
+
     operation.start()
     waitForExpectations(timeout: 3)
     XCTAssertFalse(operation.isCancelled)
     XCTAssertOperationFinished(operation: operation)
   }
-  
+
   func testBailingOutEarly() {
     let expectation1 = expectation(description: "\(#function)\(#line)")
-    
+
     let start = Date()
     let operation = DelayOperation(interval: 2)
     operation.completionBlock = {
@@ -74,11 +74,11 @@ class DelayOperationTests: XCTestCase {
       XCTAssertTrue(seconds > 0 && seconds < 1)
       expectation1.fulfill()
     }
-    
+
     operation.cancel()
     operation.start()
     waitForExpectations(timeout: 3)
     XCTAssertOperationCancelled(operation: operation)
   }
-  
+
 }

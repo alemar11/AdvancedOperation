@@ -18,6 +18,17 @@
 			name = SwiftLint;
 			productName = SwiftLint;
 		};
+		23DC2C7E2014F5DB00270CA3 /* Cleanup whitespace */ = {
+			isa = PBXAggregateTarget;
+			buildConfigurationList = 23DC2C812014F5DB00270CA3 /* Build configuration list for PBXAggregateTarget "Cleanup whitespace" */;
+			buildPhases = (
+				23DC2C822014F5E000270CA3 /* ShellScript */,
+			);
+			dependencies = (
+			);
+			name = "Cleanup whitespace";
+			productName = "Cleanup whitespace";
+		};
 /* End PBXAggregateTarget section */
 
 /* Begin PBXBuildFile section */
@@ -483,6 +494,10 @@
 						LastSwiftMigration = 0920;
 						ProvisioningStyle = Automatic;
 					};
+					23DC2C7E2014F5DB00270CA3 = {
+						CreatedOnToolsVersion = 9.2;
+						ProvisioningStyle = Automatic;
+					};
 				};
 			};
 			buildConfigurationList = 234130811F9605F5002BE7FC /* Build configuration list for PBXProject "AdvancedOperation" */;
@@ -505,6 +520,7 @@
 				2372B43C1F960DCB00189A32 /* AdvancedOperation Tests tvOS */,
 				23725070200522820000A442 /* AdvancedOperation Tests macOS */,
 				230B47F8200EA87900F46852 /* SwiftLint */,
+				23DC2C7E2014F5DB00270CA3 /* Cleanup whitespace */,
 			);
 		};
 /* End PBXProject section */
@@ -575,6 +591,19 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "if which swiftlint >/dev/null; then\nswiftlint\nelse\necho \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi";
+		};
+		23DC2C822014F5E000270CA3 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "#!/bin/sh\ndirectories=(Sources Tests)\n\nfor directory in \"${directories[@]}\"\ndo\necho \"Cleaning whitespace in directory: $directory\"\nfind $directory -iregex '.*\\.swift' -exec sed -E -i '' -e 's/[[:blank:]]*$//' {} \\;\ndone";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -1128,6 +1157,22 @@
 			};
 			name = Release;
 		};
+		23DC2C7F2014F5DB00270CA3 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		23DC2C802014F5DB00270CA3 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -1208,6 +1253,15 @@
 			buildConfigurations = (
 				2372B4461F960DCB00189A32 /* Debug */,
 				2372B4471F960DCB00189A32 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		23DC2C812014F5DB00270CA3 /* Build configuration list for PBXAggregateTarget "Cleanup whitespace" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				23DC2C7F2014F5DB00270CA3 /* Debug */,
+				23DC2C802014F5DB00270CA3 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

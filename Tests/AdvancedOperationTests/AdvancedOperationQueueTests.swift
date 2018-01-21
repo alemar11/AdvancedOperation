@@ -1,4 +1,4 @@
-// 
+//
 // AdvancedOperation
 //
 // Copyright © 2016-2018 Tinrobots.
@@ -34,18 +34,18 @@ extension AdvancedOperationQueueTests {
 }
 
 class AdvancedOperationQueueTests: XCTestCase {
-  
+
   func testQueueWithAdvancedOperations() {
     let queue = AdvancedOperationQueue()
     let delegate = MockOperationQueueDelegate()
-    
+
     queue.delegate = delegate
-    
+
     let operation1 = SleepyAsyncOperation()
     let operation2 = SleepyAsyncOperation()
     let operation3 = SleepyAsyncOperation()
     let operation4 = DelayOperation(interval: 1)
-    
+
     var addCount = 0
     delegate.willAddOperationHandler = { (queue, operation) in
       XCTAssertTrue(queue == queue)
@@ -63,9 +63,9 @@ class AdvancedOperationQueueTests: XCTestCase {
       }
       addCount += 1
     }
-    
+
     let lock = NSLock()
-    
+
     var startCount = 0
     delegate.willPerformOperationHandler = { (queue, operation) in
       lock.lock()
@@ -73,7 +73,7 @@ class AdvancedOperationQueueTests: XCTestCase {
       XCTAssertTrue(queue == queue)
       lock.unlock()
     }
-    
+
     var finishCount = 0
     delegate.didFinishOperationHandler = { (queue, operation, errors) in
       lock.lock()
@@ -82,7 +82,7 @@ class AdvancedOperationQueueTests: XCTestCase {
       XCTAssertEqual(errors.count, 0)
       lock.unlock()
     }
-    
+
     var cancelCount = 0
     delegate.didCancelOperationHandler = { (queue, operation, errors) in
       lock.lock()
@@ -91,34 +91,34 @@ class AdvancedOperationQueueTests: XCTestCase {
       XCTAssertEqual(errors.count, 0)
       lock.unlock()
     }
-    
+
     queue.addOperations([operation1, operation2, operation3, operation4], waitUntilFinished: true)
-    
+
     XCTAssertEqual(addCount, 4)
     XCTAssertEqual(startCount, 4)
     XCTAssertEqual(finishCount, 4)
     XCTAssertEqual(cancelCount, 0)
   }
-  
+
   //TODO: most of the callbacks can only be activated by subclassed of AdvancedOperation
   //TODO: rename
   func testQueueWithAdvancedOperations2() {
     let queue = AdvancedOperationQueue()
     let delegate = MockOperationQueueDelegate()
-    
+
     queue.delegate = delegate
     queue.isSuspended = true
-    
+
     let operation1 = SleepyOperation()
     let operation2 = SleepyAsyncOperation(interval1: 0, interval2: 1, interval3: 0)
     let operation3 = DelayOperation(interval: 2)
     let operation4 = DelayOperation(interval: 1)
-    
+
     let expectation1 = expectation(description: "\(#function)\(#line)")
     let expectation2 = expectation(description: "\(#function)\(#line)")
     let expectation3 = expectation(description: "\(#function)\(#line)")
     let expectation4 = expectation(description: "\(#function)\(#line)")
-    
+
     var addCount = 0
     delegate.willAddOperationHandler = { (queue, operation) in
       XCTAssertTrue(queue == queue)
@@ -136,9 +136,9 @@ class AdvancedOperationQueueTests: XCTestCase {
       }
       addCount += 1
     }
-    
+
     let lock = NSLock()
-    
+
     var startCount = 0
     delegate.willPerformOperationHandler = { (queue, operation) in
       lock.lock()
@@ -146,14 +146,14 @@ class AdvancedOperationQueueTests: XCTestCase {
       XCTAssertTrue(queue == queue)
       lock.unlock()
     }
-    
+
     var finishCount = 0
     delegate.didFinishOperationHandler = { (queue, operation, errors) in
       lock.lock()
       finishCount += 1
       XCTAssertTrue(queue == queue)
       XCTAssertEqual(errors.count, 0)
-      
+
       if operation === operation1 {
         expectation1.fulfill()
       } else if operation === operation2 {
@@ -167,7 +167,7 @@ class AdvancedOperationQueueTests: XCTestCase {
       }
       lock.unlock()
     }
-    
+
     var cancelCount = 0
     delegate.didCancelOperationHandler = { (queue, operation, errors) in
       lock.lock()
@@ -182,13 +182,13 @@ class AdvancedOperationQueueTests: XCTestCase {
     queue.addOperation(operation3)
     queue.addOperation(operation4)
     queue.isSuspended = false
-    
+
     waitForExpectations(timeout: 10)
-    
+
     XCTAssertEqual(addCount, 4)
     XCTAssertEqual(startCount, 4)
     XCTAssertEqual(finishCount, 4)
     XCTAssertEqual(cancelCount, 0)
   }
-  
+
 }

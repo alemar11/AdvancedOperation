@@ -1,4 +1,4 @@
-// 
+//
 // AdvancedOperation
 //
 // Copyright © 2016-2018 Tinrobots.
@@ -25,92 +25,92 @@ import XCTest
 @testable import AdvancedOperation
 
 class OperationKeyValueObserverTests: XCTestCase {
-  
+
   func testStart() {
     let operation = SleepyAsyncOperation(interval1: 1, interval2: 3, interval3: 1)
     let keyValueObserver = OperationObserverController(operation: operation)
     let observer = MockObserver()
     let expectation1 = expectation(description: "\(#function)\(#line)")
-    
+
     keyValueObserver.registerObserver(observer)
     operation.addCompletionBlock { expectation1.fulfill() }
     operation.start()
-    
+
     waitForExpectations(timeout: 6)
     XCTAssertEqual(observer.willCancelCount, 0)
     XCTAssertEqual(observer.didCancelCount, 0)
     XCTAssertEqual(observer.didFinishCount, 1)
     XCTAssertEqual(observer.didStartCount, 1)
   }
-  
+
   func testMultipleStart() {
     let operation = SleepyAsyncOperation(interval1: 1, interval2: 3, interval3: 1)
     let keyValueObserver = OperationObserverController(operation: operation)
     let observer = MockObserver()
     let expectation1 = expectation(description: "\(#function)\(#line)")
-    
+
     keyValueObserver.registerObserver(observer)
     operation.addCompletionBlock { expectation1.fulfill() }
     operation.start()
     operation.start()
-    
+
     waitForExpectations(timeout: 6)
     XCTAssertEqual(observer.willCancelCount, 0)
     XCTAssertEqual(observer.didCancelCount, 0)
     XCTAssertEqual(observer.didFinishCount, 1)
     XCTAssertEqual(observer.didStartCount, 1)
   }
-  
+
   func testCancel() {
     let operation = SleepyAsyncOperation(interval1: 1, interval2: 3, interval3: 1)
     let keyValueObserver = OperationObserverController(operation: operation)
     let observer = MockObserver()
     let expectation1 = expectation(description: "\(#function)\(#line)")
-    
+
     keyValueObserver.registerObserver(observer)
     operation.addCompletionBlock { expectation1.fulfill() }
     operation.start()
     operation.cancel()
-    
+
     waitForExpectations(timeout: 6)
     XCTAssertEqual(observer.willCancelCount, 1)
     XCTAssertEqual(observer.didCancelCount, 1)
     XCTAssertEqual(observer.didFinishCount, 1)
     XCTAssertEqual(observer.didStartCount, 1)
   }
-  
+
   func testCancelWithoutStart() {
     do {
       let operation = SleepyAsyncOperation(interval1: 1, interval2: 3, interval3: 1)
       let keyValueObserver = OperationObserverController(operation: operation)
       let observer = MockObserver()
       let expectation1 = expectation(description: "\(#function)\(#line)")
-      
+
       keyValueObserver.registerObserver(observer)
       operation.addCompletionBlock { expectation1.fulfill() }
       operation.cancel()
       operation.cancel()
       operation.start()
-      
+
       waitForExpectations(timeout: 6)
       XCTAssertEqual(observer.willCancelCount, 1)
       XCTAssertEqual(observer.didCancelCount, 1)
       XCTAssertEqual(observer.didFinishCount, 1)
       XCTAssertEqual(observer.didStartCount, 0) // stopped, before execution
     }
-    
+
     do {
       let operation = BlockOperation(block: { sleep(1) })
       let keyValueObserver = OperationObserverController(operation: operation)
       let observer = MockObserver()
       let expectation1 = expectation(description: "\(#function)\(#line)")
-      
+
       keyValueObserver.registerObserver(observer)
       operation.addCompletionBlock { expectation1.fulfill() }
       operation.cancel()
       operation.cancel()
       operation.start()
-      
+
       waitForExpectations(timeout: 6)
       XCTAssertEqual(observer.willCancelCount, 1)
       XCTAssertEqual(observer.didCancelCount, 1)
@@ -118,24 +118,24 @@ class OperationKeyValueObserverTests: XCTestCase {
       XCTAssertEqual(observer.didStartCount, 0) // stopped, before execution
     }
   }
-  
+
   func testMultipleCancel() {
     let operation = SleepyAsyncOperation(interval1: 1, interval2: 3, interval3: 1)
     let keyValueObserver = OperationObserverController(operation: operation)
     let observer = MockObserver()
     let expectation1 = expectation(description: "\(#function)\(#line)")
-    
+
     keyValueObserver.registerObserver(observer)
     operation.addCompletionBlock { expectation1.fulfill() }
     operation.start()
     operation.cancel()
     operation.cancel()
-    
+
     waitForExpectations(timeout: 6)
     XCTAssertEqual(observer.willCancelCount, 1)
     XCTAssertEqual(observer.didCancelCount, 1)
     XCTAssertEqual(observer.didFinishCount, 1)
     XCTAssertEqual(observer.didStartCount, 1)
   }
-  
+
 }

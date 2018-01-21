@@ -24,16 +24,16 @@
 import Foundation
 
 public class AdvancedOperation: Operation {
-  
+
   // MARK: - State
-  
+
   //public override var isAsynchronous: Bool { return true } // When you add an operation to an operation queue, the queue ignores the value of the isAsynchronous
-  
+
   public override var isExecuting: Bool { return _executing }
   public override var isFinished: Bool { return _finished }
 
   private(set) var errors = [Error]()
-  
+
   private var _executing = false {
     willSet {
       willChangeValue(forKey: ObservableKey.isExecuting)
@@ -45,7 +45,7 @@ public class AdvancedOperation: Operation {
       didChangeValue(forKey: ObservableKey.isExecuting)
     }
   }
-  
+
   private var _finished = false {
     willSet {
       willChangeValue(forKey: ObservableKey.isFinished)
@@ -59,15 +59,15 @@ public class AdvancedOperation: Operation {
   }
 
   // MARK: - Initialization
-  
+
   public override init() {
     super.init()
   }
-  
+
   // MARK: - Methods
-  
+
   public final override func start() {
-    
+
     // Bail out early if cancelled.
     guard !isCancelled else {
       //didPerform()
@@ -77,86 +77,86 @@ public class AdvancedOperation: Operation {
       _finished = true // this will fire the completionBlock via KVO
       return
     }
-    
+
     guard !isExecuting else { return }
 
     _executing = true
     _finished = false
-    
+
     //Thread.detachNewThreadSelector(#selector(main), toTarget: self, with: nil)
     // https://developer.apple.com/library/content/documentation/General/Conceptual/ConcurrencyProgrammingGuide/OperationObjects/OperationObjects.html#//apple_ref/doc/uid/TP40008091-CH101-SW16
     //willPerform()
     main()
   }
-  
+
   public override func main() {
     fatalError("\(type(of: self)) must override `main()`.")
   }
-  
+
   func cancel(error: Error? = nil) {
     if let error = error, !isCancelled {
       errors.append(error)
     }
-    
+
     cancel()
   }
-  
+
   public override func cancel() {
     willCancel()
     super.cancel()
     didCancel()
   }
-  
+
   public func finish(errors: [Error] = []) {
     guard isExecuting else { return } //sanity check
-    
+
     self.errors.append(contentsOf: errors)
     //didPerform() // the operation isn't really finished until all observers are notified
     _executing = false
     _finished = true
   }
-  
+
   // MARK: - Observer
-  
+
   private(set) var observers = [OperationObserving]()
-  
+
   public func addObserver(observer: OperationObserving) {
     assert(!isExecuting, "Cannot modify observers after execution has begun.")
-    
+
     observers.append(observer)
   }
-  
+
   private func willPerform() {
     for observer in observers {
       observer.operationDidStart(operation: self)
     }
   }
-  
+
   private func didPerform() {
     for observer in observers {
       observer.operationDidFinish(operation: self, withErrors: errors)
     }
   }
-  
+
   private func willCancel() {
     for observer in observers {
       observer.operationWillCancel(operation: self, withErrors: errors)
     }
   }
-  
+
   private func didCancel() {
     for observer in observers {
       observer.operationDidCancel(operation: self, withErrors: errors)
     }
   }
-  
+
   // MARK: - Dependencies
-  
+
   override public func addDependency(_ operation: Operation) {
     assert(!isExecuting, "Dependencies cannot be modified after execution has begun.")
-    
+
     super.addDependency(operation)
   }
-  
+
 }
 
