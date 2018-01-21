@@ -55,4 +55,4 @@ workflows:
     jobs:
       #- linux_swift_4
       #- linux_swift_4.0.3
-      - linux_swift_dev_snapshot.0.3
+      - linux_swift_dev_snapshot
