@@ -39,26 +39,28 @@ jobs:
           name: Install Dependencies
           command: sudo apt-get install clang libicu-dev libcurl4-openssl-dev wget unzip -y
       - run:
-          name: Get Swift snapshot
+          name: Download Swift snapshot
           command: wget https://swift.org/builds/development/ubuntu1404/swift-DEVELOPMENT-SNAPSHOT-2018-01-15-a/swift-DEVELOPMENT-SNAPSHOT-2018-01-15-a-ubuntu14.04.tar.gz             
       - run: 
-          name: Unzip
+          name: Untar Swift snapshot
           command: tar zxf swift-DEVELOPMENT*.tar.gz && rm -rf swift-DEVELOPMENT*.tar.gz
       - run: 
-          name: Move
+          name: Move Swift snapshot
           command: sudo mv swift-DEVELOPMENT* /swift-DEVELOPMENT
       - run: 
           name: Export
           command: echo "export PATH=/swift-DEVELOPMENT/usr/bin:\"\${PATH}\"" >> ~/.bashrc
       - run: 
-          name: Finish
+          name: Finish Swift setup
           command: source ~/.bashrc 
-      - run: 
-          name: Swift Test
-          command: swift test
-      - run:
-          name: Swift build Release
-          command: swift build -c release -Xswiftc -static-stdlib
+      - run: echo ${PATH}
+      - run: swift -v
+      # - run: 
+      #     name: Swift Test
+      #     command: swift test
+      # - run:
+      #     name: Swift build Release
+      #     command: swift build -c release -Xswiftc -static-stdlib
 
 workflows:
   version: 2
