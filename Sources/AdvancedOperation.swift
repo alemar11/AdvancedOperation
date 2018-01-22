@@ -27,8 +27,6 @@ public class AdvancedOperation: Operation {
 
   // MARK: - State
 
-  //public override var isAsynchronous: Bool { return true } // When you add an operation to an operation queue, the queue ignores the value of the isAsynchronous
-
   public override var isExecuting: Bool { return _executing }
   public override var isFinished: Bool { return _finished }
 
@@ -40,7 +38,7 @@ public class AdvancedOperation: Operation {
     }
     didSet {
       if _executing {
-        willPerform()
+        didStart()
       }
       didChangeValue(forKey: ObservableKey.isExecuting)
     }
@@ -52,7 +50,7 @@ public class AdvancedOperation: Operation {
     }
     didSet {
       if _finished {
-        didPerform()
+        didFinish()
       }
       didChangeValue(forKey: ObservableKey.isFinished)
     }
@@ -70,7 +68,6 @@ public class AdvancedOperation: Operation {
 
     // Bail out early if cancelled.
     guard !isCancelled else {
-      //didPerform()
       if _executing {
       _executing = false
       }
@@ -85,7 +82,6 @@ public class AdvancedOperation: Operation {
 
     //Thread.detachNewThreadSelector(#selector(main), toTarget: self, with: nil)
     // https://developer.apple.com/library/content/documentation/General/Conceptual/ConcurrencyProgrammingGuide/OperationObjects/OperationObjects.html#//apple_ref/doc/uid/TP40008091-CH101-SW16
-    //willPerform()
     main()
   }
 
@@ -111,7 +107,6 @@ public class AdvancedOperation: Operation {
     guard isExecuting else { return } //sanity check
 
     self.errors.append(contentsOf: errors)
-    //didPerform() // the operation isn't really finished until all observers are notified
     _executing = false
     _finished = true
   }
@@ -126,13 +121,13 @@ public class AdvancedOperation: Operation {
     observers.append(observer)
   }
 
-  private func willPerform() {
+  private func didStart() {
     for observer in observers {
       observer.operationDidStart(operation: self)
     }
   }
 
-  private func didPerform() {
+  private func didFinish() {
     for observer in observers {
       observer.operationDidFinish(operation: self, withErrors: errors)
     }
