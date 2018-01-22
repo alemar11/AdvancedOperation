@@ -49,7 +49,6 @@ class AdvancedOperationQueueTests: XCTestCase {
 
     var addCount = 0
     delegate.willAddOperationHandler = { (queue, operation) in
-       lock.lock()
       XCTAssertTrue(queue == queue)
       switch addCount {
       case 0:
@@ -64,7 +63,6 @@ class AdvancedOperationQueueTests: XCTestCase {
         XCTFail("Added too many operations: \(addCount).")
       }
       addCount += 1
-      lock.unlock()
     }
 
     var startCount = 0
