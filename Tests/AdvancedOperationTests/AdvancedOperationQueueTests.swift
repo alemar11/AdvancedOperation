@@ -39,19 +39,32 @@ extension AdvancedOperationQueueTests {
 class AdvancedOperationQueueTests: XCTestCase {
 
   func testLinux1() {
+    print("\n")
+    print("=========")
     let op1 = BlockOperation(block: {})
     let op2 = BlockOperation(block: {})
     XCTAssertTrue(op1.isReady)
     XCTAssertTrue(op2.isReady)
+    print(op1.isReady)
+    print(op2.isReady)
+
     op1.addDependency(op2)
     XCTAssertFalse(op1.isReady)
     XCTAssertTrue(op2.isReady)
+    print(op1.isReady)
+    print(op2.isReady)
+
     op2.start()
     XCTAssertTrue(op1.isReady)
     XCTAssertTrue(op2.isReady)
+    print(op1.isReady)
+    print(op2.isReady)
+
     op1.start()
     XCTAssertTrue(op1.isReady)
     XCTAssertTrue(op2.isReady)
+    print(op1.isReady)
+    print(op2.isReady)
   }
 
   func testLinux2() {
@@ -66,6 +79,8 @@ class AdvancedOperationQueueTests: XCTestCase {
   }
 
   func testLinux3() {
+    print("\n")
+    print("=========")
     let op1 = BlockOperation(block: {})
     let op2 = BlockOperation(block: {})
     let op3 = SleepyOperation()
@@ -79,6 +94,8 @@ class AdvancedOperationQueueTests: XCTestCase {
     XCTAssertTrue(op3.isReady)
     XCTAssertTrue(op1.isFinished)
     XCTAssertTrue(op2.isFinished)
+    print("=========")
+    print("\n")
   }
 
   func testQueueWithAdvancedOperations() {
