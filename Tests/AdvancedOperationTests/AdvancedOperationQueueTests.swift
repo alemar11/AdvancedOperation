@@ -59,29 +59,26 @@ class AdvancedOperationQueueTests: XCTestCase {
     let op2 = BlockOperation(block: {})
     let queue = OperationQueue()
     queue.addOperations([op1, op2], waitUntilFinished: true)
-    print("\n\n")
-    print("==========")
     XCTAssertTrue(op1.isReady)
     XCTAssertTrue(op2.isReady)
     XCTAssertTrue(op1.isFinished)
     XCTAssertTrue(op2.isFinished)
-    print("==========")
-    print("\n\n")
   }
 
   func testLinux3() {
     let op1 = BlockOperation(block: {})
     let op2 = BlockOperation(block: {})
+    let op3 = SleepyOperation()
     let queue = AdvancedOperationQueue()
-    queue.addOperations([op1, op2], waitUntilFinished: true)
-    print("\n\n")
-    print("==========")
+    XCTAssertFalse(op1.isReady)
+    XCTAssertFalse(op2.isReady)
+    XCTAssertFalse(op3.isReady)
+    queue.addOperations([op1, op2, op3], waitUntilFinished: true)
     XCTAssertTrue(op1.isReady)
     XCTAssertTrue(op2.isReady)
+    XCTAssertTrue(op3.isReady)
     XCTAssertTrue(op1.isFinished)
     XCTAssertTrue(op2.isFinished)
-    print("==========")
-    print("\n\n")
   }
 
   func testQueueWithAdvancedOperations() {
