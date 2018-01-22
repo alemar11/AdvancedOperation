@@ -45,9 +45,11 @@ class AdvancedOperationQueueTests: XCTestCase {
     let operation2 = SleepyAsyncOperation()
     let operation3 = SleepyAsyncOperation()
     let operation4 = DelayOperation(interval: 1)
+    let lock = NSLock()
 
     var addCount = 0
     delegate.willAddOperationHandler = { (queue, operation) in
+       lock.lock()
       XCTAssertTrue(queue == queue)
       switch addCount {
       case 0:
@@ -62,9 +64,8 @@ class AdvancedOperationQueueTests: XCTestCase {
         XCTFail("Added too many operations: \(addCount).")
       }
       addCount += 1
+      lock.unlock()
     }
-
-    let lock = NSLock()
 
     var startCount = 0
     delegate.willPerformOperationHandler = { (queue, operation) in
@@ -92,12 +93,7 @@ class AdvancedOperationQueueTests: XCTestCase {
       lock.unlock()
     }
 
-    //queue.addOperations([operation1, operation2, operation3, operation4], waitUntilFinished: true)
-    queue.addOperation(operation1)
-    queue.addOperation(operation2)
-    queue.addOperation(operation3)
-    queue.addOperation(operation4)
-    queue.waitUntilAllOperationsAreFinished()
+    queue.addOperations([operation1, operation2, operation3, operation4], waitUntilFinished: true)
 
     XCTAssertEqual(addCount, 4)
     XCTAssertEqual(startCount, 4)
