@@ -27,9 +27,9 @@ import XCTest
 extension AdvancedOperationQueueTests {
 
   static var allTests = [
-    ("testLinux1", testLinux1),
-    ("testLinux2", testLinux2),
-    ("testLinux3", testLinux3),
+    ("testReadinessWithoutOperationQueue", testReadinessWithoutOperationQueue),
+    ("testReadinessWithOperationQueue", testReadinessWithOperationQueue),
+    ("testReadinessWithDependenciesInOperationQueue", testReadinessWithDependenciesInOperationQueue),
     ("testLinux4", testLinux4),
     //("testQueueWithAdvancedOperations", testQueueWithAdvancedOperations),
     //("testQueueWithAdvancedOperations2", testQueueWithAdvancedOperations2)
@@ -39,94 +39,98 @@ extension AdvancedOperationQueueTests {
 
 class AdvancedOperationQueueTests: XCTestCase {
 
-  func testLinux1() {
-    print("\n")
-    print("=========")
-    let op1 = BlockOperation(block: {})
-    let op2 = BlockOperation(block: {})
-    XCTAssertTrue(op1.isReady)
-    XCTAssertTrue(op2.isReady)
-    print(op1.isReady)
-    print(op2.isReady)
+  // It appears that on Linux, the operation readiness is always set to false by default.
+  // It changes to true if an operation is added to an OperationQueue regardless of its associated operations
 
-    op1.addDependency(op2)
-    XCTAssertFalse(op1.isReady)
-    XCTAssertTrue(op2.isReady)
-    print(op1.isReady)
-    print(op2.isReady)
+  func testReadinessWithoutOperationQueue() {
+    let operation1 = BlockOperation(block: {})
+    let operation2 = BlockOperation(block: {})
+    XCTAssertFalse(operation1.isReady)
+    XCTAssertFalse(operation2.isReady)
+    print(operation1.isReady)
+    print(operation2.isReady)
 
-    op2.start()
-    XCTAssertTrue(op1.isReady)
-    XCTAssertTrue(op2.isReady)
-    print(op1.isReady)
-    print(op2.isReady)
+    operation1.addDependency(operation2)
+    XCTAssertFalse(operation1.isReady)
+    XCTAssertFalse(operation2.isReady)
+    print(operation1.isReady)
+    print(operation2.isReady)
 
-    op1.start()
-    XCTAssertTrue(op1.isReady)
-    XCTAssertTrue(op2.isReady)
-    print(op1.isReady)
-    print(op2.isReady)
+    operation2.start()
+    XCTAssertFalse(operation1.isReady)
+    XCTAssertFalse(operation2.isReady)
+    print(operation1.isReady)
+    print(operation2.isReady)
+
+    operation1.start()
+    XCTAssertFalse(operation1.isReady)
+    XCTAssertFalse(operation2.isReady)
+    print(operation1.isReady)
+    print(operation2.isReady)
   }
 
-  func testLinux2() {
-    let op1 = BlockOperation(block: {})
-    let op2 = BlockOperation(block: {})
+  func testReadinessWithOperationQueue() {
+    let operation1 = BlockOperation(block: {})
+    let operation2 = BlockOperation(block: {})
     let queue = OperationQueue()
-    print(op1.isReady)
-    print(op2.isReady)
+    print(operation1.isReady)
+    print(operation2.isReady)
+    XCTAssertFalse(operation1.isReady)
+    XCTAssertFalse(operation2.isReady)
 
-    queue.addOperations([op1, op2], waitUntilFinished: true)
-    print(op1.isReady)
-    print(op2.isReady)
-    XCTAssertTrue(op1.isReady)
-    XCTAssertTrue(op2.isReady)
-    XCTAssertTrue(op1.isFinished)
-    XCTAssertTrue(op2.isFinished)
+    queue.addOperations([operation1, operation2], waitUntilFinished: true)
+    print(operation1.isReady)
+    print(operation2.isReady)
+    XCTAssertTrue(operation1.isReady)
+    XCTAssertTrue(operation2.isReady)
+    XCTAssertTrue(operation1.isFinished)
+    XCTAssertTrue(operation2.isFinished)
   }
 
-  func testLinux3() {
-    let op1 = BlockOperation(block: {})
-    let op2 = BlockOperation(block: {})
+  func testReadinessWithDependenciesInOperationQueue() {
+    let operation1 = BlockOperation(block: {})
+    let operation2 = BlockOperation(block: {})
+    let operation3 = SleepyOperation()
     let queue = OperationQueue()
-    print("setup")
-    print(op1.isReady)
-    print(op2.isReady)
 
-    op1.addDependency(op2)
-    print("dependency added")
-    print(op1.isReady)
-    print(op2.isReady)
-    XCTAssertFalse(op1.isReady)
-    XCTAssertTrue(op2.isReady)
+    print(operation1.isReady)
+    print(operation2.isReady)
 
-    queue.addOperations([op1, op2], waitUntilFinished: true)
-    print("added operations")
-    print(op1.isReady)
-    print(op2.isReady)
-    XCTAssertTrue(op1.isReady)
-    XCTAssertTrue(op2.isReady)
-    XCTAssertTrue(op1.isFinished)
-    XCTAssertTrue(op2.isFinished)
+    operation1.addDependency(operation2)
+    print(operation1.isReady)
+    print(operation2.isReady)
+    XCTAssertFalse(operation1.isReady)
+    XCTAssertFalse(operation2.isReady)
+    XCTAssertFalse(operation3.isReady)
+
+    queue.addOperations([operation1, operation2, operation3], waitUntilFinished: true)
+    print(operation1.isReady)
+    print(operation2.isReady)
+    XCTAssertTrue(operation1.isReady)
+    XCTAssertTrue(operation2.isReady)
+    XCTAssertTrue(operation3.isReady)
+    XCTAssertTrue(operation1.isFinished)
+    XCTAssertTrue(operation2.isFinished)
+    XCTAssertTrue(operation3.isFinished)
   }
 
-  func testLinux4() {
-    print("\n")
-    print("=========")
-    let op1 = BlockOperation(block: {})
-    let op2 = BlockOperation(block: {})
-    let op3 = SleepyOperation()
+  func testAddOperationsInAdvancedOperationQueue() {
+    let operation1 = BlockOperation(block: {})
+    let operation2 = BlockOperation(block: {})
+    //let operation3 = SleepyOperation()
     let queue = AdvancedOperationQueue()
-    XCTAssertFalse(op1.isReady)
-    XCTAssertFalse(op2.isReady)
-    XCTAssertFalse(op3.isReady)
-    queue.addOperations([op1, op2, op3], waitUntilFinished: true)
-    XCTAssertTrue(op1.isReady)
-    XCTAssertTrue(op2.isReady)
-    XCTAssertTrue(op3.isReady)
-    XCTAssertTrue(op1.isFinished)
-    XCTAssertTrue(op2.isFinished)
-    print("=========")
-    print("\n")
+
+    XCTAssertFalse(operation1.isReady)
+    XCTAssertFalse(operation2.isReady)
+    //XCTAssertTrue(operation3.isReady)
+
+    queue.addOperations([operation1, operation2], waitUntilFinished: true)
+    XCTAssertTrue(operation1.isReady)
+    XCTAssertTrue(operation2.isReady)
+    //XCTAssertTrue(operation3.isReady)
+    XCTAssertTrue(operation1.isFinished)
+    XCTAssertTrue(operation2.isFinished)
+    //XCTAssertTrue(operation3.isFinished)
   }
 
   func testQueueWithAdvancedOperations() {
