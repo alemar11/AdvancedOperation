@@ -29,8 +29,8 @@ extension AdvancedOperationQueueTests {
   static var allTests = [
     ("testLinux1", testLinux1),
     ("testLinux2", testLinux2),
-    ("testLinux3", testLinux2),
-    ("testLinux4", testLinux2),
+    ("testLinux3", testLinux3),
+    ("testLinux4", testLinux4),
     //("testQueueWithAdvancedOperations", testQueueWithAdvancedOperations),
     //("testQueueWithAdvancedOperations2", testQueueWithAdvancedOperations2)
   ]
