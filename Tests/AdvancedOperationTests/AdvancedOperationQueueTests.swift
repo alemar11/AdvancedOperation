@@ -29,6 +29,7 @@ extension AdvancedOperationQueueTests {
   static var allTests = [
     ("testLinux1", testLinux1),
     ("testLinux2", testLinux2),
+    ("testLinux3", testLinux2),
     //("testQueueWithAdvancedOperations", testQueueWithAdvancedOperations),
     //("testQueueWithAdvancedOperations2", testQueueWithAdvancedOperations2)
   ]
@@ -57,6 +58,21 @@ class AdvancedOperationQueueTests: XCTestCase {
     let op1 = BlockOperation(block: {})
     let op2 = BlockOperation(block: {})
     let queue = OperationQueue()
+    queue.addOperations([op1, op2], waitUntilFinished: true)
+    print("\n\n")
+    print("==========")
+    XCTAssertTrue(op1.isReady)
+    XCTAssertTrue(op2.isReady)
+    XCTAssertTrue(op1.isFinished)
+    XCTAssertTrue(op2.isFinished)
+    print("==========")
+    print("\n\n")
+  }
+
+  func testLinux3() {
+    let op1 = BlockOperation(block: {})
+    let op2 = BlockOperation(block: {})
+    let queue = AdvancedOperationQueue()
     queue.addOperations([op1, op2], waitUntilFinished: true)
     print("\n\n")
     print("==========")
