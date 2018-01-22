@@ -88,18 +88,19 @@ class AdvancedOperationQueueTests: XCTestCase {
     let op1 = BlockOperation(block: {})
     let op2 = BlockOperation(block: {})
     let queue = OperationQueue()
+    print("setup")
     print(op1.isReady)
     print(op2.isReady)
 
     op1.addDependency(op2)
-     print("dependecy added")
+    print("dependency added")
     XCTAssertFalse(op1.isReady)
     XCTAssertTrue(op2.isReady)
     print(op1.isReady)
     print(op2.isReady)
 
     queue.addOperations([op1, op2], waitUntilFinished: true)
-
+     print("added operations")
     print(op1.isReady)
     print(op2.isReady)
     XCTAssertTrue(op1.isReady)
