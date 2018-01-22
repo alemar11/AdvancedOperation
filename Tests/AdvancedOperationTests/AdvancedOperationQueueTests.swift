@@ -92,6 +92,7 @@ class AdvancedOperationQueueTests: XCTestCase {
     print(op2.isReady)
 
     op1.addDependency(op2)
+     print("dependecy added")
     XCTAssertFalse(op1.isReady)
     XCTAssertTrue(op2.isReady)
     print(op1.isReady)
