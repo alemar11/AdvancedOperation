@@ -212,7 +212,7 @@ class AdvancedOperationTests: XCTestCase {
     operation.completionBlock = { expectation1.fulfill() }
 
     operation.start()
-
+    operation.start()
     waitForExpectations(timeout: 10)
 
     sleep(5) // make sure there are no other effects
@@ -235,6 +235,7 @@ class AdvancedOperationTests: XCTestCase {
 
     operation.start()
     operation.cancel()
+    operation.cancel(error: MockError.cancelled(date: Date()))
     waitForExpectations(timeout: 10)
 
     sleep(5) // make sure there are no other effects
