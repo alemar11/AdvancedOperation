@@ -75,7 +75,8 @@ final class DelayOperation: AdvancedOperation {
   override func main() {
     guard delay.seconds > 0 else { return finish() }
 
-    queue.asyncAfter(deadline: .now() + delay.seconds) {
+    queue.asyncAfter(deadline: .now() + delay.seconds) { [weak self] in
+      guard let `self` = self else { return }
       if !self.isCancelled {
         return self.finish()
       }
