@@ -84,13 +84,9 @@ class AdvancedOperationQueue: OperationQueue {
       }
     }
 
-    print("\n\n")
-    print("=====================")
-    print(operation)
-    print("=====================")
-    print("\n\n")
+
     delegate?.operationQueue(operationQueue: self, willAddOperation: operation)
-    super.addOperation(operation)
+    super.addOperation(operation) // FIXME: This causes an infinite loop on Linux
     delegate?.operationQueue(operationQueue: self, didAddOperation: operation)
 
   }

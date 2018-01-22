@@ -27,111 +27,13 @@ import XCTest
 extension AdvancedOperationQueueTests {
 
   static var allTests = [
-    ("testReadinessWithoutOperationQueue", testReadinessWithoutOperationQueue),
-    ("testReadinessWithOperationQueue", testReadinessWithOperationQueue),
-    ("testReadinessWithDependenciesInOperationQueue", testReadinessWithDependenciesInOperationQueue),
-    ("testAddOperationsInAdvancedOperationQueue", testAddOperationsInAdvancedOperationQueue),
-    //("testQueueWithAdvancedOperations", testQueueWithAdvancedOperations),
-    //("testQueueWithAdvancedOperations2", testQueueWithAdvancedOperations2)
+    ("testQueueWithAdvancedOperations", testQueueWithAdvancedOperations),
+    ("testQueueWithAdvancedOperations2", testQueueWithAdvancedOperations2)
   ]
 
 }
 
 class AdvancedOperationQueueTests: XCTestCase {
-
-  // It appears that on Linux, the operation readiness is always set to false by default.
-  // It changes to true if an operation is added to an OperationQueue regardless of its associated operations
-
-  func testReadinessWithoutOperationQueue() {
-    let operation1 = BlockOperation(block: {})
-    let operation2 = BlockOperation(block: {})
-    XCTAssertFalse(operation1.isReady)
-    XCTAssertFalse(operation2.isReady)
-    print(operation1.isReady)
-    print(operation2.isReady)
-
-    operation1.addDependency(operation2)
-    XCTAssertFalse(operation1.isReady)
-    XCTAssertFalse(operation2.isReady)
-    print(operation1.isReady)
-    print(operation2.isReady)
-
-    operation2.start()
-    XCTAssertFalse(operation1.isReady)
-    XCTAssertFalse(operation2.isReady)
-    print(operation1.isReady)
-    print(operation2.isReady)
-
-    operation1.start()
-    XCTAssertFalse(operation1.isReady)
-    XCTAssertFalse(operation2.isReady)
-    print(operation1.isReady)
-    print(operation2.isReady)
-  }
-
-  func testReadinessWithOperationQueue() {
-    let operation1 = BlockOperation(block: {})
-    let operation2 = BlockOperation(block: {})
-    let queue = OperationQueue()
-    print(operation1.isReady)
-    print(operation2.isReady)
-    XCTAssertFalse(operation1.isReady)
-    XCTAssertFalse(operation2.isReady)
-
-    queue.addOperations([operation1, operation2], waitUntilFinished: true)
-    print(operation1.isReady)
-    print(operation2.isReady)
-    XCTAssertTrue(operation1.isReady)
-    XCTAssertTrue(operation2.isReady)
-    XCTAssertTrue(operation1.isFinished)
-    XCTAssertTrue(operation2.isFinished)
-  }
-
-  func testReadinessWithDependenciesInOperationQueue() {
-    let operation1 = BlockOperation(block: {})
-    let operation2 = BlockOperation(block: {})
-    let operation3 = SleepyOperation()
-    let queue = OperationQueue()
-
-    print(operation1.isReady)
-    print(operation2.isReady)
-
-    operation1.addDependency(operation2)
-    print(operation1.isReady)
-    print(operation2.isReady)
-    XCTAssertFalse(operation1.isReady)
-    XCTAssertFalse(operation2.isReady)
-    XCTAssertFalse(operation3.isReady)
-
-    queue.addOperations([operation1, operation2, operation3], waitUntilFinished: true)
-    print(operation1.isReady)
-    print(operation2.isReady)
-    XCTAssertTrue(operation1.isReady)
-    XCTAssertTrue(operation2.isReady)
-    XCTAssertTrue(operation3.isReady)
-    XCTAssertTrue(operation1.isFinished)
-    XCTAssertTrue(operation2.isFinished)
-    XCTAssertTrue(operation3.isFinished)
-  }
-
-  func testAddOperationsInAdvancedOperationQueue() {
-    let operation1 = BlockOperation(block: {})
-    let operation2 = BlockOperation(block: {})
-    //let operation3 = SleepyOperation()
-    let queue = AdvancedOperationQueue()
-
-    XCTAssertFalse(operation1.isReady)
-    XCTAssertFalse(operation2.isReady)
-    //XCTAssertTrue(operation3.isReady)
-
-    queue.addOperations([operation1, operation2], waitUntilFinished: true)
-    XCTAssertTrue(operation1.isReady)
-    XCTAssertTrue(operation2.isReady)
-    //XCTAssertTrue(operation3.isReady)
-    XCTAssertTrue(operation1.isFinished)
-    XCTAssertTrue(operation2.isFinished)
-    //XCTAssertTrue(operation3.isFinished)
-  }
 
   func testQueueWithAdvancedOperations() {
     let queue = AdvancedOperationQueue()
