@@ -177,10 +177,11 @@ class AdvancedOperationQueueTests: XCTestCase {
       lock.unlock()
     }
 
-    queue.addOperation(operation1)
-    queue.addOperation(operation2)
-    queue.addOperation(operation3)
-    queue.addOperation(operation4)
+//    queue.addOperation(operation1)
+//    queue.addOperation(operation2)
+//    queue.addOperation(operation3)
+//    queue.addOperation(operation4)
+    queue.addOperations([operation1, operation2, operation3, operation4], waitUntilFinished: false)
     queue.isSuspended = false
 
     waitForExpectations(timeout: 10)
