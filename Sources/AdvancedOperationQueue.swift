@@ -84,6 +84,11 @@ class AdvancedOperationQueue: OperationQueue {
       }
     }
 
+    print("\n\n")
+    print("=====================")
+    print(operation)
+    print("=====================")
+    print("\n\n")
     delegate?.operationQueue(operationQueue: self, willAddOperation: operation)
     super.addOperation(operation)
     delegate?.operationQueue(operationQueue: self, didAddOperation: operation)
