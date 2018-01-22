@@ -28,7 +28,7 @@ public class AdvancedOperation: Operation {
   // MARK: - State
 
   public override var isExecuting: Bool { return _executing }
-  
+
   public override var isFinished: Bool { return _finished }
 
   private(set) var errors = [Error]()
@@ -69,10 +69,7 @@ public class AdvancedOperation: Operation {
 
     // Bail out early if cancelled.
     guard !isCancelled else {
-      if _executing { // avoid KVO if it's not executing
-      _executing = false
-      }
-      _finished = true // this will fire the completionBlock via KVO
+      finish()
       return
     }
 
@@ -105,11 +102,14 @@ public class AdvancedOperation: Operation {
   }
 
   public func finish(errors: [Error] = []) {
-    guard isExecuting else { return } //sanity check
-
     self.errors.append(contentsOf: errors)
-    _executing = false
-    _finished = true
+  // avoid unnecessay KVO firings.
+    if _executing {
+      _executing = false
+    }
+    if !_finished {
+     _finished = true // this will fire the completionBlock via KVO
+    }
   }
 
   // MARK: - Observer
