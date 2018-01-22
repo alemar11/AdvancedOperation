@@ -68,7 +68,7 @@ public class AdvancedOperation: Operation {
 
     // Bail out early if cancelled.
     guard !isCancelled else {
-      if _executing {
+      if _executing { // avoid KVO if it's not executing
       _executing = false
       }
       _finished = true // this will fire the completionBlock via KVO
