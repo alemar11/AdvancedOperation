@@ -96,7 +96,7 @@ class LinuxBehaviorsTests: XCTestCase {
     print(operation1.isReady)
     print(operation2.isReady)
 
-    operation1.addDependency(operation2)
+    operation1.addDependency(operation2) // FIXME: There is no readiness change when adding a dependency
     print(operation1.isReady)
     print(operation2.isReady)
     XCTAssertFalse(operation1.isReady)

@@ -213,14 +213,14 @@
 		230B47FD200EABEE00F46852 /* AdvancedOperationTests */ = {
 			isa = PBXGroup;
 			children = (
+				23856174200A87070061BAA1 /* AdvancedOperationQueueTests.swift */,
 				23F24D1D200771FA00B25A03 /* AdvancedOperationTests.swift */,
 				23F24D2B2007A33F00B25A03 /* DelayOperationTests.swift */,
 				23856170200A6E9A0061BAA1 /* GroupOperationTests.swift */,
-				23856174200A87070061BAA1 /* AdvancedOperationQueueTests.swift */,
-				23856178200A873C0061BAA1 /* Mocks.swift */,
-				23A56BAB200F984400509A65 /* XCTestCase+Utils.swift */,
-				231FE727201210300077728C /* OperationKeyValueObserverTests.swift */,
 				236FA57F2015F976001CAAA4 /* LinuxBehaviorsTests.swift */,
+				23856178200A873C0061BAA1 /* Mocks.swift */,
+				231FE727201210300077728C /* OperationKeyValueObserverTests.swift */,
+				23A56BAB200F984400509A65 /* XCTestCase+Utils.swift */,
 			);
 			path = AdvancedOperationTests;
 			sourceTree = "<group>";
@@ -253,13 +253,13 @@
 			isa = PBXGroup;
 			children = (
 				2372507C200524860000A442 /* AdvancedOperation.swift */,
-				23F24D21200799B800B25A03 /* Operation+Utils.swift */,
-				23F24D2620079CDE00B25A03 /* DelayOperation.swift */,
-				23F24D2F2007B0D200B25A03 /* OperationObserving.swift */,
 				23F24D342007BC2100B25A03 /* AdvancedOperationQueue.swift */,
 				23F24D392007C03D00B25A03 /* BlockObserver.swift */,
+				23F24D2620079CDE00B25A03 /* DelayOperation.swift */,
 				2385616B200A6BF80061BAA1 /* GroupOperation.swift */,
+				23F24D21200799B800B25A03 /* Operation+Utils.swift */,
 				23665C0E200B6E4800A6C921 /* OperationObserverController.swift */,
+				23F24D2F2007B0D200B25A03 /* OperationObserving.swift */,
 			);
 			path = Sources;
 			sourceTree = "<group>";
