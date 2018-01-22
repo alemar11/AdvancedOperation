@@ -27,13 +27,46 @@ import XCTest
 extension AdvancedOperationQueueTests {
 
   static var allTests = [
-    ("testQueueWithAdvancedOperations", testQueueWithAdvancedOperations),
-    ("testQueueWithAdvancedOperations2", testQueueWithAdvancedOperations2)
+    ("testLinux1", testLinux1),
+    ("testLinux2", testLinux2),
+    //("testQueueWithAdvancedOperations", testQueueWithAdvancedOperations),
+    //("testQueueWithAdvancedOperations2", testQueueWithAdvancedOperations2)
   ]
 
 }
 
 class AdvancedOperationQueueTests: XCTestCase {
+
+  func testLinux1() {
+    let op1 = BlockOperation(block: {})
+    let op2 = BlockOperation(block: {})
+    XCTAssertTrue(op1.isReady)
+    XCTAssertTrue(op2.isReady)
+    op1.addDependency(op2)
+    XCTAssertFalse(op1.isReady)
+    XCTAssertTrue(op2.isReady)
+    op2.start()
+    XCTAssertTrue(op1.isReady)
+    XCTAssertTrue(op2.isReady)
+    op1.start()
+    XCTAssertTrue(op1.isReady)
+    XCTAssertTrue(op2.isReady)
+  }
+
+  func testLinux2() {
+    let op1 = BlockOperation(block: {})
+    let op2 = BlockOperation(block: {})
+    let queue = OperationQueue()
+    queue.addOperations([op1, op2], waitUntilFinished: true)
+    print("\n\n")
+    print("==========")
+    XCTAssertTrue(op1.isReady)
+    XCTAssertTrue(op2.isReady)
+    XCTAssertTrue(op1.isFinished)
+    XCTAssertTrue(op2.isFinished)
+    print("==========")
+    print("\n\n")
+  }
 
   func testQueueWithAdvancedOperations() {
     let queue = AdvancedOperationQueue()
