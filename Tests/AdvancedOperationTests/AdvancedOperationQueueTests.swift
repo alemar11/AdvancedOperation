@@ -30,7 +30,7 @@ extension AdvancedOperationQueueTests {
     ("testReadinessWithoutOperationQueue", testReadinessWithoutOperationQueue),
     ("testReadinessWithOperationQueue", testReadinessWithOperationQueue),
     ("testReadinessWithDependenciesInOperationQueue", testReadinessWithDependenciesInOperationQueue),
-    ("testLinux4", testLinux4),
+    ("testAddOperationsInAdvancedOperationQueue", testAddOperationsInAdvancedOperationQueue),
     //("testQueueWithAdvancedOperations", testQueueWithAdvancedOperations),
     //("testQueueWithAdvancedOperations2", testQueueWithAdvancedOperations2)
   ]
