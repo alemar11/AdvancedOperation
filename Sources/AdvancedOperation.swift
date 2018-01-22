@@ -28,6 +28,7 @@ public class AdvancedOperation: Operation {
   // MARK: - State
 
   public override var isExecuting: Bool { return _executing }
+  
   public override var isFinished: Bool { return _finished }
 
   private(set) var errors = [Error]()
