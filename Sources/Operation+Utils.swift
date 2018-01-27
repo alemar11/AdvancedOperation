@@ -123,7 +123,7 @@ internal extension Operation {
 
     static var completionBlock: String {
       #if os(Linux)
-        let key = "queuePriority"
+        let key = "completionBlock"
       #else
         let key = #keyPath(Operation.completionBlock)
       #endif
