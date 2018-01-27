@@ -26,11 +26,11 @@ import Foundation
 extension Operation {
 
   /// Adds a completion block to be executed after the `Operation` enters the "finished" state.
+  /// If there is already a completion block, they are chained together.
   func addCompletionBlock(block: @escaping () -> Void) {
     assert(!isExecuting, "The completion block cannot be modified after execution has begun.")
 
     if let existingBlock = completionBlock {
-      // If there is already a completion block, they are chained together.
       completionBlock = {
         existingBlock()
         block()
