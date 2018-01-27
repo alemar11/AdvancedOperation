@@ -45,6 +45,7 @@ class AdvancedOperationQueueTests: XCTestCase {
     let operation2 = SleepyAsyncOperation()
     let operation3 = SleepyAsyncOperation()
     let operation4 = DelayOperation(interval: 1)
+    let lock = NSLock()
 
     var addCount = 0
     delegate.willAddOperationHandler = { (queue, operation) in
@@ -63,8 +64,6 @@ class AdvancedOperationQueueTests: XCTestCase {
       }
       addCount += 1
     }
-
-    let lock = NSLock()
 
     var startCount = 0
     delegate.willPerformOperationHandler = { (queue, operation) in

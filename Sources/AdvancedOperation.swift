@@ -27,9 +27,8 @@ public class AdvancedOperation: Operation {
 
   // MARK: - State
 
-  //public override var isAsynchronous: Bool { return true } // When you add an operation to an operation queue, the queue ignores the value of the isAsynchronous
-
   public override var isExecuting: Bool { return _executing }
+
   public override var isFinished: Bool { return _finished }
 
   private(set) var errors = [Error]()
@@ -40,7 +39,7 @@ public class AdvancedOperation: Operation {
     }
     didSet {
       if _executing {
-        willPerform()
+        didStart()
       }
       didChangeValue(forKey: ObservableKey.isExecuting)
     }
@@ -52,7 +51,7 @@ public class AdvancedOperation: Operation {
     }
     didSet {
       if _finished {
-        didPerform()
+        didFinish()
       }
       didChangeValue(forKey: ObservableKey.isFinished)
     }
@@ -70,11 +69,7 @@ public class AdvancedOperation: Operation {
 
     // Bail out early if cancelled.
     guard !isCancelled else {
-      //didPerform()
-      if _executing {
-      _executing = false
-      }
-      _finished = true // this will fire the completionBlock via KVO
+      finish()
       return
     }
 
@@ -85,7 +80,6 @@ public class AdvancedOperation: Operation {
 
     //Thread.detachNewThreadSelector(#selector(main), toTarget: self, with: nil)
     // https://developer.apple.com/library/content/documentation/General/Conceptual/ConcurrencyProgrammingGuide/OperationObjects/OperationObjects.html#//apple_ref/doc/uid/TP40008091-CH101-SW16
-    //willPerform()
     main()
   }
 
@@ -94,7 +88,8 @@ public class AdvancedOperation: Operation {
   }
 
   func cancel(error: Error? = nil) {
-    if let error = error, !isCancelled {
+    guard !isCancelled else { return }
+    if let error = error {
       errors.append(error)
     }
 
@@ -108,12 +103,14 @@ public class AdvancedOperation: Operation {
   }
 
   public func finish(errors: [Error] = []) {
-    guard isExecuting else { return } //sanity check
-
     self.errors.append(contentsOf: errors)
-    //didPerform() // the operation isn't really finished until all observers are notified
-    _executing = false
-    _finished = true
+  // avoid unnecessay KVO firings.
+    if _executing {
+      _executing = false
+    }
+    if !_finished {
+     _finished = true // this will fire the completionBlock via KVO
+    }
   }
 
   // MARK: - Observer
@@ -126,13 +123,13 @@ public class AdvancedOperation: Operation {
     observers.append(observer)
   }
 
-  private func willPerform() {
+  private func didStart() {
     for observer in observers {
       observer.operationDidStart(operation: self)
     }
   }
 
-  private func didPerform() {
+  private func didFinish() {
     for observer in observers {
       observer.operationDidFinish(operation: self, withErrors: errors)
     }

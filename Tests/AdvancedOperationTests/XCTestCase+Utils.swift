@@ -27,11 +27,30 @@ import XCTest
 
 extension XCTestCase {
 
+  // It appears that on Linux, the operation readiness is ALWAYS set to 'false' by default.
+  // It changes to 'true' ONLY if an operation is added to an OperationQueue regardless of its associated dependencies.
+  private func defaultReadiness() -> Bool {
+    #if !os(Linux)
+      return true
+    #else
+      return false
+    #endif
+  }
+
+  /// Asserts that the Operation has the default ready state.
+  /// - Note: It appears that on Linux, the operation readiness is ALWAYS set to 'false' by default. It changes to 'true' ONLY if an operation is added to an OperationQueue regardless of its associated dependencies.
+  func XCTAssertDefaultReadiness(operation: Operation, file: String = #file, line: Int = #line) {
+    guard operation.isReady == defaultReadiness() else {
+      return recordFailure(withDescription: "Operation hasn't the default ready state (\(defaultReadiness()).", inFile: file, atLine: line, expected: true)
+    }
+  }
+
+
   /// Asserts that the AdvancedOperation can be started anytime.
   func XCTAssertOperationCanBeStarted(operation: AdvancedOperation, file: String = #file, line: Int = #line) {
 
     guard
-      operation.isReady,
+      operation.isReady == defaultReadiness(),
       !operation.isExecuting,
       !operation.isCancelled,
       !operation.isFinished
@@ -42,7 +61,7 @@ extension XCTestCase {
   func XCTAssertOperationExecuting(operation: AdvancedOperation, file: String = #file, line: Int = #line) {
 
     guard
-      operation.isReady,
+      operation.isReady == defaultReadiness(),
       operation.isExecuting,
       !operation.isCancelled,
       !operation.isFinished
@@ -53,7 +72,7 @@ extension XCTestCase {
   func XCTAssertOperationCancelled(operation: AdvancedOperation, errors: [Error] = [], file: String = #file, line: Int = #line) {
 
     guard
-      operation.isReady,
+       operation.isReady == defaultReadiness(),
       !operation.isExecuting,
       operation.isCancelled,
       operation.isFinished
@@ -67,7 +86,7 @@ extension XCTestCase {
   func XCTAssertOperationFinished(operation: AdvancedOperation, errors: [Error] = [], file: String = #file, line: Int = #line) {
 
     guard
-      operation.isReady,
+      operation.isReady == defaultReadiness(),
       !operation.isExecuting,
       !operation.isCancelled,
       operation.isFinished

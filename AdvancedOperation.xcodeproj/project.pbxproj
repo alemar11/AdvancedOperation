@@ -43,6 +43,9 @@
 		23665C10200B6E4800A6C921 /* OperationObserverController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23665C0E200B6E4800A6C921 /* OperationObserverController.swift */; };
 		23665C11200B6E4800A6C921 /* OperationObserverController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23665C0E200B6E4800A6C921 /* OperationObserverController.swift */; };
 		23665C12200B6E4800A6C921 /* OperationObserverController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23665C0E200B6E4800A6C921 /* OperationObserverController.swift */; };
+		236FA5802015F976001CAAA4 /* LinuxBehaviorsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 236FA57F2015F976001CAAA4 /* LinuxBehaviorsTests.swift */; };
+		236FA5812015F976001CAAA4 /* LinuxBehaviorsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 236FA57F2015F976001CAAA4 /* LinuxBehaviorsTests.swift */; };
+		236FA5822015F976001CAAA4 /* LinuxBehaviorsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 236FA57F2015F976001CAAA4 /* LinuxBehaviorsTests.swift */; };
 		23725076200522820000A442 /* AdvancedOperation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2341309A1F960691002BE7FC /* AdvancedOperation.framework */; };
 		2372507D200524860000A442 /* AdvancedOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2372507C200524860000A442 /* AdvancedOperation.swift */; };
 		2372507E200524860000A442 /* AdvancedOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2372507C200524860000A442 /* AdvancedOperation.swift */; };
@@ -129,6 +132,7 @@
 		234130B41F9606CD002BE7FC /* AdvancedOperation.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = AdvancedOperation.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		234130B71F9606CD002BE7FC /* Info-tvOS.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Info-tvOS.plist"; sourceTree = "<group>"; };
 		23665C0E200B6E4800A6C921 /* OperationObserverController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OperationObserverController.swift; sourceTree = "<group>"; };
+		236FA57F2015F976001CAAA4 /* LinuxBehaviorsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LinuxBehaviorsTests.swift; sourceTree = "<group>"; };
 		23725071200522820000A442 /* AdvancedOperation Tests macOS.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "AdvancedOperation Tests macOS.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2372507C200524860000A442 /* AdvancedOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdvancedOperation.swift; sourceTree = "<group>"; };
 		237250812005258D0000A442 /* IDETemplateMacros.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = IDETemplateMacros.plist; path = AdvancedOperation.xcodeproj/xcshareddata/IDETemplateMacros.plist; sourceTree = SOURCE_ROOT; };
@@ -209,13 +213,14 @@
 		230B47FD200EABEE00F46852 /* AdvancedOperationTests */ = {
 			isa = PBXGroup;
 			children = (
+				23856174200A87070061BAA1 /* AdvancedOperationQueueTests.swift */,
 				23F24D1D200771FA00B25A03 /* AdvancedOperationTests.swift */,
 				23F24D2B2007A33F00B25A03 /* DelayOperationTests.swift */,
 				23856170200A6E9A0061BAA1 /* GroupOperationTests.swift */,
-				23856174200A87070061BAA1 /* AdvancedOperationQueueTests.swift */,
+				236FA57F2015F976001CAAA4 /* LinuxBehaviorsTests.swift */,
 				23856178200A873C0061BAA1 /* Mocks.swift */,
-				23A56BAB200F984400509A65 /* XCTestCase+Utils.swift */,
 				231FE727201210300077728C /* OperationKeyValueObserverTests.swift */,
+				23A56BAB200F984400509A65 /* XCTestCase+Utils.swift */,
 			);
 			path = AdvancedOperationTests;
 			sourceTree = "<group>";
@@ -248,13 +253,13 @@
 			isa = PBXGroup;
 			children = (
 				2372507C200524860000A442 /* AdvancedOperation.swift */,
-				23F24D21200799B800B25A03 /* Operation+Utils.swift */,
-				23F24D2620079CDE00B25A03 /* DelayOperation.swift */,
-				23F24D2F2007B0D200B25A03 /* OperationObserving.swift */,
 				23F24D342007BC2100B25A03 /* AdvancedOperationQueue.swift */,
 				23F24D392007C03D00B25A03 /* BlockObserver.swift */,
+				23F24D2620079CDE00B25A03 /* DelayOperation.swift */,
 				2385616B200A6BF80061BAA1 /* GroupOperation.swift */,
+				23F24D21200799B800B25A03 /* Operation+Utils.swift */,
 				23665C0E200B6E4800A6C921 /* OperationObserverController.swift */,
+				23F24D2F2007B0D200B25A03 /* OperationObserving.swift */,
 			);
 			path = Sources;
 			sourceTree = "<group>";
@@ -674,6 +679,7 @@
 			files = (
 				23F24D2E2007A33F00B25A03 /* DelayOperationTests.swift in Sources */,
 				23856177200A87070061BAA1 /* AdvancedOperationQueueTests.swift in Sources */,
+				236FA5822015F976001CAAA4 /* LinuxBehaviorsTests.swift in Sources */,
 				23A56BAE200F984400509A65 /* XCTestCase+Utils.swift in Sources */,
 				231FE72A201210300077728C /* OperationKeyValueObserverTests.swift in Sources */,
 				23F24D20200771FA00B25A03 /* AdvancedOperationTests.swift in Sources */,
@@ -688,6 +694,7 @@
 			files = (
 				23F24D2C2007A33F00B25A03 /* DelayOperationTests.swift in Sources */,
 				23856175200A87070061BAA1 /* AdvancedOperationQueueTests.swift in Sources */,
+				236FA5802015F976001CAAA4 /* LinuxBehaviorsTests.swift in Sources */,
 				23A56BAC200F984400509A65 /* XCTestCase+Utils.swift in Sources */,
 				231FE728201210300077728C /* OperationKeyValueObserverTests.swift in Sources */,
 				23F24D1E200771FA00B25A03 /* AdvancedOperationTests.swift in Sources */,
@@ -702,6 +709,7 @@
 			files = (
 				23F24D2D2007A33F00B25A03 /* DelayOperationTests.swift in Sources */,
 				23856176200A87070061BAA1 /* AdvancedOperationQueueTests.swift in Sources */,
+				236FA5812015F976001CAAA4 /* LinuxBehaviorsTests.swift in Sources */,
 				23A56BAD200F984400509A65 /* XCTestCase+Utils.swift in Sources */,
 				231FE729201210300077728C /* OperationKeyValueObserverTests.swift in Sources */,
 				23F24D1F200771FA00B25A03 /* AdvancedOperationTests.swift in Sources */,
