@@ -35,99 +35,6 @@ extension AdvancedOperationQueueTests {
 
 class AdvancedOperationQueueTests: XCTestCase {
 
-  func testQueueWithAdvancedOperations() {
-    let queue = AdvancedOperationQueue()
-    let delegate = MockOperationQueueDelegate()
-
-    queue.delegate = delegate
-
-    let operation1 = SleepyAsyncOperation()
-    let operation2 = SleepyAsyncOperation()
-    let operation3 = SleepyAsyncOperation()
-    let operation4 = DelayOperation(interval: 1)
-
-    let expectation1 = expectation(description: "\(#function)\(#line)")
-    let expectation2 = expectation(description: "\(#function)\(#line)")
-    let expectation3 = expectation(description: "\(#function)\(#line)")
-    let expectation4 = expectation(description: "\(#function)\(#line)")
-
-    operation1.addCompletionBlock {
-      expectation1.fulfill()
-    }
-
-    operation2.addCompletionBlock {
-      expectation2.fulfill()
-    }
-
-    operation3.addCompletionBlock {
-      expectation3.fulfill()
-    }
-
-    operation4.addCompletionBlock {
-      expectation4.fulfill()
-    }
-
-    let lock = NSLock()
-
-    var addCount = 0
-    delegate.willAddOperationHandler = { (queue, operation) in
-      XCTAssertTrue(queue == queue)
-      switch addCount {
-      case 0:
-        XCTAssertTrue(operation == operation1)
-      case 1:
-        XCTAssertTrue(operation == operation2)
-      case 2:
-        XCTAssertTrue(operation == operation3)
-      case 3:
-        XCTAssertTrue(operation == operation4)
-      default:
-        XCTFail("Added too many operations: \(addCount).")
-      }
-      addCount += 1
-    }
-
-    var startCount = 0
-    delegate.willPerformOperationHandler = { (queue, operation) in
-      lock.lock()
-      startCount += 1
-      XCTAssertTrue(queue == queue)
-      lock.unlock()
-    }
-
-    var finishCount = 0
-    delegate.didFinishOperationHandler = { (queue, operation, errors) in
-      lock.lock()
-      finishCount += 1
-      XCTAssertTrue(queue == queue)
-      XCTAssertEqual(errors.count, 0)
-      lock.unlock()
-    }
-
-    var cancelCount = 0
-    delegate.didCancelOperationHandler = { (queue, operation, errors) in
-      lock.lock()
-      cancelCount += 1
-      XCTAssertTrue(queue == queue)
-      XCTAssertEqual(errors.count, 0)
-      lock.unlock()
-    }
-
-    queue.addOperation(operation1)
-    queue.addOperation(operation2)
-    queue.addOperation(operation3)
-    queue.addOperation(operation4)
-
-    waitForExpectations(timeout: 20)
-
-    XCTAssertEqual(addCount, 4)
-    XCTAssertEqual(startCount, 4)
-    XCTAssertEqual(finishCount, 4)
-    XCTAssertEqual(cancelCount, 0)
-  }
-
-// FIXME: timeout with waitUntilFinished on Travis CI
-
 //  func testQueueWithAdvancedOperations() {
 //    let queue = AdvancedOperationQueue()
 //    let delegate = MockOperationQueueDelegate()
@@ -138,6 +45,28 @@ class AdvancedOperationQueueTests: XCTestCase {
 //    let operation2 = SleepyAsyncOperation()
 //    let operation3 = SleepyAsyncOperation()
 //    let operation4 = DelayOperation(interval: 1)
+//
+//    let expectation1 = expectation(description: "\(#function)\(#line)")
+//    let expectation2 = expectation(description: "\(#function)\(#line)")
+//    let expectation3 = expectation(description: "\(#function)\(#line)")
+//    let expectation4 = expectation(description: "\(#function)\(#line)")
+//
+//    operation1.addCompletionBlock {
+//      expectation1.fulfill()
+//    }
+//
+//    operation2.addCompletionBlock {
+//      expectation2.fulfill()
+//    }
+//
+//    operation3.addCompletionBlock {
+//      expectation3.fulfill()
+//    }
+//
+//    operation4.addCompletionBlock {
+//      expectation4.fulfill()
+//    }
+//
 //    let lock = NSLock()
 //
 //    var addCount = 0
@@ -184,13 +113,84 @@ class AdvancedOperationQueueTests: XCTestCase {
 //      lock.unlock()
 //    }
 //
-//    queue.addOperations([operation1, operation2, operation3, operation4], waitUntilFinished: true)
+//    queue.addOperation(operation1)
+//    queue.addOperation(operation2)
+//    queue.addOperation(operation3)
+//    queue.addOperation(operation4)
+//
+//    waitForExpectations(timeout: 20)
 //
 //    XCTAssertEqual(addCount, 4)
 //    XCTAssertEqual(startCount, 4)
 //    XCTAssertEqual(finishCount, 4)
 //    XCTAssertEqual(cancelCount, 0)
 //  }
+
+// FIXME: timeout with waitUntilFinished on Travis CI
+
+  func testQueueWithAdvancedOperations() {
+    let queue = AdvancedOperationQueue()
+    let delegate = MockOperationQueueDelegate()
+
+    queue.delegate = delegate
+
+    let operation1 = SleepyAsyncOperation()
+    let operation2 = SleepyAsyncOperation()
+    let operation3 = SleepyAsyncOperation()
+    let operation4 = DelayOperation(interval: 1)
+    let lock = NSLock()
+
+    var addCount = 0
+    delegate.willAddOperationHandler = { (queue, operation) in
+      XCTAssertTrue(queue == queue)
+      switch addCount {
+      case 0:
+        XCTAssertTrue(operation == operation1)
+      case 1:
+        XCTAssertTrue(operation == operation2)
+      case 2:
+        XCTAssertTrue(operation == operation3)
+      case 3:
+        XCTAssertTrue(operation == operation4)
+      default:
+        XCTFail("Added too many operations: \(addCount).")
+      }
+      addCount += 1
+    }
+
+    var startCount = 0
+    delegate.willPerformOperationHandler = { (queue, operation) in
+      lock.lock()
+      startCount += 1
+      XCTAssertTrue(queue == queue)
+      lock.unlock()
+    }
+
+    var finishCount = 0
+    delegate.didFinishOperationHandler = { (queue, operation, errors) in
+      lock.lock()
+      finishCount += 1
+      XCTAssertTrue(queue == queue)
+      XCTAssertEqual(errors.count, 0)
+      lock.unlock()
+    }
+
+    var cancelCount = 0
+    delegate.didCancelOperationHandler = { (queue, operation, errors) in
+      lock.lock()
+      cancelCount += 1
+      XCTAssertTrue(queue == queue)
+      XCTAssertEqual(errors.count, 0)
+      lock.unlock()
+    }
+
+    queue.addOperations([operation1, operation2, operation3, operation4], waitUntilFinished: true)
+
+    XCTAssertEqual(addCount, 4)
+    XCTAssertEqual(startCount, 4)
+    XCTAssertEqual(finishCount, 4)
+    XCTAssertEqual(cancelCount, 0)
+  }
 
   //TODO: most of the callbacks can only be activated by subclassed of AdvancedOperation
   //TODO: rename

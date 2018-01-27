@@ -221,9 +221,7 @@ class AdvancedOperationTests: XCTestCase {
     XCTAssertEqual(observer.didFinishCount, 1)
     XCTAssertEqual(observer.didCancelCount, 0)
     XCTAssertEqual(operation.errors.count, 0)
-
   }
-
 
   func testObserversWithCancelCommand() {
     let expectation1 = expectation(description: "\(#function)\(#line)")
@@ -296,7 +294,6 @@ class AdvancedOperationTests: XCTestCase {
     operation1.start()
     waitForExpectations(timeout: 5)
     XCTAssertTrue(operation1.isReady)
-
   }
 
 }
