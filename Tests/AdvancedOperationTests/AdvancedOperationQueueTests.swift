@@ -126,6 +126,8 @@ class AdvancedOperationQueueTests: XCTestCase {
     XCTAssertEqual(cancelCount, 0)
   }
 
+// FIXME: timeout with waitUntilFinished on Travis CI
+
 //  func testQueueWithAdvancedOperations() {
 //    let queue = AdvancedOperationQueue()
 //    let delegate = MockOperationQueueDelegate()
