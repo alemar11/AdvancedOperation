@@ -46,6 +46,7 @@ class AdvancedOperationQueueTests: XCTestCase {
     let operation3 = SleepyAsyncOperation()
     let operation4 = DelayOperation(interval: 1)
     let lock = NSLock()
+    let syncQueue = DispatchQueue.init(label: "org.tinrobots.advanced-operation.sync")
 
     var addCount = 0
     delegate.willAddOperationHandler = { (queue, operation) in
@@ -67,28 +68,34 @@ class AdvancedOperationQueueTests: XCTestCase {
 
     var startCount = 0
     delegate.willPerformOperationHandler = { (queue, operation) in
-      lock.lock()
-      startCount += 1
-      XCTAssertTrue(queue == queue)
-      lock.unlock()
+      //lock.lock()
+      syncQueue.sync {
+        startCount += 1
+        XCTAssertTrue(queue == queue)
+      }
+      //lock.unlock()
     }
 
     var finishCount = 0
     delegate.didFinishOperationHandler = { (queue, operation, errors) in
-      lock.lock()
+      //lock.lock()
+      syncQueue.sync {
       finishCount += 1
       XCTAssertTrue(queue == queue)
       XCTAssertEqual(errors.count, 0)
-      lock.unlock()
+      }
+      //lock.unlock()
     }
 
     var cancelCount = 0
     delegate.didCancelOperationHandler = { (queue, operation, errors) in
-      lock.lock()
+      //lock.lock()
+      syncQueue.sync {
       cancelCount += 1
       XCTAssertTrue(queue == queue)
       XCTAssertEqual(errors.count, 0)
-      lock.unlock()
+      }
+      //lock.unlock()
     }
 
     queue.addOperations([operation1, operation2, operation3, operation4], waitUntilFinished: true)
