@@ -27,13 +27,23 @@ extension Operation {
 
   /// Adds a completion block to be executed after the `Operation` enters the "finished" state.
   /// If there is already a completion block, they are chained together.
-  func addCompletionBlock(block: @escaping () -> Void) {
+  ///
+  /// - Parameters:
+  ///   - asEndingBlock: The block can be executed before the current completion block (`asEndingBlock` = false) or after (`asEndingBlock` = true).
+  ///   - block: The block to be executed after the `Operation` enters the "finished" state.
+  func addCompletionBlock(asEndingBlock: Bool = true, block: @escaping () -> Void) {
     assert(!isExecuting, "The completion block cannot be modified after execution has begun.")
 
     if let existingBlock = completionBlock {
+
       completionBlock = {
-        existingBlock()
-        block()
+        if asEndingBlock {
+          existingBlock()
+          block()
+        } else {
+          block()
+          existingBlock()
+        }
       }
 
     } else {
