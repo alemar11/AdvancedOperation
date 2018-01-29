@@ -49,30 +49,12 @@
       /// isExecuting KVO
       let isExecuting = operation.observe(\.isExecuting, options: [.old, .new]) { [weak self] (operation, change) in
         guard let `self` = self else { return }
-        guard let old = change.oldValue else { return }
-        guard let new = change.newValue else { return }
-        //
-        if old == false && new == true {
-          for observer in self.observers {
-            observer.operationDidStart(operation: operation)
-          }
+        guard let old = change.oldValue, old == false else { return }
+        guard let new = change.newValue, new == true else { return }
+
+        for observer in self.observers {
+          observer.operationDidStart(operation: operation)
         }
-
-        //        else if operation.isCancelled && old == false && new == false {
-        //          for observer in self.observers {
-        //            observer.operationDidStart(operation: operation)
-        //          }
-        //        } else {
-        //          print(operation)
-        //          print("")
-        //        }
-
-        //        guard let old = change.oldValue, old == false else { return }
-        //        guard let new = change.newValue, new == true else { return }
-        //
-        //        for observer in self.observers {
-        //          observer.operationWillPerform(operation: operation)
-        //        }
 
       }
 
@@ -95,7 +77,7 @@
       }
 
       /// isCancelled KVO
-      let isCancelled = operation.observe(\.isCancelled, options: [.prior, .old, .new]) { [weak self] (operation, change) in
+      let isCancelled = operation.observe(\.isCancelled, options: [.old, .new]) { [weak self] (operation, change) in
         guard let `self` = self else { return }
         guard let old = change.oldValue, old == false else { return }
 
