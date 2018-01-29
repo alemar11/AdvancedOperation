@@ -31,7 +31,23 @@ public class AdvancedOperation: Operation {
 
   public override var isFinished: Bool { return _finished }
 
+   public override var isReady: Bool {
+    // https://stackoverflow.com/questions/19257458/nsoperation-ready-but-not-starting-on-ios-7
+    print("super.isReady: \(super.isReady)\n")
+    print("isReady: \(_ready)\n")
+    return super.isReady && _ready
+  }
+
   private(set) var errors = [Error]()
+
+  private var _ready = true {
+    willSet {
+      willChangeValue(forKey: ObservableKey.isReady)
+    }
+    didSet {
+      didChangeValue(forKey: ObservableKey.isReady)
+    }
+  }
 
   private var _executing = false {
     willSet {
@@ -61,6 +77,7 @@ public class AdvancedOperation: Operation {
 
   public override init() {
     super.init()
+    _ready = true
   }
 
   // MARK: - Methods
