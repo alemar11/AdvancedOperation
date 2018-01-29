@@ -39,7 +39,6 @@ class OperationKeyValueObserverTests: XCTestCase {
     operation.start()
 
     waitForExpectations(timeout: 6)
-    XCTAssertEqual(observer.willCancelCount, 0)
     XCTAssertEqual(observer.didCancelCount, 0)
     XCTAssertEqual(observer.didFinishCount, 1)
     XCTAssertEqual(observer.didStartCount, 1)
@@ -57,7 +56,6 @@ class OperationKeyValueObserverTests: XCTestCase {
     operation.start()
 
     waitForExpectations(timeout: 6)
-    XCTAssertEqual(observer.willCancelCount, 0)
     XCTAssertEqual(observer.didCancelCount, 0)
     XCTAssertEqual(observer.didFinishCount, 1)
     XCTAssertEqual(observer.didStartCount, 1)
@@ -75,7 +73,6 @@ class OperationKeyValueObserverTests: XCTestCase {
     operation.cancel()
 
     waitForExpectations(timeout: 6)
-    XCTAssertEqual(observer.willCancelCount, 1)
     XCTAssertEqual(observer.didCancelCount, 1)
     XCTAssertEqual(observer.didFinishCount, 1)
     XCTAssertEqual(observer.didStartCount, 1)
@@ -95,7 +92,6 @@ class OperationKeyValueObserverTests: XCTestCase {
       operation.start()
 
       waitForExpectations(timeout: 6)
-      XCTAssertEqual(observer.willCancelCount, 1)
       XCTAssertEqual(observer.didCancelCount, 1)
       XCTAssertEqual(observer.didFinishCount, 1)
       XCTAssertEqual(observer.didStartCount, 0) // stopped, before execution
@@ -114,7 +110,6 @@ class OperationKeyValueObserverTests: XCTestCase {
       operation.start()
 
       waitForExpectations(timeout: 6)
-      XCTAssertEqual(observer.willCancelCount, 1)
       XCTAssertEqual(observer.didCancelCount, 1)
       XCTAssertEqual(observer.didFinishCount, 1)
       XCTAssertEqual(observer.didStartCount, 0) // stopped, before execution
@@ -134,7 +129,6 @@ class OperationKeyValueObserverTests: XCTestCase {
     operation.cancel()
 
     waitForExpectations(timeout: 6)
-    XCTAssertEqual(observer.willCancelCount, 1)
     XCTAssertEqual(observer.didCancelCount, 1)
     XCTAssertEqual(observer.didFinishCount, 1)
     XCTAssertEqual(observer.didStartCount, 1)

@@ -104,17 +104,10 @@
           errors = advancedOperation.errors
         }
 
-        if change.isPrior {
-          for observer in self.observers {
-            observer.operationWillCancel(operation: self.operation, withErrors: errors)
-          }
+        guard let new = change.newValue, new == true else { return }
 
-        } else {
-          guard let new = change.newValue, new == true else { return }
-
-          for observer in self.observers {
-            observer.operationDidCancel(operation: self.operation, withErrors: errors)
-          }
+        for observer in self.observers {
+          observer.operationDidCancel(operation: self.operation, withErrors: errors)
         }
 
       }

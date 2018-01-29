@@ -32,16 +32,13 @@ struct BlockObserver: OperationObserving {
 
   private let didStartHandler: ((Operation) -> Void)?
   private let didFinishHandler: ((Operation, [Error]) -> Void)?
-  private let willCancelHandler: ((Operation, [Error]) -> Void)?
   private let didCancelHandler: ((Operation, [Error]) -> Void)?
 
   init(didStart: ((Operation) -> Void)? = nil,
-       willCancel: ((Operation, [Error]) -> Void)? = nil,
        didCancel: ((Operation, [Error]) -> Void)? = nil,
        didFinish: ((Operation, [Error]) -> Void)?) {
     self.didStartHandler = didStart
     self.didFinishHandler = didFinish
-    self.willCancelHandler = willCancel
     self.didCancelHandler = didCancel
   }
 
@@ -53,10 +50,6 @@ struct BlockObserver: OperationObserving {
 
   func operationDidFinish(operation: Operation, withErrors errors: [Error]) {
     didFinishHandler?(operation, errors)
-  }
-
-  func operationWillCancel(operation: Operation, withErrors errors: [Error]) {
-    willCancelHandler?(operation, errors)
   }
 
   func operationDidCancel(operation: Operation, withErrors errors: [Error]) {

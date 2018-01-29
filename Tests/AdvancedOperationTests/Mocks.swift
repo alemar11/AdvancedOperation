@@ -125,7 +125,6 @@ internal class MockObserver: OperationObserving {
   var identifier = UUID().uuidString
   var didStartCount = 0
   var didFinishCount = 0
-  var willCancelCount = 0
   var didCancelCount = 0
 
   func operationDidStart(operation: Operation) {
@@ -136,10 +135,6 @@ internal class MockObserver: OperationObserving {
   func operationDidFinish(operation: Operation, withErrors errors: [Error]) {
     assert(operation.isFinished)
     didFinishCount += 1
-  }
-
-  func operationWillCancel(operation: Operation, withErrors errors: [Error]) {
-    willCancelCount += 1
   }
 
   func operationDidCancel(operation: Operation, withErrors errors: [Error]) {

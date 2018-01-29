@@ -97,7 +97,6 @@ public class AdvancedOperation: Operation {
   }
 
   public override func cancel() {
-    willCancel()
     super.cancel()
     didCancel()
   }
@@ -132,12 +131,6 @@ public class AdvancedOperation: Operation {
   private func didFinish() {
     for observer in observers {
       observer.operationDidFinish(operation: self, withErrors: errors)
-    }
-  }
-
-  private func willCancel() {
-    for observer in observers {
-      observer.operationWillCancel(operation: self, withErrors: errors)
     }
   }
 

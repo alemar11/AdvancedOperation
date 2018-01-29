@@ -35,13 +35,6 @@ public protocol OperationObserving {
   /// - Note: An operation can finish without starting (i.e. if cancelled before its execution)
   func operationDidFinish(operation: Operation, withErrors errors: [Error])
 
-  /// Invoked when an `Operation` is going to be cancelled, along with any errors produced during execution.
-  func operationWillCancel(operation: Operation, withErrors errors: [Error]) //TODO: remove this func
-
   /// Invoked as an `Operation` is cancelled, along with any errors produced during execution.
   func operationDidCancel(operation: Operation, withErrors errors: [Error])
 }
-
-//public extension OperationObserving {
-//  func operationWillCancel(operation: Operation, withErrors errors: [Error]) {}
-//}
