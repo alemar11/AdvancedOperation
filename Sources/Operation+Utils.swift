@@ -24,7 +24,7 @@
 import Foundation
 
 extension Operation {
-
+  
   /// Adds a completion block to be executed after the `Operation` enters the "finished" state.
   /// If there is already a completion block, they are chained together.
   ///
@@ -33,9 +33,9 @@ extension Operation {
   ///   - block: The block to be executed after the `Operation` enters the "finished" state.
   func addCompletionBlock(asEndingBlock: Bool = true, block: @escaping () -> Void) {
     assert(!isExecuting, "The completion block cannot be modified after execution has begun.")
-
+    
     if let existingBlock = completionBlock {
-
+      
       completionBlock = {
         if asEndingBlock {
           existingBlock()
@@ -45,17 +45,17 @@ extension Operation {
           existingBlock()
         }
       }
-
+      
     } else {
       completionBlock = block
     }
-
+    
   }
-
+  
   /// Adds multiple dependencies to the operation.
   func addDependencies(dependencies: [Operation]) {
     assert(!isExecuting, "Dependencies cannot be modified after execution has begun.")
-
+    
     for dependency in dependencies {
       addDependency(dependency)
     }
@@ -65,81 +65,89 @@ extension Operation {
 // MARK: - KVO
 
 internal extension Operation {
-
+  
   internal enum ObservableKey {
-
+    
     static var isCancelled: String {
-      #if os(Linux)
-        let key = "isCancelled"
-      #else
-        let key = #keyPath(Operation.isCancelled)
+      var key: String = "isCancelled"
+      #if !os(Linux)
+        if #available(iOS 11.0, macOS 10.13, tvOS 11.0, watchOS 4.0, *) {
+          key = #keyPath(Operation.isCancelled)
+        }
       #endif
       return key
     }
-
+    
     static var isAsynchronous: String {
-      #if os(Linux)
-        let key = "isAsynchronous"
-      #else
-        let key = #keyPath(Operation.isAsynchronous)
+      var key: String = "isAsynchronous"
+      #if !os(Linux)
+        if #available(iOS 11.0, macOS 10.13, tvOS 11.0, watchOS 4.0, *) {
+          key = #keyPath(Operation.isAsynchronous)
+        }
       #endif
       return key
     }
-
+    
     static var isExecuting: String {
-      #if os(Linux)
-        let key = "isExecuting"
-      #else
-        let key = #keyPath(Operation.isExecuting)
+      var key: String = "isExecuting"
+      #if !os(Linux)
+        if #available(iOS 11.0, macOS 10.13, tvOS 11.0, watchOS 4.0, *) {
+          key = #keyPath(Operation.isExecuting)
+        }
       #endif
       return key
     }
-
+    
     static var isFinished: String {
-      #if os(Linux)
-        let key = "isFinished"
-      #else
-        let key = #keyPath(Operation.isFinished)
+      var key: String = "isFinished"
+      #if !os(Linux)
+        if #available(iOS 11.0, macOS 10.13, tvOS 11.0, watchOS 4.0, *) {
+          key = #keyPath(Operation.isFinished)
+        }
       #endif
       return key
     }
-
+    
     static var isReady: String {
-      #if os(Linux)
-        let key = "isReady"
-      #else
-        let key = #keyPath(Operation.isReady)
+      var key: String = "isReady"
+      #if !os(Linux)
+        if #available(iOS 11.0, macOS 10.13, tvOS 11.0, watchOS 4.0, *) {
+          key = #keyPath(Operation.isReady)
+        }
       #endif
       return key
     }
-
+    
     static var dependencies: String {
-      #if os(Linux)
-        let key = "dependencies"
-      #else
-        let key = #keyPath(Operation.dependencies)
+      var key: String = "dependencies"
+      #if !os(Linux)
+        if #available(iOS 11.0, macOS 10.13, tvOS 11.0, watchOS 4.0, *) {
+          key = #keyPath(Operation.dependencies)
+        }
       #endif
       return key
     }
-
+    
     static var queuePriority: String {
-      #if os(Linux)
-        let key = "queuePriority"
-      #else
-        let key = #keyPath(Operation.queuePriority)
+      var key: String = "queuePriority"
+      #if !os(Linux)
+        if #available(iOS 11.0, macOS 10.13, tvOS 11.0, watchOS 4.0, *) {
+          key = #keyPath(Operation.queuePriority)
+        }
       #endif
       return key
     }
-
+    
     static var completionBlock: String {
-      #if os(Linux)
-        let key = "completionBlock"
-      #else
-        let key = #keyPath(Operation.completionBlock)
+      var key: String = "completionBlock"
+      #if !os(Linux)
+        if #available(iOS 11.0, macOS 10.13, tvOS 11.0, watchOS 4.0, *) {
+          key = #keyPath(Operation.completionBlock)
+        }
       #endif
       return key
     }
-
+    
   }
-
+  
 }

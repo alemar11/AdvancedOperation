@@ -26,9 +26,12 @@ import XCTest
 
 #if !os(Linux)
 
+@available(iOS 11.0, macOS 10.13, tvOS 11.0, watchOS 4.0, *)
 class OperationKeyValueObserverTests: XCTestCase {
 
   func testStart() {
+    guard #available(iOS 11.0, macOS 10.13, tvOS 11.0, watchOS 4.0, *) else { return }
+
     let operation = SleepyAsyncOperation(interval1: 1, interval2: 3, interval3: 1)
     let keyValueObserver = OperationObserverController(operation: operation)
     let observer = MockObserver()
@@ -45,6 +48,8 @@ class OperationKeyValueObserverTests: XCTestCase {
   }
 
   func testMultipleStart() {
+     guard #available(iOS 11.0, macOS 10.13, tvOS 11.0, watchOS 4.0, *) else { return }
+
     let operation = SleepyAsyncOperation(interval1: 1, interval2: 3, interval3: 1)
     let keyValueObserver = OperationObserverController(operation: operation)
     let observer = MockObserver()
@@ -62,6 +67,8 @@ class OperationKeyValueObserverTests: XCTestCase {
   }
 
   func testCancel() {
+     guard #available(iOS 11.0, macOS 10.13, tvOS 11.0, watchOS 4.0, *) else { return }
+
     let operation = SleepyAsyncOperation(interval1: 1, interval2: 3, interval3: 1)
     let keyValueObserver = OperationObserverController(operation: operation)
     let observer = MockObserver()
@@ -79,6 +86,8 @@ class OperationKeyValueObserverTests: XCTestCase {
   }
 
   func testCancelWithoutStart() {
+     guard #available(iOS 11.0, macOS 10.13, tvOS 11.0, watchOS 4.0, *) else { return }
+
     do {
       let operation = SleepyAsyncOperation(interval1: 1, interval2: 3, interval3: 1)
       let keyValueObserver = OperationObserverController(operation: operation)
@@ -117,6 +126,8 @@ class OperationKeyValueObserverTests: XCTestCase {
   }
 
   func testMultipleCancel() {
+     guard #available(iOS 11.0, macOS 10.13, tvOS 11.0, watchOS 4.0, *) else { return }
+    
     let operation = SleepyAsyncOperation(interval1: 1, interval2: 3, interval3: 1)
     let keyValueObserver = OperationObserverController(operation: operation)
     let observer = MockObserver()

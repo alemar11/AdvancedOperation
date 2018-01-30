@@ -25,6 +25,7 @@
 
   import Foundation
 
+  @available(iOS 11.0, macOS 10.13, tvOS 11.0, watchOS 4.0, *)
   public class OperationObserverController {
     let operation: Operation
 
@@ -45,7 +46,6 @@
     }
 
     private func setup() {
-
       /// isExecuting KVO
       let isExecuting = operation.observe(\.isExecuting, options: [.old, .new]) { [weak self] (operation, change) in
         guard let `self` = self else { return }
