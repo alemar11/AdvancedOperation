@@ -31,12 +31,14 @@ public class AdvancedOperation: Operation {
 
   public override var isFinished: Bool { return _finished }
 
-   public override var isReady: Bool {
+  public override var isReady: Bool {
     // https://stackoverflow.com/questions/19257458/nsoperation-ready-but-not-starting-on-ios-7
     print("super.isReady: \(super.isReady)\n")
     print("isReady: \(_ready)\n")
     return super.isReady && _ready
   }
+
+  private(set) var observers = [OperationObserving]()
 
   private(set) var errors = [Error]()
 
@@ -106,6 +108,7 @@ public class AdvancedOperation: Operation {
 
   func cancel(error: Error? = nil) {
     guard !isCancelled else { return }
+
     if let error = error {
       errors.append(error)
     }
@@ -120,18 +123,21 @@ public class AdvancedOperation: Operation {
 
   public func finish(errors: [Error] = []) {
     self.errors.append(contentsOf: errors)
-  // avoid unnecessay KVO firings.
-    if _executing {
+
+    if _executing { // avoid unnecessay KVO firings.
       _executing = false
     }
+
     if !_finished {
-     _finished = true // this will fire the completionBlock via KVO
+      _finished = true // this will fire the completionBlock via KVO
     }
   }
 
-  // MARK: - Observer
+}
 
-  private(set) var observers = [OperationObserving]()
+extension AdvancedOperation {
+
+  // MARK: - Observer
 
   public func addObserver(observer: OperationObserving) {
     assert(!isExecuting, "Cannot modify observers after execution has begun.")
@@ -156,6 +162,9 @@ public class AdvancedOperation: Operation {
       observer.operationDidCancel(operation: self, withErrors: errors)
     }
   }
+}
+
+extension AdvancedOperation {
 
   // MARK: - Dependencies
 
