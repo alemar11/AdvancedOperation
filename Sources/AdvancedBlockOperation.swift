@@ -22,6 +22,7 @@
 // SOFTWARE.
 
 import Foundation
+import Dispatch
 
 /// A closure type that takes a closure as its parameter.
 public typealias OperationBlock = (@escaping () -> Void) -> Void
@@ -36,16 +37,20 @@ public final class AdvancedBlockOperation: AdvancedOperation {
     super.init()
   }
 
-  public convenience init(mainQueueBlock: @escaping () -> Void) {
-    self.init(block: { continuation in
-      DispatchQueue.main.async {
-        mainQueueBlock()
-        continuation()
+  public convenience init(queue: DispatchQueue = .main, block: @escaping () -> Void) {
+    self.init(block: { complete in
+      queue.async {
+        block()
+        complete()
       }
     })
   }
 
   public override func main() {
+    guard !isCancelled else {
+      return finish()
+    }
+
     guard let block = block else {
       return finish()
     }
