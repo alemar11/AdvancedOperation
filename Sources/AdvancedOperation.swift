@@ -133,10 +133,6 @@ public class AdvancedOperation: Operation {
     }
   }
 
-}
-
-extension AdvancedOperation {
-
   // MARK: - Observer
 
   public func addObserver(observer: OperationObserving) {
@@ -162,9 +158,6 @@ extension AdvancedOperation {
       observer.operationDidCancel(operation: self, withErrors: errors)
     }
   }
-}
-
-extension AdvancedOperation {
 
   // MARK: - Dependencies
 
