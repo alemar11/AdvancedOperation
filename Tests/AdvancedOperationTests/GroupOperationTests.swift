@@ -164,7 +164,7 @@
       }
     }
 
-    // FIXME: timeout with waitUntilFinished on Travis CI 
+    // FIXME: timeout with waitUntilFinished on Travis CI
 
     func testGroupOperationWithWaitUntilFinished() {
       let operation1 = BlockOperation(block: { sleep(2)} )
@@ -304,7 +304,7 @@
       group.start()
       operation3.cancel(error: MockError.failed)
       waitForExpectations(timeout: 10)
-      
+
       XCTAssertOperationCancelled(operation: operation3, errors: [MockError.failed])
       XCTAssertOperationFinished(operation: group, errors:  [MockError.test, MockError.failed, MockError.failed, MockError.failed])
     }

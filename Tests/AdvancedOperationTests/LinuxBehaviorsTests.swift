@@ -1,4 +1,4 @@
-// 
+//
 // AdvancedOperation
 //
 // Copyright © 2016-2018 Tinrobots.
@@ -38,7 +38,7 @@ extension LinuxBehaviorsTests {
 }
 
 class LinuxBehaviorsTests: XCTestCase {
-    
+
   // It appears that on Linux, the operation readiness is ALWAYS set to 'false' by default.
   // It changes to 'true' ONLY if an operation is added to an OperationQueue regardless of its associated dependencies.
 
@@ -128,7 +128,7 @@ class LinuxBehaviorsTests: XCTestCase {
     XCTAssertTrue(operation1.isFinished)
     XCTAssertTrue(operation2.isFinished)
   }
-    
+
 }
 
 #endif

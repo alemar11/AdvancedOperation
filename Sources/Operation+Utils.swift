@@ -24,7 +24,7 @@
 import Foundation
 
 extension Operation {
-  
+
   /// Adds a completion block to be executed after the `Operation` enters the "finished" state.
   /// If there is already a completion block, they are chained together.
   ///
@@ -33,9 +33,9 @@ extension Operation {
   ///   - block: The block to be executed after the `Operation` enters the "finished" state.
   func addCompletionBlock(asEndingBlock: Bool = true, block: @escaping () -> Void) {
     assert(!isExecuting, "The completion block cannot be modified after execution has begun.")
-    
+
     if let existingBlock = completionBlock {
-      
+
       completionBlock = {
         if asEndingBlock {
           existingBlock()
@@ -45,17 +45,17 @@ extension Operation {
           existingBlock()
         }
       }
-      
+
     } else {
       completionBlock = block
     }
-    
+
   }
-  
+
   /// Adds multiple dependencies to the operation.
   func addDependencies(dependencies: [Operation]) {
     assert(!isExecuting, "Dependencies cannot be modified after execution has begun.")
-    
+
     for dependency in dependencies {
       addDependency(dependency)
     }
@@ -65,9 +65,9 @@ extension Operation {
 // MARK: - KVO
 
 internal extension Operation {
-  
+
   internal enum ObservableKey {
-    
+
     static var isCancelled: String {
       var key: String = "isCancelled"
       #if !os(Linux)
@@ -77,7 +77,7 @@ internal extension Operation {
       #endif
       return key
     }
-    
+
     static var isAsynchronous: String {
       var key: String = "isAsynchronous"
       #if !os(Linux)
@@ -87,7 +87,7 @@ internal extension Operation {
       #endif
       return key
     }
-    
+
     static var isExecuting: String {
       var key: String = "isExecuting"
       #if !os(Linux)
@@ -97,7 +97,7 @@ internal extension Operation {
       #endif
       return key
     }
-    
+
     static var isFinished: String {
       var key: String = "isFinished"
       #if !os(Linux)
@@ -107,7 +107,7 @@ internal extension Operation {
       #endif
       return key
     }
-    
+
     static var isReady: String {
       var key: String = "isReady"
       #if !os(Linux)
@@ -117,7 +117,7 @@ internal extension Operation {
       #endif
       return key
     }
-    
+
     static var dependencies: String {
       var key: String = "dependencies"
       #if !os(Linux)
@@ -127,7 +127,7 @@ internal extension Operation {
       #endif
       return key
     }
-    
+
     static var queuePriority: String {
       var key: String = "queuePriority"
       #if !os(Linux)
@@ -137,7 +137,7 @@ internal extension Operation {
       #endif
       return key
     }
-    
+
     static var completionBlock: String {
       var key: String = "completionBlock"
       #if !os(Linux)
@@ -147,7 +147,7 @@ internal extension Operation {
       #endif
       return key
     }
-    
+
   }
-  
+
 }

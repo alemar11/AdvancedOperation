@@ -45,6 +45,7 @@
       self.setup()
     }
 
+    // swiftlint:disable:next cyclomatic_complexity
     private func setup() {
       /// isExecuting KVO
       let isExecuting = operation.observe(\.isExecuting, options: [.old, .new]) { [weak self] (operation, change) in
