@@ -53,10 +53,15 @@ class AdvancedBlockOperationTests: XCTestCase {
 
   func testBlockOperationWithAsyncQueueFinishedWithErrors () {
     let errors = [MockError.generic(date: Date()), MockError.failed]
-    let operation = AdvancedBlockOperation { complete in
+
+    var object = NSObject()
+    weak var weakObject = object
+
+    var operation = AdvancedBlockOperation { [object] complete in
       DispatchQueue(label: "org.tinrobots.AdvancedOperation.\(#function)", attributes: .concurrent).async {
         sleep(1)
         sleep(1)
+        _ = object
         complete(errors)
       }
     }
@@ -67,6 +72,29 @@ class AdvancedBlockOperationTests: XCTestCase {
 
     waitForExpectations(timeout: 3)
     XCTAssertOperationFinished(operation: operation, errors: errors)
+
+    // Memory leaks test: once release the operation, the captured object (by reference) should be nil (weakObject)
+    operation = AdvancedBlockOperation(block: {})
+    object = NSObject()
+    XCTAssertNil(weakObject)
   }
+
+//  func testExperimental() {
+//    var object = NSObject()
+//    weak var weakObject = object
+//    var operation = BlockOperation(){ [object] in
+//      print("\n\n==================\n\n")
+//      _ = object
+//    }
+//    let expectation1 = expectation(description: "\(#function)\(#line)")
+//    operation.addCompletionBlock { expectation1.fulfill() }
+//    operation.start()
+//
+//    waitForExpectations(timeout: 3)
+//
+//    operation = BlockOperation(block: {})
+//    object = NSObject()
+//    XCTAssertNil(weakObject)
+//  }
 
 }

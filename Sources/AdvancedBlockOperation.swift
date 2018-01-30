@@ -31,9 +31,12 @@ public typealias OperationBlock = (@escaping ([Error]) -> Void) -> Void
 /// A sublcass of `AdvancedOperation` to execute a closure.
 public final class AdvancedBlockOperation: AdvancedOperation {
 
-  private let block: OperationBlock?
+  private var block: OperationBlock
 
-  public init(block: OperationBlock? = nil) {
+  /// The designated initializer.
+  ///
+  /// - Parameter block: The closure to run when the operation executes; the parameter passed to the block **MUST** be invoked by your code, or else the `AdvancedBlockOperation` will never finish executing.
+  public init(block: @escaping OperationBlock) {
     self.block = block
     super.init()
   }
@@ -52,12 +55,8 @@ public final class AdvancedBlockOperation: AdvancedOperation {
       return finish()
     }
 
-    guard let block = block else {
-      return finish()
-    }
-
     block { [weak self] errors in
-        self?.finish(errors: errors)
+      self?.finish(errors: errors)
     }
 
   }
