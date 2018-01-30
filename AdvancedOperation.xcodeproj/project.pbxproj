@@ -69,6 +69,13 @@
 		23A56BAC200F984400509A65 /* XCTestCase+Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23A56BAB200F984400509A65 /* XCTestCase+Utils.swift */; };
 		23A56BAD200F984400509A65 /* XCTestCase+Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23A56BAB200F984400509A65 /* XCTestCase+Utils.swift */; };
 		23A56BAE200F984400509A65 /* XCTestCase+Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23A56BAB200F984400509A65 /* XCTestCase+Utils.swift */; };
+		23A813B12020CF1E008A98E0 /* AdvancedBlockOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23A813B02020CF1E008A98E0 /* AdvancedBlockOperation.swift */; };
+		23A813B22020CF1E008A98E0 /* AdvancedBlockOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23A813B02020CF1E008A98E0 /* AdvancedBlockOperation.swift */; };
+		23A813B32020CF1E008A98E0 /* AdvancedBlockOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23A813B02020CF1E008A98E0 /* AdvancedBlockOperation.swift */; };
+		23A813B42020CF1E008A98E0 /* AdvancedBlockOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23A813B02020CF1E008A98E0 /* AdvancedBlockOperation.swift */; };
+		23A813B62020D111008A98E0 /* AdvancedBlockOperationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23A813B52020D111008A98E0 /* AdvancedBlockOperationTests.swift */; };
+		23A813B72020D111008A98E0 /* AdvancedBlockOperationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23A813B52020D111008A98E0 /* AdvancedBlockOperationTests.swift */; };
+		23A813B82020D111008A98E0 /* AdvancedBlockOperationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23A813B52020D111008A98E0 /* AdvancedBlockOperationTests.swift */; };
 		23F24D1E200771FA00B25A03 /* AdvancedOperationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23F24D1D200771FA00B25A03 /* AdvancedOperationTests.swift */; };
 		23F24D1F200771FA00B25A03 /* AdvancedOperationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23F24D1D200771FA00B25A03 /* AdvancedOperationTests.swift */; };
 		23F24D20200771FA00B25A03 /* AdvancedOperationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23F24D1D200771FA00B25A03 /* AdvancedOperationTests.swift */; };
@@ -145,6 +152,8 @@
 		23856178200A873C0061BAA1 /* Mocks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Mocks.swift; sourceTree = "<group>"; };
 		2385617C200A8DC50061BAA1 /* Package.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Package.swift; sourceTree = SOURCE_ROOT; };
 		23A56BAB200F984400509A65 /* XCTestCase+Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "XCTestCase+Utils.swift"; sourceTree = "<group>"; };
+		23A813B02020CF1E008A98E0 /* AdvancedBlockOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdvancedBlockOperation.swift; sourceTree = "<group>"; };
+		23A813B52020D111008A98E0 /* AdvancedBlockOperationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdvancedBlockOperationTests.swift; sourceTree = "<group>"; };
 		23F24D1D200771FA00B25A03 /* AdvancedOperationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdvancedOperationTests.swift; sourceTree = "<group>"; };
 		23F24D21200799B800B25A03 /* Operation+Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Operation+Utils.swift"; sourceTree = "<group>"; };
 		23F24D2620079CDE00B25A03 /* DelayOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DelayOperation.swift; sourceTree = "<group>"; };
@@ -221,6 +230,7 @@
 				23856178200A873C0061BAA1 /* Mocks.swift */,
 				231FE727201210300077728C /* OperationKeyValueObserverTests.swift */,
 				23A56BAB200F984400509A65 /* XCTestCase+Utils.swift */,
+				23A813B52020D111008A98E0 /* AdvancedBlockOperationTests.swift */,
 			);
 			path = AdvancedOperationTests;
 			sourceTree = "<group>";
@@ -260,6 +270,7 @@
 				23F24D21200799B800B25A03 /* Operation+Utils.swift */,
 				23665C0E200B6E4800A6C921 /* OperationObserverController.swift */,
 				23F24D2F2007B0D200B25A03 /* OperationObserving.swift */,
+				23A813B02020CF1E008A98E0 /* AdvancedBlockOperation.swift */,
 			);
 			path = Sources;
 			sourceTree = "<group>";
@@ -620,6 +631,7 @@
 				23F24D2720079CDE00B25A03 /* DelayOperation.swift in Sources */,
 				2372507D200524860000A442 /* AdvancedOperation.swift in Sources */,
 				23F24D22200799B800B25A03 /* Operation+Utils.swift in Sources */,
+				23A813B12020CF1E008A98E0 /* AdvancedBlockOperation.swift in Sources */,
 				23F24D302007B0D200B25A03 /* OperationObserving.swift in Sources */,
 				23665C0F200B6E4800A6C921 /* OperationObserverController.swift in Sources */,
 				2385616C200A6BF80061BAA1 /* GroupOperation.swift in Sources */,
@@ -635,6 +647,7 @@
 				23F24D2820079CDE00B25A03 /* DelayOperation.swift in Sources */,
 				2372507E200524860000A442 /* AdvancedOperation.swift in Sources */,
 				23F24D23200799B800B25A03 /* Operation+Utils.swift in Sources */,
+				23A813B22020CF1E008A98E0 /* AdvancedBlockOperation.swift in Sources */,
 				23F24D312007B0D200B25A03 /* OperationObserving.swift in Sources */,
 				23665C10200B6E4800A6C921 /* OperationObserverController.swift in Sources */,
 				2385616D200A6BF80061BAA1 /* GroupOperation.swift in Sources */,
@@ -650,6 +663,7 @@
 				23F24D2920079CDE00B25A03 /* DelayOperation.swift in Sources */,
 				2372507F200524860000A442 /* AdvancedOperation.swift in Sources */,
 				23F24D24200799B800B25A03 /* Operation+Utils.swift in Sources */,
+				23A813B32020CF1E008A98E0 /* AdvancedBlockOperation.swift in Sources */,
 				23F24D322007B0D200B25A03 /* OperationObserving.swift in Sources */,
 				23665C11200B6E4800A6C921 /* OperationObserverController.swift in Sources */,
 				2385616E200A6BF80061BAA1 /* GroupOperation.swift in Sources */,
@@ -665,6 +679,7 @@
 				23F24D2A20079CDE00B25A03 /* DelayOperation.swift in Sources */,
 				23725080200524860000A442 /* AdvancedOperation.swift in Sources */,
 				23F24D25200799B800B25A03 /* Operation+Utils.swift in Sources */,
+				23A813B42020CF1E008A98E0 /* AdvancedBlockOperation.swift in Sources */,
 				23F24D332007B0D200B25A03 /* OperationObserving.swift in Sources */,
 				23665C12200B6E4800A6C921 /* OperationObserverController.swift in Sources */,
 				2385616F200A6BF80061BAA1 /* GroupOperation.swift in Sources */,
@@ -680,6 +695,7 @@
 				23F24D2E2007A33F00B25A03 /* DelayOperationTests.swift in Sources */,
 				23856177200A87070061BAA1 /* AdvancedOperationQueueTests.swift in Sources */,
 				236FA5822015F976001CAAA4 /* LinuxBehaviorsTests.swift in Sources */,
+				23A813B82020D111008A98E0 /* AdvancedBlockOperationTests.swift in Sources */,
 				23A56BAE200F984400509A65 /* XCTestCase+Utils.swift in Sources */,
 				231FE72A201210300077728C /* OperationKeyValueObserverTests.swift in Sources */,
 				23F24D20200771FA00B25A03 /* AdvancedOperationTests.swift in Sources */,
@@ -695,6 +711,7 @@
 				23F24D2C2007A33F00B25A03 /* DelayOperationTests.swift in Sources */,
 				23856175200A87070061BAA1 /* AdvancedOperationQueueTests.swift in Sources */,
 				236FA5802015F976001CAAA4 /* LinuxBehaviorsTests.swift in Sources */,
+				23A813B62020D111008A98E0 /* AdvancedBlockOperationTests.swift in Sources */,
 				23A56BAC200F984400509A65 /* XCTestCase+Utils.swift in Sources */,
 				231FE728201210300077728C /* OperationKeyValueObserverTests.swift in Sources */,
 				23F24D1E200771FA00B25A03 /* AdvancedOperationTests.swift in Sources */,
@@ -710,6 +727,7 @@
 				23F24D2D2007A33F00B25A03 /* DelayOperationTests.swift in Sources */,
 				23856176200A87070061BAA1 /* AdvancedOperationQueueTests.swift in Sources */,
 				236FA5812015F976001CAAA4 /* LinuxBehaviorsTests.swift in Sources */,
+				23A813B72020D111008A98E0 /* AdvancedBlockOperationTests.swift in Sources */,
 				23A56BAD200F984400509A65 /* XCTestCase+Utils.swift in Sources */,
 				231FE729201210300077728C /* OperationKeyValueObserverTests.swift in Sources */,
 				23F24D1F200771FA00B25A03 /* AdvancedOperationTests.swift in Sources */,
