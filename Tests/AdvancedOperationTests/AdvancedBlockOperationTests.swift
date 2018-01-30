@@ -27,27 +27,19 @@ import XCTest
 extension AdvancedBlockOperationTests {
 
   static var allTests = [
-    ("testAsyncQueue", testAsyncQueue),
+    ("testBlockOperationWithAsyncQueue", testBlockOperationWithAsyncQueue),
+    ("testBlockOperationWithAsyncQueueFinishedWithErrors", testBlockOperationWithAsyncQueueFinishedWithErrors)
   ]
 
 }
 class AdvancedBlockOperationTests: XCTestCase {
-        
-//    func testExample() {
-//      let operation = AdvancedBlockOperation(block: {
-//        print("=========================")
-//      })
-//      operation.start()
-//    }
 
-  func testAsyncQueue() {
-
+  func testBlockOperationWithAsyncQueue() {
     let operation = AdvancedBlockOperation { complete in
-      //DispatchQueue.global().async {
-      DispatchQueue(label: "org.tinrobots.\(#function)", attributes: .concurrent).async {
+      DispatchQueue(label: "org.tinrobots.AdvancedOperation.\(#function)", attributes: .concurrent).async {
         sleep(1)
         sleep(2)
-        complete()
+        complete([])
       }
     }
 
@@ -58,5 +50,23 @@ class AdvancedBlockOperationTests: XCTestCase {
     waitForExpectations(timeout: 4)
     XCTAssertOperationFinished(operation: operation)
   }
-    
+
+  func testBlockOperationWithAsyncQueueFinishedWithErrors () {
+    let errors = [MockError.generic(date: Date()), MockError.failed]
+    let operation = AdvancedBlockOperation { complete in
+      DispatchQueue(label: "org.tinrobots.AdvancedOperation.\(#function)", attributes: .concurrent).async {
+        sleep(1)
+        sleep(1)
+        complete(errors)
+      }
+    }
+
+    let expectation1 = expectation(description: "\(#function)\(#line)")
+    operation.addCompletionBlock { expectation1.fulfill() }
+    operation.start()
+
+    waitForExpectations(timeout: 3)
+    XCTAssertOperationFinished(operation: operation, errors: errors)
+  }
+
 }
