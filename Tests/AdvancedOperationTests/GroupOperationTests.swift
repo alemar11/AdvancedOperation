@@ -40,10 +40,15 @@
       let expectation3 = expectation(description: "\(#function)\(#line)")
       let group = GroupOperation(operations: operation1, operation2)
       group.addCompletionBlock { expectation3.fulfill() }
+      XCTAssertEqual(group.maxConcurrentOperationCount, OperationQueue.defaultMaxConcurrentOperationCount)
+      XCTAssertTrue(group.isSuspended)
 
+      XCTAssertTrue(group.isSuspended)
       group.start()
+      XCTAssertFalse(group.isSuspended)
       waitForExpectations(timeout: 10)
 
+      XCTAssertTrue(group.isSuspended)
       XCTAssertOperationFinished(operation: group)
     }
 
@@ -58,17 +63,20 @@
 
       let expectation3 = expectation(description: "\(#function)\(#line)")
       let group = GroupOperation(operations: operation1, operation2)
-      group.addCompletionBlock {
-        expectation3.fulfill()
-      }
+      group.addCompletionBlock { expectation3.fulfill() }
+      XCTAssertEqual(group.maxConcurrentOperationCount, OperationQueue.defaultMaxConcurrentOperationCount)
 
+      XCTAssertTrue(group.isSuspended)
       group.start()
+      XCTAssertFalse(group.isSuspended)
       operation1.cancel(error: MockError.test)
+
       waitForExpectations(timeout: 10)
 
       XCTAssertOperationCancelled(operation: operation1, errors: [MockError.test])
       XCTAssertOperationFinished(operation: group, errors: [MockError.test])
 
+      XCTAssertTrue(group.isSuspended)
       XCTAssertEqual(group.aggregatedErrors.count, 1)
     }
 

@@ -83,7 +83,7 @@ public final class GroupOperation: AdvancedOperation {
   public init(operations: [Operation]) {
     super.init()
 
-    underlyingOperationQueue.isSuspended = true
+    isSuspended = true
     underlyingOperationQueue.delegate = self
     underlyingOperationQueue.addOperation(startingOperation)
 
@@ -116,7 +116,26 @@ public final class GroupOperation: AdvancedOperation {
     underlyingOperationQueue.addOperation(operation)
   }
 
-  //TODO: isSuspended  / maxConcurrentOperationCount
+  /// The maximum number of queued operations that can execute at the same time.
+  /// - Note: Reducing the number of concurrent operations does not affect any operations that are currently executing.
+  public final var maxConcurrentOperationCount: Int {
+    get {
+      return underlyingOperationQueue.maxConcurrentOperationCount
+    }
+    set {
+      underlyingOperationQueue.maxConcurrentOperationCount = newValue
+    }
+  }
+
+  /// A Boolean value indicating whether the GroupOpeation is actively scheduling operations for execution.
+  public final var isSuspended: Bool {
+    get {
+      return underlyingOperationQueue.isSuspended
+    }
+    set {
+      underlyingOperationQueue.isSuspended = newValue
+    }
+  }
 
 }
 
@@ -127,8 +146,9 @@ extension GroupOperation: AdvancedOperationQueueDelegate {
 
   func operationQueue(operationQueue: AdvancedOperationQueue, operationDidStart operation: Operation) {}
   func operationQueue(operationQueue: AdvancedOperationQueue, operationDidFinish operation: Operation, withErrors errors: [Error]) {
-    guard !errors.isEmpty else { return }
+    guard operationQueue === underlyingOperationQueue else { return }
 
+    guard !errors.isEmpty else { return }
     if operation !== finishingOperation || operation !== startingOperation {
       aggregatedErrors.append(contentsOf: errors)
     }

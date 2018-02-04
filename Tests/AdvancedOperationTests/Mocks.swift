@@ -46,7 +46,6 @@ internal enum MockError: Swift.Error, Equatable {
     default:
       return false
     }
-
   }
 }
 
