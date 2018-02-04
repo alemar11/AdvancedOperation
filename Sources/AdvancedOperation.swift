@@ -38,10 +38,6 @@ public class AdvancedOperation: Operation {
     return super.isReady && _ready
   }
 
-  private(set) var observers = [OperationObserving]()
-
-  private(set) var errors = [Error]()
-
   private var _ready = true {
     willSet {
       willChangeValue(forKey: ObservableKey.isReady)
@@ -74,6 +70,26 @@ public class AdvancedOperation: Operation {
       didChangeValue(forKey: ObservableKey.isFinished)
     }
   }
+
+  // MARK: - Observers
+
+  private(set) var observers = [OperationObserving]()
+
+  internal var willExecutedObservers: [OperationDidStartObserving] {
+    return observers.flatMap { $0 as OperationDidStartObserving }
+  }
+
+  internal var didCancelObservers: [OperationDidCancelObserving] {
+    return observers.flatMap { $0 as OperationDidCancelObserving }
+  }
+
+  internal var didFinishObservers: [OperationDidFinishObserving] {
+    return observers.flatMap { $0 as OperationDidFinishObserving }
+  }
+
+  // MARK: - Errors
+
+  private(set) var errors = [Error]()
 
   // MARK: - Initialization
 

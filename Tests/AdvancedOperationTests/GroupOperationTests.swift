@@ -350,6 +350,7 @@
      - failing nested group operation
      - cancelled group operation
      - cancelled nested group operation
+     - add observer for didFinish with expection fulfill
      **/
 
   }
