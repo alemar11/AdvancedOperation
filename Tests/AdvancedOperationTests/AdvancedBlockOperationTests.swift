@@ -28,7 +28,8 @@ extension AdvancedBlockOperationTests {
 
   static var allTests = [
     ("testBlockOperationWithAsyncQueue", testBlockOperationWithAsyncQueue),
-    ("testBlockOperationWithAsyncQueueFinishedWithErrors", testBlockOperationWithAsyncQueueFinishedWithErrors)
+    ("testBlockOperationWithAsyncQueueFinishedWithErrors", testBlockOperationWithAsyncQueueFinishedWithErrors),
+    ("testMemoryLeak", testMemoryLeak)
   ]
 
 }
