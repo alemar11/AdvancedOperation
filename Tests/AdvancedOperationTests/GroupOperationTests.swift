@@ -91,9 +91,7 @@
 
       let expectation3 = expectation(description: "\(#function)\(#line)")
       let group = GroupOperation(operations: operation1, operation2)
-      group.addCompletionBlock {
-        expectation3.fulfill()
-      }
+      group.addCompletionBlock { expectation3.fulfill() }
 
       group.start()
       operation2.cancel()
@@ -209,9 +207,7 @@
 
       let group = GroupOperation(operations: group1, group2, operation6)
       let exepectation1 = expectation(description: "\(#function)\(#line)")
-      group.addCompletionBlock {
-        exepectation1.fulfill()
-      }
+      group.addCompletionBlock { exepectation1.fulfill() }
 
       group.start()
       waitForExpectations(timeout: 10)
@@ -233,9 +229,7 @@
 
       let group = GroupOperation(operations: group1, group2, operation6)
       let exepectation1 = expectation(description: "\(#function)\(#line)")
-      group.addCompletionBlock {
-        exepectation1.fulfill()
-      }
+      group.addCompletionBlock { exepectation1.fulfill() }
 
       group2.cancel(error: MockError.test)
       group.start()
@@ -258,9 +252,7 @@
 
       let group = GroupOperation(operations: group1, group2, operation6)
       let exepectation1 = expectation(description: "\(#function)\(#line)")
-      group.addCompletionBlock {
-        exepectation1.fulfill()
-      }
+      group.addCompletionBlock { exepectation1.fulfill() }
 
       group.cancel(error: MockError.test)
       group.start()
@@ -282,9 +274,7 @@
 
       let group = GroupOperation(operations: group1, group2)
       let exepectation1 = expectation(description: "\(#function)\(#line)")
-      group.addCompletionBlock {
-        exepectation1.fulfill()
-      }
+      group.addCompletionBlock { exepectation1.fulfill() }
 
       group.start()
       waitForExpectations(timeout: 10)
@@ -305,9 +295,7 @@
 
       let group = GroupOperation(operations: group1, group2)
       let exepectation1 = expectation(description: "\(#function)\(#line)")
-      group.addCompletionBlock {
-        exepectation1.fulfill()
-      }
+      group.addCompletionBlock { exepectation1.fulfill() }
 
       group.start()
       operation3.cancel(error: MockError.failed)
@@ -331,14 +319,30 @@
 
       let group = GroupOperation(operations: group1, group2)
       let exepectation1 = expectation(description: "\(#function)\(#line)")
-      group.addCompletionBlock {
-        exepectation1.fulfill()
-      }
+      group.addCompletionBlock { exepectation1.fulfill() }
 
       group.start()
       waitForExpectations(timeout: 10)
 
       XCTAssertOperationFinished(operation: group, errors: errors1 + errors2 )
+    }
+
+    func testMaxConcurrentOperationCount() {
+      let errors = [MockError.test, MockError.failed, MockError.failed]
+      let operation1 = FailingAsyncOperation(errors: errors)
+      let operation2 = SleepyOperation()
+      let group = GroupOperation(operations: operation1, operation2)
+      let exepectation1 = expectation(description: "\(#function)\(#line)")
+
+      XCTAssertEqual(group.maxConcurrentOperationCount, OperationQueue.defaultMaxConcurrentOperationCount)
+      group.maxConcurrentOperationCount = 4
+      XCTAssertEqual(group.maxConcurrentOperationCount, 4)
+      group.addCompletionBlock { exepectation1.fulfill() }
+
+      group.start()
+      waitForExpectations(timeout: 10)
+
+      XCTAssertEqual(group.maxConcurrentOperationCount, 4)
     }
 
     /**
