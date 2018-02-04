@@ -262,6 +262,7 @@
 		234130921F960612002BE7FC /* Sources */ = {
 			isa = PBXGroup;
 			children = (
+				23A813B02020CF1E008A98E0 /* AdvancedBlockOperation.swift */,
 				2372507C200524860000A442 /* AdvancedOperation.swift */,
 				23F24D342007BC2100B25A03 /* AdvancedOperationQueue.swift */,
 				23F24D392007C03D00B25A03 /* BlockObserver.swift */,
@@ -270,7 +271,6 @@
 				23F24D21200799B800B25A03 /* Operation+Utils.swift */,
 				23665C0E200B6E4800A6C921 /* OperationObserverController.swift */,
 				23F24D2F2007B0D200B25A03 /* OperationObserving.swift */,
-				23A813B02020CF1E008A98E0 /* AdvancedBlockOperation.swift */,
 			);
 			path = Sources;
 			sourceTree = "<group>";

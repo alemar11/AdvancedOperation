@@ -24,7 +24,6 @@
 import Foundation
 import Dispatch
 
-
 /// A closure type that takes a closure as its parameter.
 public typealias OperationBlock = (@escaping ([Error]) -> Void) -> Void
 
