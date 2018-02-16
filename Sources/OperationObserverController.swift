@@ -25,7 +25,7 @@
 
   import Foundation
 
-  @available(iOS 11.0, macOS 10.13, tvOS 11.0, watchOS 4.0, *)
+  @available(iOS 11.0, macOS 10.13, tvOS 11.0, watchOS 4.0, *) // https://forums.developer.apple.com/thread/79683
   public class OperationObserverController {
     let operation: Operation
 
@@ -54,7 +54,7 @@
         guard let new = change.newValue, new == true else { return }
 
         for observer in self.observers {
-          observer.operationWillExecute(operation: operation)
+          observer.operationWillExecute(operation: operation) //TODO: use .prior?
         }
 
       }

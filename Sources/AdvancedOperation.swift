@@ -53,7 +53,7 @@ public class AdvancedOperation: Operation {
     }
     didSet {
       if _executing {
-        didStart()
+        willExecute()
       }
       didChangeValue(forKey: ObservableKey.isExecuting)
     }
@@ -157,7 +157,7 @@ public class AdvancedOperation: Operation {
     observers.append(observer)
   }
 
-  private func didStart() {
+  private func willExecute() {
     for observer in observers {
       observer.operationWillExecute(operation: self)
     }
