@@ -54,7 +54,7 @@
         guard let new = change.newValue, new == true else { return }
 
         for observer in self.observers {
-          observer.operationDidStart(operation: operation)
+          observer.operationWillExecute(operation: operation)
         }
 
       }

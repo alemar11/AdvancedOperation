@@ -27,14 +27,14 @@ protocol AdvancedOperationQueueDelegate: class {
   func operationQueue(operationQueue: AdvancedOperationQueue, willAddOperation operation: Operation)
   func operationQueue(operationQueue: AdvancedOperationQueue, didAddOperation operation: Operation)
 
-  func operationQueue(operationQueue: AdvancedOperationQueue, operationDidStart operation: Operation)
+  func operationQueue(operationQueue: AdvancedOperationQueue, operationWillExecute operation: Operation)
   func operationQueue(operationQueue: AdvancedOperationQueue, operationDidFinish operation: Operation, withErrors errors: [Error])
   func operationQueue(operationQueue: AdvancedOperationQueue, operationDidCancel operation: Operation, withErrors errors: [Error])
 }
 
 extension AdvancedOperationQueueDelegate {
   func operationQueue(operationQueue: AdvancedOperationQueue, willAddOperation operation: Operation) {}
-  func operationQueue(operationQueue: AdvancedOperationQueue, operationDidStart operation: Operation) {}
+  func operationQueue(operationQueue: AdvancedOperationQueue, operationWillExecute operation: Operation) {}
 }
 
 /// `AdvancedOperationQueue` is an `NSOperationQueue` subclass that implements a large number of "extra features" related to the `Operation` class:
@@ -50,9 +50,9 @@ class AdvancedOperationQueue: OperationQueue {
 
     if let operation = operation as? AdvancedOperation { /// AdvancedOperation
 
-      let observer = BlockObserver(didStart: { [weak self] (operation) in
+      let observer = BlockObserver(willExecute: { [weak self] (operation) in
         guard let `self` = self else { return }
-        self.delegate?.operationQueue(operationQueue: self, operationDidStart: operation)
+        self.delegate?.operationQueue(operationQueue: self, operationWillExecute: operation)
 
       }, didCancel: { [weak self] (operation, errors) in
         guard let `self` = self else { return }

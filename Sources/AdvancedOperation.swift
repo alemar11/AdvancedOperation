@@ -75,8 +75,8 @@ public class AdvancedOperation: Operation {
 
   private(set) var observers = [OperationObserving]()
 
-  internal var willExecutedObservers: [OperationDidStartObserving] {
-    return observers.flatMap { $0 as OperationDidStartObserving }
+  internal var willExecutedObservers: [OperationWillExecuteObserving] {
+    return observers.flatMap { $0 as OperationWillExecuteObserving }
   }
 
   internal var didCancelObservers: [OperationDidCancelObserving] {
@@ -159,7 +159,7 @@ public class AdvancedOperation: Operation {
 
   private func didStart() {
     for observer in observers {
-      observer.operationDidStart(operation: self)
+      observer.operationWillExecute(operation: self)
     }
   }
 

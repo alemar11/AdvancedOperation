@@ -30,22 +30,22 @@ struct BlockObserver: OperationObserving {
 
   var identifier = UUID().uuidString
 
-  private let didStartHandler: ((Operation) -> Void)?
+  private let willExecuteHandler: ((Operation) -> Void)?
   private let didFinishHandler: ((Operation, [Error]) -> Void)?
   private let didCancelHandler: ((Operation, [Error]) -> Void)?
 
-  init(didStart: ((Operation) -> Void)? = nil,
+  init(willExecute: ((Operation) -> Void)? = nil,
        didCancel: ((Operation, [Error]) -> Void)? = nil,
        didFinish: ((Operation, [Error]) -> Void)?) {
-    self.didStartHandler = didStart
+    self.willExecuteHandler = willExecute
     self.didFinishHandler = didFinish
     self.didCancelHandler = didCancel
   }
 
   // MARK: - OperationObserving
 
-  func operationDidStart(operation: Operation) {
-    didStartHandler?(operation)
+  func operationWillExecute(operation: Operation) {
+    willExecuteHandler?(operation)
   }
 
   func operationDidFinish(operation: Operation, withErrors errors: [Error]) {

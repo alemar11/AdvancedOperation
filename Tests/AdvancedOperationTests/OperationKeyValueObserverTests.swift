@@ -44,7 +44,7 @@ class OperationKeyValueObserverTests: XCTestCase {
     waitForExpectations(timeout: 6)
     XCTAssertEqual(observer.didCancelCount, 0)
     XCTAssertEqual(observer.didFinishCount, 1)
-    XCTAssertEqual(observer.didStartCount, 1)
+    XCTAssertEqual(observer.willExecutetCount, 1)
   }
 
   func testMultipleStart() {
@@ -63,7 +63,7 @@ class OperationKeyValueObserverTests: XCTestCase {
     waitForExpectations(timeout: 6)
     XCTAssertEqual(observer.didCancelCount, 0)
     XCTAssertEqual(observer.didFinishCount, 1)
-    XCTAssertEqual(observer.didStartCount, 1)
+    XCTAssertEqual(observer.willExecutetCount, 1)
   }
 
   func testCancel() {
@@ -82,7 +82,7 @@ class OperationKeyValueObserverTests: XCTestCase {
     waitForExpectations(timeout: 6)
     XCTAssertEqual(observer.didCancelCount, 1)
     XCTAssertEqual(observer.didFinishCount, 1)
-    XCTAssertEqual(observer.didStartCount, 1)
+    XCTAssertEqual(observer.willExecutetCount, 1)
   }
 
   func testCancelWithoutStart() {
@@ -103,7 +103,7 @@ class OperationKeyValueObserverTests: XCTestCase {
       waitForExpectations(timeout: 6)
       XCTAssertEqual(observer.didCancelCount, 1)
       XCTAssertEqual(observer.didFinishCount, 1)
-      XCTAssertEqual(observer.didStartCount, 0) // stopped, before execution
+      XCTAssertEqual(observer.willExecutetCount, 0) // stopped, before execution
     }
 
     do {
@@ -121,7 +121,7 @@ class OperationKeyValueObserverTests: XCTestCase {
       waitForExpectations(timeout: 6)
       XCTAssertEqual(observer.didCancelCount, 1)
       XCTAssertEqual(observer.didFinishCount, 1)
-      XCTAssertEqual(observer.didStartCount, 0) // stopped, before execution
+      XCTAssertEqual(observer.willExecutetCount, 0) // stopped, before execution
     }
   }
 
@@ -142,7 +142,7 @@ class OperationKeyValueObserverTests: XCTestCase {
     waitForExpectations(timeout: 6)
     XCTAssertEqual(observer.didCancelCount, 1)
     XCTAssertEqual(observer.didFinishCount, 1)
-    XCTAssertEqual(observer.didStartCount, 1)
+    XCTAssertEqual(observer.willExecutetCount, 1)
   }
 
 }

@@ -217,7 +217,7 @@ class AdvancedOperationTests: XCTestCase {
 
     sleep(5) // make sure there are no other effects
 
-    XCTAssertEqual(observer.didStartCount, 1)
+    XCTAssertEqual(observer.willExecutetCount, 1)
     XCTAssertEqual(observer.didFinishCount, 1)
     XCTAssertEqual(observer.didCancelCount, 0)
     XCTAssertEqual(operation.errors.count, 0)
@@ -238,7 +238,7 @@ class AdvancedOperationTests: XCTestCase {
 
     sleep(5) // make sure there are no other effects
 
-    XCTAssertEqual(observer.didStartCount, 1)
+    XCTAssertEqual(observer.willExecutetCount, 1)
     XCTAssertEqual(observer.didFinishCount, 1)
     XCTAssertEqual(observer.didCancelCount, 1)
     XCTAssertEqual(operation.errors.count, 0)

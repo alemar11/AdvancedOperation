@@ -24,26 +24,14 @@
 import Foundation
 
 /// The protocol that types may implement if they wish to be notified of significant operation lifecycle events.
-public protocol OperationObserving: OperationDidStartObserving, OperationDidFinishObserving, OperationDidCancelObserving {
+public protocol OperationObserving: OperationWillExecuteObserving, OperationDidFinishObserving, OperationDidCancelObserving {
   /// An unique identifier
   var identifier: String { get set }
-
-//  /// Invoked immediately prior to the `Operation`'s `main()` method (it's started but not yet executed).
-//  func operationDidStart(operation: Operation)
-//
-//  /// Invoked as an `Operation` finishes, along with any errors produced during execution.
-//  /// - Note: An operation can finish without starting (i.e. if cancelled before its execution)
-//  func operationDidFinish(operation: Operation, withErrors errors: [Error])
-//
-//  /// Invoked as an `Operation` is cancelled, along with any errors produced during execution.
-//  func operationDidCancel(operation: Operation, withErrors errors: [Error])
 }
 
-// TODO: refactoring the above protocol
-// TODO: rename to OperationWillExecuteObserving
-public protocol OperationDidStartObserving {
+public protocol OperationWillExecuteObserving {
   /// Invoked immediately prior to the `Operation`'s `main()` method (it's started but not yet executed).
-  func operationDidStart(operation: Operation) // TODO: rename to operationWillExecute
+  func operationWillExecute(operation: Operation)
 }
 
 public protocol OperationDidFinishObserving {
