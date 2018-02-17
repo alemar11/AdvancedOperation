@@ -74,7 +74,7 @@
         guard let new = change.newValue, new == true else { return }
 
         for observer in self.willExecuteObservers {
-          observer.operationWillExecute(operation: operation) //TODO: use .prior?
+          observer.operationWillExecute(operation: operation)
         }
 
       }
