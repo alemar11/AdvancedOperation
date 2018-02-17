@@ -46,16 +46,13 @@ public final class GroupOperation: AdvancedOperation {
     }
   }
 
-  private var _qualityOfService = QualityOfService.default
-
   /// Accesses the group operation queue's quality of service. It defaults to background quality.
   public final override var qualityOfService: QualityOfService {
     get {
-      return _qualityOfService
+      return underlyingOperationQueue.qualityOfService
     }
     set(value) {
-      _qualityOfService = value
-      underlyingOperationQueue.qualityOfService = _qualityOfService
+      underlyingOperationQueue.qualityOfService = value
     }
   }
 
@@ -107,7 +104,6 @@ public final class GroupOperation: AdvancedOperation {
     underlyingOperationQueue.addOperation(finishingOperation)
   }
 
-  //TODO: test
   public func addOperation(operation: Operation) {
     assert(!finishingOperation.isCancelled || !finishingOperation.isFinished, "The GroupOperation is finishing and cannot accept more operations.")
 
@@ -141,10 +137,8 @@ public final class GroupOperation: AdvancedOperation {
 
 extension GroupOperation: AdvancedOperationQueueDelegate {
 
-  func operationQueue(operationQueue: AdvancedOperationQueue, willAddOperation operation: Operation) {}
   func operationQueue(operationQueue: AdvancedOperationQueue, didAddOperation operation: Operation) {}
 
-  func operationQueue(operationQueue: AdvancedOperationQueue, operationWillExecute operation: Operation) {}
   func operationQueue(operationQueue: AdvancedOperationQueue, operationDidFinish operation: Operation, withErrors errors: [Error]) {
     guard operationQueue === underlyingOperationQueue else { return }
 
