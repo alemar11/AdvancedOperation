@@ -23,24 +23,27 @@
 
 import Foundation
 
-/// The protocol that types may implement if they wish to be notified of significant operation lifecycle events.
-public protocol OperationObserving: OperationWillExecuteObserving, OperationDidFinishObserving, OperationDidCancelObserving {
-  /// An unique identifier
-  var identifier: String { get set }
-}
+///  Types which conform to this protocol, can be attached to `AdvancedOperation` subclasses before they are executed or added to a queue.
+public protocol OperationObservingType {}
 
-public protocol OperationWillExecuteObserving {
+public protocol OperationWillExecuteObserving: OperationObservingType {
   /// Invoked immediately prior to the `Operation`'s `main()` method (it's started but not yet executed).
   func operationWillExecute(operation: Operation)
 }
 
-public protocol OperationDidFinishObserving {
+public protocol OperationDidFinishObserving: OperationObservingType {
   /// Invoked as an `Operation` finishes, along with any errors produced during execution.
   /// - Note: An operation can finish without starting (i.e. if cancelled before its execution)
   func operationDidFinish(operation: Operation, withErrors errors: [Error])
 }
 
-public protocol OperationDidCancelObserving {
+public protocol OperationDidCancelObserving: OperationObservingType {
   /// Invoked as an `Operation` is cancelled, along with any errors produced during execution.
   func operationDidCancel(operation: Operation, withErrors errors: [Error])
+}
+
+/// The protocol that types may implement if they wish to be notified of significant operation lifecycle events.
+public protocol OperationObserving: OperationWillExecuteObserving, OperationDidFinishObserving, OperationDidCancelObserving {
+  /// An unique identifier
+  var identifier: String { get set }
 }

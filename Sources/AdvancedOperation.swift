@@ -71,18 +71,18 @@ public class AdvancedOperation: Operation {
 
   // MARK: - Observers
 
-  private(set) var observers = [OperationObserving]()
+  private(set) var observers = [OperationObservingType]()
 
   internal var willExecuteObservers: [OperationWillExecuteObserving] {
-    return observers.flatMap { $0 as OperationWillExecuteObserving }
+    return observers.flatMap { $0 as? OperationWillExecuteObserving }
   }
 
   internal var didCancelObservers: [OperationDidCancelObserving] {
-    return observers.flatMap { $0 as OperationDidCancelObserving }
+    return observers.flatMap { $0 as? OperationDidCancelObserving }
   }
 
   internal var didFinishObservers: [OperationDidFinishObserving] {
-    return observers.flatMap { $0 as OperationDidFinishObserving }
+    return observers.flatMap { $0 as? OperationDidFinishObserving }
   }
 
   // MARK: - Errors
@@ -149,26 +149,30 @@ public class AdvancedOperation: Operation {
 
   // MARK: - Observer
 
-  public func addObserver(observer: OperationObserving) {
+  /// Add an observer to the to the operation, can only be done prior to the operation starting.
+  ///
+  /// - Parameter observer: the observer to add.
+  /// - Requires: `self must not have started.
+  public func addObserver(observer: OperationObservingType) {
     assert(!isExecuting, "Cannot modify observers after execution has begun.")
 
     observers.append(observer)
   }
 
   private func willExecute() {
-    for observer in observers {
+    for observer in willExecuteObservers {
       observer.operationWillExecute(operation: self)
     }
   }
 
   private func didFinish() {
-    for observer in observers {
+    for observer in didFinishObservers {
       observer.operationDidFinish(operation: self, withErrors: errors)
     }
   }
 
   private func didCancel() {
-    for observer in observers {
+    for observer in didCancelObservers {
       observer.operationDidCancel(operation: self, withErrors: errors)
     }
   }
