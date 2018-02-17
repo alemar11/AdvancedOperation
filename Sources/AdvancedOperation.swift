@@ -93,7 +93,9 @@ public class AdvancedOperation: Operation {
 
   public override init() {
     super.init()
-    _ready = true
+    defer { // use defer to fire the KVO
+      _ready = true
+    }
   }
 
   // MARK: - Methods
