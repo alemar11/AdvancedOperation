@@ -33,11 +33,11 @@ class OperationKeyValueObserverTests: XCTestCase {
     guard #available(iOS 11.0, macOS 10.13, tvOS 11.0, watchOS 4.0, *) else { return }
 
     let operation = SleepyAsyncOperation(interval1: 1, interval2: 3, interval3: 1)
-    let keyValueObserver = OperationObserverController(operation: operation)
+    let keyValueObserverControllerController = OperationObserverController(operation: operation)
     let observer = MockObserver()
     let expectation1 = expectation(description: "\(#function)\(#line)")
 
-    keyValueObserver.registerObserver(observer)
+    keyValueObserverControllerController.registerObserver(observer)
     operation.addCompletionBlock { expectation1.fulfill() }
     operation.start()
 
@@ -51,11 +51,11 @@ class OperationKeyValueObserverTests: XCTestCase {
      guard #available(iOS 11.0, macOS 10.13, tvOS 11.0, watchOS 4.0, *) else { return }
 
     let operation = SleepyAsyncOperation(interval1: 1, interval2: 3, interval3: 1)
-    let keyValueObserver = OperationObserverController(operation: operation)
+    let keyValueObserverController = OperationObserverController(operation: operation)
     let observer = MockObserver()
     let expectation1 = expectation(description: "\(#function)\(#line)")
 
-    keyValueObserver.registerObserver(observer)
+    keyValueObserverController.registerObserver(observer)
     operation.addCompletionBlock { expectation1.fulfill() }
     operation.start()
     operation.start()
@@ -70,11 +70,11 @@ class OperationKeyValueObserverTests: XCTestCase {
      guard #available(iOS 11.0, macOS 10.13, tvOS 11.0, watchOS 4.0, *) else { return }
 
     let operation = SleepyAsyncOperation(interval1: 1, interval2: 3, interval3: 1)
-    let keyValueObserver = OperationObserverController(operation: operation)
+    let keyValueObserverController = OperationObserverController(operation: operation)
     let observer = MockObserver()
     let expectation1 = expectation(description: "\(#function)\(#line)")
 
-    keyValueObserver.registerObserver(observer)
+    keyValueObserverController.registerObserver(observer)
     operation.addCompletionBlock { expectation1.fulfill() }
     operation.start()
     operation.cancel()
@@ -90,11 +90,11 @@ class OperationKeyValueObserverTests: XCTestCase {
 
     do {
       let operation = SleepyAsyncOperation(interval1: 1, interval2: 3, interval3: 1)
-      let keyValueObserver = OperationObserverController(operation: operation)
+      let keyValueObserverController = OperationObserverController(operation: operation)
       let observer = MockObserver()
       let expectation1 = expectation(description: "\(#function)\(#line)")
 
-      keyValueObserver.registerObserver(observer)
+      keyValueObserverController.registerObserver(observer)
       operation.addCompletionBlock { expectation1.fulfill() }
       operation.cancel()
       operation.cancel()
@@ -108,11 +108,11 @@ class OperationKeyValueObserverTests: XCTestCase {
 
     do {
       let operation = BlockOperation(block: { sleep(1) })
-      let keyValueObserver = OperationObserverController(operation: operation)
+      let keyValueObserverController = OperationObserverController(operation: operation)
       let observer = MockObserver()
       let expectation1 = expectation(description: "\(#function)\(#line)")
 
-      keyValueObserver.registerObserver(observer)
+      keyValueObserverController.registerObserver(observer)
       operation.addCompletionBlock { expectation1.fulfill() }
       operation.cancel()
       operation.cancel()
@@ -129,11 +129,11 @@ class OperationKeyValueObserverTests: XCTestCase {
      guard #available(iOS 11.0, macOS 10.13, tvOS 11.0, watchOS 4.0, *) else { return }
 
     let operation = SleepyAsyncOperation(interval1: 1, interval2: 3, interval3: 1)
-    let keyValueObserver = OperationObserverController(operation: operation)
+    let keyValueObserverController = OperationObserverController(operation: operation)
     let observer = MockObserver()
     let expectation1 = expectation(description: "\(#function)\(#line)")
 
-    keyValueObserver.registerObserver(observer)
+    keyValueObserverController.registerObserver(observer)
     operation.addCompletionBlock { expectation1.fulfill() }
     operation.start()
     operation.cancel()

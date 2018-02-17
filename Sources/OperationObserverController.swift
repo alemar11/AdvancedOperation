@@ -27,9 +27,27 @@
 
   @available(iOS 11.0, macOS 10.13, tvOS 11.0, watchOS 4.0, *) // https://forums.developer.apple.com/thread/79683
   public class OperationObserverController {
+
+    /// Observed operation
     let operation: Operation
 
-    private(set) var observers = [OperationObserving]()
+    // MARK: - Observers
+
+    /// Operation observers
+    private(set) var observers = [OperationObservingType]()
+
+    internal var willExecuteObservers: [OperationWillExecuteObserving] {
+      return observers.flatMap { $0 as? OperationWillExecuteObserving }
+    }
+
+    internal var didCancelObservers: [OperationDidCancelObserving] {
+      return observers.flatMap { $0 as? OperationDidCancelObserving }
+    }
+
+    internal var didFinishObservers: [OperationDidFinishObserving] {
+      return observers.flatMap { $0 as? OperationDidFinishObserving }
+    }
+
     private var keyValueObservers = [NSKeyValueObservation]()
 
     public convenience init(operation: Operation, observers: OperationObserving...) {
@@ -39,6 +57,8 @@
         self.registerObserver(observer)
       }
     }
+
+    // MARK: Initializers
 
     public init(operation: Operation) {
       self.operation = operation
@@ -53,7 +73,7 @@
         guard let old = change.oldValue, old == false else { return }
         guard let new = change.newValue, new == true else { return }
 
-        for observer in self.observers {
+        for observer in self.willExecuteObservers {
           observer.operationWillExecute(operation: operation) //TODO: use .prior?
         }
 
@@ -64,14 +84,14 @@
         guard let `self` = self else { return }
         guard let old = change.oldValue, old == false else { return }
         guard let new = change.newValue, new == true else { return }
-
+ 
         // collects errors if it's an AdvancedOperation
         var errors = [Error]()
         if let advancedOperation = operation as? AdvancedOperation {
           errors = advancedOperation.errors
         }
 
-        for observer in self.observers {
+        for observer in self.didFinishObservers {
           observer.operationDidFinish(operation: operation, withErrors: errors)
         }
 
@@ -89,7 +109,7 @@
 
         guard let new = change.newValue, new == true else { return }
 
-        for observer in self.observers {
+        for observer in self.didCancelObservers {
           observer.operationDidCancel(operation: self.operation, withErrors: errors)
         }
 
@@ -99,7 +119,7 @@
     }
 
     /// Registers a given observer.
-    public func registerObserver(_ observer: OperationObserving) {
+    public func registerObserver(_ observer: OperationObservingType) { //TODO: use OperationObservingType
       observers.append(observer)
     }
 
@@ -109,11 +129,11 @@
     }
 
     /// Removes an observer with a specified `identifier`.
-    public func removeObserver(withIdentifier identifier: String) {
-      for (index, observer) in observers.enumerated() where observer.identifier == identifier {
-        observers.remove(at: index)
-      }
-    }
+//    public func removeObserver(withIdentifier identifier: String) {
+//      for (index, observer) in observers.enumerated() where observer.identifier == identifier {
+//        observers.remove(at: index)
+//      }
+//    }
 
   }
 
