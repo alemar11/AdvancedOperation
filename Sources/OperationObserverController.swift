@@ -119,7 +119,7 @@
     }
 
     /// Registers a given observer.
-    public func registerObserver(_ observer: OperationObservingType) { //TODO: use OperationObservingType
+    public func registerObserver(_ observer: OperationObservingType) {
       observers.append(observer)
     }
 
