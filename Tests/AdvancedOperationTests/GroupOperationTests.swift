@@ -26,6 +26,28 @@
   import XCTest
   @testable import AdvancedOperation
 
+  extension GroupOperationTests {
+
+    static var allTests = [
+      ("testStandardFlow", testStandardFlow),
+      ("testOperationCancelled", testOperationCancelled),
+      ("testBlockOperationCancelled", testBlockOperationCancelled),
+      ("testGroupOperationCancelled", testGroupOperationCancelled),
+      ("testGroupOperationCancelledWithError", testGroupOperationCancelledWithError),
+      ("testGroupOperationWithWaitUntilFinished", testGroupOperationWithWaitUntilFinished),
+      ("testNestedGroupOperations", testNestedGroupOperations),
+      ("testCancelledGroupOperationInNestedGroupOperations", testCancelledGroupOperationInNestedGroupOperations),
+      ("testGroupOperationsCancelled", testGroupOperationsCancelled),
+      ("testFailedOperationInNestedGroupOperations", testFailedOperationInNestedGroupOperations),
+      ("testFailedAndCancelledOperationsInNestedGroupOperations", testFailedAndCancelledOperationsInNestedGroupOperations),
+      ("testMultipleFailedOperationsInNestedGroupOperations", testMultipleFailedOperationsInNestedGroupOperations),
+      ("testMaxConcurrentOperationCount", testMaxConcurrentOperationCount),
+      ("testQualityOfService", testQualityOfService),
+      ("testObservers", testObservers)
+    ]
+
+  }
+
   class GroupOperationTests: XCTestCase {
 
     func testStandardFlow() {
@@ -358,13 +380,25 @@
       XCTAssertEqual(group.qualityOfService, .userInitiated)
     }
 
-    /**
-     TODO:
-     - failing nested group operation
-     - cancelled group operation
-     - cancelled nested group operation
-     - add observer for didFinish with expection fulfill
-     **/
+    func testObservers() {
+      let errors = [MockError.test, MockError.failed, MockError.failed]
+      let operation1 = FailingAsyncOperation(errors: errors)
+      let operation2 = SleepyOperation()
+      let group = GroupOperation(operations: operation1, operation2)
+      let exepectation1 = expectation(description: "\(#function)\(#line)")
+
+      let observer = MockObserver()
+      group.addObserver(observer: observer)
+
+      group.addCompletionBlock { exepectation1.fulfill() }
+      group.start()
+      group.qualityOfService = .userInitiated
+      waitForExpectations(timeout: 10)
+
+      XCTAssertEqual(observer.willExecutetCount, 1)
+      XCTAssertEqual(observer.didFinishCount, 1)
+      XCTAssertEqual(observer.didCancelCount, 0)
+    }
 
   }
 
