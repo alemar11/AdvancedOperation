@@ -33,8 +33,6 @@ public class AdvancedOperation: Operation {
 
   public override var isReady: Bool {
     // https://stackoverflow.com/questions/19257458/nsoperation-ready-but-not-starting-on-ios-7
-    print("super.isReady: \(super.isReady)\n")
-    print("isReady: \(_ready)\n")
     return super.isReady && _ready
   }
 
