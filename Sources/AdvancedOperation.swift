@@ -73,7 +73,7 @@ public class AdvancedOperation: Operation {
 
   private(set) var observers = [OperationObserving]()
 
-  internal var willExecutedObservers: [OperationWillExecuteObserving] {
+  internal var willExecuteObservers: [OperationWillExecuteObserving] {
     return observers.flatMap { $0 as OperationWillExecuteObserving }
   }
 
