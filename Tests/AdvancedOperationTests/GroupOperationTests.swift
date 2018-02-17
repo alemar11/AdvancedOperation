@@ -345,6 +345,20 @@
       XCTAssertEqual(group.maxConcurrentOperationCount, 4)
     }
 
+    func testQualityOfService() {
+      let operation1 = SleepyOperation()
+      let group = GroupOperation(operations: operation1)
+      let exepectation1 = expectation(description: "\(#function)\(#line)")
+      XCTAssertEqual(group.qualityOfService, .default)
+      group.addCompletionBlock { exepectation1.fulfill() }
+
+      group.start()
+      group.qualityOfService = .userInitiated
+      waitForExpectations(timeout: 10)
+
+      XCTAssertEqual(group.qualityOfService, .userInitiated)
+    }
+
     /**
      TODO:
      - failing nested group operation

@@ -149,7 +149,9 @@ internal class MockObserver: OperationObserving {
 internal class MockOperationQueueDelegate: AdvancedOperationQueueDelegate {
 
   var willAddOperationHandler: ((AdvancedOperationQueue, Operation) -> Void)? = nil
-  var willPerformOperationHandler: ((AdvancedOperationQueue, Operation) -> Void)? = nil
+  var didAddOperationHandler: ((AdvancedOperationQueue, Operation) -> Void)? = nil
+
+  var willExecuteOperationHandler: ((AdvancedOperationQueue, Operation) -> Void)? = nil
   var didFinishOperationHandler: ((AdvancedOperationQueue, Operation, [Error]) -> Void)? = nil
   var didCancelOperationHandler: ((AdvancedOperationQueue, Operation, [Error]) -> Void)? = nil
 
@@ -157,17 +159,17 @@ internal class MockOperationQueueDelegate: AdvancedOperationQueueDelegate {
     self.willAddOperationHandler?(operationQueue, operation)
   }
 
-  func operationQueue(operationQueue: AdvancedOperationQueue, didAddOperation operation: Operation) {}
+  func operationQueue(operationQueue: AdvancedOperationQueue, didAddOperation operation: Operation) {
+    self.didAddOperationHandler?(operationQueue, operation)
+  }
 
   func operationQueue(operationQueue: AdvancedOperationQueue, operationWillExecute operation: Operation) {
-    self.willPerformOperationHandler?(operationQueue, operation)
+    self.willExecuteOperationHandler?(operationQueue, operation)
   }
 
   func operationQueue(operationQueue: AdvancedOperationQueue, operationDidFinish operation: Operation, withErrors errors: [Error]) {
     self.didFinishOperationHandler?(operationQueue, operation, errors)
   }
-
-  func operationQueue(operationQueue: AdvancedOperationQueue, operationWillCancel operation: Operation, withErrors errors: [Error]) {}
 
   func operationQueue(operationQueue: AdvancedOperationQueue, operationDidCancel operation: Operation, withErrors errors: [Error]) {
     self.didCancelOperationHandler?(operationQueue, operation, errors)

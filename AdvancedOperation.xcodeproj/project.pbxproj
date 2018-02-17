@@ -222,6 +222,7 @@
 		230B47FD200EABEE00F46852 /* AdvancedOperationTests */ = {
 			isa = PBXGroup;
 			children = (
+				23A813B52020D111008A98E0 /* AdvancedBlockOperationTests.swift */,
 				23856174200A87070061BAA1 /* AdvancedOperationQueueTests.swift */,
 				23F24D1D200771FA00B25A03 /* AdvancedOperationTests.swift */,
 				23F24D2B2007A33F00B25A03 /* DelayOperationTests.swift */,
@@ -230,7 +231,6 @@
 				23856178200A873C0061BAA1 /* Mocks.swift */,
 				231FE727201210300077728C /* OperationKeyValueObserverTests.swift */,
 				23A56BAB200F984400509A65 /* XCTestCase+Utils.swift */,
-				23A813B52020D111008A98E0 /* AdvancedBlockOperationTests.swift */,
 			);
 			path = AdvancedOperationTests;
 			sourceTree = "<group>";
