@@ -28,7 +28,7 @@
 
   class GroupOperationTests: XCTestCase {
 
-    func testFlow() {
+    func testStandardFlow() {
       let expectation1 = expectation(description: "\(#function)\(#line)")
       let operation1 = SleepyAsyncOperation()
       operation1.addCompletionBlock { expectation1.fulfill() }
@@ -279,7 +279,6 @@
       group.start()
       waitForExpectations(timeout: 10)
       XCTAssertOperationFinished(operation: group, errors: errors)
-
     }
 
     func testFailedAndCancelledOperationsInNestedGroupOperations() {
