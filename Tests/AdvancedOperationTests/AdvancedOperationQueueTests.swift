@@ -35,7 +35,7 @@ extension AdvancedOperationQueueTests {
 
 class AdvancedOperationQueueTests: XCTestCase {
 
-// FIXME: timeout with waitUntilFinished on Travis CI
+  // FIXME: timeout with waitUntilFinished on Travis CI
 
   func testQueueWithAdvancedOperationsUsingWaitUntilFinished() {
     let queue = AdvancedOperationQueue()
@@ -47,77 +47,94 @@ class AdvancedOperationQueueTests: XCTestCase {
     let operation2 = SleepyAsyncOperation()
     let operation3 = SleepyAsyncOperation()
     let operation4 = DelayOperation(interval: 1)
-    let lock = NSLock()
 
-    var willAddCount = 0
+    let willAddExpectation1 = expectation(description: "\(#function)\(#line)")
+    let willAddExpectation2 = expectation(description: "\(#function)\(#line)")
+    let willAddExpectation3 = expectation(description: "\(#function)\(#line)")
+    let willAddExpectation4 = expectation(description: "\(#function)\(#line)")
+
     delegate.willAddOperationHandler = { (queue, operation) in
       XCTAssertTrue(queue == queue)
-      switch willAddCount {
-      case 0:
-        XCTAssertTrue(operation == operation1)
-      case 1:
-        XCTAssertTrue(operation == operation2)
-      case 2:
-        XCTAssertTrue(operation == operation3)
-      case 3:
-        XCTAssertTrue(operation == operation4)
-      default:
-        XCTFail("Added too many operations: \(willAddCount).")
+      switch (operation) {
+      case operation1: willAddExpectation1.fulfill()
+      case operation2: willAddExpectation2.fulfill()
+      case operation3: willAddExpectation3.fulfill()
+      case operation4: willAddExpectation4.fulfill()
+      default: XCTFail("Added too many operations.")
       }
-      willAddCount += 1
     }
 
-    var didAddCount = 0
+    let didAddExpectation1 = expectation(description: "\(#function)\(#line)")
+    let didAddExpectation2 = expectation(description: "\(#function)\(#line)")
+    let didAddExpectation3 = expectation(description: "\(#function)\(#line)")
+    let didAddExpectation4 = expectation(description: "\(#function)\(#line)")
+
     delegate.didAddOperationHandler = { (queue, operation) in
       XCTAssertTrue(queue == queue)
-      switch didAddCount {
-      case 0:
-        XCTAssertTrue(operation == operation1)
-      case 1:
-        XCTAssertTrue(operation == operation2)
-      case 2:
-        XCTAssertTrue(operation == operation3)
-      case 3:
-        XCTAssertTrue(operation == operation4)
-      default:
-        XCTFail("Added too many operations.")
+      switch (operation) {
+      case operation1: didAddExpectation1.fulfill()
+      case operation2: didAddExpectation2.fulfill()
+      case operation3: didAddExpectation3.fulfill()
+      case operation4: didAddExpectation4.fulfill()
+      default: XCTFail("Added too many operations.")
       }
-      didAddCount += 1
     }
 
-    var willExecuteCount = 0
+    let willExecuteExpectation1 = expectation(description: "\(#function)\(#line)")
+    let willExecuteExpectation2 = expectation(description: "\(#function)\(#line)")
+    let willExecuteExpectation3 = expectation(description: "\(#function)\(#line)")
+    let willExecuteExpectation4 = expectation(description: "\(#function)\(#line)")
+
     delegate.willExecuteOperationHandler = { (queue, operation) in
-      lock.lock()
-      willExecuteCount += 1
       XCTAssertTrue(queue == queue)
-      lock.unlock()
+      switch (operation) {
+      case operation1: willExecuteExpectation1.fulfill()
+      case operation2: willExecuteExpectation2.fulfill()
+      case operation3: willExecuteExpectation3.fulfill()
+      case operation4: willExecuteExpectation4.fulfill()
+      default: XCTFail("Too many executions.")
+      }
     }
 
-    var didFinishCount = 0
+    let didFinishExpectation1 = expectation(description: "\(#function)\(#line)")
+    let didFinishExpectation2 = expectation(description: "\(#function)\(#line)")
+    let didFinishExpectation3 = expectation(description: "\(#function)\(#line)")
+    let didFinishExpectation4 = expectation(description: "\(#function)\(#line)")
+
     delegate.didFinishOperationHandler = { (queue, operation, errors) in
-      lock.lock()
-      didFinishCount += 1
       XCTAssertTrue(queue == queue)
-      XCTAssertEqual(errors.count, 0)
-      lock.unlock()
+      switch (operation) {
+      case operation1: didFinishExpectation1.fulfill()
+      case operation2: didFinishExpectation2.fulfill()
+      case operation3: didFinishExpectation3.fulfill()
+      case operation4: didFinishExpectation4.fulfill()
+      default: XCTFail("Too many finished operations.")
+      }
     }
 
-    var didCancelCount = 0
+    let didCancelExpectation1 = expectation(description: "\(#function)\(#line)")
+    let didCancelExpectation2 = expectation(description: "\(#function)\(#line)")
+    let didCancelExpectation3 = expectation(description: "\(#function)\(#line)")
+    let didCancelExpectation4 = expectation(description: "\(#function)\(#line)")
+
+    didCancelExpectation1.isInverted = true
+    didCancelExpectation2.isInverted = true
+    didCancelExpectation3.isInverted = true
+    didCancelExpectation4.isInverted = true
+
     delegate.didCancelOperationHandler = { (queue, operation, errors) in
-      lock.lock()
-      didCancelCount += 1
       XCTAssertTrue(queue == queue)
-      XCTAssertEqual(errors.count, 0)
-      lock.unlock()
+      switch (operation) {
+      case operation1: didCancelExpectation1.fulfill()
+      case operation2: didCancelExpectation2.fulfill()
+      case operation3: didCancelExpectation3.fulfill()
+      case operation4: didCancelExpectation4.fulfill()
+      default: XCTFail("Too many cancelled operations.")
+      }
     }
 
     queue.addOperations([operation1, operation2, operation3, operation4], waitUntilFinished: true)
-
-    XCTAssertEqual(willAddCount, 4)
-    XCTAssertEqual(didAddCount, 4)
-    XCTAssertEqual(willExecuteCount, 4)
-    XCTAssertEqual(didFinishCount, 4)
-    XCTAssertEqual(didCancelCount, 0)
+    waitForExpectations(timeout: 0)
   }
 
   func testQueueWithAdvancedOperationsUsingWaitForExpectations() {
@@ -337,115 +354,115 @@ class AdvancedOperationQueueTests: XCTestCase {
     XCTAssertEqual(didCancelCount, 0)
   }
 
-    func testQueueWithCancel() {
-      let queue = AdvancedOperationQueue()
-      let delegate = MockOperationQueueDelegate()
+  func testQueueWithCancel() {
+    let queue = AdvancedOperationQueue()
+    let delegate = MockOperationQueueDelegate()
 
-      queue.delegate = delegate
-      queue.isSuspended = true
+    queue.delegate = delegate
+    queue.isSuspended = true
 
-      let operation1 = SleepyOperation()
-      let operation2 = SleepyAsyncOperation(interval1: 0, interval2: 1, interval3: 0)
-      let operation3 = SleepyOperation()
-      let operation4 = SleepyOperation()
+    let operation1 = SleepyOperation()
+    let operation2 = SleepyAsyncOperation(interval1: 0, interval2: 1, interval3: 0)
+    let operation3 = SleepyOperation()
+    let operation4 = SleepyOperation()
 
-      let expectation1 = expectation(description: "\(#function)\(#line)")
-      let expectation2 = expectation(description: "\(#function)\(#line)")
-      let expectation3 = expectation(description: "\(#function)\(#line)")
-      let expectation4 = expectation(description: "\(#function)\(#line)")
+    let expectation1 = expectation(description: "\(#function)\(#line)")
+    let expectation2 = expectation(description: "\(#function)\(#line)")
+    let expectation3 = expectation(description: "\(#function)\(#line)")
+    let expectation4 = expectation(description: "\(#function)\(#line)")
 
-      var willAddCount = 0
-      delegate.willAddOperationHandler = { (queue, operation) in
-        XCTAssertTrue(queue == queue)
-        switch willAddCount {
-        case 0:
-          XCTAssertTrue(operation == operation1)
-        case 1:
-          XCTAssertTrue(operation == operation2)
-        case 2:
-          XCTAssertTrue(operation == operation3)
-        case 3:
-          XCTAssertTrue(operation == operation4)
-        default:
-          XCTFail("Added too many operations.")
-        }
-        willAddCount += 1
+    var willAddCount = 0
+    delegate.willAddOperationHandler = { (queue, operation) in
+      XCTAssertTrue(queue == queue)
+      switch willAddCount {
+      case 0:
+        XCTAssertTrue(operation == operation1)
+      case 1:
+        XCTAssertTrue(operation == operation2)
+      case 2:
+        XCTAssertTrue(operation == operation3)
+      case 3:
+        XCTAssertTrue(operation == operation4)
+      default:
+        XCTFail("Added too many operations.")
       }
+      willAddCount += 1
+    }
 
-      var didAddCount = 0
-      delegate.didAddOperationHandler = { (queue, operation) in
-        XCTAssertTrue(queue == queue)
-        switch didAddCount {
-        case 0:
-          XCTAssertTrue(operation == operation1)
-        case 1:
-          XCTAssertTrue(operation == operation2)
-        case 2:
-          XCTAssertTrue(operation == operation3)
-        case 3:
-          XCTAssertTrue(operation == operation4)
-        default:
-          XCTFail("Added too many operations.")
-        }
-        didAddCount += 1
+    var didAddCount = 0
+    delegate.didAddOperationHandler = { (queue, operation) in
+      XCTAssertTrue(queue == queue)
+      switch didAddCount {
+      case 0:
+        XCTAssertTrue(operation == operation1)
+      case 1:
+        XCTAssertTrue(operation == operation2)
+      case 2:
+        XCTAssertTrue(operation == operation3)
+      case 3:
+        XCTAssertTrue(operation == operation4)
+      default:
+        XCTFail("Added too many operations.")
       }
+      didAddCount += 1
+    }
 
-      let lock = NSLock()
+    let lock = NSLock()
 
-      var willExecuteCount = 0
-      delegate.willExecuteOperationHandler = { (queue, operation) in
-        lock.lock()
-        willExecuteCount += 1
-        XCTAssertTrue(queue == queue)
-        lock.unlock()
-        if willExecuteCount%2 == 0 {
-          //sleep(2)
-          operation.cancel()
-        }
+    var willExecuteCount = 0
+    delegate.willExecuteOperationHandler = { (queue, operation) in
+      lock.lock()
+      willExecuteCount += 1
+      XCTAssertTrue(queue == queue)
+      lock.unlock()
+      if willExecuteCount%2 == 0 {
+        //sleep(2)
+        operation.cancel()
       }
+    }
 
-      var didFinishCount = 0
-      delegate.didFinishOperationHandler = { (queue, operation, errors) in
-        lock.lock()
-        didFinishCount += 1
-        XCTAssertTrue(queue == queue)
-        XCTAssertEqual(errors.count, 0)
+    var didFinishCount = 0
+    delegate.didFinishOperationHandler = { (queue, operation, errors) in
+      lock.lock()
+      didFinishCount += 1
+      XCTAssertTrue(queue == queue)
+      XCTAssertEqual(errors.count, 0)
 
-        if operation === operation1 {
-          expectation1.fulfill()
-        } else if operation === operation2 {
-          expectation2.fulfill()
-        } else if operation === operation3 {
-          expectation3.fulfill()
-        } else if operation === operation4 {
-          expectation4.fulfill()
-        } else {
-          XCTFail("Undefined operation")
-        }
-        lock.unlock()
+      if operation === operation1 {
+        expectation1.fulfill()
+      } else if operation === operation2 {
+        expectation2.fulfill()
+      } else if operation === operation3 {
+        expectation3.fulfill()
+      } else if operation === operation4 {
+        expectation4.fulfill()
+      } else {
+        XCTFail("Undefined operation")
       }
+      lock.unlock()
+    }
 
-      var didCancelCount = 0
-      delegate.didCancelOperationHandler = { (queue, operation, errors) in
-        lock.lock()
-        didCancelCount += 1
-        XCTAssertTrue(queue == queue)
-        XCTAssertEqual(errors.count, 0)
-        lock.unlock()
-      }
+    var didCancelCount = 0
+    delegate.didCancelOperationHandler = { (queue, operation, errors) in
+      lock.lock()
+      didCancelCount += 1
+      XCTAssertTrue(queue == queue)
+      XCTAssertEqual(errors.count, 0)
+      lock.unlock()
+    }
 
-      queue.addOperation(operation1)
-      queue.addOperation(operation2)
-      queue.addOperation(operation3)
-      queue.addOperation(operation4)
-      queue.isSuspended = false
+    queue.addOperation(operation1)
+    queue.addOperation(operation2)
+    queue.addOperation(operation3)
+    queue.addOperation(operation4)
+    queue.isSuspended = false
 
-      waitForExpectations(timeout: 10)
+    waitForExpectations(timeout: 10)
 
-      XCTAssertEqual(willAddCount, 4)
-      XCTAssertEqual(didAddCount, 4)
-      XCTAssertEqual(willExecuteCount, 4)
-      XCTAssertEqual(didFinishCount, 4)
-      XCTAssertEqual(didCancelCount, 2)
-}
+    XCTAssertEqual(willAddCount, 4)
+    XCTAssertEqual(didAddCount, 4)
+    XCTAssertEqual(willExecuteCount, 4)
+    XCTAssertEqual(didFinishCount, 4)
+    XCTAssertEqual(didCancelCount, 2)
+  }
 }
