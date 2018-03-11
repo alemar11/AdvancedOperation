@@ -37,15 +37,15 @@
     private(set) var observers = [OperationObservingType]()
 
     internal var willExecuteObservers: [OperationWillExecuteObserving] {
-      return observers.flatMap { $0 as? OperationWillExecuteObserving }
+      return observers.compactMap { $0 as? OperationWillExecuteObserving }
     }
 
     internal var didCancelObservers: [OperationDidCancelObserving] {
-      return observers.flatMap { $0 as? OperationDidCancelObserving }
+      return observers.compactMap { $0 as? OperationDidCancelObserving }
     }
 
     internal var didFinishObservers: [OperationDidFinishObserving] {
-      return observers.flatMap { $0 as? OperationDidFinishObserving }
+      return observers.compactMap { $0 as? OperationDidFinishObserving }
     }
 
     private var keyValueObservers = [NSKeyValueObservation]()
