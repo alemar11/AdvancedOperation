@@ -33,6 +33,19 @@ public protocol OperationCondition {
   var isMutuallyExclusive: Bool { get }
 }
 
+public enum ConditionResult {
+
+  /// Indicates that the condition is satisfied
+  case satisfied
+
+  /// Indicates that the condition failed, but can be ignored
+  case ignored
+
+  /// Indicates that the condition failed with an associated error.
+  case failed
+  //case failed(Error)
+}
+
 public class Condition: Hashable & Equatable {
 
   public var hashValue: Int {
@@ -48,12 +61,43 @@ public class Condition: Hashable & Equatable {
   public var category: String { return String(describing: type(of: self)) }
 
   public var mutuallyExclusive = false
+
+  public func evaluate() -> ConditionResult {
+    assertionFailure("ConditionOperation must be subclassed, and \(#function) overridden.")
+    return .ignored
+  }
 }
 
-public class MutuallyExclusiveCondition<T>: Condition {
+final public class MutuallyExclusiveCondition<T>: Condition {
   public override init() {
     super.init()
     //category = "MutuallyExclusiveCondition<\(T.self)>"
     mutuallyExclusive = true
+  }
+
+  public override func evaluate() -> ConditionResult {
+    return .satisfied
+  }
+}
+
+final public class NotFailedDependencyCondition: Condition {
+  public override init() {
+    super.init()
+    //category = "MutuallyExclusiveCondition<\(T.self)>"
+    mutuallyExclusive = true
+  }
+
+  public override func evaluate() -> ConditionResult {
+    guard let operation = operation else {
+      return .ignored // TODO, missing evaluating operation
+    }
+    let advancedOperations = operation.dependencies.compactMap { $0 as? AdvancedOperation }
+    let finishedWithErrors = advancedOperations.filter { $0.isFinished && $0.errors.count > 0 }
+    let cancelledWithErrors = advancedOperations.filter { $0.isCancelled && $0.errors.count > 0 }
+
+    if !finishedWithErrors.isEmpty || !cancelledWithErrors.isEmpty {
+      return .failed
+    }
+    return .satisfied
   }
 }
