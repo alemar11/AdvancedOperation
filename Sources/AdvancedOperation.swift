@@ -69,6 +69,10 @@ public class AdvancedOperation: Operation {
     }
   }
 
+  // MARK: - Conditions
+
+  public private(set) var conditions = Set<Condition>()
+
   // MARK: - Observers
 
   private(set) var observers = [OperationObservingType]()
@@ -147,6 +151,14 @@ public class AdvancedOperation: Operation {
     if !_finished {
       _finished = true // this will fire the completionBlock via KVO
     }
+  }
+
+  // MARK: - Add Condition
+
+  public func addCondition(condition: Condition) {
+    assert(!isExecuting, "Cannot add conditions after execution has begun.")
+
+    conditions.insert(condition)
   }
 
   // MARK: - Observer
