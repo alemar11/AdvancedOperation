@@ -33,6 +33,9 @@ public class AdvancedOperation: Operation {
 
   public override var isReady: Bool {
     // https://stackoverflow.com/questions/19257458/nsoperation-ready-but-not-starting-on-ios-7
+    if !_ready {
+      evaluateConditions()
+    }
     return super.isReady && _ready
   }
 
@@ -91,23 +94,23 @@ public class AdvancedOperation: Operation {
 
   // MARK: - Errors
 
-  private(set) var errors = [Error]()
+  public private(set) var errors = [Error]()
 
   // MARK: - Initialization
 
   public override init() {
     super.init()
-    defer { // use defer to fire the KVO
+    //defer { // use defer to fire KVO
       _ready = true
-    }
+    //}
   }
 
   // MARK: - Methods
 
   public final override func start() {
 
-    // Bail out early if cancelled.
-    guard !isCancelled else {
+    // Bail out early if cancelled or there are some errors.
+    guard errors.isEmpty && !isCancelled else {
       finish()
       return
     }
@@ -157,8 +160,12 @@ public class AdvancedOperation: Operation {
 
   public func addCondition(condition: Condition) {
     assert(!isExecuting, "Cannot add conditions after execution has begun.")
-
+    _ready = false
     conditions.insert(condition)
+  }
+
+  private func evaluateConditions() {
+    _ready = true
   }
 
   // MARK: - Observer
