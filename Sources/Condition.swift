@@ -23,16 +23,6 @@
 
 import Foundation
 
-public protocol OperationCondition {
-  /// The name of the condition.
-  var name: String { get }
-
-   /// A flag to indicate whether this condition is mutually exclusive. Meaning that only one condition can be evaluated at a time.
-
-   /// Other `Operation` instances which have this condition will wait in a `.Pending` state - i.e. not get executed.
-  var isMutuallyExclusive: Bool { get }
-}
-
 public enum ConditionResult {
 
   /// Indicates that the condition is satisfied

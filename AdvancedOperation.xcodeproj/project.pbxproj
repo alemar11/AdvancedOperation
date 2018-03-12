@@ -43,6 +43,10 @@
 		231FE728201210300077728C /* OperationKeyValueObserverTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 231FE727201210300077728C /* OperationKeyValueObserverTests.swift */; };
 		231FE729201210300077728C /* OperationKeyValueObserverTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 231FE727201210300077728C /* OperationKeyValueObserverTests.swift */; };
 		231FE72A201210300077728C /* OperationKeyValueObserverTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 231FE727201210300077728C /* OperationKeyValueObserverTests.swift */; };
+		2323B9C92056A04400E55010 /* OperationConditionEvaluator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2323B9C82056A04400E55010 /* OperationConditionEvaluator.swift */; };
+		2323B9CA2056A04500E55010 /* OperationConditionEvaluator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2323B9C82056A04400E55010 /* OperationConditionEvaluator.swift */; };
+		2323B9CB2056A04500E55010 /* OperationConditionEvaluator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2323B9C82056A04400E55010 /* OperationConditionEvaluator.swift */; };
+		2323B9CC2056A04500E55010 /* OperationConditionEvaluator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2323B9C82056A04400E55010 /* OperationConditionEvaluator.swift */; };
 		2341308C1F9605F5002BE7FC /* AdvancedOperation.h in Headers */ = {isa = PBXBuildFile; fileRef = 2341308A1F9605F5002BE7FC /* AdvancedOperation.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		234130BC1F96076A002BE7FC /* AdvancedOperation.h in Headers */ = {isa = PBXBuildFile; fileRef = 2341308A1F9605F5002BE7FC /* AdvancedOperation.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		234130BD1F96076D002BE7FC /* AdvancedOperation.h in Headers */ = {isa = PBXBuildFile; fileRef = 2341308A1F9605F5002BE7FC /* AdvancedOperation.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -144,6 +148,7 @@
 		2313328D2055446100F205A3 /* ExclusivityManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExclusivityManager.swift; sourceTree = "<group>"; };
 		23133292205548AA00F205A3 /* Condition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Condition.swift; sourceTree = "<group>"; };
 		231FE727201210300077728C /* OperationKeyValueObserverTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OperationKeyValueObserverTests.swift; sourceTree = "<group>"; };
+		2323B9C82056A04400E55010 /* OperationConditionEvaluator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OperationConditionEvaluator.swift; sourceTree = "<group>"; };
 		234130871F9605F5002BE7FC /* AdvancedOperation.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = AdvancedOperation.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		2341308A1F9605F5002BE7FC /* AdvancedOperation.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AdvancedOperation.h; sourceTree = "<group>"; };
 		2341308B1F9605F5002BE7FC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -288,6 +293,7 @@
 				23F24D2F2007B0D200B25A03 /* OperationObserving.swift */,
 				2313328D2055446100F205A3 /* ExclusivityManager.swift */,
 				23133292205548AA00F205A3 /* Condition.swift */,
+				2323B9C82056A04400E55010 /* OperationConditionEvaluator.swift */,
 			);
 			path = Sources;
 			sourceTree = "<group>";
@@ -650,6 +656,7 @@
 				2372507D200524860000A442 /* AdvancedOperation.swift in Sources */,
 				23F24D22200799B800B25A03 /* Operation+Utils.swift in Sources */,
 				2313328E2055446100F205A3 /* ExclusivityManager.swift in Sources */,
+				2323B9C92056A04400E55010 /* OperationConditionEvaluator.swift in Sources */,
 				23A813B12020CF1E008A98E0 /* AdvancedBlockOperation.swift in Sources */,
 				23F24D302007B0D200B25A03 /* OperationObserving.swift in Sources */,
 				23665C0F200B6E4800A6C921 /* OperationObserverController.swift in Sources */,
@@ -668,6 +675,7 @@
 				2372507E200524860000A442 /* AdvancedOperation.swift in Sources */,
 				23F24D23200799B800B25A03 /* Operation+Utils.swift in Sources */,
 				2313328F2055446100F205A3 /* ExclusivityManager.swift in Sources */,
+				2323B9CA2056A04500E55010 /* OperationConditionEvaluator.swift in Sources */,
 				23A813B22020CF1E008A98E0 /* AdvancedBlockOperation.swift in Sources */,
 				23F24D312007B0D200B25A03 /* OperationObserving.swift in Sources */,
 				23665C10200B6E4800A6C921 /* OperationObserverController.swift in Sources */,
@@ -686,6 +694,7 @@
 				2372507F200524860000A442 /* AdvancedOperation.swift in Sources */,
 				23F24D24200799B800B25A03 /* Operation+Utils.swift in Sources */,
 				231332902055446100F205A3 /* ExclusivityManager.swift in Sources */,
+				2323B9CB2056A04500E55010 /* OperationConditionEvaluator.swift in Sources */,
 				23A813B32020CF1E008A98E0 /* AdvancedBlockOperation.swift in Sources */,
 				23F24D322007B0D200B25A03 /* OperationObserving.swift in Sources */,
 				23665C11200B6E4800A6C921 /* OperationObserverController.swift in Sources */,
@@ -704,6 +713,7 @@
 				23725080200524860000A442 /* AdvancedOperation.swift in Sources */,
 				23F24D25200799B800B25A03 /* Operation+Utils.swift in Sources */,
 				231332912055446100F205A3 /* ExclusivityManager.swift in Sources */,
+				2323B9CC2056A04500E55010 /* OperationConditionEvaluator.swift in Sources */,
 				23A813B42020CF1E008A98E0 /* AdvancedBlockOperation.swift in Sources */,
 				23F24D332007B0D200B25A03 /* OperationObserving.swift in Sources */,
 				23665C12200B6E4800A6C921 /* OperationObserverController.swift in Sources */,

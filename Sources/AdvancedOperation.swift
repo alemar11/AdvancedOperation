@@ -34,7 +34,7 @@ public class AdvancedOperation: Operation {
   public override var isReady: Bool {
     // https://stackoverflow.com/questions/19257458/nsoperation-ready-but-not-starting-on-ios-7
     if !_ready {
-      evaluateConditions()
+      evaluateConditions() //async
     }
     return super.isReady && _ready
   }
@@ -74,7 +74,7 @@ public class AdvancedOperation: Operation {
 
   // MARK: - Conditions
 
-  public private(set) var conditions = Set<Condition>()
+  public private(set) var conditions = [OperationCondition]() //TODO : set?
 
   // MARK: - Observers
 
@@ -144,28 +144,35 @@ public class AdvancedOperation: Operation {
     didCancel()
   }
 
-  public func finish(errors: [Error] = []) {
+  fileprivate var _finishing = false
+  public final func finish(errors: [Error] = []) {
+    guard !_finishing else { return }
+    _finishing = true
+
     self.errors.append(contentsOf: errors)
 
-    if _executing { // avoid unnecessay KVO firings.
+    //if _executing { // avoid unnecessay KVO firings.
       _executing = false
-    }
+    //}
 
-    if !_finished {
+    //if !_finished {
       _finished = true // this will fire the completionBlock via KVO
-    }
+    //}
   }
 
   // MARK: - Add Condition
 
-  public func addCondition(condition: Condition) {
+  public func addCondition(condition: OperationCondition) {
     assert(!isExecuting, "Cannot add conditions after execution has begun.")
     _ready = false
-    conditions.insert(condition)
+    conditions.append(condition)
   }
 
   private func evaluateConditions() {
-    _ready = true
+    OperationConditionEvaluator.evaluate(conditions, operation: self) { [weak self] errors in
+      self?.errors.append(contentsOf: errors)
+      self?._ready = true
+    }
   }
 
   // MARK: - Observer
