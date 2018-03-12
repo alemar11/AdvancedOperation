@@ -30,11 +30,11 @@ extension XCTestCase {
   // It appears that on Linux, the operation readiness is ALWAYS set to 'false' by default.
   // It changes to 'true' ONLY if an operation is added to an OperationQueue regardless of its associated dependencies.
   private func defaultReadiness() -> Bool {
-    #if !os(Linux)
-      return true
-    #else
+    //#if !os(Linux)
+      //return true
+    //#else
       return false
-    #endif
+    //#endif
   }
 
   /// Asserts that the Operation has the default ready state.
@@ -50,7 +50,7 @@ extension XCTestCase {
   func XCTAssertOperationCanBeStarted(operation: AdvancedOperation, file: String = #file, line: Int = #line) {
 
     guard
-      operation.isReady == defaultReadiness(),
+      operation.isReady,
       !operation.isExecuting,
       !operation.isCancelled,
       !operation.isFinished
@@ -61,7 +61,7 @@ extension XCTestCase {
   func XCTAssertOperationExecuting(operation: AdvancedOperation, file: String = #file, line: Int = #line) {
 
     guard
-      operation.isReady == defaultReadiness(),
+      !operation.isReady,
       operation.isExecuting,
       !operation.isCancelled,
       !operation.isFinished

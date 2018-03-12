@@ -293,7 +293,7 @@ class AdvancedOperationTests: XCTestCase {
     XCTAssertTrue(operation1.isReady)
     operation1.start()
     waitForExpectations(timeout: 5)
-    XCTAssertTrue(operation1.isReady)
+    XCTAssertFalse(operation1.isReady) // its state is finished
   }
 
 }

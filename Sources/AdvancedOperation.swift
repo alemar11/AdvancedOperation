@@ -27,50 +27,101 @@ public class AdvancedOperation: Operation {
 
   // MARK: - State
 
-  public override var isExecuting: Bool { return _executing }
+  open override var isReady: Bool { return state == .ready && super.isReady }
+  public final override var isExecuting: Bool { return state == .executing }
+  public final override var isFinished: Bool { return state == .finished }
 
-  public override var isFinished: Bool { return _finished }
+  //  public override var isExecuting: Bool { return _executing }
+  //
+  //  public override var isFinished: Bool { return _finished }
+  //
+  //  public override var isReady: Bool {
+  //    // https://stackoverflow.com/questions/19257458/nsoperation-ready-but-not-starting-on-ios-7
+  //    if !_ready {
+  //      evaluateConditions() //async
+  //    }
+  //    return super.isReady && _ready
+  //  }
 
-  public override var isReady: Bool {
-    // https://stackoverflow.com/questions/19257458/nsoperation-ready-but-not-starting-on-ios-7
-    if !_ready {
-      evaluateConditions() //async
-    }
-    return super.isReady && _ready
+  @objc
+  private enum OperationState: Int {
+    case ready
+    case executing
+    case finished
   }
 
-  private var _ready = true {
-    willSet {
-      willChangeValue(forKey: ObservableKey.isReady)
-    }
-    didSet {
-      didChangeValue(forKey: ObservableKey.isReady)
-    }
-  }
+  // MARK: - Properties
 
-  private var _executing = false {
-    willSet {
-      willChangeValue(forKey: ObservableKey.isExecuting)
-    }
-    didSet {
-      if _executing {
-        willExecute()
+  /// Concurrent queue for synchronizing access to `state`.
+
+  private let stateQueue = DispatchQueue(label: "org.tinrobots.AdvancedOperation.state", attributes: .concurrent)
+
+  /// Private backing stored property for `state`.
+
+  private var rawState: OperationState = .ready
+
+  /// The state of the operation
+
+  @objc
+  private dynamic var state: OperationState {
+    get { return stateQueue.sync { rawState } }
+    set {
+      stateQueue.sync(flags: .barrier) { rawState = newValue }
+      switch (newValue) {
+      case .executing: willExecute()
+      case .finished: didFinish()
+      default: do {}
       }
-      didChangeValue(forKey: ObservableKey.isExecuting)
     }
   }
 
-  private var _finished = false {
-    willSet {
-      willChangeValue(forKey: ObservableKey.isFinished)
-    }
-    didSet {
-      if _finished {
-        didFinish()
-      }
-      didChangeValue(forKey: ObservableKey.isFinished)
-    }
+  @objc
+  private dynamic class func keyPathsForValuesAffectingIsReady() -> Set<String> {
+    return [#keyPath(state)]
   }
+
+  @objc
+  private dynamic class func keyPathsForValuesAffectingIsExecuting() -> Set<String> {
+    return [#keyPath(state)]
+  }
+
+  @objc
+  private dynamic class func keyPathsForValuesAffectingIsFinished() -> Set<String> {
+    return [#keyPath(state)]
+  }
+
+  //  private var _ready = true {
+  //    willSet {
+  //      willChangeValue(forKey: ObservableKey.isReady)
+  //    }
+  //    didSet {
+  //      didChangeValue(forKey: ObservableKey.isReady)
+  //    }
+  //  }
+  //
+  //  private var _executing = false {
+  //    willSet {
+  //      willChangeValue(forKey: ObservableKey.isExecuting)
+  //    }
+  //    didSet {
+  //      if _executing {
+  //        willExecute()
+  //      }
+  //      didChangeValue(forKey: ObservableKey.isExecuting)
+  //    }
+  //  }
+  //
+  //  private var _finished = false {
+  //    willSet {
+  //      willChangeValue(forKey: ObservableKey.isFinished)
+  //    }
+  //    didSet {
+  //      if _finished {
+  //        didFinish()
+  //      }
+  //      didChangeValue(forKey: ObservableKey.isFinished)
+  //    }
+  //  }
 
   // MARK: - Conditions
 
@@ -101,7 +152,8 @@ public class AdvancedOperation: Operation {
   public override init() {
     super.init()
     //defer { // use defer to fire KVO
-      _ready = true
+    //_ready = true
+
     //}
   }
 
@@ -117,9 +169,9 @@ public class AdvancedOperation: Operation {
 
     guard !isExecuting else { return }
 
-    _executing = true
-    _finished = false
-
+    //    _executing = true
+    //    _finished = false
+    state = .executing
     //Thread.detachNewThreadSelector(#selector(main), toTarget: self, with: nil)
     // https://developer.apple.com/library/content/documentation/General/Conceptual/ConcurrencyProgrammingGuide/OperationObjects/OperationObjects.html#//apple_ref/doc/uid/TP40008091-CH101-SW16
     main()
@@ -151,27 +203,23 @@ public class AdvancedOperation: Operation {
 
     self.errors.append(contentsOf: errors)
 
-    //if _executing { // avoid unnecessay KVO firings.
-      _executing = false
-    //}
-
-    //if !_finished {
-      _finished = true // this will fire the completionBlock via KVO
-    //}
+    state = .finished
+    //      _executing = false
+    //      _finished = true // this will fire the completionBlock via KVO
   }
 
   // MARK: - Add Condition
 
   public func addCondition(condition: OperationCondition) {
     assert(!isExecuting, "Cannot add conditions after execution has begun.")
-    _ready = false
+    //_ready = false //TODO: add a new state
     conditions.append(condition)
   }
 
   private func evaluateConditions() {
     OperationConditionEvaluator.evaluate(conditions, operation: self) { [weak self] errors in
       self?.errors.append(contentsOf: errors)
-      self?._ready = true
+      //self?._ready = true //TODO: add a new state
     }
   }
 
