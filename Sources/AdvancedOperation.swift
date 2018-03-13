@@ -67,7 +67,7 @@ public class AdvancedOperation: Operation {
     get { return stateQueue.sync { rawState } }
     set {
       stateQueue.sync(flags: .barrier) { rawState = newValue }
-      switch (newValue) {
+      switch newValue {
       case .executing: willExecute()
       case .finished: didFinish()
       default: do {}

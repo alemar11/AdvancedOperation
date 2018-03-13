@@ -77,7 +77,7 @@ final class DelayOperation: AdvancedOperation {
 
     queue.asyncAfter(deadline: .now() + delay.seconds) { [weak self] in
       guard let `self` = self else { return }
-      
+
       if !self.isCancelled {
         return self.finish()
       }

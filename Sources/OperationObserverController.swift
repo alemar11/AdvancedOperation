@@ -88,7 +88,7 @@
         guard let `self` = self else { return }
         guard let old = change.oldValue, old == false else { return }
         guard let new = change.newValue, new == true else { return }
- 
+
         // collects errors if it's an AdvancedOperation
         var errors = [Error]()
         if let advancedOperation = operation as? AdvancedOperation {

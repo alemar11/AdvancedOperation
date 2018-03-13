@@ -1,4 +1,4 @@
-// 
+//
 // AdvancedOperation
 //
 // Copyright © 2016-2018 Tinrobots.
@@ -31,18 +31,15 @@ public protocol OperationCondition {
   var isMutuallyExclusive: Bool { get }
 
   //func dependency(for operation: AdvancedOperation) -> Operation?
-  func evaluate(for operation: AdvancedOperation, completion: @escaping (OperationConditionResult) -> ())
+  func evaluate(for operation: AdvancedOperation, completion: @escaping (OperationConditionResult) -> Void)
 }
 
-public enum OperationConditionResult
-{
+public enum OperationConditionResult {
   case satisfied
   case failed(NSError)
 
-  var error: NSError?
-  {
-    if case .failed(let error) = self
-    {
+  var error: NSError? {
+    if case .failed(let error) = self {
       return error
     }
     return nil
@@ -50,7 +47,7 @@ public enum OperationConditionResult
 }
 
 extension OperationConditionResult: Equatable {
-  public static func ==(lhs: OperationConditionResult, rhs: OperationConditionResult) -> Bool {
+  public static func == (lhs: OperationConditionResult, rhs: OperationConditionResult) -> Bool {
     switch (lhs, rhs) {
     case (.satisfied, .satisfied):
       return true
@@ -62,8 +59,7 @@ extension OperationConditionResult: Equatable {
   }
 }
 
-struct OperationConditionEvaluator
-{
+struct OperationConditionEvaluator {
   static func evaluate(_ conditions: [OperationCondition], operation: AdvancedOperation, completion: @escaping ([NSError]) -> Void) {
     let conditionGroup = DispatchGroup()
     var results = [OperationConditionResult?](repeating: nil, count: conditions.count)

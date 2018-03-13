@@ -1,4 +1,4 @@
-// 
+//
 // AdvancedOperation
 //
 // Copyright © 2016-2018 Tinrobots.
@@ -42,7 +42,6 @@ internal class ExclusivityManager {
 
   private func _addOperation(_ operation: Operation, category: String) -> Operation? {
 
-
 //    operation.addObserver(DidFinishObserver { [unowned self] op, _ in
 //      self.removeOperation(op, category: category)
 //    })
@@ -77,18 +76,18 @@ internal class ExclusivityManager {
   }
 }
 
-extension ExclusivityManager {
-
-  /// This should only be used as part of the unit testing
-  /// and in v2+ will not be publically accessible
-  internal func __tearDownForUnitTesting() {
-    queue.sync() {
-      for (category, operations) in self.operations {
-        for operation in operations {
-          operation.cancel()
-          self._removeOperation(operation, category: category)
-        }
-      }
-    }
-  }
-}
+//extension ExclusivityManager {
+//
+//  /// This should only be used as part of the unit testing
+//  /// and in v2+ will not be publically accessible
+//  internal func __tearDownForUnitTesting() {
+//    queue.sync() {
+//      for (category, operations) in self.operations {
+//        for operation in operations {
+//          operation.cancel()
+//          self._removeOperation(operation, category: category)
+//        }
+//      }
+//    }
+//  }
+//}
