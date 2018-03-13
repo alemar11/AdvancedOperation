@@ -65,6 +65,10 @@
       self.setup()
     }
 
+    deinit {
+      keyValueObservers.removeAll()
+    }
+
     // swiftlint:disable:next cyclomatic_complexity
     private func setup() {
       /// isExecuting KVO
