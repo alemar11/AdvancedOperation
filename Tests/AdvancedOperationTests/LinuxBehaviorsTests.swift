@@ -41,6 +41,7 @@ class LinuxBehaviorsTests: XCTestCase {
 
   // It appears that on Linux, the operation readiness is ALWAYS set to 'false' by default.
   // It changes to 'true' ONLY if an operation is added to an OperationQueue regardless of its associated dependencies.
+  // https://github.com/apple/swift-corelibs-foundation/blob/42d5ddf3c33f904a4579a7f3a1ceb9ee486996ec/Foundation/Operation.swift
 
   func testReadinessWithoutOperationQueue() {
     let operation1 = BlockOperation(block: {})
