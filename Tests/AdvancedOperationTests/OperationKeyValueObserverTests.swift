@@ -145,6 +145,36 @@ class OperationKeyValueObserverTests: XCTestCase {
     XCTAssertEqual(observer.willExecutetCount, 1)
   }
 
+  func testMemoryLeak() {
+    var operation: SleepyAsyncOperation? = SleepyAsyncOperation(interval1: 1, interval2: 3, interval3: 1)
+    weak var weakOperation = operation
+
+    var keyValueObserverController: OperationObserverController? = OperationObserverController(operation: operation!)
+    weak var weakObserverController = keyValueObserverController
+
+    let observer = MockObserver()
+    let expectation1 = expectation(description: "\(#function)\(#line)")
+
+    keyValueObserverController!.registerObserver(observer)
+    operation!.addCompletionBlock {
+      expectation1.fulfill()
+
+    }
+    operation!.start()
+    operation!.cancel()
+
+    waitForExpectations(timeout: 6)
+    XCTAssertEqual(observer.didCancelCount, 1)
+    XCTAssertEqual(observer.didFinishCount, 1)
+    XCTAssertEqual(observer.willExecutetCount, 1)
+
+    operation = nil
+    //XCTAssertNil(weakOperation) // TODO: fix this
+    keyValueObserverController = nil
+    XCTAssertNil(weakObserverController)
+    XCTAssertNil(weakOperation)
+  }
+
 }
 
 #endif
