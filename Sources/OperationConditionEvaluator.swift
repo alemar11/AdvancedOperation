@@ -36,9 +36,9 @@ public protocol OperationCondition {
 
 public enum OperationConditionResult {
   case satisfied
-  case failed(NSError)
+  case failed(Error)
 
-  var error: NSError? {
+  var error: Error? {
     if case .failed(let error) = self {
       return error
     }
@@ -76,7 +76,7 @@ struct OperationConditionEvaluator {
       var failures = results.compactMap { $0?.error }
 
       if operation.isCancelled {
-        failures.append(NSError()) //TODO better error
+        failures.append(operation.errors) //TODO better error
       }
       completion(failures)
     }
