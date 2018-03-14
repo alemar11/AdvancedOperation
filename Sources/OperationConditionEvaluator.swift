@@ -46,21 +46,21 @@ public enum OperationConditionResult {
   }
 }
 
-extension OperationConditionResult: Equatable {
-  public static func == (lhs: OperationConditionResult, rhs: OperationConditionResult) -> Bool {
-    switch (lhs, rhs) {
-    case (.satisfied, .satisfied):
-      return true
-    case (.failed(let lError), .failed(let rError)) where lError == rError:
-      return true
-    default:
-      return false
-    }
-  }
-}
+//extension OperationConditionResult: Equatable {
+//  public static func == (lhs: OperationConditionResult, rhs: OperationConditionResult) -> Bool {
+//    switch (lhs, rhs) {
+//    case (.satisfied, .satisfied):
+//      return true
+//    case (.failed(let lError), .failed(let rError)) where lError == rError:
+//      return true
+//    default:
+//      return false
+//    }
+//  }
+//}
 
 struct OperationConditionEvaluator {
-  static func evaluate(_ conditions: [OperationCondition], operation: AdvancedOperation, completion: @escaping ([NSError]) -> Void) {
+  static func evaluate(_ conditions: [OperationCondition], operation: AdvancedOperation, completion: @escaping ([Error]) -> Void) {
     let conditionGroup = DispatchGroup()
     var results = [OperationConditionResult?](repeating: nil, count: conditions.count)
 
@@ -76,7 +76,7 @@ struct OperationConditionEvaluator {
       var failures = results.compactMap { $0?.error }
 
       if operation.isCancelled {
-        failures.append(operation.errors) //TODO better error
+        failures.append(contentsOf: operation.errors) //TODO better error
       }
       completion(failures)
     }
