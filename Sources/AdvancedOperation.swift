@@ -58,37 +58,56 @@ public class AdvancedOperation: Operation {
 
   /// Private backing stored property for `state`.
 
-  private var rawState: OperationState = .ready
+  private var _state: OperationState = .ready
 
   /// The state of the operation
 
-  @objc
-  private dynamic var state: OperationState {
-    get { return stateQueue.sync { rawState } }
+  @objc dynamic
+  private var state: OperationState {
+    get { return stateQueue.sync { _state } }
     set {
-      stateQueue.sync(flags: .barrier) { rawState = newValue }
+//      willChangeValue(forKey: ObservableKey.isReady)
+//      willChangeValue(forKey: ObservableKey.isExecuting)
+//      willChangeValue(forKey: ObservableKey.isFinished)
+
+      stateQueue.sync(flags: .barrier) { _state = newValue }
+
       switch newValue {
-      case .executing: willExecute()
-      case .finished: didFinish()
-      default: do {}
+      case .ready:
+        do {}
+      case .executing:
+        willExecute()
+      case .finished:
+        didFinish()
       }
+//      didChangeValue(forKey: ObservableKey.isReady)
+//      didChangeValue(forKey: ObservableKey.isExecuting)
+//      didChangeValue(forKey: ObservableKey.isFinished)
+
     }
   }
 
-  @objc
-  private dynamic class func keyPathsForValuesAffectingIsReady() -> Set<String> {
-    return [#keyPath(state)]
-  }
+    public override class func keyPathsForValuesAffectingValue(forKey key: String) -> Set<String> {
+      switch (key) {
+      case ObservableKey.isReady, ObservableKey.isExecuting, ObservableKey.isFinished: return Set([#keyPath(state)])
+      default: return super.keyPathsForValuesAffectingValue(forKey: key)
+      }
+    }
 
-  @objc
-  private dynamic class func keyPathsForValuesAffectingIsExecuting() -> Set<String> {
-    return [#keyPath(state)]
-  }
-
-  @objc
-  private dynamic class func keyPathsForValuesAffectingIsFinished() -> Set<String> {
-    return [#keyPath(state)]
-  }
+  //  @objc
+  //  private dynamic class func keyPathsForValuesAffectingIsReady() -> Set<String> {
+  //    return [#keyPath(state)]
+  //  }
+  //
+  //  @objc
+  //  private dynamic class func keyPathsForValuesAffectingIsExecuting() -> Set<String> {
+  //    return [#keyPath(state)]
+  //  }
+  //
+  //  @objc
+  //  private dynamic class func keyPathsForValuesAffectingIsFinished() -> Set<String> {
+  //    return [#keyPath(state)]
+  //  }
 
   //  private var _ready = true {
   //    willSet {
