@@ -27,7 +27,21 @@ public class AdvancedOperation: Operation {
 
   // MARK: - State
 
-  open override var isReady: Bool { return state == .ready && super.isReady }
+  open override var isReady: Bool {
+    switch state {
+    case .pending:
+      guard isCancelled else { return false }
+      if super.isReady {
+        evaluateConditions()
+        return false
+      }
+    case .ready:
+      return super.isReady
+    default:
+      return false
+    }
+    return false
+  }
   public final override var isExecuting: Bool { return state == .executing }
   public final override var isFinished: Bool { return state == .finished }
 
@@ -46,8 +60,25 @@ public class AdvancedOperation: Operation {
   @objc
   private enum OperationState: Int {
     case ready
+    case pending
+    case evaluatingConditions
     case executing
     case finished
+
+    func canTransition(to state: OperationState) -> Bool {
+      switch (self, state) {
+      case (.ready, .executing):
+        return true
+      case (.ready, .evaluatingConditions):
+        return true
+      case (.evaluatingConditions, .evaluatingConditions):
+        return true
+      case (.executing, .finished):
+        return true
+      default:
+        return false
+      }
+    }
   }
 
   // MARK: - Properties
@@ -66,33 +97,33 @@ public class AdvancedOperation: Operation {
   private var state: OperationState {
     get { return stateQueue.sync { _state } }
     set {
-//      willChangeValue(forKey: ObservableKey.isReady)
-//      willChangeValue(forKey: ObservableKey.isExecuting)
-//      willChangeValue(forKey: ObservableKey.isFinished)
+      //      willChangeValue(forKey: ObservableKey.isReady)
+      //      willChangeValue(forKey: ObservableKey.isExecuting)
+      //      willChangeValue(forKey: ObservableKey.isFinished)
 
       stateQueue.sync(flags: .barrier) { _state = newValue }
 
       switch newValue {
-      case .ready:
-        do {}
       case .executing:
         willExecute()
       case .finished:
         didFinish()
+      default:
+        do {}
       }
-//      didChangeValue(forKey: ObservableKey.isReady)
-//      didChangeValue(forKey: ObservableKey.isExecuting)
-//      didChangeValue(forKey: ObservableKey.isFinished)
+      //      didChangeValue(forKey: ObservableKey.isReady)
+      //      didChangeValue(forKey: ObservableKey.isExecuting)
+      //      didChangeValue(forKey: ObservableKey.isFinished)
 
     }
   }
 
-    public override class func keyPathsForValuesAffectingValue(forKey key: String) -> Set<String> {
-      switch (key) {
-      case ObservableKey.isReady, ObservableKey.isExecuting, ObservableKey.isFinished: return Set([#keyPath(state)])
-      default: return super.keyPathsForValuesAffectingValue(forKey: key)
-      }
+  public override class func keyPathsForValuesAffectingValue(forKey key: String) -> Set<String> {
+    switch (key) {
+    case ObservableKey.isReady, ObservableKey.isExecuting, ObservableKey.isFinished: return Set([#keyPath(state)])
+    default: return super.keyPathsForValuesAffectingValue(forKey: key)
     }
+  }
 
   //  @objc
   //  private dynamic class func keyPathsForValuesAffectingIsReady() -> Set<String> {
@@ -232,13 +263,16 @@ public class AdvancedOperation: Operation {
   public func addCondition(condition: OperationCondition) {
     assert(!isExecuting, "Cannot add conditions after execution has begun.")
     //_ready = false //TODO: add a new state
+    state = .pending
     conditions.append(condition)
   }
 
   private func evaluateConditions() {
+    state = .evaluatingConditions
     OperationConditionEvaluator.evaluate(conditions, operation: self) { [weak self] errors in
       self?.errors.append(contentsOf: errors)
       //self?._ready = true //TODO: add a new state
+      self?.state = .ready
     }
   }
 
