@@ -30,10 +30,21 @@ public protocol OperationCondition {
   /// Other `Operation` instances which have this condition will wait in a `.Pending` state - i.e. not get executed.
   var isMutuallyExclusive: Bool { get }
 
-  //func dependency(for operation: AdvancedOperation) -> Operation?
+  func dependency(for operation: AdvancedOperation) -> Operation?
+
+  /// Evaluate the condition, to see if it has been satisfied or not.
+  ///
+  /// - Parameters:
+  ///   - operation: the `AdvancedOperation` which this condition is attached to.
+  ///   - completion: a closure which receives an `OperationConditionResult`.
   func evaluate(for operation: AdvancedOperation, completion: @escaping (OperationConditionResult) -> Void)
 }
 
+public extension OperationCondition {
+  func dependency(for operation: AdvancedOperation) -> Operation? { return nil }
+}
+
+// TODO, create a generic Result struct?
 public enum OperationConditionResult {
   case satisfied
   case failed(Error)
@@ -45,17 +56,3 @@ public enum OperationConditionResult {
     return nil
   }
 }
-
-//extension OperationConditionResult: Equatable {
-//  public static func == (lhs: OperationConditionResult, rhs: OperationConditionResult) -> Bool {
-//    switch (lhs, rhs) {
-//    case (.satisfied, .satisfied):
-//      return true
-//    case (.failed(let lError), .failed(let rError)) where lError == rError:
-//      return true
-//    default:
-//      return false
-//    }
-//  }
-//}
-

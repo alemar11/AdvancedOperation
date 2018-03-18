@@ -256,7 +256,7 @@ public class AdvancedOperation: Operation {
 
     state = .evaluatingConditions
 
-    OperationConditionEvaluator.evaluate(conditions, operation: self) { [weak self] errors in
+    type(of: self).evaluate(conditions, operation: self) { [weak self] errors in
       self?.errors.append(contentsOf: errors)
       self?.state = .ready
     }
@@ -302,10 +302,9 @@ public class AdvancedOperation: Operation {
 
 }
 
-// MARK: - Condition Evaluator
+// MARK: - Condition Evaluation
 
-private struct OperationConditionEvaluator {
-  private init() {}
+extension AdvancedOperation {
 
   static func evaluate(_ conditions: [OperationCondition], operation: AdvancedOperation, completion: @escaping ([Error]) -> Void) {
     let conditionGroup = DispatchGroup()
