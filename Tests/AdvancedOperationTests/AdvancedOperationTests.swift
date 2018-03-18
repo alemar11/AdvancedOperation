@@ -296,4 +296,32 @@ class AdvancedOperationTests: XCTestCase {
     XCTAssertFalse(operation1.isReady) // its state is finished
   }
 
+  // MARK: - Conditions
+
+  func testEvaluatingConditionsState() {
+    class DemoCondition: OperationCondition {
+      var name = "DemoCondition"
+      var isMutuallyExclusive = false
+      func evaluate(for operation: AdvancedOperation, completion: @escaping (OperationConditionResult) -> Void) {
+        completion(OperationConditionResult.satisfied)
+      }
+    }
+
+    let operation1 = SleepyAsyncOperation()
+    operation1.addCondition(condition: DemoCondition())
+
+    XCTAssertTrue(operation1.isReady)
+    XCTAssertEqual(operation1.state, .ready)
+
+    operation1.willEnqueue()
+    XCTAssertFalse(operation1.isReady)
+    XCTAssertEqual(operation1.state, .evaluatingConditions)
+
+    let expectation1 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isReady), object: operation1, expectedValue: true)
+    
+    wait(for: [expectation1], timeout: 5)
+    XCTAssertEqual(operation1.state, .ready)
+    XCTAssertTrue(operation1.isReady)
+  }
+
 }
