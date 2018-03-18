@@ -303,7 +303,10 @@ class AdvancedOperationTests: XCTestCase {
       var name = "DemoCondition"
       var isMutuallyExclusive = false
       func evaluate(for operation: AdvancedOperation, completion: @escaping (OperationConditionResult) -> Void) {
-        completion(OperationConditionResult.satisfied)
+        DispatchQueue.global().async {
+          sleep(3)
+          completion(OperationConditionResult.satisfied)
+        }
       }
     }
 

@@ -59,26 +59,3 @@ public enum OperationConditionResult {
 //  }
 //}
 
-struct OperationConditionEvaluator {
-  static func evaluate(_ conditions: [OperationCondition], operation: AdvancedOperation, completion: @escaping ([Error]) -> Void) {
-    let conditionGroup = DispatchGroup()
-    var results = [OperationConditionResult?](repeating: nil, count: conditions.count)
-
-    for (index, condition) in conditions.enumerated() {
-      conditionGroup.enter()
-      condition.evaluate(for: operation) { result in
-        results[index] = result
-        conditionGroup.leave()
-      }
-    }
-
-    conditionGroup.notify(queue: DispatchQueue.global()) {
-      var failures = results.compactMap { $0?.error }
-
-      if operation.isCancelled {
-        failures.append(contentsOf: operation.errors) //TODO better error
-      }
-      completion(failures)
-    }
-  }
-}
