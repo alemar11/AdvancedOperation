@@ -27,6 +27,7 @@ import Foundation
 public struct MutuallyExclusiveCondition<T>: OperationCondition {
 
   public var name: String { return category } // TODO
+  
   public var isMutuallyExclusive: Bool { return true }
 
   public func evaluate(for operation: AdvancedOperation, completion: @escaping (OperationConditionResult) -> Void) {

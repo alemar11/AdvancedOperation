@@ -23,15 +23,6 @@
 
 import Foundation
 
-//extension NSLock {
-//  func withCriticalScope<T>(_ block: () -> T) -> T {
-//    lock()
-//    let value = block()
-//    unlock()
-//    return value
-//  }
-//}
-
 public class AdvancedOperation: Operation {
 
   // MARK: - State
@@ -131,22 +122,12 @@ public class AdvancedOperation: Operation {
   internal var state: OperationState {
     get {
       return stateQueue.sync { _state }
-      //return stateLock.withCriticalScope { _state }
     }
     set {
       stateQueue.sync(flags: .barrier) {
         assert(_state.canTransition(to: newValue), "Performing an invalid state transition form \(_state) to \(newValue).")
         _state = newValue
       }
-
-      //      stateLock.withCriticalScope {
-      //        guard _state != .finished else {
-      //          return
-      //        }
-      //
-      //        assert(_state.canTransition(to: newValue), "Performing an invalid state transition form \(_state) to \(newValue).")
-      //        _state = newValue
-      //      }
 
       switch newValue {
       case .executing:
@@ -162,7 +143,7 @@ public class AdvancedOperation: Operation {
 
   public override class func keyPathsForValuesAffectingValue(forKey key: String) -> Set<String> {
     switch (key) {
-    case ObservableKey.isReady, ObservableKey.isExecuting, ObservableKey.isFinished:
+    case #keyPath(Operation.isReady), #keyPath(Operation.isExecuting), #keyPath(Operation.isFinished):
       return Set([#keyPath(state)])
     default:
       return super.keyPathsForValuesAffectingValue(forKey: key)
