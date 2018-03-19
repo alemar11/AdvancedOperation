@@ -60,11 +60,11 @@ internal extension OperationCondition {
 // TODO, create a generic Result struct?
 public enum OperationConditionResult {
   case satisfied
-  case failed(Error)
+  case failed([Error])
 
-  var error: Error? {
-    if case .failed(let error) = self {
-      return error
+  var errors: [Error]? {
+    if case .failed(let errors) = self {
+      return errors
     }
     return nil
   }

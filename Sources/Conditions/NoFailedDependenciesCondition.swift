@@ -23,12 +23,14 @@
 
 import Foundation
 
+/// A condition that specifies that every dependency of the operation must succeed.
+/// If any dependency fails/cancels, the target operation will fail.
 public struct NoFailedDependenciesCondition: OperationCondition {
 
   public var name: String { return category } // TODO
 
   public let ignoreCancellations: Bool
-  /// Initializer which takes no parameters.
+
   public init(ignoreCancellations: Bool = false) {
     self.ignoreCancellations = ignoreCancellations
   }
@@ -36,35 +38,23 @@ public struct NoFailedDependenciesCondition: OperationCondition {
   public func evaluate(for operation: AdvancedOperation, completion: @escaping (OperationConditionResult) -> Void) {
     let dependencies = operation.dependencies
 
-    let failures = dependencies.filter {
+    var failures = dependencies.filter {
       if let operation = $0 as? AdvancedOperation {
         return operation.failed
       }
       return false
     }
 
-    // if there are failures, exit
-    //TODO
-    let cancellations = dependencies.filter { $0.isCancelled }
-
-    if !failures.isEmpty {
-      //completion(.failed(<#T##Error#>))
-    } else {
-      if !cancellations.isEmpty {
-        completion(.satisfied)
-      }
+    if !ignoreCancellations {
+      failures = failures.filter { $0.isCancelled }
     }
 
-    //      switch cancellationOptions {
-    //      case _ where !failures.isEmpty:
-    //        completion(.Failed(Error.FailedDependencies))
-    //      case .Fail where !cancelled.isEmpty:
-    //        completion(.Failed(Error.CancelledDependencies))
-    //      case .Ignore where !cancelled.isEmpty:
-    //        completion(.Ignored)
-    //      default:
-    //        completion(.Satisfied)
-    //      }
+    if !failures.isEmpty {
+      let errors = failures.compactMap { $0 as? AdvancedBlockOperation }.flatMap {$0.errors}
+      completion(.failed(errors))
+    } else {
+        completion(.satisfied)
+    }
 
   }
 

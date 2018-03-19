@@ -323,7 +323,7 @@ extension AdvancedOperation {
     }
 
     conditionGroup.notify(queue: DispatchQueue.global()) {
-      var failures = results.compactMap { $0?.error }
+      var failures = results.compactMap { $0?.errors }.flatMap{ $0 }
 
       if operation.isCancelled {
         failures.append(contentsOf: operation.errors) //TODO better error
