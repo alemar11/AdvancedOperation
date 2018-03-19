@@ -24,17 +24,6 @@
 import XCTest
 @testable import AdvancedOperation
 
-extension DelayOperationTests {
-
-  static var allTests = [
-    ("testStandardFlowWithInterval", testStandardFlowWithInterval),
-    ("testStandardFlowWithDate", testStandardFlowWithDate),
-    ("testNegativeInterval", testNegativeInterval),
-    ("testBailingOutEarly", testBailingOutEarly)
-  ]
-
-}
-
 class DelayOperationTests: XCTestCase {
 
   func testStandardFlowWithInterval() {

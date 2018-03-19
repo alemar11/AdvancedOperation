@@ -24,26 +24,6 @@
 import XCTest
 @testable import AdvancedOperation
 
-extension AdvancedOperationTests {
-
-  static var allTests = [
-    ("testStart", testStart),
-    ("testMultipleStart", testMultipleStart),
-    ("testCancel", testCancel),
-    ("testMultipleCancel", testMultipleCancel),
-    ("testMultipleStartAndCancel", testMultipleStartAndCancel),
-    ("testMultipleStartAndCancelWithErrors", testMultipleStartAndCancelWithErrors),
-    ("testMultipleCancelWithError", testMultipleCancelWithError),
-    ("testBailingOutEarly", testBailingOutEarly),
-    ("testObserversWithCancelCommand", testObserversWithCancelCommand),
-    ("testObservers", testObservers),
-    ("testCancelWithErrors", testCancelWithErrors),
-    ("testFinishWithErrors", testFinishWithErrors),
-    //("testReadiness", testReadiness) // FIXME: It doesn't work on Linux
-  ]
-
-}
-
 class AdvancedOperationTests: XCTestCase {
 
   func testStart() {

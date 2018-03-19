@@ -24,9 +24,6 @@
 import XCTest
 @testable import AdvancedOperation
 
-#if !os(Linux)
-
-@available(iOS 11.0, macOS 10.13, tvOS 11.0, watchOS 4.0, *)
 class OperationKeyValueObserverTests: XCTestCase {
 
   func testStart() {
@@ -166,5 +163,3 @@ class OperationKeyValueObserverTests: XCTestCase {
 //  }
 
 }
-
-#endif

@@ -24,19 +24,6 @@
 import XCTest
 @testable import AdvancedOperation
 
-extension AdvancedBlockOperationTests {
-
-  static var allTests = [
-    ("testCancel", testCancel),
-    ("testEarlyBailOut", testEarlyBailOut),
-    ("testBlockOperationWithAsyncQueue", testBlockOperationWithAsyncQueue),
-    ("testBlockOperationWithAsyncQueueFinishedWithErrors", testBlockOperationWithAsyncQueueFinishedWithErrors),
-    ("testBlockOperationWithDispatchQueue", testBlockOperationWithDispatchQueue),
-    ("testMemoryLeak", testMemoryLeak)
-  ]
-
-}
-
 class AdvancedBlockOperationTests: XCTestCase {
 
   func testCancel() {

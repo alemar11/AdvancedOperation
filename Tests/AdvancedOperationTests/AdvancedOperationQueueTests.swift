@@ -24,16 +24,6 @@
 import XCTest
 @testable import AdvancedOperation
 
-extension AdvancedOperationQueueTests {
-
-  static var allTests = [
-    ("testQueueWithAdvancedOperationsUsingWaitUntilFinished", testQueueWithAdvancedOperationsUsingWaitUntilFinished),
-    ("testQueueWithAdvancedOperationsWithoutUsingWaitUntilFinished", testQueueWithAdvancedOperationsWithoutUsingWaitUntilFinished),
-    ("testQueueWithMixedOperations", testQueueWithMixedOperations)
-  ]
-
-}
-
 class AdvancedOperationQueueTests: XCTestCase {
 
   func testQueueWithAdvancedOperationsUsingWaitUntilFinished() {
