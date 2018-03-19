@@ -112,7 +112,7 @@ public class AdvancedOperation: Operation {
   /// A lock to guard reads and writes to the `_state` property
   fileprivate let stateLock = NSLock()
   /// Concurrent queue for synchronizing access to `state`.
-  private let stateQueue = DispatchQueue(label: "org.tinrobots.AdvancedOperation.state", attributes: .concurrent)
+  private let stateQueue = DispatchQueue(label: "\(identifier).\(#file)", attributes: .concurrent)
 
   /// Private backing stored property for `state`.
   private var _state: OperationState = .ready

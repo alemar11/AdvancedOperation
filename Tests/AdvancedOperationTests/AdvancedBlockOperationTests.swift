@@ -28,7 +28,7 @@ class AdvancedBlockOperationTests: XCTestCase {
 
   func testCancel() {
     let operation = AdvancedBlockOperation { complete in
-      DispatchQueue(label: "org.tinrobots.AdvancedOperation.\(#function)", attributes: .concurrent).async {
+      DispatchQueue(label: "\(identifier).\(#function)", attributes: .concurrent).async {
         sleep(1)
         sleep(2)
         complete([])
@@ -62,7 +62,7 @@ class AdvancedBlockOperationTests: XCTestCase {
   func testBlockOperationWithAsyncQueue() {
     let operation = AdvancedBlockOperation { complete in
       XCTAssertTrue(Thread.isMainThread)
-      DispatchQueue(label: "org.tinrobots.AdvancedOperation.\(#function)", attributes: .concurrent).async {
+      DispatchQueue(label: "\(identifier).\(#function)", attributes: .concurrent).async {
         sleep(1)
         sleep(2)
         complete([])
@@ -84,7 +84,7 @@ class AdvancedBlockOperationTests: XCTestCase {
     weak var weakObject = object
 
     var operation = AdvancedBlockOperation { [object] complete in
-      DispatchQueue(label: "org.tinrobots.AdvancedOperation.\(#function)", attributes: .concurrent).async {
+      DispatchQueue(label: "\(identifier).\(#function)", attributes: .concurrent).async {
         sleep(1)
         sleep(1)
         _ = object
@@ -106,7 +106,7 @@ class AdvancedBlockOperationTests: XCTestCase {
   }
 
   func testBlockOperationWithDispatchQueue() {
-    let queue = DispatchQueue(label: "org.tinrobots.AdvancedOperation.\(#function)")
+    let queue = DispatchQueue(label: "\(identifier).\(#function)")
     let operation = AdvancedBlockOperation(queue: queue) {
       XCTAssertTrue(!Thread.isMainThread)
     }
@@ -122,7 +122,7 @@ class AdvancedBlockOperationTests: XCTestCase {
     weak var weakObject = object
 
     var operation = AdvancedBlockOperation { [object] complete in
-      DispatchQueue(label: "org.tinrobots.AdvancedOperation.\(#function)", attributes: .concurrent).async {
+      DispatchQueue(label: "\(identifier).\(#function)", attributes: .concurrent).async {
         _ = object
         complete([])
       }

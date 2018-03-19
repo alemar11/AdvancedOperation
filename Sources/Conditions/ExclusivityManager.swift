@@ -27,7 +27,7 @@ internal class ExclusivityManager {
 
   static let sharedInstance = ExclusivityManager()
 
-  private let queue = DispatchQueue(label: "org.tinrobots.AdvancedOperation.\(#file)")
+  private let queue = DispatchQueue(label: "\(identifier).\(#file)")
   private var operations: [String: [Operation]] = [:]
 
   func addOperation(operation: Operation, category: String) {
