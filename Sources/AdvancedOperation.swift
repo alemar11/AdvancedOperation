@@ -23,6 +23,15 @@
 
 import Foundation
 
+//extension NSLock {
+//  func withCriticalScope<T>(_ block: () -> T) -> T {
+//    lock()
+//    let value = block()
+//    unlock()
+//    return value
+//  }
+//}
+
 public class AdvancedOperation: Operation {
 
   // MARK: - State
@@ -55,7 +64,7 @@ public class AdvancedOperation: Operation {
 
   public final override var isFinished: Bool { return state == .finished }
 
-// MARK: - OperationState
+  // MARK: - OperationState
 
   @objc
   internal enum OperationState: Int, CustomDebugStringConvertible {
@@ -109,6 +118,8 @@ public class AdvancedOperation: Operation {
     return errors.count > 0
   }
 
+  /// A lock to guard reads and writes to the `_state` property
+  fileprivate let stateLock = NSLock()
   /// Concurrent queue for synchronizing access to `state`.
   private let stateQueue = DispatchQueue(label: "org.tinrobots.AdvancedOperation.state", attributes: .concurrent)
 
@@ -118,12 +129,24 @@ public class AdvancedOperation: Operation {
   /// The state of the operation
   @objc dynamic
   internal var state: OperationState {
-    get { return stateQueue.sync { _state } }
+    get {
+      return stateQueue.sync { _state }
+      //return stateLock.withCriticalScope { _state }
+    }
     set {
       stateQueue.sync(flags: .barrier) {
         assert(_state.canTransition(to: newValue), "Performing an invalid state transition form \(_state) to \(newValue).")
         _state = newValue
       }
+
+      //      stateLock.withCriticalScope {
+      //        guard _state != .finished else {
+      //          return
+      //        }
+      //
+      //        assert(_state.canTransition(to: newValue), "Performing an invalid state transition form \(_state) to \(newValue).")
+      //        _state = newValue
+      //      }
 
       switch newValue {
       case .executing:
@@ -327,6 +350,5 @@ extension AdvancedOperation {
       completion(failures)
     }
   }
-  
-}
 
+}

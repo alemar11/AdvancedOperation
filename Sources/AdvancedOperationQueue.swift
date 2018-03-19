@@ -62,6 +62,33 @@ class AdvancedOperationQueue: OperationQueue {
 
       operation.addObserver(observer: observer)
 
+      ///////////////
+      if !operation.conditions.isEmpty {
+
+        // Extract any dependencies needed by this operation.
+        // TODO: to be implemented
+        let dependencies = operation.conditions.compactMap { $0.dependency(for: operation) }
+        for dependency in dependencies {
+          operation.addDependency(dependency)
+          self.addOperation(dependency)
+        }
+
+        let mutuallyExclusiveConditions = operation.conditions.filter { $0.isMutuallyExclusive }
+        let manager = ExclusivityManager.sharedInstance
+
+        for condition in mutuallyExclusiveConditions {
+          let category = condition.category
+
+          manager.addOperation(operation: operation, category: category)
+          operation.addObserver(observer: BlockObserver { op, _ in
+            manager.removeOperation(op, category: category)
+          })
+        }
+         operation.willEnqueue()
+      }
+
+      ///////////////
+
     } else { /// Operation
 
       // For regular `Operation`s, we'll manually call out to the queue's delegate we don't want

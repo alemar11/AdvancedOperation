@@ -25,33 +25,36 @@ import Foundation
 
 internal class ExclusivityManager {
 
+  static let sharedInstance = ExclusivityManager()
+
   private let queue = DispatchQueue(label: "org.tinrobots.AdvancedOperation.\(#file)")
   private var operations: [String: [Operation]] = [:]
 
-  func addOperation(operation: Operation, category: String) -> Operation? {
-    return queue.sync(execute: {
+  func addOperation(operation: Operation, category: String) {
+    queue.sync(execute: {
       self._addOperation(operation, category: category)
     })
   }
 
   func removeOperation(_ operation: Operation, category: String) {
-    queue.sync {
+    queue.async {
       self._removeOperation(operation, category: category)
     }
   }
 
+  @discardableResult
   private func _addOperation(_ operation: Operation, category: String) -> Operation? {
 
-//    operation.addObserver(DidFinishObserver { [unowned self] op, _ in
-//      self.removeOperation(op, category: category)
-//    })
+    //TODO: add this observer here? (and remove it from OperationQueue)
+    //    operation.addObserver(DidFinishObserver { [unowned self] op, _ in
+    //      self.removeOperation(op, category: category)
+    //    })
 
     var operationsWithThisCategory = operations[category] ?? []
 
     let previous = operationsWithThisCategory.last
 
     if let previous = previous {
-      precondition(!operation.isExecuting) //TODO: better solution
       operation.addDependency(previous)
       //operation.addDependencyOnPreviousMutuallyExclusiveOperation(previous)
     }
@@ -64,7 +67,6 @@ internal class ExclusivityManager {
   }
 
   private func _removeOperation(_ operation: Operation, category: String) {
-
     if
       let operationsWithThisCategory = operations[category],
       let index = operationsWithThisCategory.index(of: operation)

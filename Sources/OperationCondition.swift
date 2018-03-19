@@ -22,12 +22,13 @@
 // SOFTWARE.
 
 public protocol OperationCondition {
+
   /// The name of the condition.
   var name: String { get }
 
   /// A flag to indicate whether this condition is mutually exclusive. Meaning that only one condition can be evaluated at a time.
 
-  /// Other `Operation` instances which have this condition will wait in a `.Pending` state - i.e. not get executed.
+  /// Other `Operation` instances which have this condition will wait in a `.pending` state - i.e. not get executed.
   var isMutuallyExclusive: Bool { get }
 
   func dependency(for operation: AdvancedOperation) -> Operation?
@@ -43,6 +44,15 @@ public protocol OperationCondition {
 public extension OperationCondition {
   func dependency(for operation: AdvancedOperation) -> Operation? { return nil }
 }
+
+internal extension OperationCondition {
+
+  internal var category: String {
+    return String(describing: type(of: self))
+  }
+
+}
+
 
 // TODO, create a generic Result struct?
 public enum OperationConditionResult {
