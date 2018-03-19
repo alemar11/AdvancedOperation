@@ -58,6 +58,17 @@ extension Operation {
       addDependency(dependency)
     }
   }
+
+  /// Adds `self` as a dependency of a given operation and return both operations.
+  ///
+  /// - Parameter operation: the Operation instance to add the receiver as a dependency
+  /// - Returns: an array with both operations
+  func then(do operation: Operation) -> [Operation] {
+    assert(!isFinished, "Cannot add a finished operation as a dependency.")
+    operation.addDependency(self)
+    return [self, operation]
+  }
+
 }
 
 // MARK: - KVO

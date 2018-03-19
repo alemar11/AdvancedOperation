@@ -51,9 +51,6 @@
 		23665C10200B6E4800A6C921 /* OperationObserverController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23665C0E200B6E4800A6C921 /* OperationObserverController.swift */; };
 		23665C11200B6E4800A6C921 /* OperationObserverController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23665C0E200B6E4800A6C921 /* OperationObserverController.swift */; };
 		23665C12200B6E4800A6C921 /* OperationObserverController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23665C0E200B6E4800A6C921 /* OperationObserverController.swift */; };
-		236FA5802015F976001CAAA4 /* LinuxBehaviorsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 236FA57F2015F976001CAAA4 /* LinuxBehaviorsTests.swift */; };
-		236FA5812015F976001CAAA4 /* LinuxBehaviorsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 236FA57F2015F976001CAAA4 /* LinuxBehaviorsTests.swift */; };
-		236FA5822015F976001CAAA4 /* LinuxBehaviorsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 236FA57F2015F976001CAAA4 /* LinuxBehaviorsTests.swift */; };
 		23725076200522820000A442 /* AdvancedOperation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2341309A1F960691002BE7FC /* AdvancedOperation.framework */; };
 		2372507D200524860000A442 /* AdvancedOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2372507C200524860000A442 /* AdvancedOperation.swift */; };
 		2372507E200524860000A442 /* AdvancedOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2372507C200524860000A442 /* AdvancedOperation.swift */; };
@@ -94,6 +91,10 @@
 		23CF6E7B205FC4D300808400 /* OperationConditionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23CF6E7A205FC4D300808400 /* OperationConditionTests.swift */; };
 		23CF6E7C205FC4D300808400 /* OperationConditionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23CF6E7A205FC4D300808400 /* OperationConditionTests.swift */; };
 		23CF6E7D205FC4D300808400 /* OperationConditionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23CF6E7A205FC4D300808400 /* OperationConditionTests.swift */; };
+		23CF6E7F205FD9D500808400 /* NoFailedDependenciesCondition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23CF6E7E205FD9D500808400 /* NoFailedDependenciesCondition.swift */; };
+		23CF6E80205FD9D500808400 /* NoFailedDependenciesCondition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23CF6E7E205FD9D500808400 /* NoFailedDependenciesCondition.swift */; };
+		23CF6E81205FD9D500808400 /* NoFailedDependenciesCondition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23CF6E7E205FD9D500808400 /* NoFailedDependenciesCondition.swift */; };
+		23CF6E82205FD9D500808400 /* NoFailedDependenciesCondition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23CF6E7E205FD9D500808400 /* NoFailedDependenciesCondition.swift */; };
 		23F24D1E200771FA00B25A03 /* AdvancedOperationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23F24D1D200771FA00B25A03 /* AdvancedOperationTests.swift */; };
 		23F24D1F200771FA00B25A03 /* AdvancedOperationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23F24D1D200771FA00B25A03 /* AdvancedOperationTests.swift */; };
 		23F24D20200771FA00B25A03 /* AdvancedOperationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23F24D1D200771FA00B25A03 /* AdvancedOperationTests.swift */; };
@@ -159,7 +160,6 @@
 		234130B41F9606CD002BE7FC /* AdvancedOperation.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = AdvancedOperation.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		234130B71F9606CD002BE7FC /* Info-tvOS.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Info-tvOS.plist"; sourceTree = "<group>"; };
 		23665C0E200B6E4800A6C921 /* OperationObserverController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OperationObserverController.swift; sourceTree = "<group>"; };
-		236FA57F2015F976001CAAA4 /* LinuxBehaviorsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LinuxBehaviorsTests.swift; sourceTree = "<group>"; };
 		23725071200522820000A442 /* AdvancedOperation Tests macOS.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "AdvancedOperation Tests macOS.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2372507C200524860000A442 /* AdvancedOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdvancedOperation.swift; sourceTree = "<group>"; };
 		237250812005258D0000A442 /* IDETemplateMacros.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = IDETemplateMacros.plist; path = AdvancedOperation.xcodeproj/xcshareddata/IDETemplateMacros.plist; sourceTree = SOURCE_ROOT; };
@@ -177,6 +177,7 @@
 		23AC3ADC2038A050003E1B15 /* OperationUtilsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OperationUtilsTests.swift; sourceTree = "<group>"; };
 		23CF6E75205FC37200808400 /* MutuallyExclusiveCondition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MutuallyExclusiveCondition.swift; sourceTree = "<group>"; };
 		23CF6E7A205FC4D300808400 /* OperationConditionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OperationConditionTests.swift; sourceTree = "<group>"; };
+		23CF6E7E205FD9D500808400 /* NoFailedDependenciesCondition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoFailedDependenciesCondition.swift; sourceTree = "<group>"; };
 		23F24D1D200771FA00B25A03 /* AdvancedOperationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdvancedOperationTests.swift; sourceTree = "<group>"; };
 		23F24D21200799B800B25A03 /* Operation+Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Operation+Utils.swift"; sourceTree = "<group>"; };
 		23F24D2620079CDE00B25A03 /* DelayOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DelayOperation.swift; sourceTree = "<group>"; };
@@ -250,7 +251,6 @@
 				23F24D1D200771FA00B25A03 /* AdvancedOperationTests.swift */,
 				23F24D2B2007A33F00B25A03 /* DelayOperationTests.swift */,
 				23856170200A6E9A0061BAA1 /* GroupOperationTests.swift */,
-				236FA57F2015F976001CAAA4 /* LinuxBehaviorsTests.swift */,
 				23856178200A873C0061BAA1 /* Mocks.swift */,
 				231FE727201210300077728C /* OperationKeyValueObserverTests.swift */,
 				23A56BAB200F984400509A65 /* XCTestCase+Utils.swift */,
@@ -329,6 +329,7 @@
 				2313328D2055446100F205A3 /* ExclusivityManager.swift */,
 				2323B9C82056A04400E55010 /* OperationCondition.swift */,
 				23CF6E75205FC37200808400 /* MutuallyExclusiveCondition.swift */,
+				23CF6E7E205FD9D500808400 /* NoFailedDependenciesCondition.swift */,
 			);
 			path = Condition;
 			sourceTree = "<group>";
@@ -668,6 +669,7 @@
 				2372507D200524860000A442 /* AdvancedOperation.swift in Sources */,
 				23F24D22200799B800B25A03 /* Operation+Utils.swift in Sources */,
 				2313328E2055446100F205A3 /* ExclusivityManager.swift in Sources */,
+				23CF6E7F205FD9D500808400 /* NoFailedDependenciesCondition.swift in Sources */,
 				2323B9C92056A04400E55010 /* OperationCondition.swift in Sources */,
 				23A813B12020CF1E008A98E0 /* AdvancedBlockOperation.swift in Sources */,
 				23F24D302007B0D200B25A03 /* OperationObserving.swift in Sources */,
@@ -687,6 +689,7 @@
 				2372507E200524860000A442 /* AdvancedOperation.swift in Sources */,
 				23F24D23200799B800B25A03 /* Operation+Utils.swift in Sources */,
 				2313328F2055446100F205A3 /* ExclusivityManager.swift in Sources */,
+				23CF6E80205FD9D500808400 /* NoFailedDependenciesCondition.swift in Sources */,
 				2323B9CA2056A04500E55010 /* OperationCondition.swift in Sources */,
 				23A813B22020CF1E008A98E0 /* AdvancedBlockOperation.swift in Sources */,
 				23F24D312007B0D200B25A03 /* OperationObserving.swift in Sources */,
@@ -706,6 +709,7 @@
 				2372507F200524860000A442 /* AdvancedOperation.swift in Sources */,
 				23F24D24200799B800B25A03 /* Operation+Utils.swift in Sources */,
 				231332902055446100F205A3 /* ExclusivityManager.swift in Sources */,
+				23CF6E81205FD9D500808400 /* NoFailedDependenciesCondition.swift in Sources */,
 				2323B9CB2056A04500E55010 /* OperationCondition.swift in Sources */,
 				23A813B32020CF1E008A98E0 /* AdvancedBlockOperation.swift in Sources */,
 				23F24D322007B0D200B25A03 /* OperationObserving.swift in Sources */,
@@ -725,6 +729,7 @@
 				23725080200524860000A442 /* AdvancedOperation.swift in Sources */,
 				23F24D25200799B800B25A03 /* Operation+Utils.swift in Sources */,
 				231332912055446100F205A3 /* ExclusivityManager.swift in Sources */,
+				23CF6E82205FD9D500808400 /* NoFailedDependenciesCondition.swift in Sources */,
 				2323B9CC2056A04500E55010 /* OperationCondition.swift in Sources */,
 				23A813B42020CF1E008A98E0 /* AdvancedBlockOperation.swift in Sources */,
 				23F24D332007B0D200B25A03 /* OperationObserving.swift in Sources */,
@@ -742,7 +747,6 @@
 			files = (
 				23F24D2E2007A33F00B25A03 /* DelayOperationTests.swift in Sources */,
 				23856177200A87070061BAA1 /* AdvancedOperationQueueTests.swift in Sources */,
-				236FA5822015F976001CAAA4 /* LinuxBehaviorsTests.swift in Sources */,
 				23A813B82020D111008A98E0 /* AdvancedBlockOperationTests.swift in Sources */,
 				23A56BAE200F984400509A65 /* XCTestCase+Utils.swift in Sources */,
 				23CF6E7D205FC4D300808400 /* OperationConditionTests.swift in Sources */,
@@ -760,7 +764,6 @@
 			files = (
 				23F24D2C2007A33F00B25A03 /* DelayOperationTests.swift in Sources */,
 				23856175200A87070061BAA1 /* AdvancedOperationQueueTests.swift in Sources */,
-				236FA5802015F976001CAAA4 /* LinuxBehaviorsTests.swift in Sources */,
 				23A813B62020D111008A98E0 /* AdvancedBlockOperationTests.swift in Sources */,
 				23A56BAC200F984400509A65 /* XCTestCase+Utils.swift in Sources */,
 				23CF6E7B205FC4D300808400 /* OperationConditionTests.swift in Sources */,
@@ -778,7 +781,6 @@
 			files = (
 				23F24D2D2007A33F00B25A03 /* DelayOperationTests.swift in Sources */,
 				23856176200A87070061BAA1 /* AdvancedOperationQueueTests.swift in Sources */,
-				236FA5812015F976001CAAA4 /* LinuxBehaviorsTests.swift in Sources */,
 				23A813B72020D111008A98E0 /* AdvancedBlockOperationTests.swift in Sources */,
 				23A56BAD200F984400509A65 /* XCTestCase+Utils.swift in Sources */,
 				23CF6E7C205FC4D300808400 /* OperationConditionTests.swift in Sources */,
