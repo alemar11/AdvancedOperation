@@ -31,7 +31,7 @@ internal class ExclusivityManager {
   private var operations: [String: [Operation]] = [:]
 
   func addOperation(operation: Operation, category: String) {
-    queue.sync(execute: {
+    _ = queue.sync(execute: {
       self._addOperation(operation, category: category)
     })
   }
