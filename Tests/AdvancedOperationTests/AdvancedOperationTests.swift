@@ -301,7 +301,7 @@ class AdvancedOperationTests: XCTestCase {
     XCTAssertEqual(operation1.state, .evaluatingConditions)
 
     let expectation1 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isReady), object: operation1, expectedValue: true)
-    
+
     wait(for: [expectation1], timeout: 5)
     XCTAssertEqual(operation1.state, .ready)
     XCTAssertTrue(operation1.isReady)

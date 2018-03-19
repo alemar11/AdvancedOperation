@@ -24,48 +24,48 @@
 import Foundation
 
 public class OperationObserverController {
-  
+
   /// Observed operation
   let operation: Operation
-  
+
   // MARK: - Observers
-  
+
   /// Operation observers
   private(set) var observers = [OperationObservingType]()
-  
+
   internal var willExecuteObservers: [OperationWillExecuteObserving] {
     return observers.compactMap { $0 as? OperationWillExecuteObserving }
   }
-  
+
   internal var didCancelObservers: [OperationDidCancelObserving] {
     return observers.compactMap { $0 as? OperationDidCancelObserving }
   }
-  
+
   internal var didFinishObservers: [OperationDidFinishObserving] {
     return observers.compactMap { $0 as? OperationDidFinishObserving }
   }
-  
+
   private var keyValueObservers = [NSKeyValueObservation]()
-  
+
   public convenience init(operation: Operation, observers: OperationObserving...) {
     self.init(operation: operation)
-    
+
     for observer in observers {
       self.registerObserver(observer)
     }
   }
-  
+
   // MARK: Initializers
-  
+
   public init(operation: Operation) {
     self.operation = operation
     self.setup()
   }
-  
+
   deinit {
     keyValueObservers.removeAll()
   }
-  
+
   // swiftlint:disable:next cyclomatic_complexity
   private func setup() {
     /// isExecuting KVO
@@ -73,69 +73,69 @@ public class OperationObserverController {
       guard let `self` = self else { return }
       guard let old = change.oldValue, old == false else { return }
       guard let new = change.newValue, new == true else { return }
-      
+
       for observer in self.willExecuteObservers {
         observer.operationWillExecute(operation: operation)
       }
-      
+
     }
-    
+
     /// isFinished KVO
     let isFinished = operation.observe(\.isFinished, options: [.old, .new]) { [weak self] (operation, change) in
       guard let `self` = self else { return }
       guard let old = change.oldValue, old == false else { return }
       guard let new = change.newValue, new == true else { return }
-      
+
       // collects errors if it's an AdvancedOperation
       var errors = [Error]()
       if let advancedOperation = operation as? AdvancedOperation {
         errors = advancedOperation.errors
       }
-      
+
       for observer in self.didFinishObservers {
         observer.operationDidFinish(operation: operation, withErrors: errors)
       }
-      
+
     }
-    
+
     /// isCancelled KVO
     let isCancelled = operation.observe(\.isCancelled, options: [.old, .new]) { [weak self] (operation, change) in
       guard let `self` = self else { return }
       guard let old = change.oldValue, old == false else { return }
-      
+
       var errors = [Error]()
       if let advancedOperation = operation as? AdvancedOperation {
         errors = advancedOperation.errors
       }
-      
+
       guard let new = change.newValue, new == true else { return }
-      
+
       for observer in self.didCancelObservers {
         observer.operationDidCancel(operation: self.operation, withErrors: errors)
       }
-      
+
     }
-    
+
     keyValueObservers.append(contentsOf: [isExecuting, isFinished, isCancelled])
   }
-  
+
   /// Registers a given observer.
   public func registerObserver(_ observer: OperationObservingType) {
     observers.append(observer)
   }
-  
+
   /// Removes all regisitered observers.
   public func removeAllObservers() {
     observers.removeAll()
   }
-  
+
   /// Removes an observer with a specified `identifier`.
   //    public func removeObserver(withIdentifier identifier: String) {
   //      for (index, observer) in observers.enumerated() where observer.identifier == identifier {
   //        observers.remove(at: index)
   //      }
   //    }
-  
+
 }
 
 

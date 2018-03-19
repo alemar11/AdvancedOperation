@@ -142,7 +142,7 @@ public class AdvancedOperation: Operation {
   }
 
   public override class func keyPathsForValuesAffectingValue(forKey key: String) -> Set<String> {
-    switch (key) {
+    switch key {
     case #keyPath(Operation.isReady), #keyPath(Operation.isExecuting), #keyPath(Operation.isFinished):
       return Set([#keyPath(state)])
     default:
@@ -323,7 +323,7 @@ extension AdvancedOperation {
     }
 
     conditionGroup.notify(queue: DispatchQueue.global()) {
-      var failures = results.compactMap { $0?.errors }.flatMap{ $0 }
+      var failures = results.compactMap { $0?.errors }.flatMap { $0 }
 
       if operation.isCancelled {
         failures.append(contentsOf: operation.errors) //TODO better error

@@ -1,4 +1,4 @@
-// 
+//
 // AdvancedOperation
 //
 // Copyright © 2016-2018 Tinrobots.
@@ -38,7 +38,7 @@ public struct NegatedCondition<T: OperationCondition>: OperationCondition {
     condition.evaluate(for: operation) { (result) in
       switch result {
       case .satisfied: return completion(.failed([]))
-      case .failed(_): return completion(.satisfied)
+      case .failed: return completion(.satisfied)
       }
     }
   }

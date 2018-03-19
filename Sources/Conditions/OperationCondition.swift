@@ -56,7 +56,6 @@ internal extension OperationCondition {
 
 }
 
-
 // TODO, create a generic Result struct?
 public enum OperationConditionResult {
   case satisfied
