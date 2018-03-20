@@ -40,7 +40,7 @@ public struct NoCancelledDependeciesCondition: OperationCondition {
     let cancellations = dependencies.filter { $0.isCancelled }
 
     if !cancellations.isEmpty {
-      completion(.failed([]))
+      completion(.failed([NSError(domain: "demo", code: 1, userInfo: nil)]))
     } else {
       completion(.satisfied)
     }

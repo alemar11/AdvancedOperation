@@ -23,6 +23,7 @@
 
 import Foundation
 import Dispatch
+import XCTest
 @testable import AdvancedOperation
 
 // MARK: - Error
@@ -99,6 +100,16 @@ internal class SleepyOperation: AdvancedOperation {
     sleep(1)
     self.finish()
   }
+
+}
+
+internal class XCTFailOperation: AdvancedOperation {
+
+  override func main() {
+    XCTFail("This operation should't be executed.")
+    self.finish()
+  }
+
 }
 
 internal class FailingAsyncOperation: AdvancedOperation {

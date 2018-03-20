@@ -44,9 +44,9 @@ public struct NoFailedDependenciesCondition: OperationCondition {
       }
       return false
     }
-
-    if !ignoreCancellations {
-      failures = failures.filter { $0.isCancelled }
+    
+    if ignoreCancellations {
+      failures = failures.filter { !$0.isCancelled }
     }
 
     if !failures.isEmpty {

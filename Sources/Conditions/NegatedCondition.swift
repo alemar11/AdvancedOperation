@@ -37,7 +37,7 @@ public struct NegatedCondition<T: OperationCondition>: OperationCondition {
   public func evaluate(for operation: AdvancedOperation, completion: @escaping (OperationConditionResult) -> Void) {
     condition.evaluate(for: operation) { (result) in
       switch result {
-      case .satisfied: return completion(.failed([]))
+      case .satisfied: return completion(.failed([NSError(domain: "demo", code: 1, userInfo: nil)]))
       case .failed: return completion(.satisfied)
       }
     }

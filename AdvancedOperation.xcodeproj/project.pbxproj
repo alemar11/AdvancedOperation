@@ -43,6 +43,9 @@
 		2323B9CA2056A04500E55010 /* OperationCondition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2323B9C82056A04400E55010 /* OperationCondition.swift */; };
 		2323B9CB2056A04500E55010 /* OperationCondition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2323B9C82056A04400E55010 /* OperationCondition.swift */; };
 		2323B9CC2056A04500E55010 /* OperationCondition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2323B9C82056A04400E55010 /* OperationCondition.swift */; };
+		232952A6206194A20040EA53 /* NoCancelledDependenciesCondition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 232952A5206194A20040EA53 /* NoCancelledDependenciesCondition.swift */; };
+		232952A7206194A20040EA53 /* NoCancelledDependenciesCondition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 232952A5206194A20040EA53 /* NoCancelledDependenciesCondition.swift */; };
+		232952A8206194A20040EA53 /* NoCancelledDependenciesCondition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 232952A5206194A20040EA53 /* NoCancelledDependenciesCondition.swift */; };
 		232F3A9F206034E500FC45CB /* NoCancelledDependenciesCondition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 232F3A9E206034E500FC45CB /* NoCancelledDependenciesCondition.swift */; };
 		232F3AA0206034E500FC45CB /* NoCancelledDependenciesCondition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 232F3A9E206034E500FC45CB /* NoCancelledDependenciesCondition.swift */; };
 		232F3AA1206034E500FC45CB /* NoCancelledDependenciesCondition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 232F3A9E206034E500FC45CB /* NoCancelledDependenciesCondition.swift */; };
@@ -171,6 +174,7 @@
 		2313328D2055446100F205A3 /* ExclusivityManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExclusivityManager.swift; sourceTree = "<group>"; };
 		231FE727201210300077728C /* OperationKeyValueObserverTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OperationKeyValueObserverTests.swift; sourceTree = "<group>"; };
 		2323B9C82056A04400E55010 /* OperationCondition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OperationCondition.swift; sourceTree = "<group>"; };
+		232952A5206194A20040EA53 /* NoCancelledDependenciesCondition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoCancelledDependenciesCondition.swift; sourceTree = "<group>"; };
 		232F3A9E206034E500FC45CB /* NoCancelledDependenciesCondition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoCancelledDependenciesCondition.swift; sourceTree = "<group>"; };
 		232F3AA320603D7800FC45CB /* NegatedCondition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NegatedCondition.swift; sourceTree = "<group>"; };
 		232F3AA82060403300FC45CB /* SilentCondition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SilentCondition.swift; sourceTree = "<group>"; };
@@ -280,6 +284,7 @@
 				23A56BAB200F984400509A65 /* XCTestCase+Utils.swift */,
 				23AC3ADC2038A050003E1B15 /* OperationUtilsTests.swift */,
 				23CF6E7A205FC4D300808400 /* MutuallyExclusiveConditionTests.swift */,
+				232952A5206194A20040EA53 /* NoCancelledDependenciesCondition.swift */,
 			);
 			path = AdvancedOperationTests;
 			sourceTree = "<group>";
@@ -801,6 +806,7 @@
 				231FE72A201210300077728C /* OperationKeyValueObserverTests.swift in Sources */,
 				23F24D20200771FA00B25A03 /* AdvancedOperationTests.swift in Sources */,
 				23AC3ADF2038A050003E1B15 /* OperationUtilsTests.swift in Sources */,
+				232952A8206194A20040EA53 /* NoCancelledDependenciesCondition.swift in Sources */,
 				23856173200A6E9A0061BAA1 /* GroupOperationTests.swift in Sources */,
 				2385617B200A873C0061BAA1 /* Mocks.swift in Sources */,
 			);
@@ -818,6 +824,7 @@
 				231FE728201210300077728C /* OperationKeyValueObserverTests.swift in Sources */,
 				23F24D1E200771FA00B25A03 /* AdvancedOperationTests.swift in Sources */,
 				23AC3ADD2038A050003E1B15 /* OperationUtilsTests.swift in Sources */,
+				232952A6206194A20040EA53 /* NoCancelledDependenciesCondition.swift in Sources */,
 				23856171200A6E9A0061BAA1 /* GroupOperationTests.swift in Sources */,
 				23856179200A873C0061BAA1 /* Mocks.swift in Sources */,
 			);
@@ -835,6 +842,7 @@
 				231FE729201210300077728C /* OperationKeyValueObserverTests.swift in Sources */,
 				23F24D1F200771FA00B25A03 /* AdvancedOperationTests.swift in Sources */,
 				23AC3ADE2038A050003E1B15 /* OperationUtilsTests.swift in Sources */,
+				232952A7206194A20040EA53 /* NoCancelledDependenciesCondition.swift in Sources */,
 				23856172200A6E9A0061BAA1 /* GroupOperationTests.swift in Sources */,
 				2385617A200A873C0061BAA1 /* Mocks.swift in Sources */,
 			);
