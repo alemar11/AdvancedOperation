@@ -26,6 +26,15 @@ import XCTest
 
 class AdvancedOperationTests: XCTestCase {
 
+  // Runs some tests multiple times to find some edge cases.
+  func testStress() {
+    for i in 1...100 {
+      print("\n>>  \(i)")
+      testMultipleStartsAndCancels()
+      testCancelWithErrors()
+    }
+  }
+
   func testStart() {
     let expectation1 = expectation(description: "\(#function)\(#line)")
 
@@ -127,15 +136,6 @@ class AdvancedOperationTests: XCTestCase {
 
     waitForExpectations(timeout: 10)
     XCTAssertOperationCancelled(operation: operation)
-  }
-
-  func testStress() {
-    for i in 1...200 {
-      print("\n>>  \(i)")
-      //testMultipleStart()
-      testMultipleStartsAndCancels()
-      //testMultipleStartAndCancelWithErrors()
-    }
   }
 
   func testMultipleStartAndCancelWithErrors() {
