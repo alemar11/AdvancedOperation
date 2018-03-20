@@ -189,12 +189,6 @@ public class AdvancedOperation: Operation {
 
   public private(set) var errors = [Error]()
 
-  // MARK: - Initialization
-
-  public override init() {
-    super.init()
-  }
-
   // MARK: - Methods
 
   public final override func start() {

@@ -110,12 +110,18 @@ class AdvancedOperationTests: XCTestCase {
     XCTAssertOperationExecuting(operation: operation)
 
     operation.cancel()
+    XCTAssertTrue(operation.isCancelled)
+
     operation.start()
-    XCTAssertFalse(operation.isExecuting)
+    XCTAssertTrue(operation.isCancelled)
+
+    // Those errors will be ignored since the operation is already cancelled
     operation.cancel(error: MockError.test)
     operation.cancel(error: MockError.failed)
-    XCTAssertDefaultReadiness(operation: operation)
+
+    XCTAssertFalse(operation.isReady)
     XCTAssertTrue(operation.isCancelled)
+    XCTAssertFalse(operation.isExecuting)
 
     waitForExpectations(timeout: 10)
     XCTAssertOperationCancelled(operation: operation)

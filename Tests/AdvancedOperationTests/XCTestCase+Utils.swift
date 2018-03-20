@@ -72,7 +72,7 @@ extension XCTestCase {
   func XCTAssertOperationCancelled(operation: AdvancedOperation, errors: [Error] = [], file: String = #file, line: Int = #line) {
 
     guard
-      operation.isReady == defaultReadiness(),
+      !operation.isReady,
       !operation.isExecuting,
       operation.isCancelled,
       operation.isFinished
