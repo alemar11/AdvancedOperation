@@ -126,7 +126,7 @@ class MutuallyExclusiveConditionTests: XCTestCase {
   func testExclusivityManager() {
     var text = ""
     let manager = ExclusivityManager()
-    let queue = AdvancedOperationQueue(exclusibityManager: manager)
+    let queue = AdvancedOperationQueue(exclusivityManager: manager)
     queue.isSuspended = true
 
     let expectation1 = expectation(description: "\(#function)\(#line)")
