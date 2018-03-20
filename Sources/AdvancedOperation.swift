@@ -124,7 +124,7 @@ public class AdvancedOperation: Operation {
       return stateQueue.sync { _state }
     }
     set {
-      stateQueue.sync(flags: .barrier) {
+      stateQueue.sync {
         assert(_state.canTransition(to: newValue), "Performing an invalid state transition form \(_state) to \(newValue).")
         _state = newValue
       }
