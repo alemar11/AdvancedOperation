@@ -30,7 +30,7 @@ internal class ExclusivityManager {
   private let queue = DispatchQueue(label: "\(identifier).\(#file)")
   private var operations: [String: [Operation]] = [:]
 
-  func addOperation(operation: Operation, category: String) {
+  func addOperation(_ operation: Operation, category: String) {
     _ = queue.sync(execute: {
       self._addOperation(operation, category: category)
     })
@@ -51,16 +51,13 @@ internal class ExclusivityManager {
     //    })
 
     var operationsWithThisCategory = operations[category] ?? []
-
     let previous = operationsWithThisCategory.last
 
     if let previous = previous {
       operation.addDependency(previous)
-      //operation.addDependencyOnPreviousMutuallyExclusiveOperation(previous)
     }
 
     operationsWithThisCategory.append(operation)
-
     operations[category] = operationsWithThisCategory
 
     return previous
@@ -77,19 +74,3 @@ internal class ExclusivityManager {
     }
   }
 }
-
-//extension ExclusivityManager {
-//
-//  /// This should only be used as part of the unit testing
-//  /// and in v2+ will not be publically accessible
-//  internal func __tearDownForUnitTesting() {
-//    queue.sync() {
-//      for (category, operations) in self.operations {
-//        for operation in operations {
-//          operation.cancel()
-//          self._removeOperation(operation, category: category)
-//        }
-//      }
-//    }
-//  }
-//}

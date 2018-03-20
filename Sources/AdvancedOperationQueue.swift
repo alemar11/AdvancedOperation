@@ -79,7 +79,7 @@ class AdvancedOperationQueue: OperationQueue {
         for condition in mutuallyExclusiveConditions {
           let category = condition.category
 
-          manager.addOperation(operation: operation, category: category)
+          manager.addOperation(operation, category: category)
           operation.addObserver(observer: BlockObserver { op, _ in
             manager.removeOperation(op, category: category)
           })

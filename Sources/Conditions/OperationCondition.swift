@@ -28,9 +28,7 @@ public protocol OperationCondition {
   /// The name of the condition.
   var name: String { get }
 
-  /// A flag to indicate whether this condition is mutually exclusive. Meaning that only one condition can be evaluated at a time.
-
-  /// Other `Operation` instances which have this condition will wait in a `.pending` state - i.e. not get executed.
+  /// A flag to indicate whether this condition is mutually exclusive meaning that only one condition can be evaluated at a time.
   var isMutuallyExclusive: Bool { get }
 
   func dependency(for operation: AdvancedOperation) -> Operation?
