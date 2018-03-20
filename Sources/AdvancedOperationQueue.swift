@@ -42,10 +42,10 @@ class AdvancedOperationQueue: OperationQueue {
 
   weak var delegate: AdvancedOperationQueueDelegate?
 
-  private let exclusibityManager: ExclusivityManager
+  private let exclusivityManager: ExclusivityManager
 
-  init(exclusibityManager: ExclusivityManager = .sharedInstance) {
-    self.exclusibityManager = exclusibityManager
+  init(exclusivityManager: ExclusivityManager = .sharedInstance) {
+    self.exclusivityManager = exclusivityManager
   }
 
   override func addOperation(_ operation: Operation) {
@@ -84,9 +84,9 @@ class AdvancedOperationQueue: OperationQueue {
         for condition in mutuallyExclusiveConditions {
           let category = condition.category
 
-          exclusibityManager.addOperation(operation, category: category)
+          exclusivityManager.addOperation(operation, category: category)
           operation.addObserver(observer: BlockObserver { [weak self] op, _ in
-            self?.exclusibityManager.removeOperation(op, category: category)
+            self?.exclusivityManager.removeOperation(op, category: category)
           })
         }
          operation.willEnqueue()
