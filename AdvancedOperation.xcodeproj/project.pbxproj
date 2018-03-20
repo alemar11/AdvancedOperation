@@ -104,9 +104,9 @@
 		23CF6E77205FC37200808400 /* MutuallyExclusiveCondition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23CF6E75205FC37200808400 /* MutuallyExclusiveCondition.swift */; };
 		23CF6E78205FC37200808400 /* MutuallyExclusiveCondition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23CF6E75205FC37200808400 /* MutuallyExclusiveCondition.swift */; };
 		23CF6E79205FC37200808400 /* MutuallyExclusiveCondition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23CF6E75205FC37200808400 /* MutuallyExclusiveCondition.swift */; };
-		23CF6E7B205FC4D300808400 /* OperationConditionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23CF6E7A205FC4D300808400 /* OperationConditionTests.swift */; };
-		23CF6E7C205FC4D300808400 /* OperationConditionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23CF6E7A205FC4D300808400 /* OperationConditionTests.swift */; };
-		23CF6E7D205FC4D300808400 /* OperationConditionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23CF6E7A205FC4D300808400 /* OperationConditionTests.swift */; };
+		23CF6E7B205FC4D300808400 /* MutuallyExclusiveConditionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23CF6E7A205FC4D300808400 /* MutuallyExclusiveConditionTests.swift */; };
+		23CF6E7C205FC4D300808400 /* MutuallyExclusiveConditionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23CF6E7A205FC4D300808400 /* MutuallyExclusiveConditionTests.swift */; };
+		23CF6E7D205FC4D300808400 /* MutuallyExclusiveConditionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23CF6E7A205FC4D300808400 /* MutuallyExclusiveConditionTests.swift */; };
 		23CF6E7F205FD9D500808400 /* NoFailedDependenciesCondition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23CF6E7E205FD9D500808400 /* NoFailedDependenciesCondition.swift */; };
 		23CF6E80205FD9D500808400 /* NoFailedDependenciesCondition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23CF6E7E205FD9D500808400 /* NoFailedDependenciesCondition.swift */; };
 		23CF6E81205FD9D500808400 /* NoFailedDependenciesCondition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23CF6E7E205FD9D500808400 /* NoFailedDependenciesCondition.swift */; };
@@ -195,7 +195,7 @@
 		23A813B52020D111008A98E0 /* AdvancedBlockOperationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdvancedBlockOperationTests.swift; sourceTree = "<group>"; };
 		23AC3ADC2038A050003E1B15 /* OperationUtilsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OperationUtilsTests.swift; sourceTree = "<group>"; };
 		23CF6E75205FC37200808400 /* MutuallyExclusiveCondition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MutuallyExclusiveCondition.swift; sourceTree = "<group>"; };
-		23CF6E7A205FC4D300808400 /* OperationConditionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OperationConditionTests.swift; sourceTree = "<group>"; };
+		23CF6E7A205FC4D300808400 /* MutuallyExclusiveConditionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MutuallyExclusiveConditionTests.swift; sourceTree = "<group>"; };
 		23CF6E7E205FD9D500808400 /* NoFailedDependenciesCondition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoFailedDependenciesCondition.swift; sourceTree = "<group>"; };
 		23F24D1D200771FA00B25A03 /* AdvancedOperationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdvancedOperationTests.swift; sourceTree = "<group>"; };
 		23F24D21200799B800B25A03 /* Operation+Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Operation+Utils.swift"; sourceTree = "<group>"; };
@@ -274,7 +274,7 @@
 				231FE727201210300077728C /* OperationKeyValueObserverTests.swift */,
 				23A56BAB200F984400509A65 /* XCTestCase+Utils.swift */,
 				23AC3ADC2038A050003E1B15 /* OperationUtilsTests.swift */,
-				23CF6E7A205FC4D300808400 /* OperationConditionTests.swift */,
+				23CF6E7A205FC4D300808400 /* MutuallyExclusiveConditionTests.swift */,
 			);
 			path = AdvancedOperationTests;
 			sourceTree = "<group>";
@@ -787,7 +787,7 @@
 				23856177200A87070061BAA1 /* AdvancedOperationQueueTests.swift in Sources */,
 				23A813B82020D111008A98E0 /* AdvancedBlockOperationTests.swift in Sources */,
 				23A56BAE200F984400509A65 /* XCTestCase+Utils.swift in Sources */,
-				23CF6E7D205FC4D300808400 /* OperationConditionTests.swift in Sources */,
+				23CF6E7D205FC4D300808400 /* MutuallyExclusiveConditionTests.swift in Sources */,
 				231FE72A201210300077728C /* OperationKeyValueObserverTests.swift in Sources */,
 				23F24D20200771FA00B25A03 /* AdvancedOperationTests.swift in Sources */,
 				23AC3ADF2038A050003E1B15 /* OperationUtilsTests.swift in Sources */,
@@ -804,7 +804,7 @@
 				23856175200A87070061BAA1 /* AdvancedOperationQueueTests.swift in Sources */,
 				23A813B62020D111008A98E0 /* AdvancedBlockOperationTests.swift in Sources */,
 				23A56BAC200F984400509A65 /* XCTestCase+Utils.swift in Sources */,
-				23CF6E7B205FC4D300808400 /* OperationConditionTests.swift in Sources */,
+				23CF6E7B205FC4D300808400 /* MutuallyExclusiveConditionTests.swift in Sources */,
 				231FE728201210300077728C /* OperationKeyValueObserverTests.swift in Sources */,
 				23F24D1E200771FA00B25A03 /* AdvancedOperationTests.swift in Sources */,
 				23AC3ADD2038A050003E1B15 /* OperationUtilsTests.swift in Sources */,
@@ -821,7 +821,7 @@
 				23856176200A87070061BAA1 /* AdvancedOperationQueueTests.swift in Sources */,
 				23A813B72020D111008A98E0 /* AdvancedBlockOperationTests.swift in Sources */,
 				23A56BAD200F984400509A65 /* XCTestCase+Utils.swift in Sources */,
-				23CF6E7C205FC4D300808400 /* OperationConditionTests.swift in Sources */,
+				23CF6E7C205FC4D300808400 /* MutuallyExclusiveConditionTests.swift in Sources */,
 				231FE729201210300077728C /* OperationKeyValueObserverTests.swift in Sources */,
 				23F24D1F200771FA00B25A03 /* AdvancedOperationTests.swift in Sources */,
 				23AC3ADE2038A050003E1B15 /* OperationUtilsTests.swift in Sources */,
