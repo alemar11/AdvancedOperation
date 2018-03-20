@@ -64,6 +64,7 @@ public class AdvancedOperation: Operation {
     case pending
     case evaluatingConditions
     case executing
+    case finishing
     case finished
 
     func canTransition(to state: OperationState) -> Bool {
@@ -72,13 +73,15 @@ public class AdvancedOperation: Operation {
         return true
       case (.ready, .pending):
         return true
-      case (.ready, .finished): // early bailing out
+      case (.ready, .finishing): // early bailing out
         return true
       case (.pending, .evaluatingConditions):
         return true
       case (.evaluatingConditions, .ready):
         return true
-      case (.executing, .finished):
+      case (.executing, .finishing):
+        return true
+      case (.finishing, .finished):
         return true
       default:
         return false
@@ -95,6 +98,8 @@ public class AdvancedOperation: Operation {
         return "evaluatingConditions"
       case .executing:
         return "executing"
+      case .finishing:
+        return "finishing"
       case .finished:
         return "finished"
       }
@@ -105,27 +110,21 @@ public class AdvancedOperation: Operation {
   // MARK: - Properties
 
   /// Returns `true` if the `AdvancedOperation` failed due to errors.
-  public var failed: Bool {
-    return errors.count > 0
-  }
+  public var failed: Bool { return !errors.isEmpty }
 
   /// A lock to guard reads and writes to the `_state` property
-  fileprivate let stateLock = NSLock()
-  /// Concurrent queue for synchronizing access to `state`.
-  private let stateQueue = DispatchQueue(label: "\(identifier).\(#file)", attributes: .concurrent)
+  private let lock = NSRecursiveLock()
 
   /// Private backing stored property for `state`.
   private var _state: OperationState = .ready
-
+  
   /// The state of the operation
   @objc dynamic
   internal var state: OperationState {
-    get {
-      return stateQueue.sync { _state }
-    }
+    get { return lock.synchronized { _state } }
     set {
-      stateQueue.sync {
-        assert(_state.canTransition(to: newValue), "Performing an invalid state transition form \(_state) to \(newValue).")
+      lock.synchronized {
+        assert(_state.canTransition(to: newValue), "Performing an invalid state transition for: \(_state) to: \(newValue).")
         _state = newValue
       }
 
@@ -143,27 +142,31 @@ public class AdvancedOperation: Operation {
 
   public override class func keyPathsForValuesAffectingValue(forKey key: String) -> Set<String> {
     switch key {
-    case #keyPath(Operation.isReady), #keyPath(Operation.isExecuting), #keyPath(Operation.isFinished):
+    case #keyPath(Operation.isReady),
+         #keyPath(Operation.isExecuting),
+         #keyPath(Operation.isFinished):
       return Set([#keyPath(state)])
     default:
       return super.keyPathsForValuesAffectingValue(forKey: key)
     }
   }
 
-  //  @objc
-  //  private dynamic class func keyPathsForValuesAffectingIsReady() -> Set<String> {
-  //    return [#keyPath(state)]
-  //  }
-  //
-  //  @objc
-  //  private dynamic class func keyPathsForValuesAffectingIsExecuting() -> Set<String> {
-  //    return [#keyPath(state)]
-  //  }
-  //
-  //  @objc
-  //  private dynamic class func keyPathsForValuesAffectingIsFinished() -> Set<String> {
-  //    return [#keyPath(state)]
-  //  }
+  /**
+  @objc
+  private dynamic class func keyPathsForValuesAffectingIsReady() -> Set<String> {
+    return [#keyPath(state)]
+  }
+
+  @objc
+  private dynamic class func keyPathsForValuesAffectingIsExecuting() -> Set<String> {
+    return [#keyPath(state)]
+  }
+
+  @objc
+  private dynamic class func keyPathsForValuesAffectingIsFinished() -> Set<String> {
+    return [#keyPath(state)]
+  }
+  **/
 
   // MARK: - Conditions
 
@@ -192,6 +195,9 @@ public class AdvancedOperation: Operation {
   // MARK: - Methods
 
   public final override func start() {
+    // Do not start if it's finishing or already finished
+    guard (state != .finishing) || (state != .finished) else { return }
+
     // Bail out early if cancelled or there are some errors.
     guard errors.isEmpty && !isCancelled else {
       finish()
@@ -211,12 +217,26 @@ public class AdvancedOperation: Operation {
     fatalError("\(type(of: self)) must override `main()`.")
   }
 
+ private var _cancelling = false
+
   func cancel(error: Error? = nil) {
     guard !isCancelled else { return }
 
+    let result = lock.synchronized { () -> Bool in
+      if !_cancelling {
+        _cancelling = true
+        return true
+      }
+      return false
+    }
+
+    guard result else { return }
+
+    //lock.synchronized{
     if let error = error {
       errors.append(error)
     }
+    //}
 
     cancel()
   }
@@ -226,14 +246,30 @@ public class AdvancedOperation: Operation {
     didCancel()
   }
 
-  fileprivate var _finishing = false
-  public final func finish(errors: [Error] = []) {
-    guard !_finishing else { return }
-    _finishing = true
 
+  private var _finishing = false
+
+  public final func finish(errors: [Error] = []) {
+    guard state.canTransition(to: .finishing) else { return }
+
+    let result = lock.synchronized { () -> Bool in
+      if !_finishing {
+        _finishing = true
+        return true
+      }
+      return false
+    }
+
+    guard result else { return }
+
+    lock.synchronized {
+      state = .finishing
+    }
     self.errors.append(contentsOf: errors)
 
-    state = .finished
+    lock.synchronized {
+       state = .finished
+    }
   }
 
   // MARK: - Add Condition
