@@ -24,28 +24,25 @@
 import Foundation
 
 public final class GroupOperation: AdvancedOperation {
-
+  
   // MARK: - Properties
-
+  
   private let lock: NSLock = NSLock()
-
+  
   private var _aggregatedErrors = [Error]()
-
+  
   /// Stores all of the `AdvancedOperation` errors during the execution.
   internal var aggregatedErrors: [Error] {
     get {
-      lock.lock()
-      let result = _aggregatedErrors
-      lock.unlock()
-      return result
+      return lock.synchronized { _aggregatedErrors }
     }
-    set(value) {
-      lock.lock()
-      _aggregatedErrors = value
-      lock.unlock()
+    set {
+      lock.synchronized {
+        _aggregatedErrors = newValue
+      }
     }
   }
-
+  
   /// Accesses the group operation queue's quality of service. It defaults to background quality.
   public final override var qualityOfService: QualityOfService {
     get {
@@ -55,13 +52,13 @@ public final class GroupOperation: AdvancedOperation {
       underlyingOperationQueue.qualityOfService = value
     }
   }
-
+  
   /// Internal `AdvancedOperationQueue`.
   private let underlyingOperationQueue = AdvancedOperationQueue()
-
+  
   /// Internal starting operation.
   private lazy var startingOperation = BlockOperation(block: { })
-
+  
   /// Internal finishing operation.
   private lazy var finishingOperation: BlockOperation = {
     return BlockOperation { [weak self] in
@@ -70,26 +67,26 @@ public final class GroupOperation: AdvancedOperation {
       self.finish(errors: self.aggregatedErrors)
     }
   }()
-
+  
   // MARK: - Initialization
-
+  
   public convenience init(operations: Operation...) {
     self.init(operations: operations)
   }
-
+  
   public init(operations: [Operation]) {
     super.init()
-
+    
     isSuspended = true
     underlyingOperationQueue.delegate = self
     underlyingOperationQueue.addOperation(startingOperation)
-
+    
     for operation in operations {
       addOperation(operation: operation)
     }
-
+    
   }
-
+  
   /// Cancels the execution of every operation.
   public override final func cancel() {
     // Cancels all the operations except the (internal) finishing one.
@@ -98,20 +95,20 @@ public final class GroupOperation: AdvancedOperation {
     }
     super.cancel()
   }
-
+  
   public final override func main() {
     underlyingOperationQueue.isSuspended = false
     underlyingOperationQueue.addOperation(finishingOperation)
   }
-
+  
   public func addOperation(operation: Operation) {
     assert(!finishingOperation.isCancelled || !finishingOperation.isFinished, "The GroupOperation is finishing and cannot accept more operations.")
-
+    
     finishingOperation.addDependency(operation)
     operation.addDependency(startingOperation)
     underlyingOperationQueue.addOperation(operation)
   }
-
+  
   /// The maximum number of queued operations that can execute at the same time.
   /// - Note: Reducing the number of concurrent operations does not affect any operations that are currently executing.
   public final var maxConcurrentOperationCount: Int {
@@ -122,7 +119,7 @@ public final class GroupOperation: AdvancedOperation {
       underlyingOperationQueue.maxConcurrentOperationCount = newValue
     }
   }
-
+  
   /// A Boolean value indicating whether the GroupOpeation is actively scheduling operations for execution.
   public final var isSuspended: Bool {
     get {
@@ -132,24 +129,24 @@ public final class GroupOperation: AdvancedOperation {
       underlyingOperationQueue.isSuspended = newValue
     }
   }
-
+  
 }
 
 extension GroupOperation: AdvancedOperationQueueDelegate {
-
+  
   func operationQueue(operationQueue: AdvancedOperationQueue, didAddOperation operation: Operation) {}
-
+  
   func operationQueue(operationQueue: AdvancedOperationQueue, operationDidFinish operation: Operation, withErrors errors: [Error]) {
     guard operationQueue === underlyingOperationQueue else { return }
-
+    
     guard !errors.isEmpty else { return }
     if operation !== finishingOperation || operation !== startingOperation {
       aggregatedErrors.append(contentsOf: errors)
     }
   }
-
+  
   func operationQueue(operationQueue: AdvancedOperationQueue, operationDidCancel operation: Operation, withErrors errors: [Error]) {
     // do nothing here
   }
-
+  
 }
