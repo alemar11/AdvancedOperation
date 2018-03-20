@@ -42,6 +42,12 @@ class AdvancedOperationQueue: OperationQueue {
 
   weak var delegate: AdvancedOperationQueueDelegate?
 
+  private let exclusibityManager: ExclusivityManager
+
+  init(exclusibityManager: ExclusivityManager = .sharedInstance) {
+    self.exclusibityManager = exclusibityManager
+  }
+
   override func addOperation(_ operation: Operation) {
 
     if let operation = operation as? AdvancedOperation { /// AdvancedOperation
@@ -74,14 +80,13 @@ class AdvancedOperationQueue: OperationQueue {
         }
 
         let mutuallyExclusiveConditions = operation.conditions.filter { $0.isMutuallyExclusive }
-        let manager = ExclusivityManager.sharedInstance
 
         for condition in mutuallyExclusiveConditions {
           let category = condition.category
 
-          manager.addOperation(operation, category: category)
-          operation.addObserver(observer: BlockObserver { op, _ in
-            manager.removeOperation(op, category: category)
+          exclusibityManager.addOperation(operation, category: category)
+          operation.addObserver(observer: BlockObserver { [weak self] op, _ in
+            self?.exclusibityManager.removeOperation(op, category: category)
           })
         }
          operation.willEnqueue()

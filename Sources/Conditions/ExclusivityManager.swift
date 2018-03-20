@@ -23,20 +23,20 @@
 
 import Foundation
 
-internal class ExclusivityManager {
+final public class ExclusivityManager {
 
-  static let sharedInstance = ExclusivityManager()
+  public static let sharedInstance = ExclusivityManager()
 
   private let queue = DispatchQueue(label: "\(identifier).\(#file)")
-  private var operations: [String: [Operation]] = [:]
+  internal private(set) var operations: [String: [Operation]] = [:]
 
-  func addOperation(_ operation: Operation, category: String) {
+  internal func addOperation(_ operation: Operation, category: String) {
     _ = queue.sync(execute: {
       self._addOperation(operation, category: category)
     })
   }
 
-  func removeOperation(_ operation: Operation, category: String) {
+  internal func removeOperation(_ operation: Operation, category: String) {
     queue.async {
       self._removeOperation(operation, category: category)
     }
