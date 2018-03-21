@@ -250,8 +250,9 @@ public class AdvancedOperation: Operation {
   }
   
   public final func finish(errors: [Error] = []) {
+    guard state.canTransition(to: .finishing) else { return }
+
     let result = lock.synchronized { () -> Bool in
-      guard state.canTransition(to: .finishing) else { return  false }
       if !_finishing {
         _finishing = true
         return true
