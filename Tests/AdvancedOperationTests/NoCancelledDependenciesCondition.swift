@@ -42,6 +42,7 @@ final class NoCancelledDependenciesCondition: XCTestCase {
     operation1.addCondition(condition: NoCancelledDependeciesCondition())
     operation3.addDependency(operation4)
     operation3.addCondition(condition: NoCancelledDependeciesCondition()) // this operation will fail
+
     operation4.cancel()
 
     queue.addOperations([operation1, operation2, operation3, operation4], waitUntilFinished: true)
@@ -51,6 +52,38 @@ final class NoCancelledDependenciesCondition: XCTestCase {
     XCTAssertFalse(operation1.failed)
     XCTAssertFalse(operation1.isCancelled)
 
+  }
+
+  func testStress() {
+    for i in 1...10 {
+      print(i)
+      testAllOperationCancelled()
+    }
+  }
+
+  func testAllOperationCancelled() {
+    let queue = AdvancedOperationQueue()
+
+    let operation1 = SleepyAsyncOperation()
+    let operation2 = SleepyAsyncOperation()
+    let operation3 = XCTFailOperation()
+    let operation4 = DelayOperation(interval: 1)
+
+    operation1.addDependencies(dependencies: [operation2, operation3])
+    operation1.addCondition(condition: NoCancelledDependeciesCondition())
+    operation3.addDependency(operation4)
+    operation3.addCondition(condition: NoCancelledDependeciesCondition()) // this operation will fail
+
+    operation4.cancel()
+    operation3.cancel()
+    operation2.cancel()
+    operation1.cancel()
+
+    queue.addOperations([operation1, operation2, operation3, operation4], waitUntilFinished: true)
+    XCTAssertTrue(operation4.isCancelled)
+    XCTAssertTrue(operation3.failed)
+    XCTAssertFalse(operation2.failed)
+    XCTAssertTrue(operation1.failed)
   }
 
   func testWithNoFailedDependeciesCondition() {
@@ -66,6 +99,7 @@ final class NoCancelledDependenciesCondition: XCTestCase {
     operation1.addCondition(condition: NoFailedDependenciesCondition())
     operation3.addDependency(operation4)
     operation3.addCondition(condition: NoCancelledDependeciesCondition())
+
     operation4.cancel()
 
     queue.addOperations([operation1, operation2, operation3, operation4], waitUntilFinished: true)

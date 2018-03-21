@@ -224,9 +224,8 @@ public class AdvancedOperation: Operation {
   }
   
   func cancel(error: Error? = nil) {
-    guard !isCancelled else { return }
-    
     let result = lock.synchronized { () -> Bool in
+      guard !isCancelled else { return false }
       if !_cancelling {
         _cancelling = true
         return true
@@ -251,9 +250,8 @@ public class AdvancedOperation: Operation {
   }
   
   public final func finish(errors: [Error] = []) {
-    guard state.canTransition(to: .finishing) else { return }
-    
     let result = lock.synchronized { () -> Bool in
+      guard state.canTransition(to: .finishing) else { return  false }
       if !_finishing {
         _finishing = true
         return true
@@ -288,8 +286,9 @@ public class AdvancedOperation: Operation {
   
   private func evaluateConditions() {
     assert(state == .pending, "Cannot evaluate conditions in this state: \(state)")
-    
+    //lock.synchronized {
     state = .evaluatingConditions
+    //}
     
     type(of: self).evaluate(conditions, operation: self) { [weak self] errors in
       self?.errors.append(contentsOf: errors)
