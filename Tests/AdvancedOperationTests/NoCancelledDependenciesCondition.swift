@@ -54,12 +54,12 @@ final class NoCancelledDependenciesCondition: XCTestCase {
 
   }
 
-  func testStress() {
-    for i in 1...10 {
-      print(i)
-      testAllOperationCancelled()
-    }
-  }
+//  func testStress() {
+//    for i in 1...10 {
+//      print("\n>>  \(i)")
+//      testAllOperationCancelled()
+//    }
+//  }
 
 //  func testAllOperationCancelled() {
 //    let queue = AdvancedOperationQueue()

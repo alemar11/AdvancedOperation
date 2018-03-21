@@ -28,7 +28,7 @@ final class AdvancedOperationTests: XCTestCase {
 
   // Runs some tests multiple times to find some edge cases.
   func testStress() {
-    for i in 1...100 {
+    for i in 1...10 {
       print("\n>>  \(i)")
       testMultipleStartsAndCancels()
       testCancelWithErrors()
