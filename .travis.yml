@@ -36,21 +36,21 @@ matrix:
       osx_image: xcode9.3beta
       language: objective-c
       env: 
-        - DESTINATION="OS=11.2,name=iPhone X" SCHEME="$IOS_FRAMEWORK_SCHEME" SDK="$IOS_SDK" XCODE_RUN_TESTS="YES" CODECOV_FLAG="ios"
+        - DESTINATION="OS=11.3,name=iPhone X" SCHEME="$IOS_FRAMEWORK_SCHEME" SDK="$IOS_SDK" XCODE_RUN_TESTS="YES" CODECOV_FLAG="ios"
 
     #watchOS 4.2
     - os: osx
       osx_image: xcode9.3beta
       language: objective-c
       env: 
-        - DESTINATION="OS=4.2,name=Apple Watch - 42mm" SCHEME="$WATCHOS_FRAMEWORK_SCHEME" SDK="$WATCHOS_SDK" XCODE_RUN_TESTS="NO" CODECOV_FLAG="watchos"
+        - DESTINATION="OS=4.3,name=Apple Watch - 42mm" SCHEME="$WATCHOS_FRAMEWORK_SCHEME" SDK="$WATCHOS_SDK" XCODE_RUN_TESTS="NO" CODECOV_FLAG="watchos"
 
     # tvOS 11.2
     - os: osx
       osx_image: xcode9.3beta
       language: objective-c
       env: 
-        - DESTINATION="OS=11.2,name=Apple TV 4K (at 1080p)" SCHEME="$TVOS_FRAMEWORK_SCHEME" SDK="$TVOS_SDK" XCODE_RUN_TESTS="YES" CODECOV_FLAG="tvos" 
+        - DESTINATION="OS=11.3,name=Apple TV 4K (at 1080p)" SCHEME="$TVOS_FRAMEWORK_SCHEME" SDK="$TVOS_SDK" XCODE_RUN_TESTS="YES" CODECOV_FLAG="tvos" 
 
     # macOS
     - os: osx
