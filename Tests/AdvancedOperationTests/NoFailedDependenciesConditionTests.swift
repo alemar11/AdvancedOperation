@@ -1,4 +1,4 @@
-//
+// 
 // AdvancedOperation
 //
 // Copyright © 2016-2018 Tinrobots.
@@ -21,28 +21,13 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-import Foundation
+import XCTest
+@testable import AdvancedOperation
 
-/// A  condition that negates the evaluation of another condition.
-public struct NegatedCondition<T: OperationCondition>: OperationCondition {
-
-  public var name: String { return "Not<\(condition.name)>" }
-
-  let condition: T
-
-  init(condition: T) {
-    self.condition = condition
+class NoFailedDependenciesConditionTests: XCTestCase {
+    
+  func testIsMutuallyExclusive() {
+    XCTAssertFalse(NoFailedDependenciesCondition().isMutuallyExclusive)
   }
-
-  public func evaluate(for operation: AdvancedOperation, completion: @escaping (OperationConditionResult) -> Void) {
-    condition.evaluate(for: operation) { (result) in
-      switch result {
-      case .satisfied:
-        return completion(.failed([NSError(domain: "\(identifier).\(self.name)", code: 1, userInfo: nil)]))
-      case .failed:
-        return completion(.satisfied)
-      }
-    }
-  }
-
+    
 }

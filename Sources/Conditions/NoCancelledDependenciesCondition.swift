@@ -27,7 +27,7 @@ import Foundation
 /// If any dependency was cancelled, the target operation will be cancelled as well.
 public struct NoCancelledDependeciesCondition: OperationCondition {
 
-  public var name: String { return category } // TODO
+  public var name: String { return category }
 
   public let ignoreCancellations: Bool
   /// Initializer which takes no parameters.
@@ -40,7 +40,7 @@ public struct NoCancelledDependeciesCondition: OperationCondition {
     let cancellations = dependencies.filter { $0.isCancelled }
 
     if !cancellations.isEmpty {
-      completion(.failed([NSError(domain: "demo", code: 1, userInfo: nil)]))
+      completion(.failed([NSError(domain: "\(identifier).\(name)", code: 1, userInfo: nil)]))
     } else {
       completion(.satisfied)
     }

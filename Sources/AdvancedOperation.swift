@@ -205,7 +205,7 @@ public class AdvancedOperation: Operation {
     guard (state != .finishing) || (state != .finished) else { return }
     
     // Bail out early if cancelled or there are some errors.
-    guard errors.isEmpty && !isCancelled else {
+    guard !failed && !isCancelled else {
       finish()
       return
     }
@@ -354,12 +354,19 @@ extension AdvancedOperation {
     }
     
     conditionGroup.notify(queue: DispatchQueue.global()) {
-      var failures = results.compactMap { $0?.errors }.flatMap { $0 }
+      var errors = results.compactMap { (result) -> [Error]? in
+        switch result {
+        case .failed(let errors)?:
+          return errors
+        default:
+          return nil
+        }
+        } .flatMap { $0 }
       
       if operation.isCancelled {
-        failures.append(contentsOf: operation.errors) //TODO better error
+        errors.append(contentsOf: operation.errors) //TODO better error
       }
-      completion(failures)
+      completion(errors)
     }
   }
   

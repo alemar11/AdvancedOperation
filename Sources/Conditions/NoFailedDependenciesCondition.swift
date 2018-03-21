@@ -23,8 +23,8 @@
 
 import Foundation
 
-/// A condition that specifies that every dependency of the operation must succeed.
-/// If any dependency fails/cancels, the target operation will fail.
+/// A condition that specifies that every dependency of the operation must not fail.
+/// If any dependency finishes or cancels with errors (fail), the target operation will fail.
 public struct NoFailedDependenciesCondition: OperationCondition {
 
   public var name: String { return category } // TODO
@@ -36,24 +36,19 @@ public struct NoFailedDependenciesCondition: OperationCondition {
   }
 
   public func evaluate(for operation: AdvancedOperation, completion: @escaping (OperationConditionResult) -> Void) {
-    let dependencies = operation.dependencies
+    var dependencies = operation.dependencies
 
-    var failures = dependencies.filter {
-      if let operation = $0 as? AdvancedOperation {
-        return operation.failed
-      }
-      return false
-    }
-    
     if ignoreCancellations {
-      failures = failures.filter { !$0.isCancelled }
+      dependencies = dependencies.filter { !$0.isCancelled }
     }
+
+    let failures = dependencies.compactMap { $0 as? AdvancedOperation }.filter { $0.failed }
 
     if !failures.isEmpty {
-      let errors = failures.compactMap { $0 as? AdvancedBlockOperation }.flatMap {$0.errors}
+      let errors = failures.flatMap {$0.errors}
       completion(.failed(errors))
     } else {
-        completion(.satisfied)
+      completion(.satisfied)
     }
 
   }

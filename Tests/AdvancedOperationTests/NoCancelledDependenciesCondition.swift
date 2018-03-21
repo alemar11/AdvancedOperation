@@ -41,7 +41,7 @@ class NoCancelledDependenciesCondition: XCTestCase {
     operation1.addDependencies(dependencies: [operation2, operation3])
     operation1.addCondition(condition: NoCancelledDependeciesCondition())
     operation3.addDependency(operation4)
-    operation3.addCondition(condition: NoCancelledDependeciesCondition())
+    operation3.addCondition(condition: NoCancelledDependeciesCondition()) // this operation will fail
     operation4.cancel()
 
     queue.addOperations([operation1, operation2, operation3, operation4], waitUntilFinished: true)
@@ -53,28 +53,32 @@ class NoCancelledDependenciesCondition: XCTestCase {
 
   }
 
-//  func testWithNoFailedDependeciesCondition() {
-//    let queue = AdvancedOperationQueue()
-//
-//    let operation1 = XCTFailOperation()
-//    let operation2 = SleepyAsyncOperation()
-//    let operation3 = XCTFailOperation()
-//    let operation4 = DelayOperation(interval: 1)
-//
-//    operation1.addDependencies(dependencies: [operation2, operation3])
-//    operation1.addCondition(condition: NoCancelledDependeciesCondition())
-//    operation1.addCondition(condition: NoFailedDependenciesCondition())
-//    operation3.addDependency(operation4)
-//    operation3.addCondition(condition: NoCancelledDependeciesCondition())
-//    operation4.cancel()
-//
-//    queue.addOperations([operation1, operation2, operation3, operation4], waitUntilFinished: true)
-//    XCTAssertTrue(operation4.isCancelled)
-//    XCTAssertTrue(operation3.failed)
-//    XCTAssertFalse(operation2.isCancelled)
-//    XCTAssertTrue(operation1.failed)
-//    XCTAssertTrue(operation1.isCancelled)
-//
-//  }
+  func testWithNoFailedDependeciesCondition() {
+    let queue = AdvancedOperationQueue()
+
+    let operation1 = XCTFailOperation()
+    let operation2 = SleepyAsyncOperation()
+    let operation3 = XCTFailOperation()
+    let operation4 = DelayOperation(interval: 1)
+
+    operation1.addDependencies(dependencies: [operation2, operation3])
+    operation1.addCondition(condition: NoCancelledDependeciesCondition())
+    operation1.addCondition(condition: NoFailedDependenciesCondition())
+    operation3.addDependency(operation4)
+    operation3.addCondition(condition: NoCancelledDependeciesCondition())
+    operation4.cancel()
+
+    queue.addOperations([operation1, operation2, operation3, operation4], waitUntilFinished: true)
+    XCTAssertTrue(operation4.isCancelled)
+    XCTAssertFalse(operation4.failed)
+
+    XCTAssertTrue(operation3.failed)
+
+    XCTAssertFalse(operation2.isCancelled)
+    XCTAssertFalse(operation2.failed)
+
+    XCTAssertTrue(operation1.failed)
+    XCTAssertFalse(operation1.isCancelled)
+  }
 
 }
