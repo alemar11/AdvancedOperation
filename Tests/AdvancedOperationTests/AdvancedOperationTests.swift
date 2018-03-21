@@ -24,7 +24,7 @@
 import XCTest
 @testable import AdvancedOperation
 
-class AdvancedOperationTests: XCTestCase {
+final class AdvancedOperationTests: XCTestCase {
 
   // Runs some tests multiple times to find some edge cases.
   func testStress() {

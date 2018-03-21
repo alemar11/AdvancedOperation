@@ -24,7 +24,7 @@
 import XCTest
 @testable import AdvancedOperation
 
-class AdvancedBlockOperationTests: XCTestCase {
+final class AdvancedBlockOperationTests: XCTestCase {
 
   func testCancel() {
     let operation = AdvancedBlockOperation { complete in

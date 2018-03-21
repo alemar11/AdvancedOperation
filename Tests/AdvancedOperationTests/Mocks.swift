@@ -52,7 +52,7 @@ internal enum MockError: Swift.Error, Equatable {
 
 // MARK: - AdvancedOperation
 
-internal class SleepyAsyncOperation: AdvancedOperation {
+final internal class SleepyAsyncOperation: AdvancedOperation {
 
   private let interval1: UInt32
   private let interval2: UInt32
@@ -94,7 +94,7 @@ internal class SleepyAsyncOperation: AdvancedOperation {
 
 }
 
-internal class SleepyOperation: AdvancedOperation {
+final internal class SleepyOperation: AdvancedOperation {
 
   override func main() {
     sleep(1)
@@ -103,7 +103,7 @@ internal class SleepyOperation: AdvancedOperation {
 
 }
 
-internal class XCTFailOperation: AdvancedOperation {
+final internal class XCTFailOperation: AdvancedOperation {
 
   override func main() {
     XCTFail("This operation should't be executed.")
@@ -112,7 +112,7 @@ internal class XCTFailOperation: AdvancedOperation {
 
 }
 
-internal class FailingAsyncOperation: AdvancedOperation {
+final internal class FailingAsyncOperation: AdvancedOperation {
 
   private let defaultErrors: [Error]
 
@@ -131,7 +131,7 @@ internal class FailingAsyncOperation: AdvancedOperation {
 
 // MARK: - OperationObserving
 
-internal class MockObserver: OperationObserving {
+final internal class MockObserver: OperationObserving {
 
   var identifier = UUID().uuidString
   var willExecutetCount = 0
@@ -157,7 +157,7 @@ internal class MockObserver: OperationObserving {
 
 // MARK: - AdvancedOperationQueueDelegate
 
-internal class MockOperationQueueDelegate: AdvancedOperationQueueDelegate {
+final internal class MockOperationQueueDelegate: AdvancedOperationQueueDelegate {
 
   var willAddOperationHandler: ((AdvancedOperationQueue, Operation) -> Void)? = nil
   var didAddOperationHandler: ((AdvancedOperationQueue, Operation) -> Void)? = nil

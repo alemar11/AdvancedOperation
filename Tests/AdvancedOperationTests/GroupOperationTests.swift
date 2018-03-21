@@ -24,7 +24,7 @@
 import XCTest
 @testable import AdvancedOperation
 
-class GroupOperationTests: XCTestCase {
+final class GroupOperationTests: XCTestCase {
 
   func testStandardFlow() {
     let expectation1 = expectation(description: "\(#function)\(#line)")

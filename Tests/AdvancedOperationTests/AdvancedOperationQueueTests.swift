@@ -24,7 +24,7 @@
 import XCTest
 @testable import AdvancedOperation
 
-class AdvancedOperationQueueTests: XCTestCase {
+final class AdvancedOperationQueueTests: XCTestCase {
 
   func testQueueWithAdvancedOperationsUsingWaitUntilFinished() {
     let queue = AdvancedOperationQueue()

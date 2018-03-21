@@ -24,7 +24,7 @@
 import XCTest
 @testable import AdvancedOperation
 
-class OperationKeyValueObserverTests: XCTestCase {
+final class OperationKeyValueObserverTests: XCTestCase {
 
   func testStart() {
     let operation = SleepyAsyncOperation(interval1: 1, interval2: 3, interval3: 1)

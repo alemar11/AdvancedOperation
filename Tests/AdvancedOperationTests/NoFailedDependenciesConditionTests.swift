@@ -24,7 +24,7 @@
 import XCTest
 @testable import AdvancedOperation
 
-class NoFailedDependenciesConditionTests: XCTestCase {
+final class NoFailedDependenciesConditionTests: XCTestCase {
     
   func testIsMutuallyExclusive() {
     XCTAssertFalse(NoFailedDependenciesCondition().isMutuallyExclusive)

@@ -24,7 +24,7 @@
 import XCTest
 @testable import AdvancedOperation
 
-class DelayOperationTests: XCTestCase {
+final class DelayOperationTests: XCTestCase {
 
   func testStandardFlowWithInterval() {
     let expectation1 = expectation(description: "\(#function)\(#line)")

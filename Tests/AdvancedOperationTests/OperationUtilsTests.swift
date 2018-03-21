@@ -33,7 +33,7 @@ extension OperationUtilsTests {
 
 }
 
-class OperationUtilsTests: XCTestCase {
+final class OperationUtilsTests: XCTestCase {
 
   func testAddCompletionBlock() {
     let operation = SleepyOperation()
