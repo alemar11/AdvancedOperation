@@ -84,16 +84,16 @@ public final class GroupOperation: AdvancedOperation {
     for operation in operations {
       addOperation(operation: operation)
     }
-    
   }
   
   /// Cancels the execution of every operation.
-  public override final func cancel() {
+  public final override func cancel(error: Error?) {
     // Cancels all the operations except the (internal) finishing one.
     for operation in underlyingOperationQueue.operations where operation !== finishingOperation {
       operation.cancel()
     }
-    super.cancel()
+    
+    super.cancel(error: error)
   }
   
   public final override func main() {
