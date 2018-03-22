@@ -69,28 +69,28 @@ class AdvancedOperationQueue: OperationQueue {
       operation.addObserver(observer: observer)
 
       ///////////////
-      if !operation.conditions.isEmpty {
-
-        // Extract any dependencies needed by this operation.
-        // TODO: to be implemented
-        let dependencies = operation.conditions.compactMap { $0.dependency(for: operation) }
-        for dependency in dependencies {
-          operation.addDependency(dependency)
-          self.addOperation(dependency)
-        }
-
-        let mutuallyExclusiveConditions = operation.conditions.filter { $0.isMutuallyExclusive }
-
-        for condition in mutuallyExclusiveConditions {
-          let category = condition.category
-
-          exclusivityManager.addOperation(operation, category: category)
-          operation.addObserver(observer: BlockObserver { [weak self] op, _ in
-            self?.exclusivityManager.removeOperation(op, category: category)
-          })
-        }
-         operation.willEnqueue()
-      }
+//      if !operation.conditions.isEmpty {
+//
+//        // Extract any dependencies needed by this operation.
+//        // TODO: to be implemented
+//        let dependencies = operation.conditions.compactMap { $0.dependency(for: operation) }
+//        for dependency in dependencies {
+//          operation.addDependency(dependency)
+//          self.addOperation(dependency)
+//        }
+//
+//        let mutuallyExclusiveConditions = operation.conditions.filter { $0.isMutuallyExclusive }
+//
+//        for condition in mutuallyExclusiveConditions {
+//          let category = condition.category
+//
+//          exclusivityManager.addOperation(operation, category: category)
+//          operation.addObserver(observer: BlockObserver { [weak self] op, _ in
+//            self?.exclusivityManager.removeOperation(op, category: category)
+//          })
+//        }
+         //operation.willEnqueue()
+//      }
 
       ///////////////
 

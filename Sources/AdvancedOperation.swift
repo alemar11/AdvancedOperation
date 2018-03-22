@@ -27,29 +27,7 @@ public class AdvancedOperation: Operation {
   
   // MARK: - State
   
-  public final override var isReady: Bool {
-    switch state {
-      
-    case .pending:
-      if isCancelled {
-        return true // TODO: or should be true?
-      }
-      
-      if super.isReady {
-        evaluateConditions()
-        return false
-      }
-      
-      return false // Until conditions have been evaluated
-      
-    case .ready:
-      return super.isReady
-      
-    default:
-      return false
-    }
-    
-  }
+  open override var isReady: Bool { return state == .ready && super.isReady }
   
   public final override var isExecuting: Bool { return state == .executing }
   
@@ -61,8 +39,6 @@ public class AdvancedOperation: Operation {
   internal enum OperationState: Int, CustomDebugStringConvertible {
     
     case ready
-    case pending
-    case evaluatingConditions
     case executing
     case finishing
     case finished
@@ -71,13 +47,7 @@ public class AdvancedOperation: Operation {
       switch (self, state) {
       case (.ready, .executing):
         return true
-      case (.ready, .pending):
-        return true
       case (.ready, .finishing): // early bailing out
-        return true
-      case (.pending, .evaluatingConditions):
-        return true
-      case (.evaluatingConditions, .ready):
         return true
       case (.executing, .finishing):
         return true
@@ -92,10 +62,6 @@ public class AdvancedOperation: Operation {
       switch self {
       case .ready:
         return "ready"
-      case .pending:
-        return "pending"
-      case .evaluatingConditions:
-        return "evaluatingConditions"
       case .executing:
         return "executing"
       case .finishing:
@@ -180,7 +146,7 @@ public class AdvancedOperation: Operation {
   
   // MARK: - Conditions
   
-  public private(set) var conditions = [OperationCondition]() //TODO : set?
+  //public private(set) var conditions = [OperationCondition]() //TODO : set?
   
   // MARK: - Observers
   
@@ -303,51 +269,51 @@ public class AdvancedOperation: Operation {
     
     guard result else { return }
     
-    lock.synchronized {
+    //lock.synchronized {
       state = .finishing
-    }
+    //}
     
     lock.synchronized {
       self.errors.append(contentsOf: errors)
     }
     
-    lock.synchronized {
+    //lock.synchronized {
       state = .finished
-    }
+    //}
   }
   
   // MARK: - Add Condition
   
-  /// Indicate to the operation that it can proceed with evaluating conditions (if it's not cancelled or finished).
-  internal func willEnqueue() {
-    guard !isCancelled || !isFinished else { return }
-
-    let result = lock.synchronized { () -> Bool in
-      if _finishing || _cancelling { return false }
-      return state.canTransition(to: .pending)
-    }
-
-    guard result else { return }
-    state = .pending
-  }
-  
-  public func addCondition(condition: OperationCondition) {
-    assert(state == .ready || state == .pending, "Cannot add conditions after the evaluation (or execution) has begun.") // TODO: better assert
-    
-    conditions.append(condition)
-  }
-  
-  private func evaluateConditions() {
-    assert(state == .pending, "Cannot evaluate conditions in this state: \(state)")
-    //lock.synchronized {
-    state = .evaluatingConditions
-    //}
-    
-    type(of: self).evaluate(conditions, operation: self) { [weak self] errors in
-      self?.errors.append(contentsOf: errors)
-      self?.state = .ready
-    }
-  }
+//  /// Indicate to the operation that it can proceed with evaluating conditions (if it's not cancelled or finished).
+//  internal func willEnqueue() {
+//    guard !isCancelled || !isFinished else { return }
+//
+//    let result = lock.synchronized { () -> Bool in
+//      if _finishing || _cancelling { return false }
+//      return state.canTransition(to: .pending)
+//    }
+//
+//    guard result else { return }
+//    state = .pending
+//  }
+//  
+//  public func addCondition(condition: OperationCondition) {
+//    assert(state == .ready || state == .pending, "Cannot add conditions after the evaluation (or execution) has begun.") // TODO: better assert
+//    
+//    conditions.append(condition)
+//  }
+//  
+//  private func evaluateConditions() {
+//    assert(state == .pending, "Cannot evaluate conditions in this state: \(state)")
+//    //lock.synchronized {
+//    state = .evaluatingConditions
+//    //}
+//    
+//    type(of: self).evaluate(conditions, operation: self) { [weak self] errors in
+//      self?.errors.append(contentsOf: errors)
+//      self?.state = .ready
+//    }
+//  }
   
   // MARK: - Observer
   
