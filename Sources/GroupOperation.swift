@@ -92,10 +92,13 @@ public final class GroupOperation: AdvancedOperation {
     for operation in underlyingOperationQueue.operations where operation !== finishingOperation {
       operation.cancel()
     }
-    
     super.cancel(error: error)
   }
-  
+
+  public override func cancel() {
+    cancel(error: nil)
+  }
+
   public final override func main() {
     underlyingOperationQueue.isSuspended = false
     underlyingOperationQueue.addOperation(finishingOperation)
