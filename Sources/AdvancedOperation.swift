@@ -72,12 +72,18 @@ public class AdvancedOperation: Operation {
     }
     
   }
+
+  // MARK: - Initializers
+
+  public init(isMutuallyExclusive: Bool = false) {
+    self.isMutuallyExclusive = isMutuallyExclusive
+    super.init()
+  }
   
   // MARK: - Properties
 
-//  public override var description: String {
-//    return super.description + "state: \(_state)" + "name: \(name)"
-//  }
+  /// A flag to indicate whether this `AdvancedOperation` is mutually exclusive meaning that only one operation of this type can be evaluated at a time.
+  public let isMutuallyExclusive: Bool
 
   /// Returns `true` if the `AdvancedOperation` failed due to errors.
   public var failed: Bool { return !errors.isEmpty }
