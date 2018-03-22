@@ -32,7 +32,7 @@ public class AdvancedOperation: Operation {
       
     case .pending:
       if isCancelled {
-        return false // TODO: or should be true?
+        return true // TODO: or should be true?
       }
       
       if super.isReady {
@@ -108,7 +108,11 @@ public class AdvancedOperation: Operation {
   }
   
   // MARK: - Properties
-  
+
+//  public override var description: String {
+//    return super.description + "state: \(_state)" + "name: \(name)"
+//  }
+
   /// Returns `true` if the `AdvancedOperation` failed due to errors.
   public var failed: Bool { return !errors.isEmpty }
   
@@ -203,28 +207,66 @@ public class AdvancedOperation: Operation {
   public final override func start() {
     // Do not start if it's finishing or already finished
     guard (state != .finishing) || (state != .finished) else { return }
-    
+
     // Bail out early if cancelled or there are some errors.
     guard !failed && !isCancelled else {
       finish()
       return
     }
-    
+
     guard isReady else { return }
     guard !isExecuting else { return }
-    
+
     state = .executing
     //Thread.detachNewThreadSelector(#selector(main), toTarget: self, with: nil)
     // https://developer.apple.com/library/content/documentation/General/Conceptual/ConcurrencyProgrammingGuide/OperationObjects/OperationObjects.html#//apple_ref/doc/uid/TP40008091-CH101-SW16
     main()
   }
-  
+
+//  public final override func start() {
+//    // Do not start if it's finishing or already finished
+//    //guard (state != .finishing) || (state != .finished) else { return }
+//
+//    // Bail out early if cancelled or there are some errors.
+//    guard !isCancelled else {
+//      finish()
+//      return
+//    }
+//
+//    let result = lock.synchronized { () -> Bool in
+//      guard !failed else { return false }
+//      return true
+//
+//    }
+//
+//      guard result else {
+//        finish()
+//        return
+//      }
+//
+//    guard isReady else { return }
+//    guard !isExecuting else { return }
+//
+//    state = .executing
+//    //Thread.detachNewThreadSelector(#selector(main), toTarget: self, with: nil)
+//    // https://developer.apple.com/library/content/documentation/General/Conceptual/ConcurrencyProgrammingGuide/OperationObjects/OperationObjects.html#//apple_ref/doc/uid/TP40008091-CH101-SW16
+//    main()
+//  }
+
   public override func main() {
     fatalError("\(type(of: self)) must override `main()`.")
   }
   
-  func cancel(error: Error? = nil) {
-    guard !isCancelled else { return } // FIXME
+  public func cancel(error: Error? = nil) {
+    _cancel(error: error)
+  }
+  
+  public override func cancel() {
+    _cancel()
+  }
+  
+  private func _cancel(error: Error? = nil) {
+    guard !isCancelled else { return }
 
     let result = lock.synchronized { () -> Bool in
       if !_cancelling {
@@ -236,22 +278,20 @@ public class AdvancedOperation: Operation {
     
     guard result else { return }
     
-    //lock.synchronized{
-    if let error = error {
-      errors.append(error)
+    lock.synchronized{
+      if let error = error {
+        errors.append(error)
+      }
     }
-    //}
     
-    cancel()
-  }
-  
-  public override func cancel() {
     super.cancel()
     didCancel()
+
+    //finish()
   }
   
   public final func finish(errors: [Error] = []) {
-    guard state.canTransition(to: .finishing) else { return } // FIXME
+    guard state.canTransition(to: .finishing) else { return }
 
     let result = lock.synchronized { () -> Bool in
       if !_finishing {
@@ -266,7 +306,10 @@ public class AdvancedOperation: Operation {
     lock.synchronized {
       state = .finishing
     }
-    self.errors.append(contentsOf: errors)
+    
+    lock.synchronized {
+      self.errors.append(contentsOf: errors)
+    }
     
     lock.synchronized {
       state = .finished
@@ -275,8 +318,16 @@ public class AdvancedOperation: Operation {
   
   // MARK: - Add Condition
   
-  // Indicate to the operation that it can proceed with evaluating conditions.
+  /// Indicate to the operation that it can proceed with evaluating conditions (if it's not cancelled or finished).
   internal func willEnqueue() {
+    guard !isCancelled || !isFinished else { return }
+
+    let result = lock.synchronized { () -> Bool in
+      if _finishing || _cancelling { return false }
+      return state.canTransition(to: .pending)
+    }
+
+    guard result else { return }
     state = .pending
   }
   
