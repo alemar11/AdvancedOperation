@@ -258,8 +258,6 @@ public class AdvancedOperation: Operation {
     
     super.cancel()
     didCancel()
-
-    //finish()
   }
   
   public final func finish(errors: [Error] = []) {
@@ -361,37 +359,38 @@ public class AdvancedOperation: Operation {
   
 }
 
-// MARK: - Condition Evaluation
+//// MARK: - Condition Evaluation
+//
+//extension AdvancedOperation {
+//
+//  static func evaluate(_ conditions: [OperationCondition], operation: AdvancedOperation, completion: @escaping ([Error]) -> Void) {
+//    let conditionGroup = DispatchGroup()
+//    var results = [OperationConditionResult?](repeating: nil, count: conditions.count)
+//
+//    for (index, condition) in conditions.enumerated() {
+//      conditionGroup.enter()
+//      condition.evaluate(for: operation) { result in
+//        results[index] = result
+//        conditionGroup.leave()
+//      }
+//    }
+//
+//    conditionGroup.notify(queue: DispatchQueue.global()) {
+//      var errors = results.compactMap { (result) -> [Error]? in
+//        switch result {
+//        case .failed(let errors)?:
+//          return errors
+//        default:
+//          return nil
+//        }
+//        } .flatMap { $0 }
+//
+//      if operation.isCancelled {
+//        errors.append(contentsOf: operation.errors) //TODO better error
+//      }
+//      completion(errors)
+//    }
+//  }
+//
+//}
 
-extension AdvancedOperation {
-  
-  static func evaluate(_ conditions: [OperationCondition], operation: AdvancedOperation, completion: @escaping ([Error]) -> Void) {
-    let conditionGroup = DispatchGroup()
-    var results = [OperationConditionResult?](repeating: nil, count: conditions.count)
-    
-    for (index, condition) in conditions.enumerated() {
-      conditionGroup.enter()
-      condition.evaluate(for: operation) { result in
-        results[index] = result
-        conditionGroup.leave()
-      }
-    }
-    
-    conditionGroup.notify(queue: DispatchQueue.global()) {
-      var errors = results.compactMap { (result) -> [Error]? in
-        switch result {
-        case .failed(let errors)?:
-          return errors
-        default:
-          return nil
-        }
-        } .flatMap { $0 }
-      
-      if operation.isCancelled {
-        errors.append(contentsOf: operation.errors) //TODO better error
-      }
-      completion(errors)
-    }
-  }
-  
-}
