@@ -59,23 +59,30 @@ extension Operation {
     }
   }
 
+}
+
+extension Operation {
+
   /// Adds `self` as a dependency of a given operation and return both operations.
   ///
   /// - Parameter operation: the Operation instance to add the receiver as a dependency
-  /// - Returns: an array with both operations
-  func then(do operation: Operation) -> [Operation] {
+  @discardableResult
+  func then(_ operation: Operation) -> Operation {
     assert(!isFinished, "Cannot add a finished operation as a dependency.")
     operation.addDependency(self)
-    return [self, operation]
+    return operation
   }
 
 }
 
 extension Array where Element: Operation {
-  func then(do operations: Operation...) -> [Operation] {
-    for operation in self {
-      operation.addDependencies(dependencies: operations)
+
+  @discardableResult
+  func then(_ operations: Operation...) -> [Operation] {
+    for operation in operations {
+      operation.addDependencies(dependencies: self)
     }
     return operations
   }
+
 }

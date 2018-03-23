@@ -71,4 +71,45 @@ final class OperationUtilsTests: XCTestCase {
     waitForExpectations(timeout: 10)
   }
 
+  func testThen() {
+    let operation1 = SleepyOperation()
+    let expectation1 = expectation(description: "\(#function)\(#line)")
+    operation1.addCompletionBlock { expectation1.fulfill() }
+
+    let operation2 = SleepyOperation()
+    let expectation2 = expectation(description: "\(#function)\(#line)")
+    operation2.addCompletionBlock { expectation2.fulfill() }
+
+    let operation3 = SleepyOperation()
+    let expectation3 = expectation(description: "\(#function)\(#line)")
+    operation3.addCompletionBlock { expectation3.fulfill() }
+
+    operation1.then(operation2).then(operation3)
+
+    let queue = AdvancedOperationQueue()
+    queue.addOperations([operation2, operation1, operation3], waitUntilFinished: false)
+
+    wait(for: [expectation1, expectation2, expectation3], timeout: 30, enforceOrder: true)
+  }
+
+  func testThenWithOperations() {
+    let operation1 = SleepyOperation()
+    let operation2 = SleepyOperation()
+    let operation3 = SleepyOperation()
+    
+    let expectation3 = expectation(description: "\(#function)\(#line)")
+    operation3.addCompletionBlock { expectation3.fulfill() }
+
+    [operation1, operation2].then(operation3)
+
+    let queue = AdvancedOperationQueue()
+    queue.addOperations([operation2, operation1, operation3], waitUntilFinished: false)
+
+    wait(for: [expectation3], timeout: 30)
+    XCTAssertTrue(operation1.isFinished)
+    XCTAssertTrue(operation2.isFinished)
+    XCTAssertTrue(operation3.isFinished)
+  }
+
+
 }
