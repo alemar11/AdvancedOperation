@@ -72,19 +72,16 @@ public class AdvancedOperation: Operation {
     }
     
   }
-
-  // MARK: - Initializers
-
-  public init(isMutuallyExclusive: Bool = false) {
-    self.isMutuallyExclusive = isMutuallyExclusive
-    super.init()
-  }
   
   // MARK: - Properties
-
+  
   /// A flag to indicate whether this `AdvancedOperation` is mutually exclusive meaning that only one operation of this type can be evaluated at a time.
-  public let isMutuallyExclusive: Bool
-
+  public var isMutuallyExclusive: Bool { return !mutuallyExclusiveCategories.isEmpty }
+  
+  public var mutuallyExclusiveCategories: Set<String> {
+    get { return lock.synchronized { _categories } }
+  }
+  
   /// Returns `true` if the `AdvancedOperation` failed due to errors.
   public var failed: Bool { return !errors.isEmpty }
   
@@ -99,6 +96,9 @@ public class AdvancedOperation: Operation {
   
   /// Returns `true` if the `AdvancedOperation` is cancelling.
   private var _cancelling = false
+  
+  /// Set of categories used by the ExclusivityManager.
+  private var _categories = Set<String>()
   
   /// The state of the operation.
   @objc dynamic
@@ -150,10 +150,6 @@ public class AdvancedOperation: Operation {
    }
    **/
   
-  // MARK: - Conditions
-  
-  //public private(set) var conditions = [OperationCondition]() //TODO : set?
-  
   // MARK: - Observers
   
   private(set) var observers = [OperationObservingType]()
@@ -179,52 +175,22 @@ public class AdvancedOperation: Operation {
   public final override func start() {
     // Do not start if it's finishing or already finished
     guard (state != .finishing) || (state != .finished) else { return }
-
+    
     // Bail out early if cancelled or there are some errors.
     guard !failed && !isCancelled else {
       finish()
       return
     }
-
+    
     guard isReady else { return }
     guard !isExecuting else { return }
-
+    
     state = .executing
     //Thread.detachNewThreadSelector(#selector(main), toTarget: self, with: nil)
     // https://developer.apple.com/library/content/documentation/General/Conceptual/ConcurrencyProgrammingGuide/OperationObjects/OperationObjects.html#//apple_ref/doc/uid/TP40008091-CH101-SW16
     main()
   }
-
-//  public final override func start() {
-//    // Do not start if it's finishing or already finished
-//    //guard (state != .finishing) || (state != .finished) else { return }
-//
-//    // Bail out early if cancelled or there are some errors.
-//    guard !isCancelled else {
-//      finish()
-//      return
-//    }
-//
-//    let result = lock.synchronized { () -> Bool in
-//      guard !failed else { return false }
-//      return true
-//
-//    }
-//
-//      guard result else {
-//        finish()
-//        return
-//      }
-//
-//    guard isReady else { return }
-//    guard !isExecuting else { return }
-//
-//    state = .executing
-//    //Thread.detachNewThreadSelector(#selector(main), toTarget: self, with: nil)
-//    // https://developer.apple.com/library/content/documentation/General/Conceptual/ConcurrencyProgrammingGuide/OperationObjects/OperationObjects.html#//apple_ref/doc/uid/TP40008091-CH101-SW16
-//    main()
-//  }
-
+  
   public override func main() {
     fatalError("\(type(of: self)) must override `main()`.")
   }
@@ -239,7 +205,7 @@ public class AdvancedOperation: Operation {
   
   private func _cancel(error: Error? = nil) {
     guard !isCancelled else { return }
-
+    
     let result = lock.synchronized { () -> Bool in
       if !_cancelling {
         _cancelling = true
@@ -262,7 +228,7 @@ public class AdvancedOperation: Operation {
   
   public final func finish(errors: [Error] = []) {
     guard state.canTransition(to: .finishing) else { return }
-
+    
     let result = lock.synchronized { () -> Bool in
       if !_finishing {
         _finishing = true
@@ -274,7 +240,7 @@ public class AdvancedOperation: Operation {
     guard result else { return }
     
     //lock.synchronized {
-      state = .finishing
+    state = .finishing
     //}
     
     lock.synchronized {
@@ -282,42 +248,18 @@ public class AdvancedOperation: Operation {
     }
     
     //lock.synchronized {
-      state = .finished
+    state = .finished
     //}
   }
   
-  // MARK: - Add Condition
+  // MARK: - Mutually Exclusive Category
   
-//  /// Indicate to the operation that it can proceed with evaluating conditions (if it's not cancelled or finished).
-//  internal func willEnqueue() {
-//    guard !isCancelled || !isFinished else { return }
-//
-//    let result = lock.synchronized { () -> Bool in
-//      if _finishing || _cancelling { return false }
-//      return state.canTransition(to: .pending)
-//    }
-//
-//    guard result else { return }
-//    state = .pending
-//  }
-//  
-//  public func addCondition(condition: OperationCondition) {
-//    assert(state == .ready || state == .pending, "Cannot add conditions after the evaluation (or execution) has begun.") // TODO: better assert
-//    
-//    conditions.append(condition)
-//  }
-//  
-//  private func evaluateConditions() {
-//    assert(state == .pending, "Cannot evaluate conditions in this state: \(state)")
-//    //lock.synchronized {
-//    state = .evaluatingConditions
-//    //}
-//    
-//    type(of: self).evaluate(conditions, operation: self) { [weak self] errors in
-//      self?.errors.append(contentsOf: errors)
-//      self?.state = .ready
-//    }
-//  }
+  func addMutuallyExclusiveCategory(_ category: String) {
+    lock.synchronized {
+      assert(state == .ready, "Invalid state \(_state) for adding mutually exclusive categories.")
+      _categories.insert(category)
+    }
+  }
   
   // MARK: - Observer
   

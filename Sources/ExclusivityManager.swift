@@ -28,6 +28,7 @@ final public class ExclusivityManager {
   public static let sharedInstance = ExclusivityManager()
 
   private let queue = DispatchQueue(label: "\(identifier).\(#file)")
+
   internal private(set) var operations: [String: [Operation]] = [:]
 
   internal func addOperation(_ operation: Operation, category: String) {

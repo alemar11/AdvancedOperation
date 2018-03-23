@@ -67,13 +67,11 @@ class AdvancedOperationQueue: OperationQueue {
       })
       
       operation.addObserver(observer: observer)
-
+      
       // Check if the mutual exclusivity is enabled
-      if operation.isMutuallyExclusive {
-        let category = operation.name ?? String(describing: type(of: operation))
-
+      for category in operation.mutuallyExclusiveCategories {
         exclusivityManager.addOperation(operation, category: category)
-
+        
         operation.addObserver(observer: BlockObserver { [weak self] op, _ in //TODO: move into che MutualExclusivityManager
           self?.exclusivityManager.removeOperation(op, category: category)
         })
