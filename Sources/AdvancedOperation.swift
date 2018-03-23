@@ -86,7 +86,7 @@ public class AdvancedOperation: Operation {
   public var failed: Bool { return !errors.isEmpty }
   
   /// A lock to guard reads and writes to the `_state` property
-  private let lock = NSRecursiveLock()
+  private let lock = NSLock()
   
   /// Private backing stored property for `state`.
   private var _state: OperationState = .ready
@@ -238,25 +238,22 @@ public class AdvancedOperation: Operation {
     }
     
     guard result else { return }
-    
-    //lock.synchronized {
+
     state = .finishing
-    //}
     
     lock.synchronized {
       self.errors.append(contentsOf: errors)
     }
-    
-    //lock.synchronized {
+
     state = .finished
-    //}
   }
   
   // MARK: - Mutually Exclusive Category
 
   func addMutuallyExclusiveCategory(_ category: String) {
+    assert(isReady, "Invalid state \(_state) for adding mutually exclusive categories.")
+
     lock.synchronized {
-      assert(state == .ready, "Invalid state \(_state) for adding mutually exclusive categories.")
       _categories.insert(category)
     }
   }
@@ -269,7 +266,7 @@ public class AdvancedOperation: Operation {
   /// - Requires: `self must not have started.
   public func addObserver(observer: OperationObservingType) {
     assert(!isExecuting, "Cannot modify observers after execution has begun.")
-    
+
     observers.append(observer)
   }
   
@@ -300,39 +297,4 @@ public class AdvancedOperation: Operation {
   }
   
 }
-
-//// MARK: - Condition Evaluation
-//
-//extension AdvancedOperation {
-//
-//  static func evaluate(_ conditions: [OperationCondition], operation: AdvancedOperation, completion: @escaping ([Error]) -> Void) {
-//    let conditionGroup = DispatchGroup()
-//    var results = [OperationConditionResult?](repeating: nil, count: conditions.count)
-//
-//    for (index, condition) in conditions.enumerated() {
-//      conditionGroup.enter()
-//      condition.evaluate(for: operation) { result in
-//        results[index] = result
-//        conditionGroup.leave()
-//      }
-//    }
-//
-//    conditionGroup.notify(queue: DispatchQueue.global()) {
-//      var errors = results.compactMap { (result) -> [Error]? in
-//        switch result {
-//        case .failed(let errors)?:
-//          return errors
-//        default:
-//          return nil
-//        }
-//        } .flatMap { $0 }
-//
-//      if operation.isCancelled {
-//        errors.append(contentsOf: operation.errors) //TODO better error
-//      }
-//      completion(errors)
-//    }
-//  }
-//
-//}
 

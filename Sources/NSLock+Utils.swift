@@ -24,6 +24,7 @@
 import Foundation
 
 extension NSLock {
+  @discardableResult
   func synchronized<T>(_ block: () -> T) -> T {
     lock()
     let value = block()
@@ -33,6 +34,7 @@ extension NSLock {
 }
 
 extension NSRecursiveLock {
+  @discardableResult
   func synchronized<T>(_ block: () -> T) -> T {
     lock()
     let value = block()
