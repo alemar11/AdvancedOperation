@@ -158,8 +158,10 @@ final class MutuallyExclusiveConditionTests: XCTestCase {
 
     queue.isSuspended = false
     wait(for: [expectation1, expectation2, expectation3], timeout: 10, enforceOrder: true)
+
     XCTAssertEqual(text, "A B C.")
     XCTAssertEqual(manager.operations.keys.count, 1)
+    print(manager.operations)
     XCTAssertEqual((manager.operations[key] ?? []).count, 0)
   }
 

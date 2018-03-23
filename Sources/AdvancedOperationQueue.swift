@@ -72,9 +72,9 @@ class AdvancedOperationQueue: OperationQueue {
       for category in operation.mutuallyExclusiveCategories {
         exclusivityManager.addOperation(operation, category: category)
         
-        operation.addObserver(observer: BlockObserver { [weak self] op, _ in //TODO: move into che MutualExclusivityManager
-          self?.exclusivityManager.removeOperation(op, category: category)
-        })
+//        operation.addObserver(observer: BlockObserver { [weak self] op, _ in //TODO: move into che MutualExclusivityManager
+//          self?.exclusivityManager.removeOperation(op, category: category)
+//        })
       }
       
     } else { /// Operation
@@ -89,7 +89,7 @@ class AdvancedOperationQueue: OperationQueue {
     }
     
     delegate?.operationQueue(operationQueue: self, willAddOperation: operation)
-    super.addOperation(operation) // FIXME: This causes an infinite loop on Linux
+    super.addOperation(operation)
     delegate?.operationQueue(operationQueue: self, didAddOperation: operation)
     
   }
@@ -99,7 +99,7 @@ class AdvancedOperationQueue: OperationQueue {
     for operation in operations {
       addOperation(operation)
     }
-    
+
     if wait {
       //TODO: use this method?
       //waitUntilAllOperationsAreFinished()
