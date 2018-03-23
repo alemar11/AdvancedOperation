@@ -35,7 +35,6 @@ public final class AdvancedBlockOperation: AdvancedOperation {
   /// The designated initializer.
   ///
   /// - Parameters:
-  ///   - isMutuallyExclusive: If *true* only one `AdvancedBlockOperation` of this type can be evaluated at a time.
   ///   - block: The closure to run when the operation executes; the parameter passed to the block **MUST** be invoked by your code, or else the `AdvancedBlockOperation` will never finish executing.
   public init(block: @escaping OperationBlock) {
     self.block = block

@@ -52,12 +52,12 @@ final class MutuallyExclusiveConditionTests: XCTestCase {
     queue.addOperations([operation2, operation1], waitUntilFinished: true)
     wait(for: [expectation2, expectation1], timeout: 0, enforceOrder: true)
   }
-  
+
   func testMutuallyExclusiveConditionWithBlockOperations() {
     let queue = AdvancedOperationQueue()
     queue.maxConcurrentOperationCount = 10
     var text = ""
-    
+
     let expectation1 = expectation(description: "\(#function)\(#line)")
     let expectation2 = expectation(description: "\(#function)\(#line)")
     let expectation3 = expectation(description: "\(#function)\(#line)")
@@ -76,16 +76,22 @@ final class MutuallyExclusiveConditionTests: XCTestCase {
       complete([])
     }
     operation2.addMutuallyExclusiveCategory("MutuallyExclusive1")
-    operation2.completionBlock = { expectation2.fulfill() }
+    operation2.completionBlock = {
+      expectation2.fulfill()
+    }
     
     let operation3 = AdvancedBlockOperation {
       text += "C."
     }
     operation3.addMutuallyExclusiveCategory("MutuallyExclusive1")
-    operation3.completionBlock = { expectation3.fulfill() }
-    
+    operation3.completionBlock = {
+      expectation3.fulfill()
+    }
+
     queue.addOperations([operation1, operation2, operation3], waitUntilFinished: false)
-    wait(for: [expectation1, expectation2, expectation3], timeout: 15, enforceOrder: true)
+    /// An operation may start without waiting the completion block of the running one, so we cannot use `enforceOrder` to true.
+    /// https://marcosantadev.com/4-ways-pass-data-operations-swift/
+    wait(for: [expectation1, expectation2, expectation3], timeout: 15, enforceOrder: false)
     XCTAssertEqual(text, "A B C.")
   }
   
@@ -98,6 +104,7 @@ final class MutuallyExclusiveConditionTests: XCTestCase {
     let expectation2 = expectation(description: "\(#function)\(#line)")
     let expectation3 = expectation(description: "\(#function)\(#line)")
     let expectation4 = expectation(description: "\(#function)\(#line)")
+    let expectation5 = expectation(description: "\(#function)\(#line)")
 
     let operation1 = AdvancedBlockOperation { text += "A " }
     operation1.completionBlock = { expectation1.fulfill() }
@@ -116,8 +123,14 @@ final class MutuallyExclusiveConditionTests: XCTestCase {
     operation4.completionBlock = { expectation4.fulfill() }
     operation4.addMutuallyExclusiveCategory("MutuallyExclusive2")
 
-    queue.addOperations([operation1, operation2, operation3, operation4], waitUntilFinished: false)
-    wait(for: [expectation1, expectation2, expectation3, expectation4], timeout: 3, enforceOrder: true)
+    let operation5 = SleepyAsyncOperation(interval1: 2, interval2: 1, interval3: 2)
+    operation5.completionBlock = {
+      expectation5.fulfill()
+    }
+    operation5.addMutuallyExclusiveCategory("MutuallyExclusive2")
+
+    queue.addOperations([operation1, operation2, operation3, operation4, operation5], waitUntilFinished: false)
+    wait(for: [expectation1, expectation2, expectation3, expectation4, expectation5], timeout: 10, enforceOrder: false)
     XCTAssertEqual(text, "A B C. 🎉")
   }
 
@@ -157,13 +170,23 @@ final class MutuallyExclusiveConditionTests: XCTestCase {
     XCTAssertEqual((manager.operations[key] ?? []).count, 3)
 
     queue.isSuspended = false
-    wait(for: [expectation1, expectation2, expectation3], timeout: 10, enforceOrder: true)
+    wait(for: [expectation1, expectation2, expectation3], timeout: 10, enforceOrder: false)
 
     XCTAssertEqual(text, "A B C.")
     XCTAssertEqual(manager.operations.keys.count, 1)
     print(manager.operations)
     XCTAssertEqual((manager.operations[key] ?? []).count, 0)
   }
+
+//  func testStress() {
+//    for x in 1...100 {
+//      print("\(x)\n---")
+//      testMutuallyExclusiveConditionWithBlockOperations()
+//      testMultipleMutuallyExclusiveConditionsWithBlockOperations()
+//      testExclusivityManager()
+//      print("---")
+//    }
+//  }
 
 }
 

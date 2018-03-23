@@ -71,7 +71,7 @@ class AdvancedOperationQueue: OperationQueue {
       // Check if the mutual exclusivity is enabled
       for category in operation.mutuallyExclusiveCategories {
         exclusivityManager.addOperation(operation, category: category)
-        
+        //TODO: dispatch group
 //        operation.addObserver(observer: BlockObserver { [weak self] op, _ in //TODO: move into che MutualExclusivityManager
 //          self?.exclusivityManager.removeOperation(op, category: category)
 //        })
