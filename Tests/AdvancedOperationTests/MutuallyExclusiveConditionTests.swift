@@ -110,11 +110,11 @@ final class MutuallyExclusiveConditionTests: XCTestCase {
     let operation3 = AdvancedBlockOperation { text += "C." }
     operation3.completionBlock = { expectation3.fulfill() }
     operation3.addMutuallyExclusiveCategory("MutuallyExclusive1")
-    operation3.addMutuallyExclusiveCategory("MutuallyExclusive3")
+    operation3.addMutuallyExclusiveCategory("MutuallyExclusive2")
 
     let operation4 = AdvancedBlockOperation { text += " 🎉" }
     operation4.completionBlock = { expectation4.fulfill() }
-    operation4.addMutuallyExclusiveCategory("MutuallyExclusive3")
+    operation4.addMutuallyExclusiveCategory("MutuallyExclusive2")
 
     queue.addOperations([operation1, operation2, operation3, operation4], waitUntilFinished: false)
     wait(for: [expectation1, expectation2, expectation3, expectation4], timeout: 3, enforceOrder: true)

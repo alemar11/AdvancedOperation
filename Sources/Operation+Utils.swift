@@ -70,3 +70,12 @@ extension Operation {
   }
 
 }
+
+extension Array where Element: Operation {
+  func then(do operations: Operation...) -> [Operation] {
+    for operation in self {
+      operation.addDependencies(dependencies: operations)
+    }
+    return operations
+  }
+}

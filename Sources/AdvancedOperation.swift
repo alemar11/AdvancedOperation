@@ -72,16 +72,16 @@ public class AdvancedOperation: Operation {
     }
     
   }
-  
+
   // MARK: - Properties
-  
+
   /// A flag to indicate whether this `AdvancedOperation` is mutually exclusive meaning that only one operation of this type can be evaluated at a time.
   public var isMutuallyExclusive: Bool { return !mutuallyExclusiveCategories.isEmpty }
-  
+
   public var mutuallyExclusiveCategories: Set<String> {
     get { return lock.synchronized { _categories } }
   }
-  
+
   /// Returns `true` if the `AdvancedOperation` failed due to errors.
   public var failed: Bool { return !errors.isEmpty }
   
@@ -96,7 +96,7 @@ public class AdvancedOperation: Operation {
   
   /// Returns `true` if the `AdvancedOperation` is cancelling.
   private var _cancelling = false
-  
+
   /// Set of categories used by the ExclusivityManager.
   private var _categories = Set<String>()
   
@@ -175,22 +175,22 @@ public class AdvancedOperation: Operation {
   public final override func start() {
     // Do not start if it's finishing or already finished
     guard (state != .finishing) || (state != .finished) else { return }
-    
+
     // Bail out early if cancelled or there are some errors.
     guard !failed && !isCancelled else {
       finish()
       return
     }
-    
+
     guard isReady else { return }
     guard !isExecuting else { return }
-    
+
     state = .executing
     //Thread.detachNewThreadSelector(#selector(main), toTarget: self, with: nil)
     // https://developer.apple.com/library/content/documentation/General/Conceptual/ConcurrencyProgrammingGuide/OperationObjects/OperationObjects.html#//apple_ref/doc/uid/TP40008091-CH101-SW16
     main()
   }
-  
+
   public override func main() {
     fatalError("\(type(of: self)) must override `main()`.")
   }
@@ -205,7 +205,7 @@ public class AdvancedOperation: Operation {
   
   private func _cancel(error: Error? = nil) {
     guard !isCancelled else { return }
-    
+
     let result = lock.synchronized { () -> Bool in
       if !_cancelling {
         _cancelling = true
@@ -228,7 +228,7 @@ public class AdvancedOperation: Operation {
   
   public final func finish(errors: [Error] = []) {
     guard state.canTransition(to: .finishing) else { return }
-    
+
     let result = lock.synchronized { () -> Bool in
       if !_finishing {
         _finishing = true
@@ -253,7 +253,7 @@ public class AdvancedOperation: Operation {
   }
   
   // MARK: - Mutually Exclusive Category
-  
+
   func addMutuallyExclusiveCategory(_ category: String) {
     lock.synchronized {
       assert(state == .ready, "Invalid state \(_state) for adding mutually exclusive categories.")
