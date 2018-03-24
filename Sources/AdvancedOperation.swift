@@ -27,6 +27,7 @@ public class AdvancedOperation: Operation {
 
   // MARK: - State
 
+  //open override var isReady: Bool { return (state == .ready || isCancelled) && super.isReady }
   open override var isReady: Bool { return state == .ready && super.isReady }
 
   public final override var isExecuting: Bool { return state == .executing }
@@ -51,6 +52,8 @@ public class AdvancedOperation: Operation {
         return true
       case (.executing, .finishing):
         return true
+//      case (.executing, .ready): // cancel
+//        return true
       case (.finishing, .finished):
         return true
       default:
@@ -81,7 +84,7 @@ public class AdvancedOperation: Operation {
   public var mutuallyExclusiveCategories: Set<String> { return lock.synchronized { _categories } }
 
   /// Returns `true` if the `AdvancedOperation` failed due to errors.
-  public var failed: Bool { return !errors.isEmpty }
+  public var failed: Bool { return lock.synchronized { !errors.isEmpty } }
 
   /// A lock to guard reads and writes to the `_state` property
   private let lock = NSLock()
@@ -91,6 +94,8 @@ public class AdvancedOperation: Operation {
 
   /// Returns `true` if the `AdvancedOperation` is finishing.
   private var _finishing = false
+
+  private var _cancelled = false
 
   /// Returns `true` if the `AdvancedOperation` is cancelling.
   private var _cancelling = false
@@ -171,12 +176,27 @@ public class AdvancedOperation: Operation {
   // MARK: - Methods
 
   public final override func start() {
-    // Do not start if it's finishing or already finished
-    guard (state != .finishing) || (state != .finished) else { return }
+    print("\n")
+    print("------------------")
+    print("state: \(_state)")
+    print("------------------")
+//    let result = lock.synchronized { () -> Bool in
+//        return _cancelling
+//    }
+//
+//    guard !result else {
+//      print(result)
+//      return
+//    }
+
+    // Do not start if it's finishing
+    guard (state != .finishing) else {
+      return
+    }
 
     // Bail out early if cancelled or there are some errors.
     guard !failed && !isCancelled else {
-      finish()
+      finish() // fires KVO
       return
     }
 
@@ -204,15 +224,17 @@ public class AdvancedOperation: Operation {
   private func _cancel(error: Error? = nil) {
     guard !isCancelled else { return }
 
-    let result = lock.synchronized { () -> Bool in
-      if !_cancelling {
-        _cancelling = true
-        return true
-      }
-      return false
-    }
-
-    guard result else { return }
+//    let result = lock.synchronized { () -> Bool in
+//      guard !isCancelled else { return false }
+//      //guard !_cancelled else { return false }
+//      if !_cancelling {
+//        _cancelling = true
+//        return true
+//      }
+//      return false
+//    }
+//
+//    guard result else { return }
 
     lock.synchronized {
       if let error = error {
@@ -220,14 +242,17 @@ public class AdvancedOperation: Operation {
       }
     }
 
+    //lock.synchronized { _cancelling = false }
     super.cancel()
     didCancel()
+    //lock.synchronized { _cancelling = true }
+    //finish()
   }
 
   public final func finish(errors: [Error] = []) {
-    guard state.canTransition(to: .finishing) else { return }
-
     let result = lock.synchronized { () -> Bool in
+      guard _state.canTransition(to: .finishing) else { return false }
+      _state = .finishing
       if !_finishing {
         _finishing = true
         return true
@@ -236,8 +261,6 @@ public class AdvancedOperation: Operation {
     }
 
     guard result else { return }
-
-    state = .finishing
 
     lock.synchronized {
       self.errors.append(contentsOf: errors)
