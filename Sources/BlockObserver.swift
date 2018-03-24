@@ -44,16 +44,18 @@ struct BlockObserver: OperationObserving {
 
   // MARK: - OperationObserving
 
+  // swiftlint:disable force_cast
   func operationWillExecute(operation: Operation) {
-    willExecuteHandler?(operation) //TODO: fix as!
+    willExecuteHandler?(operation as! AdvancedOperation) //TODO: fix as!
   }
 
   func operationDidFinish(operation: Operation, withErrors errors: [Error]) {
-    didFinishHandler?(operation, errors)
+    didFinishHandler?(operation as! AdvancedOperation, errors)
   }
 
   func operationDidCancel(operation: Operation, withErrors errors: [Error]) {
-    didCancelHandler?(operation, errors)
+    didCancelHandler?(operation as! AdvancedOperation, errors)
   }
+  // swiftlint:enable force_cast
 
 }
