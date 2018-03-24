@@ -111,5 +111,17 @@ final class OperationUtilsTests: XCTestCase {
     XCTAssertTrue(operation3.isFinished)
   }
 
+  func testRemoveDependencies() {
+    let operation1 = AdvancedBlockOperation(block: {})
+    let operation2 = SleepyOperation()
+    let operation3 = BlockOperation(block: {})
+    let operation4 = SleepyAsyncOperation()
+
+    operation4.addDependencies(dependencies: [operation1, operation2, operation3])
+    XCTAssertEqual(operation4.dependencies.count, 3)
+
+    operation4.removeDependencies()
+    XCTAssertEqual(operation4.dependencies.count, 0)
+  }
 
 }

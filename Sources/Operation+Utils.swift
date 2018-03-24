@@ -31,7 +31,7 @@ extension Operation {
   /// - Parameters:
   ///   - asEndingBlock: The block can be executed before the current completion block (`asEndingBlock` = false) or after (`asEndingBlock` = true).
   ///   - block: The block to be executed after the `Operation` enters the "finished" state.
-  func addCompletionBlock(asEndingBlock: Bool = true, block: @escaping () -> Void) {
+  public func addCompletionBlock(asEndingBlock: Bool = true, block: @escaping () -> Void) {
     assert(!isExecuting, "The completion block cannot be modified after execution has begun.")
     guard let existingBlock = completionBlock else {
       completionBlock = block
@@ -51,11 +51,18 @@ extension Operation {
   }
 
   /// Adds multiple dependencies to the operation.
-  func addDependencies(dependencies: [Operation]) {
+  public func addDependencies(dependencies: [Operation]) {
     assert(!isExecuting, "Dependencies cannot be modified after execution has begun.")
 
     for dependency in dependencies {
       addDependency(dependency)
+    }
+  }
+
+  /// Removes all the dependencies.
+  public func removeDependencies() {
+    for dependency in dependencies {
+      removeDependency(dependency)
     }
   }
 
@@ -67,7 +74,7 @@ extension Operation {
   ///
   /// - Parameter operation: the Operation instance to add the receiver as a dependency
   @discardableResult
-  func then(_ operation: Operation) -> Operation {
+  public func then(_ operation: Operation) -> Operation {
     assert(!isFinished, "Cannot add a finished operation as a dependency.")
     operation.addDependency(self)
     return operation
@@ -78,7 +85,7 @@ extension Operation {
 extension Array where Element: Operation {
 
   @discardableResult
-  func then(_ operations: Operation...) -> [Operation] {
+  public func then(_ operations: Operation...) -> [Operation] {
     for operation in operations {
       operation.addDependencies(dependencies: self)
     }
