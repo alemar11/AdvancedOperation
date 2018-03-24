@@ -390,4 +390,79 @@ final class AdvancedOperationQueueTests: XCTestCase {
 
     waitForExpectations(timeout: 10)
   }
+
+  func testFailIfAtLeastOnDependecyHasBeenCancelled() {
+    let queue = AdvancedOperationQueue()
+    let expectation1 = expectation(description: "\(#function)\(#line)")
+    let operation1 = SleepyOperation()
+    let operation2 = SleepyAsyncOperation()
+    let operation3 = SleepyOperation()
+    let operation4 = SleepyAsyncOperation(interval1: 3, interval2: 3, interval3: 3)
+    let operation5 = SleepyOperation()
+    let operation6 = SleepyOperation()
+    [operation6, operation5, operation4, operation3, operation2].then(operation1)
+
+    let conditionOperation = BlockOperation { [unowned operation1] in
+      XCTAssertEqual(operation1.dependencies.count, 6)
+      let cancelled = operation1.dependencies.filter { $0.isCancelled }
+      if !cancelled.isEmpty {
+        operation1.cancel()
+      }
+    }
+    XCTAssertEqual(operation1.dependencies.count, 5)
+    for dependency in operation1.dependencies {
+      dependency.then(conditionOperation)
+    }
+
+    conditionOperation.then(operation1)
+    operation1.addCompletionBlock {
+      expectation1.fulfill()
+    }
+
+    queue.addOperations([operation1, operation2, operation3, operation4, operation5, operation6, conditionOperation], waitUntilFinished: false)
+    operation4.cancel()
+    waitForExpectations(timeout: 10)
+    XCTAssertTrue(operation1.isCancelled)
+
+  }
+
+
+  func testMemoryLeakFailIfAtLeastOnDependecyHasBeenCancelled() {
+    let queue = AdvancedOperationQueue()
+    let expectation1 = expectation(description: "\(#function)\(#line)")
+    var operation1: AdvancedOperation? = SleepyOperation()
+    weak var weakOperation1 = operation1
+
+    let operation2 = SleepyAsyncOperation()
+    let operation3 = SleepyOperation()
+    let operation4 = SleepyAsyncOperation(interval1: 3, interval2: 3, interval3: 3)
+    let operation5 = SleepyOperation()
+    let operation6 = SleepyOperation()
+    [operation6, operation5, operation4, operation3, operation2].then(operation1!)
+
+    let conditionOperation = BlockOperation { [weak operation1] in
+      guard let operation1 = operation1 else { return }
+      let cancelled = operation1.dependencies.filter { $0.isCancelled }
+      if !cancelled.isEmpty {
+        operation1.cancel()
+      }
+    }
+
+    for dependency in operation1!.dependencies {
+      dependency.then(conditionOperation)
+    }
+
+    conditionOperation.then(operation1!)
+    operation1!.addCompletionBlock {
+      expectation1.fulfill()
+    }
+
+    queue.addOperations([operation1!, operation2, operation3, operation4, operation5, operation6, conditionOperation], waitUntilFinished: false)
+    operation4.cancel()
+    waitForExpectations(timeout: 10)
+    XCTAssertTrue(operation1!.isCancelled)
+
+    operation1 = nil
+    XCTAssertNil(weakOperation1)
+  }
 }
