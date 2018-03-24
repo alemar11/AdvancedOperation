@@ -402,7 +402,7 @@ final class AdvancedOperationQueueTests: XCTestCase {
     let operation6 = SleepyOperation()
     [operation6, operation5, operation4, operation3, operation2].then(operation1)
 
-    let conditionOperation = BlockOperation { [unowned operation1] in
+    let conditionOperation = AdvancedBlockOperation { [unowned operation1] in
       XCTAssertEqual(operation1.dependencies.count, 6)
       let cancelled = operation1.dependencies.filter { $0.isCancelled }
       if !cancelled.isEmpty {
@@ -440,7 +440,7 @@ final class AdvancedOperationQueueTests: XCTestCase {
     let operation6 = SleepyOperation()
     [operation6, operation5, operation4, operation3, operation2].then(operation1!)
 
-    let conditionOperation = BlockOperation { [weak operation1] in
+    let conditionOperation = AdvancedBlockOperation { [weak operation1] in
       guard let operation1 = operation1 else { return }
       let cancelled = operation1.dependencies.filter { $0.isCancelled }
       if !cancelled.isEmpty {

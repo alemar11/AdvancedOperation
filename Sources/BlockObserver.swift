@@ -30,13 +30,13 @@ struct BlockObserver: OperationObserving {
 
   var identifier = UUID().uuidString
 
-  private let willExecuteHandler: ((Operation) -> Void)?
-  private let didFinishHandler: ((Operation, [Error]) -> Void)?
-  private let didCancelHandler: ((Operation, [Error]) -> Void)?
+  private let willExecuteHandler: ((AdvancedOperation) -> Void)?
+  private let didFinishHandler: ((AdvancedOperation, [Error]) -> Void)?
+  private let didCancelHandler: ((AdvancedOperation, [Error]) -> Void)?
 
-  init(willExecute: ((Operation) -> Void)? = nil,
-       didCancel: ((Operation, [Error]) -> Void)? = nil,
-       didFinish: ((Operation, [Error]) -> Void)?) {
+  init(willExecute: ((AdvancedOperation) -> Void)? = nil,
+       didCancel: ((AdvancedOperation, [Error]) -> Void)? = nil,
+       didFinish: ((AdvancedOperation, [Error]) -> Void)?) {
     self.willExecuteHandler = willExecute
     self.didFinishHandler = didFinish
     self.didCancelHandler = didCancel
@@ -45,15 +45,15 @@ struct BlockObserver: OperationObserving {
   // MARK: - OperationObserving
 
   func operationWillExecute(operation: Operation) {
-    willExecuteHandler?(operation)
+    willExecuteHandler?(operation as! AdvancedOperation) //TODO: fix as!
   }
 
   func operationDidFinish(operation: Operation, withErrors errors: [Error]) {
-    didFinishHandler?(operation, errors)
+    didFinishHandler?(operation as! AdvancedOperation, errors)
   }
 
   func operationDidCancel(operation: Operation, withErrors errors: [Error]) {
-    didCancelHandler?(operation, errors)
+    didCancelHandler?(operation as! AdvancedOperation, errors)
   }
 
 }
