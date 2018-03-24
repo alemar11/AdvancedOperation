@@ -45,15 +45,15 @@ struct BlockObserver: OperationObserving {
   // MARK: - OperationObserving
 
   func operationWillExecute(operation: Operation) {
-    willExecuteHandler?(operation as! AdvancedOperation) //TODO: fix as!
+    willExecuteHandler?(operation) //TODO: fix as!
   }
 
   func operationDidFinish(operation: Operation, withErrors errors: [Error]) {
-    didFinishHandler?(operation as! AdvancedOperation, errors)
+    didFinishHandler?(operation, errors)
   }
 
   func operationDidCancel(operation: Operation, withErrors errors: [Error]) {
-    didCancelHandler?(operation as! AdvancedOperation, errors)
+    didCancelHandler?(operation, errors)
   }
 
 }

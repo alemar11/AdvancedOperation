@@ -138,8 +138,6 @@ public class OperationObserverController {
 
 }
 
-
-
 //TODO:
 /// OperationQueue
 

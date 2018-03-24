@@ -96,7 +96,7 @@ final class OperationUtilsTests: XCTestCase {
     let operation1 = SleepyOperation()
     let operation2 = SleepyOperation()
     let operation3 = SleepyOperation()
-    
+
     let expectation3 = expectation(description: "\(#function)\(#line)")
     operation3.addCompletionBlock { expectation3.fulfill() }
 
