@@ -34,6 +34,8 @@ public class AdvancedOperation: Operation {
 
   public final override var isFinished: Bool { return state == .finished }
 
+  //public final override var isCancelled: Bool { return lock.synchronized { return _cancelled } }
+
   // MARK: - OperationState
 
   @objc
@@ -113,14 +115,14 @@ public class AdvancedOperation: Operation {
         _state = newValue
       }
 
-      switch newValue {
-      case .executing:
-        willExecute()
-      case .finished:
-        didFinish()
-      default:
-        break
-      }
+//      switch newValue {
+//      case .executing:
+//        willExecute()
+//      case .finished:
+//        didFinish()
+//      default:
+//        break
+//      }
 
     }
   }
@@ -200,7 +202,7 @@ public class AdvancedOperation: Operation {
     guard !isExecuting else { return }
 
     state = .executing
-    
+    willExecute()
     //Thread.detachNewThreadSelector(#selector(main), toTarget: self, with: nil)
     // https://developer.apple.com/library/content/documentation/General/Conceptual/ConcurrencyProgrammingGuide/OperationObjects/OperationObjects.html#//apple_ref/doc/uid/TP40008091-CH101-SW16
     main()
@@ -219,30 +221,28 @@ public class AdvancedOperation: Operation {
   }
 
   private func _cancel(error: Error? = nil) {
-    guard !isCancelled else { return }
+    //guard !isCancelled else { return }
 
-//    let result = lock.synchronized { () -> Bool in
-//      guard !isCancelled else { return false }
-//      //guard !_cancelled else { return false }
-//      if !_cancelling {
-//        _cancelling = true
-//        return true
-//      }
-//      return false
-//    }
-//
-//    guard result else { return }
+    let result = lock.synchronized { () -> Bool in
+      guard !_cancelled else { return false }
+      guard !_cancelling else { return false }
+      _cancelling = true
+      return _cancelling
+    }
+
+    guard result else { return }
 
     lock.synchronized {
       if let error = error {
         errors.append(error)
       }
+      _cancelled = true
     }
 
     //lock.synchronized { _cancelling = false }
-    super.cancel()
+    super.cancel() // fires KVO
     didCancel()
-    //lock.synchronized { _cancelling = true }
+    lock.synchronized { _cancelling = false }
     //finish()
   }
 
@@ -264,6 +264,7 @@ public class AdvancedOperation: Operation {
     }
 
     state = .finished
+    didFinish()
   }
 
   // MARK: - Mutually Exclusive Category
