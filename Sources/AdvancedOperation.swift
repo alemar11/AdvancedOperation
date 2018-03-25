@@ -176,10 +176,6 @@ public class AdvancedOperation: Operation {
   // MARK: - Methods
 
   public final override func start() {
-    print("\n")
-    print("------------------")
-    print("state: \(_state)")
-    print("------------------")
 //    let result = lock.synchronized { () -> Bool in
 //        return _cancelling
 //    }
@@ -204,6 +200,7 @@ public class AdvancedOperation: Operation {
     guard !isExecuting else { return }
 
     state = .executing
+    
     //Thread.detachNewThreadSelector(#selector(main), toTarget: self, with: nil)
     // https://developer.apple.com/library/content/documentation/General/Conceptual/ConcurrencyProgrammingGuide/OperationObjects/OperationObjects.html#//apple_ref/doc/uid/TP40008091-CH101-SW16
     main()
