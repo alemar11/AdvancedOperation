@@ -97,8 +97,6 @@ public class AdvancedOperation: Operation {
   /// Returns `true` if the `AdvancedOperation` is finishing.
   private var _finishing = false
 
-  private var _cancelled = false
-
   /// Returns `true` if the `AdvancedOperation` is cancelling.
   private var _cancelling = false
 
@@ -114,16 +112,6 @@ public class AdvancedOperation: Operation {
         assert(_state.canTransition(to: newValue), "Performing an invalid state transition for: \(_state) to: \(newValue).")
         _state = newValue
       }
-
-//      switch newValue {
-//      case .executing:
-//        willExecute()
-//      case .finished:
-//        didFinish()
-//      default:
-//        break
-//      }
-
     }
   }
 
@@ -229,11 +217,8 @@ public class AdvancedOperation: Operation {
   }
 
   private func _cancel(error: Error? = nil) {
-    //guard !isCancelled else { return }
-
     let result = lock.synchronized { () -> Bool in
-      guard !_cancelled else { return false }
-      guard !_cancelling else { return false }
+      guard !_cancelling && !isCancelled else { return false }
       _cancelling = true
       return _cancelling
     }
@@ -244,7 +229,6 @@ public class AdvancedOperation: Operation {
       if let error = error {
         self.errors.append(error)
       }
-      _cancelled = true
       return self.errors
     }
 
