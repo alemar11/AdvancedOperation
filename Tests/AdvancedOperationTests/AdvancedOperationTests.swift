@@ -107,6 +107,31 @@ final class AdvancedOperationTests: XCTestCase {
     XCTAssertOperationCancelled(operation: operation)
   }
 
+  func testMultipleCancelWithManyObservers() {
+    let expectation1 = expectation(description: "\(#function)\(#line)")
+
+    let operation = SleepyAsyncOperation()
+    operation.completionBlock = { expectation1.fulfill() }
+
+    XCTAssertOperationCanBeStarted(operation: operation)
+
+    for _ in 1...100 {
+      operation.addObserver(observer: BlockObserver())
+    }
+
+    operation.start()
+    XCTAssertOperationExecuting(operation: operation)
+
+    operation.cancel()
+    operation.cancel(error: MockError.test)
+    operation.cancel(error: MockError.failed)
+    XCTAssertDefaultReadiness(operation: operation)
+    XCTAssertTrue(operation.isCancelled)
+
+    waitForExpectations(timeout: 10)
+    XCTAssertOperationCancelled(operation: operation)
+  }
+
   func testMultipleStartsAndCancels() {
     let expectation1 = expectation(description: "\(#function)\(#line)")
 
@@ -214,10 +239,12 @@ final class AdvancedOperationTests: XCTestCase {
     operation.start()
     waitForExpectations(timeout: 10)
 
-    sleep(5) // make sure there are no other effects
+    //sleep(5) // make sure there are no other effects
 
     XCTAssertEqual(observer.willExecutetCount, 1)
+    XCTAssertEqual(observer.willFinishCount, 1)
     XCTAssertEqual(observer.didFinishCount, 1)
+    XCTAssertEqual(observer.willCancelCount, 0)
     XCTAssertEqual(observer.didCancelCount, 0)
     XCTAssertEqual(operation.errors.count, 0)
   }
@@ -238,7 +265,9 @@ final class AdvancedOperationTests: XCTestCase {
     sleep(5) // make sure there are no other effects
 
     XCTAssertEqual(observer.willExecutetCount, 1)
+    XCTAssertEqual(observer.willFinishCount, 1)
     XCTAssertEqual(observer.didFinishCount, 1)
+    XCTAssertEqual(observer.willCancelCount, 0)
     XCTAssertEqual(observer.didCancelCount, 1)
     XCTAssertEqual(operation.errors.count, 0)
   }
