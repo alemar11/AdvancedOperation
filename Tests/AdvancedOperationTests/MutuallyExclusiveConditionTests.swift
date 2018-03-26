@@ -53,6 +53,53 @@ final class MutuallyExclusiveConditionTests: XCTestCase {
     wait(for: [expectation2, expectation1], timeout: 0, enforceOrder: true)
   }
 
+  func testMutuallyExclusiveConditionWithtDifferentQueues() {
+    let queue1 = AdvancedOperationQueue()
+    queue1.maxConcurrentOperationCount = 10
+    var text = ""
+
+    let queue2 = AdvancedOperationQueue()
+
+    let expectation1 = expectation(description: "\(#function)\(#line)")
+    let expectation2 = expectation(description: "\(#function)\(#line)")
+    let expectation3 = expectation(description: "\(#function)\(#line)")
+    let expectation4 = expectation(description: "\(#function)\(#line)")
+
+    let operation1 = AdvancedBlockOperation { complete in
+      text += "A"
+      complete([])
+    }
+    operation1.completionBlock = { expectation1.fulfill() }
+    operation1.addMutuallyExclusiveCategory("MutuallyExclusive1")
+
+    let operation2 = AdvancedBlockOperation { complete in
+      text += "B"
+      complete([])
+    }
+    operation2.completionBlock = { expectation2.fulfill() }
+    operation2.addMutuallyExclusiveCategory("MutuallyExclusive1")
+
+    let operation3 = AdvancedBlockOperation { complete in
+      text += "C"
+      complete([])
+    }
+    operation3.completionBlock = { expectation3.fulfill() }
+    operation3.addMutuallyExclusiveCategory("MutuallyExclusive1")
+
+    let operation4 = AdvancedBlockOperation { complete in
+      text += "D"
+      complete([])
+    }
+    operation4.completionBlock = { expectation4.fulfill() }
+    operation4.addMutuallyExclusiveCategory("MutuallyExclusive1")
+
+    queue1.addOperations([operation1, operation2], waitUntilFinished: true)
+    queue2.addOperations([operation3, operation4], waitUntilFinished: true)
+
+    waitForExpectations(timeout: 10)
+    XCTAssertEqual(text, "ABCD")
+  }
+
   func testMutuallyExclusiveConditionWithBlockOperations() {
     let queue = AdvancedOperationQueue()
     queue.maxConcurrentOperationCount = 10
