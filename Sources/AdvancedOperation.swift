@@ -172,10 +172,8 @@ public class AdvancedOperation: Operation {
   // MARK: - Methods
 
   public final override func start() {
-//    let result = lock.synchronized { () -> Bool in
-//        return _cancelling
-//    }
-//
+
+//    let result = lock.synchronized { return _cancelling }
 //    guard !result else {
 //      print(result)
 //      return
