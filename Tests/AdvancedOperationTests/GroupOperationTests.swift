@@ -263,6 +263,22 @@ final class GroupOperationTests: XCTestCase {
     XCTAssertOperationCancelled(operation: group, errors: [MockError.test])
   }
 
+  func testFailedOperationInSimpleNestedGroupOperations() {
+    let errors = [MockError.test]
+
+    let operation1 = SleepyAsyncOperation(interval1: 3, interval2: 4, interval3: 1)
+    let group1 = GroupOperation(operations: operation1)
+    operation1.cancel(error: MockError.test)
+
+    let group = GroupOperation(operations: group1)
+    let exepectation1 = expectation(description: "\(#function)\(#line)")
+    group.addCompletionBlock { exepectation1.fulfill() }
+
+    group.start()
+    waitForExpectations(timeout: 10)
+    XCTAssertOperationFinished(operation: group, errors: errors)
+  }
+
   func testFailedOperationInNestedGroupOperations() {
     let errors = [MockError.test, MockError.failed, MockError.failed]
 

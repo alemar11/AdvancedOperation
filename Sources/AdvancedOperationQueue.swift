@@ -30,9 +30,13 @@ protocol AdvancedOperationQueueDelegate: class {
   func operationQueue(operationQueue: AdvancedOperationQueue, operationWillExecute operation: Operation)
   func operationQueue(operationQueue: AdvancedOperationQueue, operationDidFinish operation: Operation, withErrors errors: [Error])
   func operationQueue(operationQueue: AdvancedOperationQueue, operationDidCancel operation: Operation, withErrors errors: [Error])
+
+  func operationQueue(operationQueue: AdvancedOperationQueue, operationWillFinish operation: Operation, withErrors errors: [Error])
+  func operationQueue(operationQueue: AdvancedOperationQueue, operationWillCancel operation: Operation, withErrors errors: [Error])
 }
 
 extension AdvancedOperationQueueDelegate {
+
   func operationQueue(operationQueue: AdvancedOperationQueue, willAddOperation operation: Operation) {}
   func operationQueue(operationQueue: AdvancedOperationQueue, operationWillExecute operation: Operation) {}
 }
@@ -56,9 +60,17 @@ class AdvancedOperationQueue: OperationQueue {
         guard let `self` = self else { return }
         self.delegate?.operationQueue(operationQueue: self, operationWillExecute: operation)
 
+        }, willCancel: { [weak self] (operation, errors) in
+          guard let `self` = self else { return }
+          self.delegate?.operationQueue(operationQueue: self, operationWillCancel: operation, withErrors: errors)
+
         }, didCancel: { [weak self] (operation, errors) in
           guard let `self` = self else { return }
           self.delegate?.operationQueue(operationQueue: self, operationDidCancel: operation, withErrors: errors)
+
+        }, willFinish: { [weak self] (operation, errors) in
+          guard let `self` = self else { return }
+          self.delegate?.operationQueue(operationQueue: self, operationWillFinish: operation, withErrors: errors)
 
         }, didFinish: { [weak self] (operation, errors) in
           guard let `self` = self else { return }

@@ -31,14 +31,24 @@ struct BlockObserver: OperationObserving {
   var identifier = UUID().uuidString
 
   private let willExecuteHandler: ((AdvancedOperation) -> Void)?
+  private let willFinishHandler: ((AdvancedOperation, [Error]) -> Void)?
   private let didFinishHandler: ((AdvancedOperation, [Error]) -> Void)?
+  private let willCancelHandler: ((AdvancedOperation, [Error]) -> Void)?
   private let didCancelHandler: ((AdvancedOperation, [Error]) -> Void)?
 
-  init(willExecute: ((AdvancedOperation) -> Void)? = nil,
-       didCancel: ((AdvancedOperation, [Error]) -> Void)? = nil,
-       didFinish: ((AdvancedOperation, [Error]) -> Void)?) {
+  init(
+    willExecute: ((AdvancedOperation) -> Void)? = nil,
+    willCancel: ((AdvancedOperation, [Error]) -> Void)? = nil,
+    didCancel: ((AdvancedOperation, [Error]) -> Void)? = nil,
+    willFinish: ((AdvancedOperation, [Error]) -> Void)? = nil,
+    didFinish: ((AdvancedOperation, [Error]) -> Void)? = nil
+    ) {
     self.willExecuteHandler = willExecute
+
+    self.willFinishHandler = willFinish
     self.didFinishHandler = didFinish
+
+    self.willCancelHandler = willCancel
     self.didCancelHandler = didCancel
   }
 
@@ -49,13 +59,22 @@ struct BlockObserver: OperationObserving {
     willExecuteHandler?(operation as! AdvancedOperation) //TODO: fix as!
   }
 
+  func operationWillFinish(operation: Operation, withErrors errors: [Error]) {
+    willFinishHandler?(operation as! AdvancedOperation, errors)
+  }
+
   func operationDidFinish(operation: Operation, withErrors errors: [Error]) {
     didFinishHandler?(operation as! AdvancedOperation, errors)
+  }
+
+  func operationWillCancel(operation: Operation, withErrors errors: [Error]) {
+    willCancelHandler?(operation as! AdvancedOperation, errors)
   }
 
   func operationDidCancel(operation: Operation, withErrors errors: [Error]) {
     didCancelHandler?(operation as! AdvancedOperation, errors)
   }
+
   // swiftlint:enable force_cast
 
 }

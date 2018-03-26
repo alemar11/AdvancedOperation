@@ -85,6 +85,22 @@ final class AdvancedOperationQueueTests: XCTestCase {
       }
     }
 
+    let willFinishExpectation1 = expectation(description: "\(#function)\(#line)")
+    let willFinishExpectation2 = expectation(description: "\(#function)\(#line)")
+    let willFinishExpectation3 = expectation(description: "\(#function)\(#line)")
+    let willFinishExpectation4 = expectation(description: "\(#function)\(#line)")
+
+    delegate.willFinishOperationHandler = { (queue, operation, errors) in
+      XCTAssertTrue(queue == queue)
+      switch (operation) {
+      case operation1: willFinishExpectation1.fulfill()
+      case operation2: willFinishExpectation2.fulfill()
+      case operation3: willFinishExpectation3.fulfill()
+      case operation4: willFinishExpectation4.fulfill()
+      default: XCTFail("Too many finishing operations.")
+      }
+    }
+
     let didFinishExpectation1 = expectation(description: "\(#function)\(#line)")
     let didFinishExpectation2 = expectation(description: "\(#function)\(#line)")
     let didFinishExpectation3 = expectation(description: "\(#function)\(#line)")
@@ -99,6 +115,10 @@ final class AdvancedOperationQueueTests: XCTestCase {
       case operation4: didFinishExpectation4.fulfill()
       default: XCTFail("Too many finished operations.")
       }
+    }
+
+    delegate.willCancelOperationHandler = { (queue, operation, errors) in
+      XCTFail("There should'nt be any cancelling operations.")
     }
 
     delegate.didCancelOperationHandler = { (queue, operation, errors) in
@@ -169,6 +189,22 @@ final class AdvancedOperationQueueTests: XCTestCase {
       }
     }
 
+    let willFinishExpectation1 = expectation(description: "\(#function)\(#line)")
+    let willFinishExpectation2 = expectation(description: "\(#function)\(#line)")
+    let willFinishExpectation3 = expectation(description: "\(#function)\(#line)")
+    let willFinishExpectation4 = expectation(description: "\(#function)\(#line)")
+
+    delegate.willFinishOperationHandler = { (queue, operation, errors) in
+      XCTAssertTrue(queue == queue)
+      switch (operation) {
+      case operation1: willFinishExpectation1.fulfill()
+      case operation2: willFinishExpectation2.fulfill()
+      case operation3: willFinishExpectation3.fulfill()
+      case operation4: willFinishExpectation4.fulfill()
+      default: XCTFail("Too many finishing operations.")
+      }
+    }
+
     let didFinishExpectation1 = expectation(description: "\(#function)\(#line)")
     let didFinishExpectation2 = expectation(description: "\(#function)\(#line)")
     let didFinishExpectation3 = expectation(description: "\(#function)\(#line)")
@@ -206,7 +242,7 @@ final class AdvancedOperationQueueTests: XCTestCase {
     queue.isSuspended = true
 
     let operation1 = SleepyOperation()
-    let operation2 = BlockOperation(block: { print(#function) })
+    let operation2 = BlockOperation { }
     let operation3 = DelayOperation(interval: 2)
     let operation4 = DelayOperation(interval: 1)
 
@@ -255,6 +291,22 @@ final class AdvancedOperationQueueTests: XCTestCase {
       case operation3: willExecuteExpectation3.fulfill()
       case operation4: willExecuteExpectation4.fulfill()
       default: XCTFail("Too many executions.")
+      }
+    }
+
+    let willFinishExpectation1 = expectation(description: "\(#function)\(#line)")
+    //let willFinishExpectation2 = expectation(description: "\(#function)\(#line)")
+    let willFinishExpectation3 = expectation(description: "\(#function)\(#line)")
+    let willFinishExpectation4 = expectation(description: "\(#function)\(#line)")
+
+    delegate.willFinishOperationHandler = { (queue, operation, errors) in
+      XCTAssertTrue(queue == queue)
+      switch (operation) {
+      case operation1: willFinishExpectation1.fulfill()
+      case operation2: XCTFail("a BlockOperation doesn't have this callback.")
+      case operation3: willFinishExpectation3.fulfill()
+      case operation4: willFinishExpectation4.fulfill()
+      default: XCTFail("Undefined finishing operations.")
       }
     }
 
@@ -353,6 +405,22 @@ final class AdvancedOperationQueueTests: XCTestCase {
       }
     }
 
+    let willFinishExpectation1 = expectation(description: "\(#function)\(#line)")
+    let willFinishExpectation2 = expectation(description: "\(#function)\(#line)")
+    let willFinishExpectation3 = expectation(description: "\(#function)\(#line)")
+    let willFinishExpectation4 = expectation(description: "\(#function)\(#line)")
+
+    delegate.willFinishOperationHandler = { (queue, operation, errors) in
+      XCTAssertTrue(queue == queue)
+      switch (operation) {
+      case operation1: willFinishExpectation1.fulfill()
+      case operation2: willFinishExpectation2.fulfill()
+      case operation3: willFinishExpectation3.fulfill()
+      case operation4: willFinishExpectation4.fulfill()
+      default: XCTFail("Undefined finishing operations.")
+      }
+    }
+
     let didFinishExpectation1 = expectation(description: "\(#function)\(#line)")
     let didFinishExpectation2 = expectation(description: "\(#function)\(#line)")
     let didFinishExpectation3 = expectation(description: "\(#function)\(#line)")
@@ -366,6 +434,19 @@ final class AdvancedOperationQueueTests: XCTestCase {
       case operation3: didFinishExpectation3.fulfill()
       case operation4: didFinishExpectation4.fulfill()
       default: XCTFail("Undefined finished operations.")
+      }
+    }
+
+    let willCancelExpectation1 = expectation(description: "\(#function)\(#line)")
+    let willCancelExpectation2 = expectation(description: "\(#function)\(#line)")
+    delegate.willCancelOperationHandler = { (queue, operation, errors) in
+      XCTAssertTrue(queue == queue)
+      switch (operation) {
+      case operation1: XCTFail("This operation shouldn't be cancelling.")
+      case operation2: willCancelExpectation1.fulfill()
+      case operation3: XCTFail("This operation shouldn't be cancelling.")
+      case operation4: willCancelExpectation2.fulfill()
+      default: XCTFail("Undefined cancelled operations.")
       }
     }
 

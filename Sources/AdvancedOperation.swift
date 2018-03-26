@@ -163,8 +163,16 @@ public class AdvancedOperation: Operation {
     return observers.compactMap { $0 as? OperationWillExecuteObserving }
   }
 
+  internal var willCancelObservers: [OperationWillCancelObserving] {
+    return observers.compactMap { $0 as? OperationWillCancelObserving }
+  }
+
   internal var didCancelObservers: [OperationDidCancelObserving] {
     return observers.compactMap { $0 as? OperationDidCancelObserving }
+  }
+
+  internal var willFinishObservers: [OperationWillFinishObserving] {
+    return observers.compactMap { $0 as? OperationWillFinishObserving }
   }
 
   internal var didFinishObservers: [OperationDidFinishObserving] {
@@ -232,16 +240,18 @@ public class AdvancedOperation: Operation {
 
     guard result else { return }
 
-    lock.synchronized {
+    let _errors = lock.synchronized { () -> [Error] in
       if let error = error {
-        errors.append(error)
+        self.errors.append(error)
       }
       _cancelled = true
+      return self.errors
     }
 
     //lock.synchronized { _cancelling = false }
+    willCancel(errors: _errors)
     super.cancel() // fires KVO
-    didCancel()
+    didCancel(errors: _errors)
     lock.synchronized { _cancelling = false }
     //finish()
   }
@@ -259,12 +269,14 @@ public class AdvancedOperation: Operation {
 
     guard result else { return }
 
-    lock.synchronized {
+    let _errors = lock.synchronized { () -> [Error] in
       self.errors.append(contentsOf: errors)
+      return self.errors
     }
 
+    willFinish(errors: _errors)
     state = .finished
-    didFinish()
+    didFinish(errors: _errors)
   }
 
   // MARK: - Mutually Exclusive Category
@@ -295,13 +307,25 @@ public class AdvancedOperation: Operation {
     }
   }
 
-  private func didFinish() {
+  private func willFinish(errors: [Error]) {
+    for observer in willFinishObservers {
+      observer.operationWillFinish(operation: self, withErrors: errors)
+    }
+  }
+
+  private func didFinish(errors: [Error]) {
     for observer in didFinishObservers {
       observer.operationDidFinish(operation: self, withErrors: errors)
     }
   }
 
-  private func didCancel() {
+  private func willCancel(errors: [Error]) {
+    for observer in willCancelObservers {
+      observer.operationWillCancel(operation: self, withErrors: errors)
+    }
+  }
+
+  private func didCancel(errors: [Error]) {
     for observer in didCancelObservers {
       observer.operationDidCancel(operation: self, withErrors: errors)
     }

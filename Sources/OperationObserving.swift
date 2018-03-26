@@ -31,10 +31,21 @@ public protocol OperationWillExecuteObserving: OperationObservingType {
   func operationWillExecute(operation: Operation)
 }
 
+public protocol OperationWillFinishObserving: OperationObservingType {
+  /// Invoked as an `Operation` finishes, along with any errors produced during execution.
+  /// - Note: An operation can finish without starting (i.e. if cancelled before its execution)
+  func operationWillFinish(operation: Operation, withErrors errors: [Error])
+}
+
 public protocol OperationDidFinishObserving: OperationObservingType {
   /// Invoked as an `Operation` finishes, along with any errors produced during execution.
   /// - Note: An operation can finish without starting (i.e. if cancelled before its execution)
   func operationDidFinish(operation: Operation, withErrors errors: [Error])
+}
+
+public protocol OperationWillCancelObserving: OperationObservingType {
+  /// Invoked as an `Operation` is cancelled, along with any errors produced during execution.
+  func operationWillCancel(operation: Operation, withErrors errors: [Error])
 }
 
 public protocol OperationDidCancelObserving: OperationObservingType {
@@ -43,7 +54,7 @@ public protocol OperationDidCancelObserving: OperationObservingType {
 }
 
 /// The protocol that types may implement if they wish to be notified of significant operation lifecycle events.
-public protocol OperationObserving: OperationWillExecuteObserving, OperationDidFinishObserving, OperationDidCancelObserving {
+public protocol OperationObserving: OperationWillExecuteObserving, OperationWillFinishObserving, OperationDidFinishObserving, OperationWillCancelObserving, OperationDidCancelObserving {
   /// An unique identifier
   var identifier: String { get set }
 }
