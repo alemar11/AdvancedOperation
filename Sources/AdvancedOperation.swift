@@ -240,7 +240,7 @@ public class AdvancedOperation: Operation {
 
     guard result else { return }
 
-    let _errors = lock.synchronized { () -> [Error] in
+    let updatedErrors = lock.synchronized { () -> [Error] in
       if let error = error {
         self.errors.append(error)
       }
@@ -248,12 +248,10 @@ public class AdvancedOperation: Operation {
       return self.errors
     }
 
-    //lock.synchronized { _cancelling = false }
-    willCancel(errors: _errors)
+    willCancel(errors: updatedErrors)
     super.cancel() // fires KVO
-    didCancel(errors: _errors)
+    didCancel(errors: errors)
     lock.synchronized { _cancelling = false }
-    //finish()
   }
 
   public final func finish(errors: [Error] = []) {
@@ -269,14 +267,14 @@ public class AdvancedOperation: Operation {
 
     guard result else { return }
 
-    let _errors = lock.synchronized { () -> [Error] in
+    let updatedErrors = lock.synchronized { () -> [Error] in
       self.errors.append(contentsOf: errors)
       return self.errors
     }
 
-    willFinish(errors: _errors)
+    willFinish(errors: updatedErrors)
     state = .finished
-    didFinish(errors: _errors)
+    didFinish(errors: updatedErrors)
   }
 
   // MARK: - Mutually Exclusive Category
