@@ -213,6 +213,43 @@ final class GroupOperationTests: XCTestCase {
     XCTAssertOperationFinished(operation: group)
   }
 
+  func testMultipleNestedGroupOperations() {
+    let exepectation0 = expectation(description: "\(#function)\(#line)")
+    let exepectation1 = expectation(description: "\(#function)\(#line)")
+    let exepectation2 = expectation(description: "\(#function)\(#line)")
+    let exepectation3 = expectation(description: "\(#function)\(#line)")
+    let exepectation4 = expectation(description: "\(#function)\(#line)")
+    
+    let operation1 = BlockOperation(block: { } )
+    let operation2 = BlockOperation(block: { sleep(2) } )
+    let group1 = GroupOperation(operations: [operation1, operation2])
+    group1.addCompletionBlock { exepectation1.fulfill() }
+
+    let operation3 = SleepyOperation()
+    let operation4 = SleepyAsyncOperation(interval1: 1, interval2: 1, interval3: 1)
+    let operation5 = BlockOperation(block: { sleep(1) } )
+
+    let operation6 = SleepyAsyncOperation(interval1: 1, interval2: 1, interval3: 1)
+    let group3 = GroupOperation(operations: operation6)
+    group3.addCompletionBlock { exepectation3.fulfill() }
+
+    let group2 = GroupOperation(operations: operation3, operation4, operation5, group3)
+    group2.addCompletionBlock { exepectation2.fulfill() }
+
+    let group4 = GroupOperation(operations: [])
+    group4.addCompletionBlock { exepectation4.fulfill() }
+
+    let operation7 = SleepyAsyncOperation(interval1: 0, interval2: 0, interval3: 1)
+    let group0 = GroupOperation(operations: group1, group2, operation7, group4)
+
+    group0.addCompletionBlock { exepectation0.fulfill() }
+
+    group0.start()
+    waitForExpectations(timeout: 10)
+
+    XCTAssertOperationFinished(operation: group0)
+  }
+
   func testCancelledGroupOperationInNestedGroupOperations() {
     let operation1 = SleepyAsyncOperation(interval1: 1, interval2: 1, interval3: 1)
     let operation2 = BlockOperation(block: { sleep(2) } )
