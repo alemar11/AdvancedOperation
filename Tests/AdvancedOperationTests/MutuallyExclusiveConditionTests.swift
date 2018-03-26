@@ -134,6 +134,40 @@ final class MutuallyExclusiveConditionTests: XCTestCase {
     XCTAssertEqual(text, "A B C. 🎉")
   }
 
+  func testMultipleMutuallyExclusiveConditionsWithGroupOperations() {
+    let queue = AdvancedOperationQueue()
+    queue.maxConcurrentOperationCount = 10
+    var text = ""
+
+    let expectation1 = expectation(description: "\(#function)\(#line)")
+    let expectation2 = expectation(description: "\(#function)\(#line)")
+    let expectation3 = expectation(description: "\(#function)\(#line)")
+    let expectation4 = expectation(description: "\(#function)\(#line)")
+
+    let operation1 = AdvancedBlockOperation { text += "A " }
+    operation1.completionBlock = { expectation1.fulfill() }
+    operation1.addMutuallyExclusiveCategory("MutuallyExclusive1")
+
+    let operation2 = AdvancedBlockOperation { text += "B " }
+    operation2.completionBlock = { expectation2.fulfill() }
+    operation2.addMutuallyExclusiveCategory("MutuallyExclusive1")
+
+    let group1 = GroupOperation(operations: operation1, operation2)
+
+    let operation3 = AdvancedBlockOperation { text += "C. " }
+    operation3.completionBlock = { expectation3.fulfill() }
+    operation3.addMutuallyExclusiveCategory("MutuallyExclusive1")
+    operation3.addMutuallyExclusiveCategory("MutuallyExclusive2")
+
+    let operation4 = AdvancedBlockOperation { text += "🎉" }
+    operation4.completionBlock = { expectation4.fulfill() }
+    operation4.addMutuallyExclusiveCategory("MutuallyExclusive1")
+    operation3.addMutuallyExclusiveCategory("MutuallyExclusive2")
+
+    queue.addOperations([group1, operation3, operation4], waitUntilFinished: false)
+    waitForExpectations(timeout: 10)
+    XCTAssertEqual(text, "A B C. 🎉")
+  }
 
   func testExclusivityManager() {
     var text = ""
@@ -174,19 +208,18 @@ final class MutuallyExclusiveConditionTests: XCTestCase {
 
     XCTAssertEqual(text, "A B C.")
     XCTAssertEqual(manager.operations.keys.count, 1)
-    print(manager.operations)
     XCTAssertEqual((manager.operations[key] ?? []).count, 0)
   }
 
-  //  func testStress() {
-  //    for x in 1...100 {
-  //      print("\(x)\n---")
-  //      testMutuallyExclusiveConditionWithBlockOperations()
-  //      testMultipleMutuallyExclusiveConditionsWithBlockOperations()
-  //      testExclusivityManager()
-  //      print("---")
-  //    }
-  //  }
+//  func testStress() {
+//    for x in 1...100 {
+//      print("\(x)\n---")
+//      testMutuallyExclusiveConditionWithBlockOperations()
+//      testMultipleMutuallyExclusiveConditionsWithBlockOperations()
+//      testExclusivityManager()
+//      print("---")
+//    }
+//  }
 
   // TODO: add GroupOperation
 
