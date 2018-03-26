@@ -34,8 +34,6 @@ public class AdvancedOperation: Operation {
 
   public final override var isFinished: Bool { return state == .finished }
 
-  //public final override var isCancelled: Bool { return lock.synchronized { return _cancelled } }
-
   // MARK: - OperationState
 
   @objc
