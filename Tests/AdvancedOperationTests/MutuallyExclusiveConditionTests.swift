@@ -268,6 +268,7 @@ final class MutuallyExclusiveConditionTests: XCTestCase {
 
 //  func testStress() {
 //    for x in 1...1000 {
+//      print(x)
 //      testMutuallyExclusiveConditionWithBlockOperations()
 //      testMultipleMutuallyExclusiveConditionsWithBlockOperations()
 //      testExclusivityManager()
