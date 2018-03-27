@@ -278,8 +278,7 @@
 		230B47FD200EABEE00F46852 /* AdvancedOperationTests */ = {
 			isa = PBXGroup;
 			children = (
-				235D08C8206A6FC900F70142 /* NoCancelledDependenciesCondition.swift */,
-				235D08C7206A6FC800F70142 /* NoFailedDependenciesConditionTests.swift */,
+				235D08CF206A80ED00F70142 /* Conditions */,
 				23A813B52020D111008A98E0 /* AdvancedBlockOperationTests.swift */,
 				23856174200A87070061BAA1 /* AdvancedOperationQueueTests.swift */,
 				23F24D1D200771FA00B25A03 /* AdvancedOperationTests.swift */,
@@ -368,6 +367,15 @@
 				235D08A7206A494E00F70142 /* OperationCondition.swift */,
 				235D08A4206A494D00F70142 /* NoCancelledDependenciesCondition.swift */,
 				235D08A5206A494D00F70142 /* NoFailedDependenciesCondition.swift */,
+			);
+			path = Conditions;
+			sourceTree = "<group>";
+		};
+		235D08CF206A80ED00F70142 /* Conditions */ = {
+			isa = PBXGroup;
+			children = (
+				235D08C8206A6FC900F70142 /* NoCancelledDependenciesCondition.swift */,
+				235D08C7206A6FC800F70142 /* NoFailedDependenciesConditionTests.swift */,
 			);
 			path = Conditions;
 			sourceTree = "<group>";
