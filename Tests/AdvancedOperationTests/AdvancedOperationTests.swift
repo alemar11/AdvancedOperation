@@ -26,14 +26,14 @@ import XCTest
 
 final class AdvancedOperationTests: XCTestCase {
 
-  func testStress() {
-    for x in 1...100 {
-      print(x)
-      //testStart()
-      //testMultipleCancel()
-       testMultipleStartsAndCancels()
-    }
-  }
+//  func testStress() {
+//    for x in 1...100 {
+//      print(x)
+//      //testStart()
+//      //testMultipleCancel()
+//      testMultipleStartsAndCancels()
+//    }
+//  }
 
   func testStart() {
     let expectation1 = expectation(description: "\(#function)\(#line)")
