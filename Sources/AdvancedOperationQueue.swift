@@ -94,7 +94,7 @@ class AdvancedOperationQueue: OperationQueue {
         let mutuallyExclusiveConditions = operation.conditions.filter { $0.isMutuallyExclusive }
 
         for condition in mutuallyExclusiveConditions {
-          let category = condition.category
+          let category = condition.name
 
           exclusivityManager.addOperation(operation, category: category)
 //          operation.addObserver(observer: BlockObserver { [weak self] op, _ in

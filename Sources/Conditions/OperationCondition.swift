@@ -48,9 +48,9 @@ public extension OperationCondition {
   func dependency(for operation: AdvancedOperation) -> Operation? { return nil }
 }
 
-internal extension OperationCondition {
+public extension OperationCondition {
 
-  internal var category: String {
+  public var name: String {
     return String(describing: type(of: self))
   }
 
@@ -61,7 +61,7 @@ public enum OperationConditionResult {
   case satisfied
   case failed([Error])
 
-  var errors: [Error]? {
+  public var errors: [Error]? {
     if case .failed(let errors) = self {
       return errors
     }

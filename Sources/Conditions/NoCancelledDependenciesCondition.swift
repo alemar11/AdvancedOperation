@@ -27,8 +27,6 @@ import Foundation
 /// If any dependency was cancelled, the target operation will be cancelled as well.
 public struct NoCancelledDependeciesCondition: OperationCondition {
 
-  public var name: String { return category }
-
   public let ignoreCancellations: Bool
   /// Initializer which takes no parameters.
   public init(ignoreCancellations: Bool = false) {

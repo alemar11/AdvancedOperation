@@ -36,7 +36,7 @@ struct BlockObserver: OperationObserving {
   private let willCancelHandler: ((AdvancedOperation, [Error]) -> Void)?
   private let didCancelHandler: ((AdvancedOperation, [Error]) -> Void)?
 
-  init(
+  init (
     willExecute: ((AdvancedOperation) -> Void)? = nil,
     willCancel: ((AdvancedOperation, [Error]) -> Void)? = nil,
     didCancel: ((AdvancedOperation, [Error]) -> Void)? = nil,
@@ -56,7 +56,7 @@ struct BlockObserver: OperationObserving {
 
   // swiftlint:disable force_cast
   func operationWillExecute(operation: Operation) {
-    willExecuteHandler?(operation as! AdvancedOperation) //TODO: fix as!
+    willExecuteHandler?(operation as! AdvancedOperation)
   }
 
   func operationWillFinish(operation: Operation, withErrors errors: [Error]) {

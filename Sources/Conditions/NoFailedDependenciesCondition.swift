@@ -24,10 +24,8 @@
 import Foundation
 
 /// A condition that specifies that every dependency of the operation must not fail.
-/// If any dependency finishes or cancels with errors (fail), the target operation will fail.
+/// If any dependency fails (finishes or cancels with errors), the target operation will fail.
 public struct NoFailedDependenciesCondition: OperationCondition {
-
-  public var name: String { return category } // TODO
 
   public let ignoreCancellations: Bool
 
