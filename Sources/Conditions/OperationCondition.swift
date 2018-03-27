@@ -42,7 +42,9 @@ public protocol OperationCondition {
 }
 
 public extension OperationCondition {
+
   var isMutuallyExclusive: Bool { return false }
+
   func dependency(for operation: AdvancedOperation) -> Operation? { return nil }
 }
 
