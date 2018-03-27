@@ -114,6 +114,22 @@ final class AdvancedOperationTests: XCTestCase {
     XCTAssertOperationCancelled(operation: operation)
   }
 
+  func testCancelBeforeStart() {
+    let expectation1 = expectation(description: "\(#function)\(#line)")
+
+    let operation = SleepyAsyncOperation()
+    operation.completionBlock = { expectation1.fulfill() }
+
+    XCTAssertOperationCanBeStarted(operation: operation)
+
+    operation.cancel()
+    operation.start()
+    XCTAssertTrue(operation.isCancelled)
+
+    waitForExpectations(timeout: 10)
+    XCTAssertOperationCancelled(operation: operation)
+  }
+
   func testMultipleCancel() {
     let expectation1 = expectation(description: "\(#function)\(#line)")
 
