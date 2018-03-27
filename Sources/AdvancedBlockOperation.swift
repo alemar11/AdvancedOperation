@@ -51,9 +51,7 @@ public final class AdvancedBlockOperation: AdvancedOperation {
   }
 
   public override func main() {
-    guard !isCancelled else {
-      return finish()
-    }
+    guard !isCancelled else { finish(); return }
 
     block { [weak self] errors in
       self?.finish(errors: errors)
