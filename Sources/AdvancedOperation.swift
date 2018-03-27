@@ -207,14 +207,14 @@ public class AdvancedOperation: Operation {
       return
     }
 
-    let result = lock.synchronized { () -> Bool in
+    let canBeExecuted = lock.synchronized { () -> Bool in
       guard isReady else { return false }
       guard !isExecuting else { return false }
       state = .executing // recursive lock
       return true
     }
 
-    guard result else { return }
+    guard canBeExecuted else { return }
     willExecute()
     //Thread.detachNewThreadSelector(#selector(main), toTarget: self, with: nil)
     // https://developer.apple.com/library/content/documentation/General/Conceptual/ConcurrencyProgrammingGuide/OperationObjects/OperationObjects.html#//apple_ref/doc/uid/TP40008091-CH101-SW16
@@ -234,13 +234,13 @@ public class AdvancedOperation: Operation {
   }
 
   private func _cancel(error: Error? = nil) {
-    let result = lock.synchronized { () -> Bool in
+    let canBeCancelled = lock.synchronized { () -> Bool in
       guard !_cancelling && !isCancelled else { return false }
       _cancelling = true
       return _cancelling
     }
 
-    guard result else { return }
+    guard canBeCancelled else { return }
 
     let updatedErrors = lock.synchronized { () -> [Error] in
       if let error = error {
@@ -256,7 +256,7 @@ public class AdvancedOperation: Operation {
   }
 
   public final func finish(errors: [Error] = []) {
-    let result = lock.synchronized { () -> Bool in
+    let canBeFinished = lock.synchronized { () -> Bool in
       guard _state.canTransition(to: .finishing) else { return false }
       _state = .finishing
       if !_finishing {
@@ -266,7 +266,7 @@ public class AdvancedOperation: Operation {
       return false
     }
 
-    guard result else { return }
+    guard canBeFinished else { return }
 
     let updatedErrors = lock.synchronized { () -> [Error] in
       self.errors.append(contentsOf: errors)
@@ -336,11 +336,11 @@ public class AdvancedOperation: Operation {
   internal func willEnqueue() {
     guard !isCancelled else { return } // if it's cancelled, there's no point in evaluating the conditions
 
-    let result = lock.synchronized { () -> Bool in
+    let canBeEnqueued = lock.synchronized { () -> Bool in
       return state.canTransition(to: .pending)
     }
 
-    guard result else { return }
+    guard canBeEnqueued else { return }
     state = .pending
   }
 
@@ -351,13 +351,13 @@ public class AdvancedOperation: Operation {
   }
 
   private func evaluateConditions() {
-    let result = lock.synchronized { () -> Bool in
+    let canBeEvaluated = lock.synchronized { () -> Bool in
       guard state.canTransition(to: .evaluating) else { return false }
       state = .evaluating
       return true
     }
 
-    guard result else { return }
+    guard canBeEvaluated else { return }
 
     type(of: self).evaluate(conditions, operation: self) { [weak self] errors in
       self?.errors.append(contentsOf: errors)
