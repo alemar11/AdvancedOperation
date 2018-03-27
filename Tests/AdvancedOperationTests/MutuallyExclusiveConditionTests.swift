@@ -248,6 +248,7 @@ final class MutuallyExclusiveConditionTests: XCTestCase {
 
     // this observer is added as the last one for the last operation
     let finalObserver = BlockObserver(didFinish: { (_, _) in
+      sleep(2) // wait a bit longer...
       expectation4.fulfill()
     })
     operation3.addObserver(observer: finalObserver)
@@ -266,14 +267,14 @@ final class MutuallyExclusiveConditionTests: XCTestCase {
     XCTAssertEqual((manager.operations[key] ?? []).count, 0)
   }
 
-//  func testStress() {
-//    for x in 1...1000 {
-//      print(x)
-//      testMutuallyExclusiveConditionWithBlockOperations()
-//      testMultipleMutuallyExclusiveConditionsWithBlockOperations()
-//      testExclusivityManager()
-//    }
-//  }
+  func testStress() {
+    for x in 1...100 {
+      print(x)
+      //testMutuallyExclusiveConditionWithBlockOperations()
+      //testMultipleMutuallyExclusiveConditionsWithBlockOperations()
+      testExclusivityManager()
+    }
+  }
 
 }
 
