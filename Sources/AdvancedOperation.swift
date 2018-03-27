@@ -87,7 +87,7 @@ public class AdvancedOperation: Operation {
   public var failed: Bool { return lock.synchronized { !errors.isEmpty } }
 
   /// A lock to guard reads and writes to the `_state` property
-  private let lock = NSLock()
+  private let lock = NSRecursiveLock()
 
   /// Private backing stored property for `state`.
   private var _state: OperationState = .ready
@@ -190,10 +190,14 @@ public class AdvancedOperation: Operation {
       return
     }
 
-    guard isReady else { return }
-    guard !isExecuting else { return }
+    let result = lock.synchronized { () -> Bool in
+      guard isReady else { return false }
+      guard !isExecuting else { return false }
+      state = .executing // recursive lock
+      return true
+    }
 
-    state = .executing
+    guard result else { return }
     willExecute()
     //Thread.detachNewThreadSelector(#selector(main), toTarget: self, with: nil)
     // https://developer.apple.com/library/content/documentation/General/Conceptual/ConcurrencyProgrammingGuide/OperationObjects/OperationObjects.html#//apple_ref/doc/uid/TP40008091-CH101-SW16

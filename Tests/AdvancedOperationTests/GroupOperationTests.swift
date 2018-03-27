@@ -168,8 +168,6 @@ final class GroupOperationTests: XCTestCase {
     }
   }
 
-  // FIXME: timeout with waitUntilFinished on Travis CI
-
   func testGroupOperationWithWaitUntilFinished() {
     let operation1 = BlockOperation(block: { sleep(2)} )
     let operation2 = BlockOperation(block: { sleep(2)} )
