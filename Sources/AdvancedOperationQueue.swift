@@ -97,9 +97,9 @@ class AdvancedOperationQueue: OperationQueue {
           let category = condition.category
 
           exclusivityManager.addOperation(operation, category: category)
-          operation.addObserver(observer: BlockObserver { [weak self] op, _ in
-            self?.exclusivityManager.removeOperation(op, category: category)
-          })
+//          operation.addObserver(observer: BlockObserver { [weak self] op, _ in
+//            self?.exclusivityManager.removeOperation(op, category: category)
+//          })
         }
         operation.willEnqueue()
       }

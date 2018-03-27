@@ -28,29 +28,30 @@ final public class ExclusivityManager {
   public static let sharedInstance = ExclusivityManager()
 
   private let queue = DispatchQueue(label: "\(identifier).\(#file)")
+
   internal private(set) var operations: [String: [Operation]] = [:]
 
-  internal func addOperation(_ operation: Operation, category: String) {
+  internal func addOperation(_ operation: AdvancedOperation, category: String) {
     _ = queue.sync(execute: {
       self._addOperation(operation, category: category)
     })
   }
 
-  internal func removeOperation(_ operation: Operation, category: String) {
+  internal func removeOperation(_ operation: AdvancedOperation, category: String) {
     queue.async {
       self._removeOperation(operation, category: category)
     }
   }
 
   @discardableResult
-  private func _addOperation(_ operation: Operation, category: String) -> Operation? {
-//    let observer = BlockObserver { [weak self] op, _ in
-//      self?.removeOperation(op, category: category)
-//    }
-
-//    operation.addObserver(observer: BlockObserver { [weak self] op, _ in
-//    self?.exclusivityManager.removeOperation(op, category: category)
-//    })
+  private func _addOperation(_ operation: AdvancedOperation, category: String) -> Operation? {
+    //    let observer = BlockObserver(willFinish: { [unowned self] (currentOperation, errors) in
+    //      self.removeOperation(currentOperation, category: category)
+    //    })
+    let observer = BlockObserver {  [unowned self] (currentOperation, errors) in
+      self.removeOperation(currentOperation, category: category)
+    }
+    operation.addObserver(observer: observer)
 
     var operationsWithThisCategory = operations[category] ?? []
     let previous = operationsWithThisCategory.last
@@ -65,7 +66,7 @@ final public class ExclusivityManager {
     return previous
   }
 
-  private func _removeOperation(_ operation: Operation, category: String) {
+  private func _removeOperation(_ operation: AdvancedOperation, category: String) {
     if
       let operationsWithThisCategory = operations[category],
       let index = operationsWithThisCategory.index(of: operation)
