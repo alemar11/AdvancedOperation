@@ -79,7 +79,7 @@ final class DelayOperationTests: XCTestCase {
     let operation = DelayOperation(interval: 2)
     operation.completionBlock = {
       let seconds = Date().timeIntervalSince(start)
-      XCTAssertTrue(seconds > 2 && seconds < 3, "\(seconds) should be greater than 0s and lesser than 1s.")
+      XCTAssertTrue(seconds > 0 && seconds < 1, "\(seconds) should be greater than 0s and lesser than 1s.")
       expectation1.fulfill()
     }
 
