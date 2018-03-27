@@ -26,6 +26,13 @@ import XCTest
 
 final class AdvancedOperationQueueTests: XCTestCase {
 
+//  func testStress() {
+//    for x in 1...100 {
+//      print(x)
+//      testQueueWithAdvancedOperationsUsingWaitUntilFinished()
+//    }
+//  }
+
   func testQueueWithAdvancedOperationsUsingWaitUntilFinished() {
     let queue = AdvancedOperationQueue()
     let delegate = MockOperationQueueDelegate()
@@ -33,8 +40,10 @@ final class AdvancedOperationQueueTests: XCTestCase {
     queue.delegate = delegate
 
     let operation1 = SleepyAsyncOperation()
-    let operation2 = SleepyAsyncOperation()
-    let operation3 = SleepyAsyncOperation()
+    let operation2 = AdvancedBlockOperation { complete in
+      complete([])
+    }
+    let operation3 = SleepyOperation()
     let operation4 = DelayOperation(interval: 1)
 
     let willAddExpectation1 = expectation(description: "\(#function)\(#line)")
@@ -75,7 +84,6 @@ final class AdvancedOperationQueueTests: XCTestCase {
     let willExecuteExpectation4 = expectation(description: "\(#function)\(#line)")
 
     delegate.willExecuteOperationHandler = { (queue, operation) in
-      XCTAssertTrue(queue == queue)
       switch (operation) {
       case operation1: willExecuteExpectation1.fulfill()
       case operation2: willExecuteExpectation2.fulfill()
@@ -126,7 +134,9 @@ final class AdvancedOperationQueueTests: XCTestCase {
     }
 
     queue.addOperations([operation1, operation2, operation3, operation4], waitUntilFinished: true)
-    waitForExpectations(timeout: 0) // at this point all the operations should be completed
+    XCTAssertTrue(queue.operations.isEmpty)
+    // at this point all the operations should be completed BUT the didFinish couldn not yet be called.
+    waitForExpectations(timeout: 3)
   }
 
   func testQueueWithAdvancedOperationsWithoutUsingWaitUntilFinished() {
