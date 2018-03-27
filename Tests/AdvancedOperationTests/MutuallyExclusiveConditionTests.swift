@@ -26,12 +26,9 @@ import XCTest
 
 final class MutuallyExclusiveConditionTests: XCTestCase {
 
-//  func testIsMutuallyExclusive() {
-//    XCTAssertFalse(SleepyAsyncOperation().isMutuallyExclusive)
-//    let operation = SleepyAsyncOperation()
-//    operation.addMutuallyExclusiveCategory("test")
-//    XCTAssertTrue(operation.isMutuallyExclusive)
-//  }
+  func testIsMutuallyExclusive() {
+    XCTAssertTrue(MutuallyExclusiveCondition<XCTestCase>().isMutuallyExclusive)
+  }
 
   func testMutuallyExclusiveCondition() {
     let queue = AdvancedOperationQueue()
