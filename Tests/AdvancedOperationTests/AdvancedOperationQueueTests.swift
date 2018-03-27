@@ -510,9 +510,15 @@ final class AdvancedOperationQueueTests: XCTestCase {
   func testMemoryLeakFailIfAtLeastOnDependecyHasBeenCancelled() {
     var queue: AdvancedOperationQueue? = AdvancedOperationQueue()
     weak var weakQueue = queue
+
     let expectation1 = expectation(description: "\(#function)\(#line)")
     var operation1: AdvancedOperation? = SleepyOperation()
+
     weak var weakOperation1 = operation1
+    defer {
+      XCTAssertNil(weakQueue)
+      XCTAssertNil(weakOperation1)
+    }
 
     let operation2 = SleepyAsyncOperation()
     let operation3 = SleepyOperation()
@@ -543,15 +549,7 @@ final class AdvancedOperationQueueTests: XCTestCase {
     waitForExpectations(timeout: 10)
     XCTAssertTrue(operation1!.isCancelled)
 
-    print(queue!.operationCount)
     queue = nil
-    XCTAssertNil(weakQueue)
-
-    for dependency in operation1!.dependencies {
-      operation1?.removeDependency(dependency)
-    }
-
     operation1 = nil
-    XCTAssertNil(weakOperation1)
   }
 }
