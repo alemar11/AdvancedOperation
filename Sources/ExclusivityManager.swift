@@ -24,46 +24,48 @@
 import Foundation
 
 final public class ExclusivityManager {
-
+  
   public static let sharedInstance = ExclusivityManager()
-
+  
   private let queue = DispatchQueue(label: "\(identifier).\(#file)")
-
+  
   internal private(set) var operations: [String: [Operation]] = [:]
-
+  
   internal func addOperation(_ operation: AdvancedOperation, category: String) {
     _ = queue.sync(execute: {
       self._addOperation(operation, category: category)
     })
   }
-
+  
   internal func removeOperation(_ operation: AdvancedOperation, category: String) {
     queue.async {
       self._removeOperation(operation, category: category)
     }
   }
-
+  
   @discardableResult
   private func _addOperation(_ operation: AdvancedOperation, category: String) -> Operation? {
-
-      let observer = BlockObserver {  [unowned self] (currentOperation, errors) in
-        self.removeOperation(currentOperation, category: category)
-      }
-      operation.addObserver(observer: observer)
-
+    let observer = BlockObserver(willFinish: { [unowned self] (currentOperation, errors) in
+      self.removeOperation(currentOperation, category: category)
+    })
+    //      let observer = BlockObserver {  [unowned self] (currentOperation, errors) in
+    //        self.removeOperation(currentOperation, category: category)
+    //      }
+    operation.addObserver(observer: observer)
+    
     var operationsWithThisCategory = operations[category] ?? []
     let previous = operationsWithThisCategory.last
-
+    
     if let previous = previous {
       operation.addDependency(previous)
     }
-
+    
     operationsWithThisCategory.append(operation)
     operations[category] = operationsWithThisCategory
-
+    
     return previous
   }
-
+  
   private func _removeOperation(_ operation: AdvancedOperation, category: String) {
     if
       let operationsWithThisCategory = operations[category],
