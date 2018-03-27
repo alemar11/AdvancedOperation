@@ -27,13 +27,12 @@ public class AdvancedOperation: Operation {
 
   // MARK: - State
 
-  //open override var isReady: Bool { return (state == .ready || isCancelled) && super.isReady }
   public final override var isReady: Bool {
     switch state {
 
     case .pending:
       if isCancelled {
-        return true // TODO: or should be true?
+        return true // TODO
       }
 
       if super.isReady {
@@ -62,7 +61,7 @@ public class AdvancedOperation: Operation {
 
     case ready
     case pending
-    case evaluatingConditions
+    case evaluating
     case executing
     case finishing
     case finished
@@ -75,9 +74,9 @@ public class AdvancedOperation: Operation {
         return true
       case (.ready, .finishing): // early bailing out
         return true
-      case (.pending, .evaluatingConditions):
+      case (.pending, .evaluating):
         return true
-      case (.evaluatingConditions, .ready):
+      case (.evaluating, .ready):
         return true
       case (.executing, .finishing):
         return true
@@ -94,8 +93,8 @@ public class AdvancedOperation: Operation {
         return "ready"
       case .pending:
         return "pending"
-      case .evaluatingConditions:
-        return "evaluatingConditions"
+      case .evaluating:
+        return "evaluating conditions"
       case .executing:
         return "executing"
       case .finishing:
@@ -108,11 +107,6 @@ public class AdvancedOperation: Operation {
   }
 
   // MARK: - Properties
-
-//  /// A flag to indicate whether this `AdvancedOperation` is mutually exclusive meaning that only one operation of this type can be evaluated at a time.
-//  public var isMutuallyExclusive: Bool { return !mutuallyExclusiveCategories.isEmpty }
-//
-//  public var mutuallyExclusiveCategories: Set<String> { return lock.synchronized { _categories } }
 
   /// Returns `true` if the `AdvancedOperation` failed due to errors.
   public var failed: Bool { return lock.synchronized { !errors.isEmpty } }
@@ -128,9 +122,6 @@ public class AdvancedOperation: Operation {
 
   /// Returns `true` if the `AdvancedOperation` is cancelling.
   private var _cancelling = false
-
-//  /// Set of categories used by the ExclusivityManager.
-//  private var _categories = Set<String>()
 
   /// The state of the operation.
   @objc dynamic
@@ -203,12 +194,6 @@ public class AdvancedOperation: Operation {
   // MARK: - Methods
 
   public final override func start() {
-
-//    let result = lock.synchronized { return _cancelling }
-//    guard !result else {
-//      print(result)
-//      return
-//    }
 
     // Do not start if it's finishing
     guard (state != .finishing) else {
@@ -292,16 +277,6 @@ public class AdvancedOperation: Operation {
     didFinish(errors: updatedErrors)
   }
 
-  // MARK: - Mutually Exclusive Category
-
-//  func addMutuallyExclusiveCategory(_ category: String) {
-//    assert(isReady, "Invalid state \(_state) for adding mutually exclusive categories.")
-//
-//    lock.synchronized {
-//      _categories.insert(category)
-//    }
-//  }
-
   // MARK: - Observer
 
   /// Add an observer to the to the operation, can only be done prior to the operation starting.
@@ -354,7 +329,7 @@ public class AdvancedOperation: Operation {
 
   // MARK: - Add Condition
 
-    public private(set) var conditions = [OperationCondition]() //TODO : set?
+  public private(set) var conditions = [OperationCondition]() //TODO : set?
 
   /// Indicate to the operation that it can proceed with evaluating conditions (if it's not cancelled or finished).
   internal func willEnqueue() {
@@ -378,8 +353,8 @@ public class AdvancedOperation: Operation {
     //assert(state == .pending, "Cannot evaluate conditions in this state: \(state)")
 
     let result = lock.synchronized { () -> Bool in
-      guard state.canTransition(to: .evaluatingConditions) else { return false }
-      state = .evaluatingConditions
+      guard state.canTransition(to: .evaluating) else { return false }
+      state = .evaluating
       return true
     }
 
