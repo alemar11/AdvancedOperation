@@ -28,8 +28,29 @@ public class AdvancedOperation: Operation {
   // MARK: - State
 
   //open override var isReady: Bool { return (state == .ready || isCancelled) && super.isReady }
-  open override var isReady: Bool { return state == .ready && super.isReady }
+  public final override var isReady: Bool {
+    switch state {
 
+    case .pending:
+      if isCancelled {
+        return true // TODO: or should be true?
+      }
+
+      if super.isReady {
+        evaluateConditions()
+        return false
+      }
+
+      return false // Until conditions have been evaluated
+
+    case .ready:
+      return super.isReady
+
+    default:
+      return false
+    }
+
+  }
   public final override var isExecuting: Bool { return state == .executing }
 
   public final override var isFinished: Bool { return state == .finished }
@@ -40,6 +61,8 @@ public class AdvancedOperation: Operation {
   internal enum OperationState: Int, CustomDebugStringConvertible {
 
     case ready
+    case pending
+    case evaluatingConditions
     case executing
     case finishing
     case finished
@@ -48,12 +71,16 @@ public class AdvancedOperation: Operation {
       switch (self, state) {
       case (.ready, .executing):
         return true
+      case (.ready, .pending):
+        return true
       case (.ready, .finishing): // early bailing out
+        return true
+      case (.pending, .evaluatingConditions):
+        return true
+      case (.evaluatingConditions, .ready):
         return true
       case (.executing, .finishing):
         return true
-//      case (.executing, .ready): // cancel
-//        return true
       case (.finishing, .finished):
         return true
       default:
@@ -65,6 +92,10 @@ public class AdvancedOperation: Operation {
       switch self {
       case .ready:
         return "ready"
+      case .pending:
+        return "pending"
+      case .evaluatingConditions:
+        return "evaluatingConditions"
       case .executing:
         return "executing"
       case .finishing:
@@ -78,10 +109,10 @@ public class AdvancedOperation: Operation {
 
   // MARK: - Properties
 
-  /// A flag to indicate whether this `AdvancedOperation` is mutually exclusive meaning that only one operation of this type can be evaluated at a time.
-  public var isMutuallyExclusive: Bool { return !mutuallyExclusiveCategories.isEmpty }
-
-  public var mutuallyExclusiveCategories: Set<String> { return lock.synchronized { _categories } }
+//  /// A flag to indicate whether this `AdvancedOperation` is mutually exclusive meaning that only one operation of this type can be evaluated at a time.
+//  public var isMutuallyExclusive: Bool { return !mutuallyExclusiveCategories.isEmpty }
+//
+//  public var mutuallyExclusiveCategories: Set<String> { return lock.synchronized { _categories } }
 
   /// Returns `true` if the `AdvancedOperation` failed due to errors.
   public var failed: Bool { return lock.synchronized { !errors.isEmpty } }
@@ -98,8 +129,8 @@ public class AdvancedOperation: Operation {
   /// Returns `true` if the `AdvancedOperation` is cancelling.
   private var _cancelling = false
 
-  /// Set of categories used by the ExclusivityManager.
-  private var _categories = Set<String>()
+//  /// Set of categories used by the ExclusivityManager.
+//  private var _categories = Set<String>()
 
   /// The state of the operation.
   @objc dynamic
@@ -263,13 +294,13 @@ public class AdvancedOperation: Operation {
 
   // MARK: - Mutually Exclusive Category
 
-  func addMutuallyExclusiveCategory(_ category: String) {
-    assert(isReady, "Invalid state \(_state) for adding mutually exclusive categories.")
-
-    lock.synchronized {
-      _categories.insert(category)
-    }
-  }
+//  func addMutuallyExclusiveCategory(_ category: String) {
+//    assert(isReady, "Invalid state \(_state) for adding mutually exclusive categories.")
+//
+//    lock.synchronized {
+//      _categories.insert(category)
+//    }
+//  }
 
   // MARK: - Observer
 
@@ -319,6 +350,80 @@ public class AdvancedOperation: Operation {
     assert(!isExecuting, "Dependencies cannot be modified after execution has begun.")
 
     super.addDependency(operation)
+  }
+
+  // MARK: - Add Condition
+
+    public private(set) var conditions = [OperationCondition]() //TODO : set?
+
+  /// Indicate to the operation that it can proceed with evaluating conditions (if it's not cancelled or finished).
+  internal func willEnqueue() {
+    guard !isCancelled else { return } // if it's cancelled, there's no point in evaluating the conditions
+
+    let result = lock.synchronized { () -> Bool in
+      return state.canTransition(to: .pending)
+    }
+
+    guard result else { return }
+    state = .pending
+  }
+
+  public func addCondition(condition: OperationCondition) {
+    assert(state == .ready || state == .pending, "Cannot add conditions after the evaluation (or execution) has begun.") // TODO: better assert
+
+    conditions.append(condition)
+  }
+
+  private func evaluateConditions() {
+    assert(state == .pending, "Cannot evaluate conditions in this state: \(state)")
+
+    let result = lock.synchronized { () -> Bool in
+      guard state.canTransition(to: .evaluatingConditions) else { return false }
+      state = .evaluatingConditions
+      return true
+    }
+
+    guard result else { return }
+
+    type(of: self).evaluate(conditions, operation: self) { [weak self] errors in
+      self?.errors.append(contentsOf: errors)
+      self?.state = .ready
+    }
+  }
+
+}
+
+// MARK: - Condition Evaluation
+
+extension AdvancedOperation {
+
+  static func evaluate(_ conditions: [OperationCondition], operation: AdvancedOperation, completion: @escaping ([Error]) -> Void) {
+    let conditionGroup = DispatchGroup()
+    var results = [OperationConditionResult?](repeating: nil, count: conditions.count)
+
+    for (index, condition) in conditions.enumerated() {
+      conditionGroup.enter()
+      condition.evaluate(for: operation) { result in
+        results[index] = result
+        conditionGroup.leave()
+      }
+    }
+
+    conditionGroup.notify(queue: DispatchQueue.global()) {
+      var errors = results.compactMap { (result) -> [Error]? in
+        switch result {
+        case .failed(let errors)?:
+          return errors
+        default:
+          return nil
+        }
+        } .flatMap { $0 }
+
+      if operation.isCancelled {
+        errors.append(contentsOf: operation.errors) //TODO better error
+      }
+      completion(errors)
+    }
   }
 
 }

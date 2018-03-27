@@ -32,10 +32,6 @@
 /* End PBXAggregateTarget section */
 
 /* Begin PBXBuildFile section */
-		2313328E2055446100F205A3 /* ExclusivityManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2313328D2055446100F205A3 /* ExclusivityManager.swift */; };
-		2313328F2055446100F205A3 /* ExclusivityManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2313328D2055446100F205A3 /* ExclusivityManager.swift */; };
-		231332902055446100F205A3 /* ExclusivityManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2313328D2055446100F205A3 /* ExclusivityManager.swift */; };
-		231332912055446100F205A3 /* ExclusivityManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2313328D2055446100F205A3 /* ExclusivityManager.swift */; };
 		231FE728201210300077728C /* OperationKeyValueObserverTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 231FE727201210300077728C /* OperationKeyValueObserverTests.swift */; };
 		231FE729201210300077728C /* OperationKeyValueObserverTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 231FE727201210300077728C /* OperationKeyValueObserverTests.swift */; };
 		231FE72A201210300077728C /* OperationKeyValueObserverTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 231FE727201210300077728C /* OperationKeyValueObserverTests.swift */; };
@@ -47,6 +43,34 @@
 		234130BC1F96076A002BE7FC /* AdvancedOperation.h in Headers */ = {isa = PBXBuildFile; fileRef = 2341308A1F9605F5002BE7FC /* AdvancedOperation.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		234130BD1F96076D002BE7FC /* AdvancedOperation.h in Headers */ = {isa = PBXBuildFile; fileRef = 2341308A1F9605F5002BE7FC /* AdvancedOperation.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		234130BE1F960770002BE7FC /* AdvancedOperation.h in Headers */ = {isa = PBXBuildFile; fileRef = 2341308A1F9605F5002BE7FC /* AdvancedOperation.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		235D0887206A410900F70142 /* ExclusivityManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 235D0880206A410800F70142 /* ExclusivityManager.swift */; };
+		235D0888206A410900F70142 /* ExclusivityManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 235D0880206A410800F70142 /* ExclusivityManager.swift */; };
+		235D0889206A410900F70142 /* ExclusivityManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 235D0880206A410800F70142 /* ExclusivityManager.swift */; };
+		235D088A206A410900F70142 /* ExclusivityManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 235D0880206A410800F70142 /* ExclusivityManager.swift */; };
+		235D088B206A410900F70142 /* NegatedCondition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 235D0881206A410800F70142 /* NegatedCondition.swift */; };
+		235D088C206A410900F70142 /* NegatedCondition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 235D0881206A410800F70142 /* NegatedCondition.swift */; };
+		235D088D206A410900F70142 /* NegatedCondition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 235D0881206A410800F70142 /* NegatedCondition.swift */; };
+		235D088E206A410900F70142 /* NegatedCondition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 235D0881206A410800F70142 /* NegatedCondition.swift */; };
+		235D088F206A410900F70142 /* SilentCondition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 235D0882206A410800F70142 /* SilentCondition.swift */; };
+		235D0890206A410900F70142 /* SilentCondition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 235D0882206A410800F70142 /* SilentCondition.swift */; };
+		235D0891206A410900F70142 /* SilentCondition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 235D0882206A410800F70142 /* SilentCondition.swift */; };
+		235D0892206A410900F70142 /* SilentCondition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 235D0882206A410800F70142 /* SilentCondition.swift */; };
+		235D0893206A410900F70142 /* MutuallyExclusiveCondition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 235D0883206A410800F70142 /* MutuallyExclusiveCondition.swift */; };
+		235D0894206A410900F70142 /* MutuallyExclusiveCondition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 235D0883206A410800F70142 /* MutuallyExclusiveCondition.swift */; };
+		235D0895206A410900F70142 /* MutuallyExclusiveCondition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 235D0883206A410800F70142 /* MutuallyExclusiveCondition.swift */; };
+		235D0896206A410900F70142 /* MutuallyExclusiveCondition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 235D0883206A410800F70142 /* MutuallyExclusiveCondition.swift */; };
+		235D0897206A410900F70142 /* OperationCondition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 235D0884206A410800F70142 /* OperationCondition.swift */; };
+		235D0898206A410900F70142 /* OperationCondition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 235D0884206A410800F70142 /* OperationCondition.swift */; };
+		235D0899206A410900F70142 /* OperationCondition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 235D0884206A410800F70142 /* OperationCondition.swift */; };
+		235D089A206A410900F70142 /* OperationCondition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 235D0884206A410800F70142 /* OperationCondition.swift */; };
+		235D089B206A410900F70142 /* NoCancelledDependenciesCondition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 235D0885206A410800F70142 /* NoCancelledDependenciesCondition.swift */; };
+		235D089C206A410900F70142 /* NoCancelledDependenciesCondition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 235D0885206A410800F70142 /* NoCancelledDependenciesCondition.swift */; };
+		235D089D206A410900F70142 /* NoCancelledDependenciesCondition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 235D0885206A410800F70142 /* NoCancelledDependenciesCondition.swift */; };
+		235D089E206A410900F70142 /* NoCancelledDependenciesCondition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 235D0885206A410800F70142 /* NoCancelledDependenciesCondition.swift */; };
+		235D089F206A410900F70142 /* NoFailedDependenciesCondition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 235D0886206A410800F70142 /* NoFailedDependenciesCondition.swift */; };
+		235D08A0206A410900F70142 /* NoFailedDependenciesCondition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 235D0886206A410800F70142 /* NoFailedDependenciesCondition.swift */; };
+		235D08A1206A410900F70142 /* NoFailedDependenciesCondition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 235D0886206A410800F70142 /* NoFailedDependenciesCondition.swift */; };
+		235D08A2206A410900F70142 /* NoFailedDependenciesCondition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 235D0886206A410800F70142 /* NoFailedDependenciesCondition.swift */; };
 		23665C0F200B6E4800A6C921 /* OperationObserverController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23665C0E200B6E4800A6C921 /* OperationObserverController.swift */; };
 		23665C10200B6E4800A6C921 /* OperationObserverController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23665C0E200B6E4800A6C921 /* OperationObserverController.swift */; };
 		23665C11200B6E4800A6C921 /* OperationObserverController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23665C0E200B6E4800A6C921 /* OperationObserverController.swift */; };
@@ -144,7 +168,6 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		2313328D2055446100F205A3 /* ExclusivityManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExclusivityManager.swift; sourceTree = "<group>"; };
 		231FE727201210300077728C /* OperationKeyValueObserverTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OperationKeyValueObserverTests.swift; sourceTree = "<group>"; };
 		232F3AAD206041DE00FC45CB /* Globals.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Globals.swift; sourceTree = "<group>"; };
 		234130871F9605F5002BE7FC /* AdvancedOperation.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = AdvancedOperation.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -154,6 +177,13 @@
 		234130A71F9606B8002BE7FC /* AdvancedOperation.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = AdvancedOperation.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		234130B41F9606CD002BE7FC /* AdvancedOperation.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = AdvancedOperation.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		234130B71F9606CD002BE7FC /* Info-tvOS.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Info-tvOS.plist"; sourceTree = "<group>"; };
+		235D0880206A410800F70142 /* ExclusivityManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExclusivityManager.swift; sourceTree = "<group>"; };
+		235D0881206A410800F70142 /* NegatedCondition.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NegatedCondition.swift; sourceTree = "<group>"; };
+		235D0882206A410800F70142 /* SilentCondition.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SilentCondition.swift; sourceTree = "<group>"; };
+		235D0883206A410800F70142 /* MutuallyExclusiveCondition.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MutuallyExclusiveCondition.swift; sourceTree = "<group>"; };
+		235D0884206A410800F70142 /* OperationCondition.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OperationCondition.swift; sourceTree = "<group>"; };
+		235D0885206A410800F70142 /* NoCancelledDependenciesCondition.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NoCancelledDependenciesCondition.swift; sourceTree = "<group>"; };
+		235D0886206A410800F70142 /* NoFailedDependenciesCondition.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NoFailedDependenciesCondition.swift; sourceTree = "<group>"; };
 		23665C0E200B6E4800A6C921 /* OperationObserverController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OperationObserverController.swift; sourceTree = "<group>"; };
 		23725071200522820000A442 /* AdvancedOperation Tests macOS.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "AdvancedOperation Tests macOS.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2372507C200524860000A442 /* AdvancedOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdvancedOperation.swift; sourceTree = "<group>"; };
@@ -281,7 +311,7 @@
 		234130921F960612002BE7FC /* Sources */ = {
 			isa = PBXGroup;
 			children = (
-				2313328D2055446100F205A3 /* ExclusivityManager.swift */,
+				235D087F206A410800F70142 /* Conditions */,
 				23A813B02020CF1E008A98E0 /* AdvancedBlockOperation.swift */,
 				2372507C200524860000A442 /* AdvancedOperation.swift */,
 				23F24D342007BC2100B25A03 /* AdvancedOperationQueue.swift */,
@@ -316,6 +346,21 @@
 				2341308B1F9605F5002BE7FC /* Info.plist */,
 			);
 			path = Support;
+			sourceTree = "<group>";
+		};
+		235D087F206A410800F70142 /* Conditions */ = {
+			isa = PBXGroup;
+			children = (
+				235D0880206A410800F70142 /* ExclusivityManager.swift */,
+				235D0881206A410800F70142 /* NegatedCondition.swift */,
+				235D0882206A410800F70142 /* SilentCondition.swift */,
+				235D0883206A410800F70142 /* MutuallyExclusiveCondition.swift */,
+				235D0884206A410800F70142 /* OperationCondition.swift */,
+				235D0885206A410800F70142 /* NoCancelledDependenciesCondition.swift */,
+				235D0886206A410800F70142 /* NoFailedDependenciesCondition.swift */,
+			);
+			name = Conditions;
+			path = "../../../../Downloads/AdvancedOperation-conditions/Sources/Conditions";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -649,17 +694,23 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				235D0897206A410900F70142 /* OperationCondition.swift in Sources */,
 				23F24D2720079CDE00B25A03 /* DelayOperation.swift in Sources */,
 				2372507D200524860000A442 /* AdvancedOperation.swift in Sources */,
 				23F24D22200799B800B25A03 /* Operation+Utils.swift in Sources */,
-				2313328E2055446100F205A3 /* ExclusivityManager.swift in Sources */,
+				235D088B206A410900F70142 /* NegatedCondition.swift in Sources */,
 				232F3AAE206041DE00FC45CB /* Globals.swift in Sources */,
 				23830CA320615E7C00F6EBC9 /* NSLock+Utils.swift in Sources */,
 				23A813B12020CF1E008A98E0 /* AdvancedBlockOperation.swift in Sources */,
 				23F24D302007B0D200B25A03 /* OperationObserving.swift in Sources */,
 				23665C0F200B6E4800A6C921 /* OperationObserverController.swift in Sources */,
 				2385616C200A6BF80061BAA1 /* GroupOperation.swift in Sources */,
+				235D089F206A410900F70142 /* NoFailedDependenciesCondition.swift in Sources */,
+				235D088F206A410900F70142 /* SilentCondition.swift in Sources */,
 				23F24D352007BC2100B25A03 /* AdvancedOperationQueue.swift in Sources */,
+				235D0887206A410900F70142 /* ExclusivityManager.swift in Sources */,
+				235D089B206A410900F70142 /* NoCancelledDependenciesCondition.swift in Sources */,
+				235D0893206A410900F70142 /* MutuallyExclusiveCondition.swift in Sources */,
 				23F24D3A2007C03D00B25A03 /* BlockObserver.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -668,17 +719,23 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				235D0898206A410900F70142 /* OperationCondition.swift in Sources */,
 				23F24D2820079CDE00B25A03 /* DelayOperation.swift in Sources */,
 				2372507E200524860000A442 /* AdvancedOperation.swift in Sources */,
 				23F24D23200799B800B25A03 /* Operation+Utils.swift in Sources */,
-				2313328F2055446100F205A3 /* ExclusivityManager.swift in Sources */,
+				235D088C206A410900F70142 /* NegatedCondition.swift in Sources */,
 				232F3AAF206041DE00FC45CB /* Globals.swift in Sources */,
 				23830CA420615E7C00F6EBC9 /* NSLock+Utils.swift in Sources */,
 				23A813B22020CF1E008A98E0 /* AdvancedBlockOperation.swift in Sources */,
 				23F24D312007B0D200B25A03 /* OperationObserving.swift in Sources */,
 				23665C10200B6E4800A6C921 /* OperationObserverController.swift in Sources */,
 				2385616D200A6BF80061BAA1 /* GroupOperation.swift in Sources */,
+				235D08A0206A410900F70142 /* NoFailedDependenciesCondition.swift in Sources */,
+				235D0890206A410900F70142 /* SilentCondition.swift in Sources */,
 				23F24D362007BC2100B25A03 /* AdvancedOperationQueue.swift in Sources */,
+				235D0888206A410900F70142 /* ExclusivityManager.swift in Sources */,
+				235D089C206A410900F70142 /* NoCancelledDependenciesCondition.swift in Sources */,
+				235D0894206A410900F70142 /* MutuallyExclusiveCondition.swift in Sources */,
 				23F24D3B2007C03D00B25A03 /* BlockObserver.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -687,17 +744,23 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				235D0899206A410900F70142 /* OperationCondition.swift in Sources */,
 				23F24D2920079CDE00B25A03 /* DelayOperation.swift in Sources */,
 				2372507F200524860000A442 /* AdvancedOperation.swift in Sources */,
 				23F24D24200799B800B25A03 /* Operation+Utils.swift in Sources */,
-				231332902055446100F205A3 /* ExclusivityManager.swift in Sources */,
+				235D088D206A410900F70142 /* NegatedCondition.swift in Sources */,
 				232F3AB0206041DE00FC45CB /* Globals.swift in Sources */,
 				23830CA520615E7C00F6EBC9 /* NSLock+Utils.swift in Sources */,
 				23A813B32020CF1E008A98E0 /* AdvancedBlockOperation.swift in Sources */,
 				23F24D322007B0D200B25A03 /* OperationObserving.swift in Sources */,
 				23665C11200B6E4800A6C921 /* OperationObserverController.swift in Sources */,
 				2385616E200A6BF80061BAA1 /* GroupOperation.swift in Sources */,
+				235D08A1206A410900F70142 /* NoFailedDependenciesCondition.swift in Sources */,
+				235D0891206A410900F70142 /* SilentCondition.swift in Sources */,
 				23F24D372007BC2100B25A03 /* AdvancedOperationQueue.swift in Sources */,
+				235D0889206A410900F70142 /* ExclusivityManager.swift in Sources */,
+				235D089D206A410900F70142 /* NoCancelledDependenciesCondition.swift in Sources */,
+				235D0895206A410900F70142 /* MutuallyExclusiveCondition.swift in Sources */,
 				23F24D3C2007C03D00B25A03 /* BlockObserver.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -706,17 +769,23 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				235D089A206A410900F70142 /* OperationCondition.swift in Sources */,
 				23F24D2A20079CDE00B25A03 /* DelayOperation.swift in Sources */,
 				23725080200524860000A442 /* AdvancedOperation.swift in Sources */,
 				23F24D25200799B800B25A03 /* Operation+Utils.swift in Sources */,
-				231332912055446100F205A3 /* ExclusivityManager.swift in Sources */,
+				235D088E206A410900F70142 /* NegatedCondition.swift in Sources */,
 				232F3AB1206041DE00FC45CB /* Globals.swift in Sources */,
 				23830CA620615E7C00F6EBC9 /* NSLock+Utils.swift in Sources */,
 				23A813B42020CF1E008A98E0 /* AdvancedBlockOperation.swift in Sources */,
 				23F24D332007B0D200B25A03 /* OperationObserving.swift in Sources */,
 				23665C12200B6E4800A6C921 /* OperationObserverController.swift in Sources */,
 				2385616F200A6BF80061BAA1 /* GroupOperation.swift in Sources */,
+				235D08A2206A410900F70142 /* NoFailedDependenciesCondition.swift in Sources */,
+				235D0892206A410900F70142 /* SilentCondition.swift in Sources */,
 				23F24D382007BC2100B25A03 /* AdvancedOperationQueue.swift in Sources */,
+				235D088A206A410900F70142 /* ExclusivityManager.swift in Sources */,
+				235D089E206A410900F70142 /* NoCancelledDependenciesCondition.swift in Sources */,
+				235D0896206A410900F70142 /* MutuallyExclusiveCondition.swift in Sources */,
 				23F24D3D2007C03D00B25A03 /* BlockObserver.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
