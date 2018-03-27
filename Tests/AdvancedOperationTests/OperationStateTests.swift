@@ -68,4 +68,13 @@ final class OperationStateTests: XCTestCase {
     XCTAssertFalse(AdvancedOperation.OperationState.finishing.canTransition(to: .finishing))
   }
 
+  func testDebugDescription() {
+    XCTAssertEqual(AdvancedOperation.OperationState.ready.debugDescription.lowercased(), "ready")
+    XCTAssertEqual(AdvancedOperation.OperationState.pending.debugDescription.lowercased(), "pending")
+    XCTAssertEqual(AdvancedOperation.OperationState.evaluating.debugDescription.lowercased(), "evaluating conditions")
+    XCTAssertEqual(AdvancedOperation.OperationState.executing.debugDescription.lowercased(), "executing")
+    XCTAssertEqual(AdvancedOperation.OperationState.finishing.debugDescription.lowercased(), "finishing")
+    XCTAssertEqual(AdvancedOperation.OperationState.finished.debugDescription.lowercased(), "finished")
+  }
+
 }
