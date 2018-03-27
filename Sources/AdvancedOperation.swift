@@ -375,7 +375,7 @@ public class AdvancedOperation: Operation {
   }
 
   private func evaluateConditions() {
-    assert(state == .pending, "Cannot evaluate conditions in this state: \(state)")
+    //assert(state == .pending, "Cannot evaluate conditions in this state: \(state)")
 
     let result = lock.synchronized { () -> Bool in
       guard state.canTransition(to: .evaluatingConditions) else { return false }

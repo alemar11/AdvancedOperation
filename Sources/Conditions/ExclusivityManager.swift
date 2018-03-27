@@ -44,11 +44,13 @@ final public class ExclusivityManager {
 
   @discardableResult
   private func _addOperation(_ operation: Operation, category: String) -> Operation? {
+//    let observer = BlockObserver { [weak self] op, _ in
+//      self?.removeOperation(op, category: category)
+//    }
 
-    //TODO: add this observer here? (and remove it from OperationQueue)
-    //    operation.addObserver(DidFinishObserver { [unowned self] op, _ in
-    //      self.removeOperation(op, category: category)
-    //    })
+//    operation.addObserver(observer: BlockObserver { [weak self] op, _ in
+//    self?.exclusivityManager.removeOperation(op, category: category)
+//    })
 
     var operationsWithThisCategory = operations[category] ?? []
     let previous = operationsWithThisCategory.last

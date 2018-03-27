@@ -41,16 +41,20 @@ final class MutuallyExclusiveConditionTests: XCTestCase {
     let expectation2 = expectation(description: "\(#function)\(#line)")
 
     let operation1 = SleepyAsyncOperation(interval1: 0, interval2: 0, interval3: 0)
-    operation1.completionBlock = { expectation1.fulfill() }
+    operation1.completionBlock = {
+      expectation1.fulfill()
+    }
     operation1.addCondition(condition: MutuallyExclusiveCondition<SleepyAsyncOperation>())
 
 
     let operation2 = SleepyAsyncOperation(interval1: 5, interval2: 5, interval3: 5)
-    operation2.completionBlock = { expectation2.fulfill() }
+    operation2.completionBlock = {
+      expectation2.fulfill()
+    }
     operation2.addCondition(condition: MutuallyExclusiveCondition<SleepyAsyncOperation>())
 
     queue.addOperations([operation2, operation1], waitUntilFinished: true)
-    wait(for: [expectation2, expectation1], timeout: 0, enforceOrder: true)
+    waitForExpectations(timeout: 0)
   }
 
   func testMutuallyExclusiveConditionWithtDifferentQueues() {
