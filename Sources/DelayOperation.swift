@@ -56,14 +56,14 @@ final class DelayOperation: AdvancedOperation {
 
   // MARK: - Initialization
 
-  init(interval: TimeInterval, queue: DispatchQueue = .global(qos: .default)) {
+  public init(interval: TimeInterval, queue: DispatchQueue = .global(qos: .default)) {
     self.delay = .interval(interval)
     self.queue = queue
 
     super.init()
   }
 
-  init(until date: Date, queue: DispatchQueue = .global(qos: .default)) {
+  public init(until date: Date, queue: DispatchQueue = .global(qos: .default)) {
     self.delay = .date(date)
     self.queue = queue
 
@@ -73,14 +73,12 @@ final class DelayOperation: AdvancedOperation {
   // MARK: - Methods
 
   override func main() {
-    guard delay.seconds > 0 else { return finish() }
+    guard delay.seconds > 0 else { finish(); return }
 
     queue.asyncAfter(deadline: .now() + delay.seconds) { [weak self] in
       guard let `self` = self else { return }
 
-      if !self.isCancelled {
-        return self.finish()
-      }
+      if !self.isCancelled { self.finish(); return }
     }
 
   }
