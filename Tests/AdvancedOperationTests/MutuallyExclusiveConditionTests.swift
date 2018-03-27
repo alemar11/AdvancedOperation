@@ -268,7 +268,5 @@ final class MutuallyExclusiveConditionTests: XCTestCase {
 //    }
 //  }
 
-  // TODO: add GroupOperation
-
 }
 
