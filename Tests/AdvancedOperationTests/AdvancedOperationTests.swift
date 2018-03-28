@@ -47,7 +47,7 @@ final class AdvancedOperationTests: XCTestCase {
     XCTAssertOperationExecuting(operation: operation)
 
     waitForExpectations(timeout: 10)
-    XCTAssertOperationFinished(operation: operation)
+    XCTAssertTrue(operation.isFinished)
   }
 
   func testMultipleStart() {
@@ -67,7 +67,7 @@ final class AdvancedOperationTests: XCTestCase {
     XCTAssertOperationExecuting(operation: operation)
 
     waitForExpectations(timeout: 10)
-    XCTAssertOperationFinished(operation: operation)
+    XCTAssertTrue(operation.isFinished)
   }
 
   func testMultipleAsyncStart() {
@@ -92,7 +92,7 @@ final class AdvancedOperationTests: XCTestCase {
     XCTAssertOperationExecuting(operation: operation)
 
     waitForExpectations(timeout: 10)
-    XCTAssertOperationFinished(operation: operation)
+    XCTAssertTrue(operation.isFinished)
   }
 
   func testCancel() {

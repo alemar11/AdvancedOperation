@@ -74,7 +74,7 @@ final class AdvancedBlockOperationTests: XCTestCase {
     operation.start()
 
     waitForExpectations(timeout: 4)
-    XCTAssertOperationFinished(operation: operation)
+    XCTAssertTrue(operation.isFinished)
   }
 
   func testBlockOperationWithAsyncQueueFinishedWithErrors () {
@@ -97,7 +97,8 @@ final class AdvancedBlockOperationTests: XCTestCase {
     operation.start()
 
     waitForExpectations(timeout: 3)
-    XCTAssertOperationFinished(operation: operation, errors: errors)
+    XCTAssertTrue(operation.isFinished)
+    XCTAssertSameErrorQuantity(errors: operation.errors, expectedErrors: errors)
 
     // Memory leaks test: once release the operation, the captured object (by reference) should be nil (weakObject)
     operation = AdvancedBlockOperation(block: {})

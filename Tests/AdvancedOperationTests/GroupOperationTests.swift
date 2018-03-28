@@ -47,7 +47,7 @@ final class GroupOperationTests: XCTestCase {
     waitForExpectations(timeout: 10)
 
     XCTAssertTrue(group.isSuspended)
-    XCTAssertOperationFinished(operation: group)
+    XCTAssertTrue(group.isFinished)
   }
 
   func testStress() {
@@ -139,8 +139,8 @@ final class GroupOperationTests: XCTestCase {
     operation2.cancel()
     waitForExpectations(timeout: 10)
 
-    XCTAssertOperationFinished(operation: operation1)
-    XCTAssertOperationFinished(operation: group)
+    XCTAssertTrue(operation1.isFinished)
+    XCTAssertTrue(group.isFinished)
     XCTAssertEqual(group.aggregatedErrors.count, 0)
 
   }
@@ -252,7 +252,7 @@ final class GroupOperationTests: XCTestCase {
     group.start()
     waitForExpectations(timeout: 10)
 
-    XCTAssertOperationFinished(operation: group)
+    XCTAssertTrue(group.isFinished)
   }
 
   func testMultipleNestedGroupOperations() {
@@ -289,7 +289,7 @@ final class GroupOperationTests: XCTestCase {
     group0.start()
     waitForExpectations(timeout: 10)
 
-    XCTAssertOperationFinished(operation: group0)
+    XCTAssertTrue(group0.isFinished)
   }
 
   func testCancelledGroupOperationInNestedGroupOperations() {
@@ -354,7 +354,8 @@ final class GroupOperationTests: XCTestCase {
 
     group.start()
     waitForExpectations(timeout: 10)
-    XCTAssertOperationFinished(operation: group, errors: errors)
+    XCTAssertTrue(group.isFinished)
+    XCTAssertSameErrorQuantity(errors: group.errors, expectedErrors: errors)
   }
 
   func testFailedOperationInNestedGroupOperations() {
@@ -374,7 +375,9 @@ final class GroupOperationTests: XCTestCase {
 
     group.start()
     waitForExpectations(timeout: 10)
-    XCTAssertOperationFinished(operation: group, errors: errors)
+
+    XCTAssertTrue(group.isFinished)
+    XCTAssertSameErrorQuantity(errors: group.errors, expectedErrors: errors)
   }
 
   func testFailedAndCancelledOperationsInNestedGroupOperations() {
@@ -397,7 +400,9 @@ final class GroupOperationTests: XCTestCase {
     waitForExpectations(timeout: 10)
 
     XCTAssertOperationCancelled(operation: operation3, errors: [MockError.failed])
-    XCTAssertOperationFinished(operation: group, errors:  [MockError.test, MockError.failed, MockError.failed, MockError.failed])
+
+    XCTAssertTrue(group.isFinished)
+    XCTAssertSameErrorQuantity(errors: group.errors, expectedErrors: [MockError.test, MockError.failed, MockError.failed, MockError.failed])
   }
 
   func testMultipleFailedOperationsInNestedGroupOperations() {
@@ -419,7 +424,8 @@ final class GroupOperationTests: XCTestCase {
     group.start()
     waitForExpectations(timeout: 10)
 
-    XCTAssertOperationFinished(operation: group, errors: errors1 + errors2 )
+    XCTAssertTrue(group.isFinished)
+    XCTAssertSameErrorQuantity(errors: group.errors, expectedErrors: errors1 + errors2)
   }
 
   func testMaxConcurrentOperationCount() {
