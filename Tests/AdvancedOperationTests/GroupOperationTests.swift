@@ -50,6 +50,14 @@ final class GroupOperationTests: XCTestCase {
     XCTAssertOperationFinished(operation: group)
   }
 
+  func testStress() {
+    for i in 1...100 {
+      print(i)
+      testOperationCancelled()
+      testOperationCancelledAsynchronously()
+    }
+  }
+
   func testOperationCancelled() {
     let expectation1 = expectation(description: "\(#function)\(#line)")
     let operation1 = SleepyAsyncOperation()
@@ -71,9 +79,45 @@ final class GroupOperationTests: XCTestCase {
 
     waitForExpectations(timeout: 10)
 
-    XCTAssertOperationCancelled(operation: operation1, errors: [MockError.test])
-    XCTAssertOperationFinished(operation: group, errors: [MockError.test])
+    XCTAssertTrue(operation1.isCancelled)
+    XCTAssertTrue(operation1.isFinished)
+    XCTAssertEqual(operation1.errors.count, 1)
 
+    XCTAssertFalse(group.isCancelled)
+    XCTAssertTrue(group.isFinished)
+    XCTAssertTrue(group.isSuspended)
+    XCTAssertEqual(group.aggregatedErrors.count, 1)
+  }
+
+  func testOperationCancelledAsynchronously() {
+    let expectation1 = expectation(description: "\(#function)\(#line)")
+    let operation1 = SleepyAsyncOperation()
+    operation1.addCompletionBlock { expectation1.fulfill() }
+
+    let expectation2 = expectation(description: "\(#function)\(#line)")
+    let operation2 = BlockOperation(block: { sleep(1)} )
+    operation2.addCompletionBlock { expectation2.fulfill() }
+
+    let expectation3 = expectation(description: "\(#function)\(#line)")
+    let group = GroupOperation(operations: operation1, operation2)
+    group.addCompletionBlock { expectation3.fulfill() }
+    XCTAssertEqual(group.maxConcurrentOperationCount, OperationQueue.defaultMaxConcurrentOperationCount)
+
+    XCTAssertTrue(group.isSuspended)
+    group.start()
+    XCTAssertFalse(group.isSuspended)
+    DispatchQueue.global().async {
+      operation1.cancel(error: MockError.test)
+    }
+
+    waitForExpectations(timeout: 10)
+
+    XCTAssertTrue(operation1.isCancelled)
+    XCTAssertTrue(operation1.isFinished)
+    XCTAssertEqual(operation1.errors.count, 1)
+
+    XCTAssertFalse(group.isCancelled)
+    XCTAssertTrue(group.isFinished)
     XCTAssertTrue(group.isSuspended)
     XCTAssertEqual(group.aggregatedErrors.count, 1)
   }
