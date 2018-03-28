@@ -37,37 +37,6 @@ extension XCTestCase {
     //#endif
   }
 
-  /// Asserts that the Operation has the default ready state.
-  /// - Note: It appears that on Linux, the operation readiness is ALWAYS set to 'false' by default. It changes to 'true' ONLY if an operation is added to an OperationQueue regardless of its associated dependencies.
-  func _XCTAssertDefaultReadiness(operation: Operation, file: String = #file, line: Int = #line) {
-    guard operation.isReady == defaultReadiness() else {
-      return recordFailure(withDescription: "Operation hasn't the default ready state (\(defaultReadiness()).", inFile: file, atLine: line, expected: true)
-    }
-  }
-
-
-  /// Asserts that the AdvancedOperation can be started anytime.
-  func _XCTAssertOperationCanBeStarted(operation: AdvancedOperation, file: String = #file, line: Int = #line) {
-
-    guard
-      operation.isReady,
-      !operation.isExecuting,
-      !operation.isCancelled,
-      !operation.isFinished
-      else { return recordFailure(withDescription: "Operation cannot be started.", inFile: file, atLine: line, expected: true) }
-  }
-
-  /// Asserts that the AdvancedOperation is currently executing.
-  func _XCTAssertOperationExecuting(operation: AdvancedOperation, file: String = #file, line: Int = #line) {
-
-    guard
-      !operation.isReady,
-      operation.isExecuting,
-      !operation.isCancelled,
-      !operation.isFinished
-      else { return recordFailure(withDescription: "Operation is not executing.", inFile: file, atLine: line, expected: true) }
-  }
-
   /// Asserts that the AdvancedOperation has finished due to a cancel command.
   func XCTAssertOperationCancelled(operation: AdvancedOperation, errors: [Error] = [], file: String = #file, line: Int = #line) {
 
@@ -86,21 +55,6 @@ extension XCTestCase {
     guard checkSameErrorQuantity(generatedErrors: errors, expectedErrors: expectedErrors) else {
       return recordFailure(withDescription: "Operation has \(errors.count) errors, expected: \(errors.count)", inFile: file, atLine: line, expected: true)
     }
-  }
-
-  /// Asserts that the AdvancedOperation has finished.
-  func _XCTAssertOperationFinished(operation: AdvancedOperation, errors: [Error] = [], file: String = #file, line: Int = #line) {
-
-    guard
-      operation.isReady == defaultReadiness(),
-      !operation.isExecuting,
-      !operation.isCancelled,
-      operation.isFinished
-      else { return recordFailure(withDescription: "Operation is not finished.", inFile: file, atLine: line, expected: true) }
-
-    guard checkSameErrorQuantity(generatedErrors: operation.errors, expectedErrors: errors)
-      else { return recordFailure(withDescription: "Operation has \(operation.errors.count) errors, expected: \(errors.count)", inFile: file, atLine: line, expected: true) }
-
   }
 
   /// Returns `true` if the generated operation's error are the same (as quantity) of the expected ones.
