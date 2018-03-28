@@ -27,7 +27,7 @@ final public class ExclusivityManager {
 
   public static let sharedInstance = ExclusivityManager()
 
-  private let queue = DispatchQueue(label: "\(identifier).\(#file).\(UUID().uuidString)")
+  private let queue = DispatchQueue(label: "\(identifier).\(#file).\(UUID().uuidString)") //TODO: better label?
 
   internal private(set) var operations: [String: [Operation]] = [:]
 
