@@ -191,8 +191,6 @@ final class AdvancedOperationTests: XCTestCase {
     operation.cancel()
     XCTAssertTrue(operation.isCancelled)
 
-    //XCTAssertFalse(operation.isExecuting)
-
     operation.start()
     XCTAssertFalse(operation.isExecuting, "--> \(operation.state)")  //TODO: travis error https://travis-ci.org/tinrobots/AdvancedOperation/jobs/357734981
     XCTAssertTrue(operation.isCancelled)
@@ -202,13 +200,13 @@ final class AdvancedOperationTests: XCTestCase {
     operation.cancel(error: MockError.failed)
 
     XCTAssertFalse(operation.isExecuting)
-    //XCTAssertFalse(operation.isReady)
     XCTAssertTrue(operation.isCancelled)
 
     XCTAssertFalse(operation.isExecuting)
 
     waitForExpectations(timeout: 10)
-    //XCTAssertOperationCancelled(operation: operation)
+    XCTAssertTrue(operation.isCancelled)
+
   }
 
   func testMultipleStartAndCancelWithErrors() {
