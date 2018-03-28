@@ -60,5 +60,37 @@ class NegatedConditionTests: XCTestCase {
     }
     waitForExpectations(timeout: 2)
   }
+
+  func testMutlipleNegatedConditions() {
+    let queue = AdvancedOperationQueue()
+
+    let expectation1 = expectation(description: "\(#function)\(#line)")
+    let expectation2 = expectation(description: "\(#function)\(#line)")
+    let expectation3 = expectation(description: "\(#function)\(#line)")
+    let expectation4 = expectation(description: "\(#function)\(#line)")
+
+    let operation1 = AdvancedBlockOperation { }
+    operation1.name = "operation1"
+
+    let operation2 = FailingAsyncOperation(errors: [.failed])
+    operation2.name = "operation2"
+
+    let operation3 = FailingAsyncOperation(errors: [.failed])
+    operation3.name = "operation3"
+
+    let operation4 = DelayOperation(interval: 1)
+    operation4.name = "operation4"
+
+    operation1.addCompletionBlock { expectation1.fulfill() }
+    operation2.addCompletionBlock { expectation2.fulfill() }
+    operation3.addCompletionBlock { expectation3.fulfill() }
+    operation4.addCompletionBlock { expectation4.fulfill() }
+
+    operation1.addCondition(condition: NegatedCondition(condition: NoFailedDependenciesCondition()))
+    [operation4, operation3, operation2].then(operation1)
+    queue.addOperations([operation1, operation2, operation3, operation4], waitUntilFinished: false)
+    waitForExpectations(timeout: 5)
+    XCTAssertFalse(operation1.failed)
+  }
   
 }
