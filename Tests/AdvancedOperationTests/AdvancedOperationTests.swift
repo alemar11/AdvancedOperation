@@ -107,7 +107,6 @@ final class AdvancedOperationTests: XCTestCase {
     XCTAssertTrue(operation.isExecuting)
 
     operation.cancel()
-    XCTAssertDefaultReadiness(operation: operation)
     XCTAssertTrue(operation.isCancelled)
 
     waitForExpectations(timeout: 10)
@@ -144,7 +143,6 @@ final class AdvancedOperationTests: XCTestCase {
     operation.cancel()
     operation.cancel(error: MockError.test)
     operation.cancel(error: MockError.failed)
-    XCTAssertDefaultReadiness(operation: operation)
     XCTAssertTrue(operation.isCancelled)
 
     waitForExpectations(timeout: 10)
@@ -174,7 +172,6 @@ final class AdvancedOperationTests: XCTestCase {
       operation.cancel(error: MockError.test)
     }
     operation.cancel(error: MockError.failed)
-    XCTAssertDefaultReadiness(operation: operation)
     XCTAssertTrue(operation.isCancelled)
 
     waitForExpectations(timeout: 10)
@@ -230,7 +227,6 @@ final class AdvancedOperationTests: XCTestCase {
     XCTAssertFalse(operation.isExecuting)
     operation.cancel()
     operation.cancel(error: MockError.failed)
-    XCTAssertDefaultReadiness(operation: operation)
     XCTAssertTrue(operation.isCancelled)
 
     waitForExpectations(timeout: 10)
@@ -252,7 +248,6 @@ final class AdvancedOperationTests: XCTestCase {
     operation.cancel(error: error)
     operation.cancel(error: MockError.test)
     operation.cancel(error: MockError.failed)
-    XCTAssertDefaultReadiness(operation: operation)
     XCTAssertTrue(operation.isCancelled)
 
     waitForExpectations(timeout: 10)
@@ -269,7 +264,6 @@ final class AdvancedOperationTests: XCTestCase {
     XCTAssertOperationCancelled(operation: operation)
 
     operation.cancel()
-    XCTAssertDefaultReadiness(operation: operation)
     XCTAssertTrue(operation.isCancelled)
 
     operation.waitUntilFinished()
@@ -331,7 +325,6 @@ final class AdvancedOperationTests: XCTestCase {
     XCTAssertTrue(operation.isExecuting)
 
     operation.cancel(error: MockError.test)
-    XCTAssertDefaultReadiness(operation: operation)
     XCTAssertTrue(operation.isCancelled)
 
     waitForExpectations(timeout: 10)
