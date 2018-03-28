@@ -207,3 +207,21 @@ final internal class MockOperationQueueDelegate: AdvancedOperationQueueDelegate 
   }
 
 }
+
+// MARK:  Conditions
+
+internal struct AlwaysFailingCondition: OperationCondition {
+
+  public func evaluate(for operation: AdvancedOperation, completion: @escaping (OperationConditionResult) -> Void) {
+    completion(.failed([MockError.failed]))
+  }
+
+}
+
+internal struct AlwaysSuccessingCondition: OperationCondition {
+
+  public func evaluate(for operation: AdvancedOperation, completion: @escaping (OperationConditionResult) -> Void) {
+    completion(.satisfied)
+  }
+
+}
