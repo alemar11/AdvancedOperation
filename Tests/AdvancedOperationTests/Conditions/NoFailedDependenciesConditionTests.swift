@@ -39,13 +39,13 @@ final class NoFailedDependenciesConditionTests: XCTestCase {
     let expectation4 = expectation(description: "\(#function)\(#line)")
 
     let operation1 = XCTFailOperation()
-    operation1.name = "operation3"
+    operation1.name = "operation1"
 
     let operation2 = FailingAsyncOperation(errors: [.failed])
     operation2.name = "operation2"
 
     let operation3 = SleepyAsyncOperation()
-    operation3.name = "operation1"
+    operation3.name = "operation3"
 
     let operation4 = DelayOperation(interval: 1)
     operation4.name = "operation4"
@@ -71,13 +71,13 @@ final class NoFailedDependenciesConditionTests: XCTestCase {
     let expectation4 = expectation(description: "\(#function)\(#line)")
 
     let operation1 = XCTFailOperation()
-    operation1.name = "operation3"
+    operation1.name = "operation1"
 
     let operation2 = SleepyAsyncOperation()
     operation2.name = "operation2"
 
     let operation3 = SleepyAsyncOperation()
-    operation3.name = "operation1"
+    operation3.name = "operation3"
 
     let operation4 = DelayOperation(interval: 1)
     operation4.name = "operation4"
@@ -105,13 +105,13 @@ final class NoFailedDependenciesConditionTests: XCTestCase {
     let expectation4 = expectation(description: "\(#function)\(#line)")
 
     let operation1 = AdvancedBlockOperation { }
-    operation1.name = "operation3"
+    operation1.name = "operation1"
 
     let operation2 = SleepyAsyncOperation()
     operation2.name = "operation2"
 
     let operation3 = SleepyAsyncOperation()
-    operation3.name = "operation1"
+    operation3.name = "operation3"
 
     let operation4 = DelayOperation(interval: 1)
     operation4.name = "operation4"
@@ -139,13 +139,13 @@ final class NoFailedDependenciesConditionTests: XCTestCase {
     let expectation4 = expectation(description: "\(#function)\(#line)")
 
     let operation1 = XCTFailOperation()
-    operation1.name = "operation3"
+    operation1.name = "operation1"
 
     let operation2 = SleepyAsyncOperation()
     operation2.name = "operation2"
 
     let operation3 = SleepyAsyncOperation()
-    operation3.name = "operation1"
+    operation3.name = "operation3"
 
     let operation4 = FailingAsyncOperation(errors: [.failed, .cancelled(date: Date())])
     operation4.name = "operation4"
@@ -173,13 +173,13 @@ final class NoFailedDependenciesConditionTests: XCTestCase {
     let expectation4 = expectation(description: "\(#function)\(#line)")
 
     let operation1 = AdvancedBlockOperation { }
-    operation1.name = "operation3"
+    operation1.name = "operation1"
 
     let operation2 = FailingAsyncOperation(errors: [.failed])
     operation2.name = "operation2"
 
     let operation3 = SleepyAsyncOperation()
-    operation3.name = "operation1"
+    operation3.name = "operation3"
 
     let operation4 = DelayOperation(interval: 1)
     operation4.name = "operation4"
