@@ -47,7 +47,7 @@ extension XCTestCase {
 
 
   /// Asserts that the AdvancedOperation can be started anytime.
-  func XCTAssertOperationCanBeStarted(operation: AdvancedOperation, file: String = #file, line: Int = #line) {
+  func _XCTAssertOperationCanBeStarted(operation: AdvancedOperation, file: String = #file, line: Int = #line) {
 
     guard
       operation.isReady,

@@ -41,7 +41,7 @@ final class AdvancedOperationTests: XCTestCase {
     let operation = SleepyAsyncOperation()
     operation.completionBlock = { expectation1.fulfill() }
 
-    XCTAssertOperationCanBeStarted(operation: operation)
+    XCTAssertTrue(operation.isReady)
 
     operation.start()
     XCTAssertTrue(operation.isExecuting)
@@ -101,7 +101,7 @@ final class AdvancedOperationTests: XCTestCase {
     let operation = SleepyAsyncOperation()
     operation.completionBlock = { expectation1.fulfill() }
 
-    XCTAssertOperationCanBeStarted(operation: operation)
+    XCTAssertTrue(operation.isReady)
 
     operation.start()
     XCTAssertTrue(operation.isExecuting)
@@ -120,7 +120,7 @@ final class AdvancedOperationTests: XCTestCase {
     let operation = SleepyAsyncOperation()
     operation.completionBlock = { expectation1.fulfill() }
 
-    XCTAssertOperationCanBeStarted(operation: operation)
+    XCTAssertTrue(operation.isReady)
 
     operation.cancel()
     operation.start()
@@ -136,7 +136,7 @@ final class AdvancedOperationTests: XCTestCase {
     let operation = SleepyAsyncOperation()
     operation.completionBlock = { expectation1.fulfill() }
 
-    XCTAssertOperationCanBeStarted(operation: operation)
+    XCTAssertTrue(operation.isReady)
 
     operation.start()
     XCTAssertTrue(operation.isExecuting)
@@ -157,7 +157,7 @@ final class AdvancedOperationTests: XCTestCase {
     let operation = SleepyAsyncOperation()
     operation.completionBlock = { expectation1.fulfill() }
 
-    XCTAssertOperationCanBeStarted(operation: operation)
+    XCTAssertTrue(operation.isReady)
 
     for _ in 1...100 {
       operation.addObserver(observer: BlockObserver())
@@ -187,7 +187,7 @@ final class AdvancedOperationTests: XCTestCase {
     let operation = SleepyAsyncOperation(interval1: 2, interval2: 2, interval3: 2)
     operation.completionBlock = { expectation1.fulfill() }
 
-    XCTAssertOperationCanBeStarted(operation: operation)
+    XCTAssertTrue(operation.isReady)
     operation.start()
     XCTAssertTrue(operation.isExecuting)
 
@@ -220,7 +220,7 @@ final class AdvancedOperationTests: XCTestCase {
     let operation = SleepyAsyncOperation()
     operation.completionBlock = { expectation1.fulfill() }
 
-    XCTAssertOperationCanBeStarted(operation: operation)
+    XCTAssertTrue(operation.isReady)
 
     operation.start()
     XCTAssertTrue(operation.isExecuting)
@@ -243,7 +243,7 @@ final class AdvancedOperationTests: XCTestCase {
     let operation = SleepyAsyncOperation()
     operation.completionBlock = { expectation1.fulfill() }
 
-    XCTAssertOperationCanBeStarted(operation: operation)
+    XCTAssertTrue(operation.isReady)
 
     operation.start()
     XCTAssertTrue(operation.isExecuting)
@@ -262,7 +262,7 @@ final class AdvancedOperationTests: XCTestCase {
   func testBailingOutEarly() {
     let operation = SleepyAsyncOperation()
 
-    XCTAssertOperationCanBeStarted(operation: operation)
+    XCTAssertTrue(operation.isReady)
 
     operation.cancel()
     operation.start()
