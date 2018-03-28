@@ -58,7 +58,7 @@ extension XCTestCase {
   }
 
   /// Asserts that the AdvancedOperation is currently executing.
-  func XCTAssertOperationExecuting(operation: AdvancedOperation, file: String = #file, line: Int = #line) {
+  func _XCTAssertOperationExecuting(operation: AdvancedOperation, file: String = #file, line: Int = #line) {
 
     guard
       !operation.isReady,
@@ -84,7 +84,7 @@ extension XCTestCase {
 
   func XCTAssertSameErrorQuantity(errors: [Error], expectedErrors: [Error], file: String = #file, line: Int = #line) {
     guard checkSameErrorQuantity(generatedErrors: errors, expectedErrors: expectedErrors) else {
-      return recordFailure(withDescription: "Operation has \(errors.count) errors, expected: \(errors.count)", inFile: file, atLine: line, expected: true) 
+      return recordFailure(withDescription: "Operation has \(errors.count) errors, expected: \(errors.count)", inFile: file, atLine: line, expected: true)
     }
   }
 

@@ -44,7 +44,7 @@ final class AdvancedOperationTests: XCTestCase {
     XCTAssertOperationCanBeStarted(operation: operation)
 
     operation.start()
-    XCTAssertOperationExecuting(operation: operation)
+    XCTAssertTrue(operation.isExecuting)
 
     waitForExpectations(timeout: 10)
     XCTAssertTrue(operation.isFinished)
@@ -64,7 +64,7 @@ final class AdvancedOperationTests: XCTestCase {
     operation.start()
     operation.start()
 
-    XCTAssertOperationExecuting(operation: operation)
+    XCTAssertTrue(operation.isExecuting)
 
     waitForExpectations(timeout: 10)
     XCTAssertTrue(operation.isFinished)
@@ -89,7 +89,7 @@ final class AdvancedOperationTests: XCTestCase {
     queue.async {
       operation.start()
     }
-    XCTAssertOperationExecuting(operation: operation)
+    XCTAssertTrue(operation.isExecuting)
 
     waitForExpectations(timeout: 10)
     XCTAssertTrue(operation.isFinished)
@@ -104,7 +104,7 @@ final class AdvancedOperationTests: XCTestCase {
     XCTAssertOperationCanBeStarted(operation: operation)
 
     operation.start()
-    XCTAssertOperationExecuting(operation: operation)
+    XCTAssertTrue(operation.isExecuting)
 
     operation.cancel()
     XCTAssertDefaultReadiness(operation: operation)
@@ -139,7 +139,7 @@ final class AdvancedOperationTests: XCTestCase {
     XCTAssertOperationCanBeStarted(operation: operation)
 
     operation.start()
-    XCTAssertOperationExecuting(operation: operation)
+    XCTAssertTrue(operation.isExecuting)
 
     operation.cancel()
     operation.cancel(error: MockError.test)
@@ -164,7 +164,7 @@ final class AdvancedOperationTests: XCTestCase {
     }
 
     operation.start()
-    XCTAssertOperationExecuting(operation: operation)
+    XCTAssertTrue(operation.isExecuting)
 
     let queue = DispatchQueue(label: "test")
 
@@ -189,7 +189,7 @@ final class AdvancedOperationTests: XCTestCase {
 
     XCTAssertOperationCanBeStarted(operation: operation)
     operation.start()
-    XCTAssertOperationExecuting(operation: operation)
+    XCTAssertTrue(operation.isExecuting)
 
     operation.cancel()
     XCTAssertTrue(operation.isCancelled)
@@ -223,7 +223,7 @@ final class AdvancedOperationTests: XCTestCase {
     XCTAssertOperationCanBeStarted(operation: operation)
 
     operation.start()
-    XCTAssertOperationExecuting(operation: operation)
+    XCTAssertTrue(operation.isExecuting)
 
     operation.cancel(error: MockError.test)
     operation.start()
@@ -246,7 +246,7 @@ final class AdvancedOperationTests: XCTestCase {
     XCTAssertOperationCanBeStarted(operation: operation)
 
     operation.start()
-    XCTAssertOperationExecuting(operation: operation)
+    XCTAssertTrue(operation.isExecuting)
 
     let error = MockError.cancelled(date: Date())
     operation.cancel(error: error)
@@ -328,7 +328,7 @@ final class AdvancedOperationTests: XCTestCase {
     operation.completionBlock = { expectation1.fulfill() }
     operation.start()
 
-    XCTAssertOperationExecuting(operation: operation)
+    XCTAssertTrue(operation.isExecuting)
 
     operation.cancel(error: MockError.test)
     XCTAssertDefaultReadiness(operation: operation)
