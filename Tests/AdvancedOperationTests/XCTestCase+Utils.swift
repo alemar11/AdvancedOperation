@@ -39,7 +39,7 @@ extension XCTestCase {
 
   /// Asserts that the Operation has the default ready state.
   /// - Note: It appears that on Linux, the operation readiness is ALWAYS set to 'false' by default. It changes to 'true' ONLY if an operation is added to an OperationQueue regardless of its associated dependencies.
-  func XCTAssertDefaultReadiness(operation: Operation, file: String = #file, line: Int = #line) {
+  func _XCTAssertDefaultReadiness(operation: Operation, file: String = #file, line: Int = #line) {
     guard operation.isReady == defaultReadiness() else {
       return recordFailure(withDescription: "Operation hasn't the default ready state (\(defaultReadiness()).", inFile: file, atLine: line, expected: true)
     }
