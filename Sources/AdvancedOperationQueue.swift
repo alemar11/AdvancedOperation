@@ -23,7 +23,7 @@
 
 import Foundation
 
-protocol AdvancedOperationQueueDelegate: class {
+public protocol AdvancedOperationQueueDelegate: class {
   func operationQueue(operationQueue: AdvancedOperationQueue, willAddOperation operation: Operation)
   func operationQueue(operationQueue: AdvancedOperationQueue, didAddOperation operation: Operation)
 
@@ -35,24 +35,24 @@ protocol AdvancedOperationQueueDelegate: class {
   func operationQueue(operationQueue: AdvancedOperationQueue, operationWillCancel operation: Operation, withErrors errors: [Error])
 }
 
-extension AdvancedOperationQueueDelegate {
+public extension AdvancedOperationQueueDelegate {
 
   func operationQueue(operationQueue: AdvancedOperationQueue, willAddOperation operation: Operation) {}
   func operationQueue(operationQueue: AdvancedOperationQueue, operationWillExecute operation: Operation) {}
 }
 
 /// `AdvancedOperationQueue` is an `OperationQueue` subclass that implements a large number of "extra features" related to the `Operation` class.
-class AdvancedOperationQueue: OperationQueue {
+open class AdvancedOperationQueue: OperationQueue {
 
-  weak var delegate: AdvancedOperationQueueDelegate?
+  public weak var delegate: AdvancedOperationQueueDelegate?
 
   private let exclusivityManager: ExclusivityManager
 
-  init(exclusivityManager: ExclusivityManager = .sharedInstance) {
+  public init(exclusivityManager: ExclusivityManager = .sharedInstance) {
     self.exclusivityManager = exclusivityManager
   }
 
-  override func addOperation(_ operation: Operation) {
+  open override func addOperation(_ operation: Operation) {
 
     if let operation = operation as? AdvancedOperation { /// AdvancedOperation
 
@@ -123,7 +123,7 @@ class AdvancedOperationQueue: OperationQueue {
 
   }
 
-  override func addOperations(_ operations: [Operation], waitUntilFinished wait: Bool) {
+  open override func addOperations(_ operations: [Operation], waitUntilFinished wait: Bool) {
 
     for operation in operations {
       addOperation(operation)

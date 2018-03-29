@@ -24,11 +24,11 @@
 import Foundation
 
 /// The `BlockObserver` is a way to attach arbitrary blocks to significant events in an `Operation`'s lifecycle.
-struct BlockObserver: OperationObserving {
+public struct BlockObserver: OperationObserving {
 
   // MARK: - Properties
 
-  var identifier = UUID().uuidString
+  public var identifier = UUID().uuidString
 
   private let willExecuteHandler: ((AdvancedOperation) -> Void)?
   private let willFinishHandler: ((AdvancedOperation, [Error]) -> Void)?
@@ -36,7 +36,7 @@ struct BlockObserver: OperationObserving {
   private let willCancelHandler: ((AdvancedOperation, [Error]) -> Void)?
   private let didCancelHandler: ((AdvancedOperation, [Error]) -> Void)?
 
-  init (
+  public init (
     willExecute: ((AdvancedOperation) -> Void)? = nil,
     willCancel: ((AdvancedOperation, [Error]) -> Void)? = nil,
     didCancel: ((AdvancedOperation, [Error]) -> Void)? = nil,
@@ -55,26 +55,25 @@ struct BlockObserver: OperationObserving {
   // MARK: - OperationObserving
 
   // swiftlint:disable force_cast
-  func operationWillExecute(operation: Operation) {
+  public func operationWillExecute(operation: Operation) {
     willExecuteHandler?(operation as! AdvancedOperation)
   }
 
-  func operationWillFinish(operation: Operation, withErrors errors: [Error]) {
+  public func operationWillFinish(operation: Operation, withErrors errors: [Error]) {
     willFinishHandler?(operation as! AdvancedOperation, errors)
   }
 
-  func operationDidFinish(operation: Operation, withErrors errors: [Error]) {
+  public func operationDidFinish(operation: Operation, withErrors errors: [Error]) {
     didFinishHandler?(operation as! AdvancedOperation, errors)
   }
 
-  func operationWillCancel(operation: Operation, withErrors errors: [Error]) {
+  public func operationWillCancel(operation: Operation, withErrors errors: [Error]) {
     willCancelHandler?(operation as! AdvancedOperation, errors)
   }
 
-  func operationDidCancel(operation: Operation, withErrors errors: [Error]) {
+  public func operationDidCancel(operation: Operation, withErrors errors: [Error]) {
     didCancelHandler?(operation as! AdvancedOperation, errors)
   }
-
   // swiftlint:enable force_cast
 
 }

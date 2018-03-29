@@ -24,7 +24,7 @@
 import Foundation
 
 /// An advanced subclass of `Operation`.
-public class AdvancedOperation: Operation {
+open class AdvancedOperation: Operation {
 
   // MARK: - State
 
@@ -136,7 +136,7 @@ public class AdvancedOperation: Operation {
     }
   }
 
-  public override class func keyPathsForValuesAffectingValue(forKey key: String) -> Set<String> {
+  open override class func keyPathsForValuesAffectingValue(forKey key: String) -> Set<String> {
     switch key {
     case #keyPath(Operation.isReady),
          #keyPath(Operation.isExecuting),
@@ -221,7 +221,7 @@ public class AdvancedOperation: Operation {
     main()
   }
 
-  public override func main() {
+  open override func main() {
     fatalError("\(type(of: self)) must override `main()`.")
   }
 
@@ -229,7 +229,7 @@ public class AdvancedOperation: Operation {
     _cancel(error: error)
   }
 
-  public override func cancel() {
+  open override func cancel() {
     _cancel()
   }
 
@@ -322,7 +322,7 @@ public class AdvancedOperation: Operation {
 
   // MARK: - Dependencies
 
-  override public func addDependency(_ operation: Operation) {
+  open override func addDependency(_ operation: Operation) {
     assert(!isExecuting, "Dependencies cannot be modified after execution has begun.")
 
     super.addDependency(operation)

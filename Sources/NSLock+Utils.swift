@@ -23,7 +23,8 @@
 
 import Foundation
 
-extension NSLock {
+internal extension NSLock {
+
   @discardableResult
   func synchronized<T>(_ block: () -> T) -> T {
     lock()
@@ -31,9 +32,11 @@ extension NSLock {
     unlock()
     return value
   }
+
 }
 
-extension NSRecursiveLock {
+internal extension NSRecursiveLock {
+
   @discardableResult
   func synchronized<T>(_ block: () -> T) -> T {
     lock()
@@ -41,4 +44,5 @@ extension NSRecursiveLock {
     unlock()
     return value
   }
+
 }
