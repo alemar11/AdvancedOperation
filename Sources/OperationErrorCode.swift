@@ -1,4 +1,4 @@
-//
+// 
 // AdvancedOperation
 //
 // Copyright © 2016-2018 Tinrobots.
@@ -21,35 +21,9 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-import Foundation
-
-/// A condition that specifies that every dependency of the operation must not fail.
-/// If any dependency fails (finishes or cancels with errors), the target operation will fail.
-public struct NoFailedDependenciesCondition: OperationCondition {
-
-  public let ignoreCancellations: Bool
-
-  public init(ignoreCancellations: Bool = false) {
-    self.ignoreCancellations = ignoreCancellations
-  }
-
-  public func evaluate(for operation: AdvancedOperation, completion: @escaping (OperationConditionResult) -> Void) {
-    var dependencies = operation.dependencies
-
-    if ignoreCancellations {
-      dependencies = dependencies.filter { !$0.isCancelled }
-    }
-
-    let failures = dependencies.compactMap { $0 as? AdvancedOperation }.filter { $0.failed }
-
-    if !failures.isEmpty {
-      let error = NSError(domain: "\(identifier).\(name)", code: OperationErrorCode.conditionFailed.rawValue, userInfo: nil)
-      let errors = [error] + failures.flatMap {$0.errors}
-      completion(.failed(errors))
-    } else {
-      completion(.satisfied)
-    }
-
-  }
-
+public enum OperationErrorCode: Int {
+  /// Operation failed for a condition.
+  case conditionFailed = 1
+  /// Operation failed during its execution.
+  case executionFailed = 2
 }
