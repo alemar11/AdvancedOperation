@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>AdvancedOperationQueueDelegate Protocol Reference</title>
+    <link rel="stylesheet" type="text/css" href="../css/jazzy.css" />
+    <link rel="stylesheet" type="text/css" href="../css/highlight.css" />
+    <meta charset='utf-8'>
+    <script src="../js/jquery.min.js" defer></script>
+    <script src="../js/jazzy.js" defer></script>
+    
+  </head>
+  <body>
+    <a name="//apple_ref/swift/Protocol/AdvancedOperationQueueDelegate" class="dashAnchor"></a>
+    <a title="AdvancedOperationQueueDelegate Protocol Reference"></a>
+    <header>
+      <div class="content-wrapper">
+        <p><a href="../index.html"> Docs</a> (44% documented)</p>
+      </div>
+    </header>
+    <div class="content-wrapper">
+      <p id="breadcrumbs">
+        <a href="../index.html"> Reference</a>
+        <img id="carat" src="../img/carat.png" />
+        AdvancedOperationQueueDelegate Protocol Reference
+      </p>
+    </div>
+    <div class="content-wrapper">
+      <nav class="sidebar">
+        <ul class="nav-groups">
+          <li class="nav-group-name">
+            <a href="../Classes.html">Classes</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Classes/AdvancedBlockOperation.html">AdvancedBlockOperation</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/AdvancedOperation.html">AdvancedOperation</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/AdvancedOperationQueue.html">AdvancedOperationQueue</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/ExclusivityManager.html">ExclusivityManager</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/GroupOperation.html">GroupOperation</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/OperationObserverController.html">OperationObserverController</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Enums.html">Enums</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Enums/OperationConditionResult.html">OperationConditionResult</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/OperationErrorCode.html">OperationErrorCode</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Extensions.html">Extensions</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Extensions/Array.html">Array</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Extensions/Operation.html">Operation</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Protocols.html">Protocols</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Protocols/AdvancedOperationQueueDelegate.html">AdvancedOperationQueueDelegate</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/OperationCondition.html">OperationCondition</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/OperationDidCancelObserving.html">OperationDidCancelObserving</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/OperationDidFinishObserving.html">OperationDidFinishObserving</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/OperationObserving.html">OperationObserving</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols.html#/s:17AdvancedOperation0B13ObservingTypeP">OperationObservingType</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/OperationWillCancelObserving.html">OperationWillCancelObserving</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/OperationWillExecuteObserving.html">OperationWillExecuteObserving</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/OperationWillFinishObserving.html">OperationWillFinishObserving</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Structs.html">Structs</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Structs/BlockObserver.html">BlockObserver</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/MutuallyExclusiveCondition.html">MutuallyExclusiveCondition</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/NegatedCondition.html">NegatedCondition</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/NoCancelledDependeciesCondition.html">NoCancelledDependeciesCondition</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/NoFailedDependenciesCondition.html">NoFailedDependenciesCondition</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/SilentCondition.html">SilentCondition</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Typealiases.html">Typealiases</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Typealiases.html#/s:17AdvancedOperation0B5Blocka">OperationBlock</a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </nav>
+      <article class="main-content">
+        <section>
+          <section class="section">
+            <h1>AdvancedOperationQueueDelegate</h1>
+            <p>Undocumented</p>
+
+          </section>
+          <section class="section task-group-section">
+            <div class="task-group">
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:17AdvancedOperation0aB13QueueDelegateP09operationC0yAA0abC0CAD_So0B0C07willAddB0tF"></a>
+                    <a name="//apple_ref/swift/Method/operationQueue(operationQueue:willAddOperation:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:17AdvancedOperation0aB13QueueDelegateP09operationC0yAA0abC0CAD_So0B0C07willAddB0tF">operationQueue(operationQueue:willAddOperation:)</a>
+                    </code>
+                      <span class="declaration-note">
+                        Default implementation
+                      </span>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <h4>Default Implementation</h4>
+                      <div class="default_impl abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:17AdvancedOperation0aB13QueueDelegateP09operationC0yAA0abC0CAD_So0B0C06didAddB0tF"></a>
+                    <a name="//apple_ref/swift/Method/operationQueue(operationQueue:didAddOperation:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:17AdvancedOperation0aB13QueueDelegateP09operationC0yAA0abC0CAD_So0B0C06didAddB0tF">operationQueue(operationQueue:didAddOperation:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:17AdvancedOperation0aB13QueueDelegateP09operationC0yAA0abC0CAD_So0B0C0E11WillExecutetF"></a>
+                    <a name="//apple_ref/swift/Method/operationQueue(operationQueue:operationWillExecute:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:17AdvancedOperation0aB13QueueDelegateP09operationC0yAA0abC0CAD_So0B0C0E11WillExecutetF">operationQueue(operationQueue:operationWillExecute:)</a>
+                    </code>
+                      <span class="declaration-note">
+                        Default implementation
+                      </span>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <h4>Default Implementation</h4>
+                      <div class="default_impl abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:17AdvancedOperation0aB13QueueDelegateP09operationC0yAA0abC0CAD_So0B0C0E9DidFinishSays5Error_pG10withErrorstF"></a>
+                    <a name="//apple_ref/swift/Method/operationQueue(operationQueue:operationDidFinish:withErrors:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:17AdvancedOperation0aB13QueueDelegateP09operationC0yAA0abC0CAD_So0B0C0E9DidFinishSays5Error_pG10withErrorstF">operationQueue(operationQueue:operationDidFinish:withErrors:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:17AdvancedOperation0aB13QueueDelegateP09operationC0yAA0abC0CAD_So0B0C0E9DidCancelSays5Error_pG10withErrorstF"></a>
+                    <a name="//apple_ref/swift/Method/operationQueue(operationQueue:operationDidCancel:withErrors:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:17AdvancedOperation0aB13QueueDelegateP09operationC0yAA0abC0CAD_So0B0C0E9DidCancelSays5Error_pG10withErrorstF">operationQueue(operationQueue:operationDidCancel:withErrors:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:17AdvancedOperation0aB13QueueDelegateP09operationC0yAA0abC0CAD_So0B0C0E10WillFinishSays5Error_pG10withErrorstF"></a>
+                    <a name="//apple_ref/swift/Method/operationQueue(operationQueue:operationWillFinish:withErrors:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:17AdvancedOperation0aB13QueueDelegateP09operationC0yAA0abC0CAD_So0B0C0E10WillFinishSays5Error_pG10withErrorstF">operationQueue(operationQueue:operationWillFinish:withErrors:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:17AdvancedOperation0aB13QueueDelegateP09operationC0yAA0abC0CAD_So0B0C0E10WillCancelSays5Error_pG10withErrorstF"></a>
+                    <a name="//apple_ref/swift/Method/operationQueue(operationQueue:operationWillCancel:withErrors:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:17AdvancedOperation0aB13QueueDelegateP09operationC0yAA0abC0CAD_So0B0C0E10WillCancelSays5Error_pG10withErrorstF">operationQueue(operationQueue:operationWillCancel:withErrors:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </section>
+        </section>
+        <section id="footer">
+          <p>&copy; 2018 <a class="link" href="" target="_blank" rel="external"></a>. All rights reserved. (Last updated: 2018-03-29)</p>
+          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.8.2</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+        </section>
+      </article>
+    </div>
+  </body>
+</div>
+</html>

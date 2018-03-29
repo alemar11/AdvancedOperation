@@ -14,7 +14,7 @@
     <a title="OperationWillExecuteObserving Protocol Reference"></a>
     <header>
       <div class="content-wrapper">
-        <p><a href="../index.html"> Docs</a> (41% documented)</p>
+        <p><a href="../index.html"> Docs</a> (44% documented)</p>
       </div>
     </header>
     <div class="content-wrapper">
@@ -37,6 +37,12 @@
                 <a href="../Classes/AdvancedOperation.html">AdvancedOperation</a>
               </li>
               <li class="nav-group-task">
+                <a href="../Classes/AdvancedOperationQueue.html">AdvancedOperationQueue</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/ExclusivityManager.html">ExclusivityManager</a>
+              </li>
+              <li class="nav-group-task">
                 <a href="../Classes/GroupOperation.html">GroupOperation</a>
               </li>
               <li class="nav-group-task">
@@ -45,8 +51,36 @@
             </ul>
           </li>
           <li class="nav-group-name">
+            <a href="../Enums.html">Enums</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Enums/OperationConditionResult.html">OperationConditionResult</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/OperationErrorCode.html">OperationErrorCode</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Extensions.html">Extensions</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Extensions/Array.html">Array</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Extensions/Operation.html">Operation</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
             <a href="../Protocols.html">Protocols</a>
             <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Protocols/AdvancedOperationQueueDelegate.html">AdvancedOperationQueueDelegate</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/OperationCondition.html">OperationCondition</a>
+              </li>
               <li class="nav-group-task">
                 <a href="../Protocols/OperationDidCancelObserving.html">OperationDidCancelObserving</a>
               </li>
@@ -60,12 +94,41 @@
                 <a href="../Protocols.html#/s:17AdvancedOperation0B13ObservingTypeP">OperationObservingType</a>
               </li>
               <li class="nav-group-task">
+                <a href="../Protocols/OperationWillCancelObserving.html">OperationWillCancelObserving</a>
+              </li>
+              <li class="nav-group-task">
                 <a href="../Protocols/OperationWillExecuteObserving.html">OperationWillExecuteObserving</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/OperationWillFinishObserving.html">OperationWillFinishObserving</a>
               </li>
             </ul>
           </li>
           <li class="nav-group-name">
-            <a href="../Typealiases.html">Type Aliases</a>
+            <a href="../Structs.html">Structs</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Structs/BlockObserver.html">BlockObserver</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/MutuallyExclusiveCondition.html">MutuallyExclusiveCondition</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/NegatedCondition.html">NegatedCondition</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/NoCancelledDependeciesCondition.html">NoCancelledDependeciesCondition</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/NoFailedDependenciesCondition.html">NoFailedDependenciesCondition</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/SilentCondition.html">SilentCondition</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Typealiases.html">Typealiases</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
                 <a href="../Typealiases.html#/s:17AdvancedOperation0B5Blocka">OperationBlock</a>
@@ -78,12 +141,6 @@
         <section>
           <section class="section">
             <h1>OperationWillExecuteObserving</h1>
-              <div class="declaration">
-                <div class="language">
-                  <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">protocol</span> <span class="kt">OperationWillExecuteObserving</span><span class="p">:</span> <span class="kt"><a href="../Protocols.html#/s:17AdvancedOperation0B13ObservingTypeP">OperationObservingType</a></span></code></pre>
-
-                </div>
-              </div>
             <p>Undocumented</p>
 
           </section>
@@ -110,7 +167,7 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">operationWillExecute</span><span class="p">(</span><span class="nv">operation</span><span class="p">:</span> <span class="kt">Operation</span><span class="p">)</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">func</span> <span class="nf">operationWillExecute</span><span class="p">(</span><span class="nv">operation</span><span class="p">:</span> <span class="kt">Operation</span><span class="p">)</span></code></pre>
 
                         </div>
                       </div>
@@ -122,8 +179,8 @@
           </section>
         </section>
         <section id="footer">
-          <p>&copy; 2018 <a class="link" href="" target="_blank" rel="external"></a>. All rights reserved. (Last updated: 2018-02-17)</p>
-          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.9.1</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+          <p>&copy; 2018 <a class="link" href="" target="_blank" rel="external"></a>. All rights reserved. (Last updated: 2018-03-29)</p>
+          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.8.2</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
         </section>
       </article>
     </div>

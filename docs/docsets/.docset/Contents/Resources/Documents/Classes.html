@@ -13,7 +13,7 @@
     <a title="Classes  Reference"></a>
     <header>
       <div class="content-wrapper">
-        <p><a href="index.html"> Docs</a> (41% documented)</p>
+        <p><a href="index.html"> Docs</a> (44% documented)</p>
       </div>
     </header>
     <div class="content-wrapper">
@@ -36,6 +36,12 @@
                 <a href="Classes/AdvancedOperation.html">AdvancedOperation</a>
               </li>
               <li class="nav-group-task">
+                <a href="Classes/AdvancedOperationQueue.html">AdvancedOperationQueue</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Classes/ExclusivityManager.html">ExclusivityManager</a>
+              </li>
+              <li class="nav-group-task">
                 <a href="Classes/GroupOperation.html">GroupOperation</a>
               </li>
               <li class="nav-group-task">
@@ -44,8 +50,36 @@
             </ul>
           </li>
           <li class="nav-group-name">
+            <a href="Enums.html">Enums</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="Enums/OperationConditionResult.html">OperationConditionResult</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Enums/OperationErrorCode.html">OperationErrorCode</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="Extensions.html">Extensions</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="Extensions/Array.html">Array</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Extensions/Operation.html">Operation</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
             <a href="Protocols.html">Protocols</a>
             <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="Protocols/AdvancedOperationQueueDelegate.html">AdvancedOperationQueueDelegate</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Protocols/OperationCondition.html">OperationCondition</a>
+              </li>
               <li class="nav-group-task">
                 <a href="Protocols/OperationDidCancelObserving.html">OperationDidCancelObserving</a>
               </li>
@@ -59,12 +93,41 @@
                 <a href="Protocols.html#/s:17AdvancedOperation0B13ObservingTypeP">OperationObservingType</a>
               </li>
               <li class="nav-group-task">
+                <a href="Protocols/OperationWillCancelObserving.html">OperationWillCancelObserving</a>
+              </li>
+              <li class="nav-group-task">
                 <a href="Protocols/OperationWillExecuteObserving.html">OperationWillExecuteObserving</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Protocols/OperationWillFinishObserving.html">OperationWillFinishObserving</a>
               </li>
             </ul>
           </li>
           <li class="nav-group-name">
-            <a href="Typealiases.html">Type Aliases</a>
+            <a href="Structs.html">Structs</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="Structs/BlockObserver.html">BlockObserver</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Structs/MutuallyExclusiveCondition.html">MutuallyExclusiveCondition</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Structs/NegatedCondition.html">NegatedCondition</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Structs/NoCancelledDependeciesCondition.html">NoCancelledDependeciesCondition</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Structs/NoFailedDependenciesCondition.html">NoFailedDependenciesCondition</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Structs/SilentCondition.html">SilentCondition</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="Typealiases.html">Typealiases</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
                 <a href="Typealiases.html#/s:17AdvancedOperation0B5Blocka">OperationBlock</a>
@@ -96,7 +159,7 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>An advanced subclass of <code>Operation</code>.</p>
 
                         <a href="Classes/AdvancedOperation.html" class="slightly-smaller">See more</a>
                       </div>
@@ -104,9 +167,33 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">AdvancedOperation</span><span class="p">:</span> <span class="kt">Operation</span></code></pre>
+                          <pre class="highlight"><code><span class="n">open</span> <span class="kd">class</span> <span class="kt">AdvancedOperation</span><span class="p">:</span> <span class="kt">Operation</span></code></pre>
 
                         </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:17AdvancedOperation18ExclusivityManagerC"></a>
+                    <a name="//apple_ref/swift/Class/ExclusivityManager" class="dashAnchor"></a>
+                    <a class="token" href="#/s:17AdvancedOperation18ExclusivityManagerC">ExclusivityManager</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                        <a href="Classes/ExclusivityManager.html" class="slightly-smaller">See more</a>
                       </div>
                     </section>
                   </div>
@@ -136,7 +223,7 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">final</span> <span class="kd">class</span> <span class="kt">AdvancedBlockOperation</span><span class="p">:</span> <span class="kt"><a href="Classes/AdvancedOperation.html">AdvancedOperation</a></span></code></pre>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">final</span> <span class="kd">class</span> <span class="kt">AdvancedBlockOperation</span><span class="p">:</span> <span class="kt"><a href="Classes/AdvancedOperation.html">AdvancedOperation</a></span></code></pre>
 
                         </div>
                       </div>
@@ -164,14 +251,6 @@
 
                         <a href="Classes/OperationObserverController.html" class="slightly-smaller">See more</a>
                       </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">OperationObserverController</span></code></pre>
-
-                        </div>
-                      </div>
                     </section>
                   </div>
                 </li>
@@ -196,11 +275,35 @@
 
                         <a href="Classes/GroupOperation.html" class="slightly-smaller">See more</a>
                       </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:@M@AdvancedOperation@objc(cs)AdvancedOperationQueue"></a>
+                    <a name="//apple_ref/swift/Class/AdvancedOperationQueue" class="dashAnchor"></a>
+                    <a class="token" href="#/c:@M@AdvancedOperation@objc(cs)AdvancedOperationQueue">AdvancedOperationQueue</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p><code>AdvancedOperationQueue</code> is an <code>OperationQueue</code> subclass that implements a large number of <q>extra features</q> related to the <code>Operation</code> class.</p>
+
+                        <a href="Classes/AdvancedOperationQueue.html" class="slightly-smaller">See more</a>
+                      </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">final</span> <span class="kd">class</span> <span class="kt">GroupOperation</span><span class="p">:</span> <span class="kt"><a href="Classes/AdvancedOperation.html">AdvancedOperation</a></span></code></pre>
+                          <pre class="highlight"><code><span class="n">open</span> <span class="kd">class</span> <span class="kt">AdvancedOperationQueue</span><span class="p">:</span> <span class="kt">OperationQueue</span></code></pre>
 
                         </div>
                       </div>
@@ -212,8 +315,8 @@
           </section>
         </section>
         <section id="footer">
-          <p>&copy; 2018 <a class="link" href="" target="_blank" rel="external"></a>. All rights reserved. (Last updated: 2018-02-17)</p>
-          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.9.1</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+          <p>&copy; 2018 <a class="link" href="" target="_blank" rel="external"></a>. All rights reserved. (Last updated: 2018-03-29)</p>
+          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.8.2</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
         </section>
       </article>
     </div>
