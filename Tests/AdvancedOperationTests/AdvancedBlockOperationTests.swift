@@ -121,25 +121,29 @@ final class AdvancedBlockOperationTests: XCTestCase {
   }
 
   func testMemoryLeak() {
+
     var object = NSObject()
     weak var weakObject = object
 
-    var operation = AdvancedBlockOperation { [object] complete in
-      DispatchQueue(label: "\(identifier).\(#function)", attributes: .concurrent).async {
-        _ = object
-        complete([])
+    autoreleasepool {
+      var operation = AdvancedBlockOperation { [object] complete in
+        DispatchQueue(label: "\(identifier).\(#function)", attributes: .concurrent).async {
+          _ = object
+          complete([])
+        }
       }
+
+      let expectation1 = expectation(description: "\(#function)\(#line)")
+      operation.addCompletionBlock { expectation1.fulfill() }
+      operation.start()
+
+      waitForExpectations(timeout: 3)
+
+      // Memory leaks test: once release the operation, the captured object (by reference) should be nil (weakObject)
+      operation = AdvancedBlockOperation(block: {})
+      object = NSObject()
     }
-
-    let expectation1 = expectation(description: "\(#function)\(#line)")
-    operation.addCompletionBlock { expectation1.fulfill() }
-    operation.start()
-
-    waitForExpectations(timeout: 3)
-
-    // Memory leaks test: once release the operation, the captured object (by reference) should be nil (weakObject)
-    operation = AdvancedBlockOperation(block: {})
-    object = NSObject()
+    
     XCTAssertNil(weakObject)
   }
 
