@@ -2,7 +2,7 @@
 ![Platforms](https://img.shields.io/badge/Platform-iOS%2011%2B%20|%20macOS%2010.13+%20|%20tvOS%2011+%20|%20watchOS%204+-blue.svg) 
 
 |Branch|TravisCI Build Status (all os)|Code Coverage
-|----|----|----|----|
+|----|----|----|
 |Master|[![TravisCI](https://travis-ci.org/tinrobots/AdvancedOperation.svg?branch=master)](https://travis-ci.org/tinrobots/AdvancedOperation)|[![codecov](https://codecov.io/gh/tinrobots/AdvancedOperation/branch/master/graph/badge.svg)](https://codecov.io/gh/tinrobots/AdvancedOperation)
 |Develop|![TravisCI](https://travis-ci.org/tinrobots/AdvancedOperation.svg?branch=develop)|[![codecov](https://codecov.io/gh/tinrobots/AdvancedOperation/branch/develop/graph/badge.svg)](https://codecov.io/gh/tinrobots/AdvancedOperation)
 
