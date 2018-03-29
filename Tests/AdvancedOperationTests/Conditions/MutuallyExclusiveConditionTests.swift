@@ -139,7 +139,7 @@ final class MutuallyExclusiveConditionTests: XCTestCase {
     queue.addOperations([operation1, operation2, operation3], waitUntilFinished: false)
     /// An operation may start without waiting the completion block of the running one, so we cannot use `enforceOrder` to true.
     /// https://marcosantadev.com/4-ways-pass-data-operations-swift/
-    wait(for: [expectation1, expectation2, expectation3], timeout: 5, enforceOrder: false)
+    wait(for: [expectation1, expectation2, expectation3], timeout: 10, enforceOrder: false)
     XCTAssertEqual(text, "A B C.")
   }
 
