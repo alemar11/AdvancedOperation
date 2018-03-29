@@ -192,7 +192,7 @@ open class AdvancedOperation: Operation {
 
   public private(set) var errors = [Error]()
 
-  // MARK: - Methods
+  // MARK: - Execution
 
   public final override func start() {
 
@@ -278,43 +278,77 @@ open class AdvancedOperation: Operation {
     didFinish(errors: updatedErrors)
   }
 
+  /// Produce another operation on the same queue that this instance is on.
+  ///
+  /// - Parameter operation: an `Operation` instance.
+  final func produceOperation(_ operation: Operation) {
+    //didProduceOperationObservers { $0.operation(self, didProduceOperation: operation) } // TODO
+  }
+
+  // MARK: - Overridables // TODO
+
+  open func operationWillExecute() {
+    fatalError("\(type(of: self)) operationWillExecute.")
+  }
+
+  open func operationWillCancel(errors: [Error]) {
+    fatalError("\(type(of: self)) operationWillCancel.")
+  }
+
+  open func operationDidCancel(errors: [Error]) {
+    fatalError("\(type(of: self)) operationDidCancel.")
+  }
+
+  open func operationWillFinish(errors: [Error]) {
+    fatalError("\(type(of: self)) operationWillFinish.")
+  }
+
+  open func operationDidFinish(errors: [Error]) {
+    fatalError("\(type(of: self)) operationDidFinish.")
+  }
+
   // MARK: - Observer
 
   /// Add an observer to the to the operation, can only be done prior to the operation starting.
   ///
   /// - Parameter observer: the observer to add.
   /// - Requires: `self must not have started.
-  public func addObserver(observer: OperationObservingType) {
+  public func addObserver(observer: OperationObservingType) { //TODO: rename in addObserver(_ observer: OperationObservingType)
     assert(!isExecuting, "Cannot modify observers after execution has begun.")
 
     observers.append(observer)
   }
 
   private func willExecute() {
+    operationWillExecute()
     for observer in willExecuteObservers {
       observer.operationWillExecute(operation: self)
     }
   }
 
   private func willFinish(errors: [Error]) {
+    operationWillFinish(errors: errors)
     for observer in willFinishObservers {
       observer.operationWillFinish(operation: self, withErrors: errors)
     }
   }
 
   private func didFinish(errors: [Error]) {
+    operationDidFinish(errors: errors)
     for observer in didFinishObservers {
       observer.operationDidFinish(operation: self, withErrors: errors)
     }
   }
 
   private func willCancel(errors: [Error]) {
+    operationWillCancel(errors: errors)
     for observer in willCancelObservers {
       observer.operationWillCancel(operation: self, withErrors: errors)
     }
   }
 
   private func didCancel(errors: [Error]) {
+    operationDidCancel(errors: errors)
     for observer in didCancelObservers {
       observer.operationDidCancel(operation: self, withErrors: errors)
     }
