@@ -97,7 +97,7 @@ final class MutuallyExclusiveConditionTests: XCTestCase {
     queue1.addOperations([operation1, operation2], waitUntilFinished: true)
     queue2.addOperations([operation3, operation4], waitUntilFinished: true)
 
-    waitForExpectations(timeout: 5)
+    waitForExpectations(timeout: 10)
     XCTAssertEqual(text, "ABCD")
   }
 
@@ -178,7 +178,7 @@ final class MutuallyExclusiveConditionTests: XCTestCase {
     operation5.addCondition(condition: MutuallyExclusiveCondition<XCTest>())
 
     queue.addOperations([operation1, operation2, operation3, operation4, operation5], waitUntilFinished: false)
-    waitForExpectations(timeout: 5)
+    waitForExpectations(timeout: 10)
     XCTAssertEqual(text, "A B C. 🎉")
   }
 
@@ -213,7 +213,7 @@ final class MutuallyExclusiveConditionTests: XCTestCase {
     operation4.addCondition(condition: MutuallyExclusiveCondition<XCTest>())
 
     queue.addOperations([group1, operation3, operation4], waitUntilFinished: false)
-    waitForExpectations(timeout: 5)
+    waitForExpectations(timeout: 10)
     XCTAssertEqual(text, "A B C. 🎉")
   }
 
@@ -260,7 +260,7 @@ final class MutuallyExclusiveConditionTests: XCTestCase {
     XCTAssertEqual((manager.operations[key] ?? []).count, 3)
 
     queue.isSuspended = false
-    waitForExpectations(timeout: 5)
+    waitForExpectations(timeout: 10)
 
     XCTAssertEqual(text, "A B C.")
     XCTAssertEqual(manager.operations.keys.count, 1)
