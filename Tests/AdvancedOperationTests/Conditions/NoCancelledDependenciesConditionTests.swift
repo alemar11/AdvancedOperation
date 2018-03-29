@@ -24,7 +24,7 @@
 import XCTest
 @testable import AdvancedOperation
 
-final class NoCancelledDependenciesCondition: XCTestCase {
+final class NoCancelledDependenciesConditionTests: XCTestCase {
 
   /// queue with waitUntilFinished set to true may stuck in a loop
 //  func testStress() {
@@ -95,7 +95,7 @@ final class NoCancelledDependenciesCondition: XCTestCase {
 
     queue.addOperations([operation1, operation2, operation3, operation4], waitUntilFinished: false)
 
-    waitForExpectations(timeout: 5)
+    waitForExpectations(timeout: 10)
     XCTAssertTrue(operation4.isCancelled)
 
     XCTAssertFalse(operation3.failed) // it's not failed because it's been cancelled before evaluating its conditions
