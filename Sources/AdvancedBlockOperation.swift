@@ -29,9 +29,13 @@ public typealias OperationBlock = (@escaping ([Error]) -> Void) -> Void
 
 /// A sublcass of `AdvancedOperation` to execute a closure.
 public final class AdvancedBlockOperation: AdvancedOperation {
-
+  
+  // MARK: - Private Properties
+  
   private var block: OperationBlock
-
+  
+  // MARK: - Initializers
+  
   /// The designated initializer.
   ///
   /// - Parameters:
@@ -40,7 +44,13 @@ public final class AdvancedBlockOperation: AdvancedOperation {
     self.block = block
     super.init()
   }
-
+  
+  
+  /// A convenience initializer.
+  ///
+  /// - Parameters:
+  ///   - queue: The `DispatchQueue` where the operation will run its `block`.
+  ///   - block: The closure to run when the operation executes.
   public convenience init(queue: DispatchQueue = .main, block: @escaping () -> Void) {
     self.init(block: { complete in
       queue.async {
@@ -49,14 +59,16 @@ public final class AdvancedBlockOperation: AdvancedOperation {
       }
     })
   }
-
+  
+  // MARK: - Overrides
+  
   public override func main() {
     guard !isCancelled else { finish(); return }
-
+    
     block { [weak self] errors in
       self?.finish(errors: errors)
     }
-
+    
   }
-
+  
 }
