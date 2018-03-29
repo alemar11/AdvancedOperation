@@ -126,7 +126,7 @@ $ git submodule add https://github.com/tinrobots/AdvancedOperation.git
 
 ## License
 
-[![License MIT](https://img.shields.io/badge/License-MIT-lightgrey.svg?style=flat)](https://github.com/tinrobots/AdvancedOperation/blob/master/LICENSE.md))
+[![License MIT](https://img.shields.io/badge/License-MIT-lightgrey.svg?style=flat)](https://github.com/tinrobots/AdvancedOperation/blob/master/LICENSE.md)
 
 AdvancedOperation is released under the MIT license. See [LICENSE](./LICENSE.md) for details.
 
