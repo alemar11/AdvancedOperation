@@ -95,7 +95,7 @@ final class NoCancelledDependenciesCondition: XCTestCase {
 
     queue.addOperations([operation1, operation2, operation3, operation4], waitUntilFinished: false)
 
-    waitForExpectations(timeout: 10)
+    waitForExpectations(timeout: 5)
     XCTAssertTrue(operation4.isCancelled)
 
     XCTAssertFalse(operation3.failed) // it's not failed because it's been cancelled before evaluating its conditions
