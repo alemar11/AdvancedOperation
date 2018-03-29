@@ -27,8 +27,8 @@ import XCTest
 final class AdvancedOperationQueueTests: XCTestCase {
 
 //  func testStress() {
-//    for x in 1...20 {
-//      print(x)
+//    for i in 1...20 {
+//      print(i)
 //      testQueueWithAdvancedOperationsUsingWaitUntilFinished()
 //    }
 //  }

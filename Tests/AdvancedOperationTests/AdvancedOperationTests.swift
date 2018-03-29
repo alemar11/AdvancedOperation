@@ -27,8 +27,8 @@ import XCTest
 final class AdvancedOperationTests: XCTestCase {
 
 //  func testStress() {
-//    for x in 1...100 {
-//      print(x)
+//    for i in 1...100 {
+//      print(i)
 //      //testStart()
 //      //testMultipleCancel()
 //      testMultipleStartsAndCancels()
