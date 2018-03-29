@@ -1,4 +1,5 @@
 [![Swift 4.1.0](https://img.shields.io/badge/Swift-4.1.0-orange.svg?style=flat)](https://developer.apple.com/swift)
+![Platforms](https://img.shields.io/badge/Platform-iOS%2011%2B%20|%20macOS%2010.13+%20|%20tvOS%2011+%20|%20watchOS%204+-blue.svg) 
 
 |Branch|TravisCI Build Status (all os)|Code Coverage
 |----|----|----|----|
