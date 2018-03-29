@@ -41,7 +41,9 @@ class NegatedConditionTests: XCTestCase {
     let expectation1 = expectation(description: "\(#function)\(#line)")
     negatedFailingCondition.evaluate(for: dummyOperation) { (result) in
       switch result {
-      case .satisfied: expectation1.fulfill()
+      case .satisfied:
+        XCTAssertNil(result.errors)
+        expectation1.fulfill()
       default: return
       }
     }
@@ -54,7 +56,10 @@ class NegatedConditionTests: XCTestCase {
     let expectation1 = expectation(description: "\(#function)\(#line)")
     negatedFailingCondition.evaluate(for: dummyOperation) { (result) in
       switch result {
-      case .failed(_): expectation1.fulfill()
+      case .failed(_):
+        XCTAssertNotNil(result.errors)
+        XCTAssertEqual(result.errors?.count, 1)
+        expectation1.fulfill()
       default: return
       }
     }
