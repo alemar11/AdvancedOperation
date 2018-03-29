@@ -110,7 +110,8 @@ final class AdvancedOperationTests: XCTestCase {
     XCTAssertTrue(operation.isCancelled)
 
     waitForExpectations(timeout: 10)
-    XCTAssertOperationCancelled(operation: operation)
+    XCTAssertTrue(operation.isCancelled)
+    XCTAssertTrue(operation.isFinished)
   }
 
   func testCancelBeforeStart() {
@@ -126,7 +127,8 @@ final class AdvancedOperationTests: XCTestCase {
     XCTAssertTrue(operation.isCancelled)
 
     waitForExpectations(timeout: 10)
-    XCTAssertOperationCancelled(operation: operation)
+    XCTAssertTrue(operation.isCancelled)
+    XCTAssertTrue(operation.isFinished)
   }
 
   func testMultipleCancel() {
@@ -146,7 +148,8 @@ final class AdvancedOperationTests: XCTestCase {
     XCTAssertTrue(operation.isCancelled)
 
     waitForExpectations(timeout: 10)
-    XCTAssertOperationCancelled(operation: operation)
+    XCTAssertTrue(operation.isCancelled)
+    XCTAssertTrue(operation.isFinished)
   }
 
   func testMultipleCancelWithManyObservers() {
@@ -175,7 +178,8 @@ final class AdvancedOperationTests: XCTestCase {
     XCTAssertTrue(operation.isCancelled)
 
     waitForExpectations(timeout: 10)
-    XCTAssertOperationCancelled(operation: operation)
+    XCTAssertTrue(operation.isCancelled)
+    XCTAssertTrue(operation.isFinished)
   }
 
   func testMultipleStartsAndCancels() {
@@ -228,7 +232,10 @@ final class AdvancedOperationTests: XCTestCase {
     XCTAssertTrue(operation.isCancelled)
 
     waitForExpectations(timeout: 10)
-    XCTAssertOperationCancelled(operation: operation, errors: [MockError.test])
+
+    XCTAssertTrue(operation.isCancelled)
+    XCTAssertTrue(operation.isFinished)
+    XCTAssertSameErrorQuantity(errors: operation.errors, expectedErrors: [MockError.test])
   }
 
   func testMultipleCancelWithError() {
@@ -249,7 +256,9 @@ final class AdvancedOperationTests: XCTestCase {
     XCTAssertTrue(operation.isCancelled)
 
     waitForExpectations(timeout: 10)
-    XCTAssertOperationCancelled(operation: operation, errors: [error])
+    XCTAssertTrue(operation.isCancelled)
+    XCTAssertTrue(operation.isFinished)
+    XCTAssertSameErrorQuantity(errors: operation.errors, expectedErrors: [error])
   }
 
   func testBailingOutEarly() {
@@ -259,13 +268,16 @@ final class AdvancedOperationTests: XCTestCase {
 
     operation.cancel()
     operation.start()
-    XCTAssertOperationCancelled(operation: operation)
+    
+    XCTAssertTrue(operation.isCancelled)
+    XCTAssertTrue(operation.isFinished)
 
     operation.cancel()
     XCTAssertTrue(operation.isCancelled)
 
     operation.waitUntilFinished()
-    XCTAssertOperationCancelled(operation: operation)
+    XCTAssertTrue(operation.isCancelled)
+    XCTAssertTrue(operation.isFinished)
   }
 
   func testObservers() {
@@ -326,7 +338,9 @@ final class AdvancedOperationTests: XCTestCase {
     XCTAssertTrue(operation.isCancelled)
 
     waitForExpectations(timeout: 10)
-    XCTAssertOperationCancelled(operation: operation, errors: [MockError.test])
+    XCTAssertTrue(operation.isCancelled)
+    XCTAssertTrue(operation.isFinished)
+    XCTAssertSameErrorQuantity(errors: operation.errors, expectedErrors: [MockError.test])
   }
 
   func testFinishWithErrors() {

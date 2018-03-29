@@ -42,7 +42,8 @@ final class AdvancedBlockOperationTests: XCTestCase {
 
     waitForExpectations(timeout: 4)
     print(operation)
-    XCTAssertOperationCancelled(operation: operation)
+    XCTAssertTrue(operation.isCancelled)
+    XCTAssertTrue(operation.isFinished)
   }
 
   func testEarlyBailOut() {
@@ -56,7 +57,8 @@ final class AdvancedBlockOperationTests: XCTestCase {
     operation.start()
 
     waitForExpectations(timeout: 4)
-    XCTAssertOperationCancelled(operation: operation)
+    XCTAssertTrue(operation.isCancelled)
+    XCTAssertTrue(operation.isFinished)
   }
 
   func testBlockOperationWithAsyncQueue() {

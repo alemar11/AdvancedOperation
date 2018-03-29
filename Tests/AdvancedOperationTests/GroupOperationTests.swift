@@ -172,7 +172,8 @@ final class GroupOperationTests: XCTestCase {
       XCTAssertTrue(operation.isCancelled)
       XCTAssertTrue(operation.isFinished)
       if let advancedOperation = operation as? AdvancedOperation {
-        XCTAssertOperationCancelled(operation: advancedOperation)
+        XCTAssertTrue(advancedOperation.isCancelled)
+        XCTAssertTrue(advancedOperation.isFinished)
       }
     }
   }
@@ -338,7 +339,9 @@ final class GroupOperationTests: XCTestCase {
     group.start()
     waitForExpectations(timeout: 10)
 
-    XCTAssertOperationCancelled(operation: group, errors: [MockError.test])
+    XCTAssertTrue(group.isCancelled)
+    XCTAssertTrue(group.isFinished)
+    XCTAssertSameErrorQuantity(errors: group.errors, expectedErrors: [MockError.test])
   }
 
   func testFailedOperationInSimpleNestedGroupOperations() {
@@ -399,7 +402,9 @@ final class GroupOperationTests: XCTestCase {
     operation3.cancel(error: MockError.failed)
     waitForExpectations(timeout: 10)
 
-    XCTAssertOperationCancelled(operation: operation3, errors: [MockError.failed])
+    XCTAssertTrue(operation3.isCancelled)
+    XCTAssertTrue(operation3.isFinished)
+    XCTAssertSameErrorQuantity(errors: operation3.errors, expectedErrors: [MockError.failed])
 
     XCTAssertTrue(group.isFinished)
     XCTAssertSameErrorQuantity(errors: group.errors, expectedErrors: [MockError.test, MockError.failed, MockError.failed, MockError.failed])

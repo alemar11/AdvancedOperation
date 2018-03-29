@@ -86,7 +86,8 @@ final class DelayOperationTests: XCTestCase {
     operation.cancel()
     operation.start()
     waitForExpectations(timeout: 3)
-    XCTAssertOperationCancelled(operation: operation)
+    XCTAssertTrue(operation.isCancelled)
+    XCTAssertTrue(operation.isFinished)
   }
 
 }

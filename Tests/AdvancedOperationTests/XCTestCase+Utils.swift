@@ -27,30 +27,6 @@ import XCTest
 
 extension XCTestCase {
 
-  // It appears that on Linux, the operation readiness is ALWAYS set to 'false' by default.
-  // It changes to 'true' ONLY if an operation is added to an OperationQueue regardless of its associated dependencies.
-  private func defaultReadiness() -> Bool {
-    //#if !os(Linux)
-      //return true
-    //#else
-      return false
-    //#endif
-  }
-
-  /// Asserts that the AdvancedOperation has finished due to a cancel command.
-  func XCTAssertOperationCancelled(operation: AdvancedOperation, errors: [Error] = [], file: String = #file, line: Int = #line) {
-
-    guard
-      !operation.isReady,
-      !operation.isExecuting,
-      operation.isCancelled,
-      operation.isFinished
-      else { return recordFailure(withDescription: "Operation is not cancelled.", inFile: file, atLine: line, expected: true) }
-
-    guard checkSameErrorQuantity(generatedErrors: operation.errors, expectedErrors: errors)
-      else { return recordFailure(withDescription: "Operation has \(operation.errors.count) errors, expected: \(errors.count)", inFile: file, atLine: line, expected: true) }
-  }
-
   func XCTAssertSameErrorQuantity(errors: [Error], expectedErrors: [Error], file: String = #file, line: Int = #line) {
     guard checkSameErrorQuantity(generatedErrors: errors, expectedErrors: expectedErrors) else {
       return recordFailure(withDescription: "Operation has \(errors.count) errors, expected: \(errors.count)", inFile: file, atLine: line, expected: true)
