@@ -46,11 +46,11 @@ class OperationConditionTests: XCTestCase {
     let dependecy2 = AdvancedBlockOperation { }
     dependecy2.completionBlock = { expectation4.fulfill() }
 
-    let depencyCondition1 = DependecyCondition(dependency: dependecy1)
-    let depencyCondition2 = DependecyCondition(dependency: dependecy2)
+    let dependencyCondition1 = DependecyCondition(dependency: dependecy1)
+    let dependencyCondition2 = DependecyCondition(dependency: dependecy2)
 
-    operation1.addCondition(condition: depencyCondition1)
-    operation2.addCondition(condition: depencyCondition2)
+    operation1.addCondition(condition: dependencyCondition1)
+    operation2.addCondition(condition: dependencyCondition2)
 
     queue.addOperations([operation1, operation2], waitUntilFinished: false)
     waitForExpectations(timeout: 10)

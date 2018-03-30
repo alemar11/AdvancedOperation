@@ -251,6 +251,42 @@ final class MutuallyExclusiveConditionTests: XCTestCase {
     XCTAssertEqual(text, "A B C. 🎉")
   }
 
+  func testMultipleMutuallyExclusiveConditionsAndDependencies() {
+    let queue = AdvancedOperationQueue()
+    var text = ""
+
+    let expectationDependency1 = expectation(description: "\(#function)\(#line)")
+    let expectationDependency2 = expectation(description: "\(#function)\(#line)")
+
+    let dependency1 = AdvancedBlockOperation { text += "1 " }
+    dependency1.addCondition(condition: MutuallyExclusiveCondition<XCTest>())
+    dependency1.completionBlock = { expectationDependency1.fulfill() }
+
+    let dependency2 = AdvancedBlockOperation { text += "2 " }
+    dependency2.addCondition(condition: MutuallyExclusiveCondition<XCTest>())
+    dependency2.completionBlock = { expectationDependency2.fulfill() }
+
+    let dependencyCondition1 = DependecyCondition(dependency: dependency1)
+    let dependencyCondition2 = DependecyCondition(dependency: dependency2)
+
+    let expectation1 = expectation(description: "\(#function)\(#line)")
+    let expectation2 = expectation(description: "\(#function)\(#line)")
+
+    let operation1 = AdvancedBlockOperation { text += "A " }
+    operation1.completionBlock = { expectation1.fulfill() }
+    operation1.addCondition(condition: MutuallyExclusiveCondition<AdvancedBlockOperation>())
+    operation1.addCondition(condition: dependencyCondition1)
+
+    let operation2 = AdvancedBlockOperation { text += "B" }
+    operation2.completionBlock = { expectation2.fulfill() }
+    operation2.addCondition(condition: MutuallyExclusiveCondition<AdvancedBlockOperation>())
+    operation2.addCondition(condition: dependencyCondition2)
+
+    queue.addOperations([operation1, operation2], waitUntilFinished: false)
+    waitForExpectations(timeout: 10)
+    XCTAssertEqual(text, "1 A 2 B")
+  }
+
   func testExclusivityManager() {
     var text = ""
     let manager = ExclusivityManager()
