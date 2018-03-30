@@ -23,7 +23,7 @@
 
 import Foundation
 
-public final class GroupOperation: AdvancedOperation {
+open class GroupOperation: AdvancedOperation {
 
   // MARK: - Properties
 
@@ -95,7 +95,7 @@ public final class GroupOperation: AdvancedOperation {
     super.cancel(error: error)
   }
 
-  public override func cancel() {
+  open override func cancel() {
     cancel(error: nil)
   }
 
