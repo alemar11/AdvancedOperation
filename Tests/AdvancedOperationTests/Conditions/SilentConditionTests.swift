@@ -58,6 +58,4 @@ class SilentConditionTests: XCTestCase {
     waitForExpectations(timeout: 10)
   }
 
-  //TODO: add a more complicated case
-    
 }
