@@ -51,6 +51,7 @@ open class AdvancedOperation: Operation {
     }
 
   }
+
   public final override var isExecuting: Bool { return state == .executing }
 
   public final override var isFinished: Bool { return state == .finished }
@@ -109,6 +110,7 @@ open class AdvancedOperation: Operation {
 
   // MARK: - Properties
 
+  /// Errors generated during the execution.
   public private(set) var errors = [Error]()
 
   /// Returns `true` if the `AdvancedOperation` failed due to errors.
@@ -148,23 +150,6 @@ open class AdvancedOperation: Operation {
       return super.keyPathsForValuesAffectingValue(forKey: key)
     }
   }
-
-  /**
-   @objc
-   private dynamic class func keyPathsForValuesAffectingIsReady() -> Set<String> {
-   return [#keyPath(state)]
-   }
-
-   @objc
-   private dynamic class func keyPathsForValuesAffectingIsExecuting() -> Set<String> {
-   return [#keyPath(state)]
-   }
-
-   @objc
-   private dynamic class func keyPathsForValuesAffectingIsFinished() -> Set<String> {
-   return [#keyPath(state)]
-   }
-   **/
 
   // MARK: - Observers
 
@@ -218,8 +203,7 @@ open class AdvancedOperation: Operation {
 
     guard canBeExecuted else { return }
     willExecute()
-    //Thread.detachNewThreadSelector(#selector(main), toTarget: self, with: nil)
-    // https://developer.apple.com/library/content/documentation/General/Conceptual/ConcurrencyProgrammingGuide/OperationObjects/OperationObjects.html#//apple_ref/doc/uid/TP40008091-CH101-SW16
+
     main()
   }
 
@@ -280,27 +264,22 @@ open class AdvancedOperation: Operation {
     didFinish(errors: updatedErrors)
   }
 
-  // MARK: - Overridables // TODO
+  // MARK: - Subclass
 
-  open func operationWillExecute() {
-    //fatalError("\(type(of: self)) operationWillExecute.")
-  }
+  /// Subclass this method to know when the operation will start executing.
+  open func operationWillExecute() { }
 
-  open func operationWillCancel(errors: [Error]) {
-    //fatalError("\(type(of: self)) operationWillCancel.")
-  }
+  /// Subclass this method to know when the operation will be cancelled.
+  open func operationWillCancel(errors: [Error]) { }
 
-  open func operationDidCancel(errors: [Error]) {
-    //fatalError("\(type(of: self)) operationDidCancel.")
-  }
+  /// Subclass this method to know when the operation has been cancelled.
+  open func operationDidCancel(errors: [Error]) { }
 
-  open func operationWillFinish(errors: [Error]) {
-    //fatalError("\(type(of: self)) operationWillFinish.")
-  }
+  /// Subclass this method to know when the operation will finish its execution.
+  open func operationWillFinish(errors: [Error]) { }
 
-  open func operationDidFinish(errors: [Error]) {
-    //fatalError("\(type(of: self)) operationDidFinish.")
-  }
+  /// Subclass this method to know when the operation has finished executing.
+  open func operationDidFinish(errors: [Error]) { }
 
   // MARK: - Observers
 
