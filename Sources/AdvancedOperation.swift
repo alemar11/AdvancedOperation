@@ -374,7 +374,7 @@ open class AdvancedOperation: Operation {
 
   // MARK: - Conditions
 
-  public private(set) var conditions = [OperationCondition]() //TODO : set?
+  public private(set) var conditions = [OperationCondition]()
 
   /// Indicate to the operation running on a `AdvancedOperationQueue` that it can proceed with evaluating conditions (if it's not cancelled or finished).
   internal func willEnqueue() {
@@ -389,7 +389,7 @@ open class AdvancedOperation: Operation {
   }
 
   public func addCondition(_ condition: OperationCondition) {
-    assert(state == .ready || state == .pending, "Cannot add conditions after the evaluation (or execution) has begun.") // TODO: better assert
+    assert(state == .ready || state == .pending, "Cannot add conditions if the operation is \(state).")
 
     conditions.append(condition)
   }
