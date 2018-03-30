@@ -46,7 +46,7 @@ final class NoCancelledDependenciesConditionTests: XCTestCase {
     let operation3 = XCTFailOperation()
     let operation4 = DelayOperation(interval: 1)
 
-    operation1.addDependencies(dependencies: [operation2, operation3])
+    operation1.addDependencies([operation2, operation3])
     operation1.addCondition(NoCancelledDependeciesCondition())
     operation3.addDependency(operation4)
     operation3.addCondition(NoCancelledDependeciesCondition()) // this operation will fail
@@ -83,7 +83,7 @@ final class NoCancelledDependenciesConditionTests: XCTestCase {
     operation3.addCompletionBlock { expectation3.fulfill() }
     operation4.addCompletionBlock { expectation4.fulfill() }
 
-    operation1.addDependencies(dependencies: [operation2, operation3])
+    operation1.addDependencies([operation2, operation3])
     operation1.addCondition(NoCancelledDependeciesCondition())
     operation3.addDependency(operation4)
     operation3.addCondition(NoCancelledDependeciesCondition()) // this operation will fail
@@ -116,7 +116,7 @@ final class NoCancelledDependenciesConditionTests: XCTestCase {
     let operation3 = XCTFailOperation()
     let operation4 = DelayOperation(interval: 1)
 
-    operation1.addDependencies(dependencies: [operation2, operation3])
+    operation1.addDependencies([operation2, operation3])
     operation1.addCondition(NoCancelledDependeciesCondition())
     operation1.addCondition(NoFailedDependenciesCondition())
     operation3.addDependency(operation4)

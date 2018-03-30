@@ -51,7 +51,7 @@ extension Operation {
   }
 
   /// Adds multiple dependencies to the operation.
-  public func addDependencies(dependencies: [Operation]) {
+  public func addDependencies(_ dependencies: [Operation]) {
     assert(!isExecuting, "Dependencies cannot be modified after execution has begun.")
 
     for dependency in dependencies {
@@ -87,7 +87,7 @@ extension Array where Element: Operation {
   @discardableResult
   public func then(_ operations: Operation...) -> [Operation] {
     for operation in operations {
-      operation.addDependencies(dependencies: self)
+      operation.addDependencies(self)
     }
     return operations
   }

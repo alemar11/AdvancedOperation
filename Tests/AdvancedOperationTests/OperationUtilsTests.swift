@@ -117,7 +117,7 @@ final class OperationUtilsTests: XCTestCase {
     let operation3 = BlockOperation(block: {})
     let operation4 = SleepyAsyncOperation()
 
-    operation4.addDependencies(dependencies: [operation1, operation2, operation3])
+    operation4.addDependencies([operation1, operation2, operation3])
     XCTAssertEqual(operation4.dependencies.count, 3)
 
     operation4.removeDependencies()
