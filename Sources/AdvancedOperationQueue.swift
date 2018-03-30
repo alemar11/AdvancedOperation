@@ -62,8 +62,8 @@ open class AdvancedOperationQueue: OperationQueue {
           self.delegate?.operationQueue(operationQueue: self, operationWillExecute: operation)
           
         }, didProduce: { [weak self] in
-            guard let `self` = self else { return }
-            self.addOperation($1)
+          guard let `self` = self else { return }
+          self.addOperation($1)
 
         }, willCancel: { [weak self] (operation, errors) in
           guard let `self` = self else { return }
@@ -85,27 +85,26 @@ open class AdvancedOperationQueue: OperationQueue {
       
       operation.addObserver(observer: observer)
       
-      ///////////////
+      // Conditions
       if !operation.conditions.isEmpty {
-        
+
         let dependencies = operation.conditions.compactMap { $0.dependency(for: operation) }
         for dependency in dependencies {
-          operation.addDependency(dependency)
           self.addOperation(dependency)
+          operation.addDependency(dependency)
         }
-        
+
         let mutuallyExclusiveConditions = operation.conditions.filter { $0.isMutuallyExclusive }
-        
-        for condition in mutuallyExclusiveConditions {
-          let category = condition.name
-          
-          exclusivityManager.addOperation(operation, category: category)
+        if !mutuallyExclusiveConditions.isEmpty {
+          for condition in mutuallyExclusiveConditions {
+            let category = condition.name
+            exclusivityManager.addOperation(operation, category: category)
+          }
         }
+
         operation.willEnqueue()
       }
-      
-      ///////////////
-      
+
     } else { /// Operation
       
       // For regular `Operation`s, we'll manually call out to the queue's delegate we don't want

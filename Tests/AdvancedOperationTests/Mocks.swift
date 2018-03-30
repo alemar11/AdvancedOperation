@@ -230,3 +230,19 @@ internal struct AlwaysSuccessingCondition: OperationCondition {
   }
 
 }
+
+internal struct DependecyCondition: OperationCondition {
+
+  private var dependency: Operation
+
+  init(dependency: AdvancedOperation) {
+    self.dependency = dependency as Operation
+  }
+
+  func dependency(for operation: AdvancedOperation) -> Operation? { return dependency }
+
+  func evaluate(for operation: AdvancedOperation, completion: @escaping (OperationConditionResult) -> Void) {
+    completion(.satisfied)
+  }
+
+}
