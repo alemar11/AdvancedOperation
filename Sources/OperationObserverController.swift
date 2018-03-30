@@ -23,6 +23,7 @@
 
 import Foundation
 
+//TODO: remove this?
 public class OperationObserverController {
 
   /// Observed operation
