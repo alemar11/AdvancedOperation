@@ -288,23 +288,23 @@ open class AdvancedOperation: Operation {
   // MARK: - Overridables // TODO
 
   open func operationWillExecute() {
-    fatalError("\(type(of: self)) operationWillExecute.")
+    //fatalError("\(type(of: self)) operationWillExecute.")
   }
 
   open func operationWillCancel(errors: [Error]) {
-    fatalError("\(type(of: self)) operationWillCancel.")
+    //fatalError("\(type(of: self)) operationWillCancel.")
   }
 
   open func operationDidCancel(errors: [Error]) {
-    fatalError("\(type(of: self)) operationDidCancel.")
+    //fatalError("\(type(of: self)) operationDidCancel.")
   }
 
   open func operationWillFinish(errors: [Error]) {
-    fatalError("\(type(of: self)) operationWillFinish.")
+    //fatalError("\(type(of: self)) operationWillFinish.")
   }
 
   open func operationDidFinish(errors: [Error]) {
-    fatalError("\(type(of: self)) operationDidFinish.")
+    //fatalError("\(type(of: self)) operationDidFinish.")
   }
 
   // MARK: - Observer
