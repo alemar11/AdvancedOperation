@@ -388,7 +388,7 @@ open class AdvancedOperation: Operation {
     state = .pending
   }
 
-  public func addCondition(condition: OperationCondition) {
+  public func addCondition(_ condition: OperationCondition) {
     assert(state == .ready || state == .pending, "Cannot add conditions after the evaluation (or execution) has begun.") // TODO: better assert
 
     conditions.append(condition)

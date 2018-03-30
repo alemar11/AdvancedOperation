@@ -49,8 +49,8 @@ class OperationConditionTests: XCTestCase {
     let dependencyCondition1 = DependecyCondition(dependency: dependecy1)
     let dependencyCondition2 = DependecyCondition(dependency: dependecy2)
 
-    operation1.addCondition(condition: dependencyCondition1)
-    operation2.addCondition(condition: dependencyCondition2)
+    operation1.addCondition(dependencyCondition1)
+    operation2.addCondition(dependencyCondition2)
 
     queue.addOperations([operation1, operation2], waitUntilFinished: false)
     waitForExpectations(timeout: 10)

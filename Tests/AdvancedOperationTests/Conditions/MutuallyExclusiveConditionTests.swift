@@ -41,14 +41,14 @@ final class MutuallyExclusiveConditionTests: XCTestCase {
     operation1.completionBlock = {
       expectation1.fulfill()
     }
-    operation1.addCondition(condition: MutuallyExclusiveCondition<SleepyAsyncOperation>())
+    operation1.addCondition(MutuallyExclusiveCondition<SleepyAsyncOperation>())
 
 
     let operation2 = SleepyAsyncOperation(interval1: 5, interval2: 5, interval3: 5)
     operation2.completionBlock = {
       expectation2.fulfill()
     }
-    operation2.addCondition(condition: MutuallyExclusiveCondition<SleepyAsyncOperation>())
+    operation2.addCondition(MutuallyExclusiveCondition<SleepyAsyncOperation>())
 
     queue.addOperations([operation2, operation1], waitUntilFinished: true)
     waitForExpectations(timeout: 0)
@@ -71,28 +71,28 @@ final class MutuallyExclusiveConditionTests: XCTestCase {
       complete([])
     }
     operation1.completionBlock = { expectation1.fulfill() }
-    operation1.addCondition(condition: MutuallyExclusiveCondition<AdvancedBlockOperation>())
+    operation1.addCondition(MutuallyExclusiveCondition<AdvancedBlockOperation>())
 
     let operation2 = AdvancedBlockOperation { complete in
       text += "B"
       complete([])
     }
     operation2.completionBlock = { expectation2.fulfill() }
-    operation2.addCondition(condition: MutuallyExclusiveCondition<AdvancedBlockOperation>())
+    operation2.addCondition(MutuallyExclusiveCondition<AdvancedBlockOperation>())
 
     let operation3 = AdvancedBlockOperation { complete in
       text += "C"
       complete([])
     }
     operation3.completionBlock = { expectation3.fulfill() }
-    operation3.addCondition(condition: MutuallyExclusiveCondition<AdvancedBlockOperation>())
+    operation3.addCondition(MutuallyExclusiveCondition<AdvancedBlockOperation>())
 
     let operation4 = AdvancedBlockOperation { complete in
       text += "D"
       complete([])
     }
     operation4.completionBlock = { expectation4.fulfill() }
-    operation4.addCondition(condition: MutuallyExclusiveCondition<AdvancedBlockOperation>())
+    operation4.addCondition(MutuallyExclusiveCondition<AdvancedBlockOperation>())
 
     queue1.addOperations([operation1, operation2], waitUntilFinished: true)
     queue2.addOperations([operation3, operation4], waitUntilFinished: true)
@@ -114,7 +114,7 @@ final class MutuallyExclusiveConditionTests: XCTestCase {
       text += "A "
       complete([])
     }
-    operation1.addCondition(condition: MutuallyExclusiveCondition<AdvancedBlockOperation>())
+    operation1.addCondition(MutuallyExclusiveCondition<AdvancedBlockOperation>())
     operation1.completionBlock = {
       expectation1.fulfill()
     }
@@ -123,7 +123,7 @@ final class MutuallyExclusiveConditionTests: XCTestCase {
       text += "B "
       complete([])
     }
-    operation2.addCondition(condition: MutuallyExclusiveCondition<AdvancedBlockOperation>())
+    operation2.addCondition(MutuallyExclusiveCondition<AdvancedBlockOperation>())
     operation2.completionBlock = {
       expectation2.fulfill()
     }
@@ -131,7 +131,7 @@ final class MutuallyExclusiveConditionTests: XCTestCase {
     let operation3 = AdvancedBlockOperation {
       text += "C."
     }
-    operation3.addCondition(condition: MutuallyExclusiveCondition<AdvancedBlockOperation>())
+    operation3.addCondition(MutuallyExclusiveCondition<AdvancedBlockOperation>())
     operation3.completionBlock = {
       expectation3.fulfill()
     }
@@ -156,26 +156,26 @@ final class MutuallyExclusiveConditionTests: XCTestCase {
 
     let operation1 = AdvancedBlockOperation { text += "A " }
     operation1.completionBlock = { expectation1.fulfill() }
-    operation1.addCondition(condition: MutuallyExclusiveCondition<AdvancedBlockOperation>())
+    operation1.addCondition(MutuallyExclusiveCondition<AdvancedBlockOperation>())
 
     let operation2 = AdvancedBlockOperation { text += "B " }
     operation2.completionBlock = { expectation2.fulfill() }
-    operation2.addCondition(condition: MutuallyExclusiveCondition<AdvancedBlockOperation>())
+    operation2.addCondition(MutuallyExclusiveCondition<AdvancedBlockOperation>())
 
     let operation3 = AdvancedBlockOperation { text += "C." }
     operation3.completionBlock = { expectation3.fulfill() }
-    operation3.addCondition(condition: MutuallyExclusiveCondition<AdvancedBlockOperation>())
-    operation3.addCondition(condition: MutuallyExclusiveCondition<XCTest>())
+    operation3.addCondition(MutuallyExclusiveCondition<AdvancedBlockOperation>())
+    operation3.addCondition(MutuallyExclusiveCondition<XCTest>())
 
     let operation4 = AdvancedBlockOperation { text += " 🎉" }
     operation4.completionBlock = { expectation4.fulfill() }
-    operation4.addCondition(condition: MutuallyExclusiveCondition<XCTest>())
+    operation4.addCondition(MutuallyExclusiveCondition<XCTest>())
 
     let operation5 = SleepyAsyncOperation(interval1: 2, interval2: 1, interval3: 2)
     operation5.completionBlock = {
       expectation5.fulfill()
     }
-    operation5.addCondition(condition: MutuallyExclusiveCondition<XCTest>())
+    operation5.addCondition(MutuallyExclusiveCondition<XCTest>())
 
     queue.addOperations([operation1, operation2, operation3, operation4, operation5], waitUntilFinished: false)
     waitForExpectations(timeout: 10)
@@ -194,23 +194,23 @@ final class MutuallyExclusiveConditionTests: XCTestCase {
 
     let operation1 = AdvancedBlockOperation { text += "A " }
     operation1.completionBlock = { expectation1.fulfill() }
-    operation1.addCondition(condition: MutuallyExclusiveCondition<AdvancedBlockOperation>())
+    operation1.addCondition(MutuallyExclusiveCondition<AdvancedBlockOperation>())
 
     let operation2 = AdvancedBlockOperation { text += "B " }
     operation2.completionBlock = { expectation2.fulfill() }
-    operation2.addCondition(condition: MutuallyExclusiveCondition<AdvancedBlockOperation>())
+    operation2.addCondition(MutuallyExclusiveCondition<AdvancedBlockOperation>())
 
     let group1 = GroupOperation(operations: operation1, operation2)
 
     let operation3 = AdvancedBlockOperation { text += "C. " }
     operation3.completionBlock = { expectation3.fulfill() }
-    operation3.addCondition(condition: MutuallyExclusiveCondition<AdvancedBlockOperation>())
-    operation3.addCondition(condition: MutuallyExclusiveCondition<XCTest>())
+    operation3.addCondition(MutuallyExclusiveCondition<AdvancedBlockOperation>())
+    operation3.addCondition(MutuallyExclusiveCondition<XCTest>())
 
     let operation4 = AdvancedBlockOperation { text += "🎉" }
     operation4.completionBlock = { expectation4.fulfill() }
-    operation4.addCondition(condition: MutuallyExclusiveCondition<AdvancedBlockOperation>())
-    operation4.addCondition(condition: MutuallyExclusiveCondition<XCTest>())
+    operation4.addCondition(MutuallyExclusiveCondition<AdvancedBlockOperation>())
+    operation4.addCondition(MutuallyExclusiveCondition<XCTest>())
 
     queue.addOperations([group1, operation3, operation4], waitUntilFinished: false)
     waitForExpectations(timeout: 10)
@@ -228,21 +228,21 @@ final class MutuallyExclusiveConditionTests: XCTestCase {
 
     let operation1 = AdvancedBlockOperation { text += "A " }
     operation1.completionBlock = { expectation1.fulfill() }
-    operation1.addCondition(condition: MutuallyExclusiveCondition<AdvancedBlockOperation>())
+    operation1.addCondition(MutuallyExclusiveCondition<AdvancedBlockOperation>())
 
     let operation2 = AdvancedBlockOperation { text += "B " }
     operation2.completionBlock = { expectation2.fulfill() }
-    operation2.addCondition(condition: MutuallyExclusiveCondition<AdvancedBlockOperation>())
+    operation2.addCondition(MutuallyExclusiveCondition<AdvancedBlockOperation>())
 
     let operation3 = AdvancedBlockOperation { text += "C. " }
     operation3.completionBlock = { expectation3.fulfill() }
-    operation3.addCondition(condition: MutuallyExclusiveCondition<AdvancedBlockOperation>())
-    operation3.addCondition(condition: MutuallyExclusiveCondition<XCTest>())
+    operation3.addCondition(MutuallyExclusiveCondition<AdvancedBlockOperation>())
+    operation3.addCondition(MutuallyExclusiveCondition<XCTest>())
 
     let operation4 = AdvancedBlockOperation { text += "🎉" }
     operation4.completionBlock = { expectation4.fulfill() }
-    operation4.addCondition(condition: MutuallyExclusiveCondition<AdvancedBlockOperation>())
-    operation4.addCondition(condition: MutuallyExclusiveCondition<XCTest>())
+    operation4.addCondition(MutuallyExclusiveCondition<AdvancedBlockOperation>())
+    operation4.addCondition(MutuallyExclusiveCondition<XCTest>())
 
     let group = GroupOperation(operations: operation1, operation2, operation3, operation4)
     group.addCompletionBlock { expectation5.fulfill() }
@@ -259,11 +259,11 @@ final class MutuallyExclusiveConditionTests: XCTestCase {
     let expectationDependency2 = expectation(description: "\(#function)\(#line)")
 
     let dependency1 = AdvancedBlockOperation { text += "1 " }
-    dependency1.addCondition(condition: MutuallyExclusiveCondition<XCTest>())
+    dependency1.addCondition(MutuallyExclusiveCondition<XCTest>())
     dependency1.completionBlock = { expectationDependency1.fulfill() }
 
     let dependency2 = AdvancedBlockOperation { text += "2 " }
-    dependency2.addCondition(condition: MutuallyExclusiveCondition<XCTest>())
+    dependency2.addCondition(MutuallyExclusiveCondition<XCTest>())
     dependency2.completionBlock = { expectationDependency2.fulfill() }
 
     let dependencyCondition1 = DependecyCondition(dependency: dependency1)
@@ -274,13 +274,13 @@ final class MutuallyExclusiveConditionTests: XCTestCase {
 
     let operation1 = AdvancedBlockOperation { text += "A " }
     operation1.completionBlock = { expectation1.fulfill() }
-    operation1.addCondition(condition: MutuallyExclusiveCondition<AdvancedBlockOperation>())
-    operation1.addCondition(condition: dependencyCondition1)
+    operation1.addCondition(MutuallyExclusiveCondition<AdvancedBlockOperation>())
+    operation1.addCondition(dependencyCondition1)
 
     let operation2 = AdvancedBlockOperation { text += "B" }
     operation2.completionBlock = { expectation2.fulfill() }
-    operation2.addCondition(condition: MutuallyExclusiveCondition<AdvancedBlockOperation>())
-    operation2.addCondition(condition: dependencyCondition2)
+    operation2.addCondition(MutuallyExclusiveCondition<AdvancedBlockOperation>())
+    operation2.addCondition(dependencyCondition2)
 
     queue.addOperations([operation1, operation2], waitUntilFinished: false)
     waitForExpectations(timeout: 10)
@@ -307,9 +307,9 @@ final class MutuallyExclusiveConditionTests: XCTestCase {
     let operation3 = AdvancedBlockOperation { text += "C." }
     operation3.completionBlock = { expectation3.fulfill() }
 
-    operation1.addCondition(condition: MutuallyExclusiveCondition<AdvancedBlockOperation>())
-    operation2.addCondition(condition: MutuallyExclusiveCondition<AdvancedBlockOperation>())
-    operation3.addCondition(condition: MutuallyExclusiveCondition<AdvancedBlockOperation>())
+    operation1.addCondition(MutuallyExclusiveCondition<AdvancedBlockOperation>())
+    operation2.addCondition(MutuallyExclusiveCondition<AdvancedBlockOperation>())
+    operation3.addCondition(MutuallyExclusiveCondition<AdvancedBlockOperation>())
 
     XCTAssertEqual(manager.operations.keys.count, 0)
     queue.addOperation(operation1)

@@ -47,9 +47,9 @@ final class NoCancelledDependenciesConditionTests: XCTestCase {
     let operation4 = DelayOperation(interval: 1)
 
     operation1.addDependencies(dependencies: [operation2, operation3])
-    operation1.addCondition(condition: NoCancelledDependeciesCondition())
+    operation1.addCondition(NoCancelledDependeciesCondition())
     operation3.addDependency(operation4)
-    operation3.addCondition(condition: NoCancelledDependeciesCondition()) // this operation will fail
+    operation3.addCondition(NoCancelledDependeciesCondition()) // this operation will fail
 
     operation4.cancel()
 
@@ -84,9 +84,9 @@ final class NoCancelledDependenciesConditionTests: XCTestCase {
     operation4.addCompletionBlock { expectation4.fulfill() }
 
     operation1.addDependencies(dependencies: [operation2, operation3])
-    operation1.addCondition(condition: NoCancelledDependeciesCondition())
+    operation1.addCondition(NoCancelledDependeciesCondition())
     operation3.addDependency(operation4)
-    operation3.addCondition(condition: NoCancelledDependeciesCondition()) // this operation will fail
+    operation3.addCondition(NoCancelledDependeciesCondition()) // this operation will fail
 
     operation4.cancel()
     operation3.cancel() // it's pending and cancelled at the same time
@@ -117,10 +117,10 @@ final class NoCancelledDependenciesConditionTests: XCTestCase {
     let operation4 = DelayOperation(interval: 1)
 
     operation1.addDependencies(dependencies: [operation2, operation3])
-    operation1.addCondition(condition: NoCancelledDependeciesCondition())
-    operation1.addCondition(condition: NoFailedDependenciesCondition())
+    operation1.addCondition(NoCancelledDependeciesCondition())
+    operation1.addCondition(NoFailedDependenciesCondition())
     operation3.addDependency(operation4)
-    operation3.addCondition(condition: NoCancelledDependeciesCondition())
+    operation3.addCondition(NoCancelledDependeciesCondition())
 
     operation4.cancel()
 

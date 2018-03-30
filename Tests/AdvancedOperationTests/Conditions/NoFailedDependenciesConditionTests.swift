@@ -55,7 +55,7 @@ final class NoFailedDependenciesConditionTests: XCTestCase {
     operation3.addCompletionBlock { expectation3.fulfill() }
     operation4.addCompletionBlock { expectation4.fulfill() }
 
-    operation1.addCondition(condition: NoFailedDependenciesCondition())
+    operation1.addCondition(NoFailedDependenciesCondition())
     [operation4, operation3, operation2].then(operation1)
     queue.addOperations([operation1, operation2, operation3, operation4], waitUntilFinished: false)
     waitForExpectations(timeout: 5)
@@ -89,7 +89,7 @@ final class NoFailedDependenciesConditionTests: XCTestCase {
     operation3.addCompletionBlock { expectation3.fulfill() }
     operation4.addCompletionBlock { expectation4.fulfill() }
 
-    operation1.addCondition(condition: NoFailedDependenciesCondition())
+    operation1.addCondition(NoFailedDependenciesCondition())
     [operation4, operation3, operation2].then(operation1)
     queue.addOperations([operation1, operation2, operation3, operation4], waitUntilFinished: false)
     waitForExpectations(timeout: 5)
@@ -123,7 +123,7 @@ final class NoFailedDependenciesConditionTests: XCTestCase {
     operation3.addCompletionBlock { expectation3.fulfill() }
     operation4.addCompletionBlock { expectation4.fulfill() }
 
-    operation1.addCondition(condition: NoFailedDependenciesCondition(ignoreCancellations: true))
+    operation1.addCondition(NoFailedDependenciesCondition(ignoreCancellations: true))
     [operation4, operation3, operation2].then(operation1)
     queue.addOperations([operation1, operation2, operation3, operation4], waitUntilFinished: false)
     waitForExpectations(timeout: 10)
@@ -157,7 +157,7 @@ final class NoFailedDependenciesConditionTests: XCTestCase {
     operation3.addCompletionBlock { expectation3.fulfill() }
     operation4.addCompletionBlock { expectation4.fulfill() }
 
-    operation1.addCondition(condition: NoFailedDependenciesCondition(ignoreCancellations: true))
+    operation1.addCondition(NoFailedDependenciesCondition(ignoreCancellations: true))
     [operation4, operation3, operation2].then(operation1)
     queue.addOperations([operation1, operation2, operation3, operation4], waitUntilFinished: false)
     waitForExpectations(timeout: 10)
@@ -189,7 +189,7 @@ final class NoFailedDependenciesConditionTests: XCTestCase {
     operation3.addCompletionBlock { expectation3.fulfill() }
     operation4.addCompletionBlock { expectation4.fulfill() }
 
-    operation1.addCondition(condition: NegatedCondition(condition: NoFailedDependenciesCondition()))
+    operation1.addCondition(NegatedCondition(condition: NoFailedDependenciesCondition()))
     [operation4, operation3, operation2].then(operation1)
     queue.addOperations([operation1, operation2, operation3, operation4], waitUntilFinished: false)
     waitForExpectations(timeout: 5)
