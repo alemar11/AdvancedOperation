@@ -26,41 +26,42 @@ import Foundation
 public protocol AdvancedOperationQueueDelegate: class {
   func operationQueue(operationQueue: AdvancedOperationQueue, willAddOperation operation: Operation)
   func operationQueue(operationQueue: AdvancedOperationQueue, didAddOperation operation: Operation)
-  
+
   func operationQueue(operationQueue: AdvancedOperationQueue, operationWillExecute operation: Operation)
   func operationQueue(operationQueue: AdvancedOperationQueue, operationDidFinish operation: Operation, withErrors errors: [Error])
   func operationQueue(operationQueue: AdvancedOperationQueue, operationDidCancel operation: Operation, withErrors errors: [Error])
-  
+
   func operationQueue(operationQueue: AdvancedOperationQueue, operationWillFinish operation: Operation, withErrors errors: [Error])
   func operationQueue(operationQueue: AdvancedOperationQueue, operationWillCancel operation: Operation, withErrors errors: [Error])
 }
 
 public extension AdvancedOperationQueueDelegate {
-  
+
   func operationQueue(operationQueue: AdvancedOperationQueue, willAddOperation operation: Operation) {}
   func operationQueue(operationQueue: AdvancedOperationQueue, operationWillExecute operation: Operation) {}
 }
 
 /// `AdvancedOperationQueue` is an `OperationQueue` subclass that implements a large number of "extra features" related to the `Operation` class.
 open class AdvancedOperationQueue: OperationQueue {
-  
+
   public weak var delegate: AdvancedOperationQueueDelegate?
-  
+
   private let exclusivityManager: ExclusivityManager
-  
+
   public init(exclusivityManager: ExclusivityManager = .sharedInstance) {
     self.exclusivityManager = exclusivityManager
   }
-  
+
+  // swiftlint:disable:next cyclomatic_complexity
   open override func addOperation (_ operation: Operation) {
-    
+
     if let operation = operation as? AdvancedOperation { /// AdvancedOperation
-      
+
       let observer = BlockObserver(
         willExecute: { [weak self] (operation) in
           guard let `self` = self else { return }
           self.delegate?.operationQueue(operationQueue: self, operationWillExecute: operation)
-          
+
         }, didProduce: { [weak self] in
           guard let `self` = self else { return }
           self.addOperation($1)
@@ -68,23 +69,23 @@ open class AdvancedOperationQueue: OperationQueue {
         }, willCancel: { [weak self] (operation, errors) in
           guard let `self` = self else { return }
           self.delegate?.operationQueue(operationQueue: self, operationWillCancel: operation, withErrors: errors)
-          
+
         }, didCancel: { [weak self] (operation, errors) in
           guard let `self` = self else { return }
           self.delegate?.operationQueue(operationQueue: self, operationDidCancel: operation, withErrors: errors)
-          
+
         }, willFinish: { [weak self] (operation, errors) in
           guard let `self` = self else { return }
           self.delegate?.operationQueue(operationQueue: self, operationWillFinish: operation, withErrors: errors)
-          
+
         }, didFinish: { [weak self] (operation, errors) in
           guard let `self` = self else { return }
           self.delegate?.operationQueue(operationQueue: self, operationDidFinish: operation, withErrors: errors)
-          
+
       })
-      
+
       operation.addObserver(observer)
-      
+
       // Conditions
       if !operation.conditions.isEmpty {
 
@@ -106,28 +107,28 @@ open class AdvancedOperationQueue: OperationQueue {
       }
 
     } else { /// Operation
-      
+
       // For regular `Operation`s, we'll manually call out to the queue's delegate we don't want
       // to just capture "operation" because that would lead to the operation strongly referencing itself and that's the pure definition of a memory leak.
       operation.addCompletionBlock(asEndingBlock: false) { [weak self, weak operation] in
         guard let queue = self, let operation = operation else { return }
-        
+
         queue.delegate?.operationQueue(operationQueue: queue, operationDidFinish: operation, withErrors: [])
       }
     }
-    
+
     delegate?.operationQueue(operationQueue: self, willAddOperation: operation)
     super.addOperation(operation)
     delegate?.operationQueue(operationQueue: self, didAddOperation: operation)
-    
+
   }
-  
+
   open override func addOperations(_ operations: [Operation], waitUntilFinished wait: Bool) {
-    
+
     for operation in operations {
       addOperation(operation)
     }
-    
+
     if wait {
       //TODO: use this method?
       //waitUntilAllOperationsAreFinished()
@@ -136,5 +137,5 @@ open class AdvancedOperationQueue: OperationQueue {
       }
     }
   }
-  
+
 }

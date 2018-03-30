@@ -1,4 +1,4 @@
-// 
+//
 // AdvancedOperation
 //
 // Copyright © 2016-2018 Tinrobots.
@@ -25,7 +25,7 @@ import XCTest
 @testable import AdvancedOperation
 
 class NegatedConditionTests: XCTestCase {
-    
+
   func testIsMutuallyExclusive() {
     XCTAssertFalse(NegatedCondition(condition: NoFailedDependenciesCondition()).isMutuallyExclusive)
   }
@@ -97,5 +97,5 @@ class NegatedConditionTests: XCTestCase {
     waitForExpectations(timeout: 5)
     XCTAssertFalse(operation1.failed)
   }
-  
+
 }

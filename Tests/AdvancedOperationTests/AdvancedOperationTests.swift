@@ -268,7 +268,7 @@ final class AdvancedOperationTests: XCTestCase {
 
     operation.cancel()
     operation.start()
-    
+
     XCTAssertTrue(operation.isCancelled)
     XCTAssertTrue(operation.isFinished)
 

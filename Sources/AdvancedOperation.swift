@@ -199,7 +199,7 @@ open class AdvancedOperation: Operation {
   public final override func start() {
 
     // Do not start if it's finishing
-    guard (state != .finishing) else {
+    guard state != .finishing else {
       return
     }
 
@@ -368,7 +368,7 @@ open class AdvancedOperation: Operation {
 
   open override func addDependency(_ operation: Operation) {
     assert(!isExecuting, "Dependencies cannot be modified after execution has begun.")
-    
+
     super.addDependency(operation)
   }
 

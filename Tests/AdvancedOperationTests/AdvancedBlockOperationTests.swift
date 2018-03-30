@@ -143,7 +143,7 @@ final class AdvancedBlockOperationTests: XCTestCase {
       operation = AdvancedBlockOperation(block: {})
       object = NSObject()
     }
-    
+
     XCTAssertNil(weakObject)
   }
 

@@ -29,13 +29,13 @@ public typealias OperationBlock = (@escaping ([Error]) -> Void) -> Void
 
 /// A sublcass of `AdvancedOperation` to execute a closure.
 public final class AdvancedBlockOperation: AdvancedOperation {
-  
+
   // MARK: - Private Properties
-  
+
   private var block: OperationBlock
-  
+
   // MARK: - Initializers
-  
+
   /// The designated initializer.
   ///
   /// - Parameters:
@@ -44,8 +44,7 @@ public final class AdvancedBlockOperation: AdvancedOperation {
     self.block = block
     super.init()
   }
-  
-  
+
   /// A convenience initializer.
   ///
   /// - Parameters:
@@ -59,16 +58,16 @@ public final class AdvancedBlockOperation: AdvancedOperation {
       }
     })
   }
-  
+
   // MARK: - Overrides
-  
+
   public override func main() {
     guard !isCancelled else { finish(); return }
-    
+
     block { [weak self] errors in
       self?.finish(errors: errors)
     }
-    
+
   }
-  
+
 }

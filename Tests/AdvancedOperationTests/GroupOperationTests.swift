@@ -262,7 +262,7 @@ final class GroupOperationTests: XCTestCase {
     let exepectation2 = expectation(description: "\(#function)\(#line)")
     let exepectation3 = expectation(description: "\(#function)\(#line)")
     let exepectation4 = expectation(description: "\(#function)\(#line)")
-    
+
     let operation1 = BlockOperation(block: { } )
     let operation2 = BlockOperation(block: { sleep(2) } )
     let group1 = GroupOperation(operations: [operation1, operation2])

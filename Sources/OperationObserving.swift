@@ -59,4 +59,5 @@ public protocol OperationDidProduceOperationObserving: OperationObservingType {
 }
 
 /// The protocol that types may implement if they wish to be notified of significant operation lifecycle events.
+// swiftlint:disable:next line_length
 public protocol OperationObserving: OperationWillExecuteObserving, OperationWillFinishObserving, OperationDidFinishObserving, OperationWillCancelObserving, OperationDidCancelObserving, OperationDidProduceOperationObserving { }

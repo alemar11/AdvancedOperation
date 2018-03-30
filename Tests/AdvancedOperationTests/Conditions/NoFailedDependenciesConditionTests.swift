@@ -25,7 +25,7 @@ import XCTest
 @testable import AdvancedOperation
 
 final class NoFailedDependenciesConditionTests: XCTestCase {
-  
+
   func testIsMutuallyExclusive() {
     XCTAssertFalse(NoFailedDependenciesCondition().isMutuallyExclusive)
   }
@@ -195,5 +195,5 @@ final class NoFailedDependenciesConditionTests: XCTestCase {
     waitForExpectations(timeout: 5)
     XCTAssertFalse(operation1.failed)
   }
-  
+
 }
