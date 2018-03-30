@@ -196,8 +196,8 @@ final class AdvancedOperationTests: XCTestCase {
     XCTAssertTrue(operation.isCancelled)
 
     operation.start()
-    XCTAssertFalse(operation.isExecuting, "--> \(operation.state)")  //TODO: travis error https://travis-ci.org/tinrobots/AdvancedOperation/jobs/357734981
-    XCTAssertTrue(operation.isCancelled)
+    XCTAssertFalse(operation.isExecuting, "Should not executing for state: \(operation.state)")
+    XCTAssertTrue(operation.isCancelled, "Should be cancelled for state: \(operation.state)")
 
     // Those errors will be ignored since the operation is already cancelled
     operation.cancel(error: MockError.test)

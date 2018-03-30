@@ -130,8 +130,7 @@ open class AdvancedOperationQueue: OperationQueue {
     }
 
     if wait {
-      //TODO: use this method?
-      //waitUntilAllOperationsAreFinished()
+      // waitUntilAllOperationsAreFinished()
       for operation in operations {
         operation.waitUntilFinished()
       }
