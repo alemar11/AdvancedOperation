@@ -339,7 +339,7 @@ open class AdvancedOperation: Operation {
     }
   }
 
- // MARK: - Produced Operations
+  // MARK: - Produced Operations
 
   /// Produce another operation on the same `AdvancedOperationQueue` that this instance is on.
   ///
@@ -422,7 +422,9 @@ extension AdvancedOperation {
         } .flatMap { $0 }
 
       if operation.isCancelled {
-        errors.append(contentsOf: operation.errors) //TODO better error
+        var aggregatedErrors = operation.errors
+        aggregatedErrors.append(contentsOf: [NSError(domain: "\(identifier).\(type(of: self))", code: OperationErrorCode.conditionFailed.rawValue, userInfo: nil)])
+        errors.append(aggregatedErrors as! Error)
       }
       completion(errors)
     }
