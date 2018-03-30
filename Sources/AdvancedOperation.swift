@@ -221,6 +221,7 @@ open class AdvancedOperation: Operation {
 
   private func _cancel(error: Error? = nil) {
     let canBeCancelled = lock.synchronized { () -> Bool in
+      guard !_finishing && !isFinished else { return false } // do not cancel an operation finishing/ed
       guard !_cancelling && !isCancelled else { return false }
       _cancelling = true
       return _cancelling
@@ -269,6 +270,9 @@ open class AdvancedOperation: Operation {
   /// Subclass this method to know when the operation will start executing.
   open func operationWillExecute() { }
 
+  /// Subclass this method to know when the operation has produced another `Operation`.
+  open func operationDidProduceOperation(_ operation: Operation) { }
+
   /// Subclass this method to know when the operation will be cancelled.
   open func operationWillCancel(errors: [Error]) { }
 
@@ -301,6 +305,7 @@ open class AdvancedOperation: Operation {
   }
 
   private func didProduceOperation(_ operation: Operation) {
+    operationDidProduceOperation(operation)
     for observer in didProduceOperationObservers {
       observer.operation(operation: self, didProduce: operation)
     }
