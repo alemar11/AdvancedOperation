@@ -313,6 +313,7 @@ final class AdvancedOperationTests: XCTestCase {
     operation.start()
     operation.cancel()
     operation.cancel(error: MockError.cancelled(date: Date()))
+    
     waitForExpectations(timeout: 10)
 
     //sleep(5) // make sure there are no other effects
@@ -322,6 +323,28 @@ final class AdvancedOperationTests: XCTestCase {
     XCTAssertEqual(observer.didFinishCount, 1)
     XCTAssertEqual(observer.willCancelCount, 1)
     XCTAssertEqual(observer.didCancelCount, 1)
+    XCTAssertEqual(operation.errors.count, 0)
+  }
+
+  func testObserversWithOperationProduction() {
+    let expectation1 = expectation(description: "\(#function)\(#line)")
+    let observer = MockObserver()
+    let operation = SleepyAsyncOperation()
+    operation.addObserver(observer: observer)
+
+    operation.completionBlock = { expectation1.fulfill() }
+    operation.produceOperation(BlockOperation { })
+    operation.produceOperation(BlockOperation { })
+    operation.start()
+
+    waitForExpectations(timeout: 10)
+
+    XCTAssertEqual(observer.willExecutetCount, 1)
+    XCTAssertEqual(observer.didProduceCount, 2)
+    XCTAssertEqual(observer.willFinishCount, 1)
+    XCTAssertEqual(observer.didFinishCount, 1)
+    XCTAssertEqual(observer.willCancelCount, 0)
+    XCTAssertEqual(observer.didCancelCount, 0)
     XCTAssertEqual(operation.errors.count, 0)
   }
 
