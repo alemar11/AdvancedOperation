@@ -253,7 +253,8 @@ final class MutuallyExclusiveConditionTests: XCTestCase {
 
   func testMultipleMutuallyExclusiveConditionsAndDependencies() {
     let queue = AdvancedOperationQueue()
-    var text = ""
+    var text1 = ""
+    var text2 = ""
 
     let expectationDependency1 = expectation(description: "\(#function)\(#line)")
     let expectationDependency2 = expectation(description: "\(#function)\(#line)")
@@ -284,7 +285,8 @@ final class MutuallyExclusiveConditionTests: XCTestCase {
 
     queue.addOperations([operation1, operation2], waitUntilFinished: false)
     waitForExpectations(timeout: 10)
-    XCTAssertEqual(text, "1 A 2 B")
+    XCTAssertEqual(text1, "1 2")
+    XCTAssertEqual(text1, "A B")
   }
 
   func testExclusivityManager() {

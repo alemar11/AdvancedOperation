@@ -357,7 +357,7 @@ open class AdvancedOperation: Operation {
 
  // MARK: - Produced Operations
 
-  /// Produce another operation on the same queue that this instance is on.
+  /// Produce another operation on the same `AdvancedOperationQueue` that this instance is on.
   ///
   /// - Parameter operation: an `Operation` instance.
   final func produceOperation(_ operation: Operation) {
@@ -376,7 +376,7 @@ open class AdvancedOperation: Operation {
 
   public private(set) var conditions = [OperationCondition]() //TODO : set?
 
-  /// Indicate to the operation that it can proceed with evaluating conditions (if it's not cancelled or finished).
+  /// Indicate to the operation running on a `AdvancedOperationQueue` that it can proceed with evaluating conditions (if it's not cancelled or finished).
   internal func willEnqueue() {
     guard !isCancelled else { return } // if it's cancelled, there's no point in evaluating the conditions
 
