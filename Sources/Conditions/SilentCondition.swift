@@ -26,8 +26,6 @@ import Foundation
 /// A simple condition that causes another condition to not enqueue its dependency.
 public struct SilentCondition<T: OperationCondition>: OperationCondition {
 
-  //public var name: String { return "Silent<\(condition.name)>" }
-
   let condition: T
 
   init(condition: T) {

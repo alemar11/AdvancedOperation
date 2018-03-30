@@ -1,4 +1,4 @@
-//
+// 
 // AdvancedOperation
 //
 // Copyright © 2016-2018 Tinrobots.
@@ -24,15 +24,17 @@
 import XCTest
 @testable import AdvancedOperation
 
-class OperationConditionTests: XCTestCase {
-
-  func testDependecy() {
+class SilentConditionTests: XCTestCase {
+    
+  func testSilentCondition() {
     let queue = AdvancedOperationQueue()
 
     let expectation1 = expectation(description: "\(#function)\(#line)")
     let expectation2 = expectation(description: "\(#function)\(#line)")
     let expectation3 = expectation(description: "\(#function)\(#line)")
     let expectation4 = expectation(description: "\(#function)\(#line)")
+
+    expectation4.isInverted = true
 
     let operation1 = SleepyOperation()
     operation1.completionBlock = { expectation1.fulfill() }
@@ -50,10 +52,12 @@ class OperationConditionTests: XCTestCase {
     let dependencyCondition2 = DependecyCondition(dependency: dependecy2)
 
     operation1.addCondition(dependencyCondition1)
-    operation2.addCondition(dependencyCondition2)
+    operation2.addCondition(SilentCondition(condition: dependencyCondition2))
 
     queue.addOperations([operation1, operation2], waitUntilFinished: false)
     waitForExpectations(timeout: 10)
   }
 
+  //TODO: add a more complicated case
+    
 }
