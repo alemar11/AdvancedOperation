@@ -133,10 +133,10 @@ final internal class FailingAsyncOperation: AdvancedOperation {
 final internal class MockObserver: OperationObserving {
 
   var willExecutetCount = 0
-  var didProduceCount = 0 //TODO: add tests
-  var willFinishCount = 0 //TODO: add tests
+  var didProduceCount = 0
+  var willFinishCount = 0
   var didFinishCount = 0
-  var willCancelCount = 0 //TODO: add tests
+  var willCancelCount = 0
   var didCancelCount = 0
 
   func operationWillExecute(operation: Operation) {
