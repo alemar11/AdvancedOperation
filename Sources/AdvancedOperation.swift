@@ -109,6 +109,8 @@ open class AdvancedOperation: Operation {
 
   // MARK: - Properties
 
+  public private(set) var errors = [Error]()
+
   /// Returns `true` if the `AdvancedOperation` failed due to errors.
   public var failed: Bool { return lock.synchronized { !errors.isEmpty } }
 
@@ -172,6 +174,10 @@ open class AdvancedOperation: Operation {
     return observers.compactMap { $0 as? OperationWillExecuteObserving }
   }
 
+  internal var didProduceOperationObservers: [OperationDidProduceOperationObserving] {
+    return observers.compactMap { $0 as? OperationDidProduceOperationObserving }
+  }
+
   internal var willCancelObservers: [OperationWillCancelObserving] {
     return observers.compactMap { $0 as? OperationWillCancelObserving }
   }
@@ -187,10 +193,6 @@ open class AdvancedOperation: Operation {
   internal var didFinishObservers: [OperationDidFinishObserving] {
     return observers.compactMap { $0 as? OperationDidFinishObserving }
   }
-
-  // MARK: - Errors
-
-  public private(set) var errors = [Error]()
 
   // MARK: - Execution
 
@@ -278,13 +280,6 @@ open class AdvancedOperation: Operation {
     didFinish(errors: updatedErrors)
   }
 
-  /// Produce another operation on the same queue that this instance is on.
-  ///
-  /// - Parameter operation: an `Operation` instance.
-  final func produceOperation(_ operation: Operation) {
-    //didProduceOperationObservers { $0.operation(self, didProduceOperation: operation) } // TODO
-  }
-
   // MARK: - Overridables // TODO
 
   open func operationWillExecute() {
@@ -307,7 +302,7 @@ open class AdvancedOperation: Operation {
     //fatalError("\(type(of: self)) operationDidFinish.")
   }
 
-  // MARK: - Observer
+  // MARK: - Observers
 
   /// Add an observer to the to the operation, can only be done prior to the operation starting.
   ///
@@ -323,6 +318,12 @@ open class AdvancedOperation: Operation {
     operationWillExecute()
     for observer in willExecuteObservers {
       observer.operationWillExecute(operation: self)
+    }
+  }
+
+  private func didProduceOperation(_ operation: Operation) {
+    for observer in didProduceOperationObservers {
+      observer.operation(operation: self, didProduce: operation)
     }
   }
 
@@ -352,6 +353,15 @@ open class AdvancedOperation: Operation {
     for observer in didCancelObservers {
       observer.operationDidCancel(operation: self, withErrors: errors)
     }
+  }
+
+ // MARK: - Produced Operations
+
+  /// Produce another operation on the same queue that this instance is on.
+  ///
+  /// - Parameter operation: an `Operation` instance.
+  final func produceOperation(_ operation: Operation) {
+    didProduceOperation(operation)
   }
 
   // MARK: - Dependencies

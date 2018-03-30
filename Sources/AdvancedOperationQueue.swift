@@ -52,14 +52,19 @@ open class AdvancedOperationQueue: OperationQueue {
     self.exclusivityManager = exclusivityManager
   }
   
-  open override func addOperation(_ operation: Operation) {
+  open override func addOperation (_ operation: Operation) {
     
     if let operation = operation as? AdvancedOperation { /// AdvancedOperation
       
-      let observer = BlockObserver(willExecute: { [weak self] (operation) in
-        guard let `self` = self else { return }
-        self.delegate?.operationQueue(operationQueue: self, operationWillExecute: operation)
-        
+      let observer = BlockObserver(
+        willExecute: { [weak self] (operation) in
+          guard let `self` = self else { return }
+          self.delegate?.operationQueue(operationQueue: self, operationWillExecute: operation)
+          
+        }, didProduce: { [weak self] in
+            guard let `self` = self else { return }
+            self.addOperation($1)
+
         }, willCancel: { [weak self] (operation, errors) in
           guard let `self` = self else { return }
           self.delegate?.operationQueue(operationQueue: self, operationWillCancel: operation, withErrors: errors)
@@ -83,8 +88,6 @@ open class AdvancedOperationQueue: OperationQueue {
       ///////////////
       if !operation.conditions.isEmpty {
         
-        // Extract any dependencies needed by this operation.
-        // TODO: to be implemented
         let dependencies = operation.conditions.compactMap { $0.dependency(for: operation) }
         for dependency in dependencies {
           operation.addDependency(dependency)

@@ -53,8 +53,10 @@ public protocol OperationDidCancelObserving: OperationObservingType {
   func operationDidCancel(operation: Operation, withErrors errors: [Error])
 }
 
-/// The protocol that types may implement if they wish to be notified of significant operation lifecycle events.
-public protocol OperationObserving: OperationWillExecuteObserving, OperationWillFinishObserving, OperationDidFinishObserving, OperationWillCancelObserving, OperationDidCancelObserving {
-  /// An unique identifier
-  var identifier: String { get set }
+public protocol OperationDidProduceOperationObserving: OperationObservingType {
+  /// Invoked as an `Operation` produces another `Operation` during execution.
+  func operation(operation: Operation, didProduce: Operation)
 }
+
+/// The protocol that types may implement if they wish to be notified of significant operation lifecycle events.
+public protocol OperationObserving: OperationWillExecuteObserving, OperationWillFinishObserving, OperationDidFinishObserving, OperationWillCancelObserving, OperationDidCancelObserving, OperationDidProduceOperationObserving { }

@@ -131,8 +131,9 @@ final internal class FailingAsyncOperation: AdvancedOperation {
 // MARK: - OperationObserving
 
 final internal class MockObserver: OperationObserving {
-  var identifier = UUID().uuidString
+
   var willExecutetCount = 0
+  var didProduceCount = 0 //TODO: add tests
   var willFinishCount = 0 //TODO: add tests
   var didFinishCount = 0
   var willCancelCount = 0 //TODO: add tests
@@ -161,6 +162,10 @@ final internal class MockObserver: OperationObserving {
   func operationWillCancel(operation: Operation, withErrors errors: [Error]) {
     assert(!operation.isFinished)
     willCancelCount += 1
+  }
+
+  func operation(operation: Operation, didProduce: Operation) {
+    didProduceCount += 1
   }
 
 }

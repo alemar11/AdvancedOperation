@@ -35,16 +35,18 @@ public struct BlockObserver: OperationObserving {
   private let didFinishHandler: ((AdvancedOperation, [Error]) -> Void)?
   private let willCancelHandler: ((AdvancedOperation, [Error]) -> Void)?
   private let didCancelHandler: ((AdvancedOperation, [Error]) -> Void)?
+  private let didProduceOperationHandler: ((Operation, Operation) -> Void)?
 
   public init (
     willExecute: ((AdvancedOperation) -> Void)? = nil,
+    didProduce: ((Operation, Operation) -> Void)? = nil,
     willCancel: ((AdvancedOperation, [Error]) -> Void)? = nil,
     didCancel: ((AdvancedOperation, [Error]) -> Void)? = nil,
     willFinish: ((AdvancedOperation, [Error]) -> Void)? = nil,
     didFinish: ((AdvancedOperation, [Error]) -> Void)? = nil
     ) {
     self.willExecuteHandler = willExecute
-
+    self.didProduceOperationHandler = didProduce
     self.willFinishHandler = willFinish
     self.didFinishHandler = didFinish
 
@@ -73,6 +75,10 @@ public struct BlockObserver: OperationObserving {
 
   public func operationDidCancel(operation: Operation, withErrors errors: [Error]) {
     didCancelHandler?(operation as! AdvancedOperation, errors)
+  }
+
+  public func operation(operation: Operation, didProduce producedOperation: Operation) {
+    didProduceOperationHandler?(operation, producedOperation)
   }
   // swiftlint:enable force_cast
 
