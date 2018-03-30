@@ -263,7 +263,7 @@ final class MutuallyExclusiveConditionTests: XCTestCase {
     dependency1.addCondition(MutuallyExclusiveCondition<XCTest>())
     dependency1.completionBlock = { expectationDependency1.fulfill() }
 
-    let dependency2 = AdvancedBlockOperation { text1 += "2 " }
+    let dependency2 = AdvancedBlockOperation { text1 += "2" }
     dependency2.addCondition(MutuallyExclusiveCondition<XCTest>())
     dependency2.completionBlock = { expectationDependency2.fulfill() }
 
@@ -286,7 +286,7 @@ final class MutuallyExclusiveConditionTests: XCTestCase {
     queue.addOperations([operation1, operation2], waitUntilFinished: false)
     waitForExpectations(timeout: 10)
     XCTAssertEqual(text1, "1 2")
-    XCTAssertEqual(text1, "A B")
+    XCTAssertEqual(text2, "A B")
   }
 
   func testExclusivityManager() {
