@@ -473,7 +473,7 @@ final class GroupOperationTests: XCTestCase {
     let exepectation1 = expectation(description: "\(#function)\(#line)")
 
     let observer = MockObserver()
-    group.addObserver(observer: observer)
+    group.addObserver(observer)
 
     group.addCompletionBlock { exepectation1.fulfill() }
     group.start()

@@ -83,7 +83,7 @@ open class AdvancedOperationQueue: OperationQueue {
           
       })
       
-      operation.addObserver(observer: observer)
+      operation.addObserver(observer)
       
       // Conditions
       if !operation.conditions.isEmpty {

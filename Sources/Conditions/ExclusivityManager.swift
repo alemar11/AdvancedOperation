@@ -48,7 +48,7 @@ final public class ExclusivityManager {
     let didFinishObserver = BlockObserver {  [unowned self] (currentOperation, errors) in
       self.removeOperation(currentOperation, category: category)
     }
-    operation.addObserver(observer: didFinishObserver)
+    operation.addObserver(didFinishObserver)
 
     var operationsWithThisCategory = operations[category] ?? []
     let previous = operationsWithThisCategory.last

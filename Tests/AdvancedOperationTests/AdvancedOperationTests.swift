@@ -161,7 +161,7 @@ final class AdvancedOperationTests: XCTestCase {
     XCTAssertTrue(operation.isReady)
 
     for _ in 1...100 {
-      operation.addObserver(observer: BlockObserver())
+      operation.addObserver(BlockObserver())
     }
 
     operation.start()
@@ -284,7 +284,7 @@ final class AdvancedOperationTests: XCTestCase {
     let expectation1 = expectation(description: "\(#function)\(#line)")
     let observer = MockObserver()
     let operation = SleepyAsyncOperation()
-    operation.addObserver(observer: observer)
+    operation.addObserver(observer)
 
     operation.completionBlock = { expectation1.fulfill() }
 
@@ -306,14 +306,14 @@ final class AdvancedOperationTests: XCTestCase {
     let expectation1 = expectation(description: "\(#function)\(#line)")
     let observer = MockObserver()
     let operation = SleepyAsyncOperation()
-    operation.addObserver(observer: observer)
+    operation.addObserver(observer)
 
     operation.completionBlock = { expectation1.fulfill() }
 
     operation.start()
     operation.cancel()
     operation.cancel(error: MockError.cancelled(date: Date()))
-    
+
     waitForExpectations(timeout: 10)
 
     //sleep(5) // make sure there are no other effects
@@ -330,7 +330,7 @@ final class AdvancedOperationTests: XCTestCase {
     let expectation1 = expectation(description: "\(#function)\(#line)")
     let observer = MockObserver()
     let operation = SleepyAsyncOperation()
-    operation.addObserver(observer: observer)
+    operation.addObserver(observer)
 
     operation.completionBlock = { expectation1.fulfill() }
     operation.produceOperation(BlockOperation { })

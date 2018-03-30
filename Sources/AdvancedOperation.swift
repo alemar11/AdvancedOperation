@@ -308,7 +308,7 @@ open class AdvancedOperation: Operation {
   ///
   /// - Parameter observer: the observer to add.
   /// - Requires: `self must not have started.
-  public func addObserver(observer: OperationObservingType) { //TODO: rename in addObserver(_ observer: OperationObservingType)
+  public func addObserver(_ observer: OperationObservingType) {
     assert(!isExecuting, "Cannot modify observers after execution has begun.")
 
     observers.append(observer)

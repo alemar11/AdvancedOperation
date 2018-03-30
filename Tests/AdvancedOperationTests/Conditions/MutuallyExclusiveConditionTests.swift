@@ -285,7 +285,7 @@ final class MutuallyExclusiveConditionTests: XCTestCase {
       sleep(2) // wait a bit longer...
       expectation4.fulfill()
     })
-    operation3.addObserver(observer: finalObserver)
+    operation3.addObserver(finalObserver)
 
     XCTAssertEqual(manager.operations.keys.count, 1)
     guard let key = manager.operations.keys.first else {
