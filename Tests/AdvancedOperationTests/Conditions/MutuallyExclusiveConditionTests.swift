@@ -259,11 +259,11 @@ final class MutuallyExclusiveConditionTests: XCTestCase {
     let expectationDependency1 = expectation(description: "\(#function)\(#line)")
     let expectationDependency2 = expectation(description: "\(#function)\(#line)")
 
-    let dependency1 = AdvancedBlockOperation { text += "1 " }
+    let dependency1 = AdvancedBlockOperation { text1 += "1 " }
     dependency1.addCondition(MutuallyExclusiveCondition<XCTest>())
     dependency1.completionBlock = { expectationDependency1.fulfill() }
 
-    let dependency2 = AdvancedBlockOperation { text += "2 " }
+    let dependency2 = AdvancedBlockOperation { text1 += "2 " }
     dependency2.addCondition(MutuallyExclusiveCondition<XCTest>())
     dependency2.completionBlock = { expectationDependency2.fulfill() }
 
@@ -273,12 +273,12 @@ final class MutuallyExclusiveConditionTests: XCTestCase {
     let expectation1 = expectation(description: "\(#function)\(#line)")
     let expectation2 = expectation(description: "\(#function)\(#line)")
 
-    let operation1 = AdvancedBlockOperation { text += "A " }
+    let operation1 = AdvancedBlockOperation { text2 += "A " }
     operation1.completionBlock = { expectation1.fulfill() }
     operation1.addCondition(MutuallyExclusiveCondition<AdvancedBlockOperation>())
     operation1.addCondition(dependencyCondition1)
 
-    let operation2 = AdvancedBlockOperation { text += "B" }
+    let operation2 = AdvancedBlockOperation { text2 += "B" }
     operation2.completionBlock = { expectation2.fulfill() }
     operation2.addCondition(MutuallyExclusiveCondition<AdvancedBlockOperation>())
     operation2.addCondition(dependencyCondition2)
