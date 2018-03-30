@@ -26,14 +26,14 @@ import XCTest
 
 final class AdvancedOperationTests: XCTestCase {
 
-//  func testStress() {
-//    for i in 1...100 {
-//      print(i)
-//      //testStart()
-//      //testMultipleCancel()
-//      testMultipleStartsAndCancels()
-//    }
-//  }
+  //  func testStress() {
+  //    for i in 1...100 {
+  //      print(i)
+  //      //testStart()
+  //      //testMultipleCancel()
+  //      testMultipleStartsAndCancels()
+  //    }
+  //  }
 
   func testStart() {
     let expectation1 = expectation(description: "\(#function)\(#line)")
@@ -399,6 +399,57 @@ final class AdvancedOperationTests: XCTestCase {
     operation1.start()
     waitForExpectations(timeout: 5)
     XCTAssertFalse(operation1.isReady) // its state is finished
+  }
+
+  func testSubclassableObservers() {
+    let expectation1 = expectation(description: "\(#function)\(#line)")
+    let expectation2 = expectation(description: "\(#function)\(#line)")
+    let expectation3 = expectation(description: "\(#function)\(#line)")
+    let expectation4 = expectation(description: "\(#function)\(#line)")
+    let expectation5 = expectation(description: "\(#function)\(#line)")
+    let expectation6 = expectation(description: "\(#function)\(#line)")
+
+    let operation1 = SelfObservigOperation()
+    let operation2 = AdvancedBlockOperation { }
+    let error = MockError.test
+
+    operation1.willExecuteHandler = {
+      expectation1.fulfill()
+    }
+
+    operation1.didProduceOperationHandler = { operation in
+      XCTAssertTrue(operation2 === operation)
+      expectation2.fulfill()
+    }
+
+    operation1.willCancelHandler = { errors in
+      XCTAssertNotNil(errors)
+      XCTAssertEqual(errors.count, 1)
+      expectation3.fulfill()
+    }
+
+    operation1.didCancelHandler = { errors in
+      XCTAssertNotNil(errors)
+      XCTAssertEqual(errors.count, 1)
+      expectation4.fulfill()
+    }
+
+    operation1.willFinishHandler = { errors in
+      XCTAssertNotNil(errors)
+      XCTAssertEqual(errors.count, 1)
+      expectation5.fulfill()
+    }
+
+    operation1.didFinishHandler = { errors in
+      XCTAssertNotNil(errors)
+      XCTAssertEqual(errors.count, 1)
+      expectation6.fulfill()
+    }
+
+    operation1.start()
+    operation1.produceOperation(operation2)
+    operation1.cancel(error: error)
+    waitForExpectations(timeout: 10)
   }
 
 }

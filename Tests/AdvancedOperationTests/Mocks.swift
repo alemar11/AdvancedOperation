@@ -52,6 +52,53 @@ internal enum MockError: Swift.Error, Equatable {
 
 // MARK: - AdvancedOperation
 
+final internal class SelfObservigOperation: AdvancedOperation {
+
+  var willExecuteHandler: (() -> Void)? = nil
+  var didProduceOperationHandler: ((Operation) -> Void)? = nil
+  var willCancelHandler: (([Error]) -> Void)? = nil
+  var didCancelHandler: (([Error]) -> Void)? = nil
+  var willFinishHandler: (([Error]) -> Void)? = nil
+  var didFinishHandler: (([Error]) -> Void)? = nil
+
+  override func main() {
+    DispatchQueue.global().asyncAfter(deadline: .now() + 3) { [weak self] in
+      guard let `self` = self else { return }
+      if `self`.isCancelled {
+         self.finish()
+        return
+      }
+      self.finish()
+    }
+
+  }
+
+  override func operationWillExecute() {
+    willExecuteHandler?()
+  }
+
+  override func operationWillCancel(errors: [Error]) {
+    willCancelHandler?(errors)
+  }
+
+  override func operationDidProduceOperation(_ operation: Operation) {
+    didProduceOperationHandler?(operation)
+  }
+
+  override func operationDidCancel(errors: [Error]) {
+    didCancelHandler?(errors)
+  }
+
+  override func operationWillFinish(errors: [Error]) {
+    willFinishHandler?(errors)
+  }
+
+  override func operationDidFinish(errors: [Error]) {
+    didFinishHandler?(errors)
+  }
+
+}
+
 final internal class SleepyAsyncOperation: AdvancedOperation {
 
   private let interval1: UInt32
