@@ -217,6 +217,40 @@ final class MutuallyExclusiveConditionTests: XCTestCase {
     XCTAssertEqual(text, "A B C. 🎉")
   }
 
+  func testMultipleMutuallyExclusiveConditionsInsideAGroupOperation() {
+    var text = ""
+
+    let expectation1 = expectation(description: "\(#function)\(#line)")
+    let expectation2 = expectation(description: "\(#function)\(#line)")
+    let expectation3 = expectation(description: "\(#function)\(#line)")
+    let expectation4 = expectation(description: "\(#function)\(#line)")
+    let expectation5 = expectation(description: "\(#function)\(#line)")
+
+    let operation1 = AdvancedBlockOperation { text += "A " }
+    operation1.completionBlock = { expectation1.fulfill() }
+    operation1.addCondition(condition: MutuallyExclusiveCondition<AdvancedBlockOperation>())
+
+    let operation2 = AdvancedBlockOperation { text += "B " }
+    operation2.completionBlock = { expectation2.fulfill() }
+    operation2.addCondition(condition: MutuallyExclusiveCondition<AdvancedBlockOperation>())
+
+    let operation3 = AdvancedBlockOperation { text += "C. " }
+    operation3.completionBlock = { expectation3.fulfill() }
+    operation3.addCondition(condition: MutuallyExclusiveCondition<AdvancedBlockOperation>())
+    operation3.addCondition(condition: MutuallyExclusiveCondition<XCTest>())
+
+    let operation4 = AdvancedBlockOperation { text += "🎉" }
+    operation4.completionBlock = { expectation4.fulfill() }
+    operation4.addCondition(condition: MutuallyExclusiveCondition<AdvancedBlockOperation>())
+    operation4.addCondition(condition: MutuallyExclusiveCondition<XCTest>())
+
+    let group = GroupOperation(operations: operation1, operation2, operation3, operation4)
+    group.addCompletionBlock { expectation5.fulfill() }
+    group.start()
+    waitForExpectations(timeout: 10)
+    XCTAssertEqual(text, "A B C. 🎉")
+  }
+
   func testExclusivityManager() {
     var text = ""
     let manager = ExclusivityManager()
