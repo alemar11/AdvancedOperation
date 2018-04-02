@@ -54,7 +54,7 @@ open class GroupOperation: AdvancedOperation {
   }
 
   /// Internal `AdvancedOperationQueue`.
-  private let underlyingOperationQueue = AdvancedOperationQueue()
+  private let underlyingOperationQueue: AdvancedOperationQueue
 
   /// Internal starting operation.
   private lazy var startingOperation = BlockOperation(block: { })
@@ -68,15 +68,20 @@ open class GroupOperation: AdvancedOperation {
     }
   }()
 
+  /// ExclusivityManager used by `AdvancedOperationQueue`.
+  private let exclusivityManager: ExclusivityManager
+
   // MARK: - Initialization
 
-  public convenience init(operations: Operation...) {
-    self.init(operations: operations)
+  public convenience init(exclusivityManager: ExclusivityManager = .sharedInstance, operations: Operation...) {
+    self.init(exclusivityManager: exclusivityManager, operations: operations)
   }
 
-  public init(operations: [Operation]) {
-    super.init()
+  public init(exclusivityManager: ExclusivityManager = .sharedInstance, operations: [Operation]) {
+    self.exclusivityManager = exclusivityManager
+    self.underlyingOperationQueue = AdvancedOperationQueue(exclusivityManager: exclusivityManager)
 
+    super.init()
     isSuspended = true
     underlyingOperationQueue.delegate = self
     underlyingOperationQueue.addOperation(startingOperation)
