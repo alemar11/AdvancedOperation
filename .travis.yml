@@ -30,7 +30,7 @@ matrix:
         - swift --version
         - swift build
         - swift test
-        #- pod lib lint    
+        - pod lib lint    
 
     # iOS 11.3 Debug
     - os: osx

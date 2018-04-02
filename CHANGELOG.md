@@ -1,8 +1,8 @@
 # Changelog
 
-### 0.4.0 (wip)
+### 0.4.0
 
-- Added conditions' dependencies.
+- Conditions can generate dependencies.
 - Bugfixes.
 
 ### 0.3.0
