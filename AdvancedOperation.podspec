@@ -3,7 +3,7 @@ Pod::Spec.new do |s|
   s.version = '0.4.0'
   s.license = 'MIT'
   s.documentation_url = 'http://www.tinrobots.org/AdvancedOperation'  
-  s.summary   = 'CoreData extensions.'
+  s.summary   = 'Advanced operations.'
   s.homepage  = 'https://github.com/tinrobots/AdvancedOperation'
   s.authors   = { 'Alessandro Marzoli' => 'me@alessandromarzoli.com' }
   s.source    = { :git => 'https://github.com/tinrobots/AdvancedOperation.git', :tag => s.version }
