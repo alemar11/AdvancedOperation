@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>OperationWillFinishObserving Protocol Reference</title>
+    <title>OperationObserving Protocol Reference</title>
     <link rel="stylesheet" type="text/css" href="../css/jazzy.css" />
     <link rel="stylesheet" type="text/css" href="../css/highlight.css" />
     <meta charset='utf-8'>
@@ -10,18 +10,18 @@
     
   </head>
   <body>
-    <a name="//apple_ref/swift/Protocol/OperationWillFinishObserving" class="dashAnchor"></a>
-    <a title="OperationWillFinishObserving Protocol Reference"></a>
+    <a name="//apple_ref/swift/Protocol/OperationObserving" class="dashAnchor"></a>
+    <a title="OperationObserving Protocol Reference"></a>
     <header>
       <div class="content-wrapper">
-        <p><a href="../index.html">AdvancedOperation Docs</a> (49% documented)</p>
+        <p><a href="../index.html"> Docs</a> (44% documented)</p>
       </div>
     </header>
     <div class="content-wrapper">
       <p id="breadcrumbs">
-        <a href="../index.html">AdvancedOperation Reference</a>
+        <a href="../index.html"> Reference</a>
         <img id="carat" src="../img/carat.png" />
-        OperationWillFinishObserving Protocol Reference
+        OperationObserving Protocol Reference
       </p>
     </div>
     <div class="content-wrapper">
@@ -45,10 +45,13 @@
               <li class="nav-group-task">
                 <a href="../Classes/GroupOperation.html">GroupOperation</a>
               </li>
+              <li class="nav-group-task">
+                <a href="../Classes/OperationObserverController.html">OperationObserverController</a>
+              </li>
             </ul>
           </li>
           <li class="nav-group-name">
-            <a href="../Enums.html">Enumerations</a>
+            <a href="../Enums.html">Enums</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
                 <a href="../Enums/OperationConditionResult.html">OperationConditionResult</a>
@@ -85,10 +88,7 @@
                 <a href="../Protocols/OperationDidFinishObserving.html">OperationDidFinishObserving</a>
               </li>
               <li class="nav-group-task">
-                <a href="../Protocols/OperationDidProduceOperationObserving.html">OperationDidProduceOperationObserving</a>
-              </li>
-              <li class="nav-group-task">
-                <a href="../Protocols.html#/s:17AdvancedOperation0B9ObservingP">OperationObserving</a>
+                <a href="../Protocols/OperationObserving.html">OperationObserving</a>
               </li>
               <li class="nav-group-task">
                 <a href="../Protocols.html#/s:17AdvancedOperation0B13ObservingTypeP">OperationObservingType</a>
@@ -105,7 +105,7 @@
             </ul>
           </li>
           <li class="nav-group-name">
-            <a href="../Structs.html">Structures</a>
+            <a href="../Structs.html">Structs</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
                 <a href="../Structs/BlockObserver.html">BlockObserver</a>
@@ -128,7 +128,7 @@
             </ul>
           </li>
           <li class="nav-group-name">
-            <a href="../Typealiases.html">Type Aliases</a>
+            <a href="../Typealiases.html">Typealiases</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
                 <a href="../Typealiases.html#/s:17AdvancedOperation0B5Blocka">OperationBlock</a>
@@ -140,14 +140,14 @@
       <article class="main-content">
         <section>
           <section class="section">
-            <h1>OperationWillFinishObserving</h1>
+            <h1>OperationObserving</h1>
               <div class="declaration">
                 <div class="language">
-                  <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">protocol</span> <span class="kt">OperationWillFinishObserving</span><span class="p">:</span> <span class="kt"><a href="../Protocols.html#/s:17AdvancedOperation0B13ObservingTypeP">OperationObservingType</a></span></code></pre>
+                  <pre class="highlight"><code><span class="kd">public</span> <span class="kd">protocol</span> <span class="kt">OperationObserving</span><span class="p">:</span> <span class="kt"><a href="../Protocols/OperationWillExecuteObserving.html">OperationWillExecuteObserving</a></span><span class="p">,</span> <span class="kt"><a href="../Protocols/OperationWillFinishObserving.html">OperationWillFinishObserving</a></span><span class="p">,</span> <span class="kt"><a href="../Protocols/OperationDidFinishObserving.html">OperationDidFinishObserving</a></span><span class="p">,</span> <span class="kt"><a href="../Protocols/OperationWillCancelObserving.html">OperationWillCancelObserving</a></span><span class="p">,</span> <span class="kt"><a href="../Protocols/OperationDidCancelObserving.html">OperationDidCancelObserving</a></span></code></pre>
 
                 </div>
               </div>
-            <p>Undocumented</p>
+            <p>The protocol that types may implement if they wish to be notified of significant operation lifecycle events.</p>
 
           </section>
           <section class="section task-group-section">
@@ -156,9 +156,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:17AdvancedOperation0B19WillFinishObservingP09operationcD0ySo0B0C0F0_Says5Error_pG10withErrorstF"></a>
-                    <a name="//apple_ref/swift/Method/operationWillFinish(operation:withErrors:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:17AdvancedOperation0B19WillFinishObservingP09operationcD0ySo0B0C0F0_Says5Error_pG10withErrorstF">operationWillFinish(operation:withErrors:)</a>
+                    <a name="/s:17AdvancedOperation0B9ObservingP10identifierSSvp"></a>
+                    <a name="//apple_ref/swift/Property/identifier" class="dashAnchor"></a>
+                    <a class="token" href="#/s:17AdvancedOperation0B9ObservingP10identifierSSvp">identifier</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -166,19 +166,14 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Invoked as an <code>Operation</code> finishes, along with any errors produced during execution.</p>
-<div class="aside aside-note">
-    <p class="aside-title">Note</p>
-    An operation can finish without starting (i.e. if cancelled before its execution)
-
-</div>
+                        <p>An unique identifier</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">operationWillFinish</span><span class="p">(</span><span class="nv">operation</span><span class="p">:</span> <span class="kt">Operation</span><span class="p">,</span> <span class="n">withErrors</span> <span class="nv">errors</span><span class="p">:</span> <span class="p">[</span><span class="kt">Error</span><span class="p">])</span></code></pre>
+                          <pre class="highlight"><code><span class="k">var</span> <span class="nv">identifier</span><span class="p">:</span> <span class="kt">String</span></code></pre>
 
                         </div>
                       </div>
@@ -190,8 +185,8 @@
           </section>
         </section>
         <section id="footer">
-          <p>&copy; 2018 <a class="link" href="https://github.com/tinrobots/AdvancedOperation" target="_blank" rel="external">Alessandro Marzoli</a>. All rights reserved. (Last updated: 2018-04-02)</p>
-          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.9.1</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+          <p>&copy; 2018 <a class="link" href="" target="_blank" rel="external"></a>. All rights reserved. (Last updated: 2018-03-29)</p>
+          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.8.2</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
         </section>
       </article>
     </div>
