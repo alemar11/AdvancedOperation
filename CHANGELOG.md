@@ -1,5 +1,10 @@
 # Changelog
 
+### 0.4.1
+
+- Bugfixes.
+- More tests.
+
 ### 0.4.0
 
 - Conditions can generate dependencies.
