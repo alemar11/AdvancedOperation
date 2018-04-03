@@ -70,9 +70,10 @@ extension Operation {
 
 extension Operation {
 
-  /// Adds `self` as a dependency of a given operation and return both operations.
+  /// Adds `self` as a dependency of a given operation.
   ///
-  /// - Parameter operation: the Operation instance to add the receiver as a dependency
+  /// - Parameter operation: the Operation instance to add to the receiver as a dependency.
+  /// - Returns: The given operation.
   @discardableResult
   public func then(_ operation: Operation) -> Operation {
     assert(!isFinished, "Cannot add a finished operation as a dependency.")
@@ -80,14 +81,46 @@ extension Operation {
     return operation
   }
 
+  /// Adds `self` as a dependency of a given list of operations.
+  ///
+  /// - Parameter operation: the Operation instance to add the receiver as a dependency.
+  /// - Returns: The given list of operations.
+  @discardableResult
+  public func then(_ operations: Operation...) -> [Operation] {
+    assert(!isFinished, "Cannot add a finished operation as a dependency.")
+    for operation in operations {
+      operation.addDependency(self)
+    }
+    return operations
+  }
+
 }
 
-extension Array where Element: Operation {
+extension Sequence where Element: Operation {
 
+  /// Adds `self` as dependencies of a given operation.
+  ///
+  /// - Parameter operation: the Operation instance to add the receiver as a dependency.
+  /// - Returns: The given operation.
+  @discardableResult
+  public func then(_ operation: Operation) -> Operation {
+    for selfOperation in self {
+      operation.addDependency(selfOperation)
+    }
+
+    return operation
+  }
+
+  /// Adds `self` as dependencies of a given list of operation.
+  ///
+  /// - Parameter operations: the Operation instances to add the to receiver as a dependencies.
+  /// - Returns: The given list of operations.
   @discardableResult
   public func then(_ operations: Operation...) -> [Operation] {
     for operation in operations {
-      operation.addDependencies(self)
+      for selfOperation in self {
+        operation.addDependency(selfOperation)
+      }
     }
     return operations
   }
