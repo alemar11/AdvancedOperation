@@ -23,7 +23,7 @@
 
 import Foundation
 
-/// A  condition that negates the evaluation of another condition.
+/// A condition that negates the evaluation of another condition.
 public struct NegatedCondition<T: OperationCondition>: OperationCondition {
 
   public var name: String { return "Not<\(condition.name)>" }
