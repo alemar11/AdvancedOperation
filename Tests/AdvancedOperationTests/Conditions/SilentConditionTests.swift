@@ -1,4 +1,4 @@
-// 
+//
 // AdvancedOperation
 //
 // Copyright © 2016-2018 Tinrobots.
@@ -25,7 +25,7 @@ import XCTest
 @testable import AdvancedOperation
 
 class SilentConditionTests: XCTestCase {
-    
+
   func testSilentCondition() {
     let queue = AdvancedOperationQueue()
 

@@ -1,4 +1,4 @@
-// 
+//
 // AdvancedOperation
 //
 // Copyright © 2016-2018 Tinrobots.
@@ -25,9 +25,9 @@ import XCTest
 @testable import AdvancedOperation
 
 class BlockObserverTests: XCTestCase {
-  
+
   func testOperationProduced() {
-    
+
     let expectation1 = expectation(description: "\(#function)\(#line)")
     let expectation2 = expectation(description: "\(#function)\(#line)")
     let expectation3 = expectation(description: "\(#function)\(#line)")
@@ -35,11 +35,11 @@ class BlockObserverTests: XCTestCase {
     let expectation5 = expectation(description: "\(#function)\(#line)")
     let expectation6 = expectation(description: "\(#function)\(#line)")
     let expectation7 = expectation(description: "\(#function)\(#line)")
-    
+
     expectation3.isInverted = true
     expectation4.isInverted = true
     var count = 0
-    
+
     let observer = BlockObserver(willExecute: { (operation) in
       expectation1.fulfill()
     }, didProduce: { (operation, producedOperation) in
@@ -49,25 +49,25 @@ class BlockObserverTests: XCTestCase {
       }
     }, willCancel: { (operation, errors) in
       expectation3.fulfill()
-      
+
     }, didCancel: { (operation, errors) in
       expectation4.fulfill()
-      
+
     }, willFinish: { (operation, errors) in
       expectation5.fulfill()
-      
+
     }) { (operation, errors) in
       expectation6.fulfill()
     }
     let operation = SleepyAsyncOperation()
     operation.addObserver(observer)
-    
+
     operation.completionBlock = { expectation7.fulfill() }
     operation.produceOperation(BlockOperation { })
     operation.produceOperation(BlockOperation { })
     operation.start()
-    
+
     waitForExpectations(timeout: 10)
   }
-  
+
 }
