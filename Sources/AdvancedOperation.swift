@@ -32,9 +32,9 @@ open class AdvancedOperation: Operation {
     switch state {
 
     case .pending:
-      if isCancelled {
-        return true
-      }
+//      if isCancelled {
+//        return true
+//      }
 
       if super.isReady {
         evaluateConditions()
@@ -223,6 +223,9 @@ open class AdvancedOperation: Operation {
     let canBeCancelled = lock.synchronized { () -> Bool in
       guard !_finishing && !isFinished else { return false } // do not cancel an operation finishing/ed
       guard !_cancelling && !isCancelled else { return false }
+      if (_state == .pending) { // conditions will not be evaluated anymore
+        _state = .ready
+      }
       _cancelling = true
       return _cancelling
     }
