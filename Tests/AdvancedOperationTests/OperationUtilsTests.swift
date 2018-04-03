@@ -71,7 +71,7 @@ final class OperationUtilsTests: XCTestCase {
     waitForExpectations(timeout: 10)
   }
 
-  func testThen() {
+  func testThenOneToOne() {
     let operation1 = SleepyOperation()
     let expectation1 = expectation(description: "\(#function)\(#line)")
     operation1.addCompletionBlock { expectation1.fulfill() }
@@ -92,7 +92,28 @@ final class OperationUtilsTests: XCTestCase {
     wait(for: [expectation1, expectation2, expectation3], timeout: 30, enforceOrder: true)
   }
 
-  func testThenWithOperations() {
+  func testThenOneToMany() {
+    let operation1 = SleepyOperation()
+    let operation2 = SleepyOperation()
+    let operation3 = SleepyOperation()
+
+    let expectation2 = expectation(description: "\(#function)\(#line)")
+    operation2.addCompletionBlock { expectation2.fulfill() }
+    let expectation3 = expectation(description: "\(#function)\(#line)")
+    operation3.addCompletionBlock { expectation3.fulfill() }
+
+    [operation1].then(operation3, operation2)
+
+    let queue = AdvancedOperationQueue()
+    queue.addOperations([operation2, operation1, operation3], waitUntilFinished: false)
+
+    wait(for: [expectation2, expectation3], timeout: 30)
+    XCTAssertTrue(operation1.isFinished)
+    XCTAssertTrue(operation2.isFinished)
+    XCTAssertTrue(operation3.isFinished)
+  }
+
+  func testThenManyToOne() {
     let operation1 = SleepyOperation()
     let operation2 = SleepyOperation()
     let operation3 = SleepyOperation()
@@ -109,6 +130,29 @@ final class OperationUtilsTests: XCTestCase {
     XCTAssertTrue(operation1.isFinished)
     XCTAssertTrue(operation2.isFinished)
     XCTAssertTrue(operation3.isFinished)
+  }
+
+  func testThenManyToMany() {
+    let operation1 = SleepyOperation()
+    let operation2 = SleepyOperation()
+    let operation3 = SleepyOperation()
+    let operation4 = SleepyOperation()
+
+    let expectation3 = expectation(description: "\(#function)\(#line)")
+    operation3.addCompletionBlock { expectation3.fulfill() }
+    let expectation4 = expectation(description: "\(#function)\(#line)")
+    operation4.addCompletionBlock { expectation4.fulfill() }
+
+    [operation1, operation2].then(operation3, operation4)
+
+    let queue = AdvancedOperationQueue()
+    queue.addOperations([operation2, operation1, operation3, operation4], waitUntilFinished: false)
+
+    wait(for: [expectation3, expectation4], timeout: 30)
+    XCTAssertTrue(operation1.isFinished)
+    XCTAssertTrue(operation2.isFinished)
+    XCTAssertTrue(operation3.isFinished)
+    XCTAssertTrue(operation4.isFinished)
   }
 
   func testRemoveDependencies() {

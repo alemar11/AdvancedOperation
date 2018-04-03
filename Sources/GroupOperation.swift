@@ -63,6 +63,7 @@ open class GroupOperation: AdvancedOperation {
   private lazy var finishingOperation: BlockOperation = {
     return BlockOperation { [weak self] in
       guard let `self` = self else { return }
+
       self.underlyingOperationQueue.isSuspended = true
       self.finish(errors: self.aggregatedErrors)
     }

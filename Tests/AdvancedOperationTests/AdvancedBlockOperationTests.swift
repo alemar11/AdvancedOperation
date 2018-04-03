@@ -120,6 +120,27 @@ final class AdvancedBlockOperationTests: XCTestCase {
     waitForExpectations(timeout: 3)
   }
 
+  func testComposition() {
+    let expectation3 = expectation(description: "\(#function)\(#line)")
+
+    let operation1 = SleepyOperation()
+    let operation2 = SleepyAsyncOperation()
+    let operation3 = SleepyOperation()
+
+    operation3.addCompletionBlock { expectation3.fulfill() }
+    let adapterOperation = AdvancedBlockOperation { [unowned operation2] in
+      operation2.cancel()
+    }
+    operation1.then(adapterOperation).then(operation2).then(operation3)
+    let queue = AdvancedOperationQueue()
+    queue.addOperations([operation1, operation2, operation3, adapterOperation], waitUntilFinished: false)
+    waitForExpectations(timeout: 10)
+    XCTAssertTrue(operation1.isFinished)
+    XCTAssertTrue(operation2.isCancelled)
+    XCTAssertTrue(operation3.isFinished)
+    XCTAssertTrue(adapterOperation.isFinished)
+  }
+
   func testMemoryLeak() {
 
     var object = NSObject()

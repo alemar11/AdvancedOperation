@@ -60,6 +60,7 @@ final class NoFailedDependenciesConditionTests: XCTestCase {
     queue.addOperations([operation1, operation2, operation3, operation4], waitUntilFinished: false)
     waitForExpectations(timeout: 5)
     XCTAssertTrue(operation1.failed)
+    XCTAssertEqual(operation1.errors.count, 2)
   }
 
   func testCancelledAndFailedOperation() {
@@ -94,6 +95,7 @@ final class NoFailedDependenciesConditionTests: XCTestCase {
     queue.addOperations([operation1, operation2, operation3, operation4], waitUntilFinished: false)
     waitForExpectations(timeout: 5)
     XCTAssertTrue(operation1.failed)
+    XCTAssertEqual(operation1.errors.count, 2)
   }
 
   func testIgnoredCancelledAndFailedOperation() {
@@ -162,6 +164,7 @@ final class NoFailedDependenciesConditionTests: XCTestCase {
     queue.addOperations([operation1, operation2, operation3, operation4], waitUntilFinished: false)
     waitForExpectations(timeout: 10)
     XCTAssertTrue(operation1.failed)
+    XCTAssertEqual(operation1.errors.count, 3)
   }
 
   func testFinishedAndFailedOperationNegated() {

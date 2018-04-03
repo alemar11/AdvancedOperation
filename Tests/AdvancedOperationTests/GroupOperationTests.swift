@@ -451,6 +451,81 @@ final class GroupOperationTests: XCTestCase {
     XCTAssertEqual(group.maxConcurrentOperationCount, 4)
   }
 
+  func testComposition() {
+    let expectationGroup = expectation(description: "\(#function)\(#line)")
+    let expectationAdapter = expectation(description: "\(#function)\(#line)")
+
+    let expectation1 = expectation(description: "\(#function)\(#line)")
+    let expectation2 = expectation(description: "\(#function)\(#line)")
+    let expectation3 = expectation(description: "\(#function)\(#line)")
+
+    let operation1 = SleepyOperation()
+    operation1.addCompletionBlock { expectation1.fulfill() }
+
+    let operation2 = SleepyAsyncOperation()
+    operation2.addCompletionBlock { expectation2.fulfill() }
+    
+    let operation3 = SleepyOperation()
+    operation3.addCompletionBlock { expectation3.fulfill() }
+
+    let adapterOperation = AdvancedBlockOperation { [unowned operation2] in
+      operation2.cancel()
+    }
+    adapterOperation.addCompletionBlock { expectationAdapter.fulfill() }
+
+    adapterOperation.addDependency(operation1)
+    operation2.addDependency(adapterOperation)
+    operation3.addDependency(operation2)
+    //operation1.then(adapterOperation).then(operation2).then(operation3)
+
+    let group = GroupOperation(operations: [operation1, operation2, operation3, adapterOperation])
+    group.addCompletionBlock { expectationGroup.fulfill() }
+    group.start()
+    waitForExpectations(timeout: 10)
+    XCTAssertTrue(operation1.isFinished)
+    XCTAssertTrue(operation2.isCancelled)
+    XCTAssertTrue(operation3.isFinished)
+    XCTAssertTrue(adapterOperation.isFinished)
+  }
+
+  func testCompositionWithCondition() {
+    let expectationGroup = expectation(description: "\(#function)\(#line)")
+    let expectationAdapter = expectation(description: "\(#function)\(#line)")
+
+    let expectation1 = expectation(description: "\(#function)\(#line)")
+    let expectation2 = expectation(description: "\(#function)\(#line)")
+    let expectation3 = expectation(description: "\(#function)\(#line)")
+
+    let operation1 = SleepyOperation()
+    operation1.addCompletionBlock { expectation1.fulfill() }
+
+    let operation2 = SleepyAsyncOperation()
+    operation2.addCompletionBlock { expectation2.fulfill() }
+    operation2.addCondition(NoFailedDependenciesCondition()) // this condition will set operation2 as pending
+
+    let operation3 = SleepyOperation()
+    operation3.addCompletionBlock { expectation3.fulfill() }
+
+    let adapterOperation = AdvancedBlockOperation { [unowned operation2] in
+      operation2.cancel()
+    }
+    adapterOperation.addCompletionBlock { expectationAdapter.fulfill() }
+
+    adapterOperation.addDependency(operation1)
+    operation2.addDependency(adapterOperation)
+    operation3.addDependency(operation2)
+    //operation1.then(adapterOperation).then(operation2).then(operation3)
+
+    let group = GroupOperation(operations: [operation1, operation2, operation3, adapterOperation])
+    group.addCompletionBlock { expectationGroup.fulfill() }
+    group.start()
+    waitForExpectations(timeout: 10)
+    XCTAssertTrue(operation1.isFinished)
+    XCTAssertTrue(operation2.isCancelled)
+    XCTAssertTrue(operation3.isFinished)
+    XCTAssertTrue(adapterOperation.isFinished)
+  }
+
   func testQualityOfService() {
     let operation1 = SleepyOperation()
     let group = GroupOperation(operations: operation1)
@@ -486,4 +561,3 @@ final class GroupOperationTests: XCTestCase {
   }
 
 }
-
