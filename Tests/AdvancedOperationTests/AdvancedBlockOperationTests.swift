@@ -123,9 +123,9 @@ final class AdvancedBlockOperationTests: XCTestCase {
   func testComposition() {
     let expectation3 = expectation(description: "\(#function)\(#line)")
 
-    let operation1 = SleepyAsyncOperation()
-    let operation2 = SleepyOperation()
-    let operation3 = SleepyAsyncOperation()
+    let operation1 = SleepyOperation()
+    let operation2 = SleepyAsyncOperation()
+    let operation3 = SleepyOperation()
 
     operation3.addCompletionBlock { expectation3.fulfill() }
     let adapterOperation = AdvancedBlockOperation { [unowned operation2] in
