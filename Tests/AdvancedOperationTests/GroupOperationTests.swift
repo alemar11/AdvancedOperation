@@ -61,7 +61,10 @@ final class GroupOperationTests: XCTestCase {
   func testOperationCancelled() {
     let expectation1 = expectation(description: "\(#function)\(#line)")
     let operation1 = SleepyAsyncOperation()
-    operation1.addCompletionBlock { expectation1.fulfill() }
+    operation1.addCompletionBlock { [unowned operation1] in
+      XCTAssertTrue(operation1.isCancelled, "It should be cancelled for state: \(operation1.state).")
+      expectation1.fulfill()
+    }
 
     let expectation2 = expectation(description: "\(#function)\(#line)")
     let operation2 = BlockOperation(block: { sleep(1)} )
@@ -79,12 +82,12 @@ final class GroupOperationTests: XCTestCase {
 
     waitForExpectations(timeout: 10)
 
-    XCTAssertTrue(operation1.isCancelled)
-    XCTAssertTrue(operation1.isFinished)
+    XCTAssertTrue(operation1.isCancelled, "It should be cancelled for state: \(operation1.state).")
+    XCTAssertTrue(operation1.isFinished, "It should be finished for state: \(operation1.state).")
     XCTAssertEqual(operation1.errors.count, 1)
 
-    XCTAssertFalse(group.isCancelled)
-    XCTAssertTrue(group.isFinished)
+    XCTAssertFalse(group.isCancelled, "It should be cancelled for state: \(group.state).")
+    XCTAssertTrue(group.isFinished, "It should be finished for state: \(group.state).")
     XCTAssertTrue(group.isSuspended)
     XCTAssertEqual(group.aggregatedErrors.count, 1)
   }
