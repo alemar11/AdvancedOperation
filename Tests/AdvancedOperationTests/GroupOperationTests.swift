@@ -51,16 +51,16 @@ final class GroupOperationTests: XCTestCase {
   }
 
 //  func testStress() {
-//    for i in 1...100 {
+//    for i in 1...1000 {
 //      print(i)
 //      testOperationCancelled()
-//      testOperationCancelledAsynchronously()
+//      //testOperationCancelledAsynchronously()
 //    }
 //  }
 
   func testOperationCancelled() {
     let expectation1 = expectation(description: "\(#function)\(#line)")
-    let operation1 = SleepyAsyncOperation()
+    let operation1 = RunUntilCancelledOperation()
     operation1.addCompletionBlock { [unowned operation1] in
       XCTAssertTrue(operation1.isCancelled, "It should be cancelled for state: \(operation1.state).")
       expectation1.fulfill()
