@@ -50,10 +50,19 @@ final class GroupOperationTests: XCTestCase {
     XCTAssertTrue(group.isFinished)
   }
 
-  func testStress() {
+  func testStress1() {
     for i in 1...1000 {
       print(i)
       testOperationCancelled()
+      //testOperationCancelledAsynchronously()
+    }
+  }
+
+  func testStress2() {
+    for i in 1...100 {
+      print(i)
+      testGroupOperationCancelled()
+      testGroupOperationCancelledWithError()
       //testOperationCancelledAsynchronously()
     }
   }
@@ -131,12 +140,16 @@ final class GroupOperationTests: XCTestCase {
     operation1.addCompletionBlock { expectation1.fulfill() }
 
     let expectation2 = expectation(description: "\(#function)\(#line)")
-    let operation2 = BlockOperation(block: { sleep(1)} )
+    let operation2 = RunUntilCancelledOperation()
     operation2.addCompletionBlock { expectation2.fulfill() }
 
     let expectation3 = expectation(description: "\(#function)\(#line)")
-    let group = GroupOperation(operations: operation1, operation2)
-    group.addCompletionBlock { expectation3.fulfill() }
+    let operation3 = BlockOperation(block: { sleep(1)} )
+    operation3.addCompletionBlock { expectation3.fulfill() }
+
+    let expectation4 = expectation(description: "\(#function)\(#line)")
+    let group = GroupOperation(operations: operation1, operation2, operation3)
+    group.addCompletionBlock { expectation4.fulfill() }
 
     group.start()
     operation2.cancel()
@@ -150,15 +163,15 @@ final class GroupOperationTests: XCTestCase {
 
   func testGroupOperationCancelled() {
     let expectation1 = expectation(description: "\(#function)\(#line)")
-    let operation1 = BlockOperation(block: { sleep(2)} )
+    let operation1 = RunUntilCancelledOperation()
     operation1.addCompletionBlock { expectation1.fulfill() }
 
     let expectation2 = expectation(description: "\(#function)\(#line)")
-    let operation2 = BlockOperation(block: { sleep(2)} )
+    let operation2 = RunUntilCancelledOperation()
     operation2.addCompletionBlock { expectation2.fulfill() }
 
     let expectation3 = expectation(description: "\(#function)\(#line)")
-    let operation3 = BlockOperation(block: { sleep(2)} )
+    let operation3 = RunUntilCancelledOperation()
     operation3.addCompletionBlock { expectation3.fulfill() }
 
     let expectation4 = expectation(description: "\(#function)\(#line)")
@@ -172,26 +185,24 @@ final class GroupOperationTests: XCTestCase {
 
     for operation in [operation1, operation2, operation3, group] {
       XCTAssertFalse(operation.isExecuting)
+      XCTAssertTrue(operation.isCancelled) //fail
+      XCTAssertTrue(operation.isFinished)
       XCTAssertTrue(operation.isCancelled)
       XCTAssertTrue(operation.isFinished)
-      if let advancedOperation = operation as? AdvancedOperation {
-        XCTAssertTrue(advancedOperation.isCancelled)
-        XCTAssertTrue(advancedOperation.isFinished)
-      }
     }
   }
 
   func testGroupOperationCancelledWithError() {
     let expectation1 = expectation(description: "\(#function)\(#line)")
-    let operation1 = BlockOperation(block: { sleep(2)} )
+    let operation1 = RunUntilCancelledOperation()
     operation1.addCompletionBlock { expectation1.fulfill() }
 
     let expectation2 = expectation(description: "\(#function)\(#line)")
-    let operation2 = BlockOperation(block: { sleep(2)} )
+    let operation2 = RunUntilCancelledOperation()
     operation2.addCompletionBlock { expectation2.fulfill() }
 
     let expectation3 = expectation(description: "\(#function)\(#line)")
-    let operation3 = BlockOperation(block: { sleep(2)} )
+    let operation3 = RunUntilCancelledOperation()
     operation3.addCompletionBlock { expectation3.fulfill() }
 
     let expectation4 = expectation(description: "\(#function)\(#line)")
@@ -205,13 +216,13 @@ final class GroupOperationTests: XCTestCase {
 
     for operation in [operation1, operation2, operation3, group] {
       XCTAssertFalse(operation.isExecuting)
-      XCTAssertTrue(operation.isCancelled)
+      XCTAssertTrue(operation.isCancelled) // fail
       XCTAssertTrue(operation.isFinished)
       if let groupOperation = operation as? GroupOperation {
         XCTAssertEqual(groupOperation.errors.count, 1)
         XCTAssertEqual(groupOperation.aggregatedErrors.count, 0)
-      } else if let advancedOperation = operation as? AdvancedOperation {
-        XCTAssertEqual(advancedOperation.errors.count, 0)
+      } else {
+        XCTAssertEqual(operation.errors.count, 0)
       }
     }
   }
