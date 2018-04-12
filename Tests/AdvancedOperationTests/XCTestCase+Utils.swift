@@ -29,7 +29,7 @@ extension XCTestCase {
 
   func XCTAssertSameErrorQuantity(errors: [Error], expectedErrors: [Error], file: String = #file, line: Int = #line) {
     guard checkSameErrorQuantity(generatedErrors: errors, expectedErrors: expectedErrors) else {
-      return recordFailure(withDescription: "Operation has \(errors.count) errors, expected: \(errors.count)", inFile: file, atLine: line, expected: true)
+      return recordFailure(withDescription: "Operation has \(errors.count) errors, expected: \(expectedErrors.count)", inFile: file, atLine: line, expected: true)
     }
   }
 
