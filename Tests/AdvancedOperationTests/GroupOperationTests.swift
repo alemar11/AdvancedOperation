@@ -50,13 +50,13 @@ final class GroupOperationTests: XCTestCase {
     XCTAssertTrue(group.isFinished)
   }
 
-//  func testStress() {
-//    for i in 1...1000 {
-//      print(i)
-//      testOperationCancelled()
-//      //testOperationCancelledAsynchronously()
-//    }
-//  }
+  func testStress() {
+    for i in 1...1000 {
+      print(i)
+      testOperationCancelled()
+      //testOperationCancelledAsynchronously()
+    }
+  }
 
   func testOperationCancelled() {
     let expectation1 = expectation(description: "\(#function)\(#line)")
