@@ -51,10 +51,10 @@ final class GroupOperationTests: XCTestCase {
   }
 
   func testStress1() {
-    for i in 1...1000 {
+    for i in 1...100 {
       print(i)
       testOperationCancelled()
-      //testOperationCancelledAsynchronously()
+      testOperationCancelledAsynchronously()
     }
   }
 
@@ -63,7 +63,6 @@ final class GroupOperationTests: XCTestCase {
       print(i)
       testGroupOperationCancelled()
       testGroupOperationCancelledWithError()
-      //testOperationCancelledAsynchronously()
     }
   }
 
