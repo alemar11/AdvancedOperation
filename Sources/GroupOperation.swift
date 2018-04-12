@@ -57,17 +57,10 @@ open class GroupOperation: AdvancedOperation {
   private let underlyingOperationQueue: AdvancedOperationQueue
 
   /// Internal starting operation.
-  private lazy var startingOperation = BlockOperation(block: { })
+  private lazy var startingOperation = BlockOperation { }
 
-  /// Internal finishing operation.
-  private lazy var finishingOperation: BlockOperation = {
-    return BlockOperation { [weak self] in
-      guard let `self` = self else { return }
-
-      self.underlyingOperationQueue.isSuspended = true
-      self.finish(errors: self.aggregatedErrors)
-    }
-  }()
+  /// Internal finishing operation. It's an AdvancedBlockOperation so all its states can be monitored.
+  private lazy var finishingOperation = AdvancedBlockOperation { complete in complete([]) }
 
   /// ExclusivityManager used by `AdvancedOperationQueue`.
   private let exclusivityManager: ExclusivityManager
@@ -92,13 +85,14 @@ open class GroupOperation: AdvancedOperation {
     }
   }
 
-  /// Cancels the execution of every operation.
+  /// Advises the `GroupOperation` object that it should stop executing its tasks.
   public final override func cancel(error: Error?) {
-    // Cancels all the operations except the (internal) finishing one.
+    guard !isCancelling && !isCancelled && !isFinished else { return }
+    // underlyingOperationQueue.cancelAllOperations()
     for operation in underlyingOperationQueue.operations where operation !== finishingOperation {
       operation.cancel()
     }
-    super.cancel(error: error)
+    finishingOperation.cancel(error: error) // the cancel error is stored in the last operation
   }
 
   open override func cancel() {
@@ -145,19 +139,27 @@ extension GroupOperation: AdvancedOperationQueueDelegate {
 
   public func operationQueue(operationQueue: AdvancedOperationQueue, didAddOperation operation: Operation) {}
 
-  public func operationQueue(operationQueue: AdvancedOperationQueue, operationWillFinish operation: Operation, withErrors errors: [Error]) {
-    guard operationQueue === underlyingOperationQueue else { return }
-    guard !errors.isEmpty else { return }
+  public func operationQueue(operationQueue: AdvancedOperationQueue, operationWillFinish operation: Operation, withErrors errors: [Error]) { }
 
-    if operation !== finishingOperation || operation !== startingOperation {
+  public func operationQueue(operationQueue: AdvancedOperationQueue, operationDidFinish operation: Operation, withErrors errors: [Error]) {
+    guard operationQueue === underlyingOperationQueue else { return }
+
+    if operation === finishingOperation {
+      underlyingOperationQueue.isSuspended = true
+      finish(errors: aggregatedErrors)
+    } else if operation !== startingOperation && !errors.isEmpty {
       aggregatedErrors.append(contentsOf: errors)
     }
   }
 
-  public func operationQueue(operationQueue: AdvancedOperationQueue, operationWillCancel operation: Operation, withErrors errors: [Error]) { }
+  public func operationQueue(operationQueue: AdvancedOperationQueue, operationWillCancel operation: Operation, withErrors errors: [Error]) {
+    guard operationQueue === underlyingOperationQueue else { return }
+    if operation === finishingOperation {
+      super.cancel(error: errors.first)
+    }
+  }
 
-  public func operationQueue(operationQueue: AdvancedOperationQueue, operationDidFinish operation: Operation, withErrors errors: [Error]) { }
-
-  public func operationQueue(operationQueue: AdvancedOperationQueue, operationDidCancel operation: Operation, withErrors errors: [Error]) { }
+  public func operationQueue(operationQueue: AdvancedOperationQueue, operationDidCancel operation: Operation, withErrors errors: [Error]) {
+}
 
 }

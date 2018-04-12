@@ -58,6 +58,8 @@ open class AdvancedOperation: Operation {
 
   public final override var isCancelled: Bool { return lock.synchronized { return _cancelled } }
 
+  internal final var isCancelling: Bool { return lock.synchronized { return _cancelling } }
+
   // MARK: - OperationState
 
   @objc
