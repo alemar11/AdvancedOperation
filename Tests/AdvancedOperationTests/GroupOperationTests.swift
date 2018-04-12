@@ -247,6 +247,8 @@ final class GroupOperationTests: XCTestCase {
 
     group.start()
     group.cancel(error: MockError.test)
+    group.cancel(error: MockError.test)
+    group.cancel(error: MockError.test)
 
     waitForExpectations(timeout: 10)
   }
