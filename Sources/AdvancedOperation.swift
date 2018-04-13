@@ -448,11 +448,11 @@ extension AdvancedOperation {
         }
         } .flatMap { $0 }
 
-      if operation.isCancelled {
-        var aggregatedErrors = operation.errors
-        aggregatedErrors.append(contentsOf: [NSError(domain: "\(identifier).\(type(of: self))", code: OperationErrorCode.conditionFailed.rawValue, userInfo: nil)])
-        errors.append(contentsOf: aggregatedErrors)
-      }
+//      if operation.isCancelled {
+//        var aggregatedErrors = operation.errors
+//        aggregatedErrors.append(contentsOf: [NSError(domain: "\(identifier).\(type(of: self))", code: OperationErrorCode.conditionFailed.rawValue, userInfo: nil)])
+//        errors.append(contentsOf: aggregatedErrors)
+//      }
       completion(errors)
     }
   }

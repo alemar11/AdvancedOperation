@@ -100,17 +100,34 @@ class OperationConditionTests: XCTestCase {
     waitForExpectations(timeout: 10)
   }
 
+
+  func testStress() {
+    for i in 1...100 {
+      print("🚩\(i)")
+      //testGroupOperationWithDependencies()
+      testCancelledGroupOperationWithDependencies()
+      print("\n\n")
+    }
+  }
+
   func testCancelledGroupOperationWithDependencies() {
-    let expectation1 = expectation(description: "\(#function)\(#line)")
+    let expectation1 = expectation(description: "\(#function)\(#line)") // Exceeded timeout of 10 seconds, with unfulfilled expectations: "testCancelledGroupOperationWithDependencies()113"
     let expectation2 = expectation(description: "\(#function)\(#line)")
     let expectation3 = expectation(description: "\(#function)\(#line)")
     let expectation4 = expectation(description: "\(#function)\(#line)")
     let expectation5 = expectation(description: "\(#function)\(#line)")
 
-    let operation1 = AdvancedBlockOperation { }
+    let operation1 = AdvancedBlockOperation { complete in
+      print("------->🔶")
+      complete([])
+    }
+    operation1.name = "operation1"
     operation1.completionBlock = { expectation1.fulfill() }
 
-    let operation2 = AdvancedBlockOperation { }
+    let operation2 = AdvancedBlockOperation { complete in
+      print("------->🔷")
+      complete([]) }
+    operation2.name = "operation2"
     operation2.completionBlock = { expectation2.fulfill() }
 
     let group = GroupOperation()
@@ -118,10 +135,20 @@ class OperationConditionTests: XCTestCase {
       expectation5.fulfill()
     }
 
-    let dependency1 = AdvancedBlockOperation { sleep(2) }
-    dependency1.completionBlock = { expectation3.fulfill() }
+    let dependency1 = AdvancedBlockOperation { complete in
+      sleep(4);
+      print("🧡")
+      complete([]) }
+    dependency1.name = "dependency1"
+    dependency1.completionBlock = {
+      expectation3.fulfill()
+    }
 
-    let dependency2 = AdvancedBlockOperation { sleep(1) }
+    let dependency2 = AdvancedBlockOperation { complete in
+      sleep(1)
+      print("💙")
+      complete([]) }
+    dependency2.name = "dependency2"
     dependency2.completionBlock = { expectation4.fulfill() }
 
     let dependencyCondition1 = DependencyCondition(dependency: dependency1)
@@ -136,11 +163,14 @@ class OperationConditionTests: XCTestCase {
     group.start()
     group.cancel(error: MockError.failed)
 
-    waitForExpectations(timeout: 10)
+    waitForExpectations(timeout: 15)
 
-    XCTAssertSameErrorQuantity(errors: group.errors, expectedErrors: [MockError.failed])
+    XCTAssertSameErrorQuantity(errors: group.errors, expectedErrors: [MockError.failed]) //Operation has 2 errors, expected: 1
+
     XCTAssertTrue(group.isCancelled)
     XCTAssertTrue(group.isFinished)
+    XCTAssertTrue(operation1.isCancelled)
+    XCTAssertTrue(operation2.isCancelled)
   }
 
 }

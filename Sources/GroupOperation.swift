@@ -78,13 +78,18 @@ open class GroupOperation: AdvancedOperation {
     super.init()
     isSuspended = true
     underlyingOperationQueue.delegate = self
-    underlyingOperationQueue.addOperation(startingOperation)
+
+    finishingOperation.name = "Finishing Operation"
+    finishingOperation.addDependency(startingOperation)
     finishingOperation.completionBlock = { [weak self] in
-      // executed always
+      // always executed
       guard let `self` = self else { return }
-      self.underlyingOperationQueue.isSuspended = true
+      self.underlyingOperationQueue.isSuspended = true //TODO: self.isSupended = true
       self.finish(errors: self.aggregatedErrors)
     }
+
+    startingOperation.name = "Starting Operation"
+    underlyingOperationQueue.addOperation(startingOperation)
 
     for operation in operations {
       addOperation(operation: operation)
@@ -99,9 +104,16 @@ open class GroupOperation: AdvancedOperation {
       // executed before the block defined in the initializer
       super.cancel(error: error)
     }
-    
+startingOperation.cancel()
+    //assert(startingOperation.isCancelled)
     for operation in underlyingOperationQueue.operations where operation !== finishingOperation {
+      //print(operation.name!)
       operation.cancel()
+//      print("\n")
+//      operation.dependencies.forEach { (operation) in
+//        print(operation.name)
+//      }
+//      print("\n")
     }
     finishingOperation.cancel()
   }
@@ -111,15 +123,15 @@ open class GroupOperation: AdvancedOperation {
   }
 
   public final override func main() {
-    underlyingOperationQueue.isSuspended = false
     underlyingOperationQueue.addOperation(finishingOperation)
+    underlyingOperationQueue.isSuspended = false
   }
 
   public func addOperation(operation: Operation) {
     assert(!finishingOperation.isCancelled || !finishingOperation.isFinished, "The GroupOperation is finishing and cannot accept more operations.")
     
-    // finishingOperation.addDependency(operation)
-    // operation.addDependency(startingOperation)
+    finishingOperation.addDependency(operation)
+    operation.addDependency(startingOperation)
     underlyingOperationQueue.addOperation(operation)
   }
 
@@ -154,14 +166,14 @@ extension GroupOperation: AdvancedOperationQueueDelegate {
     // An operation is added to the group or an operation in this group has produced a new operation to execute.
 
     // make the finishing operation dependent on this newly-produced operation.
-    if operation !== finishingOperation {
+    if operation !== finishingOperation && !operation.dependencies.contains(finishingOperation){
       finishingOperation.addDependency(operation)
     }
 
     // All operations should be dependent on the "startingOperation". This way, we can guarantee that the conditions for other operations
     // will not evaluate until just before the operation is about to run. Otherwise, the conditions could be evaluated at any time, even
     // before the internal operation queue is unsuspended.
-    if operation !== startingOperation {
+    if operation !== startingOperation && !operation.dependencies.contains(startingOperation) {
       operation.addDependency(startingOperation)
     }
   }
@@ -170,11 +182,12 @@ extension GroupOperation: AdvancedOperationQueueDelegate {
 
   public func operationQueue(operationQueue: AdvancedOperationQueue, operationWillFinish operation: Operation, withErrors errors: [Error]) {
     guard operationQueue === underlyingOperationQueue else { return }
-
+    
     guard operation !== finishingOperation && operation !== startingOperation else { return }
 
     if !errors.isEmpty {
       aggregatedErrors.append(contentsOf: errors)
+      print(aggregatedErrors)
     }
   }
 
