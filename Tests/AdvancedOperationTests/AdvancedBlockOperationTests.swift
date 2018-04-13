@@ -111,7 +111,7 @@ final class AdvancedBlockOperationTests: XCTestCase {
   func testBlockOperationWithDispatchQueue() {
     let queue = DispatchQueue(label: "\(identifier).\(#function)")
     let operation = AdvancedBlockOperation(queue: queue) {
-      XCTAssertTrue(!Thread.isMainThread)
+      XCTAssertFalse(Thread.isMainThread)
     }
 
     let expectation1 = expectation(description: "\(#function)\(#line)")
