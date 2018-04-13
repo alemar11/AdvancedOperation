@@ -100,7 +100,7 @@ open class GroupOperation: AdvancedOperation {
     finishingOperation.addCompletionBlock(asEndingBlock: false) {
       super.cancel(error: error)
     }
-    // underlyingOperationQueue.cancelAllOperations()
+    
     for operation in underlyingOperationQueue.operations where operation !== finishingOperation {
       operation.cancel()
     }
