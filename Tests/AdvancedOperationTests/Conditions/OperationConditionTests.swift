@@ -46,8 +46,8 @@ class OperationConditionTests: XCTestCase {
     let dependecy2 = AdvancedBlockOperation { }
     dependecy2.completionBlock = { expectation4.fulfill() }
 
-    let dependencyCondition1 = DependecyCondition(dependency: dependecy1)
-    let dependencyCondition2 = DependecyCondition(dependency: dependecy2)
+    let dependencyCondition1 = DependencyCondition(dependency: dependecy1)
+    let dependencyCondition2 = DependencyCondition(dependency: dependecy2)
 
     operation1.addCondition(dependencyCondition1)
     operation2.addCondition(dependencyCondition2)

@@ -289,7 +289,7 @@ internal struct AlwaysSuccessingCondition: OperationCondition {
   
 }
 
-internal struct DependecyCondition: OperationCondition {
+internal struct DependencyCondition: OperationCondition {
   
   private var dependency: Operation
   
