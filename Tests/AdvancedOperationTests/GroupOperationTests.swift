@@ -26,29 +26,29 @@ import XCTest
 
 final class GroupOperationTests: XCTestCase {
 
-  func testStress1() {
-    for i in 1...500 {
-      print("\(i)")
-      testOperationCancelled()
-      testOperationCancelledAsynchronously()
-    }
-  }
+//  func testStress1() {
+//    for i in 1...500 {
+//      print("\(i)")
+//      testOperationCancelled()
+//      testOperationCancelledAsynchronously()
+//    }
+//  }
 
-  func testStress2() {
-    for i in 1...500 {
-      print("\(i)")
-      testGroupOperationCancelled()
-      testGroupOperationCancelledWithError()
-    }
-  }
+//  func testStress2() {
+//    for i in 1...500 {
+//      print("\(i)")
+//      testGroupOperationCancelled()
+//      testGroupOperationCancelledWithError()
+//    }
+//  }
 
-  func testStress3() {
-    for i in 1...500 {
-      print("\(i)")
-      testCancelledGroupOperationInNestedGroupOperations()
-      testGroupOperationsCancelled()
-    }
-  }
+//  func testStress3() {
+//    for i in 1...500 {
+//      print("\(i)")
+//      testCancelledGroupOperationInNestedGroupOperations()
+//      testGroupOperationsCancelled()
+//    }
+//  }
 
   func testStandardFlow() {
     let expectation1 = expectation(description: "\(#function)\(#line)")
