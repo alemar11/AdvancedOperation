@@ -80,6 +80,7 @@ open class GroupOperation: AdvancedOperation {
     underlyingOperationQueue.delegate = self
     underlyingOperationQueue.addOperation(startingOperation)
     finishingOperation.completionBlock = { [weak self] in
+      // executed always
       guard let `self` = self else { return }
       self.underlyingOperationQueue.isSuspended = true
       self.finish(errors: self.aggregatedErrors)
@@ -95,6 +96,7 @@ open class GroupOperation: AdvancedOperation {
     guard !isCancelling && !isCancelled && !isFinished else { return }
 
     finishingOperation.addCompletionBlock(asEndingBlock: false) {
+      // executed before the block defined in the initializer
       super.cancel(error: error)
     }
     
