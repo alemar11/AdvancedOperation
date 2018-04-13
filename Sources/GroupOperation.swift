@@ -60,10 +60,7 @@ open class GroupOperation: AdvancedOperation {
   private lazy var startingOperation = BlockOperation { }
 
   /// Internal finishing operation.
-  /// It's an AdvancedBlockOperation so all its states can be monitored.
-  private lazy var finishingOperation = AdvancedBlockOperation { complete in
-    complete([])
-  }
+  private lazy var finishingOperation = BlockOperation { }
 
   /// ExclusivityManager used by `AdvancedOperationQueue`.
   private let exclusivityManager: ExclusivityManager
@@ -151,18 +148,17 @@ extension GroupOperation: AdvancedOperationQueueDelegate {
 
   public func operationQueue(operationQueue: AdvancedOperationQueue, didAddOperation operation: Operation) {}
 
-  public func operationQueue(operationQueue: AdvancedOperationQueue, operationWillFinish operation: Operation, withErrors errors: [Error]) { }
-
-  public func operationQueue(operationQueue: AdvancedOperationQueue, operationDidFinish operation: Operation, withErrors errors: [Error]) {
+  public func operationQueue(operationQueue: AdvancedOperationQueue, operationWillFinish operation: Operation, withErrors errors: [Error]) {
     guard operationQueue === underlyingOperationQueue else { return }
 
-    if operation === finishingOperation || operation === startingOperation {
-      return
-    } else if !errors.isEmpty {
+    guard operation !== finishingOperation && operation !== startingOperation else { return }
+
+    if !errors.isEmpty {
       aggregatedErrors.append(contentsOf: errors)
     }
-
   }
+
+  public func operationQueue(operationQueue: AdvancedOperationQueue, operationDidFinish operation: Operation, withErrors errors: [Error]) { }
 
   public func operationQueue(operationQueue: AdvancedOperationQueue, operationWillCancel operation: Operation, withErrors errors: [Error]) { }
 
