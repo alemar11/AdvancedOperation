@@ -118,8 +118,8 @@ open class GroupOperation: AdvancedOperation {
   public func addOperation(operation: Operation) {
     assert(!finishingOperation.isCancelled || !finishingOperation.isFinished, "The GroupOperation is finishing and cannot accept more operations.")
 
-    finishingOperation.addDependency(operation)
-    operation.addDependency(startingOperation)
+    //finishingOperation.addDependency(operation)
+    //operation.addDependency(startingOperation)
     underlyingOperationQueue.addOperation(operation)
   }
 
@@ -148,6 +148,29 @@ open class GroupOperation: AdvancedOperation {
 
 extension GroupOperation: AdvancedOperationQueueDelegate {
 
+  public func operationQueue(operationQueue: AdvancedOperationQueue, willAddOperation operation: Operation) {
+    assert(!finishingOperation.isFinished && !finishingOperation.isExecuting, "Cannot add new operations to a group after the group has completed.")
+
+    /*
+     Some operation in this group has produced a new operation to execute.
+     We want to allow that operation to execute before the group completes,
+     so we'll make the finishing operation dependent on this newly-produced operation.
+     */
+    if operation !== finishingOperation {
+      finishingOperation.addDependency(operation)
+    }
+
+    /*
+     All operations should be dependent on the "startingOperation".
+     This way, we can guarantee that the conditions for other operations
+     will not evaluate until just before the operation is about to run.
+     Otherwise, the conditions could be evaluated at any time, even
+     before the internal operation queue is unsuspended.
+     */
+    if operation !== startingOperation {
+      operation.addDependency(startingOperation)
+    }
+  }
   public func operationQueue(operationQueue: AdvancedOperationQueue, didAddOperation operation: Operation) {}
 
   public func operationQueue(operationQueue: AdvancedOperationQueue, operationWillFinish operation: Operation, withErrors errors: [Error]) {
