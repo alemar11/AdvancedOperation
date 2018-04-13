@@ -147,7 +147,7 @@ final class AdvancedBlockOperationTests: XCTestCase {
     weak var weakObject = object
 
     autoreleasepool {
-      var operation = AdvancedBlockOperation { [object] complete in
+      var operation = AdvancedBlockOperation { [unowned object] complete in
         DispatchQueue(label: "\(identifier).\(#function)", attributes: .concurrent).async {
           _ = object
           complete([])

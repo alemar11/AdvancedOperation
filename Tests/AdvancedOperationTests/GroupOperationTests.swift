@@ -393,12 +393,12 @@ final class GroupOperationTests: XCTestCase {
   }
 
   func testCancelledGroupOperationsWithOnlyBlockOperations() {
-    let operation1 = BlockOperation(block: { sleep(2) } )
+    let operation1 = BlockOperation {  }
     let operation2 = BlockOperation(block: { sleep(2) } )
     let group1 = GroupOperation(operations: [operation1, operation2])
 
     let operation3 = BlockOperation(block: { sleep(2) } )
-    let operation4 = BlockOperation(block: { sleep(2) } )
+    let operation4 = BlockOperation { }
     let operation5 = BlockOperation(block: { sleep(2) } )
     let group2 = GroupOperation(operations: operation3, operation4, operation5)
 
