@@ -33,7 +33,7 @@ final class GroupOperationTests: XCTestCase {
 //      testOperationCancelledAsynchronously()
 //    }
 //  }
-
+//
 //  func testStress2() {
 //    for i in 1...500 {
 //      print("\(i)")
@@ -41,7 +41,7 @@ final class GroupOperationTests: XCTestCase {
 //      testGroupOperationCancelledWithError()
 //    }
 //  }
-
+//
 //  func testStress3() {
 //    for i in 1...500 {
 //      print("\(i)")

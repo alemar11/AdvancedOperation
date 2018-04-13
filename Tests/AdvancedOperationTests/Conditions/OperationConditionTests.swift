@@ -101,13 +101,13 @@ class OperationConditionTests: XCTestCase {
   }
 
 
-  func testStress() {
-    for i in 1...200 {
-      print("\(i)")
-      testGroupOperationWithDependencies()
-      testCancelledGroupOperationWithDependencies()
-    }
-  }
+//  func testStress() {
+//    for i in 1...500 {
+//      print("\(i)")
+//      testGroupOperationWithDependencies()
+//      testCancelledGroupOperationWithDependencies()
+//    }
+//  }
 
   func testCancelledGroupOperationWithDependencies() {
     let expectation1 = expectation(description: "\(#function)\(#line)")
