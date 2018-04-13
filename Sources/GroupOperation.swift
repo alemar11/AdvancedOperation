@@ -57,7 +57,7 @@ open class GroupOperation: AdvancedOperation {
   private let underlyingOperationQueue: AdvancedOperationQueue
 
   /// Internal starting operation.
-  private lazy var startingOperation = BlockOperation { }
+  private lazy var startingOperation = AdvancedBlockOperation { complete in complete([])} //TODO: test with normal block operation
 
   /// Internal finishing operation.
   private lazy var finishingOperation = BlockOperation { }
