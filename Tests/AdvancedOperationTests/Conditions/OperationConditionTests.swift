@@ -26,7 +26,7 @@ import XCTest
 
 class OperationConditionTests: XCTestCase {
 
-  func testDependecy() {
+  func testDependency() {
     let queue = AdvancedOperationQueue()
 
     let expectation1 = expectation(description: "\(#function)\(#line)")
@@ -40,20 +40,24 @@ class OperationConditionTests: XCTestCase {
     let operation2 = SleepyOperation()
     operation2.completionBlock = { expectation2.fulfill() }
 
-    let dependecy1 = AdvancedBlockOperation { }
-    dependecy1.completionBlock = { expectation3.fulfill() }
+    let dependency1 = AdvancedBlockOperation { }
+    dependency1.completionBlock = { expectation3.fulfill() }
 
-    let dependecy2 = AdvancedBlockOperation { }
-    dependecy2.completionBlock = { expectation4.fulfill() }
+    let dependency2 = AdvancedBlockOperation { }
+    dependency2.completionBlock = { expectation4.fulfill() }
 
-    let dependencyCondition1 = DependencyCondition(dependency: dependecy1)
-    let dependencyCondition2 = DependencyCondition(dependency: dependecy2)
+    let dependencyCondition1 = DependencyCondition(dependency: dependency1)
+    let dependencyCondition2 = DependencyCondition(dependency: dependency2)
 
     operation1.addCondition(dependencyCondition1)
     operation2.addCondition(dependencyCondition2)
 
     queue.addOperations([operation1, operation2], waitUntilFinished: false)
     waitForExpectations(timeout: 10)
+  }
+
+  func testGroupOperation() {
+  let operation1 = BlockOperation { }
   }
 
 }
