@@ -56,8 +56,91 @@ class OperationConditionTests: XCTestCase {
     waitForExpectations(timeout: 10)
   }
 
-  func testGroupOperation() {
-  let operation1 = BlockOperation { }
+  func testGroupOperationWithDependencies() {
+    let expectation1 = expectation(description: "\(#function)\(#line)")
+    let expectation2 = expectation(description: "\(#function)\(#line)")
+    let expectation3 = expectation(description: "\(#function)\(#line)")
+    let expectation4 = expectation(description: "\(#function)\(#line)")
+    let expectation5 = expectation(description: "\(#function)\(#line)")
+
+    let operation1 = AdvancedBlockOperation { }
+    operation1.completionBlock = { expectation1.fulfill() }
+
+    let operation2 = AdvancedBlockOperation { }
+    operation2.completionBlock = { expectation2.fulfill() }
+
+    let group = GroupOperation()
+    group.completionBlock = {
+      expectation5.fulfill()
+    }
+
+    let dependency1 = AdvancedBlockOperation { sleep(2) }
+    dependency1.completionBlock = {
+      XCTAssertFalse(group.isFinished)
+      expectation3.fulfill()
+    }
+
+    let dependency2 = AdvancedBlockOperation { sleep(4) }
+    dependency2.completionBlock = {
+      XCTAssertFalse(group.isFinished)
+      expectation4.fulfill()
+    }
+
+    let dependencyCondition1 = DependencyCondition(dependency: dependency1)
+    let dependencyCondition2 = DependencyCondition(dependency: dependency2)
+
+    operation1.addCondition(dependencyCondition1)
+    operation2.addCondition(dependencyCondition2)
+
+    group.addOperation(operation: operation1)
+    group.addOperation(operation: operation2)
+
+    group.start()
+
+    waitForExpectations(timeout: 10)
+  }
+
+  func testCancelledGroupOperationWithDependencies() {
+    let expectation1 = expectation(description: "\(#function)\(#line)")
+    let expectation2 = expectation(description: "\(#function)\(#line)")
+    let expectation3 = expectation(description: "\(#function)\(#line)")
+    let expectation4 = expectation(description: "\(#function)\(#line)")
+    let expectation5 = expectation(description: "\(#function)\(#line)")
+
+    let operation1 = AdvancedBlockOperation { }
+    operation1.completionBlock = { expectation1.fulfill() }
+
+    let operation2 = AdvancedBlockOperation { }
+    operation2.completionBlock = { expectation2.fulfill() }
+
+    let group = GroupOperation()
+    group.completionBlock = {
+      expectation5.fulfill()
+    }
+
+    let dependency1 = AdvancedBlockOperation { sleep(2) }
+    dependency1.completionBlock = { expectation3.fulfill() }
+
+    let dependency2 = AdvancedBlockOperation { sleep(1) }
+    dependency2.completionBlock = { expectation4.fulfill() }
+
+    let dependencyCondition1 = DependencyCondition(dependency: dependency1)
+    let dependencyCondition2 = DependencyCondition(dependency: dependency2)
+
+    operation1.addCondition(dependencyCondition1)
+    operation2.addCondition(dependencyCondition2)
+
+    group.addOperation(operation: operation1)
+    group.addOperation(operation: operation2)
+
+    group.start()
+    group.cancel(error: MockError.failed)
+
+    waitForExpectations(timeout: 10)
+
+    XCTAssertSameErrorQuantity(errors: group.errors, expectedErrors: [MockError.failed])
+    XCTAssertTrue(group.isCancelled)
+    XCTAssertTrue(group.isFinished)
   }
 
 }
