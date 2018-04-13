@@ -195,7 +195,7 @@ open class AdvancedOperation: Operation {
       return
     }
 
-    // Bail out early if cancelled or there are some errors.
+    // Bail out early if cancelled or if there are some errors.
     guard !failed && !isCancelled else {
       finish() // fires KVO
       return
