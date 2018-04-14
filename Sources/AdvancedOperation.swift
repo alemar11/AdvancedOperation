@@ -227,13 +227,6 @@ open class AdvancedOperation: Operation {
   }
 
   private func _cancel(error: Error? = nil) {
-    //    let isBeingFinished = lock.synchronized { () -> Bool in
-    //      if _finishing || isFinished { return true }
-    //      return false
-    //    }
-    //
-    //    guard !isBeingFinished else { return }
-
     let canBeCancelled = lock.synchronized { () -> Bool in
       guard !_finishing && !isFinished else { return false }
       guard !_cancelling && !_cancelled else { return false }
