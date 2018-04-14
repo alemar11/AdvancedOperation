@@ -84,7 +84,7 @@ open class GroupOperation: AdvancedOperation {
     finishingOperation.completionBlock = { [weak self] in
       // always executed
       guard let `self` = self else { return }
-      self.isSuspended = true //TODO: self.isSupended = true
+      self.isSuspended = true
       self.finish(errors: self.aggregatedErrors)
     }
 
