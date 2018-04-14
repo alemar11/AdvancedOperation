@@ -57,7 +57,7 @@ open class GroupOperation: AdvancedOperation {
   private let underlyingOperationQueue: AdvancedOperationQueue
 
   /// Internal starting operation.
-  private lazy var startingOperation = AdvancedBlockOperation { complete in complete([]) } //TODO: test with normal block operation
+  private lazy var startingOperation = AdvancedBlockOperation { complete in complete([]) }
 
   /// Internal finishing operation.
   private lazy var finishingOperation = AdvancedBlockOperation { complete in complete([]) }
@@ -100,6 +100,7 @@ open class GroupOperation: AdvancedOperation {
   public final override func cancel(error: Error?) {
     guard !isCancelling && !isCancelled && !isFinished else { return }
 
+    // TODO: what if the finishingOperation is already executing?
     finishingOperation.addCompletionBlock(asEndingBlock: false) {
       // executed before the block defined in the initializer
       super.cancel(error: error)
