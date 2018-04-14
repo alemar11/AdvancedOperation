@@ -227,12 +227,12 @@ open class AdvancedOperation: Operation {
   }
 
   private func _cancel(error: Error? = nil) {
-//    let isBeingFinished = lock.synchronized { () -> Bool in
-//      if _finishing || isFinished { return true }
-//      return false
-//    }
-//
-//    guard !isBeingFinished else { return }
+    //    let isBeingFinished = lock.synchronized { () -> Bool in
+    //      if _finishing || isFinished { return true }
+    //      return false
+    //    }
+    //
+    //    guard !isBeingFinished else { return }
 
     let canBeCancelled = lock.synchronized { () -> Bool in
       guard !_finishing && !isFinished else { return false }
@@ -439,7 +439,8 @@ extension AdvancedOperation {
     }
 
     conditionGroup.notify(queue: DispatchQueue.global()) {
-      var errors = results.compactMap { (result) -> [Error]? in
+      // Aggregate all the occurred errors.
+      let errors = results.compactMap { (result) -> [Error]? in
         switch result {
         case .failed(let errors)?:
           return errors
@@ -448,11 +449,15 @@ extension AdvancedOperation {
         }
         } .flatMap { $0 }
 
-//      if operation.isCancelled {
-//        var aggregatedErrors = operation.errors
-//        aggregatedErrors.append(contentsOf: [NSError(domain: "\(identifier).\(type(of: self))", code: OperationErrorCode.conditionFailed.rawValue, userInfo: nil)])
-//        errors.append(contentsOf: aggregatedErrors)
-//      }
+      // TODO: manage an operation cancelled state
+
+      /*
+       if operation.isCancelled {
+       var aggregatedErrors = operation.errors
+       aggregatedErrors.append(contentsOf: [NSError(domain: "\(identifier).\(type(of: self))", code: OperationErrorCode.conditionFailed.rawValue, userInfo: nil)])
+       errors.append(contentsOf: aggregatedErrors)
+       }
+       */
       completion(errors)
     }
   }
