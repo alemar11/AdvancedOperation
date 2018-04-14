@@ -248,7 +248,7 @@ open class AdvancedOperation: Operation {
       if let error = error {
         self.errors.append(error)
       }
-      if (_state == .pending) { // conditions will not be evaluated anymore
+      if _state == .pending { // conditions will not be evaluated anymore
         _state = .ready
       }
       _cancelled = true
