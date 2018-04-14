@@ -151,7 +151,7 @@ class OperationConditionTests: XCTestCase {
 
     waitForExpectations(timeout: 15)
 
-    XCTAssertSameErrorQuantity(errors: group.errors, expectedErrors: [MockError.failed]) //Operation has 2 errors, expected: 1
+    XCTAssertSameErrorQuantity(errors: group.errors, expectedErrors: [MockError.failed])
 
     XCTAssertTrue(group.isCancelled)
     XCTAssertTrue(group.isFinished)
