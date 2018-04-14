@@ -132,16 +132,11 @@ open class GroupOperation: AdvancedOperation {
     _temporaryCancelError = error
     }
 
-//    finishingOperation.addCompletionBlock(asEndingBlock: false) {
-//      // executed before the block defined in the initializer
-//      super.cancel(error: error)
-//    }
-
     startingOperation.cancel()
     for operation in underlyingOperationQueue.operations where operation !== finishingOperation && operation !== startingOperation {
       operation.cancel()
     }
-    finishingOperation.cancel()
+    // once all the operations will be cancelled, the finishing operation will be called
   }
 
   open override func cancel() {

@@ -41,7 +41,7 @@ final class AdvancedBlockOperationTests: XCTestCase {
     operation.cancel()
 
     waitForExpectations(timeout: 4)
-    print(operation)
+    
     XCTAssertTrue(operation.isCancelled)
     XCTAssertTrue(operation.isFinished)
   }

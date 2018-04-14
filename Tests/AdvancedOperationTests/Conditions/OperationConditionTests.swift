@@ -102,7 +102,7 @@ class OperationConditionTests: XCTestCase {
 
 
   func testStress() {
-    for i in 1...100 {
+    for i in 1...1000 {
       print("\(i)")
       //testGroupOperationWithDependencies()
       testCancelledGroupOperationWithDependencies()
@@ -116,11 +116,26 @@ class OperationConditionTests: XCTestCase {
     let expectation4 = expectation(description: "\(#function)\(#line)")
     let expectation5 = expectation(description: "\(#function)\(#line)")
 
+    let observer = BlockObserver(willExecute: { (operation) in
+      print("\(operation.name!) willExecute")
+    }, didProduce: { (from, to) in
+
+    }, willCancel: { (operation, errors) in
+      print("\(operation.name!) willCancel")
+    }, didCancel: { (operation, errors) in
+      print("\(operation.name!) didCancel")
+    }, willFinish: { (operation, errors) in
+      print("\(operation.name!) willFinish")
+    }) { (operation, errors) in
+      print("\(operation.name!) didFinish")
+    }
+
     let operation1 = AdvancedBlockOperation { }
     operation1.name = "operation1"
     operation1.completionBlock = { expectation1.fulfill() }
 
     let operation2 = AdvancedBlockOperation { }
+    operation2.addObserver(observer)
     operation2.name = "operation2"
     operation2.completionBlock = { expectation2.fulfill() }
 
@@ -159,7 +174,7 @@ class OperationConditionTests: XCTestCase {
     XCTAssertTrue(operation1.isCancelled)
     XCTAssertTrue(operation1.isFinished)
     XCTAssertTrue(operation2.isCancelled)
-    XCTAssertTrue(operation2.isFinished)
+    XCTAssertTrue(operation2.isFinished, "🔴 \(operation2.state)")
   }
 
   func testCancelledOperationWithMultipleConditions() {
