@@ -260,9 +260,9 @@ open class AdvancedOperation: Operation {
 
     super.cancel() // fires isReady KVO
 
-    if state == .executing {
-      finish()
-    }
+//    if state == .executing {
+//      finish()
+//    }
   }
   
   public final func finish(errors: [Error] = []) {
