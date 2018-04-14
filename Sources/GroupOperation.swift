@@ -114,6 +114,7 @@ open class GroupOperation: AdvancedOperation {
     }
   }
 
+  /// The GroupOperation completion command, called by the finishing operation.
   private func complete() {
     isSuspended = true
     if lock.synchronized({ () -> Bool in return _requiresCancellationBeforeFinishing }) {
