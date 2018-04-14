@@ -273,6 +273,17 @@ final internal class MockOperationQueueDelegate: AdvancedOperationQueueDelegate 
 
 // MARK:  Conditions
 
+internal struct SlowCondition: OperationCondition {
+
+  public func evaluate(for operation: AdvancedOperation, completion: @escaping (OperationConditionResult) -> Void) {
+    DispatchQueue(label: "SlowCondition").async {
+      sleep(10)
+      completion(.satisfied)
+    }
+  }
+
+}
+
 internal struct AlwaysFailingCondition: OperationCondition {
   
   public func evaluate(for operation: AdvancedOperation, completion: @escaping (OperationConditionResult) -> Void) {

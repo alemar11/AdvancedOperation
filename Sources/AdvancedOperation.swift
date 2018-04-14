@@ -423,7 +423,7 @@ extension AdvancedOperation {
     let conditionGroup = DispatchGroup()
     var results = [OperationConditionResult?](repeating: nil, count: conditions.count)
 
-    //TODO: manage operation cancelled state
+    // Even if an operation is canceled, the conditions are evaluated nonetheless.
 
     for (index, condition) in conditions.enumerated() {
       conditionGroup.enter()
@@ -443,8 +443,6 @@ extension AdvancedOperation {
           return nil
         }
         } .flatMap { $0 }
-
-      // TODO: manage an operation cancelled state
 
       /*
        if operation.isCancelled {

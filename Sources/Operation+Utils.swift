@@ -32,7 +32,6 @@ extension Operation {
   ///   - asEndingBlock: The block can be executed before the current completion block (`asEndingBlock` = false) or after (`asEndingBlock` = true).
   ///   - block: The block to be executed after the `Operation` enters the "finished" state.
   public func addCompletionBlock(asEndingBlock: Bool = true, block: @escaping () -> Void) {
-    //assert(!isExecuting, "The completion block cannot be modified after execution has begun.") //TODO this test
     guard let existingBlock = completionBlock else {
       completionBlock = block
       return

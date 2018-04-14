@@ -159,4 +159,69 @@ class OperationConditionTests: XCTestCase {
     XCTAssertTrue(operation2.isCancelled)
   }
 
+  func testCancelledOperationWithMultipleConditions() {
+    let expectation1 = expectation(description: "\(#function)\(#line)")
+    let expectation2 = expectation(description: "\(#function)\(#line)")
+    let expectation3 = expectation(description: "\(#function)\(#line)")
+    let expectation4 = expectation(description: "\(#function)\(#line)")
+
+    let operation1 = SleepyOperation()
+    operation1.completionBlock = { expectation1.fulfill() }
+
+    let dependency1 = AdvancedBlockOperation { complete in
+      sleep(5)
+      XCTAssertFalse(operation1.isExecuting)
+      complete([])
+    }
+    dependency1.completionBlock = { expectation2.fulfill() }
+
+    let dependency2 = AdvancedBlockOperation { complete in
+      XCTAssertFalse(operation1.isExecuting)
+      complete([])
+    }
+    dependency2.completionBlock = { expectation3.fulfill() }
+
+    let dependency3 = AdvancedBlockOperation {
+      XCTAssertFalse(operation1.isExecuting)
+    }
+
+    dependency3.completionBlock = {
+      expectation4.fulfill()
+    }
+
+    let dependencyCondition1 = DependencyCondition(dependency: dependency1)
+    let dependencyCondition2 = DependencyCondition(dependency: dependency2)
+    let dependencyCondition3 = DependencyCondition(dependency: dependency3)
+
+    operation1.addCondition(dependencyCondition1)
+    operation1.addCondition(dependencyCondition2)
+    operation1.addCondition(dependencyCondition3)
+
+    let queue = AdvancedOperationQueue()
+    queue.addOperation(operation1)
+
+    operation1.cancel() // at this point: all its dependecies are already running
+
+    waitForExpectations(timeout: 10)
+    XCTAssertTrue(operation1.isCancelled)
+  }
+
+  func testCancelledOperationWhileEvaluatingConditions() {
+    let expectation1 = expectation(description: "\(#function)\(#line)")
+    let operation1 = SleepyOperation()
+    operation1.completionBlock = { expectation1.fulfill() }
+
+    for _ in 1...100 {
+      operation1.addCondition(SlowCondition())
+    }
+
+    let queue = AdvancedOperationQueue()
+    queue.addOperation(operation1)
+
+    operation1.cancel() // at this point the operation itself is cancelled, but its conditions are still evaluating
+
+    waitForExpectations(timeout: 15)
+    XCTAssertTrue(operation1.isCancelled)
+  }
+
 }
