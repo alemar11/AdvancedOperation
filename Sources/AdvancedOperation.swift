@@ -260,6 +260,7 @@ open class AdvancedOperation: Operation {
 
     super.cancel() // fires isReady KVO
 
+    // TODO: implement autofinishing as opt in functionality
 //    if state == .executing {
 //      finish()
 //    }
