@@ -267,8 +267,8 @@ final class MutuallyExclusiveConditionTests: XCTestCase {
     dependency2.addCondition(MutuallyExclusiveCondition<XCTest>())
     dependency2.completionBlock = { expectationDependency2.fulfill() }
 
-    let dependencyCondition1 = DependecyCondition(dependency: dependency1)
-    let dependencyCondition2 = DependecyCondition(dependency: dependency2)
+    let dependencyCondition1 = DependencyCondition(dependency: dependency1)
+    let dependencyCondition2 = DependencyCondition(dependency: dependency2)
 
     let expectation1 = expectation(description: "\(#function)\(#line)")
     let expectation2 = expectation(description: "\(#function)\(#line)")

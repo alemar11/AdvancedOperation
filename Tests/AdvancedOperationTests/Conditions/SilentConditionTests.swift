@@ -42,14 +42,14 @@ class SilentConditionTests: XCTestCase {
     let operation2 = SleepyOperation()
     operation2.completionBlock = { expectation2.fulfill() }
 
-    let dependecy1 = AdvancedBlockOperation { }
-    dependecy1.completionBlock = { expectation3.fulfill() }
+    let dependency1 = AdvancedBlockOperation { }
+    dependency1.completionBlock = { expectation3.fulfill() }
 
-    let dependecy2 = AdvancedBlockOperation { }
-    dependecy2.completionBlock = { expectation4.fulfill() }
+    let dependency2 = AdvancedBlockOperation { }
+    dependency2.completionBlock = { expectation4.fulfill() }
 
-    let dependencyCondition1 = DependecyCondition(dependency: dependecy1)
-    let dependencyCondition2 = DependecyCondition(dependency: dependecy2)
+    let dependencyCondition1 = DependencyCondition(dependency: dependency1)
+    let dependencyCondition2 = DependencyCondition(dependency: dependency2)
 
     operation1.addCondition(dependencyCondition1)
     operation2.addCondition(SilentCondition(condition: dependencyCondition2))
