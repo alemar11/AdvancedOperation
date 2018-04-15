@@ -1,5 +1,11 @@
 # Changelog
 
+### 0.5.0
+
+- Improved GroupOperation.
+- Improved cancel command.
+- Bugfixes.
+
 ### 0.4.1
 
 - Bugfixes.

@@ -41,7 +41,7 @@ final class AdvancedBlockOperationTests: XCTestCase {
     operation.cancel()
 
     waitForExpectations(timeout: 4)
-    print(operation)
+    
     XCTAssertTrue(operation.isCancelled)
     XCTAssertTrue(operation.isFinished)
   }
@@ -111,7 +111,7 @@ final class AdvancedBlockOperationTests: XCTestCase {
   func testBlockOperationWithDispatchQueue() {
     let queue = DispatchQueue(label: "\(identifier).\(#function)")
     let operation = AdvancedBlockOperation(queue: queue) {
-      XCTAssertTrue(!Thread.isMainThread)
+      XCTAssertFalse(Thread.isMainThread)
     }
 
     let expectation1 = expectation(description: "\(#function)\(#line)")
@@ -147,7 +147,7 @@ final class AdvancedBlockOperationTests: XCTestCase {
     weak var weakObject = object
 
     autoreleasepool {
-      var operation = AdvancedBlockOperation { [object] complete in
+      var operation = AdvancedBlockOperation { [unowned object] complete in
         DispatchQueue(label: "\(identifier).\(#function)", attributes: .concurrent).async {
           _ = object
           complete([])

@@ -53,6 +53,17 @@ final class OperationUtilsTests: XCTestCase {
     waitForExpectations(timeout: 10)
   }
 
+  func testAddCompletionBlockWhileExecuting() {
+    let operation = SleepyAsyncOperation()
+    let expectation1 = expectation(description: "\(#function)\(#line)")
+
+    operation.start()
+    operation.addCompletionBlock {
+      expectation1.fulfill()
+    }
+    waitForExpectations(timeout: 10)
+  }
+
   func testAddCompletionBlockAsEndingBlock() {
     let operation = SleepyOperation()
     let expectation1 = expectation(description: "\(#function)\(#line)")
