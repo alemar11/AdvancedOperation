@@ -27,6 +27,9 @@ final public class ExclusivityManager {
 
   public static let sharedInstance = ExclusivityManager()
 
+  /// Creates a new `ExclusivityManager` instance.
+  public init() { }
+
   private let queue = DispatchQueue(label: "\(identifier).ExclusivityManager.\(UUID().uuidString)")
 
   internal private(set) var operations: [String: [Operation]] = [:]
