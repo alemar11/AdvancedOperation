@@ -30,6 +30,9 @@ public struct MutuallyExclusiveCondition<T>: OperationCondition {
 
   public var isMutuallyExclusive: Bool { return true }
 
+  /// Creates a new `MutuallyExclusiveCondition` element.
+  public init() { }
+
   public func evaluate(for operation: AdvancedOperation, completion: @escaping (OperationConditionResult) -> Void) {
     completion(.satisfied)
   }

@@ -28,7 +28,10 @@ import Foundation
 public struct NoCancelledDependeciesCondition: OperationCondition {
 
   public let ignoreCancellations: Bool
-  /// Initializer which takes no parameters.
+
+  /// Create a new `NoCancelledDependeciesCondition` element.
+  ///
+  /// - Parameter ignoreCancellations: true if cancellations should be ignored.
   public init(ignoreCancellations: Bool = false) {
     self.ignoreCancellations = ignoreCancellations
   }

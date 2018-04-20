@@ -29,6 +29,9 @@ public struct NoFailedDependenciesCondition: OperationCondition {
 
   public let ignoreCancellations: Bool
 
+  /// Create a new `NoFailedDependenciesCondition` element.
+  ///
+  /// - Parameter ignoreCancellations: true if cancellations should be ignored.
   public init(ignoreCancellations: Bool = false) {
     self.ignoreCancellations = ignoreCancellations
   }
