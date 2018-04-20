@@ -246,13 +246,6 @@
       "warning": "undocumented"
     },
     {
-      "file": "/Users/a.marzoli/Developer/x/AdvancedOperation/Sources/Conditions/NoFailedDependenciesCondition.swift",
-      "line": 32,
-      "symbol": "NoFailedDependenciesCondition.init(ignoreCancellations:)",
-      "symbol_kind": "source.lang.swift.decl.function.method.instance",
-      "warning": "undocumented"
-    },
-    {
       "file": "/Users/a.marzoli/Developer/x/AdvancedOperation/Sources/Conditions/OperationCondition.swift",
       "line": null,
       "symbol": "OperationCondition",
