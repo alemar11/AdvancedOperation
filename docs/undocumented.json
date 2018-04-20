@@ -1,453 +1,453 @@
 {
   "warnings": [
     {
-      "file": "/Users/a.marzoli/Developer/Frameworks/AdvancedOperation/Sources/AdvancedBlockOperation.swift",
+      "file": "/Users/a.marzoli/Developer/x/AdvancedOperation/Sources/AdvancedBlockOperation.swift",
       "line": 64,
       "symbol": "AdvancedBlockOperation.main()",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/a.marzoli/Developer/Frameworks/AdvancedOperation/Sources/AdvancedOperation.swift",
+      "file": "/Users/a.marzoli/Developer/x/AdvancedOperation/Sources/AdvancedOperation.swift",
       "line": 31,
       "symbol": "AdvancedOperation.isReady",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/a.marzoli/Developer/Frameworks/AdvancedOperation/Sources/AdvancedOperation.swift",
+      "file": "/Users/a.marzoli/Developer/x/AdvancedOperation/Sources/AdvancedOperation.swift",
       "line": 55,
       "symbol": "AdvancedOperation.isExecuting",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/a.marzoli/Developer/Frameworks/AdvancedOperation/Sources/AdvancedOperation.swift",
+      "file": "/Users/a.marzoli/Developer/x/AdvancedOperation/Sources/AdvancedOperation.swift",
       "line": 57,
       "symbol": "AdvancedOperation.isFinished",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/a.marzoli/Developer/Frameworks/AdvancedOperation/Sources/AdvancedOperation.swift",
+      "file": "/Users/a.marzoli/Developer/x/AdvancedOperation/Sources/AdvancedOperation.swift",
       "line": 59,
       "symbol": "AdvancedOperation.isCancelled",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/a.marzoli/Developer/Frameworks/AdvancedOperation/Sources/AdvancedOperation.swift",
+      "file": "/Users/a.marzoli/Developer/x/AdvancedOperation/Sources/AdvancedOperation.swift",
       "line": 150,
       "symbol": "AdvancedOperation.keyPathsForValuesAffectingValue(forKey:)",
       "symbol_kind": "source.lang.swift.decl.function.method.class",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/a.marzoli/Developer/Frameworks/AdvancedOperation/Sources/AdvancedOperation.swift",
+      "file": "/Users/a.marzoli/Developer/x/AdvancedOperation/Sources/AdvancedOperation.swift",
       "line": 191,
       "symbol": "AdvancedOperation.start()",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/a.marzoli/Developer/Frameworks/AdvancedOperation/Sources/AdvancedOperation.swift",
+      "file": "/Users/a.marzoli/Developer/x/AdvancedOperation/Sources/AdvancedOperation.swift",
       "line": 217,
       "symbol": "AdvancedOperation.main()",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/a.marzoli/Developer/Frameworks/AdvancedOperation/Sources/AdvancedOperation.swift",
+      "file": "/Users/a.marzoli/Developer/x/AdvancedOperation/Sources/AdvancedOperation.swift",
       "line": 221,
       "symbol": "AdvancedOperation.cancel(error:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/a.marzoli/Developer/Frameworks/AdvancedOperation/Sources/AdvancedOperation.swift",
+      "file": "/Users/a.marzoli/Developer/x/AdvancedOperation/Sources/AdvancedOperation.swift",
       "line": 225,
       "symbol": "AdvancedOperation.cancel()",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/a.marzoli/Developer/Frameworks/AdvancedOperation/Sources/AdvancedOperation.swift",
-      "line": 264,
+      "file": "/Users/a.marzoli/Developer/x/AdvancedOperation/Sources/AdvancedOperation.swift",
+      "line": 269,
       "symbol": "AdvancedOperation.finish(errors:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/a.marzoli/Developer/Frameworks/AdvancedOperation/Sources/AdvancedOperation.swift",
-      "line": 373,
+      "file": "/Users/a.marzoli/Developer/x/AdvancedOperation/Sources/AdvancedOperation.swift",
+      "line": 378,
       "symbol": "AdvancedOperation.addDependency(_:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/a.marzoli/Developer/Frameworks/AdvancedOperation/Sources/AdvancedOperation.swift",
-      "line": 381,
+      "file": "/Users/a.marzoli/Developer/x/AdvancedOperation/Sources/AdvancedOperation.swift",
+      "line": 386,
       "symbol": "AdvancedOperation.conditions",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/a.marzoli/Developer/Frameworks/AdvancedOperation/Sources/AdvancedOperation.swift",
-      "line": 395,
+      "file": "/Users/a.marzoli/Developer/x/AdvancedOperation/Sources/AdvancedOperation.swift",
+      "line": 400,
       "symbol": "AdvancedOperation.addCondition(_:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/a.marzoli/Developer/Frameworks/AdvancedOperation/Sources/AdvancedOperationQueue.swift",
+      "file": "/Users/a.marzoli/Developer/x/AdvancedOperation/Sources/AdvancedOperationQueue.swift",
       "line": null,
       "symbol": "AdvancedOperationQueueDelegate",
       "symbol_kind": "source.lang.swift.decl.extension",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/a.marzoli/Developer/Frameworks/AdvancedOperation/Sources/AdvancedOperationQueue.swift",
+      "file": "/Users/a.marzoli/Developer/x/AdvancedOperation/Sources/AdvancedOperationQueue.swift",
       "line": 26,
       "symbol": "AdvancedOperationQueueDelegate",
       "symbol_kind": "source.lang.swift.decl.protocol",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/a.marzoli/Developer/Frameworks/AdvancedOperation/Sources/AdvancedOperationQueue.swift",
+      "file": "/Users/a.marzoli/Developer/x/AdvancedOperation/Sources/AdvancedOperationQueue.swift",
       "line": 27,
       "symbol": "AdvancedOperationQueueDelegate.operationQueue(operationQueue:willAddOperation:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/a.marzoli/Developer/Frameworks/AdvancedOperation/Sources/AdvancedOperationQueue.swift",
+      "file": "/Users/a.marzoli/Developer/x/AdvancedOperation/Sources/AdvancedOperationQueue.swift",
       "line": 28,
       "symbol": "AdvancedOperationQueueDelegate.operationQueue(operationQueue:didAddOperation:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/a.marzoli/Developer/Frameworks/AdvancedOperation/Sources/AdvancedOperationQueue.swift",
+      "file": "/Users/a.marzoli/Developer/x/AdvancedOperation/Sources/AdvancedOperationQueue.swift",
       "line": 30,
       "symbol": "AdvancedOperationQueueDelegate.operationQueue(operationQueue:operationWillExecute:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/a.marzoli/Developer/Frameworks/AdvancedOperation/Sources/AdvancedOperationQueue.swift",
+      "file": "/Users/a.marzoli/Developer/x/AdvancedOperation/Sources/AdvancedOperationQueue.swift",
       "line": 31,
       "symbol": "AdvancedOperationQueueDelegate.operationQueue(operationQueue:operationDidFinish:withErrors:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/a.marzoli/Developer/Frameworks/AdvancedOperation/Sources/AdvancedOperationQueue.swift",
+      "file": "/Users/a.marzoli/Developer/x/AdvancedOperation/Sources/AdvancedOperationQueue.swift",
       "line": 32,
       "symbol": "AdvancedOperationQueueDelegate.operationQueue(operationQueue:operationDidCancel:withErrors:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/a.marzoli/Developer/Frameworks/AdvancedOperation/Sources/AdvancedOperationQueue.swift",
+      "file": "/Users/a.marzoli/Developer/x/AdvancedOperation/Sources/AdvancedOperationQueue.swift",
       "line": 34,
       "symbol": "AdvancedOperationQueueDelegate.operationQueue(operationQueue:operationWillFinish:withErrors:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/a.marzoli/Developer/Frameworks/AdvancedOperation/Sources/AdvancedOperationQueue.swift",
+      "file": "/Users/a.marzoli/Developer/x/AdvancedOperation/Sources/AdvancedOperationQueue.swift",
       "line": 35,
       "symbol": "AdvancedOperationQueueDelegate.operationQueue(operationQueue:operationWillCancel:withErrors:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/a.marzoli/Developer/Frameworks/AdvancedOperation/Sources/AdvancedOperationQueue.swift",
+      "file": "/Users/a.marzoli/Developer/x/AdvancedOperation/Sources/AdvancedOperationQueue.swift",
       "line": 40,
       "symbol": "AdvancedOperationQueueDelegate.operationQueue(operationQueue:willAddOperation:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/a.marzoli/Developer/Frameworks/AdvancedOperation/Sources/AdvancedOperationQueue.swift",
+      "file": "/Users/a.marzoli/Developer/x/AdvancedOperation/Sources/AdvancedOperationQueue.swift",
       "line": 41,
       "symbol": "AdvancedOperationQueueDelegate.operationQueue(operationQueue:operationWillExecute:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/a.marzoli/Developer/Frameworks/AdvancedOperation/Sources/AdvancedOperationQueue.swift",
+      "file": "/Users/a.marzoli/Developer/x/AdvancedOperation/Sources/AdvancedOperationQueue.swift",
       "line": 47,
       "symbol": "AdvancedOperationQueue.delegate",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/a.marzoli/Developer/Frameworks/AdvancedOperation/Sources/AdvancedOperationQueue.swift",
+      "file": "/Users/a.marzoli/Developer/x/AdvancedOperation/Sources/AdvancedOperationQueue.swift",
       "line": 51,
       "symbol": "AdvancedOperationQueue.init(exclusivityManager:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/a.marzoli/Developer/Frameworks/AdvancedOperation/Sources/AdvancedOperationQueue.swift",
+      "file": "/Users/a.marzoli/Developer/x/AdvancedOperation/Sources/AdvancedOperationQueue.swift",
       "line": 56,
       "symbol": "AdvancedOperationQueue.addOperation(_:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/a.marzoli/Developer/Frameworks/AdvancedOperation/Sources/AdvancedOperationQueue.swift",
+      "file": "/Users/a.marzoli/Developer/x/AdvancedOperation/Sources/AdvancedOperationQueue.swift",
       "line": 126,
       "symbol": "AdvancedOperationQueue.addOperations(_:waitUntilFinished:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/a.marzoli/Developer/Frameworks/AdvancedOperation/Sources/BlockObserver.swift",
+      "file": "/Users/a.marzoli/Developer/x/AdvancedOperation/Sources/BlockObserver.swift",
       "line": 31,
       "symbol": "BlockObserver.identifier",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/a.marzoli/Developer/Frameworks/AdvancedOperation/Sources/BlockObserver.swift",
+      "file": "/Users/a.marzoli/Developer/x/AdvancedOperation/Sources/BlockObserver.swift",
       "line": 40,
       "symbol": "BlockObserver.init(willExecute:didProduce:willCancel:didCancel:willFinish:didFinish:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/a.marzoli/Developer/Frameworks/AdvancedOperation/Sources/Conditions/ExclusivityManager.swift",
+      "file": "/Users/a.marzoli/Developer/x/AdvancedOperation/Sources/Conditions/ExclusivityManager.swift",
       "line": 26,
       "symbol": "ExclusivityManager",
       "symbol_kind": "source.lang.swift.decl.class",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/a.marzoli/Developer/Frameworks/AdvancedOperation/Sources/Conditions/ExclusivityManager.swift",
+      "file": "/Users/a.marzoli/Developer/x/AdvancedOperation/Sources/Conditions/ExclusivityManager.swift",
       "line": 28,
       "symbol": "ExclusivityManager.sharedInstance",
       "symbol_kind": "source.lang.swift.decl.var.static",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/a.marzoli/Developer/Frameworks/AdvancedOperation/Sources/Conditions/NoCancelledDependenciesCondition.swift",
+      "file": "/Users/a.marzoli/Developer/x/AdvancedOperation/Sources/Conditions/NoCancelledDependenciesCondition.swift",
       "line": 30,
       "symbol": "NoCancelledDependeciesCondition.ignoreCancellations",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/a.marzoli/Developer/Frameworks/AdvancedOperation/Sources/Conditions/NoFailedDependenciesCondition.swift",
+      "file": "/Users/a.marzoli/Developer/x/AdvancedOperation/Sources/Conditions/NoFailedDependenciesCondition.swift",
       "line": 30,
       "symbol": "NoFailedDependenciesCondition.ignoreCancellations",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/a.marzoli/Developer/Frameworks/AdvancedOperation/Sources/Conditions/NoFailedDependenciesCondition.swift",
+      "file": "/Users/a.marzoli/Developer/x/AdvancedOperation/Sources/Conditions/NoFailedDependenciesCondition.swift",
       "line": 32,
       "symbol": "NoFailedDependenciesCondition.init(ignoreCancellations:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/a.marzoli/Developer/Frameworks/AdvancedOperation/Sources/Conditions/OperationCondition.swift",
+      "file": "/Users/a.marzoli/Developer/x/AdvancedOperation/Sources/Conditions/OperationCondition.swift",
       "line": null,
       "symbol": "OperationCondition",
       "symbol_kind": "source.lang.swift.decl.extension",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/a.marzoli/Developer/Frameworks/AdvancedOperation/Sources/Conditions/OperationCondition.swift",
+      "file": "/Users/a.marzoli/Developer/x/AdvancedOperation/Sources/Conditions/OperationCondition.swift",
       "line": null,
       "symbol": "OperationCondition",
       "symbol_kind": "source.lang.swift.decl.extension",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/a.marzoli/Developer/Frameworks/AdvancedOperation/Sources/Conditions/OperationCondition.swift",
+      "file": "/Users/a.marzoli/Developer/x/AdvancedOperation/Sources/Conditions/OperationCondition.swift",
       "line": 26,
       "symbol": "OperationCondition",
       "symbol_kind": "source.lang.swift.decl.protocol",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/a.marzoli/Developer/Frameworks/AdvancedOperation/Sources/Conditions/OperationConditionResult.swift",
+      "file": "/Users/a.marzoli/Developer/x/AdvancedOperation/Sources/Conditions/OperationConditionResult.swift",
       "line": 24,
       "symbol": "OperationConditionResult",
       "symbol_kind": "source.lang.swift.decl.enum",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/a.marzoli/Developer/Frameworks/AdvancedOperation/Sources/Conditions/OperationConditionResult.swift",
+      "file": "/Users/a.marzoli/Developer/x/AdvancedOperation/Sources/Conditions/OperationConditionResult.swift",
       "line": 25,
       "symbol": "OperationConditionResult.satisfied",
       "symbol_kind": "source.lang.swift.decl.enumelement",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/a.marzoli/Developer/Frameworks/AdvancedOperation/Sources/Conditions/OperationConditionResult.swift",
+      "file": "/Users/a.marzoli/Developer/x/AdvancedOperation/Sources/Conditions/OperationConditionResult.swift",
       "line": 26,
       "symbol": "OperationConditionResult.failed",
       "symbol_kind": "source.lang.swift.decl.enumelement",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/a.marzoli/Developer/Frameworks/AdvancedOperation/Sources/Conditions/OperationConditionResult.swift",
+      "file": "/Users/a.marzoli/Developer/x/AdvancedOperation/Sources/Conditions/OperationConditionResult.swift",
       "line": 28,
       "symbol": "OperationConditionResult.errors",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/a.marzoli/Developer/Frameworks/AdvancedOperation/Sources/GroupOperation.swift",
+      "file": "/Users/a.marzoli/Developer/x/AdvancedOperation/Sources/GroupOperation.swift",
       "line": null,
       "symbol": "GroupOperation",
       "symbol_kind": "source.lang.swift.decl.extension",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/a.marzoli/Developer/Frameworks/AdvancedOperation/Sources/GroupOperation.swift",
+      "file": "/Users/a.marzoli/Developer/x/AdvancedOperation/Sources/GroupOperation.swift",
       "line": 26,
       "symbol": "GroupOperation",
       "symbol_kind": "source.lang.swift.decl.class",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/a.marzoli/Developer/Frameworks/AdvancedOperation/Sources/GroupOperation.swift",
+      "file": "/Users/a.marzoli/Developer/x/AdvancedOperation/Sources/GroupOperation.swift",
       "line": 89,
       "symbol": "GroupOperation.init(exclusivityManager:operations:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/a.marzoli/Developer/Frameworks/AdvancedOperation/Sources/GroupOperation.swift",
+      "file": "/Users/a.marzoli/Developer/x/AdvancedOperation/Sources/GroupOperation.swift",
       "line": 93,
       "symbol": "GroupOperation.init(exclusivityManager:operations:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/a.marzoli/Developer/Frameworks/AdvancedOperation/Sources/GroupOperation.swift",
-      "line": 147,
+      "file": "/Users/a.marzoli/Developer/x/AdvancedOperation/Sources/GroupOperation.swift",
+      "line": 142,
       "symbol": "GroupOperation.cancel()",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/a.marzoli/Developer/Frameworks/AdvancedOperation/Sources/GroupOperation.swift",
-      "line": 151,
+      "file": "/Users/a.marzoli/Developer/x/AdvancedOperation/Sources/GroupOperation.swift",
+      "line": 146,
       "symbol": "GroupOperation.main()",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/a.marzoli/Developer/Frameworks/AdvancedOperation/Sources/GroupOperation.swift",
-      "line": 156,
+      "file": "/Users/a.marzoli/Developer/x/AdvancedOperation/Sources/GroupOperation.swift",
+      "line": 151,
       "symbol": "GroupOperation.addOperation(operation:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/a.marzoli/Developer/Frameworks/AdvancedOperation/Sources/GroupOperation.swift",
-      "line": 189,
+      "file": "/Users/a.marzoli/Developer/x/AdvancedOperation/Sources/GroupOperation.swift",
+      "line": 184,
       "symbol": "GroupOperation.operationQueue(operationQueue:willAddOperation:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/a.marzoli/Developer/Frameworks/AdvancedOperation/Sources/GroupOperation.swift",
-      "line": 207,
+      "file": "/Users/a.marzoli/Developer/x/AdvancedOperation/Sources/GroupOperation.swift",
+      "line": 202,
       "symbol": "GroupOperation.operationQueue(operationQueue:didAddOperation:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/a.marzoli/Developer/Frameworks/AdvancedOperation/Sources/GroupOperation.swift",
-      "line": 209,
+      "file": "/Users/a.marzoli/Developer/x/AdvancedOperation/Sources/GroupOperation.swift",
+      "line": 204,
       "symbol": "GroupOperation.operationQueue(operationQueue:operationWillFinish:withErrors:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/a.marzoli/Developer/Frameworks/AdvancedOperation/Sources/GroupOperation.swift",
-      "line": 219,
+      "file": "/Users/a.marzoli/Developer/x/AdvancedOperation/Sources/GroupOperation.swift",
+      "line": 214,
       "symbol": "GroupOperation.operationQueue(operationQueue:operationDidFinish:withErrors:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/a.marzoli/Developer/Frameworks/AdvancedOperation/Sources/GroupOperation.swift",
-      "line": 221,
+      "file": "/Users/a.marzoli/Developer/x/AdvancedOperation/Sources/GroupOperation.swift",
+      "line": 216,
       "symbol": "GroupOperation.operationQueue(operationQueue:operationWillCancel:withErrors:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/a.marzoli/Developer/Frameworks/AdvancedOperation/Sources/GroupOperation.swift",
-      "line": 223,
+      "file": "/Users/a.marzoli/Developer/x/AdvancedOperation/Sources/GroupOperation.swift",
+      "line": 218,
       "symbol": "GroupOperation.operationQueue(operationQueue:operationDidCancel:withErrors:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/a.marzoli/Developer/Frameworks/AdvancedOperation/Sources/OperationErrorCode.swift",
+      "file": "/Users/a.marzoli/Developer/x/AdvancedOperation/Sources/OperationErrorCode.swift",
       "line": 24,
       "symbol": "OperationErrorCode",
       "symbol_kind": "source.lang.swift.decl.enum",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/a.marzoli/Developer/Frameworks/AdvancedOperation/Sources/OperationObserving.swift",
+      "file": "/Users/a.marzoli/Developer/x/AdvancedOperation/Sources/OperationObserving.swift",
       "line": 29,
       "symbol": "OperationWillExecuteObserving",
       "symbol_kind": "source.lang.swift.decl.protocol",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/a.marzoli/Developer/Frameworks/AdvancedOperation/Sources/OperationObserving.swift",
+      "file": "/Users/a.marzoli/Developer/x/AdvancedOperation/Sources/OperationObserving.swift",
       "line": 34,
       "symbol": "OperationWillFinishObserving",
       "symbol_kind": "source.lang.swift.decl.protocol",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/a.marzoli/Developer/Frameworks/AdvancedOperation/Sources/OperationObserving.swift",
+      "file": "/Users/a.marzoli/Developer/x/AdvancedOperation/Sources/OperationObserving.swift",
       "line": 40,
       "symbol": "OperationDidFinishObserving",
       "symbol_kind": "source.lang.swift.decl.protocol",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/a.marzoli/Developer/Frameworks/AdvancedOperation/Sources/OperationObserving.swift",
+      "file": "/Users/a.marzoli/Developer/x/AdvancedOperation/Sources/OperationObserving.swift",
       "line": 46,
       "symbol": "OperationWillCancelObserving",
       "symbol_kind": "source.lang.swift.decl.protocol",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/a.marzoli/Developer/Frameworks/AdvancedOperation/Sources/OperationObserving.swift",
+      "file": "/Users/a.marzoli/Developer/x/AdvancedOperation/Sources/OperationObserving.swift",
       "line": 51,
       "symbol": "OperationDidCancelObserving",
       "symbol_kind": "source.lang.swift.decl.protocol",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/a.marzoli/Developer/Frameworks/AdvancedOperation/Sources/OperationObserving.swift",
+      "file": "/Users/a.marzoli/Developer/x/AdvancedOperation/Sources/OperationObserving.swift",
       "line": 56,
       "symbol": "OperationDidProduceOperationObserving",
       "symbol_kind": "source.lang.swift.decl.protocol",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/a.marzoli/Developer/Frameworks/AdvancedOperation/Sources/OperationObserving.swift",
+      "file": "/Users/a.marzoli/Developer/x/AdvancedOperation/Sources/OperationObserving.swift",
       "line": 63,
       "symbol": "OperationObserving",
       "symbol_kind": "source.lang.swift.decl.protocol",
       "warning": "undocumented"
     }
   ],
-  "source_directory": "/Users/a.marzoli/Developer/Frameworks/AdvancedOperation"
+  "source_directory": "/Users/a.marzoli/Developer/x/AdvancedOperation"
 }
