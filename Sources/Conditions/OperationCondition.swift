@@ -28,8 +28,8 @@ public protocol OperationCondition {
   /// The name of the condition.
   var name: String { get }
 
-  /// A flag to indicate whether this condition is mutually exclusive meaning that only one condition can be evaluated at a time.
-  var mutuallyExclusivityMode: MutualExclusivityMode { get } //TODO
+  /// Indicates how this condition is mutually exclusive.
+  var mutuallyExclusivityMode: MutualExclusivityMode { get }
 
   /// Some conditions may have the ability to satisfy the condition if another operation is executed first.
   ///
@@ -49,7 +49,7 @@ public protocol OperationCondition {
 
 public extension OperationCondition {
 
-  var mutuallyExclusivityMode: MutualExclusivityMode { return .no }
+  var mutuallyExclusivityMode: MutualExclusivityMode { return .disabled }
 
   func dependency(for operation: AdvancedOperation) -> Operation? { return nil }
 }

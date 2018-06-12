@@ -95,7 +95,7 @@ open class AdvancedOperationQueue: OperationQueue {
           operation.addDependency(dependency)
         }
 
-        let mutuallyExclusiveConditions = operation.conditions.filter { $0.mutuallyExclusivityMode != .no }
+        let mutuallyExclusiveConditions = operation.conditions.filter { $0.mutuallyExclusivityMode != .disabled }
         if !mutuallyExclusiveConditions.isEmpty {
           for condition in mutuallyExclusiveConditions {
             let category = condition.name

@@ -34,7 +34,7 @@ final public class ExclusivityManager {
 
   internal private(set) var operations: [String: [Operation]] = [:]
 
-  internal func addOperation(_ operation: AdvancedOperation, category: String, cancelIfExists: Bool = false) {
+  internal func addOperation(_ operation: AdvancedOperation, category: String, cancelIfExists: Bool = false) { //TODO: better naming
     _ = queue.sync(execute: {
       self._addOperation(operation, category: category, cancelIfExists: cancelIfExists)
     })

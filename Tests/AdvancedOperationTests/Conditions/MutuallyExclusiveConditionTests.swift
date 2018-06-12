@@ -30,6 +30,8 @@ final class MutuallyExclusiveConditionTests: XCTestCase {
     XCTAssertTrue(MutuallyExclusiveCondition<XCTestCase>().mutuallyExclusivityMode == .enqueue)
   }
 
+  // MARK: - Enqueue Mode
+
   func testMutuallyExclusiveCondition() {
     let queue = AdvancedOperationQueue()
     queue.maxConcurrentOperationCount = 10
@@ -339,6 +341,80 @@ final class MutuallyExclusiveConditionTests: XCTestCase {
     XCTAssertEqual((manager.operations[key] ?? []).count, 0)
   }
 
+  // MARK: - Cancel Mode
+
+  func testMutuallyExclusiveConditionWithCancelMode() {
+    let queue = AdvancedOperationQueue()
+    queue.maxConcurrentOperationCount = 10
+
+    let expectation1 = expectation(description: "\(#function)\(#line)")
+    let expectation2 = expectation(description: "\(#function)\(#line)")
+
+    let operation1 = SleepyAsyncOperation(interval1: 0, interval2: 0, interval3: 0)
+    operation1.completionBlock = {
+      expectation1.fulfill()
+    }
+    operation1.addCondition(MutuallyExclusiveCondition<SleepyAsyncOperation>(mode: .cancel))
+
+
+    let operation2 = SleepyAsyncOperation(interval1: 5, interval2: 5, interval3: 5)
+    operation2.completionBlock = {
+      expectation2.fulfill()
+    }
+    operation2.addCondition(MutuallyExclusiveCondition<SleepyAsyncOperation>())
+
+    queue.addOperations([operation2, operation1], waitUntilFinished: true)
+    waitForExpectations(timeout: 0)
+    XCTAssertTrue(operation1.isCancelled)
+  }
+
+  func testMutuallyExclusiveConditionWithtDifferentQueuesWithCancelMode() {
+    let queue1 = AdvancedOperationQueue()
+    queue1.maxConcurrentOperationCount = 10
+    var text = ""
+
+    let queue2 = AdvancedOperationQueue()
+
+    let expectation1 = expectation(description: "\(#function)\(#line)")
+    let expectation2 = expectation(description: "\(#function)\(#line)")
+    let expectation3 = expectation(description: "\(#function)\(#line)")
+    let expectation4 = expectation(description: "\(#function)\(#line)")
+
+    let operation1 = AdvancedBlockOperation { complete in
+      text += "A"
+      complete([])
+    }
+    operation1.completionBlock = { expectation1.fulfill() }
+    operation1.addCondition(MutuallyExclusiveCondition<AdvancedBlockOperation>())
+
+    let operation2 = AdvancedBlockOperation { complete in
+      text += "B"
+      complete([])
+    }
+    operation2.completionBlock = { expectation2.fulfill() }
+    operation2.addCondition(MutuallyExclusiveCondition<AdvancedBlockOperation>(mode: .cancel))
+
+    let operation3 = AdvancedBlockOperation { complete in
+      text += "C"
+      complete([])
+    }
+    operation3.completionBlock = { expectation3.fulfill() }
+    operation3.addCondition(MutuallyExclusiveCondition<AdvancedBlockOperation>())
+
+    let operation4 = AdvancedBlockOperation { complete in
+      text += "D"
+      complete([])
+    }
+    operation4.completionBlock = { expectation4.fulfill() }
+    operation4.addCondition(MutuallyExclusiveCondition<AdvancedBlockOperation>(mode: .cancel))
+
+    queue1.addOperations([operation1, operation2], waitUntilFinished: true)
+    queue2.addOperations([operation3, operation4], waitUntilFinished: true)
+
+    waitForExpectations(timeout: 10)
+    XCTAssertEqual(text, "AC")
+  }
+
   func testExclusivityManagerWithCancelMode() {
     var text = ""
     let manager = ExclusivityManager()
@@ -359,9 +435,9 @@ final class MutuallyExclusiveConditionTests: XCTestCase {
     let operation3 = AdvancedBlockOperation { text += "C." }
     operation3.completionBlock = { expectation3.fulfill() }
 
-    operation1.addCondition(MutuallyExclusiveCondition<AdvancedBlockOperation>.init(mode: .cancel))
-    operation2.addCondition(MutuallyExclusiveCondition<AdvancedBlockOperation>.init(mode: .cancel))
-    operation3.addCondition(MutuallyExclusiveCondition<AdvancedBlockOperation>.init(mode: .enqueue))
+    operation1.addCondition(MutuallyExclusiveCondition<AdvancedBlockOperation>())
+    operation2.addCondition(MutuallyExclusiveCondition<AdvancedBlockOperation>(mode: .cancel))
+    operation3.addCondition(MutuallyExclusiveCondition<AdvancedBlockOperation>(mode: .enqueue))
 
     XCTAssertEqual(manager.operations.keys.count, 0)
     queue.addOperation(operation1)

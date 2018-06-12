@@ -22,20 +22,19 @@
 // SOFTWARE.
 
 /// Defines all the mutual exclusivity behaviours between operations.
-public enum MutualExclusivityMode: CustomStringConvertible {
+public enum MutualExclusivityMode: CustomStringConvertible { //TODO: better naming
   /// Disabled
-  case no
-  /// Enabled, but only one operation at time can be executed.
+  case disabled
+  /// Enabled, but only one operation can be evaluated at a time.
   case enqueue
   /// Enabled, but only one operation will be executed.
   case cancel
 
   public var description: String {
     switch self {
-    case .no: return "disabled"
+    case .disabled: return "disabled"
     case .enqueue: return "enabled in enqueue mode"
     case .cancel: return "enabled in cancel mode"
     }
   }
 }
-
