@@ -27,7 +27,7 @@ import XCTest
 class NegatedConditionTests: XCTestCase {
 
   func testIsMutuallyExclusive() {
-    XCTAssertFalse(NegatedCondition(condition: NoFailedDependenciesCondition()).isMutuallyExclusive)
+    XCTAssertTrue(NegatedCondition(condition: NoFailedDependenciesCondition()).mutuallyExclusivityMode == .no)
   }
 
   func testName() {

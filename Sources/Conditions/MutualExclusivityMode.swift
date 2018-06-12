@@ -1,4 +1,4 @@
-//
+// 
 // AdvancedOperation
 //
 // Copyright © 2016-2018 Tinrobots.
@@ -21,11 +21,21 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-public enum OperationErrorCode: Int {
-  /// Operation failed for a condition.
-  case conditionFailed = 1
-  /// Operation failed during its execution.
-  case executionFailed = 2
-  /// Operation cancelled.
-  case executionCancelled = 3
+/// Defines all the mutual exclusivity behaviours between operations.
+public enum MutualExclusivityMode: CustomStringConvertible {
+  /// Disabled
+  case no
+  /// Enabled, but only one operation at time can be executed.
+  case enqueue
+  /// Enabled, but only one operation will be executed.
+  case cancel
+
+  public var description: String {
+    switch self {
+    case .no: return "disabled"
+    case .enqueue: return "enabled in enqueue mode"
+    case .cancel: return "enabled in cancel mode"
+    }
+  }
 }
+

@@ -35,7 +35,7 @@ final class NoCancelledDependenciesConditionTests: XCTestCase {
 //  }
 
   func testIsMutuallyExclusive() {
-    XCTAssertFalse(NoCancelledDependeciesCondition().isMutuallyExclusive)
+    XCTAssertTrue(NoCancelledDependeciesCondition().mutuallyExclusivityMode == .no)
   }
 
   func testTwoLevelCondition() {

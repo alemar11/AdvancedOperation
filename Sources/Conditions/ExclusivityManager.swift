@@ -30,13 +30,13 @@ final public class ExclusivityManager {
   /// Creates a new `ExclusivityManager` instance.
   public init() { }
 
-  private let queue = DispatchQueue(label: "\(identifier).ExclusivityManager.\(UUID().uuidString)")
+  private lazy var queue = DispatchQueue(label: "\(identifier).\(type(of: self)).\(UUID().uuidString)")
 
   internal private(set) var operations: [String: [Operation]] = [:]
 
-  internal func addOperation(_ operation: AdvancedOperation, category: String) {
+  internal func addOperation(_ operation: AdvancedOperation, category: String, cancelIfExists: Bool = false) {
     _ = queue.sync(execute: {
-      self._addOperation(operation, category: category)
+      self._addOperation(operation, category: category, cancelIfExists: cancelIfExists)
     })
   }
 
@@ -47,7 +47,7 @@ final public class ExclusivityManager {
   }
 
   @discardableResult
-  private func _addOperation(_ operation: AdvancedOperation, category: String) -> Operation? {
+  private func _addOperation(_ operation: AdvancedOperation, category: String, cancelIfExists: Bool) -> Operation? {
     let didFinishObserver = BlockObserver {  [unowned self] currentOperation, _ in
       self.removeOperation(currentOperation, category: category)
     }
@@ -57,7 +57,16 @@ final public class ExclusivityManager {
     let previous = operationsWithThisCategory.last
 
     if let previous = previous {
-      operation.addDependency(previous)
+      if cancelIfExists {
+        let error = NSError(
+          domain: "\(identifier).\(type(of: self)).\(category)",
+          code: OperationErrorCode.executionCancelled.rawValue,
+          userInfo: nil)
+        
+        operation.cancel(error: error)
+      } else {
+        operation.addDependency(previous)
+      }
     }
 
     operationsWithThisCategory.append(operation)

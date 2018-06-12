@@ -95,11 +95,12 @@ open class AdvancedOperationQueue: OperationQueue {
           operation.addDependency(dependency)
         }
 
-        let mutuallyExclusiveConditions = operation.conditions.filter { $0.isMutuallyExclusive }
+        let mutuallyExclusiveConditions = operation.conditions.filter { $0.mutuallyExclusivityMode != .no }
         if !mutuallyExclusiveConditions.isEmpty {
           for condition in mutuallyExclusiveConditions {
             let category = condition.name
-            exclusivityManager.addOperation(operation, category: category)
+            let cancellable = condition.mutuallyExclusivityMode == .cancel
+            exclusivityManager.addOperation(operation, category: category, cancelIfExists: cancellable)
           }
         }
 

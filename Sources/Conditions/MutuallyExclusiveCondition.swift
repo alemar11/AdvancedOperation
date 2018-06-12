@@ -28,7 +28,7 @@ public struct MutuallyExclusiveCondition<T>: OperationCondition {
 
   public var name: String { return "MutuallyExclusive<\(T.self)>" }
 
-  public var isMutuallyExclusive: Bool { return true }
+  public private(set) var mutuallyExclusivityMode: MutualExclusivityMode = .enqueue
 
   /// Creates a new `MutuallyExclusiveCondition` element.
   public init() { }

@@ -27,7 +27,7 @@ import XCTest
 final class NoFailedDependenciesConditionTests: XCTestCase {
 
   func testIsMutuallyExclusive() {
-    XCTAssertFalse(NoFailedDependenciesCondition().isMutuallyExclusive)
+    XCTAssertTrue(NoFailedDependenciesCondition().mutuallyExclusivityMode == .no)
   }
 
   func testFinishedAndFailedOperation() {

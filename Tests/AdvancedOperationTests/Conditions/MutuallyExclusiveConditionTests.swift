@@ -27,7 +27,7 @@ import XCTest
 final class MutuallyExclusiveConditionTests: XCTestCase {
 
   func testIsMutuallyExclusive() {
-    XCTAssertTrue(MutuallyExclusiveCondition<XCTestCase>().isMutuallyExclusive)
+    XCTAssertTrue(MutuallyExclusiveCondition<XCTestCase>().mutuallyExclusivityMode == .enqueue)
   }
 
   func testMutuallyExclusiveCondition() {
