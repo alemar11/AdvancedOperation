@@ -28,10 +28,12 @@ public struct MutuallyExclusiveCondition<T>: OperationCondition {
 
   public var name: String { return "MutuallyExclusive<\(T.self)>" }
 
-  public private(set) var mutuallyExclusivityMode: MutualExclusivityMode = .enqueue
+  public let mutuallyExclusivityMode: MutualExclusivityMode
 
   /// Creates a new `MutuallyExclusiveCondition` element.
-  public init() { }
+  public init(mode: MutualExclusivityMode = .enqueue) {
+    self.mutuallyExclusivityMode = mode
+  }
 
   public func evaluate(for operation: AdvancedOperation, completion: @escaping (OperationConditionResult) -> Void) {
     completion(.satisfied)
