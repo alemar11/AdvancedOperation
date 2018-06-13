@@ -61,3 +61,22 @@ public extension OperationCondition {
   }
 
 }
+
+/// Defines the mutual exclusivity behaviour for an operation's condition.
+public enum MutualExclusivityMode: CustomStringConvertible {
+  /// Disabled
+  case disabled
+  /// Enabled, but only one operation can be evaluated at a time.
+  case enqueue
+  /// Enabled, but only one operation will be executed.
+  case cancel
+
+  public var description: String {
+    switch self {
+    case .disabled: return "disabled"
+    case .enqueue: return "enabled in enqueue mode"
+    case .cancel: return "enabled in cancel mode"
+    }
+  }
+}
+

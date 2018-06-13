@@ -100,7 +100,7 @@ open class AdvancedOperationQueue: OperationQueue {
           for condition in mutuallyExclusiveConditions {
             let category = condition.name
             let cancellable = condition.mutuallyExclusivityMode == .cancel
-            exclusivityManager.addOperation(operation, category: category, cancelIfExists: cancellable)
+            exclusivityManager.addOperation(operation, category: category, cancellable: cancellable)
           }
         }
 

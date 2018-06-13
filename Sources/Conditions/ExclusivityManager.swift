@@ -34,9 +34,15 @@ final public class ExclusivityManager {
 
   internal private(set) var operations: [String: [Operation]] = [:]
 
-  internal func addOperation(_ operation: AdvancedOperation, category: String, cancelIfExists: Bool = false) { //TODO: better naming
+  /// Adds an `AdvancedOperation` the the `ExclusivityManager` instance.
+  ///
+  /// - Parameters:
+  ///   - operation: The `AdvancedOperation` to add.
+  ///   - category: The category to identify an `AdvancedOperation`.
+  ///   - cancellable: True if the operation should be cancelled instead of enqueue if another operation with the same category exists.
+  internal func addOperation(_ operation: AdvancedOperation, category: String, cancellable: Bool = false) {
     _ = queue.sync(execute: {
-      self._addOperation(operation, category: category, cancelIfExists: cancelIfExists)
+      self._addOperation(operation, category: category, cancellable: cancellable)
     })
   }
 
@@ -47,7 +53,7 @@ final public class ExclusivityManager {
   }
 
   @discardableResult
-  private func _addOperation(_ operation: AdvancedOperation, category: String, cancelIfExists: Bool) -> Operation? {
+  private func _addOperation(_ operation: AdvancedOperation, category: String, cancellable: Bool) -> Operation? {
     let didFinishObserver = BlockObserver {  [unowned self] currentOperation, _ in
       self.removeOperation(currentOperation, category: category)
     }
@@ -57,7 +63,7 @@ final public class ExclusivityManager {
     let previous = operationsWithThisCategory.last
 
     if let previous = previous {
-      if cancelIfExists {
+      if cancellable {
         let error = NSError(
           domain: "\(identifier).\(type(of: self)).\(category)",
           code: OperationErrorCode.executionCancelled.rawValue,
