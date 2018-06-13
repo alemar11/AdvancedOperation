@@ -24,14 +24,17 @@
 import Foundation
 
 /// A generic condition for describing kinds of operations that may not execute concurrently.
-public struct MutuallyExclusiveCondition<T>: OperationCondition {
+public struct MutuallyExclusiveCondition: OperationCondition {
 
-  public var name: String { return "MutuallyExclusive<\(T.self)>" }
+  public let name: String
 
-  public var isMutuallyExclusive: Bool { return true }
+  public let mutuallyExclusivityMode: MutualExclusivityMode
 
   /// Creates a new `MutuallyExclusiveCondition` element.
-  public init() { }
+  public init(name: String, mode: MutualExclusivityMode = .enqueue) {
+    self.name = name
+    self.mutuallyExclusivityMode = mode
+  }
 
   public func evaluate(for operation: AdvancedOperation, completion: @escaping (OperationConditionResult) -> Void) {
     completion(.satisfied)

@@ -26,4 +26,6 @@ public enum OperationErrorCode: Int {
   case conditionFailed = 1
   /// Operation failed during its execution.
   case executionFailed = 2
+  /// Operation cancelled.
+  case executionCancelled = 3
 }

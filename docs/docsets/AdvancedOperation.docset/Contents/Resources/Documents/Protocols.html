@@ -10,10 +10,11 @@
     
   </head>
   <body>
+    <a name="//apple_ref/swift/Section/Protocols" class="dashAnchor"></a>
     <a title="Protocols  Reference"></a>
     <header>
       <div class="content-wrapper">
-        <p><a href="index.html">AdvancedOperation Docs</a> (51% documented)</p>
+        <p><a href="index.html">AdvancedOperation Docs</a> (53% documented)</p>
       </div>
     </header>
     <div class="content-wrapper">
@@ -47,8 +48,11 @@
             </ul>
           </li>
           <li class="nav-group-name">
-            <a href="Enums.html">Enums</a>
+            <a href="Enums.html">Enumerations</a>
             <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="Enums/MutualExclusivityMode.html">MutualExclusivityMode</a>
+              </li>
               <li class="nav-group-task">
                 <a href="Enums/OperationConditionResult.html">OperationConditionResult</a>
               </li>
@@ -104,7 +108,7 @@
             </ul>
           </li>
           <li class="nav-group-name">
-            <a href="Structs.html">Structs</a>
+            <a href="Structs.html">Structures</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
                 <a href="Structs/BlockObserver.html">BlockObserver</a>
@@ -127,7 +131,7 @@
             </ul>
           </li>
           <li class="nav-group-name">
-            <a href="Typealiases.html">Typealiases</a>
+            <a href="Typealiases.html">Type Aliases</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
                 <a href="Typealiases.html#/s:17AdvancedOperation0B5Blocka">OperationBlock</a>
@@ -149,9 +153,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:17AdvancedOperation0B13ObservingTypeP"></a>
-                    <a name="//apple_ref/swift/Protocol/OperationObservingType" class="dashAnchor"></a>
-                    <a class="token" href="#/s:17AdvancedOperation0B13ObservingTypeP">OperationObservingType</a>
+                    <a name="/s:17AdvancedOperation0aB13QueueDelegateP"></a>
+                    <a name="//apple_ref/swift/Protocol/AdvancedOperationQueueDelegate" class="dashAnchor"></a>
+                    <a class="token" href="#/s:17AdvancedOperation0aB13QueueDelegateP">AdvancedOperationQueueDelegate</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -159,155 +163,17 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Types which conform to this protocol, can be attached to <code><a href="Classes/AdvancedOperation.html">AdvancedOperation</a></code> subclasses before they are executed or added to a queue.</p>
+                        <p>Undocumented</p>
 
+                        <a href="Protocols/AdvancedOperationQueueDelegate.html" class="slightly-smaller">See more</a>
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">protocol</span> <span class="kt">OperationObservingType</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">protocol</span> <span class="kt">AdvancedOperationQueueDelegate</span> <span class="p">:</span> <span class="kt">AnyObject</span></code></pre>
 
                         </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:17AdvancedOperation0B20WillExecuteObservingP"></a>
-                    <a name="//apple_ref/swift/Protocol/OperationWillExecuteObserving" class="dashAnchor"></a>
-                    <a class="token" href="#/s:17AdvancedOperation0B20WillExecuteObservingP">OperationWillExecuteObserving</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>Undocumented</p>
-
-                        <a href="Protocols/OperationWillExecuteObserving.html" class="slightly-smaller">See more</a>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:17AdvancedOperation0B19WillFinishObservingP"></a>
-                    <a name="//apple_ref/swift/Protocol/OperationWillFinishObserving" class="dashAnchor"></a>
-                    <a class="token" href="#/s:17AdvancedOperation0B19WillFinishObservingP">OperationWillFinishObserving</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>Undocumented</p>
-
-                        <a href="Protocols/OperationWillFinishObserving.html" class="slightly-smaller">See more</a>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:17AdvancedOperation0B18DidFinishObservingP"></a>
-                    <a name="//apple_ref/swift/Protocol/OperationDidFinishObserving" class="dashAnchor"></a>
-                    <a class="token" href="#/s:17AdvancedOperation0B18DidFinishObservingP">OperationDidFinishObserving</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>Undocumented</p>
-
-                        <a href="Protocols/OperationDidFinishObserving.html" class="slightly-smaller">See more</a>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:17AdvancedOperation0B19WillCancelObservingP"></a>
-                    <a name="//apple_ref/swift/Protocol/OperationWillCancelObserving" class="dashAnchor"></a>
-                    <a class="token" href="#/s:17AdvancedOperation0B19WillCancelObservingP">OperationWillCancelObserving</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>Undocumented</p>
-
-                        <a href="Protocols/OperationWillCancelObserving.html" class="slightly-smaller">See more</a>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:17AdvancedOperation0B18DidCancelObservingP"></a>
-                    <a name="//apple_ref/swift/Protocol/OperationDidCancelObserving" class="dashAnchor"></a>
-                    <a class="token" href="#/s:17AdvancedOperation0B18DidCancelObservingP">OperationDidCancelObserving</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>Undocumented</p>
-
-                        <a href="Protocols/OperationDidCancelObserving.html" class="slightly-smaller">See more</a>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:17AdvancedOperation0b10DidProduceB9ObservingP"></a>
-                    <a name="//apple_ref/swift/Protocol/OperationDidProduceOperationObserving" class="dashAnchor"></a>
-                    <a class="token" href="#/s:17AdvancedOperation0b10DidProduceB9ObservingP">OperationDidProduceOperationObserving</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>Undocumented</p>
-
-                        <a href="Protocols/OperationDidProduceOperationObserving.html" class="slightly-smaller">See more</a>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:17AdvancedOperation0B9ObservingP"></a>
-                    <a name="//apple_ref/swift/Protocol/OperationObserving" class="dashAnchor"></a>
-                    <a class="token" href="#/s:17AdvancedOperation0B9ObservingP">OperationObserving</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>Undocumented</p>
-
                       </div>
                     </section>
                   </div>
@@ -333,6 +199,14 @@
 
                         <a href="Protocols/OperationCondition.html" class="slightly-smaller">See more</a>
                       </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">protocol</span> <span class="kt">OperationCondition</span></code></pre>
+
+                        </div>
+                      </div>
                     </section>
                   </div>
                 </li>
@@ -343,9 +217,36 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:17AdvancedOperation0aB13QueueDelegateP"></a>
-                    <a name="//apple_ref/swift/Protocol/AdvancedOperationQueueDelegate" class="dashAnchor"></a>
-                    <a class="token" href="#/s:17AdvancedOperation0aB13QueueDelegateP">AdvancedOperationQueueDelegate</a>
+                    <a name="/s:17AdvancedOperation0B13ObservingTypeP"></a>
+                    <a name="//apple_ref/swift/Protocol/OperationObservingType" class="dashAnchor"></a>
+                    <a class="token" href="#/s:17AdvancedOperation0B13ObservingTypeP">OperationObservingType</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Types which conform to this protocol, can be attached to <code><a href="Classes/AdvancedOperation.html">AdvancedOperation</a></code> subclasses before they are executed or added to a queue.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">protocol</span> <span class="kt">OperationObservingType</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:17AdvancedOperation0B20WillExecuteObservingP"></a>
+                    <a name="//apple_ref/swift/Protocol/OperationWillExecuteObserving" class="dashAnchor"></a>
+                    <a class="token" href="#/s:17AdvancedOperation0B20WillExecuteObservingP">OperationWillExecuteObserving</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -355,7 +256,182 @@
                       <div class="abstract">
                         <p>Undocumented</p>
 
-                        <a href="Protocols/AdvancedOperationQueueDelegate.html" class="slightly-smaller">See more</a>
+                        <a href="Protocols/OperationWillExecuteObserving.html" class="slightly-smaller">See more</a>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">protocol</span> <span class="kt">OperationWillExecuteObserving</span> <span class="p">:</span> <span class="kt"><a href="Protocols.html#/s:17AdvancedOperation0B13ObservingTypeP">OperationObservingType</a></span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:17AdvancedOperation0B19WillFinishObservingP"></a>
+                    <a name="//apple_ref/swift/Protocol/OperationWillFinishObserving" class="dashAnchor"></a>
+                    <a class="token" href="#/s:17AdvancedOperation0B19WillFinishObservingP">OperationWillFinishObserving</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                        <a href="Protocols/OperationWillFinishObserving.html" class="slightly-smaller">See more</a>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">protocol</span> <span class="kt">OperationWillFinishObserving</span> <span class="p">:</span> <span class="kt"><a href="Protocols.html#/s:17AdvancedOperation0B13ObservingTypeP">OperationObservingType</a></span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:17AdvancedOperation0B18DidFinishObservingP"></a>
+                    <a name="//apple_ref/swift/Protocol/OperationDidFinishObserving" class="dashAnchor"></a>
+                    <a class="token" href="#/s:17AdvancedOperation0B18DidFinishObservingP">OperationDidFinishObserving</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                        <a href="Protocols/OperationDidFinishObserving.html" class="slightly-smaller">See more</a>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">protocol</span> <span class="kt">OperationDidFinishObserving</span> <span class="p">:</span> <span class="kt"><a href="Protocols.html#/s:17AdvancedOperation0B13ObservingTypeP">OperationObservingType</a></span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:17AdvancedOperation0B19WillCancelObservingP"></a>
+                    <a name="//apple_ref/swift/Protocol/OperationWillCancelObserving" class="dashAnchor"></a>
+                    <a class="token" href="#/s:17AdvancedOperation0B19WillCancelObservingP">OperationWillCancelObserving</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                        <a href="Protocols/OperationWillCancelObserving.html" class="slightly-smaller">See more</a>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">protocol</span> <span class="kt">OperationWillCancelObserving</span> <span class="p">:</span> <span class="kt"><a href="Protocols.html#/s:17AdvancedOperation0B13ObservingTypeP">OperationObservingType</a></span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:17AdvancedOperation0B18DidCancelObservingP"></a>
+                    <a name="//apple_ref/swift/Protocol/OperationDidCancelObserving" class="dashAnchor"></a>
+                    <a class="token" href="#/s:17AdvancedOperation0B18DidCancelObservingP">OperationDidCancelObserving</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                        <a href="Protocols/OperationDidCancelObserving.html" class="slightly-smaller">See more</a>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">protocol</span> <span class="kt">OperationDidCancelObserving</span> <span class="p">:</span> <span class="kt"><a href="Protocols.html#/s:17AdvancedOperation0B13ObservingTypeP">OperationObservingType</a></span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:17AdvancedOperation0b10DidProduceB9ObservingP"></a>
+                    <a name="//apple_ref/swift/Protocol/OperationDidProduceOperationObserving" class="dashAnchor"></a>
+                    <a class="token" href="#/s:17AdvancedOperation0b10DidProduceB9ObservingP">OperationDidProduceOperationObserving</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                        <a href="Protocols/OperationDidProduceOperationObserving.html" class="slightly-smaller">See more</a>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">protocol</span> <span class="kt">OperationDidProduceOperationObserving</span> <span class="p">:</span> <span class="kt"><a href="Protocols.html#/s:17AdvancedOperation0B13ObservingTypeP">OperationObservingType</a></span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:17AdvancedOperation0B9ObservingP"></a>
+                    <a name="//apple_ref/swift/Protocol/OperationObserving" class="dashAnchor"></a>
+                    <a class="token" href="#/s:17AdvancedOperation0B9ObservingP">OperationObserving</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">protocol</span> <span class="kt">OperationObserving</span> <span class="p">:</span> <span class="kt"><a href="Protocols/OperationDidCancelObserving.html">OperationDidCancelObserving</a></span><span class="p">,</span> <span class="kt"><a href="Protocols/OperationDidFinishObserving.html">OperationDidFinishObserving</a></span><span class="p">,</span> <span class="kt"><a href="Protocols/OperationDidProduceOperationObserving.html">OperationDidProduceOperationObserving</a></span><span class="p">,</span> <span class="kt"><a href="Protocols/OperationWillCancelObserving.html">OperationWillCancelObserving</a></span><span class="p">,</span> <span class="kt"><a href="Protocols/OperationWillExecuteObserving.html">OperationWillExecuteObserving</a></span><span class="p">,</span> <span class="kt"><a href="Protocols/OperationWillFinishObserving.html">OperationWillFinishObserving</a></span></code></pre>
+
+                        </div>
                       </div>
                     </section>
                   </div>
@@ -365,8 +441,8 @@
           </section>
         </section>
         <section id="footer">
-          <p>&copy; 2018 <a class="link" href="https://github.com/tinrobots/AdvancedOperation" target="_blank" rel="external">Alessandro Marzoli</a>. All rights reserved. (Last updated: 2018-04-20)</p>
-          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.8.2</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+          <p>&copy; 2018 <a class="link" href="https://github.com/tinrobots/AdvancedOperation" target="_blank" rel="external">Alessandro Marzoli</a>. All rights reserved. (Last updated: 2018-06-13)</p>
+          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.9.2</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
         </section>
       </article>
     </div>
