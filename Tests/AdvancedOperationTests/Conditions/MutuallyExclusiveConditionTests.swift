@@ -465,6 +465,45 @@ final class MutuallyExclusiveConditionTests: XCTestCase {
     XCTAssertEqual((manager.operations[key] ?? []).count, 0)
   }
 
+  func testMultipleMutuallyExclusiveConditionsAndDependenciesWithCancelMode() {
+    let queue = AdvancedOperationQueue()
+    var text1 = ""
+    var text2 = ""
+
+    let expectationDependency1 = expectation(description: "\(#function)\(#line)")
+    let expectationDependency2 = expectation(description: "\(#function)\(#line)")
+
+    let dependency1 = AdvancedBlockOperation { text1 += "1 " }
+    dependency1.addCondition(MutuallyExclusiveCondition<XCTest>(mode: .cancel))
+    dependency1.completionBlock = { expectationDependency1.fulfill() }
+
+    // dependency2 is going to be cancelled because it's added to the queue before dependency1 is completed (in this case is not yet started)
+    let dependency2 = AdvancedBlockOperation { text1 += "2" }
+    dependency2.addCondition(MutuallyExclusiveCondition<XCTest>(mode: .cancel))
+    dependency2.completionBlock = { expectationDependency2.fulfill() }
+
+    let dependencyCondition1 = DependencyCondition(dependency: dependency1)
+    let dependencyCondition2 = DependencyCondition(dependency: dependency2)
+
+    let expectation1 = expectation(description: "\(#function)\(#line)")
+    let expectation2 = expectation(description: "\(#function)\(#line)")
+
+    let operation1 = AdvancedBlockOperation { text2 += "A " }
+    operation1.completionBlock = { expectation1.fulfill() }
+    operation1.addCondition(MutuallyExclusiveCondition<AdvancedBlockOperation>())
+    operation1.addCondition(dependencyCondition1)
+
+    let operation2 = AdvancedBlockOperation { text2 += "B" }
+    operation2.completionBlock = { expectation2.fulfill() }
+    operation2.addCondition(MutuallyExclusiveCondition<AdvancedBlockOperation>())
+    operation2.addCondition(dependencyCondition2)
+
+    queue.addOperations([operation1, operation2], waitUntilFinished: false)
+    waitForExpectations(timeout: 10)
+    XCTAssertEqual(text1, "1 ")
+    XCTAssertEqual(text2, "A B")
+  }
+
 //  func testStress() {
 //    for i in 1...100 {
 //      print(i)
