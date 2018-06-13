@@ -198,7 +198,7 @@
     },
     {
       "file": "/Users/a.marzoli/Developer/x/AdvancedOperation/Sources/AdvancedOperationQueue.swift",
-      "line": 126,
+      "line": 127,
       "symbol": "AdvancedOperationQueue.addOperations(_:waitUntilFinished:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"

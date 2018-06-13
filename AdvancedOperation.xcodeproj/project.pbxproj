@@ -382,13 +382,13 @@
 			isa = PBXGroup;
 			children = (
 				235D08AA206A494E00F70142 /* ExclusivityManager.swift */,
-				235D08A6206A494D00F70142 /* NegatedCondition.swift */,
-				235D08A9206A494E00F70142 /* SilentCondition.swift */,
 				235D08A8206A494E00F70142 /* MutuallyExclusiveCondition.swift */,
-				235D08A7206A494E00F70142 /* OperationCondition.swift */,
+				235D08A6206A494D00F70142 /* NegatedCondition.swift */,
 				235D08A4206A494D00F70142 /* NoCancelledDependenciesCondition.swift */,
 				235D08A5206A494D00F70142 /* NoFailedDependenciesCondition.swift */,
+				235D08A7206A494E00F70142 /* OperationCondition.swift */,
 				2326CC24206E6199001876A2 /* OperationConditionResult.swift */,
+				235D08A9206A494E00F70142 /* SilentCondition.swift */,
 			);
 			path = Conditions;
 			sourceTree = "<group>";

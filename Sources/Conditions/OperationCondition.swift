@@ -28,8 +28,8 @@ public protocol OperationCondition {
   /// The name of the condition.
   var name: String { get }
 
-  /// A flag to indicate whether this condition is mutually exclusive meaning that only one condition can be evaluated at a time.
-  var isMutuallyExclusive: Bool { get }
+  /// Indicates how this condition is mutually exclusive.
+  var mutuallyExclusivityMode: MutualExclusivityMode { get }
 
   /// Some conditions may have the ability to satisfy the condition if another operation is executed first.
   ///
@@ -49,7 +49,7 @@ public protocol OperationCondition {
 
 public extension OperationCondition {
 
-  var isMutuallyExclusive: Bool { return false }
+  var mutuallyExclusivityMode: MutualExclusivityMode { return .disabled }
 
   func dependency(for operation: AdvancedOperation) -> Operation? { return nil }
 }
@@ -61,3 +61,22 @@ public extension OperationCondition {
   }
 
 }
+
+/// Defines the mutual exclusivity behaviour for an operation's condition.
+public enum MutualExclusivityMode: CustomStringConvertible {
+  /// Disabled
+  case disabled
+  /// Enabled, but only one operation can be evaluated at a time.
+  case enqueue
+  /// Enabled, but only one operation will be executed.
+  case cancel
+
+  public var description: String {
+    switch self {
+    case .disabled: return "disabled"
+    case .enqueue: return "enabled in enqueue mode"
+    case .cancel: return "enabled in cancel mode"
+    }
+  }
+}
+

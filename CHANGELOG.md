@@ -1,5 +1,9 @@
 # Changelog
 
+### 0.6.0
+
+- The mutual exclusivity now can be enabled in *enqueue* or *cancel* mode.
+
 ### 0.5.1
 
 - Added more public APIs.
