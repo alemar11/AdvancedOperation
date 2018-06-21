@@ -70,9 +70,7 @@ final public class ExclusivityManager {
           userInfo: nil)
         
         operation.cancel(error: error)
-        print("❌")
       } else {
-        print("✅")
         operation.addDependency(previous)
       }
     }
