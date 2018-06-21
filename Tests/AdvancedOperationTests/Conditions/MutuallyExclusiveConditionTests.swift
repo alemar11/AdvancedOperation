@@ -382,6 +382,7 @@ final class MutuallyExclusiveConditionTests: XCTestCase {
 
     let operation1 = AdvancedBlockOperation { complete in
       text += "A"
+      sleep(1)
       complete([])
     }
     operation1.completionBlock = { expectation1.fulfill() }
@@ -396,6 +397,7 @@ final class MutuallyExclusiveConditionTests: XCTestCase {
 
     let operation3 = AdvancedBlockOperation { complete in
       text += "C"
+      sleep(1)
       complete([])
     }
     operation3.completionBlock = { expectation3.fulfill() }
@@ -505,11 +507,12 @@ final class MutuallyExclusiveConditionTests: XCTestCase {
   }
 
 //  func testStress() {
-//    for i in 1...100 {
+//    for i in 1...800 {
 //      print(i)
 //      //testMutuallyExclusiveConditionWithBlockOperations()
 //      //testMultipleMutuallyExclusiveConditionsWithBlockOperations()
-//      testExclusivityManager()
+//      //testExclusivityManager()
+//      //testMutuallyExclusiveConditionWithtDifferentQueuesWithCancelMode()
 //    }
 //  }
 
