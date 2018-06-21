@@ -382,7 +382,7 @@ final class MutuallyExclusiveConditionTests: XCTestCase {
 
     let operation1 = AdvancedBlockOperation { complete in
       text += "A"
-      sleep(1)
+      sleep(1) // simulate a "time consuming" job
       complete([])
     }
     operation1.completionBlock = { expectation1.fulfill() }
