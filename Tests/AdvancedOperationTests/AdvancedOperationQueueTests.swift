@@ -135,7 +135,7 @@ final class AdvancedOperationQueueTests: XCTestCase {
 
     queue.addOperations([operation1, operation2, operation3, operation4], waitUntilFinished: true)
     XCTAssertTrue(queue.operations.isEmpty)
-    // at this point all the operations should be completed BUT the didFinish couldn not yet be called.
+    // at this point all the operations should be completed BUT the didFinish could not yet be called.
     waitForExpectations(timeout: 3)
   }
 
