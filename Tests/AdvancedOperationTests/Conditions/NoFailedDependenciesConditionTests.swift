@@ -98,6 +98,31 @@ final class NoFailedDependenciesConditionTests: XCTestCase {
     XCTAssertEqual(operation1.errors.count, 2)
   }
 
+  func testCancelledAndFailedOperationWaitUntilFinished() {
+    let queue = AdvancedOperationQueue()
+
+    let operation1 = XCTFailOperation()
+    operation1.name = "operation1"
+
+    let operation2 = SleepyAsyncOperation()
+    operation2.name = "operation2"
+
+    let operation3 = SleepyAsyncOperation()
+    operation3.name = "operation3"
+
+    let operation4 = DelayOperation(interval: 1)
+    operation4.name = "operation4"
+
+    operation2.cancel(error: MockError.failed)
+
+    operation1.addCondition(NoFailedDependenciesCondition())
+    [operation4, operation3, operation2].then(operation1)
+
+    queue.addOperations([operation1, operation2, operation3, operation4], waitUntilFinished: true)
+    XCTAssertTrue(operation1.failed)
+    XCTAssertEqual(operation1.errors.count, 2)
+  }
+
   func testIgnoredCancelledAndFailedOperation() {
     let queue = AdvancedOperationQueue()
 
