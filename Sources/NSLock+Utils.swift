@@ -27,10 +27,8 @@ internal extension NSLock {
 
   @discardableResult
   func synchronized<T>(_ block: () -> T) -> T {
-    lock()
-    let value = block()
-    unlock()
-    return value
+    lock(); defer { unlock() }
+    return block()
   }
 
 }
@@ -39,10 +37,8 @@ internal extension NSRecursiveLock {
 
   @discardableResult
   func synchronized<T>(_ block: () -> T) -> T {
-    lock()
-    let value = block()
-    unlock()
-    return value
+    lock(); defer { unlock() }
+    return block()
   }
 
 }
