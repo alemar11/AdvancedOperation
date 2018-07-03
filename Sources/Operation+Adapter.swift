@@ -1,4 +1,4 @@
-// 
+//
 // AdvancedOperation
 //
 // Copyright © 2016-2018 Tinrobots.
@@ -25,15 +25,15 @@ import Foundation
 
 // MARK: - Function
 
-public protocol Function : AnyObject {
-  associatedtype I
-  associatedtype O
-  var input: I? { get set }
-  var output: O? { get set }
+public protocol Function: AnyObject {
+  associatedtype Input
+  associatedtype Output
+  var input: Input? { get set }
+  var output: Output? { get set }
 }
 
 /// An `AdvancedOperation` with input and output values.
-public class FunctionOperation<I,O> : AdvancedOperation, Function {
+public class FunctionOperation<I, O> : AdvancedOperation, Function {
   public var input: I?
   public var output: O?
 }
@@ -43,9 +43,10 @@ public class FunctionOperation<I,O> : AdvancedOperation, Function {
 public extension AdvancedOperation {
 
   /// - Parameter operations: a tuple of Operations where the second one needs, as input, the output of the first one.
-  /// - Returns: Returns an *adapter* operation which passes the output from the first `AdvancedOperation` into the input of the second `AdvancedOperation`, and builds dependencies so the first operation runs first, then the adapter, then second operation.
+  /// - Returns: Returns an *adapter* operation which passes the output from the first `AdvancedOperation` into the input of the second `AdvancedOperation`,
+  /// and builds dependencies so the first operation runs first, then the adapter, then second operation.
   /// - Note: The client is still responsible for adding all three blocks to a queue.
-  class func adaptOperations<F:Function & AdvancedOperation, G: Function & AdvancedOperation>(_ operations: (F, G)) -> AdvancedBlockOperation where F.O == G.I {
+  class func adaptOperations<F: Function & AdvancedOperation, G: Function & AdvancedOperation>(_ operations: (F, G)) -> AdvancedBlockOperation where F.Output == G.Input {
 
     let adapterOperation = AdvancedBlockOperation { [unowned operation0 = operations.0, unowned operation1 = operations.1] complete in
       operation1.input = operation0.output

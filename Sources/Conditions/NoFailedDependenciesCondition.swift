@@ -47,7 +47,7 @@ public struct NoFailedDependenciesCondition: OperationCondition {
 
     if !failures.isEmpty {
       let error = NSError(domain: "\(identifier).\(name)", code: OperationErrorCode.conditionFailed.rawValue, userInfo: nil)
-      let errors = [error] + failures.flatMap {$0.errors}
+      let errors = [error] + failures.flatMap { $0.errors }
       completion(.failed(errors))
     } else {
       completion(.satisfied)

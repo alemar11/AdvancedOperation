@@ -537,7 +537,7 @@ final class GroupOperationTests: XCTestCase {
 
     let operation2 = SleepyAsyncOperation()
     operation2.addCompletionBlock { expectation2.fulfill() }
-    
+
     let operation3 = SleepyOperation()
     operation3.addCompletionBlock { expectation3.fulfill() }
 

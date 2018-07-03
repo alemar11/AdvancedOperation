@@ -51,7 +51,7 @@ open class GroupOperation: AdvancedOperation {
   /// ExclusivityManager used by `AdvancedOperationQueue`.
   private let exclusivityManager: ExclusivityManager
 
-  private let lock: NSLock = NSLock()
+  private let lock = NSLock()
 
   private var _temporaryCancelError: Error?
 

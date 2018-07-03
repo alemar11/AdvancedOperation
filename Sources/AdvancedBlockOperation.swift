@@ -21,8 +21,8 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-import Foundation
 import Dispatch
+import Foundation
 
 /// A closure type that takes a closure as its parameter.
 public typealias OperationBlock = (@escaping ([Error]) -> Void) -> Void

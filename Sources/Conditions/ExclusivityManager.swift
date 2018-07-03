@@ -68,7 +68,7 @@ final public class ExclusivityManager {
           domain: "\(identifier).\(type(of: self)).\(category)",
           code: OperationErrorCode.executionCancelled.rawValue,
           userInfo: nil)
-        
+
         operation.cancel(error: error)
       } else {
         operation.addDependency(previous)
