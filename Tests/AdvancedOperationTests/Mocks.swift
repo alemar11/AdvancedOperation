@@ -271,7 +271,32 @@ final internal class MockOperationQueueDelegate: AdvancedOperationQueueDelegate 
   
 }
 
-// MARK:  Conditions
+// MARK: - Composable Operations
+
+internal class IntToStringOperation: FunctionOperation<Int, String> {
+  override func main() {
+    if let input = self.input {
+      output = "\(input)"
+      finish()
+    } else {
+      finish(errors: [MockError.failed])
+    }
+  }
+}
+
+internal class StringToIntOperation: FunctionOperation<String, Int> {
+  override func main() {
+    if let input = self.input, let value = Int(input) {
+      output = value
+      finish()
+    } else {
+      finish(errors: [MockError.failed])
+    }
+  }
+}
+
+
+// MARK: - Conditions
 
 internal struct SlowCondition: OperationCondition {
 

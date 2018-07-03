@@ -157,6 +157,14 @@ open class AdvancedOperation: Operation {
       return super.keyPathsForValuesAffectingValue(forKey: key)
     }
   }
+
+  // MARK: - Life Cycle
+
+  deinit {
+    for dependency in dependencies {
+      removeDependency(dependency)
+    }
+  }
   
   // MARK: - Observers
   
