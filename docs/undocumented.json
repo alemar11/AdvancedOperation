@@ -44,56 +44,56 @@
     },
     {
       "file": "/Users/a.marzoli/Developer/x/AdvancedOperation/Sources/AdvancedOperation.swift",
-      "line": 191,
+      "line": 199,
       "symbol": "AdvancedOperation.start()",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/a.marzoli/Developer/x/AdvancedOperation/Sources/AdvancedOperation.swift",
-      "line": 217,
+      "line": 227,
       "symbol": "AdvancedOperation.main()",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/a.marzoli/Developer/x/AdvancedOperation/Sources/AdvancedOperation.swift",
-      "line": 221,
+      "line": 231,
       "symbol": "AdvancedOperation.cancel(error:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/a.marzoli/Developer/x/AdvancedOperation/Sources/AdvancedOperation.swift",
-      "line": 225,
+      "line": 235,
       "symbol": "AdvancedOperation.cancel()",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/a.marzoli/Developer/x/AdvancedOperation/Sources/AdvancedOperation.swift",
-      "line": 269,
+      "line": 279,
       "symbol": "AdvancedOperation.finish(errors:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/a.marzoli/Developer/x/AdvancedOperation/Sources/AdvancedOperation.swift",
-      "line": 378,
+      "line": 388,
       "symbol": "AdvancedOperation.addDependency(_:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/a.marzoli/Developer/x/AdvancedOperation/Sources/AdvancedOperation.swift",
-      "line": 386,
+      "line": 396,
       "symbol": "AdvancedOperation.conditions",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/a.marzoli/Developer/x/AdvancedOperation/Sources/AdvancedOperation.swift",
-      "line": 400,
+      "line": 411,
       "symbol": "AdvancedOperation.addCondition(_:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
@@ -383,6 +383,55 @@
       "line": 218,
       "symbol": "GroupOperation.operationQueue(operationQueue:operationDidCancel:withErrors:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/a.marzoli/Developer/x/AdvancedOperation/Sources/Operation+Adapter.swift",
+      "line": 28,
+      "symbol": "Function",
+      "symbol_kind": "source.lang.swift.decl.protocol",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/a.marzoli/Developer/x/AdvancedOperation/Sources/Operation+Adapter.swift",
+      "line": 29,
+      "symbol": "Function.Input",
+      "symbol_kind": "source.lang.swift.decl.associatedtype",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/a.marzoli/Developer/x/AdvancedOperation/Sources/Operation+Adapter.swift",
+      "line": 30,
+      "symbol": "Function.Output",
+      "symbol_kind": "source.lang.swift.decl.associatedtype",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/a.marzoli/Developer/x/AdvancedOperation/Sources/Operation+Adapter.swift",
+      "line": 31,
+      "symbol": "Function.input",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/a.marzoli/Developer/x/AdvancedOperation/Sources/Operation+Adapter.swift",
+      "line": 32,
+      "symbol": "Function.output",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/a.marzoli/Developer/x/AdvancedOperation/Sources/Operation+Adapter.swift",
+      "line": 37,
+      "symbol": "FunctionOperation.input",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/a.marzoli/Developer/x/AdvancedOperation/Sources/Operation+Adapter.swift",
+      "line": 38,
+      "symbol": "FunctionOperation.output",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
