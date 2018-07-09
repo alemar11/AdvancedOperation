@@ -242,11 +242,11 @@ class OperationConditionTests: XCTestCase {
     XCTAssertTrue(operation1.isCancelled)
   }
 
-    func testStress() {
-      for i in 1...200 {
-        print(i)
-        testCancelledOperationWhileEvaluatingConditions()
-      }
-    }
+//    func testStress() {
+//      for i in 1...200 {
+//        print(i)
+//        testCancelledOperationWhileEvaluatingConditions()
+//      }
+//    }
 
 }
