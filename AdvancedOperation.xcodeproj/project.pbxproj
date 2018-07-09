@@ -121,13 +121,13 @@
 		23856179200A873C0061BAA1 /* Mocks.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23856178200A873C0061BAA1 /* Mocks.swift */; };
 		2385617A200A873C0061BAA1 /* Mocks.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23856178200A873C0061BAA1 /* Mocks.swift */; };
 		2385617B200A873C0061BAA1 /* Mocks.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23856178200A873C0061BAA1 /* Mocks.swift */; };
-		239BC52220EB7539009A36D9 /* Operation+Adapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 239BC52120EB7539009A36D9 /* Operation+Adapter.swift */; };
-		239BC52320EB7539009A36D9 /* Operation+Adapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 239BC52120EB7539009A36D9 /* Operation+Adapter.swift */; };
-		239BC52420EB7539009A36D9 /* Operation+Adapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 239BC52120EB7539009A36D9 /* Operation+Adapter.swift */; };
-		239BC52520EB7539009A36D9 /* Operation+Adapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 239BC52120EB7539009A36D9 /* Operation+Adapter.swift */; };
-		239BC52720EB7C47009A36D9 /* AdapterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 239BC52620EB7C47009A36D9 /* AdapterTests.swift */; };
-		239BC52820EB7C47009A36D9 /* AdapterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 239BC52620EB7C47009A36D9 /* AdapterTests.swift */; };
-		239BC52920EB7C47009A36D9 /* AdapterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 239BC52620EB7C47009A36D9 /* AdapterTests.swift */; };
+		239BC52220EB7539009A36D9 /* Operation+Injection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 239BC52120EB7539009A36D9 /* Operation+Injection.swift */; };
+		239BC52320EB7539009A36D9 /* Operation+Injection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 239BC52120EB7539009A36D9 /* Operation+Injection.swift */; };
+		239BC52420EB7539009A36D9 /* Operation+Injection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 239BC52120EB7539009A36D9 /* Operation+Injection.swift */; };
+		239BC52520EB7539009A36D9 /* Operation+Injection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 239BC52120EB7539009A36D9 /* Operation+Injection.swift */; };
+		239BC52720EB7C47009A36D9 /* InjectionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 239BC52620EB7C47009A36D9 /* InjectionTests.swift */; };
+		239BC52820EB7C47009A36D9 /* InjectionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 239BC52620EB7C47009A36D9 /* InjectionTests.swift */; };
+		239BC52920EB7C47009A36D9 /* InjectionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 239BC52620EB7C47009A36D9 /* InjectionTests.swift */; };
 		23A56BAC200F984400509A65 /* XCTestCase+Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23A56BAB200F984400509A65 /* XCTestCase+Utils.swift */; };
 		23A56BAD200F984400509A65 /* XCTestCase+Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23A56BAB200F984400509A65 /* XCTestCase+Utils.swift */; };
 		23A56BAE200F984400509A65 /* XCTestCase+Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23A56BAB200F984400509A65 /* XCTestCase+Utils.swift */; };
@@ -233,8 +233,8 @@
 		23856174200A87070061BAA1 /* AdvancedOperationQueueTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdvancedOperationQueueTests.swift; sourceTree = "<group>"; };
 		23856178200A873C0061BAA1 /* Mocks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Mocks.swift; sourceTree = "<group>"; };
 		2385617C200A8DC50061BAA1 /* Package.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Package.swift; sourceTree = SOURCE_ROOT; };
-		239BC52120EB7539009A36D9 /* Operation+Adapter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Operation+Adapter.swift"; sourceTree = "<group>"; };
-		239BC52620EB7C47009A36D9 /* AdapterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdapterTests.swift; sourceTree = "<group>"; };
+		239BC52120EB7539009A36D9 /* Operation+Injection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Operation+Injection.swift"; sourceTree = "<group>"; };
+		239BC52620EB7C47009A36D9 /* InjectionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InjectionTests.swift; sourceTree = "<group>"; };
 		23A56BAB200F984400509A65 /* XCTestCase+Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "XCTestCase+Utils.swift"; sourceTree = "<group>"; };
 		23A813B02020CF1E008A98E0 /* AdvancedBlockOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdvancedBlockOperation.swift; sourceTree = "<group>"; };
 		23A813B52020D111008A98E0 /* AdvancedBlockOperationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdvancedBlockOperationTests.swift; sourceTree = "<group>"; };
@@ -319,7 +319,7 @@
 				23AC3ADC2038A050003E1B15 /* OperationUtilsTests.swift */,
 				235D08D0206A941B00F70142 /* OperationStateTests.swift */,
 				2368702B206E4BE8004DFC17 /* BlockObserverTests.swift */,
-				239BC52620EB7C47009A36D9 /* AdapterTests.swift */,
+				239BC52620EB7C47009A36D9 /* InjectionTests.swift */,
 			);
 			path = AdvancedOperationTests;
 			sourceTree = "<group>";
@@ -363,7 +363,7 @@
 				232F3AAD206041DE00FC45CB /* Globals.swift */,
 				23830CA220615E7C00F6EBC9 /* NSLock+Utils.swift */,
 				236F54B5206CDE070079B033 /* OperationErrorCode.swift */,
-				239BC52120EB7539009A36D9 /* Operation+Adapter.swift */,
+				239BC52120EB7539009A36D9 /* Operation+Injection.swift */,
 			);
 			path = Sources;
 			sourceTree = "<group>";
@@ -763,7 +763,7 @@
 				232F3AAE206041DE00FC45CB /* Globals.swift in Sources */,
 				235D08AC206A498400F70142 /* NegatedCondition.swift in Sources */,
 				235D08AE206A498400F70142 /* MutuallyExclusiveCondition.swift in Sources */,
-				239BC52220EB7539009A36D9 /* Operation+Adapter.swift in Sources */,
+				239BC52220EB7539009A36D9 /* Operation+Injection.swift in Sources */,
 				23830CA320615E7C00F6EBC9 /* NSLock+Utils.swift in Sources */,
 				2326CC25206E6199001876A2 /* OperationConditionResult.swift in Sources */,
 				23A813B12020CF1E008A98E0 /* AdvancedBlockOperation.swift in Sources */,
@@ -790,7 +790,7 @@
 				232F3AAF206041DE00FC45CB /* Globals.swift in Sources */,
 				235D08B3206A498400F70142 /* NegatedCondition.swift in Sources */,
 				235D08B5206A498400F70142 /* MutuallyExclusiveCondition.swift in Sources */,
-				239BC52320EB7539009A36D9 /* Operation+Adapter.swift in Sources */,
+				239BC52320EB7539009A36D9 /* Operation+Injection.swift in Sources */,
 				23830CA420615E7C00F6EBC9 /* NSLock+Utils.swift in Sources */,
 				2326CC26206E6199001876A2 /* OperationConditionResult.swift in Sources */,
 				23A813B22020CF1E008A98E0 /* AdvancedBlockOperation.swift in Sources */,
@@ -817,7 +817,7 @@
 				232F3AB0206041DE00FC45CB /* Globals.swift in Sources */,
 				235D08BA206A498500F70142 /* NegatedCondition.swift in Sources */,
 				235D08BC206A498500F70142 /* MutuallyExclusiveCondition.swift in Sources */,
-				239BC52420EB7539009A36D9 /* Operation+Adapter.swift in Sources */,
+				239BC52420EB7539009A36D9 /* Operation+Injection.swift in Sources */,
 				23830CA520615E7C00F6EBC9 /* NSLock+Utils.swift in Sources */,
 				2326CC27206E6199001876A2 /* OperationConditionResult.swift in Sources */,
 				23A813B32020CF1E008A98E0 /* AdvancedBlockOperation.swift in Sources */,
@@ -844,7 +844,7 @@
 				232F3AB1206041DE00FC45CB /* Globals.swift in Sources */,
 				235D08C1206A498500F70142 /* NegatedCondition.swift in Sources */,
 				235D08C3206A498500F70142 /* MutuallyExclusiveCondition.swift in Sources */,
-				239BC52520EB7539009A36D9 /* Operation+Adapter.swift in Sources */,
+				239BC52520EB7539009A36D9 /* Operation+Injection.swift in Sources */,
 				23830CA620615E7C00F6EBC9 /* NSLock+Utils.swift in Sources */,
 				2326CC28206E6199001876A2 /* OperationConditionResult.swift in Sources */,
 				23A813B42020CF1E008A98E0 /* AdvancedBlockOperation.swift in Sources */,
@@ -873,7 +873,7 @@
 				2368702A206E36A3004DFC17 /* OperationConditionTests.swift in Sources */,
 				23A56BAE200F984400509A65 /* XCTestCase+Utils.swift in Sources */,
 				23CF6E7D205FC4D300808400 /* MutuallyExclusiveConditionTests.swift in Sources */,
-				239BC52920EB7C47009A36D9 /* AdapterTests.swift in Sources */,
+				239BC52920EB7C47009A36D9 /* InjectionTests.swift in Sources */,
 				2368702E206E4BE8004DFC17 /* BlockObserverTests.swift in Sources */,
 				23F24D20200771FA00B25A03 /* AdvancedOperationTests.swift in Sources */,
 				235D08D3206A941B00F70142 /* OperationStateTests.swift in Sources */,
@@ -897,7 +897,7 @@
 				23687028206E36A3004DFC17 /* OperationConditionTests.swift in Sources */,
 				23A56BAC200F984400509A65 /* XCTestCase+Utils.swift in Sources */,
 				23CF6E7B205FC4D300808400 /* MutuallyExclusiveConditionTests.swift in Sources */,
-				239BC52720EB7C47009A36D9 /* AdapterTests.swift in Sources */,
+				239BC52720EB7C47009A36D9 /* InjectionTests.swift in Sources */,
 				2368702C206E4BE8004DFC17 /* BlockObserverTests.swift in Sources */,
 				23F24D1E200771FA00B25A03 /* AdvancedOperationTests.swift in Sources */,
 				235D08D1206A941B00F70142 /* OperationStateTests.swift in Sources */,
@@ -921,7 +921,7 @@
 				23687029206E36A3004DFC17 /* OperationConditionTests.swift in Sources */,
 				23A56BAD200F984400509A65 /* XCTestCase+Utils.swift in Sources */,
 				23CF6E7C205FC4D300808400 /* MutuallyExclusiveConditionTests.swift in Sources */,
-				239BC52820EB7C47009A36D9 /* AdapterTests.swift in Sources */,
+				239BC52820EB7C47009A36D9 /* InjectionTests.swift in Sources */,
 				2368702D206E4BE8004DFC17 /* BlockObserverTests.swift in Sources */,
 				23F24D1F200771FA00B25A03 /* AdvancedOperationTests.swift in Sources */,
 				235D08D2206A941B00F70142 /* OperationStateTests.swift in Sources */,

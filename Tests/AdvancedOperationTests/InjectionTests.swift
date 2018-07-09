@@ -24,7 +24,7 @@
 import XCTest
 @testable import AdvancedOperation
 
-class AdapterTests: XCTestCase {
+class InjectionTests: XCTestCase {
 
   func testInputAndOutput() {
     let operation1 = IntToStringOperation()
@@ -38,42 +38,44 @@ class AdapterTests: XCTestCase {
     XCTAssertEqual(operation2.output, 10)
   }
 
-  func testAdapterWithWaitUntilFinishedUsingClassMethod() {
+  func testInjectionWithWaitUntilFinishedUsingClassMethod() {
     let operation1 = IntToStringOperation()
     let operation2 = StringToIntOperation()
     operation1.input = 10
-    let adapterOperation = AdvancedOperation.adaptOperations((operation1, operation2))
+    let adapterOperation = AdvancedOperation.injectOperation(operation1, into: operation2)
     let queue = AdvancedOperationQueue()
     queue.addOperations([operation1, operation2, adapterOperation], waitUntilFinished: true)
 
     XCTAssertEqual(operation2.output, 10)
   }
 
-  func testAdapterWithWaitUntilFinishedUsingInstanceMethod() {
+  func testInjectionWithWaitUntilFinishedUsingInstanceMethod() {
     let operation1 = IntToStringOperation()
     let operation2 = StringToIntOperation()
     operation1.input = 10
-    let adapterOperation = operation1.adapt(into: operation2)
+    let adapterOperation = operation1.inject(into: operation2)
     let queue = AdvancedOperationQueue()
     queue.addOperations([operation1, operation2, adapterOperation], waitUntilFinished: true)
 
     XCTAssertEqual(operation2.output, 10)
   }
 
-  func testAdapterWithoutWaitingUntileFinished() {
+  func testInjectionWithoutWaitingUntileFinished() {
     let expectation = self.expectation(description: "\(#function)\(#line)")
     let operation1 = IntToStringOperation()
     let operation2 = StringToIntOperation()
     let operation3 = AdvancedBlockOperation {
       expectation.fulfill()
     }
+    operation3.addDependency(operation2)
 
     operation1.input = 10
-    let adapterOperation = AdvancedOperation.adaptOperations((operation1, operation2))
+    let adapterOperation = AdvancedOperation.injectOperation(operation1, into: operation2)
     let queue = AdvancedOperationQueue()
     queue.addOperations([operation1, operation2, adapterOperation, operation3], waitUntilFinished: false)
 
     waitForExpectations(timeout: 3)
+    XCTAssertEqual(operation2.input, "10")
     XCTAssertEqual(operation2.output, 10)
   }
 

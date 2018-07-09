@@ -273,6 +273,15 @@ final internal class MockOperationQueueDelegate: AdvancedOperationQueueDelegate 
 
 // MARK: - Composable Operations
 
+/// An `AdvancedOperation` with input and output values.
+internal class FunctionOperation<I, O> : AdvancedOperation, OperationInputType & OperationOutputType {
+  /// A generic input.
+  public var input: I?
+
+  /// A generic output.
+  public var output: O?
+}
+
 internal class IntToStringOperation: OperationWithInputAndOuput {
   var input: Int?
   var output: String?
