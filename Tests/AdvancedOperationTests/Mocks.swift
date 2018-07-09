@@ -313,8 +313,7 @@ internal class StringToIntOperation: FunctionOperation<String, Int> {
 internal struct SlowCondition: OperationCondition {
 
   public func evaluate(for operation: AdvancedOperation, completion: @escaping (OperationConditionResult) -> Void) {
-    DispatchQueue(label: "SlowCondition").async {
-      sleep(10)
+    DispatchQueue(label: "SlowCondition").asyncAfter(deadline: .now() + 10) {
       completion(.satisfied)
     }
   }

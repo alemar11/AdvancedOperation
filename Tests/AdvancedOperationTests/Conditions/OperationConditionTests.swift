@@ -227,7 +227,10 @@ class OperationConditionTests: XCTestCase {
     let expectation1 = expectation(description: "\(#function)\(#line)")
     let operation1 = SleepyOperation()
     operation1.completionBlock = { expectation1.fulfill() }
-
+    
+    DispatchQueue.global().asyncAfter(deadline: .now() + 3.0) {
+      operation1.cancel() // at this point the operation itself is cancelled, but its conditions are still evaluating
+    }
     for _ in 1...100 {
       operation1.addCondition(SlowCondition())
     }
@@ -235,10 +238,15 @@ class OperationConditionTests: XCTestCase {
     let queue = AdvancedOperationQueue()
     queue.addOperation(operation1)
 
-    operation1.cancel() // at this point the operation itself is cancelled, but its conditions are still evaluating
-
     waitForExpectations(timeout: 15)
     XCTAssertTrue(operation1.isCancelled)
   }
+
+    func testStress() {
+      for i in 1...200 {
+        print(i)
+        testCancelledOperationWhileEvaluatingConditions()
+      }
+    }
 
 }
