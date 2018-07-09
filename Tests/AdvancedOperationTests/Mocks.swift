@@ -273,7 +273,10 @@ final internal class MockOperationQueueDelegate: AdvancedOperationQueueDelegate 
 
 // MARK: - Composable Operations
 
-internal class IntToStringOperation: FunctionOperation<Int, String> {
+internal class IntToStringOperation: OperationWithInputAndOuput {
+  var input: Int?
+  var output: String?
+  
   override func main() {
     if let input = self.input {
       output = "\(input)"
