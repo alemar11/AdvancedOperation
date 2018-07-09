@@ -38,11 +38,22 @@ class AdapterTests: XCTestCase {
     XCTAssertEqual(operation2.output, 10)
   }
 
-  func testAdapterWithWaitUntilFinished() {
+  func testAdapterWithWaitUntilFinishedUsingClassMethod() {
     let operation1 = IntToStringOperation()
     let operation2 = StringToIntOperation()
     operation1.input = 10
     let adapterOperation = AdvancedOperation.adaptOperations((operation1, operation2))
+    let queue = AdvancedOperationQueue()
+    queue.addOperations([operation1, operation2, adapterOperation], waitUntilFinished: true)
+
+    XCTAssertEqual(operation2.output, 10)
+  }
+
+  func testAdapterWithWaitUntilFinishedUsingInstanceMethod() {
+    let operation1 = IntToStringOperation()
+    let operation2 = StringToIntOperation()
+    operation1.input = 10
+    let adapterOperation = operation1.adapt(into: operation2)
     let queue = AdvancedOperationQueue()
     queue.addOperations([operation1, operation2, adapterOperation], waitUntilFinished: true)
 
@@ -56,6 +67,7 @@ class AdapterTests: XCTestCase {
     let operation3 = AdvancedBlockOperation {
       expectation.fulfill()
     }
+
     operation1.input = 10
     let adapterOperation = AdvancedOperation.adaptOperations((operation1, operation2))
     let queue = AdvancedOperationQueue()

@@ -34,14 +34,27 @@ public protocol Function: AnyObject {
 
 /// An `AdvancedOperation` with input and output values.
 public class FunctionOperation<I, O> : AdvancedOperation, Function {
+  /// A generic input.
   public var input: I?
+
+  /// A generic output.
   public var output: O?
+
+  /// Creates a new operation that passes the output of `self` into the given `AdvancedOperation`
+  ///
+  /// - Parameter operation: The operation that needs the output of `self` to generate an output.
+  /// - Returns: Returns an *adapter* operation which passes the output of `self` into the given `AdvancedOperation`
+  func adapt<E: Function & AdvancedOperation>(into operation: E) -> AdvancedBlockOperation where O == E.Input {
+    return AdvancedOperation.adaptOperations((self, operation))
+  }
 }
 
 // MARK: - Adapter
 
 public extension AdvancedOperation {
 
+  /// Creates an *adapter* operation which passes the output from the first `AdvancedOperation` into the input of the second `AdvancedOperation`
+  ///
   /// - Parameter operations: a tuple of Operations where the second one needs, as input, the output of the first one.
   /// - Returns: Returns an *adapter* operation which passes the output from the first `AdvancedOperation` into the input of the second `AdvancedOperation`,
   /// and builds dependencies so the first operation runs first, then the adapter, then second operation.
