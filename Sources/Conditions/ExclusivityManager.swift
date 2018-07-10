@@ -64,10 +64,7 @@ final public class ExclusivityManager {
 
     if let previous = previous {
       if cancellable {
-        let error = NSError(
-          domain: "\(identifier).\(type(of: self)).\(category)",
-          code: OperationErrorCode.executionCancelled.rawValue,
-          userInfo: nil)
+        let error = AdvancedOperationError.executionCancelled(message: "The operation has been cancelled because there is already an operation for the category: \(category) running.")
 
         operation.cancel(error: error)
       } else {

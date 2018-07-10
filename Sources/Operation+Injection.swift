@@ -79,15 +79,15 @@ public extension AdvancedOperation {
 
       let error: NSError? = {
         if requirements.contains(.notOptional) && outputOperation.output == nil {
-          return NSError(domain: "\(identifier).Adapter", code: OperationErrorCode.conditionFailed.rawValue, userInfo: nil) //TODO better errors
+          return AdvancedOperationError.executionCancelled(message: "The injectable input is nil and it doesn't satisfy the requirements (\(requirements).")
         }
 
         if requirements.contains(.successful), !outputOperation.errors.isEmpty {
-          return NSError(domain: "\(identifier).Adapter", code: OperationErrorCode.conditionFailed.rawValue, userInfo: nil) //TODO better errors
+          return AdvancedOperationError.executionCancelled(message: "The injectable operation contains errors and it doesn't satisfy the requirements (\(requirements).")
         }
 
         if requirements.contains(.noCancellation), outputOperation.isCancelled {
-          return NSError(domain: "\(identifier).Adapter", code: OperationErrorCode.conditionFailed.rawValue, userInfo: nil) //TODO better errors
+          return AdvancedOperationError.executionCancelled(message: "The injectable operation is cancelledand it doesn't satisfy the requirements (\(requirements).")
         }
 
         return nil

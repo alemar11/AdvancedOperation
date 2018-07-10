@@ -56,7 +56,7 @@ open class AdvancedOperation: Operation {
 
   public final override var isFinished: Bool { return state == .finished }
 
-  public final override var isCancelled: Bool { return lock.synchronized { return _cancelled && state != .evaluating} }
+  public final override var isCancelled: Bool { return lock.synchronized { return _cancelled && state != .evaluating } }
 
   internal final var isCancelling: Bool { return lock.synchronized { return _cancelling } }
 

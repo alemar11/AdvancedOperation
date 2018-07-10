@@ -38,7 +38,8 @@ public struct NegatedCondition<T: OperationCondition>: OperationCondition {
     condition.evaluate(for: operation) { (result) in
       switch result {
       case .satisfied:
-        return completion(.failed([NSError(domain: "\(identifier).\(self.name)", code: OperationErrorCode.conditionFailed.rawValue, userInfo: nil)]))
+        let error = AdvancedOperationError.conditionFailed(message: "The condition has been negated.")
+        return completion(.failed([error]))
       case .failed:
         return completion(.satisfied)
       }
