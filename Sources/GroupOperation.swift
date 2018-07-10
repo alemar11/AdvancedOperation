@@ -51,7 +51,7 @@ open class GroupOperation: AdvancedOperation {
   /// ExclusivityManager used by `AdvancedOperationQueue`.
   private let exclusivityManager: ExclusivityManager
 
-  private let lock: NSLock = NSLock()
+  private let lock = NSLock()
 
   private var _temporaryCancelError: Error?
 
@@ -118,7 +118,7 @@ open class GroupOperation: AdvancedOperation {
   private func complete() {
     isSuspended = true
     if lock.synchronized({ () -> Bool in return _requiresCancellationBeforeFinishing }) {
-      super.cancel(error: _temporaryCancelError)
+      super.cancel(error: temporaryCancelError)
     }
     finish(errors: self.aggregatedErrors)
   }

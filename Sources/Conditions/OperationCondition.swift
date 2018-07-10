@@ -73,10 +73,9 @@ public enum MutualExclusivityMode: CustomStringConvertible {
 
   public var description: String {
     switch self {
-    case .disabled: return "disabled"
-    case .enqueue: return "enabled in enqueue mode"
-    case .cancel: return "enabled in cancel mode"
+    case .disabled: return "Disabled"
+    case .enqueue: return "Enabled in enqueue mode"
+    case .cancel: return "Enabled in cancel mode"
     }
   }
 }
-

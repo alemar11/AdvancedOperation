@@ -20,7 +20,7 @@ A library of Swift utils to ease your iOS, macOS, watchOS, tvOS and Linux develo
 ## Requirements
 
 - iOS 11.0+ / macOS 10.13+ / tvOS 11.0+ / watchOS 4.0+
-- Xcode 9.3
+- Xcode 9.4
 - Swift 4.1.0
 
 ## Documentation
@@ -39,7 +39,7 @@ Documentation is [available online](http://www.tinrobots.org/AdvancedOperation/)
 $ gem install cocoapods
 ```
 
-> CocoaPods 1.1.0+ is required to build AdvancedOperation 1.0.0+.
+> CocoaPods 1.1.0+ is required to build AdvancedOperation 0.7.0+.
 
 To integrate AdvancedOperation into your Xcode project using CocoaPods, specify it in your `Podfile`:
 
@@ -49,7 +49,7 @@ platform :ios, '11.0'
 use_frameworks!
 
 target '<Your Target Name>' do
-    pod 'AdvancedOperation', '~> 0.5.0'
+    pod 'AdvancedOperation', '~> 0.7.0'
 end
 ```
 
@@ -73,7 +73,7 @@ $ brew install carthage
 To integrate AdvancedOperation into your Xcode project using Carthage, specify it in your `Cartfile`:
 
 ```ogdl
-github "tinrobots/AdvancedOperation" ~> 0.5.0
+github "tinrobots/AdvancedOperation" ~> 0.7.0
 ```
 
 Run `carthage update` to build the framework and drag the built `AdvancedOperation.framework` into your Xcode project.
@@ -85,7 +85,7 @@ Once you have your Swift package set up, adding AdvancedOperation as a dependenc
 
 ```swift
 dependencies: [
-    .package(url: "https://github.com/tinrobots/AdvancedOperation.git", from: "0.5.0")
+    .package(url: "https://github.com/tinrobots/AdvancedOperation.git", from: "0.7.0")
 ]
 ```
 

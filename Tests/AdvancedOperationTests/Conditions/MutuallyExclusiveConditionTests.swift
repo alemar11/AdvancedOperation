@@ -28,6 +28,7 @@ final class MutuallyExclusiveConditionTests: XCTestCase {
 
   func testIsMutuallyExclusive() {
     XCTAssertTrue(MutuallyExclusiveCondition(name: "test").mutuallyExclusivityMode == .enqueue)
+    XCTAssertEqual(MutuallyExclusiveCondition(name: "test").mutuallyExclusivityMode.description, "Enabled in enqueue mode")
   }
 
   // MARK: - Enqueue Mode
@@ -354,7 +355,11 @@ final class MutuallyExclusiveConditionTests: XCTestCase {
     operation1.completionBlock = {
       expectation1.fulfill()
     }
-    operation1.addCondition(MutuallyExclusiveCondition(name: "SleepyAsyncOperation", mode: .cancel))
+
+    let condition = MutuallyExclusiveCondition(name: "SleepyAsyncOperation", mode: .cancel)
+    XCTAssertEqual(condition.mutuallyExclusivityMode.description, "Enabled in cancel mode")
+
+    operation1.addCondition(condition)
 
 
     let operation2 = SleepyAsyncOperation(interval1: 5, interval2: 5, interval3: 5)

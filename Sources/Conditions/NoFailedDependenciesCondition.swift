@@ -46,8 +46,8 @@ public struct NoFailedDependenciesCondition: OperationCondition {
     let failures = dependencies.compactMap { $0 as? AdvancedOperation }.filter { $0.failed }
 
     if !failures.isEmpty {
-      let error = NSError(domain: "\(identifier).\(name)", code: OperationErrorCode.conditionFailed.rawValue, userInfo: nil)
-      let errors = [error] + failures.flatMap {$0.errors}
+      let error = AdvancedOperationError.conditionFailed(message: "Some dependencies have failures.")
+      let errors = [error] + failures.flatMap { $0.errors }
       completion(.failed(errors))
     } else {
       completion(.satisfied)

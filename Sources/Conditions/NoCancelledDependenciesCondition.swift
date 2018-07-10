@@ -41,7 +41,8 @@ public struct NoCancelledDependeciesCondition: OperationCondition {
     let cancellations = dependencies.filter { $0.isCancelled }
 
     if !cancellations.isEmpty {
-      completion(.failed([NSError(domain: "\(identifier).\(name)", code: OperationErrorCode.conditionFailed.rawValue, userInfo: nil)]))
+      let error = AdvancedOperationError.conditionFailed(message: "Some dependencies have been cancelled.")
+      completion(.failed([error]))
     } else {
       completion(.satisfied)
     }

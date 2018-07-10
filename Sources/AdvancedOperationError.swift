@@ -21,11 +21,32 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-public enum OperationErrorCode: Int {
-  /// Operation failed for a condition.
-  case conditionFailed = 1
-  /// Operation failed during its execution.
-  case executionFailed = 2
-  /// Operation cancelled.
-  case executionCancelled = 3
+import Foundation
+
+public struct AdvancedOperationError {
+
+  public enum Code {
+    static let conditionFailed = 100
+    static let executionCancelled = 200
+  }
+
+  static var domain = identifier
+
+  static func conditionFailed(message: String) -> NSError {
+    return NSError(domain: domain,
+                   code: Code.conditionFailed,
+                   userInfo: [
+                    NSLocalizedFailureReasonErrorKey: "The operation condition wasn't satisfied.",
+                    NSLocalizedDescriptionKey: message
+      ])
+  }
+
+  static func executionCancelled(message: String) -> NSError {
+    return NSError(domain: domain,
+                   code: Code.executionCancelled,
+                   userInfo: [
+                    NSLocalizedFailureReasonErrorKey: "The operation execution has been cancelled.",
+                    NSLocalizedDescriptionKey: message
+      ])
+  }
 }
