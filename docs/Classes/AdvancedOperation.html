@@ -43,9 +43,6 @@
                 <a href="../Classes/ExclusivityManager.html">ExclusivityManager</a>
               </li>
               <li class="nav-group-task">
-                <a href="../Classes/FunctionOperation.html">FunctionOperation</a>
-              </li>
-              <li class="nav-group-task">
                 <a href="../Classes/GroupOperation.html">GroupOperation</a>
               </li>
             </ul>
@@ -58,9 +55,6 @@
               </li>
               <li class="nav-group-task">
                 <a href="../Enums/OperationConditionResult.html">OperationConditionResult</a>
-              </li>
-              <li class="nav-group-task">
-                <a href="../Enums/OperationErrorCode.html">OperationErrorCode</a>
               </li>
             </ul>
           </li>
@@ -82,7 +76,7 @@
                 <a href="../Protocols/AdvancedOperationQueueDelegate.html">AdvancedOperationQueueDelegate</a>
               </li>
               <li class="nav-group-task">
-                <a href="../Protocols/Function.html">Function</a>
+                <a href="../Protocols/InputHaving.html">InputHaving</a>
               </li>
               <li class="nav-group-task">
                 <a href="../Protocols/OperationCondition.html">OperationCondition</a>
@@ -111,13 +105,25 @@
               <li class="nav-group-task">
                 <a href="../Protocols/OperationWillFinishObserving.html">OperationWillFinishObserving</a>
               </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/OutputHaving.html">OutputHaving</a>
+              </li>
             </ul>
           </li>
           <li class="nav-group-name">
             <a href="../Structs.html">Structures</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
+                <a href="../Structs/AdvancedOperationError.html">AdvancedOperationError</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/AdvancedOperationError.html#/s:17AdvancedOperation0aB5ErrorV4CodeO">– Code</a>
+              </li>
+              <li class="nav-group-task">
                 <a href="../Structs/BlockObserver.html">BlockObserver</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/InjectedInputRequirements.html">InjectedInputRequirements</a>
               </li>
               <li class="nav-group-task">
                 <a href="../Structs/MutuallyExclusiveCondition.html">MutuallyExclusiveCondition</a>
@@ -867,9 +873,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:17AdvancedOperationAAC15adaptOperationsAA0a5BlockB0Cx_q_t_tABRbzAA8FunctionRzABRb_AaFR_5InputQy_6OutputRtzr0_lFZ"></a>
-                    <a name="//apple_ref/swift/Method/adaptOperations(_:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:17AdvancedOperationAAC15adaptOperationsAA0a5BlockB0Cx_q_t_tABRbzAA8FunctionRzABRb_AaFR_5InputQy_6OutputRtzr0_lFZ">adaptOperations(_:)</a>
+                    <a name="/s:17AdvancedOperationAAC06injectB0AA0a5BlockB0Cx_q_4intoAA25InjectedInputRequirementsV12requirementstABRbzAA12OutputHavingRzABRb_AA0gK0R_0G0Qy_0J0Rtzr0_lFZ"></a>
+                    <a name="//apple_ref/swift/Method/injectOperation(_:into:requirements:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:17AdvancedOperationAAC06injectB0AA0a5BlockB0Cx_q_4intoAA25InjectedInputRequirementsV12requirementstABRbzAA12OutputHavingRzABRb_AA0gK0R_0G0Qy_0J0Rtzr0_lFZ">injectOperation(_:into:requirements:)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -877,44 +883,16 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <div class="aside aside-note">
-    <p class="aside-title">Note</p>
-    The client is still responsible for adding all three blocks to a queue.
-
-</div>
+                        <p>Undocumented</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">class</span> <span class="kd">func</span> <span class="n">adaptOperations</span><span class="o">&lt;</span><span class="kt">F</span><span class="p">,</span> <span class="kt">G</span><span class="o">&gt;</span><span class="p">(</span><span class="n">_</span> <span class="nv">operations</span><span class="p">:</span> <span class="p">(</span><span class="kt">F</span><span class="p">,</span> <span class="kt">G</span><span class="p">))</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Classes/AdvancedBlockOperation.html">AdvancedBlockOperation</a></span> <span class="k">where</span> <span class="kt">F</span> <span class="p">:</span> <span class="kt">AdvancedOperation</span><span class="p">,</span> <span class="kt">F</span> <span class="p">:</span> <span class="kt"><a href="../Protocols/Function.html">Function</a></span><span class="p">,</span> <span class="kt">G</span> <span class="p">:</span> <span class="kt">AdvancedOperation</span><span class="p">,</span> <span class="kt">G</span> <span class="p">:</span> <span class="kt"><a href="../Protocols/Function.html">Function</a></span><span class="p">,</span> <span class="kt">F</span><span class="o">.</span><span class="kt">Output</span> <span class="o">==</span> <span class="kt">G</span><span class="o">.</span><span class="kt">Input</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">class</span> <span class="kd">func</span> <span class="n">injectOperation</span><span class="o">&lt;</span><span class="kt">F</span><span class="p">:</span> <span class="kt"><a href="../Protocols/OutputHaving.html">OutputHaving</a></span> <span class="o">&amp;</span> <span class="kt">AdvancedOperation</span><span class="p">,</span> <span class="kt">G</span><span class="p">:</span> <span class="kt"><a href="../Protocols/InputHaving.html">InputHaving</a></span> <span class="o">&amp;</span> <span class="kt">AdvancedOperation</span><span class="o">&gt;</span><span class="p">(</span><span class="n">_</span> <span class="nv">outputOperation</span><span class="p">:</span> <span class="kt">F</span><span class="p">,</span> <span class="n">into</span> <span class="nv">inputOpertion</span><span class="p">:</span> <span class="kt">G</span><span class="p">,</span> <span class="nv">requirements</span><span class="p">:</span> <span class="kt"><a href="../Structs/InjectedInputRequirements.html">InjectedInputRequirements</a></span> <span class="o">=</span> <span class="p">[])</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Classes/AdvancedBlockOperation.html">AdvancedBlockOperation</a></span> <span class="k">where</span> <span class="kt">F</span><span class="o">.</span><span class="kt">Output</span> <span class="o">==</span> <span class="kt">G</span><span class="o">.</span><span class="kt">Input</span></code></pre>
 
                         </div>
-                      </div>
-                      <div>
-                        <h4>Parameters</h4>
-                        <table class="graybox">
-                          <tbody>
-                            <tr>
-                              <td>
-                                <code>
-                                <em>operations</em>
-                                </code>
-                              </td>
-                              <td>
-                                <div>
-                                  <p>a tuple of Operations where the second one needs, as input, the output of the first one.</p>
-                                </div>
-                              </td>
-                            </tr>
-                          </tbody>
-                        </table>
-                      </div>
-                      <div>
-                        <h4>Return Value</h4>
-                        <p>Returns an <em>adapter</em> operation which passes the output from the first <code>AdvancedOperation</code> into the input of the second <code>AdvancedOperation</code>,
-and builds dependencies so the first operation runs first, then the adapter, then second operation.</p>
                       </div>
                     </section>
                   </div>
@@ -924,7 +902,7 @@ and builds dependencies so the first operation runs first, then the adapter, the
           </section>
         </section>
         <section id="footer">
-          <p>&copy; 2018 <a class="link" href="https://github.com/tinrobots/AdvancedOperation" target="_blank" rel="external">Alessandro Marzoli</a>. All rights reserved. (Last updated: 2018-07-03)</p>
+          <p>&copy; 2018 <a class="link" href="https://github.com/tinrobots/AdvancedOperation" target="_blank" rel="external">Alessandro Marzoli</a>. All rights reserved. (Last updated: 2018-07-10)</p>
           <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.9.2</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
         </section>
       </article>

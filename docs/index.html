@@ -42,9 +42,6 @@
                 <a href="Classes/ExclusivityManager.html">ExclusivityManager</a>
               </li>
               <li class="nav-group-task">
-                <a href="Classes/FunctionOperation.html">FunctionOperation</a>
-              </li>
-              <li class="nav-group-task">
                 <a href="Classes/GroupOperation.html">GroupOperation</a>
               </li>
             </ul>
@@ -57,9 +54,6 @@
               </li>
               <li class="nav-group-task">
                 <a href="Enums/OperationConditionResult.html">OperationConditionResult</a>
-              </li>
-              <li class="nav-group-task">
-                <a href="Enums/OperationErrorCode.html">OperationErrorCode</a>
               </li>
             </ul>
           </li>
@@ -81,7 +75,7 @@
                 <a href="Protocols/AdvancedOperationQueueDelegate.html">AdvancedOperationQueueDelegate</a>
               </li>
               <li class="nav-group-task">
-                <a href="Protocols/Function.html">Function</a>
+                <a href="Protocols/InputHaving.html">InputHaving</a>
               </li>
               <li class="nav-group-task">
                 <a href="Protocols/OperationCondition.html">OperationCondition</a>
@@ -110,13 +104,25 @@
               <li class="nav-group-task">
                 <a href="Protocols/OperationWillFinishObserving.html">OperationWillFinishObserving</a>
               </li>
+              <li class="nav-group-task">
+                <a href="Protocols/OutputHaving.html">OutputHaving</a>
+              </li>
             </ul>
           </li>
           <li class="nav-group-name">
             <a href="Structs.html">Structures</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
+                <a href="Structs/AdvancedOperationError.html">AdvancedOperationError</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Structs/AdvancedOperationError.html#/s:17AdvancedOperation0aB5ErrorV4CodeO">– Code</a>
+              </li>
+              <li class="nav-group-task">
                 <a href="Structs/BlockObserver.html">BlockObserver</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Structs/InjectedInputRequirements.html">InjectedInputRequirements</a>
               </li>
               <li class="nav-group-task">
                 <a href="Structs/MutuallyExclusiveCondition.html">MutuallyExclusiveCondition</a>
@@ -187,7 +193,7 @@
 
 <ul>
 <li>iOS 11.0+ / macOS 10.13+ / tvOS 11.0+ / watchOS 4.0+</li>
-<li>Xcode 9.3</li>
+<li>Xcode 9.4</li>
 <li>Swift 4.1.0</li>
 </ul>
 <h2 id='documentation' class='heading'>Documentation</h2>
@@ -205,7 +211,7 @@
 </code></pre>
 
 <blockquote>
-<p>CocoaPods 1.1.0+ is required to build AdvancedOperation 1.0.0+.</p>
+<p>CocoaPods 1.1.0+ is required to build AdvancedOperation 0.7.0+.</p>
 </blockquote>
 
 <p>To integrate AdvancedOperation into your Xcode project using CocoaPods, specify it in your <code>Podfile</code>:</p>
@@ -214,7 +220,7 @@
 <span class="n">use_frameworks!</span>
 
 <span class="n">target</span> <span class="s1">'&lt;Your Target Name&gt;'</span> <span class="k">do</span>
-    <span class="n">pod</span> <span class="s1">'AdvancedOperation'</span><span class="p">,</span> <span class="s1">'~&gt; 0.5.0'</span>
+    <span class="n">pod</span> <span class="s1">'AdvancedOperation'</span><span class="p">,</span> <span class="s1">'~&gt; 0.7.0'</span>
 <span class="k">end</span>
 </code></pre>
 
@@ -231,7 +237,7 @@
 </code></pre>
 
 <p>To integrate AdvancedOperation into your Xcode project using Carthage, specify it in your <code>Cartfile</code>:</p>
-<pre class="highlight plaintext"><code>github "tinrobots/AdvancedOperation" ~&gt; 0.5.0
+<pre class="highlight plaintext"><code>github "tinrobots/AdvancedOperation" ~&gt; 0.7.0
 </code></pre>
 
 <p>Run <code>carthage update</code> to build the framework and drag the built <code>AdvancedOperation.framework</code> into your Xcode project.</p>
@@ -240,7 +246,7 @@
 <p>The <a href="https://swift.org/package-manager/">Swift Package Manager</a> is a tool for automating the distribution of Swift code and is integrated into the <code>swift</code> compiler. 
 Once you have your Swift package set up, adding AdvancedOperation as a dependency is as easy as adding it to the <code>dependencies</code> value of your <code>Package.swift</code>.</p>
 <pre class="highlight swift"><code><span class="nv">dependencies</span><span class="p">:</span> <span class="p">[</span>
-    <span class="o">.</span><span class="nf">package</span><span class="p">(</span><span class="nv">url</span><span class="p">:</span> <span class="s">"https://github.com/tinrobots/AdvancedOperation.git"</span><span class="p">,</span> <span class="nv">from</span><span class="p">:</span> <span class="s">"0.5.0"</span><span class="p">)</span>
+    <span class="o">.</span><span class="nf">package</span><span class="p">(</span><span class="nv">url</span><span class="p">:</span> <span class="s">"https://github.com/tinrobots/AdvancedOperation.git"</span><span class="p">,</span> <span class="nv">from</span><span class="p">:</span> <span class="s">"0.7.0"</span><span class="p">)</span>
 <span class="p">]</span>
 </code></pre>
 <h3 id='manually' class='heading'>Manually</h3>
@@ -294,7 +300,7 @@ Once you have your Swift package set up, adding AdvancedOperation as a dependenc
           </section>
         </section>
         <section id="footer">
-          <p>&copy; 2018 <a class="link" href="https://github.com/tinrobots/AdvancedOperation" target="_blank" rel="external">Alessandro Marzoli</a>. All rights reserved. (Last updated: 2018-07-03)</p>
+          <p>&copy; 2018 <a class="link" href="https://github.com/tinrobots/AdvancedOperation" target="_blank" rel="external">Alessandro Marzoli</a>. All rights reserved. (Last updated: 2018-07-10)</p>
           <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.9.2</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
         </section>
       </article>

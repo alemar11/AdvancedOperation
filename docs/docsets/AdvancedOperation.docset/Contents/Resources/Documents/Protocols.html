@@ -43,9 +43,6 @@
                 <a href="Classes/ExclusivityManager.html">ExclusivityManager</a>
               </li>
               <li class="nav-group-task">
-                <a href="Classes/FunctionOperation.html">FunctionOperation</a>
-              </li>
-              <li class="nav-group-task">
                 <a href="Classes/GroupOperation.html">GroupOperation</a>
               </li>
             </ul>
@@ -58,9 +55,6 @@
               </li>
               <li class="nav-group-task">
                 <a href="Enums/OperationConditionResult.html">OperationConditionResult</a>
-              </li>
-              <li class="nav-group-task">
-                <a href="Enums/OperationErrorCode.html">OperationErrorCode</a>
               </li>
             </ul>
           </li>
@@ -82,7 +76,7 @@
                 <a href="Protocols/AdvancedOperationQueueDelegate.html">AdvancedOperationQueueDelegate</a>
               </li>
               <li class="nav-group-task">
-                <a href="Protocols/Function.html">Function</a>
+                <a href="Protocols/InputHaving.html">InputHaving</a>
               </li>
               <li class="nav-group-task">
                 <a href="Protocols/OperationCondition.html">OperationCondition</a>
@@ -111,13 +105,25 @@
               <li class="nav-group-task">
                 <a href="Protocols/OperationWillFinishObserving.html">OperationWillFinishObserving</a>
               </li>
+              <li class="nav-group-task">
+                <a href="Protocols/OutputHaving.html">OutputHaving</a>
+              </li>
             </ul>
           </li>
           <li class="nav-group-name">
             <a href="Structs.html">Structures</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
+                <a href="Structs/AdvancedOperationError.html">AdvancedOperationError</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Structs/AdvancedOperationError.html#/s:17AdvancedOperation0aB5ErrorV4CodeO">– Code</a>
+              </li>
+              <li class="nav-group-task">
                 <a href="Structs/BlockObserver.html">BlockObserver</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Structs/InjectedInputRequirements.html">InjectedInputRequirements</a>
               </li>
               <li class="nav-group-task">
                 <a href="Structs/MutuallyExclusiveCondition.html">MutuallyExclusiveCondition</a>
@@ -219,20 +225,13 @@
               </ul>
             </div>
             <div class="task-group">
-              <div class="task-name-container">
-                <a name="/Function"></a>
-                <a name="//apple_ref/swift/Section/Function" class="dashAnchor"></a>
-                <a href="#/Function">
-                  <h3 class="section-name">Function</h3>
-                </a>
-              </div>
               <ul>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:17AdvancedOperation8FunctionP"></a>
-                    <a name="//apple_ref/swift/Protocol/Function" class="dashAnchor"></a>
-                    <a class="token" href="#/s:17AdvancedOperation8FunctionP">Function</a>
+                    <a name="/s:17AdvancedOperation11InputHavingP"></a>
+                    <a name="//apple_ref/swift/Protocol/InputHaving" class="dashAnchor"></a>
+                    <a class="token" href="#/s:17AdvancedOperation11InputHavingP">InputHaving</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -242,13 +241,41 @@
                       <div class="abstract">
                         <p>Undocumented</p>
 
-                        <a href="Protocols/Function.html" class="slightly-smaller">See more</a>
+                        <a href="Protocols/InputHaving.html" class="slightly-smaller">See more</a>
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">protocol</span> <span class="kt">Function</span> <span class="p">:</span> <span class="kt">AnyObject</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">protocol</span> <span class="kt">InputHaving</span> <span class="p">:</span> <span class="kt">AnyObject</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:17AdvancedOperation12OutputHavingP"></a>
+                    <a name="//apple_ref/swift/Protocol/OutputHaving" class="dashAnchor"></a>
+                    <a class="token" href="#/s:17AdvancedOperation12OutputHavingP">OutputHaving</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                        <a href="Protocols/OutputHaving.html" class="slightly-smaller">See more</a>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">protocol</span> <span class="kt">OutputHaving</span> <span class="p">:</span> <span class="kt">AnyObject</span></code></pre>
 
                         </div>
                       </div>
@@ -486,7 +513,7 @@
           </section>
         </section>
         <section id="footer">
-          <p>&copy; 2018 <a class="link" href="https://github.com/tinrobots/AdvancedOperation" target="_blank" rel="external">Alessandro Marzoli</a>. All rights reserved. (Last updated: 2018-07-03)</p>
+          <p>&copy; 2018 <a class="link" href="https://github.com/tinrobots/AdvancedOperation" target="_blank" rel="external">Alessandro Marzoli</a>. All rights reserved. (Last updated: 2018-07-10)</p>
           <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.9.2</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
         </section>
       </article>
