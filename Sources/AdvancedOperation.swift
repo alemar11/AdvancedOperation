@@ -237,6 +237,7 @@ open class AdvancedOperation: Operation {
   }
 
   private func _cancel(error: Error? = nil) {
+    //TODO: what if the state is .evaluating?
     let canBeCancelled = lock.synchronized { () -> Bool in
       guard !_finishing && !isFinished else { return false }
       guard !_cancelling && !_cancelled else { return false }
