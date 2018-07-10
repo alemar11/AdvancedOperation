@@ -23,42 +23,39 @@
 
 import Foundation
 
-// MARK: - Function
-
-public protocol OperationInputType: AnyObject {
+public protocol InputHaving: AnyObject {
   associatedtype Input
   var input: Input? { get set }
 }
 
-public protocol OperationOutputType: AnyObject {
+public protocol OutputHaving: AnyObject {
   associatedtype Output
    var output: Output? { get set }
 }
 
-public typealias OperationWithInput = AdvancedOperation & OperationInputType
-public typealias OperationWithOutput = AdvancedOperation & OperationOutputType
-public typealias OperationWithInputAndOuput = OperationWithInput & OperationWithOutput
-
-public struct InjectionRequirements: OptionSet { //TODO: rename in InjectionRequirements?
+/// An `OptionSet` containing a list of option that an injectd input should have.
+public struct InjectedInputRequirements: OptionSet {
   public let rawValue: Int
   public init(rawValue: Int) {
     self.rawValue = rawValue
   }
 
   /// The injected input is required.
-  public static let validInput = InjectionRequirements(rawValue: 1)
-  /// The first operation must finish without errors.
-  public static let successful = InjectionRequirements(rawValue: 2)
-  ///  The first operation must finish without being cancelled.
-  public static let noCancellation = InjectionRequirements(rawValue: 3)
+  public static let notOptional = InjectedInputRequirements(rawValue: 1)
+  /// The injected input is a result of a successul operation
+  public static let successful = InjectedInputRequirements(rawValue: 2)
+  /// The injected input is a result of a not cancelled operation
+  public static let noCancellation = InjectedInputRequirements(rawValue: 3)
 }
 
-extension OperationOutputType where Self: AdvancedOperation {
+extension OutputHaving where Self: AdvancedOperation {
   /// Creates a new operation that passes the output of `self` into the given `AdvancedOperation`
   ///
-  /// - Parameter operation: The operation that needs the output of `self` to generate an output.
-  /// - Returns: Returns an *adapter* operation which passes the output of `self` into the given `AdvancedOperation`
-  func inject<E: OperationInputType & AdvancedOperation>(into operation: E, requirements: InjectionRequirements = []) -> AdvancedBlockOperation where Output == E.Input {
+  /// - Parameters:
+  ///   - operation: The operation that needs the output of `self` to generate an output.
+  ///   - requirements: A list of options that the injected input must satisfy.
+  /// - Returns: Returns an *adapter* operation which passes the output of `self` into the given `AdvancedOperation`.
+  func inject<E: InputHaving & AdvancedOperation>(into operation: E, requirements: InjectedInputRequirements = [.notOptional, .successful]) -> AdvancedBlockOperation where Output == E.Input {
     return AdvancedOperation.injectOperation(self, into: operation)
   }
 }
@@ -67,18 +64,21 @@ extension OperationOutputType where Self: AdvancedOperation {
 
 public extension AdvancedOperation {
 
-  /// Creates an *adapter* operation which passes the output from the first `AdvancedOperation` into the input of the second `AdvancedOperation`
+  /// Creates an *adapter* operation which passes the output from the `outputOperation` into the input of the `inputOpertion`.
   ///
-  /// - Parameter operations: a tuple of Operations where the second one needs, as input, the output of the first one.
-  /// - Returns: Returns an *adapter* operation which passes the output from the first `AdvancedOperation` into the input of the second `AdvancedOperation`,
-  /// and builds dependencies so the first operation runs first, then the adapter, then second operation.
+  /// - Parameters:
+  ///   - outputOperation: The operation whose output is needed by the `inputOperation`.
+  ///   - inputOpertion: The operation who needs needs, as input, the output of the `inputOperation`.
+  ///   - requirements: A set of `InjectedInputRequirements`.
+  /// - Returns: Returns an *adapter* operation which passes the output from the `outputOperation` into the input of the `inputOpertion`,
+  /// and builds dependencies so the outputOperation runs first, then the adapter, then inputOpertion.
   /// - Note: The client is still responsible for adding all three blocks to a queue.
   // swiftlint:disable:next line_length
-  class func injectOperation<F: OperationOutputType & AdvancedOperation, G: OperationInputType & AdvancedOperation>(_ outputOperation: F, into inputOpertion: G, requirements: InjectionRequirements = []) -> AdvancedBlockOperation where F.Output == G.Input {
+  class func injectOperation<F: OutputHaving & AdvancedOperation, G: InputHaving & AdvancedOperation>(_ outputOperation: F, into inputOpertion: G, requirements: InjectedInputRequirements = []) -> AdvancedBlockOperation where F.Output == G.Input {
     let adapterOperation = AdvancedBlockOperation { [unowned outputOperation = outputOperation, unowned inputOpertion = inputOpertion] complete in
 
       let error: NSError? = {
-        if requirements.contains(.validInput) && outputOperation.output != nil {
+        if requirements.contains(.notOptional) && outputOperation.output != nil {
           return NSError(domain: "\(identifier).Adapter", code: OperationErrorCode.conditionFailed.rawValue, userInfo: nil) //TODO better errors
         }
 
@@ -104,6 +104,5 @@ public extension AdvancedOperation {
     inputOpertion.addDependency(adapterOperation)
 
     return adapterOperation
-
   }
 }
