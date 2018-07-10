@@ -118,7 +118,7 @@ open class GroupOperation: AdvancedOperation {
   private func complete() {
     isSuspended = true
     if lock.synchronized({ () -> Bool in return _requiresCancellationBeforeFinishing }) {
-      super.cancel(error: _temporaryCancelError)
+      super.cancel(error: temporaryCancelError)
     }
     finish(errors: self.aggregatedErrors)
   }

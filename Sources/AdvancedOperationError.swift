@@ -25,8 +25,7 @@ public struct AdvancedOperationError {
 
   public enum Code {
     static let conditionFailed = 100
-    static let executionFailed = 200
-    static let executionCancelled = 300
+    static let executionCancelled = 200
   }
 
   static var domain = identifier
@@ -36,15 +35,6 @@ public struct AdvancedOperationError {
                    code: Code.conditionFailed,
                    userInfo: [
                     NSLocalizedFailureReasonErrorKey: "The operation condition wasn't satisfied.",
-                    NSLocalizedDescriptionKey: message
-      ])
-  }
-
-  static func executionFailed(message: String) -> NSError {
-    return NSError(domain: domain,
-                   code: Code.executionFailed,
-                   userInfo: [
-                    NSLocalizedFailureReasonErrorKey: "The operation execution failed.",
                     NSLocalizedDescriptionKey: message
       ])
   }

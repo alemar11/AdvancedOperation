@@ -62,7 +62,10 @@ public final class AdvancedBlockOperation: AdvancedOperation {
   // MARK: - Overrides
 
   public override func main() {
-    guard !isCancelled else { finish(); return }
+    guard !isCancelled else {
+      finish()
+      return
+    }
 
     block { [weak self] errors in
       self?.finish(errors: errors)

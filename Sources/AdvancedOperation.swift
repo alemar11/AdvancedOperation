@@ -461,15 +461,15 @@ extension AdvancedOperation {
         default:
           return nil
         }
-      }.flatMap { $0 }
+        }.flatMap { $0 }
 
-      /*
-       if operation.isCancelled {
-       var aggregatedErrors = operation.errors
-       aggregatedErrors.append(contentsOf: [NSError(domain: "\(identifier).\(type(of: self))", code: OperationErrorCode.conditionFailed.rawValue, userInfo: nil)])
-       errors.append(contentsOf: aggregatedErrors)
-       }
-       */
+
+//      if operation.isCancelled {
+//        var aggregatedErrors = operation.errors
+//        let error = AdvancedOperationError.executionCancelled(message: "Operation cancelled while evaluating its conditions.")
+//        errors.append(contentsOf: aggregatedErrors)
+//      }
+
       completion(errors)
     }
   }
