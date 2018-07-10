@@ -79,4 +79,59 @@ class InjectionTests: XCTestCase {
     XCTAssertEqual(operation2.output, 10)
   }
 
+  func testInjectionInputNotOptionalRequirement() {
+    let expectation1 = self.expectation(description: "\(#function)\(#line)")
+    let operation1 = IntToStringOperation()
+    let operation2 = StringToIntOperation()
+    operation2.completionBlock = {
+      expectation1.fulfill()
+    }
+    operation1.input = 2000 // values greater than 1000 will produce a nil output 😎
+    let adapterOperation = operation1.inject(into: operation2)
+    let queue = AdvancedOperationQueue()
+    queue.addOperations([operation1, operation2, adapterOperation], waitUntilFinished: false)
+
+    waitForExpectations(timeout: 3)
+    XCTAssertNil(operation2.input)
+    XCTAssertNil(operation2.output)
+    XCTAssertTrue(operation2.isCancelled)
+  }
+
+  func testInjectionInputSuccessFullRequirement() {
+    let expectation1 = self.expectation(description: "\(#function)\(#line)")
+    let operation1 = IntToStringOperation() // no input -> fails
+    let operation2 = StringToIntOperation()
+    operation2.completionBlock = {
+      expectation1.fulfill()
+    }
+
+    let adapterOperation = operation1.inject(into: operation2, requirements: [.successful])
+    let queue = AdvancedOperationQueue()
+    queue.addOperations([operation1, operation2, adapterOperation], waitUntilFinished: false)
+
+    waitForExpectations(timeout: 3)
+    XCTAssertNil(operation2.input)
+    XCTAssertNil(operation2.output)
+    XCTAssertTrue(operation2.isCancelled)
+  }
+
+  func testInjectionInputNotCancelledRequirement() {
+    let expectation1 = self.expectation(description: "\(#function)\(#line)")
+    let operation1 = IntToStringOperation() // no input -> fails
+    let operation2 = StringToIntOperation()
+    operation2.completionBlock = {
+      expectation1.fulfill()
+    }
+    operation1.input = 100 // special value to cancel the operation 😎
+    operation1.cancel()
+    let adapterOperation = operation1.inject(into: operation2, requirements: [.noCancellation])
+    let queue = AdvancedOperationQueue()
+    queue.addOperations([operation1, operation2, adapterOperation], waitUntilFinished: false)
+
+    waitForExpectations(timeout: 3)
+    XCTAssertNil(operation2.input)
+    XCTAssertNil(operation2.output)
+    XCTAssertTrue(operation2.isCancelled)
+  }
+
 }

@@ -45,7 +45,7 @@ public struct InjectedInputRequirements: OptionSet {
   /// The injected input is a result of a successul operation
   public static let successful = InjectedInputRequirements(rawValue: 2)
   /// The injected input is a result of a not cancelled operation
-  public static let noCancellation = InjectedInputRequirements(rawValue: 3)
+  public static let noCancellation = InjectedInputRequirements(rawValue: 4)
 }
 
 extension OutputHaving where Self: AdvancedOperation {
@@ -56,7 +56,7 @@ extension OutputHaving where Self: AdvancedOperation {
   ///   - requirements: A list of options that the injected input must satisfy.
   /// - Returns: Returns an *adapter* operation which passes the output of `self` into the given `AdvancedOperation`.
   func inject<E: InputHaving & AdvancedOperation>(into operation: E, requirements: InjectedInputRequirements = [.notOptional, .successful]) -> AdvancedBlockOperation where Output == E.Input {
-    return AdvancedOperation.injectOperation(self, into: operation)
+    return AdvancedOperation.injectOperation(self, into: operation, requirements: requirements)
   }
 }
 
@@ -78,7 +78,7 @@ public extension AdvancedOperation {
     let adapterOperation = AdvancedBlockOperation { [unowned outputOperation = outputOperation, unowned inputOpertion = inputOpertion] complete in
 
       let error: NSError? = {
-        if requirements.contains(.notOptional) && outputOperation.output != nil {
+        if requirements.contains(.notOptional) && outputOperation.output == nil {
           return NSError(domain: "\(identifier).Adapter", code: OperationErrorCode.conditionFailed.rawValue, userInfo: nil) //TODO better errors
         }
 
