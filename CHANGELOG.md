@@ -1,5 +1,12 @@
 # Changelog
 
+### 0.7.0
+
+- Injectable operations.
+- Now an operation cancelled while evaluating its conditions, will be flagged as cancelled only after the evaluation.
+- Bugfixes.
+- More tests.
+
 ### 0.6.0
 
 - The mutual exclusivity now can be enabled in *enqueue* or *cancel* mode.

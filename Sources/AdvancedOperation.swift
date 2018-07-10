@@ -56,7 +56,7 @@ open class AdvancedOperation: Operation {
 
   public final override var isFinished: Bool { return state == .finished }
 
-  public final override var isCancelled: Bool { return lock.synchronized { return _cancelled } }
+  public final override var isCancelled: Bool { return lock.synchronized { return _cancelled && state != .evaluating} }
 
   internal final var isCancelling: Bool { return lock.synchronized { return _cancelling } }
 
@@ -237,7 +237,6 @@ open class AdvancedOperation: Operation {
   }
 
   private func _cancel(error: Error? = nil) {
-    //TODO: what if the state is .evaluating?
     let canBeCancelled = lock.synchronized { () -> Bool in
       guard !_finishing && !isFinished else { return false }
       guard !_cancelling && !_cancelled else { return false }

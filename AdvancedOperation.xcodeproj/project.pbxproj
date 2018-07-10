@@ -235,6 +235,7 @@
 		2385617C200A8DC50061BAA1 /* Package.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Package.swift; sourceTree = SOURCE_ROOT; };
 		239BC52120EB7539009A36D9 /* Operation+Injection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Operation+Injection.swift"; sourceTree = "<group>"; };
 		239BC52620EB7C47009A36D9 /* InjectionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InjectionTests.swift; sourceTree = "<group>"; };
+		23A1A85720F4AD9100EA3350 /* CHANGELOG.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = CHANGELOG.md; sourceTree = SOURCE_ROOT; };
 		23A56BAB200F984400509A65 /* XCTestCase+Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "XCTestCase+Utils.swift"; sourceTree = "<group>"; };
 		23A813B02020CF1E008A98E0 /* AdvancedBlockOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdvancedBlockOperation.swift; sourceTree = "<group>"; };
 		23A813B52020D111008A98E0 /* AdvancedBlockOperationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdvancedBlockOperationTests.swift; sourceTree = "<group>"; };
@@ -379,6 +380,7 @@
 		234130941F96061E002BE7FC /* Support */ = {
 			isa = PBXGroup;
 			children = (
+				23A1A85720F4AD9100EA3350 /* CHANGELOG.md */,
 				2385617C200A8DC50061BAA1 /* Package.swift */,
 				237250812005258D0000A442 /* IDETemplateMacros.plist */,
 				2341308A1F9605F5002BE7FC /* AdvancedOperation.h */,
