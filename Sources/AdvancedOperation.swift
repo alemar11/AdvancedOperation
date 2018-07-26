@@ -115,7 +115,14 @@ open class AdvancedOperation: Operation {
   // MARK: - Properties
 
   /// Errors generated during the execution.
-  public private(set) var errors = [Error]()
+  public private(set) var errors: [Error] {
+    get {
+     return lock.synchronized { return _errors }
+    }
+    set {
+      lock.synchronized { _errors = newValue }
+    }
+  }
 
   /// Returns `true` if the `AdvancedOperation` failed due to errors.
   public var failed: Bool { return lock.synchronized { !errors.isEmpty } }
@@ -134,6 +141,9 @@ open class AdvancedOperation: Operation {
 
   /// Returns `true` if the `AdvancedOperation` is cancelled.
   private var _cancelled = false
+
+  /// Errors generated during the execution.
+  private var _errors = [Error]()
 
   /// The state of the operation.
   @objc dynamic

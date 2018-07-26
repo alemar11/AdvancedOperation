@@ -30,9 +30,16 @@ final public class ExclusivityManager {
   /// Creates a new `ExclusivityManager` instance.
   public init() { }
 
+  /// The private queue used for thread safe operations.
   private lazy var queue = DispatchQueue(label: "\(identifier).\(type(of: self)).\(UUID().uuidString)")
 
-  internal private(set) var operations: [String: [Operation]] = [:]
+  /// Holds all the running operations.
+  private(set) var _operations: [String: [Operation]] = [:]
+
+  /// Running operations
+  internal var operations: [String: [Operation]] {
+    return queue.sync { return _operations }
+  }
 
   /// Adds an `AdvancedOperation` the the `ExclusivityManager` instance.
   ///
@@ -59,7 +66,7 @@ final public class ExclusivityManager {
     }
     operation.addObserver(didFinishObserver)
 
-    var operationsWithThisCategory = operations[category] ?? []
+    var operationsWithThisCategory = _operations[category] ?? []
     let previous = operationsWithThisCategory.last
 
     if let previous = previous {
@@ -73,19 +80,19 @@ final public class ExclusivityManager {
     }
 
     operationsWithThisCategory.append(operation)
-    operations[category] = operationsWithThisCategory
+    _operations[category] = operationsWithThisCategory
 
     return previous
   }
 
   private func _removeOperation(_ operation: AdvancedOperation, category: String) {
     if
-      let operationsWithThisCategory = operations[category],
+      let operationsWithThisCategory = _operations[category],
       let index = operationsWithThisCategory.index(of: operation)
     {
       var mutableOperationsWithThisCategory = operationsWithThisCategory
       mutableOperationsWithThisCategory.remove(at: index)
-      operations[category] = mutableOperationsWithThisCategory
+      _operations[category] = mutableOperationsWithThisCategory
     }
   }
 }
