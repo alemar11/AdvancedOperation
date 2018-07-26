@@ -471,8 +471,7 @@ extension AdvancedOperation {
         default:
           return nil
         }
-        }.flatMap { $0 }
-
+      }.flatMap { $0 }
 
 //      if operation.isCancelled {
 //        var aggregatedErrors = operation.errors

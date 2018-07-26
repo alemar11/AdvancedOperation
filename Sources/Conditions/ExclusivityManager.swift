@@ -34,6 +34,7 @@ final public class ExclusivityManager {
   private lazy var queue = DispatchQueue(label: "\(identifier).\(type(of: self)).\(UUID().uuidString)")
 
   /// Holds all the running operations.
+  // swiftlint:disable:next identifier_name
   private(set) var _operations: [String: [Operation]] = [:]
 
   /// Running operations
