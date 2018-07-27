@@ -28,9 +28,7 @@ final class AdvancedBlockOperationTests: XCTestCase {
 
   func testCancel() {
     let operation = AdvancedBlockOperation { complete in
-      DispatchQueue(label: "\(identifier).\(#function)", attributes: .concurrent).async {
-        sleep(1)
-        sleep(2)
+      DispatchQueue(label: "\(identifier).\(#function)", attributes: .concurrent).asyncAfter(deadline: .now() + 2) {
         complete([])
       }
     }
@@ -64,9 +62,7 @@ final class AdvancedBlockOperationTests: XCTestCase {
   func testBlockOperationWithAsyncQueue() {
     let operation = AdvancedBlockOperation { complete in
       XCTAssertTrue(Thread.isMainThread)
-      DispatchQueue(label: "\(identifier).\(#function)", attributes: .concurrent).async {
-        sleep(1)
-        sleep(2)
+      DispatchQueue(label: "\(identifier).\(#function)", attributes: .concurrent).asyncAfter(deadline: .now() + 3) {
         complete([])
       }
     }
@@ -86,9 +82,7 @@ final class AdvancedBlockOperationTests: XCTestCase {
     weak var weakObject = object
 
     var operation = AdvancedBlockOperation { [object] complete in
-      DispatchQueue(label: "\(identifier).\(#function)", attributes: .concurrent).async {
-        sleep(1)
-        sleep(1)
+      DispatchQueue(label: "\(identifier).\(#function)", attributes: .concurrent).asyncAfter(deadline: .now() + 2) {
         _ = object
         complete(errors)
       }
@@ -98,7 +92,7 @@ final class AdvancedBlockOperationTests: XCTestCase {
     operation.addCompletionBlock { expectation1.fulfill() }
     operation.start()
 
-    waitForExpectations(timeout: 3)
+    waitForExpectations(timeout: 5)
     XCTAssertTrue(operation.isFinished)
     XCTAssertSameErrorQuantity(errors: operation.errors, expectedErrors: errors)
 
