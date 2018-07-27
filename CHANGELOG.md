@@ -1,6 +1,6 @@
 # Changelog
 
-### 0.8.0 (WIP)
+### 0.7.1
 
 - Fixed some thread safety isssues.
 - Fixed an issue occurring while cancelling a `DelayOperation`.
