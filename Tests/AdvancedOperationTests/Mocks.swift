@@ -190,12 +190,79 @@ final internal class FailingAsyncOperation: AdvancedOperation {
 
 final internal class MockObserver: OperationObserving {
 
-  var willExecutetCount = 0
-  var didProduceCount = 0
-  var willFinishCount = 0
-  var didFinishCount = 0
-  var willCancelCount = 0
-  var didCancelCount = 0
+  let lock = NSLock()
+  var _willExecutetCount = 0
+  var _didProduceCount = 0
+  var _willFinishCount = 0
+  var _didFinishCount = 0
+  var _willCancelCount = 0
+  var _didCancelCount = 0
+
+  var willExecutetCount: Int {
+    get {
+      return lock.synchronized { return _willExecutetCount }
+    }
+    set {
+      lock.lock()
+      defer { lock.unlock() }
+      _willExecutetCount = newValue
+    }
+  }
+
+  var didProduceCount: Int {
+    get {
+      return lock.synchronized { return _didProduceCount }
+    }
+    set {
+      lock.lock()
+      defer { lock.unlock() }
+      _didProduceCount = newValue
+    }
+  }
+
+  var willFinishCount: Int {
+    get {
+      return lock.synchronized { return _willFinishCount }
+    }
+    set {
+      lock.synchronized {
+        _willFinishCount = newValue
+      }
+    }
+  }
+
+  var didFinishCount: Int {
+    get {
+      return lock.synchronized { return _didFinishCount }
+    }
+    set {
+      lock.synchronized {
+        _didFinishCount = newValue
+      }
+    }
+  }
+
+  var willCancelCount: Int {
+    get {
+      return lock.synchronized { return _willCancelCount }
+    }
+    set {
+      lock.synchronized {
+        _willCancelCount = newValue
+      }
+    }
+  }
+
+  var didCancelCount: Int {
+    get {
+      return lock.synchronized { return _didCancelCount }
+    }
+    set {
+      lock.synchronized {
+        _didCancelCount = newValue
+      }
+    }
+  }
 
   func operationWillExecute(operation: Operation) {
     assert(operation.isExecuting)

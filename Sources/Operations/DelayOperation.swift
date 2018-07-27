@@ -26,6 +26,7 @@ import Foundation
 
 /// An `AdvancedOperation` that will simply wait for a given time interval, or until a specific `Date`.
 /// If the interval is negative, or the `Date` is in the past, then this operation immediately finishes.
+/// - Note: A `DelayOperation` cannot be cancelled once started running.
 final class DelayOperation: AdvancedOperation {
 
   // MARK: - Properties
@@ -78,7 +79,7 @@ final class DelayOperation: AdvancedOperation {
     queue.asyncAfter(deadline: .now() + delay.seconds) { [weak self] in
       guard let `self` = self else { return }
 
-      if !self.isCancelled { self.finish(); return }
+      self.finish()
     }
 
   }

@@ -292,8 +292,6 @@ final class AdvancedOperationTests: XCTestCase {
     operation.start()
     waitForExpectations(timeout: 10)
 
-    //sleep(5) // make sure there are no other effects
-
     XCTAssertEqual(observer.willExecutetCount, 1)
     XCTAssertEqual(observer.willFinishCount, 1)
     XCTAssertEqual(observer.didFinishCount, 1)
@@ -315,8 +313,6 @@ final class AdvancedOperationTests: XCTestCase {
     operation.cancel(error: MockError.cancelled(date: Date()))
 
     waitForExpectations(timeout: 10)
-
-    //sleep(5) // make sure there are no other effects
 
     XCTAssertEqual(observer.willExecutetCount, 1)
     XCTAssertEqual(observer.willFinishCount, 1)

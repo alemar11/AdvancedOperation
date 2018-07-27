@@ -1,5 +1,10 @@
 # Changelog
 
+### 0.7.1
+
+- Fixed some thread safety isssues.
+- Fixed an issue occurring while cancelling a `DelayOperation`.
+
 ### 0.7.0
 
 - Injectable operations.
