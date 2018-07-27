@@ -34,7 +34,7 @@ final class DelayOperationTests: XCTestCase {
 
     operation.completionBlock = {
       let seconds = Date().timeIntervalSince(start)
-      XCTAssertTrue(seconds > 2 && seconds < 3, "\(seconds) should be greater than 2s and lesser than 3s.")
+      XCTAssertEqual(seconds, 2, accuracy: 0.3)
       expectation1.fulfill()
     }
 
@@ -52,7 +52,7 @@ final class DelayOperationTests: XCTestCase {
 
     operation.completionBlock = {
       let seconds = Date().timeIntervalSince(start)
-      XCTAssertTrue(seconds > 2 && seconds < 3, "\(seconds) should be greater than 2s and lesser than 3s.")
+      XCTAssertEqual(seconds, 2, accuracy: 0.3)
       expectation1.fulfill()
     }
 
@@ -63,12 +63,33 @@ final class DelayOperationTests: XCTestCase {
 
   func testNegativeInterval() {
     let expectation1 = expectation(description: "\(#function)\(#line)")
+
     let operation = DelayOperation(interval: -2)
     operation.completionBlock = { expectation1.fulfill() }
 
     operation.start()
     waitForExpectations(timeout: 3)
     XCTAssertFalse(operation.isCancelled)
+    XCTAssertTrue(operation.isFinished)
+  }
+
+  func testCancel() {
+    let expectation1 = expectation(description: "\(#function)\(#line)")
+
+    let start = Date()
+    let end = start.addingTimeInterval(5)
+    let operation = DelayOperation(until: end)
+
+    operation.completionBlock = {
+      let seconds = Date().timeIntervalSince(start)
+      XCTAssertEqual(seconds, 5, accuracy: 0.3)
+      expectation1.fulfill()
+    }
+
+    operation.start()
+    operation.cancel()
+    waitForExpectations(timeout: 10)
+    XCTAssertTrue(operation.isCancelled)
     XCTAssertTrue(operation.isFinished)
   }
 
@@ -79,7 +100,7 @@ final class DelayOperationTests: XCTestCase {
     let operation = DelayOperation(interval: 2)
     operation.completionBlock = {
       let seconds = Date().timeIntervalSince(start)
-      XCTAssertTrue(seconds > 0 && seconds < 1, "\(seconds) should be greater than 0s and lesser than 1s.")
+      XCTAssertEqual(seconds, 0, accuracy: 0.3)
       expectation1.fulfill()
     }
 
