@@ -1,5 +1,9 @@
 # Changelog
 
+### 0.7.2
+
+-  Resolved an ExclusivityManager bug where a cancelled operation was added the operation list.
+
 ### 0.7.1
 
 - Fixed some thread safety isssues.
