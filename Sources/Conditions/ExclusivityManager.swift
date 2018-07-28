@@ -34,7 +34,6 @@ final public class ExclusivityManager {
   private lazy var queue = DispatchQueue(label: "\(identifier).\(type(of: self)).\(UUID().uuidString)")
 
   /// Holds all the running operations.
-  // swiftlint:disable:next identifier_name
   private var _operations: [String: [Operation]] = [:]
 
   /// Running operations
@@ -72,6 +71,7 @@ final public class ExclusivityManager {
 
     if let previous = previous {
       if cancellable {
+        // swiftlint:disable:next line_length
         let error = AdvancedOperationError.executionCancelled(message: "The operation has been cancelled by the ExclusivityManager because there is already an operation for the category: \(category) running.")
 
         operation.cancel(error: error)
