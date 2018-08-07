@@ -62,7 +62,7 @@ extension OutputHaving where Self: AdvancedOperation {
 
 // MARK: - Adapter
 
-public extension AdvancedOperation {
+extension AdvancedOperation {
 
   /// Creates an *adapter* operation which passes the output from the `outputOperation` into the input of the `inputOpertion`.
   ///
@@ -74,7 +74,7 @@ public extension AdvancedOperation {
   /// and builds dependencies so the outputOperation runs first, then the adapter, then inputOpertion.
   /// - Note: The client is still responsible for adding all three blocks to a queue.
   // swiftlint:disable:next line_length
-  public class func injectOperation<F: OutputHaving & AdvancedOperation, G: InputHaving & AdvancedOperation>(_ outputOperation: F, into inputOpertion: G, requirements: InjectedInputRequirements = []) -> AdvancedBlockOperation where F.Output == G.Input {
+  class func injectOperation<F: OutputHaving & AdvancedOperation, G: InputHaving & AdvancedOperation>(_ outputOperation: F, into inputOpertion: G, requirements: InjectedInputRequirements = []) -> AdvancedBlockOperation where F.Output == G.Input {
     let adapterOperation = AdvancedBlockOperation { [unowned outputOperation = outputOperation, unowned inputOpertion = inputOpertion] complete in
 
       let error: NSError? = {
