@@ -1,5 +1,9 @@
 # Changelog
 
+### 0.7.5
+
+- The  `main` function in  `GroupOperation` is now overridable.
+
 ### 0.7.4
 
 - An Injectable operation now has a `transform` closure.
