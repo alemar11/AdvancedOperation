@@ -1,5 +1,9 @@
 # Changelog
 
+### 0.7.3
+
+- Fixed access levels.
+
 ### 0.7.2
 
 -  Resolved an ExclusivityManager bug where a cancelled operation was added the operation list.
