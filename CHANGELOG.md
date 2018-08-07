@@ -2,7 +2,7 @@
 
 ### 0.7.4
 
-- An Injectable operation now has a `trasnform` closure.
+- An Injectable operation now has a `transform` closure.
 
 ### 0.7.3
 
