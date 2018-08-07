@@ -143,7 +143,9 @@ open class GroupOperation: AdvancedOperation {
     cancel(error: nil)
   }
 
-  public final override func main() {
+  /// Performs the receiver’s non-concurrent task.
+  /// - Note: If overridden, be sure to call the parent `main` as the end of the new implementation.
+  open override func main() {
     underlyingOperationQueue.addOperation(finishingOperation)
     underlyingOperationQueue.isSuspended = false
   }
