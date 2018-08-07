@@ -361,8 +361,9 @@ internal class IntToStringOperation: AdvancedOperation & InputHaving & OutputHav
         output = "\(input)"
         cancel()
         finish()
-      }
-      if input <= 1000 {
+      } else if input == 404 {
+        output = nil
+      } else if input <= 1000 {
         output = "\(input)"
       }
       finish()

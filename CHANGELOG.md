@@ -1,5 +1,11 @@
 # Changelog
 
+### 0.7.4
+
+- An Injectable operation now has a `trasnform` closure.
+
+- Fixed access levels.
+
 ### 0.7.3
 
 - Fixed access levels.

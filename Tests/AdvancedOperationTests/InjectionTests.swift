@@ -38,7 +38,7 @@ class InjectionTests: XCTestCase {
     XCTAssertEqual(operation2.output, 10)
   }
 
-  func testInjectionWithWaitUntilFinishedUsingClassMethod() {
+  func testInjectionUsingClassMethodAndWaitUntilFinished() {
     let operation1 = IntToStringOperation()
     let operation2 = StringToIntOperation()
     operation1.input = 10
@@ -49,7 +49,7 @@ class InjectionTests: XCTestCase {
     XCTAssertEqual(operation2.output, 10)
   }
 
-  func testInjectionWithWaitUntilFinishedUsingInstanceMethod() {
+  func testInjectionUsingInstanceMethodAndWaitUntilFinished() {
     let operation1 = IntToStringOperation()
     let operation2 = StringToIntOperation()
     operation1.input = 10
@@ -60,7 +60,41 @@ class InjectionTests: XCTestCase {
     XCTAssertEqual(operation2.output, 10)
   }
 
-  func testInjectionWithoutWaitingUntileFinished() {
+  func testTransformableInjectionInstanceMethodAndWaitUntilFinishedUsing() {
+    let operation1 = IntToStringOperation()
+    let operation2 = IntToStringOperation()
+    operation1.input = 10
+    let adapterOperation = operation1.inject(into: operation2) { value -> Int? in
+      if let value = value {
+        return Int(value)
+      } else {
+        return nil
+      }
+    }
+    let queue = AdvancedOperationQueue()
+    queue.addOperations([operation1, operation2, adapterOperation], waitUntilFinished: true)
+
+    XCTAssertEqual(operation2.output, "10")
+  }
+
+  func testTransformableInjectionWithNilResultUsingInstanceMethodAndWaitUntilFinished() {
+    let operation1 = IntToStringOperation()
+    let operation2 = IntToStringOperation()
+    operation1.input = 404
+    let adapterOperation = operation1.inject(into: operation2) { value -> Int? in
+      if let value = value {
+        return Int(value)
+      } else {
+        return nil
+      }
+    }
+    let queue = AdvancedOperationQueue()
+    queue.addOperations([operation1, operation2, adapterOperation], waitUntilFinished: true)
+
+    XCTAssertNil(operation2.output)
+  }
+
+  func testInjectionWithoutWaitingUntilFinished() {
     let expectation = self.expectation(description: "\(#function)\(#line)")
     let operation1 = IntToStringOperation()
     let operation2 = StringToIntOperation()
