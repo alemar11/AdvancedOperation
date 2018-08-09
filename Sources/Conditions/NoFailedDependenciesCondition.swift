@@ -31,7 +31,7 @@ public struct NoFailedDependenciesCondition: OperationCondition {
 
   /// Create a new `NoFailedDependenciesCondition` element.
   ///
-  /// - Parameter ignoreCancellations: true if cancellations should be ignored.
+  /// - Parameter ignoreCancellations: `true` if cancellations should be ignored (defaults to `false`).
   public init(ignoreCancellations: Bool = false) {
     self.ignoreCancellations = ignoreCancellations
   }
