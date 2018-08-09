@@ -27,6 +27,9 @@ open class GroupOperation: AdvancedOperation {
 
   // MARK: - Public Properties
 
+  /// ExclusivityManager used by `AdvancedOperationQueue`.
+  public let exclusivityManager: ExclusivityManager
+
   /// Accesses the group operation queue's quality of service. It defaults to background quality.
   public final override var qualityOfService: QualityOfService {
     get {
@@ -47,9 +50,6 @@ open class GroupOperation: AdvancedOperation {
 
   /// Internal finishing operation.
   private lazy var finishingOperation = BlockOperation { } //AdvancedBlockOperation { complete in complete([]) }
-
-  /// ExclusivityManager used by `AdvancedOperationQueue`.
-  private let exclusivityManager: ExclusivityManager
 
   private let lock = NSLock()
 
