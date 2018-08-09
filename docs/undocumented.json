@@ -345,58 +345,58 @@
     },
     {
       "file": "/Users/a.marzoli/Developer/x/AdvancedOperation/Sources/GroupOperation.swift",
-      "line": 146,
-      "symbol": "GroupOperation.main()",
-      "symbol_kind": "source.lang.swift.decl.function.method.instance",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/a.marzoli/Developer/x/AdvancedOperation/Sources/GroupOperation.swift",
-      "line": 151,
+      "line": 153,
       "symbol": "GroupOperation.addOperation(operation:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/a.marzoli/Developer/x/AdvancedOperation/Sources/GroupOperation.swift",
-      "line": 184,
+      "line": 186,
       "symbol": "GroupOperation.operationQueue(operationQueue:willAddOperation:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/a.marzoli/Developer/x/AdvancedOperation/Sources/GroupOperation.swift",
-      "line": 202,
+      "line": 204,
       "symbol": "GroupOperation.operationQueue(operationQueue:didAddOperation:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/a.marzoli/Developer/x/AdvancedOperation/Sources/GroupOperation.swift",
-      "line": 204,
+      "line": 206,
       "symbol": "GroupOperation.operationQueue(operationQueue:operationWillFinish:withErrors:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/a.marzoli/Developer/x/AdvancedOperation/Sources/GroupOperation.swift",
-      "line": 214,
+      "line": 216,
       "symbol": "GroupOperation.operationQueue(operationQueue:operationDidFinish:withErrors:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/a.marzoli/Developer/x/AdvancedOperation/Sources/GroupOperation.swift",
-      "line": 216,
+      "line": 218,
       "symbol": "GroupOperation.operationQueue(operationQueue:operationWillCancel:withErrors:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/a.marzoli/Developer/x/AdvancedOperation/Sources/GroupOperation.swift",
-      "line": 218,
+      "line": 220,
       "symbol": "GroupOperation.operationQueue(operationQueue:operationDidCancel:withErrors:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/a.marzoli/Developer/x/AdvancedOperation/Sources/Operation+Injection.swift",
+      "line": null,
+      "symbol": "OutputHaving",
+      "symbol_kind": "source.lang.swift.decl.extension",
       "warning": "undocumented"
     },
     {
@@ -439,13 +439,6 @@
       "line": 33,
       "symbol": "OutputHaving.output",
       "symbol_kind": "source.lang.swift.decl.var.instance",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/a.marzoli/Developer/x/AdvancedOperation/Sources/Operation+Injection.swift",
-      "line": 77,
-      "symbol": "AdvancedOperation.injectOperation(_:into:requirements:)",
-      "symbol_kind": "source.lang.swift.decl.function.method.class",
       "warning": "undocumented"
     },
     {
