@@ -63,7 +63,7 @@ final internal class SelfObservigOperation: AdvancedOperation {
 
   override func main() {
     DispatchQueue.global().asyncAfter(deadline: .now() + 3) { [weak self] in
-      guard let `self` = self else { return }
+      guard let self = self else { return }
       if `self`.isCancelled {
         self.finish()
         return

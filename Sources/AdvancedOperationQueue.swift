@@ -59,30 +59,36 @@ open class AdvancedOperationQueue: OperationQueue {
 
       let observer = BlockObserver(
         willExecute: { [weak self] (operation) in
-          guard let `self` = self else { return }
+          guard let self = self else { return }
+
           self.delegate?.operationQueue(operationQueue: self, operationWillExecute: operation)
 
         }, didProduce: { [weak self] in
-          guard let `self` = self else { return }
+          guard let self = self else { return }
+
           self.addOperation($1)
 
         }, willCancel: { [weak self] (operation, errors) in
-          guard let `self` = self else { return }
+          guard let self = self else { return }
+
           self.delegate?.operationQueue(operationQueue: self, operationWillCancel: operation, withErrors: errors)
 
         }, didCancel: { [weak self] (operation, errors) in
-          guard let `self` = self else { return }
+          guard let self = self else { return }
+
           self.delegate?.operationQueue(operationQueue: self, operationDidCancel: operation, withErrors: errors)
 
         }, willFinish: { [weak self] (operation, errors) in
-          guard let `self` = self else { return }
+          guard let self = self else { return }
+
           self.delegate?.operationQueue(operationQueue: self, operationWillFinish: operation, withErrors: errors)
 
         }, didFinish: { [weak self] (operation, errors) in
-          guard let `self` = self else { return }
-          self.delegate?.operationQueue(operationQueue: self, operationDidFinish: operation, withErrors: errors)
+          guard let self = self else { return }
 
-      })
+          self.delegate?.operationQueue(operationQueue: self, operationDidFinish: operation, withErrors: errors)
+        }
+      )
 
       operation.addObserver(observer)
 

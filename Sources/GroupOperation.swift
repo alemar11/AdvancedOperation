@@ -102,7 +102,8 @@ open class GroupOperation: AdvancedOperation {
     finishingOperation.addDependency(startingOperation)
     finishingOperation.completionBlock = { [weak self] in
       // always executed
-      guard let `self` = self else { return }
+      guard let self = self else { return }
+
       self.complete()
     }
 
