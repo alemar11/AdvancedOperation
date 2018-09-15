@@ -36,7 +36,6 @@ public protocol AdvancedOperationQueueDelegate: class {
 }
 
 public extension AdvancedOperationQueueDelegate {
-
   func operationQueue(operationQueue: AdvancedOperationQueue, willAddOperation operation: Operation) {}
   func operationQueue(operationQueue: AdvancedOperationQueue, operationWillExecute operation: Operation) {}
 }
