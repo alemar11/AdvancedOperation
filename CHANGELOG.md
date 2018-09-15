@@ -1,5 +1,8 @@
 # Changelog
 
+### 1.0.0
+- Swift 4.2 support.
+
 ### 0.7.5
 
 - The  `main` function in  `GroupOperation` is now overridable.
