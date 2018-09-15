@@ -1,7 +1,7 @@
 # Changelog
 
-### 1.0.0
-- Swift 4.2 support.
+### 1.0.0 ⭐
+- AdvancedOperation is now completely migrated to **Swift 4.2**.
 
 ### 0.7.5
 
