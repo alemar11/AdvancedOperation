@@ -46,19 +46,19 @@ matrix:
       env: 
         - DESTINATION="OS=11.4,name=iPhone X" SCHEME="$IOS_FRAMEWORK_SCHEME" SDK="$IOS_SDK" XCODE_RUN_TESTS="YES" CODECOV_FLAG="ios" XCODE_CONFIGURATION="RELEASE"
 
-    #watchOS 4.3 Debug
+    #watchOS 4.2 Debug
     - os: osx
       osx_image: xcode10
       language: objective-c
       env: 
-        - DESTINATION="OS=4.3,name=Apple Watch - 42mm" SCHEME="$WATCHOS_FRAMEWORK_SCHEME" SDK="$WATCHOS_SDK" XCODE_RUN_TESTS="NO" CODECOV_FLAG="watchos" XCODE_CONFIGURATION="DEBUG"
+        - DESTINATION="OS=4.2,name=Apple Watch - 42mm" SCHEME="$WATCHOS_FRAMEWORK_SCHEME" SDK="$WATCHOS_SDK" XCODE_RUN_TESTS="NO" CODECOV_FLAG="watchos" XCODE_CONFIGURATION="DEBUG"
 
-    #watchOS 4.3 Release
+    #watchOS 4.2 Release
     - os: osx
       osx_image: xcode10
       language: objective-c
       env: 
-        - DESTINATION="OS=4.3,name=Apple Watch - 42mm" SCHEME="$WATCHOS_FRAMEWORK_SCHEME" SDK="$WATCHOS_SDK" XCODE_RUN_TESTS="NO" CODECOV_FLAG="watchos" XCODE_CONFIGURATION="RELEASE"
+        - DESTINATION="OS=4.2,name=Apple Watch - 42mm" SCHEME="$WATCHOS_FRAMEWORK_SCHEME" SDK="$WATCHOS_SDK" XCODE_RUN_TESTS="NO" CODECOV_FLAG="watchos" XCODE_CONFIGURATION="RELEASE"
 
     # tvOS 11.4 Debug
     - os: osx
