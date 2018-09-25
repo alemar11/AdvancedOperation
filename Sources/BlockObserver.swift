@@ -24,11 +24,9 @@
 import Foundation
 
 /// The `BlockObserver` is a way to attach arbitrary blocks to significant events in an `Operation`'s lifecycle.
-public struct BlockObserver: OperationObserving {
+public class BlockObserver: OperationObserving {
 
   // MARK: - Properties
-
-  public var identifier = UUID().uuidString
 
   private let willExecuteHandler: ((AdvancedOperation) -> Void)?
   private let willFinishHandler: ((AdvancedOperation, [Error]) -> Void)?
@@ -37,14 +35,12 @@ public struct BlockObserver: OperationObserving {
   private let didCancelHandler: ((AdvancedOperation, [Error]) -> Void)?
   private let didProduceOperationHandler: ((Operation, Operation) -> Void)?
 
-  public init (
-    willExecute: ((AdvancedOperation) -> Void)? = nil,
-    didProduce: ((Operation, Operation) -> Void)? = nil,
-    willCancel: ((AdvancedOperation, [Error]) -> Void)? = nil,
-    didCancel: ((AdvancedOperation, [Error]) -> Void)? = nil,
-    willFinish: ((AdvancedOperation, [Error]) -> Void)? = nil,
-    didFinish: ((AdvancedOperation, [Error]) -> Void)? = nil
-    ) {
+  public init (willExecute: ((AdvancedOperation) -> Void)? = nil,
+               didProduce: ((Operation, Operation) -> Void)? = nil,
+               willCancel: ((AdvancedOperation, [Error]) -> Void)? = nil,
+               didCancel: ((AdvancedOperation, [Error]) -> Void)? = nil,
+               willFinish: ((AdvancedOperation, [Error]) -> Void)? = nil,
+               didFinish: ((AdvancedOperation, [Error]) -> Void)? = nil) {
     self.willExecuteHandler = willExecute
     self.didProduceOperationHandler = didProduce
     self.willFinishHandler = willFinish
