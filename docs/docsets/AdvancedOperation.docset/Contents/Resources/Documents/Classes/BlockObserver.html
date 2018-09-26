@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>AdvancedOperationQueueDelegate Protocol Reference</title>
+    <title>BlockObserver Class Reference</title>
     <link rel="stylesheet" type="text/css" href="../css/jazzy.css" />
     <link rel="stylesheet" type="text/css" href="../css/highlight.css" />
     <meta charset='utf-8'>
@@ -10,8 +10,8 @@
     
   </head>
   <body>
-    <a name="//apple_ref/swift/Protocol/AdvancedOperationQueueDelegate" class="dashAnchor"></a>
-    <a title="AdvancedOperationQueueDelegate Protocol Reference"></a>
+    <a name="//apple_ref/swift/Class/BlockObserver" class="dashAnchor"></a>
+    <a title="BlockObserver Class Reference"></a>
     <header>
       <div class="content-wrapper">
         <p><a href="../index.html">AdvancedOperation Docs</a> (53% documented)</p>
@@ -21,7 +21,7 @@
       <p id="breadcrumbs">
         <a href="../index.html">AdvancedOperation Reference</a>
         <img id="carat" src="../img/carat.png" />
-        AdvancedOperationQueueDelegate Protocol Reference
+        BlockObserver Class Reference
       </p>
     </div>
     <div class="content-wrapper">
@@ -161,29 +161,33 @@
       <article class="main-content">
         <section>
           <section class="section">
-            <h1>AdvancedOperationQueueDelegate</h1>
+            <h1>BlockObserver</h1>
               <div class="declaration">
                 <div class="language">
-                  <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">protocol</span> <span class="kt">AdvancedOperationQueueDelegate</span> <span class="p">:</span> <span class="kt">AnyObject</span></code></pre>
+                  <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">BlockObserver</span> <span class="p">:</span> <span class="kt"><a href="../Protocols.html#/s:17AdvancedOperation0B9ObservingP">OperationObserving</a></span></code></pre>
 
                 </div>
               </div>
-            <p>Undocumented</p>
+            <p>The <code>BlockObserver</code> is a way to attach arbitrary blocks to significant events in an <code>Operation</code>&lsquo;s lifecycle.</p>
 
           </section>
           <section class="section task-group-section">
             <div class="task-group">
+              <div class="task-name-container">
+                <a name="/Properties"></a>
+                <a name="//apple_ref/swift/Section/Properties" class="dashAnchor"></a>
+                <a href="#/Properties">
+                  <h3 class="section-name">Properties</h3>
+                </a>
+              </div>
               <ul>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:17AdvancedOperation0aB13QueueDelegateP09operationC0AD07willAddB0yAA0abC0C_So11NSOperationCtF"></a>
-                    <a name="//apple_ref/swift/Method/operationQueue(operationQueue:willAddOperation:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:17AdvancedOperation0aB13QueueDelegateP09operationC0AD07willAddB0yAA0abC0C_So11NSOperationCtF">operationQueue(operationQueue:willAddOperation:)</a>
+                    <a name="/s:17AdvancedOperation13BlockObserverC11willExecute10didProduce0E6Cancel0gI00E6Finish0gJ0ACyA2ACcSg_ySo11NSOperationC_AMtcSgyAJ_Says5Error_pGtcSgA3Qtcfc"></a>
+                    <a name="//apple_ref/swift/Method/init(willExecute:didProduce:willCancel:didCancel:willFinish:didFinish:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:17AdvancedOperation13BlockObserverC11willExecute10didProduce0E6Cancel0gI00E6Finish0gJ0ACyA2ACcSg_ySo11NSOperationC_AMtcSgyAJ_Says5Error_pGtcSgA3Qtcfc">init(willExecute:didProduce:willCancel:didCancel:willFinish:didFinish:)</a>
                     </code>
-                      <span class="declaration-note">
-                        Default implementation
-                      </span>
                   </div>
                   <div class="height-container">
                     <div class="pointer-container"></div>
@@ -193,16 +197,53 @@
                         <p>Undocumented</p>
 
                       </div>
-                      <h4>Default Implementation</h4>
-                      <div class="default_impl abstract">
-                        <p>Undocumented</p>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="nf">init</span> <span class="p">(</span><span class="nv">willExecute</span><span class="p">:</span> <span class="p">((</span><span class="kt"><a href="../Classes/AdvancedOperation.html">AdvancedOperation</a></span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span>
+             <span class="nv">didProduce</span><span class="p">:</span> <span class="p">((</span><span class="kt">Operation</span><span class="p">,</span> <span class="kt">Operation</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span>
+             <span class="nv">willCancel</span><span class="p">:</span> <span class="p">((</span><span class="kt"><a href="../Classes/AdvancedOperation.html">AdvancedOperation</a></span><span class="p">,</span> <span class="p">[</span><span class="kt">Error</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span>
+             <span class="nv">didCancel</span><span class="p">:</span> <span class="p">((</span><span class="kt"><a href="../Classes/AdvancedOperation.html">AdvancedOperation</a></span><span class="p">,</span> <span class="p">[</span><span class="kt">Error</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span>
+             <span class="nv">willFinish</span><span class="p">:</span> <span class="p">((</span><span class="kt"><a href="../Classes/AdvancedOperation.html">AdvancedOperation</a></span><span class="p">,</span> <span class="p">[</span><span class="kt">Error</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span>
+             <span class="nv">didFinish</span><span class="p">:</span> <span class="p">((</span><span class="kt"><a href="../Classes/AdvancedOperation.html">AdvancedOperation</a></span><span class="p">,</span> <span class="p">[</span><span class="kt">Error</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">)</span></code></pre>
 
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <div class="task-name-container">
+                <a name="/OperationObserving"></a>
+                <a name="//apple_ref/swift/Section/OperationObserving" class="dashAnchor"></a>
+                <a href="#/OperationObserving">
+                  <h3 class="section-name">OperationObserving</h3>
+                </a>
+              </div>
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:17AdvancedOperation0B20WillExecuteObservingP09operationcD00F0ySo11NSOperationC_tF"></a>
+                    <a name="//apple_ref/swift/Method/operationWillExecute(operation:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:17AdvancedOperation0B20WillExecuteObservingP09operationcD00F0ySo11NSOperationC_tF">operationWillExecute(operation:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">operationQueue</span><span class="p">(</span><span class="nv">operationQueue</span><span class="p">:</span> <span class="kt"><a href="../Classes/AdvancedOperationQueue.html">AdvancedOperationQueue</a></span><span class="p">,</span> <span class="n">willAddOperation</span> <span class="nv">operation</span><span class="p">:</span> <span class="kt">Operation</span><span class="p">)</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">operationWillExecute</span><span class="p">(</span><span class="nv">operation</span><span class="p">:</span> <span class="kt">Operation</span><span class="p">)</span></code></pre>
 
                         </div>
                       </div>
@@ -212,9 +253,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:17AdvancedOperation0aB13QueueDelegateP09operationC0AD06didAddB0yAA0abC0C_So11NSOperationCtF"></a>
-                    <a name="//apple_ref/swift/Method/operationQueue(operationQueue:didAddOperation:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:17AdvancedOperation0aB13QueueDelegateP09operationC0AD06didAddB0yAA0abC0C_So11NSOperationCtF">operationQueue(operationQueue:didAddOperation:)</a>
+                    <a name="/s:17AdvancedOperation0B19WillFinishObservingP09operationcD00F010withErrorsySo11NSOperationC_Says5Error_pGtF"></a>
+                    <a name="//apple_ref/swift/Method/operationWillFinish(operation:withErrors:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:17AdvancedOperation0B19WillFinishObservingP09operationcD00F010withErrorsySo11NSOperationC_Says5Error_pGtF">operationWillFinish(operation:withErrors:)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -222,14 +263,13 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
-
+                        
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">operationQueue</span><span class="p">(</span><span class="nv">operationQueue</span><span class="p">:</span> <span class="kt"><a href="../Classes/AdvancedOperationQueue.html">AdvancedOperationQueue</a></span><span class="p">,</span> <span class="n">didAddOperation</span> <span class="nv">operation</span><span class="p">:</span> <span class="kt">Operation</span><span class="p">)</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">operationWillFinish</span><span class="p">(</span><span class="nv">operation</span><span class="p">:</span> <span class="kt">Operation</span><span class="p">,</span> <span class="n">withErrors</span> <span class="nv">errors</span><span class="p">:</span> <span class="p">[</span><span class="kt">Error</span><span class="p">])</span></code></pre>
 
                         </div>
                       </div>
@@ -239,32 +279,23 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:17AdvancedOperation0aB13QueueDelegateP09operationC0AD0E11WillExecuteyAA0abC0C_So11NSOperationCtF"></a>
-                    <a name="//apple_ref/swift/Method/operationQueue(operationQueue:operationWillExecute:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:17AdvancedOperation0aB13QueueDelegateP09operationC0AD0E11WillExecuteyAA0abC0C_So11NSOperationCtF">operationQueue(operationQueue:operationWillExecute:)</a>
+                    <a name="/s:17AdvancedOperation0B18DidFinishObservingP09operationcD00F010withErrorsySo11NSOperationC_Says5Error_pGtF"></a>
+                    <a name="//apple_ref/swift/Method/operationDidFinish(operation:withErrors:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:17AdvancedOperation0B18DidFinishObservingP09operationcD00F010withErrorsySo11NSOperationC_Says5Error_pGtF">operationDidFinish(operation:withErrors:)</a>
                     </code>
-                      <span class="declaration-note">
-                        Default implementation
-                      </span>
                   </div>
                   <div class="height-container">
                     <div class="pointer-container"></div>
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
-
-                      </div>
-                      <h4>Default Implementation</h4>
-                      <div class="default_impl abstract">
-                        <p>Undocumented</p>
-
+                        
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">operationQueue</span><span class="p">(</span><span class="nv">operationQueue</span><span class="p">:</span> <span class="kt"><a href="../Classes/AdvancedOperationQueue.html">AdvancedOperationQueue</a></span><span class="p">,</span> <span class="n">operationWillExecute</span> <span class="nv">operation</span><span class="p">:</span> <span class="kt">Operation</span><span class="p">)</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">operationDidFinish</span><span class="p">(</span><span class="nv">operation</span><span class="p">:</span> <span class="kt">Operation</span><span class="p">,</span> <span class="n">withErrors</span> <span class="nv">errors</span><span class="p">:</span> <span class="p">[</span><span class="kt">Error</span><span class="p">])</span></code></pre>
 
                         </div>
                       </div>
@@ -274,9 +305,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:17AdvancedOperation0aB13QueueDelegateP09operationC0AD0E9DidFinish10withErrorsyAA0abC0C_So11NSOperationCSays5Error_pGtF"></a>
-                    <a name="//apple_ref/swift/Method/operationQueue(operationQueue:operationDidFinish:withErrors:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:17AdvancedOperation0aB13QueueDelegateP09operationC0AD0E9DidFinish10withErrorsyAA0abC0C_So11NSOperationCSays5Error_pGtF">operationQueue(operationQueue:operationDidFinish:withErrors:)</a>
+                    <a name="/s:17AdvancedOperation0B19WillCancelObservingP09operationcD00F010withErrorsySo11NSOperationC_Says5Error_pGtF"></a>
+                    <a name="//apple_ref/swift/Method/operationWillCancel(operation:withErrors:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:17AdvancedOperation0B19WillCancelObservingP09operationcD00F010withErrorsySo11NSOperationC_Says5Error_pGtF">operationWillCancel(operation:withErrors:)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -284,14 +315,13 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
-
+                        
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">operationQueue</span><span class="p">(</span><span class="nv">operationQueue</span><span class="p">:</span> <span class="kt"><a href="../Classes/AdvancedOperationQueue.html">AdvancedOperationQueue</a></span><span class="p">,</span> <span class="n">operationDidFinish</span> <span class="nv">operation</span><span class="p">:</span> <span class="kt">Operation</span><span class="p">,</span> <span class="n">withErrors</span> <span class="nv">errors</span><span class="p">:</span> <span class="p">[</span><span class="kt">Error</span><span class="p">])</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">operationWillCancel</span><span class="p">(</span><span class="nv">operation</span><span class="p">:</span> <span class="kt">Operation</span><span class="p">,</span> <span class="n">withErrors</span> <span class="nv">errors</span><span class="p">:</span> <span class="p">[</span><span class="kt">Error</span><span class="p">])</span></code></pre>
 
                         </div>
                       </div>
@@ -301,9 +331,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:17AdvancedOperation0aB13QueueDelegateP09operationC0AD0E9DidCancel10withErrorsyAA0abC0C_So11NSOperationCSays5Error_pGtF"></a>
-                    <a name="//apple_ref/swift/Method/operationQueue(operationQueue:operationDidCancel:withErrors:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:17AdvancedOperation0aB13QueueDelegateP09operationC0AD0E9DidCancel10withErrorsyAA0abC0C_So11NSOperationCSays5Error_pGtF">operationQueue(operationQueue:operationDidCancel:withErrors:)</a>
+                    <a name="/s:17AdvancedOperation0B18DidCancelObservingP09operationcD00F010withErrorsySo11NSOperationC_Says5Error_pGtF"></a>
+                    <a name="//apple_ref/swift/Method/operationDidCancel(operation:withErrors:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:17AdvancedOperation0B18DidCancelObservingP09operationcD00F010withErrorsySo11NSOperationC_Says5Error_pGtF">operationDidCancel(operation:withErrors:)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -311,14 +341,13 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
-
+                        
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">operationQueue</span><span class="p">(</span><span class="nv">operationQueue</span><span class="p">:</span> <span class="kt"><a href="../Classes/AdvancedOperationQueue.html">AdvancedOperationQueue</a></span><span class="p">,</span> <span class="n">operationDidCancel</span> <span class="nv">operation</span><span class="p">:</span> <span class="kt">Operation</span><span class="p">,</span> <span class="n">withErrors</span> <span class="nv">errors</span><span class="p">:</span> <span class="p">[</span><span class="kt">Error</span><span class="p">])</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">operationDidCancel</span><span class="p">(</span><span class="nv">operation</span><span class="p">:</span> <span class="kt">Operation</span><span class="p">,</span> <span class="n">withErrors</span> <span class="nv">errors</span><span class="p">:</span> <span class="p">[</span><span class="kt">Error</span><span class="p">])</span></code></pre>
 
                         </div>
                       </div>
@@ -328,9 +357,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:17AdvancedOperation0aB13QueueDelegateP09operationC0AD0E10WillFinish10withErrorsyAA0abC0C_So11NSOperationCSays5Error_pGtF"></a>
-                    <a name="//apple_ref/swift/Method/operationQueue(operationQueue:operationWillFinish:withErrors:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:17AdvancedOperation0aB13QueueDelegateP09operationC0AD0E10WillFinish10withErrorsyAA0abC0C_So11NSOperationCSays5Error_pGtF">operationQueue(operationQueue:operationWillFinish:withErrors:)</a>
+                    <a name="/s:17AdvancedOperation0b10DidProduceB9ObservingP9operationAD03didD0ySo11NSOperationC_AGtF"></a>
+                    <a name="//apple_ref/swift/Method/operation(operation:didProduce:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:17AdvancedOperation0b10DidProduceB9ObservingP9operationAD03didD0ySo11NSOperationC_AGtF">operation(operation:didProduce:)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -338,41 +367,13 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
-
+                        
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">operationQueue</span><span class="p">(</span><span class="nv">operationQueue</span><span class="p">:</span> <span class="kt"><a href="../Classes/AdvancedOperationQueue.html">AdvancedOperationQueue</a></span><span class="p">,</span> <span class="n">operationWillFinish</span> <span class="nv">operation</span><span class="p">:</span> <span class="kt">Operation</span><span class="p">,</span> <span class="n">withErrors</span> <span class="nv">errors</span><span class="p">:</span> <span class="p">[</span><span class="kt">Error</span><span class="p">])</span></code></pre>
-
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:17AdvancedOperation0aB13QueueDelegateP09operationC0AD0E10WillCancel10withErrorsyAA0abC0C_So11NSOperationCSays5Error_pGtF"></a>
-                    <a name="//apple_ref/swift/Method/operationQueue(operationQueue:operationWillCancel:withErrors:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:17AdvancedOperation0aB13QueueDelegateP09operationC0AD0E10WillCancel10withErrorsyAA0abC0C_So11NSOperationCSays5Error_pGtF">operationQueue(operationQueue:operationWillCancel:withErrors:)</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>Undocumented</p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">operationQueue</span><span class="p">(</span><span class="nv">operationQueue</span><span class="p">:</span> <span class="kt"><a href="../Classes/AdvancedOperationQueue.html">AdvancedOperationQueue</a></span><span class="p">,</span> <span class="n">operationWillCancel</span> <span class="nv">operation</span><span class="p">:</span> <span class="kt">Operation</span><span class="p">,</span> <span class="n">withErrors</span> <span class="nv">errors</span><span class="p">:</span> <span class="p">[</span><span class="kt">Error</span><span class="p">])</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">operation</span><span class="p">(</span><span class="nv">operation</span><span class="p">:</span> <span class="kt">Operation</span><span class="p">,</span> <span class="n">didProduce</span> <span class="nv">producedOperation</span><span class="p">:</span> <span class="kt">Operation</span><span class="p">)</span></code></pre>
 
                         </div>
                       </div>
