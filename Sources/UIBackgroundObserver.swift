@@ -21,9 +21,9 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#if canImport(UIKit) && !os(watchOS)
+#if canImport(UIApplication)
 
-import UIKit
+import UIApplication
 
 public protocol UIApplicationBackgroundTask {
   var applicationState: UIApplication.State { get }
