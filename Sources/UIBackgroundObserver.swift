@@ -44,10 +44,13 @@ private extension Selector {
 /// The `UIBackgroundObserver` let an `AdvancedOperation` run for a period of time after the app transitions to the background.
 public final class UIBackgroundObserver: NSObject {
 
+  /// The task name.
   public let backgroundTaskName = "\(identifier).UIBackgroundObserver.\(UUID().uuidString)"
 
+  /// A unique token that identifies a request to run in the background.
+  public private(set) var taskIdentifier: UIBackgroundTaskIdentifier = .invalid
+
   private let application: UIApplicationBackgroundTask
-  private var taskIdentifier: UIBackgroundTaskIdentifier = .invalid
 
   /// Initializes a new `UIBackgroundObserver` instance.
   public init(application: UIApplicationBackgroundTask) {

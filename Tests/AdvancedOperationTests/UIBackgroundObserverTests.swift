@@ -70,6 +70,7 @@ final class UIBackgroundObserverTests: XCTestCase {
   }
 
   func testUIBackgroundObserverStartsBackgroundTask() {
+    // Given
     var backgroundTaskIdentifier: UIBackgroundTaskIdentifier!
     var endedBackgroundTaskIdentifier: UIBackgroundTaskIdentifier!
 
@@ -81,6 +82,7 @@ final class UIBackgroundObserverTests: XCTestCase {
       endedBackgroundTaskIdentifier = identifier
     }
 
+    // When
     let application = MockUIApplication(state: .active, didBeginTask: didBeginTask, didEndTask: didEndTask)
     let observer = UIBackgroundObserver(application: application)
     let operation = SleepyAsyncOperation(interval1: 2, interval2: 2, interval3: 2)
@@ -90,6 +92,7 @@ final class UIBackgroundObserverTests: XCTestCase {
       expectation.fulfill()
     }
 
+    // Then
     operation.start()
     applicationEntersBackground(application: application)
     waitForExpectations(timeout: 10, handler: nil)
@@ -98,9 +101,11 @@ final class UIBackgroundObserverTests: XCTestCase {
     XCTAssertTrue(operation.isFinished)
     XCTAssertEqual(backgroundTaskIdentifier, endedBackgroundTaskIdentifier)
     XCTAssertTrue(observer.backgroundTaskName.starts(with: "\(identifier).UIBackgroundObserver."))
+    XCTAssertEqual(observer.taskIdentifier, .invalid)
   }
 
   func testUIBackgroundObserverStartsInBackgroundThenBecomesActive() {
+    // Given
     var backgroundTaskIdentifier: UIBackgroundTaskIdentifier!
     var endedBackgroundTaskIdentifier: UIBackgroundTaskIdentifier!
 
@@ -112,6 +117,7 @@ final class UIBackgroundObserverTests: XCTestCase {
       endedBackgroundTaskIdentifier = identifier
     }
 
+    // When
     let application = MockUIApplication(state: .active, didBeginTask: didBeginTask, didEndTask: didEndTask)
     applicationEntersBackground(application: application)
 
@@ -122,6 +128,8 @@ final class UIBackgroundObserverTests: XCTestCase {
     operation.addCompletionBlock {
       expectation.fulfill()
     }
+
+    // Then
     operation.start()
     applicationBecomesActive(application: application)
     waitForExpectations(timeout: 10, handler: nil)
@@ -130,6 +138,7 @@ final class UIBackgroundObserverTests: XCTestCase {
     XCTAssertTrue(operation.isFinished)
     XCTAssertEqual(backgroundTaskIdentifier, endedBackgroundTaskIdentifier)
     XCTAssertTrue(observer.backgroundTaskName.starts(with: "\(identifier).UIBackgroundObserver."))
+    XCTAssertEqual(observer.taskIdentifier, .invalid)
   }
 
 }
