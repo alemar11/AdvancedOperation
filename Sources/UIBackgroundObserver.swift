@@ -21,9 +21,11 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#if canImport(UIApplication)
+// TODO: https://developer.apple.com/documentation/foundation/processinfo/1617030-performexpiringactivity
 
-import UIApplication
+#if canImport(UIKit) && !os(watchOS)
+
+import UIKit
 
 public protocol UIApplicationBackgroundTask {
   var applicationState: UIApplication.State { get }
@@ -39,6 +41,7 @@ private extension Selector {
   static let didEnterBackground = #selector(UIBackgroundObserver.didEnterBackground(notification:))
 }
 
+/// The `UIBackgroundObserver` let an `AdvancedOperation` run for a period of time after the app transitions to the background.
 public final class UIBackgroundObserver: NSObject {
 
   public let backgroundTaskName = "\(identifier).UIBackgroundObserver.\(UUID().uuidString)"
@@ -46,6 +49,7 @@ public final class UIBackgroundObserver: NSObject {
   private let application: UIApplicationBackgroundTask
   private var taskIdentifier: UIBackgroundTaskIdentifier = .invalid
 
+  /// Initializes a new `UIBackgroundObserver` instance.
   public init(application: UIApplicationBackgroundTask) {
     self.application = application
     super.init()
@@ -53,7 +57,7 @@ public final class UIBackgroundObserver: NSObject {
     NotificationCenter.default.addObserver(self, selector: Selector.didEnterBackground, name: UIApplication.didEnterBackgroundNotification, object: .none)
     NotificationCenter.default.addObserver(self, selector: Selector.didBecomeActive, name: UIApplication.didBecomeActiveNotification, object: .none)
 
-    if isInBackground {
+    if application.applicationState == .background {
       startBackgroundTask()
     }
   }
@@ -62,31 +66,22 @@ public final class UIBackgroundObserver: NSObject {
     NotificationCenter.default.removeObserver(self)
   }
 
-  private var isInBackground: Bool {
-    return application.applicationState == .background
-  }
-
-  /// The task is already running in background
-  private var isActive: Bool {
-    return taskIdentifier != .invalid
-  }
-
   @objc
   fileprivate func didEnterBackground(notification: NSNotification) {
-    if isInBackground {
+    if application.applicationState == .background {
       startBackgroundTask()
     }
   }
 
   @objc
   fileprivate func didBecomeActive(notification: NSNotification) {
-    if !isInBackground {
+    if application.applicationState != .background {
       endBackgroundTask()
     }
   }
 
   private func startBackgroundTask() {
-    if !isActive {
+    if taskIdentifier == .invalid {
       taskIdentifier = application.beginBackgroundTask(withName: backgroundTaskName) {
         self.endBackgroundTask()
       }
@@ -94,7 +89,7 @@ public final class UIBackgroundObserver: NSObject {
   }
 
   private func endBackgroundTask() {
-    if isActive {
+    if taskIdentifier != .invalid {
       application.endBackgroundTask(taskIdentifier)
       taskIdentifier = .invalid
     }
