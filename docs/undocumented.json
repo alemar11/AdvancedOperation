@@ -510,13 +510,6 @@
       "symbol": "UIApplicationBackgroundTask.endBackgroundTask(_:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
-    },
-    {
-      "file": "/Users/a.marzoli/Developer/x/AdvancedOperation/Sources/UIBackgroundObserver.swift",
-      "line": 47,
-      "symbol": "UIBackgroundObserver.backgroundTaskName",
-      "symbol_kind": "source.lang.swift.decl.var.instance",
-      "warning": "undocumented"
     }
   ],
   "source_directory": "/Users/a.marzoli/Developer/x/AdvancedOperation"
