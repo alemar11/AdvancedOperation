@@ -29,7 +29,6 @@ import UIKit
 
 public protocol UIApplicationBackgroundTask {
   var applicationState: UIApplication.State { get }
-  // var backgroundTimeRemaining: TimeInterval { get }
   func beginBackgroundTask(withName taskName: String?, expirationHandler handler: (() -> Void)?) -> UIBackgroundTaskIdentifier
   func endBackgroundTask(_ identifier: UIBackgroundTaskIdentifier)
 }
