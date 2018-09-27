@@ -108,4 +108,22 @@ extension UIBackgroundObserver: OperationDidFinishObserving {
 
 }
 
+extension AdvancedOperation {
+
+  /// The operation continues to run, *for a period of time*, after the app transitions to the background.
+  /// - Note: The period of time is undefined.
+  func continueToRunInBackground(application: UIApplicationBackgroundTask) -> UIBackgroundObserver {
+    let backgroundObserver = observers.first { $0 is UIBackgroundObserver }
+
+    if let observer = backgroundObserver as? UIBackgroundObserver {
+      return observer
+    } else {
+      let observer = UIBackgroundObserver(application: application)
+      self.addObserver(observer)
+      return observer
+    }
+  }
+
+}
+
 #endif

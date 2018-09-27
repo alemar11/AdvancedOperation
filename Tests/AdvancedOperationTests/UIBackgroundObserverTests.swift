@@ -69,6 +69,17 @@ final class UIBackgroundObserverTests: XCTestCase {
     NotificationCenter.default.post(name: UIApplication.didBecomeActiveNotification, object: self)
   }
 
+  func testAddingMultipleObservers() {
+    let application = MockUIApplication(state: .active, didBeginTask: .none, didEndTask: .none)
+    let operation = SleepyAsyncOperation(interval1: 2, interval2: 2, interval3: 2)
+    let observer1 = operation.continueToRunInBackground(application: application)
+    let observer2 = operation.continueToRunInBackground(application: application)
+    let observer3 = operation.continueToRunInBackground(application: application)
+    XCTAssertTrue(observer1 === observer2)
+    XCTAssertTrue(observer1 === observer3)
+    XCTAssertTrue(observer2 === observer3)
+  }
+
   func testUIBackgroundObserverStartsBackgroundTask() {
     // Given
     var backgroundTaskIdentifier: UIBackgroundTaskIdentifier!
@@ -84,8 +95,8 @@ final class UIBackgroundObserverTests: XCTestCase {
 
     // When
     let application = MockUIApplication(state: .active, didBeginTask: didBeginTask, didEndTask: didEndTask)
-    let observer = UIBackgroundObserver(application: application)
     let operation = SleepyAsyncOperation(interval1: 2, interval2: 2, interval3: 2)
+    let observer = operation.continueToRunInBackground(application: application)
     operation.addObserver(observer)
     let expectation = self.expectation(description: "\(#function)\(#line)")
     operation.addCompletionBlock {
