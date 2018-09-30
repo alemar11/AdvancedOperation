@@ -97,5 +97,26 @@ final public class ExclusivityManager {
       mutableOperationsWithThisCategory.remove(at: index)
       _operations[category] = mutableOperationsWithThisCategory
     }
+
+    if _operations[category]?.count ?? 0 == 0 {
+      _operations[category] = nil
+    }
+  }
+
+  deinit {
+    queue.sync {
+      _operations.forEach { _, operations in
+        let error = AdvancedOperationError.executionCancelled(message: "The operation has been cancelled because the ExclusivityManager holding that operation has been deallocated.")
+        _ = operations.map {
+          if let advancedOperation = $0 as? AdvancedOperation {
+            advancedOperation.cancel(error: error)
+          } else {
+            $0.cancel()
+          }
+        }
+      }
+
+      _operations.removeAll()
+    }
   }
 }

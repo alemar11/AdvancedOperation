@@ -34,7 +34,8 @@ final class MutuallyExclusiveConditionTests: XCTestCase {
   // MARK: - Enqueue Mode
 
   func testMutuallyExclusiveCondition() {
-    let queue = AdvancedOperationQueue()
+    let exclusivityManager = ExclusivityManager()
+    let queue = AdvancedOperationQueue(exclusivityManager: exclusivityManager)
     queue.maxConcurrentOperationCount = 10
 
     let expectation1 = expectation(description: "\(#function)\(#line)")
@@ -47,14 +48,16 @@ final class MutuallyExclusiveConditionTests: XCTestCase {
     operation1.addCondition(MutuallyExclusiveCondition(name: "SleepyAsyncOperation"))
 
 
-    let operation2 = SleepyAsyncOperation(interval1: 5, interval2: 5, interval3: 5)
+    let operation2 = SleepyAsyncOperation(interval1: 1, interval2: 1, interval3: 1)
     operation2.completionBlock = {
       expectation2.fulfill()
     }
     operation2.addCondition(MutuallyExclusiveCondition(name: "SleepyAsyncOperation"))
 
     queue.addOperations([operation2, operation1], waitUntilFinished: true)
-    waitForExpectations(timeout: 0)
+    waitForExpectations(timeout: 5)
+    let remainingOperations = exclusivityManager.operations.count
+    XCTAssertEqual(remainingOperations, 0, "Expected 0 operations instead of \(remainingOperations).")
   }
 
   func testMutuallyExclusiveConditionWithtDifferentQueues() {
@@ -338,7 +341,7 @@ final class MutuallyExclusiveConditionTests: XCTestCase {
     waitForExpectations(timeout: 10)
 
     XCTAssertEqual(text, "A B C.")
-    XCTAssertEqual(manager.operations.keys.count, 1)
+    XCTAssertEqual(manager.operations.keys.count, 0)
     XCTAssertEqual((manager.operations[key] ?? []).count, 0)
   }
 
@@ -468,7 +471,7 @@ final class MutuallyExclusiveConditionTests: XCTestCase {
     waitForExpectations(timeout: 10)
 
     XCTAssertEqual(text, "A C.")
-    XCTAssertEqual(manager.operations.keys.count, 1)
+    XCTAssertEqual(manager.operations.keys.count, 0)
     XCTAssertEqual((manager.operations[key] ?? []).count, 0)
   }
 
