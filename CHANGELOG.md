@@ -1,9 +1,12 @@
 # Changelog
 
 ### 1.1.0 (WIP)
+
 - Added a UIBackgroundObserver to let an AdvancedOperation run in background (for a small amount of time) on iOS and tvOS.
+- ExclusivityManager improvements.
 
 ### 1.0.0 ⭐
+
 - AdvancedOperation is now completely migrated to **Swift 4.2**.
 
 ### 0.7.5
