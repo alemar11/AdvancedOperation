@@ -23,14 +23,14 @@
 
 import Foundation
 
-public protocol InputHaving: AnyObject {
+public protocol OperationInputHaving: AnyObject {
   associatedtype Input
   var input: Input? { get set }
 }
 
-public protocol OutputHaving: AnyObject {
+public protocol OperationOutputHaving: AnyObject {
   associatedtype Output
-   var output: Output? { get set }
+  var output: Output? { get set }
 }
 
 /// An `OptionSet` containing a list of option that an injectd input should have.
@@ -48,7 +48,7 @@ public struct InjectedInputRequirements: OptionSet {
   public static let noCancellation = InjectedInputRequirements(rawValue: 4)
 }
 
-extension OutputHaving where Self: AdvancedOperation {
+extension OperationOutputHaving where Self: AdvancedOperation {
 
   /// Creates a new operation that passes the output of `self` into the given `AdvancedOperation`
   ///
@@ -56,8 +56,8 @@ extension OutputHaving where Self: AdvancedOperation {
   ///   - operation: The operation that needs the output of `self` to generate an output.
   ///   - requirements: A list of options that the injected input must satisfy.
   /// - Returns: Returns an *adapter* operation which passes the output of `self` into the given `AdvancedOperation`.
-  public func inject<E: InputHaving & AdvancedOperation>(into operation: E,
-                                                         requirements: InjectedInputRequirements = [.notOptional, .successful]) -> AdvancedBlockOperation where Output == E.Input {
+  public func inject<E: OperationInputHaving & AdvancedOperation>(into operation: E,
+                                                                  requirements: InjectedInputRequirements = [.notOptional, .successful]) -> AdvancedBlockOperation where Output == E.Input {
     return AdvancedOperation.injectOperation(self, into: operation, requirements: requirements)
   }
 
@@ -68,9 +68,9 @@ extension OutputHaving where Self: AdvancedOperation {
   ///   - requirements: A list of options that the injected input must satisfy.
   ///   - transform: Closure to transform the output of `self` into a valid `input` for the next operation.
   /// - Returns: Returns an *adapter* operation which passes the transformed output of `self` into the given `AdvancedOperation`.
-  public func inject<E: InputHaving & AdvancedOperation>(into operation: E,
-                                                         requirements: InjectedInputRequirements = [.notOptional, .successful],
-                                                         transform: @escaping (Output?) -> E.Input?) -> AdvancedBlockOperation {
+  public func inject<E: OperationInputHaving & AdvancedOperation>(into operation: E,
+                                                                  requirements: InjectedInputRequirements = [.notOptional, .successful],
+                                                                  transform: @escaping (Output?) -> E.Input?) -> AdvancedBlockOperation {
     return AdvancedOperation.injectOperation(self, into: operation, requirements: requirements, transform: { transform($0) })
   }
 }
@@ -88,11 +88,13 @@ extension AdvancedOperation {
   /// - Returns: Returns an *adapter* operation which passes the output from the `outputOperation` into the input of the `inputOpertion`,
   /// and builds dependencies so the outputOperation runs first, then the adapter, then inputOpertion.
   /// - Note: The client is still responsible for adding all three blocks to a queue.
-  // swiftlint:disable:next line_length
-  class func injectOperation<F: OutputHaving & AdvancedOperation, G: InputHaving & AdvancedOperation>(_ outputOperation: F, into inputOpertion: G, requirements: InjectedInputRequirements = []) -> AdvancedBlockOperation where F.Output == G.Input {
+  class func injectOperation<F: OperationOutputHaving & AdvancedOperation, G: OperationInputHaving & AdvancedOperation>
+    (_ outputOperation: F,
+     into inputOpertion: G,
+     requirements: InjectedInputRequirements = []) -> AdvancedBlockOperation where F.Output == G.Input {
     let adapterOperation = AdvancedBlockOperation { [unowned outputOperation = outputOperation, unowned inputOpertion = inputOpertion] complete in
 
-    let error = AdvancedOperation.evaluateOutputOperation(outputOperation, forRequirements: requirements)
+      let error = AdvancedOperation.evaluateOutputOperation(outputOperation, forRequirements: requirements)
 
       inputOpertion.input = outputOperation.output
       if let error = error {
@@ -117,8 +119,11 @@ extension AdvancedOperation {
   /// - Returns: Returns an *adapter* operation which passes the transformed output from the `outputOperation` into the input of the `inputOpertion`,
   /// and builds dependencies so the outputOperation runs first, then the adapter, then inputOpertion.
   /// - Note: The client is still responsible for adding all three blocks to a queue.
-  // swiftlint:disable:next line_length
-  class func injectOperation<F: OutputHaving & AdvancedOperation, G: InputHaving & AdvancedOperation>(_ outputOperation: F, into inputOpertion: G, requirements: InjectedInputRequirements = [], transform: @escaping (F.Output?) -> G.Input?) -> AdvancedBlockOperation {
+  class func injectOperation<F: OperationOutputHaving & AdvancedOperation, G: OperationInputHaving & AdvancedOperation>
+    (_ outputOperation: F,
+     into inputOpertion: G,
+     requirements: InjectedInputRequirements = [],
+     transform: @escaping (F.Output?) -> G.Input?) -> AdvancedBlockOperation {
     let adapterOperation = AdvancedBlockOperation { [unowned outputOperation = outputOperation, unowned inputOpertion = inputOpertion] complete in
 
       let error = AdvancedOperation.evaluateOutputOperation(outputOperation, forRequirements: requirements)
@@ -136,19 +141,19 @@ extension AdvancedOperation {
     return adapterOperation
   }
 
-  private class func evaluateOutputOperation<F: OutputHaving & AdvancedOperation>(_ outputOperation: F, forRequirements requirements: InjectedInputRequirements) -> NSError? {
-      if requirements.contains(.notOptional) && outputOperation.output == nil {
-        return AdvancedOperationError.executionCancelled(message: "The injectable input is nil and it doesn't satisfy the requirements (\(requirements).")
-      }
+  private class func evaluateOutputOperation<F: OperationOutputHaving & AdvancedOperation>(_ outputOperation: F, forRequirements requirements: InjectedInputRequirements) -> NSError? {
+    if requirements.contains(.notOptional) && outputOperation.output == nil {
+      return AdvancedOperationError.executionCancelled(message: "The injectable input is nil and it doesn't satisfy the requirements (\(requirements).")
+    }
 
-      if requirements.contains(.successful), !outputOperation.errors.isEmpty {
-        return AdvancedOperationError.executionCancelled(message: "The injectable operation contains errors and it doesn't satisfy the requirements (\(requirements).")
-      }
+    if requirements.contains(.successful), !outputOperation.errors.isEmpty {
+      return AdvancedOperationError.executionCancelled(message: "The injectable operation contains errors and it doesn't satisfy the requirements (\(requirements).")
+    }
 
-      if requirements.contains(.noCancellation), outputOperation.isCancelled {
-        return AdvancedOperationError.executionCancelled(message: "The injectable operation is cancelledand it doesn't satisfy the requirements (\(requirements).")
-      }
+    if requirements.contains(.noCancellation), outputOperation.isCancelled {
+      return AdvancedOperationError.executionCancelled(message: "The injectable operation is cancelledand it doesn't satisfy the requirements (\(requirements).")
+    }
 
-      return nil
+    return nil
   }
 }

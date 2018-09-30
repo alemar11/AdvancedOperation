@@ -341,7 +341,7 @@ final internal class MockOperationQueueDelegate: AdvancedOperationQueueDelegate 
 // MARK: - Composable Operations
 
 /// An `AdvancedOperation` with input and output values.
-internal class FunctionOperation<I, O> : AdvancedOperation, InputHaving & OutputHaving {
+internal class FunctionOperation<I, O> : AdvancedOperation, OperationInputHaving & OperationOutputHaving {
   /// A generic input.
   public var input: I?
 
@@ -351,7 +351,7 @@ internal class FunctionOperation<I, O> : AdvancedOperation, InputHaving & Output
 
 /// This operation output is nil if the input is greater than **1000**
 /// This operation cancels itself if the input is **100**
-internal class IntToStringOperation: AdvancedOperation & InputHaving & OutputHaving {
+internal class IntToStringOperation: AdvancedOperation & OperationInputHaving & OperationOutputHaving {
   var input: Int?
   var output: String?
 
