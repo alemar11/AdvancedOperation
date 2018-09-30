@@ -26,12 +26,12 @@ import XCTest
 
 final class AdvancedOperationQueueTests: XCTestCase {
 
-//  func testStress() {
-//    for i in 1...20 {
-//      print(i)
-//      testQueueWithAdvancedOperationsUsingWaitUntilFinished()
-//    }
-//  }
+  //  func testStress() {
+  //    for i in 1...20 {
+  //      print(i)
+  //      testQueueWithAdvancedOperationsUsingWaitUntilFinished()
+  //    }
+  //  }
 
   func testQueueWithAdvancedOperationsUsingWaitUntilFinished() {
     let queue = AdvancedOperationQueue()
@@ -523,7 +523,6 @@ final class AdvancedOperationQueueTests: XCTestCase {
 
     let expectation1 = expectation(description: "\(#function)\(#line)")
     var operation1: AdvancedOperation? = SleepyOperation()
-
     weak var weakOperation1 = operation1
 
     autoreleasepool {
@@ -562,5 +561,39 @@ final class AdvancedOperationQueueTests: XCTestCase {
 
     XCTAssertNil(weakQueue)
     XCTAssertNil(weakOperation1)
+  }
+
+  func testMemoryLeakFailOnceOperationsHaveBeenCompleted() {
+    let queue: AdvancedOperationQueue? = AdvancedOperationQueue()
+
+    var operation1: AdvancedOperation? = SleepyAsyncOperation()
+    var operation2: AdvancedOperation? = SleepyOperation()
+    var operation3: AdvancedOperation? = SleepyAsyncOperation(interval1: 1, interval2: 2, interval3: 1)
+    var operation4: AdvancedOperation? = SleepyOperation()
+
+    weak var weakOperation1 = operation1
+    weak var weakOperation2 = operation2
+    weak var weakOperation3 = operation3
+    weak var weakOperation4 = operation4
+
+    XCTAssertNotNil(weakOperation1)
+    XCTAssertNotNil(weakOperation2)
+    XCTAssertNotNil(weakOperation3)
+    XCTAssertNotNil(weakOperation4)
+
+    autoreleasepool {
+      queue!.addOperations([operation1!, operation2!, operation3!, operation4!], waitUntilFinished: true)
+
+      operation1 = nil
+      operation2 = nil
+      operation3 = nil
+      operation4 = nil
+    }
+
+    // All the operations should have been deallocated by now.
+    XCTAssertNil(weakOperation1)
+    XCTAssertNil(weakOperation2)
+    XCTAssertNil(weakOperation3)
+    XCTAssertNil(weakOperation4)
   }
 }
