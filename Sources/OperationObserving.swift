@@ -23,7 +23,7 @@
 
 import Foundation
 
-///  Types which conform to this protocol, can be attached to `AdvancedOperation` subclasses before they are executed or added to a queue.
+/// Types which conform to this protocol, can be attached to `AdvancedOperation` subclasses before they are executed or added to a queue.
 public protocol OperationObservingType {}
 
 public protocol OperationWillExecuteObserving: OperationObservingType {

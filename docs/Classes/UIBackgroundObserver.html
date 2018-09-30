@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>MutuallyExclusiveCondition Structure Reference</title>
+    <title>UIBackgroundObserver Class Reference</title>
     <link rel="stylesheet" type="text/css" href="../css/jazzy.css" />
     <link rel="stylesheet" type="text/css" href="../css/highlight.css" />
     <meta charset='utf-8'>
@@ -10,8 +10,8 @@
     
   </head>
   <body>
-    <a name="//apple_ref/swift/Struct/MutuallyExclusiveCondition" class="dashAnchor"></a>
-    <a title="MutuallyExclusiveCondition Structure Reference"></a>
+    <a name="//apple_ref/swift/Class/UIBackgroundObserver" class="dashAnchor"></a>
+    <a title="UIBackgroundObserver Class Reference"></a>
     <header>
       <div class="content-wrapper">
         <p><a href="../index.html">AdvancedOperation Docs</a> (54% documented)</p>
@@ -21,7 +21,7 @@
       <p id="breadcrumbs">
         <a href="../index.html">AdvancedOperation Reference</a>
         <img id="carat" src="../img/carat.png" />
-        MutuallyExclusiveCondition Structure Reference
+        UIBackgroundObserver Class Reference
       </p>
     </div>
     <div class="content-wrapper">
@@ -161,14 +161,14 @@
       <article class="main-content">
         <section>
           <section class="section">
-            <h1>MutuallyExclusiveCondition</h1>
+            <h1>UIBackgroundObserver</h1>
               <div class="declaration">
                 <div class="language">
-                  <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">MutuallyExclusiveCondition</span> <span class="p">:</span> <span class="kt"><a href="../Protocols/OperationCondition.html">OperationCondition</a></span></code></pre>
+                  <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">final</span> <span class="kd">class</span> <span class="kt">UIBackgroundObserver</span> <span class="p">:</span> <span class="kt">NSObject</span></code></pre>
 
                 </div>
               </div>
-            <p>A generic condition for describing kinds of operations that may not execute concurrently.</p>
+            <p>The <code>UIBackgroundObserver</code> let an <code><a href="../Classes/AdvancedOperation.html">AdvancedOperation</a></code> run for a period of time after the app transitions to the background.</p>
 
           </section>
           <section class="section task-group-section">
@@ -177,9 +177,94 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:17AdvancedOperation0B9ConditionP4nameSSvp"></a>
-                    <a name="//apple_ref/swift/Property/name" class="dashAnchor"></a>
-                    <a class="token" href="#/s:17AdvancedOperation0B9ConditionP4nameSSvp">name</a>
+                    <a name="/s:17AdvancedOperation20UIBackgroundObserverC18backgroundTaskNameSSvp"></a>
+                    <a name="//apple_ref/swift/Property/backgroundTaskName" class="dashAnchor"></a>
+                    <a class="token" href="#/s:17AdvancedOperation20UIBackgroundObserverC18backgroundTaskNameSSvp">backgroundTaskName</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The task name.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">backgroundTaskName</span><span class="p">:</span> <span class="kt">String</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:17AdvancedOperation20UIBackgroundObserverC14taskIdentifierSo0c4TaskF0avp"></a>
+                    <a name="//apple_ref/swift/Property/taskIdentifier" class="dashAnchor"></a>
+                    <a class="token" href="#/s:17AdvancedOperation20UIBackgroundObserverC14taskIdentifierSo0c4TaskF0avp">taskIdentifier</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>A unique token that identifies a request to run in the background.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">private(set)</span> <span class="k">var</span> <span class="nv">taskIdentifier</span><span class="p">:</span> <span class="kt">UIBackgroundTaskIdentifier</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:17AdvancedOperation20UIBackgroundObserverC11applicationAcA27UIApplicationBackgroundTask_p_tcfc"></a>
+                    <a name="//apple_ref/swift/Method/init(application:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:17AdvancedOperation20UIBackgroundObserverC11applicationAcA27UIApplicationBackgroundTask_p_tcfc">init(application:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Initializes a new <code>UIBackgroundObserver</code> instance.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="nf">init</span><span class="p">(</span><span class="nv">application</span><span class="p">:</span> <span class="kt"><a href="../Protocols/UIApplicationBackgroundTask.html">UIApplicationBackgroundTask</a></span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:17AdvancedOperation0B18DidFinishObservingP09operationcD00F010withErrorsySo11NSOperationC_Says5Error_pGtF"></a>
+                    <a name="//apple_ref/swift/Method/operationDidFinish(operation:withErrors:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:17AdvancedOperation0B18DidFinishObservingP09operationcD00F010withErrorsySo11NSOperationC_Says5Error_pGtF">operationDidFinish(operation:withErrors:)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -193,86 +278,7 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">name</span><span class="p">:</span> <span class="kt">String</span></code></pre>
-
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:17AdvancedOperation0B9ConditionP23mutuallyExclusivityModeAA06MutualeF0Ovp"></a>
-                    <a name="//apple_ref/swift/Property/mutuallyExclusivityMode" class="dashAnchor"></a>
-                    <a class="token" href="#/s:17AdvancedOperation0B9ConditionP23mutuallyExclusivityModeAA06MutualeF0Ovp">mutuallyExclusivityMode</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">mutuallyExclusivityMode</span><span class="p">:</span> <span class="kt"><a href="../Enums/MutualExclusivityMode.html">MutualExclusivityMode</a></span></code></pre>
-
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:17AdvancedOperation26MutuallyExclusiveConditionV4name4modeACSS_AA21MutualExclusivityModeOtcfc"></a>
-                    <a name="//apple_ref/swift/Method/init(name:mode:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:17AdvancedOperation26MutuallyExclusiveConditionV4name4modeACSS_AA21MutualExclusivityModeOtcfc">init(name:mode:)</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>Creates a new <code>MutuallyExclusiveCondition</code> element.</p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="nf">init</span><span class="p">(</span><span class="nv">name</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">mode</span><span class="p">:</span> <span class="kt"><a href="../Enums/MutualExclusivityMode.html">MutualExclusivityMode</a></span> <span class="o">=</span> <span class="o">.</span><span class="n">enqueue</span><span class="p">)</span></code></pre>
-
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:17AdvancedOperation0B9ConditionP8evaluate3for10completionyA2AC_yAA0bC6ResultOctF"></a>
-                    <a name="//apple_ref/swift/Method/evaluate(for:completion:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:17AdvancedOperation0B9ConditionP8evaluate3for10completionyA2AC_yAA0bC6ResultOctF">evaluate(for:completion:)</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">evaluate</span><span class="p">(</span><span class="k">for</span> <span class="nv">operation</span><span class="p">:</span> <span class="kt"><a href="../Classes/AdvancedOperation.html">AdvancedOperation</a></span><span class="p">,</span> <span class="nv">completion</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="p">(</span><span class="kt"><a href="../Enums/OperationConditionResult.html">OperationConditionResult</a></span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">operationDidFinish</span><span class="p">(</span><span class="nv">operation</span><span class="p">:</span> <span class="kt">Operation</span><span class="p">,</span> <span class="n">withErrors</span> <span class="nv">errors</span><span class="p">:</span> <span class="p">[</span><span class="kt">Error</span><span class="p">])</span></code></pre>
 
                         </div>
                       </div>
