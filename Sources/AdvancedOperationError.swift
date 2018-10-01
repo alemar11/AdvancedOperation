@@ -32,6 +32,7 @@ public struct AdvancedOperationError {
 
   static var domain = identifier
 
+  /// Creates an error usable when a condition has failed..
   public static func conditionFailed(message: String, userInfo: [String: Any]? = nil) -> NSError {
     var info: [String: Any] =  [
       NSLocalizedFailureReasonErrorKey: "The operation condition wasn't satisfied.",
@@ -45,6 +46,7 @@ public struct AdvancedOperationError {
     return NSError(domain: domain, code: Code.conditionFailed, userInfo: info)
   }
 
+  /// Creates an error usable when an operation has been cancelled.
   public static func executionCancelled(message: String, userInfo: [String: Any]? = nil) -> NSError {
     var info: [String: Any] =  [
       NSLocalizedFailureReasonErrorKey: "The operation execution has been cancelled.",
