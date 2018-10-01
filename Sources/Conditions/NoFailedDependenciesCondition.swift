@@ -29,7 +29,7 @@ public struct NoFailedDependenciesCondition: OperationCondition {
 
   public let ignoreCancellations: Bool
 
-  static var noFailedDependenciesConditionKey: String { return "noFailedDependenciesCondition" }
+  static var noFailedDependenciesConditionKey: String { return "NoFailedDependenciesCondition" }
 
   /// Create a new `NoFailedDependenciesCondition` element.
   ///
