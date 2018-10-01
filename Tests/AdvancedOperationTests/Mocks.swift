@@ -28,7 +28,7 @@ import XCTest
 
 // MARK: - Error
 
-internal enum MockError: Swift.Error, Equatable, CustomStringConvertible {
+internal enum MockError: Swift.Error, Equatable {
   case test
   case failed
   case cancelled(date: Date)
@@ -46,15 +46,6 @@ internal enum MockError: Swift.Error, Equatable, CustomStringConvertible {
       return dateLhs == dateRhs
     default:
       return false
-    }
-  }
-
-  var description: String {
-    switch self {
-    case .test: return "test"
-    case .failed: return "failed"
-    case .cancelled(date: let date): return "cancelled on \(date)"
-    case .generic(date: let date): return "generci error on \(date)"
     }
   }
 
