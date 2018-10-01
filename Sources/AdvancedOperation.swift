@@ -25,7 +25,6 @@ import Foundation
 import os.log
 
 /// An advanced subclass of `Operation`.
-@available(iOS 11, tvOS 11, watchOS 4, macOS 10.12, *)
 open class AdvancedOperation: Operation {
 
   // MARK: - State
