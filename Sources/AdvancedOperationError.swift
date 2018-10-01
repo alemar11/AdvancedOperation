@@ -32,21 +32,29 @@ public struct AdvancedOperationError {
 
   static var domain = identifier
 
-  static func conditionFailed(message: String) -> NSError {
-    return NSError(domain: domain,
-                   code: Code.conditionFailed,
-                   userInfo: [
-                    NSLocalizedFailureReasonErrorKey: "The operation condition wasn't satisfied.",
-                    NSLocalizedDescriptionKey: message
-      ])
+  static func conditionFailed(message: String, userInfo: [String: Any]? = nil) -> NSError {
+    var info: [String: Any] =  [
+      NSLocalizedFailureReasonErrorKey: "The operation condition wasn't satisfied.",
+      NSLocalizedDescriptionKey: message
+    ]
+
+    userInfo?.forEach { (key, value) in
+      info[key] = value
+    }
+
+    return NSError(domain: domain, code: Code.conditionFailed, userInfo: info)
   }
 
-  static func executionCancelled(message: String) -> NSError {
-    return NSError(domain: domain,
-                   code: Code.executionCancelled,
-                   userInfo: [
-                    NSLocalizedFailureReasonErrorKey: "The operation execution has been cancelled.",
-                    NSLocalizedDescriptionKey: message
-      ])
+  static func executionCancelled(message: String, userInfo: [String: Any]? = nil) -> NSError {
+    var info: [String: Any] =  [
+      NSLocalizedFailureReasonErrorKey: "The operation execution has been cancelled.",
+      NSLocalizedDescriptionKey: message
+    ]
+
+    userInfo?.forEach { (key, value) in
+      info[key] = value
+    }
+
+    return NSError(domain: domain, code: Code.executionCancelled, userInfo: info)
   }
 }
