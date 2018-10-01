@@ -68,6 +68,7 @@ open class AdvancedOperationQueue: OperationQueue {
             guard let self = self else { return }
 
             self.delegate?.operationQueue(operationQueue: self, operationWillExecute: operation)
+            self.willExecute(operation: operation)
 
           }, didProduce: { [weak self] in
             guard let self = self else { return }
@@ -78,21 +79,26 @@ open class AdvancedOperationQueue: OperationQueue {
             guard let self = self else { return }
 
             self.delegate?.operationQueue(operationQueue: self, operationWillCancel: operation, withErrors: errors)
+            self.willCancel(operation: operation, withErrors: errors)
 
           }, didCancel: { [weak self] (operation, errors) in
             guard let self = self else { return }
 
             self.delegate?.operationQueue(operationQueue: self, operationDidCancel: operation, withErrors: errors)
+            self.didCancel(operation: operation, withErrors: errors)
 
           }, willFinish: { [weak self] (operation, errors) in
             guard let self = self else { return }
 
             self.delegate?.operationQueue(operationQueue: self, operationWillFinish: operation, withErrors: errors)
+            self.willFinish(operation: operation, withErrors: errors)
 
           }, didFinish: { [weak self] (operation, errors) in
             guard let self = self else { return }
 
             self.delegate?.operationQueue(operationQueue: self, operationDidFinish: operation, withErrors: errors)
+            self.didFinish(operation: operation, withErrors: errors)
+
           }
         )
 
@@ -127,12 +133,15 @@ open class AdvancedOperationQueue: OperationQueue {
           guard let queue = self, let operation = operation else { return }
 
           queue.delegate?.operationQueue(operationQueue: queue, operationDidFinish: operation, withErrors: [])
+          queue.didFinish(operation: operation, withErrors: [])
         }
       }
 
       delegate?.operationQueue(operationQueue: self, willAddOperation: operation)
+      willAdd(operation: operation)
       super.addOperation(operation)
       delegate?.operationQueue(operationQueue: self, didAddOperation: operation)
+      didAdd(operation: operation)
 
     }
   }
