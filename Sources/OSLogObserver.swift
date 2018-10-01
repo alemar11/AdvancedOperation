@@ -24,8 +24,6 @@
 import Foundation
 import os.log
 
-// log stream --level debug --predicate 'subsystem contains "org.tinrobots"'
-
 @available(iOS 11, tvOS 11, macOS 10.12, watchOS 4.0, *)
 public final class OSLogObserver: OperationObserving {
   private let log: OSLog
@@ -47,42 +45,48 @@ public final class OSLogObserver: OperationObserving {
   }
 
   public func operationDidFinish(operation: Operation, withErrors errors: [Error]) {
+    let name = nameForOperation(operation)
+
     if errors.isEmpty {
-      os_log("%{public}s has finished.", log: log, type: .default, nameForOperation(operation))
+      os_log("%{public}s has finished.", log: log, type: .default, name)
     } else {
-        os_log("%{public}s has finished with errors: %@", log: log, type: .error, nameForOperation(operation), errors)
-      }
+      os_log("%{public}s has finished with errors: %@", log: log, type: .error, nameForOperation(operation), errors)
     }
-
-    public func operationWillCancel(operation: Operation, withErrors errors: [Error]) {
-      os_log("%{public}s is cancelling.", log: log, type: .default, nameForOperation(operation))
-    }
-
-    public func operationDidCancel(operation: Operation, withErrors errors: [Error]) {
-      os_log("%{public}s has been cancelled.", log: log, type: .default, nameForOperation(operation))
-      if !errors.isEmpty {
-        os_log("Cancellation errors: %@", log: log, type: .error, errors)
-      }
-    }
-
-    public func operation(operation: Operation, didProduce producedOperation: Operation) {
-      os_log("%{public}s has produced a new operation: %{public}s.", log: log, type: .default, nameForOperation(operation), nameForOperation(producedOperation))
-    }
-
   }
 
-  extension AdvancedOperation {
+  public func operationWillCancel(operation: Operation, withErrors errors: [Error]) {
+    os_log("%{public}s is cancelling.", log: log, type: .default, nameForOperation(operation))
+  }
 
-    @available(iOS 11, tvOS 11, macOS 10.12, watchOS 4.0, *)
-    public func enableLog(log: OSLog) {
-      let observer = OSLogObserver(log: log)
-      addObserver(observer)
-    }
+  public func operationDidCancel(operation: Operation, withErrors errors: [Error]) {
+    let name = nameForOperation(operation)
 
-    @available(iOS 11, tvOS 11, macOS 10.12, watchOS 4.0, *)
-    public func enableLog() {
-      let log = OSLog(subsystem: identifier, category: "AdvancedOperation")
-      enableLog(log: log)
+    if errors.isEmpty {
+      os_log("%{public}s has been cancelled.", log: log, type: .default, name)
+    } else {
+      os_log("%{public}s has been cancelled with errors: %@", log: log, type: .error, name, errors)
     }
+  }
+
+  public func operation(operation: Operation, didProduce producedOperation: Operation) {
+    os_log("%{public}s has produced a new operation: %{public}s.", log: log, type: .default, nameForOperation(operation), nameForOperation(producedOperation))
+  }
+
+}
+
+extension AdvancedOperation {
+
+  @available(iOS 11, tvOS 11, macOS 10.12, watchOS 4.0, *)
+  public func enableLog(log: OSLog) {
+    let observer = OSLogObserver(log: log)
+    addObserver(observer)
+  }
+
+  // log stream --level debug --predicate 'subsystem contains "org.tinrobots.AdvancedOperation"'
+  @available(iOS 11, tvOS 11, macOS 10.12, watchOS 4.0, *)
+  public func enableLog() {
+    let log = OSLog(subsystem: identifier, category: "AdvancedOperation")
+    enableLog(log: log)
+  }
 
 }
