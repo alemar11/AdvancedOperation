@@ -51,6 +51,7 @@ final class NoCancelledDependenciesConditionTests: XCTestCase {
     operation1.addCondition(NoCancelledDependeciesCondition())
     operation3.addDependency(operation4)
     operation3.addCondition(NoCancelledDependeciesCondition()) // this operation will fail
+    operation4.name = "DelayOperation - Canceled"
 
     operation4.cancel()
 

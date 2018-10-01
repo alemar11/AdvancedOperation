@@ -29,6 +29,8 @@ public struct NoFailedDependenciesCondition: OperationCondition {
 
   public let ignoreCancellations: Bool
 
+  static var noFailedDependenciesConditionKey: String { return "noFailedDependenciesCondition" }
+
   /// Create a new `NoFailedDependenciesCondition` element.
   ///
   /// - Parameter ignoreCancellations: `true` if cancellations should be ignored (defaults to `false`).
@@ -46,7 +48,10 @@ public struct NoFailedDependenciesCondition: OperationCondition {
     let failures = dependencies.compactMap { $0 as? AdvancedOperation }.filter { $0.failed }
 
     if !failures.isEmpty {
-      let error = AdvancedOperationError.conditionFailed(message: "Some dependencies have failures.")
+      let names = failures.map { $0.name ?? "\(type(of: $0))" }
+      let error = AdvancedOperationError.conditionFailed(message: "Some dependencies have failures.",
+                                                         userInfo: [operationConditionKey: self.name,
+                                                                    type(of: self).noFailedDependenciesConditionKey: names])
       let errors = [error] + failures.flatMap { $0.errors }
       completion(.failed(errors))
     } else {
