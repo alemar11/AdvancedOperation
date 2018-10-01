@@ -351,29 +351,20 @@ final class MutuallyExclusiveConditionTests: XCTestCase {
     let queue = AdvancedOperationQueue()
     queue.maxConcurrentOperationCount = 10
 
-    let expectation1 = expectation(description: "\(#function)\(#line)")
-    let expectation2 = expectation(description: "\(#function)\(#line)")
-
     let operation1 = SleepyAsyncOperation(interval1: 0, interval2: 0, interval3: 0)
-    operation1.completionBlock = {
-      expectation1.fulfill()
-    }
-
     let condition = MutuallyExclusiveCondition(name: "SleepyAsyncOperation", mode: .cancel)
     XCTAssertEqual(condition.mutuallyExclusivityMode.description, "Enabled in cancel mode")
 
     operation1.addCondition(condition)
 
-
-    let operation2 = SleepyAsyncOperation(interval1: 5, interval2: 5, interval3: 5)
-    operation2.completionBlock = {
-      expectation2.fulfill()
-    }
+    let operation2 = SleepyAsyncOperation(interval1: 2, interval2: 2, interval3: 2)
     operation2.addCondition(MutuallyExclusiveCondition(name: "SleepyAsyncOperation"))
 
     queue.addOperations([operation2, operation1], waitUntilFinished: true)
-    waitForExpectations(timeout: 0)
     XCTAssertTrue(operation1.isCancelled)
+    XCTAssertNotNil(operation1.errors)
+    XCTAssertTrue(operation2.isFinished)
+    XCTAssertTrue(operation2.errors.isEmpty)
   }
 
   func testMutuallyExclusiveConditionWithtDifferentQueuesWithCancelMode() {
