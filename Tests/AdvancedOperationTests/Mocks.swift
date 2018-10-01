@@ -28,7 +28,7 @@ import XCTest
 
 // MARK: - Error
 
-internal enum MockError: Swift.Error, Equatable {
+internal enum MockError: Swift.Error, Equatable, CustomStringConvertible {
   case test
   case failed
   case cancelled(date: Date)
@@ -48,6 +48,16 @@ internal enum MockError: Swift.Error, Equatable {
       return false
     }
   }
+
+  var description: String {
+    switch self {
+    case .test: return "test"
+    case .failed: return "failed"
+    case .cancelled(date: let date): return "cancelled on \(date)"
+    case .generic(date: let date): return "generci error on \(date)"
+    }
+  }
+
 }
 
 // MARK: - AdvancedOperation
@@ -176,6 +186,10 @@ final internal class FailingAsyncOperation: AdvancedOperation {
   init(errors: [MockError] = [MockError.failed, MockError.test]) {
     self.defaultErrors = errors
     super.init()
+
+    if #available(iOS 11, tvOS 11, macOS 10.12, watchOS 4.0, *) {
+      self.enableLog()
+    }
   }
 
   override func main() {

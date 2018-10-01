@@ -148,6 +148,10 @@
 		23AC3ADD2038A050003E1B15 /* OperationUtilsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23AC3ADC2038A050003E1B15 /* OperationUtilsTests.swift */; };
 		23AC3ADE2038A050003E1B15 /* OperationUtilsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23AC3ADC2038A050003E1B15 /* OperationUtilsTests.swift */; };
 		23AC3ADF2038A050003E1B15 /* OperationUtilsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23AC3ADC2038A050003E1B15 /* OperationUtilsTests.swift */; };
+		23C16A2B21627324002EE5E7 /* OSLogObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23C16A2A21627324002EE5E7 /* OSLogObserver.swift */; };
+		23C16A2C21627324002EE5E7 /* OSLogObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23C16A2A21627324002EE5E7 /* OSLogObserver.swift */; };
+		23C16A2D21627324002EE5E7 /* OSLogObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23C16A2A21627324002EE5E7 /* OSLogObserver.swift */; };
+		23C16A2E21627324002EE5E7 /* OSLogObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23C16A2A21627324002EE5E7 /* OSLogObserver.swift */; };
 		23CF6E7B205FC4D300808400 /* MutuallyExclusiveConditionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23CF6E7A205FC4D300808400 /* MutuallyExclusiveConditionTests.swift */; };
 		23CF6E7C205FC4D300808400 /* MutuallyExclusiveConditionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23CF6E7A205FC4D300808400 /* MutuallyExclusiveConditionTests.swift */; };
 		23CF6E7D205FC4D300808400 /* MutuallyExclusiveConditionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23CF6E7A205FC4D300808400 /* MutuallyExclusiveConditionTests.swift */; };
@@ -249,6 +253,7 @@
 		23A813B02020CF1E008A98E0 /* AdvancedBlockOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdvancedBlockOperation.swift; sourceTree = "<group>"; };
 		23A813B52020D111008A98E0 /* AdvancedBlockOperationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdvancedBlockOperationTests.swift; sourceTree = "<group>"; };
 		23AC3ADC2038A050003E1B15 /* OperationUtilsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OperationUtilsTests.swift; sourceTree = "<group>"; };
+		23C16A2A21627324002EE5E7 /* OSLogObserver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OSLogObserver.swift; sourceTree = "<group>"; };
 		23CF6E7A205FC4D300808400 /* MutuallyExclusiveConditionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MutuallyExclusiveConditionTests.swift; sourceTree = "<group>"; };
 		23F24D1D200771FA00B25A03 /* AdvancedOperationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdvancedOperationTests.swift; sourceTree = "<group>"; };
 		23F24D21200799B800B25A03 /* Operation+Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Operation+Utils.swift"; sourceTree = "<group>"; };
@@ -376,6 +381,7 @@
 				23F24D21200799B800B25A03 /* Operation+Utils.swift */,
 				235D08A3206A494600F70142 /* Conditions */,
 				236F54BA206CE5390079B033 /* Operations */,
+				23C16A2A21627324002EE5E7 /* OSLogObserver.swift */,
 			);
 			path = Sources;
 			sourceTree = "<group>";
@@ -815,6 +821,7 @@
 				236F54B6206CDE070079B033 /* AdvancedOperationError.swift in Sources */,
 				235D08B1206A498400F70142 /* NoFailedDependenciesCondition.swift in Sources */,
 				235D08AF206A498400F70142 /* OperationCondition.swift in Sources */,
+				23C16A2B21627324002EE5E7 /* OSLogObserver.swift in Sources */,
 				2385616C200A6BF80061BAA1 /* GroupOperation.swift in Sources */,
 				23F24D352007BC2100B25A03 /* AdvancedOperationQueue.swift in Sources */,
 				232C452E215A898000B73E79 /* UIBackgroundObserver.swift in Sources */,
@@ -843,6 +850,7 @@
 				236F54B7206CDE070079B033 /* AdvancedOperationError.swift in Sources */,
 				235D08B8206A498400F70142 /* NoFailedDependenciesCondition.swift in Sources */,
 				235D08B6206A498400F70142 /* OperationCondition.swift in Sources */,
+				23C16A2C21627324002EE5E7 /* OSLogObserver.swift in Sources */,
 				2385616D200A6BF80061BAA1 /* GroupOperation.swift in Sources */,
 				23F24D362007BC2100B25A03 /* AdvancedOperationQueue.swift in Sources */,
 				2359AB4E216212CD00AC09D8 /* UIBackgroundObserver.swift in Sources */,
@@ -871,6 +879,7 @@
 				236F54B8206CDE070079B033 /* AdvancedOperationError.swift in Sources */,
 				235D08BF206A498500F70142 /* NoFailedDependenciesCondition.swift in Sources */,
 				235D08BD206A498500F70142 /* OperationCondition.swift in Sources */,
+				23C16A2D21627324002EE5E7 /* OSLogObserver.swift in Sources */,
 				2385616E200A6BF80061BAA1 /* GroupOperation.swift in Sources */,
 				23F24D372007BC2100B25A03 /* AdvancedOperationQueue.swift in Sources */,
 				232C452F215A898000B73E79 /* UIBackgroundObserver.swift in Sources */,
@@ -899,6 +908,7 @@
 				236F54B9206CDE070079B033 /* AdvancedOperationError.swift in Sources */,
 				235D08C6206A498500F70142 /* NoFailedDependenciesCondition.swift in Sources */,
 				235D08C4206A498500F70142 /* OperationCondition.swift in Sources */,
+				23C16A2E21627324002EE5E7 /* OSLogObserver.swift in Sources */,
 				2385616F200A6BF80061BAA1 /* GroupOperation.swift in Sources */,
 				23F24D382007BC2100B25A03 /* AdvancedOperationQueue.swift in Sources */,
 				232C4530215A898000B73E79 /* UIBackgroundObserver.swift in Sources */,
