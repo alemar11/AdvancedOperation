@@ -181,30 +181,6 @@ open class AdvancedOperation: Operation {
 
   private(set) var observers = [OperationObservingType]()
 
-  internal var willExecuteObservers: [OperationWillExecuteObserving] {
-    return observers.compactMap { $0 as? OperationWillExecuteObserving }
-  }
-
-  internal var didProduceOperationObservers: [OperationDidProduceOperationObserving] {
-    return observers.compactMap { $0 as? OperationDidProduceOperationObserving }
-  }
-
-  internal var willCancelObservers: [OperationWillCancelObserving] {
-    return observers.compactMap { $0 as? OperationWillCancelObserving }
-  }
-
-  internal var didCancelObservers: [OperationDidCancelObserving] {
-    return observers.compactMap { $0 as? OperationDidCancelObserving }
-  }
-
-  internal var willFinishObservers: [OperationWillFinishObserving] {
-    return observers.compactMap { $0 as? OperationWillFinishObserving }
-  }
-
-  internal var didFinishObservers: [OperationDidFinishObserving] {
-    return observers.compactMap { $0 as? OperationDidFinishObserving }
-  }
-
   // MARK: - Execution
 
   public final override func start() {
@@ -327,60 +303,6 @@ open class AdvancedOperation: Operation {
   /// Subclass this method to know when the operation has finished executing.
   open func operationDidFinish(errors: [Error]) { }
 
-  // MARK: - Observers
-
-  /// Add an observer to the to the operation, can only be done prior to the operation starting.
-  ///
-  /// - Parameter observer: the observer to add.
-  /// - Requires: `self must not have started.
-  public func addObserver(_ observer: OperationObservingType) {
-    assert(!isExecuting, "Cannot modify observers after execution has begun.")
-
-    observers.append(observer)
-  }
-
-  private func willExecute() {
-    operationWillExecute()
-    for observer in willExecuteObservers {
-      observer.operationWillExecute(operation: self)
-    }
-  }
-
-  private func didProduceOperation(_ operation: Operation) {
-    operationDidProduceOperation(operation)
-    for observer in didProduceOperationObservers {
-      observer.operation(operation: self, didProduce: operation)
-    }
-  }
-
-  private func willFinish(errors: [Error]) {
-    operationWillFinish(errors: errors)
-    for observer in willFinishObservers {
-      observer.operationWillFinish(operation: self, withErrors: errors)
-    }
-  }
-
-  private func didFinish(errors: [Error]) {
-    operationDidFinish(errors: errors)
-    for observer in didFinishObservers {
-      observer.operationDidFinish(operation: self, withErrors: errors)
-    }
-  }
-
-  private func willCancel(errors: [Error]) {
-    operationWillCancel(errors: errors)
-    for observer in willCancelObservers {
-      observer.operationWillCancel(operation: self, withErrors: errors)
-    }
-  }
-
-  private func didCancel(errors: [Error]) {
-    operationDidCancel(errors: errors)
-    for observer in didCancelObservers {
-      observer.operationDidCancel(operation: self, withErrors: errors)
-    }
-  }
-
   // MARK: - Produced Operations
 
   /// Produce another operation on the same `AdvancedOperationQueue` that this instance is on.
@@ -436,6 +358,86 @@ open class AdvancedOperation: Operation {
     }
   }
 
+}
+
+// MARK: - Observers
+
+extension AdvancedOperation {
+  /// Add an observer to the to the operation, can only be done prior to the operation starting.
+  ///
+  /// - Parameter observer: the observer to add.
+  /// - Requires: `self must not have started.
+  public func addObserver(_ observer: OperationObservingType) {
+    assert(!isExecuting, "Cannot modify observers after execution has begun.")
+
+    observers.append(observer)
+  }
+
+  internal var willExecuteObservers: [OperationWillExecuteObserving] {
+    return observers.compactMap { $0 as? OperationWillExecuteObserving }
+  }
+
+  internal var didProduceOperationObservers: [OperationDidProduceOperationObserving] {
+    return observers.compactMap { $0 as? OperationDidProduceOperationObserving }
+  }
+
+  internal var willCancelObservers: [OperationWillCancelObserving] {
+    return observers.compactMap { $0 as? OperationWillCancelObserving }
+  }
+
+  internal var didCancelObservers: [OperationDidCancelObserving] {
+    return observers.compactMap { $0 as? OperationDidCancelObserving }
+  }
+
+  internal var willFinishObservers: [OperationWillFinishObserving] {
+    return observers.compactMap { $0 as? OperationWillFinishObserving }
+  }
+
+  internal var didFinishObservers: [OperationDidFinishObserving] {
+    return observers.compactMap { $0 as? OperationDidFinishObserving }
+  }
+
+  private func willExecute() {
+    operationWillExecute()
+    for observer in willExecuteObservers {
+      observer.operationWillExecute(operation: self)
+    }
+  }
+
+  private func didProduceOperation(_ operation: Operation) {
+    operationDidProduceOperation(operation)
+    for observer in didProduceOperationObservers {
+      observer.operation(operation: self, didProduce: operation)
+    }
+  }
+
+  private func willFinish(errors: [Error]) {
+    operationWillFinish(errors: errors)
+    for observer in willFinishObservers {
+      observer.operationWillFinish(operation: self, withErrors: errors)
+    }
+  }
+
+  private func didFinish(errors: [Error]) {
+    operationDidFinish(errors: errors)
+    for observer in didFinishObservers {
+      observer.operationDidFinish(operation: self, withErrors: errors)
+    }
+  }
+
+  private func willCancel(errors: [Error]) {
+    operationWillCancel(errors: errors)
+    for observer in willCancelObservers {
+      observer.operationWillCancel(operation: self, withErrors: errors)
+    }
+  }
+
+  private func didCancel(errors: [Error]) {
+    operationDidCancel(errors: errors)
+    for observer in didCancelObservers {
+      observer.operationDidCancel(operation: self, withErrors: errors)
+    }
+  }
 }
 
 // MARK: - Condition Evaluation
