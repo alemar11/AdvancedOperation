@@ -53,7 +53,7 @@ open class AdvancedOperationQueue: OperationQueue {
     self.exclusivityManager = exclusivityManager
   }
 
-  private let lock = NSLock()
+  private let lock = NSRecursiveLock()
 
   private(set) var observers = [OperationQueueObservingType]()
 
