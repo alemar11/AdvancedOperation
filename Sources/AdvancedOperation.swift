@@ -22,6 +22,7 @@
 // SOFTWARE.
 
 import Foundation
+import os.log
 
 /// An advanced subclass of `Operation`.
 open class AdvancedOperation: Operation {
@@ -57,6 +58,8 @@ open class AdvancedOperation: Operation {
   public final override var isFinished: Bool { return state == .finished }
 
   public final override var isCancelled: Bool { return lock.synchronized { return _cancelled && state != .evaluating } }
+
+  public let log = OSLog(subsystem: "\(identifier)", category: "AdvancedOperation")
 
   internal final var isCancelling: Bool { return lock.synchronized { return _cancelling } }
 
@@ -231,6 +234,7 @@ open class AdvancedOperation: Operation {
     guard canBeExecuted else { return }
 
     willExecute()
+    os_log("%@ has started.", log: log, type: .debug, "\(type(of: self))")
     main()
   }
 
@@ -273,6 +277,7 @@ open class AdvancedOperation: Operation {
       }
       _cancelled = true
       _cancelling = false
+      os_log("%@ has been cancelled.", log: log, type: .debug, "\(type(of: self))")
     }
 
     didCancel(errors: errors) // observers
@@ -285,6 +290,7 @@ open class AdvancedOperation: Operation {
     let canBeFinished = lock.synchronized { () -> Bool in
       guard _state.canTransition(to: .finishing) else { return false }
       _state = .finishing
+      os_log("%@ is finishing.", log: log, type: .debug, "\(type(of: self))")
       if !_finishing {
         _finishing = true
         return true
@@ -301,6 +307,7 @@ open class AdvancedOperation: Operation {
 
     willFinish(errors: updatedErrors)
     state = .finished
+    os_log("%@ has finished.", log: log, type: .debug, "\(type(of: self))")
     didFinish(errors: updatedErrors)
     lock.synchronized { _finishing = false }
   }
@@ -428,6 +435,7 @@ open class AdvancedOperation: Operation {
 
     guard canBeEvaluated else { return }
 
+    os_log("%@ is evaluating its conditions.", log: log, type: .debug, "\(type(of: self))")
     type(of: self).evaluate(conditions, operation: self) { [weak self] errors in
       self?.errors.append(contentsOf: errors)
       self?.state = .ready
