@@ -367,9 +367,7 @@
 		234130921F960612002BE7FC /* Sources */ = {
 			isa = PBXGroup;
 			children = (
-				23F24D392007C03D00B25A03 /* BlockObserver.swift */,
-				23F24D2F2007B0D200B25A03 /* OperationObserving.swift */,
-				232C452D215A898000B73E79 /* UIBackgroundObserver.swift */,
+				2367AA3F21629183006F68C0 /* Observers */,
 				23A813B02020CF1E008A98E0 /* AdvancedBlockOperation.swift */,
 				2372507C200524860000A442 /* AdvancedOperation.swift */,
 				236F54B5206CDE070079B033 /* AdvancedOperationError.swift */,
@@ -381,7 +379,6 @@
 				23F24D21200799B800B25A03 /* Operation+Utils.swift */,
 				235D08A3206A494600F70142 /* Conditions */,
 				236F54BA206CE5390079B033 /* Operations */,
-				23C16A2A21627324002EE5E7 /* OSLogObserver.swift */,
 			);
 			path = Sources;
 			sourceTree = "<group>";
@@ -434,6 +431,17 @@
 				2368702F206E4FE8004DFC17 /* SilentConditionTests.swift */,
 			);
 			path = Conditions;
+			sourceTree = "<group>";
+		};
+		2367AA3F21629183006F68C0 /* Observers */ = {
+			isa = PBXGroup;
+			children = (
+				23F24D392007C03D00B25A03 /* BlockObserver.swift */,
+				23F24D2F2007B0D200B25A03 /* OperationObserving.swift */,
+				232C452D215A898000B73E79 /* UIBackgroundObserver.swift */,
+				23C16A2A21627324002EE5E7 /* OSLogObserver.swift */,
+			);
+			path = Observers;
 			sourceTree = "<group>";
 		};
 		236F54BA206CE5390079B033 /* Operations */ = {
