@@ -74,6 +74,8 @@ public final class OSLogObserver: OperationObserving {
 
 }
 
+public let log = OSLog(subsystem: identifier, category: "AdvancedOperation")
+
 extension AdvancedOperation {
 
   @available(iOS 11, tvOS 11, macOS 10.12, watchOS 4.0, *)
@@ -85,7 +87,6 @@ extension AdvancedOperation {
   // log stream --level debug --predicate 'subsystem contains "org.tinrobots.AdvancedOperation"'
   @available(iOS 11, tvOS 11, macOS 10.12, watchOS 4.0, *)
   public func enableLog() {
-    let log = OSLog(subsystem: identifier, category: "AdvancedOperation")
     enableLog(log: log)
   }
 
