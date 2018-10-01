@@ -74,6 +74,7 @@ public final class OSLogObserver: OperationObserving {
 
 }
 
+@available(iOS 11, tvOS 11, macOS 10.12, watchOS 4.0, *)
 public let log = OSLog(subsystem: identifier, category: "AdvancedOperation")
 
 extension AdvancedOperation {

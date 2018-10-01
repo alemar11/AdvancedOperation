@@ -23,17 +23,19 @@
 
 import Foundation
 
-public protocol AdvancedOperationQueueDelegate: class {
-  func operationQueue(operationQueue: AdvancedOperationQueue, willAddOperation operation: Operation)
-  func operationQueue(operationQueue: AdvancedOperationQueue, didAddOperation operation: Operation)
+//public protocol AdvancedOperationQueueDelegate: class {
+//  func operationQueue(operationQueue: AdvancedOperationQueue, willAddOperation operation: Operation)
+//  func operationQueue(operationQueue: AdvancedOperationQueue, didAddOperation operation: Operation)
+//
+//  func operationQueue(operationQueue: AdvancedOperationQueue, operationWillExecute operation: Operation)
+//  func operationQueue(operationQueue: AdvancedOperationQueue, operationDidFinish operation: Operation, withErrors errors: [Error])
+//  func operationQueue(operationQueue: AdvancedOperationQueue, operationDidCancel operation: Operation, withErrors errors: [Error])
+//
+//  func operationQueue(operationQueue: AdvancedOperationQueue, operationWillFinish operation: Operation, withErrors errors: [Error])
+//  func operationQueue(operationQueue: AdvancedOperationQueue, operationWillCancel operation: Operation, withErrors errors: [Error])
+//}
 
-  func operationQueue(operationQueue: AdvancedOperationQueue, operationWillExecute operation: Operation)
-  func operationQueue(operationQueue: AdvancedOperationQueue, operationDidFinish operation: Operation, withErrors errors: [Error])
-  func operationQueue(operationQueue: AdvancedOperationQueue, operationDidCancel operation: Operation, withErrors errors: [Error])
-
-  func operationQueue(operationQueue: AdvancedOperationQueue, operationWillFinish operation: Operation, withErrors errors: [Error])
-  func operationQueue(operationQueue: AdvancedOperationQueue, operationWillCancel operation: Operation, withErrors errors: [Error])
-}
+public protocol AdvancedOperationQueueDelegate: class, OperationQueueObserving { }
 
 public extension AdvancedOperationQueueDelegate {
   func operationQueue(operationQueue: AdvancedOperationQueue, willAddOperation operation: Operation) {}
