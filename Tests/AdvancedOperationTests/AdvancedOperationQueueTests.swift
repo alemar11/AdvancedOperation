@@ -591,9 +591,9 @@ final class AdvancedOperationQueueTests: XCTestCase {
     }
 
     // All the operations should have been deallocated by now.
-    XCTAssertNil(weakOperation1)
-    XCTAssertNil(weakOperation2)
-    XCTAssertNil(weakOperation3)
-    XCTAssertNil(weakOperation4)
+    XCTAssertNil(weakOperation1, "operation1 should be nilled out.")
+    XCTAssertNil(weakOperation2, "operation2 should be nilled out.")
+    XCTAssertNil(weakOperation3, "operation3 should be nilled out.")
+    XCTAssertNil(weakOperation4, "operation4 should be nilled out.")
   }
 }
