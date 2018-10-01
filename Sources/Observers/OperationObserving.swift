@@ -24,7 +24,7 @@
 import Foundation
 
 /// Types which conform to this protocol, can be attached to `AdvancedOperation` subclasses before they are executed or added to a queue.
-public protocol OperationObservingType {}
+public protocol OperationObservingType { }
 
 public protocol OperationWillExecuteObserving: OperationObservingType {
   /// Invoked immediately prior to the `Operation`'s `main()` method (it's started but not yet executed).

@@ -23,7 +23,7 @@
 
 import Foundation
 
-public protocol OperationQueueObservingType {}
+public protocol OperationQueueObservingType { }
 
 public protocol OperationQueueAddOperationObserving: OperationQueueObservingType {
   func operationQueue(operationQueue: AdvancedOperationQueue, willAddOperation operation: Operation)
