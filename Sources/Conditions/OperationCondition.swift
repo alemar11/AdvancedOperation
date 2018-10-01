@@ -23,6 +23,8 @@
 
 import Foundation
 
+let operationConditionKey = "OperationCondition"
+
 public protocol OperationCondition {
 
   /// The name of the condition.

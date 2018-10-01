@@ -27,6 +27,8 @@ final public class ExclusivityManager {
 
   public static let sharedInstance = ExclusivityManager()
 
+  static let exclusivityManagerKey = "ExclusivityManager"
+
   /// Creates a new `ExclusivityManager` instance.
   public init() { }
 
@@ -71,8 +73,11 @@ final public class ExclusivityManager {
 
     if let previous = previous {
       if cancellable {
-        // swiftlint:disable:next line_length
-        let error = AdvancedOperationError.executionCancelled(message: "The operation has been cancelled by the ExclusivityManager because there is already an operation for the category: \(category) running.")
+        let name = previous.name ?? "\(type(of: self))"
+        let error = AdvancedOperationError.executionCancelled(
+          message: "The operation has been cancelled by the ExclusivityManager because there is already an operation for the category: \(category) running.",
+          userInfo: [type(of: self).exclusivityManagerKey: name]
+        )
 
         operation.cancel(error: error)
 

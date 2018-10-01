@@ -279,11 +279,6 @@ open class AdvancedOperation: Operation {
     didChangeValue(forKey: #keyPath(AdvancedOperation.isCancelled))
 
     super.cancel() // fires isReady KVO
-
-    // TODO: implement autofinishing as opt in functionality
-    //    if state == .executing {
-    //      finish()
-    //    }
   }
 
   public final func finish(errors: [Error] = []) {

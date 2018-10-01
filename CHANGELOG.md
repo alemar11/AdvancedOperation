@@ -2,8 +2,9 @@
 
 ### 1.1.0 (WIP)
 
-- Added a UIBackgroundObserver to let an AdvancedOperation run in background (for a small amount of time) on iOS and tvOS.
-- ExclusivityManager improvements.
+- Added a `UIBackgroundObserver` to let an `AdvancedOperation` run in background (for a small amount of time) on `iOS` and `tvOS`.
+- `ExclusivityManager` improvements.
+- Better` OperationCondition` errors.
 
 ### 1.0.0 ⭐
 
@@ -15,7 +16,7 @@
 
 ### 0.7.4
 
-- An Injectable operation now has a `transform` closure.
+- An Injectable operation now has a  `transform` closure.
 
 ### 0.7.3
 
@@ -28,7 +29,7 @@
 ### 0.7.1
 
 - Fixed some thread safety isssues.
-- Fixed an issue occurring while cancelling a `DelayOperation`.
+- Fixed an issue occurring while cancelling a  `DelayOperation`.
 
 ### 0.7.0
 

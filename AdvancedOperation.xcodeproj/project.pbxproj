@@ -50,6 +50,7 @@
 		234130BC1F96076A002BE7FC /* AdvancedOperation.h in Headers */ = {isa = PBXBuildFile; fileRef = 2341308A1F9605F5002BE7FC /* AdvancedOperation.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		234130BD1F96076D002BE7FC /* AdvancedOperation.h in Headers */ = {isa = PBXBuildFile; fileRef = 2341308A1F9605F5002BE7FC /* AdvancedOperation.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		234130BE1F960770002BE7FC /* AdvancedOperation.h in Headers */ = {isa = PBXBuildFile; fileRef = 2341308A1F9605F5002BE7FC /* AdvancedOperation.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		2359AB4E216212CD00AC09D8 /* UIBackgroundObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 232C452D215A898000B73E79 /* UIBackgroundObserver.swift */; };
 		235D08AB206A498400F70142 /* ExclusivityManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 235D08AA206A494E00F70142 /* ExclusivityManager.swift */; };
 		235D08AC206A498400F70142 /* NegatedCondition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 235D08A6206A494D00F70142 /* NegatedCondition.swift */; };
 		235D08AD206A498400F70142 /* SilentCondition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 235D08A9206A494E00F70142 /* SilentCondition.swift */; };
@@ -317,6 +318,8 @@
 		230B47FD200EABEE00F46852 /* AdvancedOperationTests */ = {
 			isa = PBXGroup;
 			children = (
+				2368702B206E4BE8004DFC17 /* BlockObserverTests.swift */,
+				232A53BE215B683A008B76AC /* UIBackgroundObserverTests.swift */,
 				23A813B52020D111008A98E0 /* AdvancedBlockOperationTests.swift */,
 				23856174200A87070061BAA1 /* AdvancedOperationQueueTests.swift */,
 				23F24D1D200771FA00B25A03 /* AdvancedOperationTests.swift */,
@@ -328,7 +331,6 @@
 				23AC3ADC2038A050003E1B15 /* OperationUtilsTests.swift */,
 				23A56BAB200F984400509A65 /* XCTestCase+Utils.swift */,
 				235D08CF206A80ED00F70142 /* Conditions */,
-				2359AB4D2162020900AC09D8 /* Observers */,
 			);
 			path = AdvancedOperationTests;
 			sourceTree = "<group>";
@@ -360,6 +362,9 @@
 		234130921F960612002BE7FC /* Sources */ = {
 			isa = PBXGroup;
 			children = (
+				23F24D392007C03D00B25A03 /* BlockObserver.swift */,
+				23F24D2F2007B0D200B25A03 /* OperationObserving.swift */,
+				232C452D215A898000B73E79 /* UIBackgroundObserver.swift */,
 				23A813B02020CF1E008A98E0 /* AdvancedBlockOperation.swift */,
 				2372507C200524860000A442 /* AdvancedOperation.swift */,
 				236F54B5206CDE070079B033 /* AdvancedOperationError.swift */,
@@ -370,7 +375,6 @@
 				239BC52120EB7539009A36D9 /* Operation+Injection.swift */,
 				23F24D21200799B800B25A03 /* Operation+Utils.swift */,
 				235D08A3206A494600F70142 /* Conditions */,
-				2359AB4C2162019A00AC09D8 /* Observers */,
 				236F54BA206CE5390079B033 /* Operations */,
 			);
 			path = Sources;
@@ -396,25 +400,6 @@
 				2341308B1F9605F5002BE7FC /* Info.plist */,
 			);
 			path = Support;
-			sourceTree = "<group>";
-		};
-		2359AB4C2162019A00AC09D8 /* Observers */ = {
-			isa = PBXGroup;
-			children = (
-				23F24D392007C03D00B25A03 /* BlockObserver.swift */,
-				23F24D2F2007B0D200B25A03 /* OperationObserving.swift */,
-				232C452D215A898000B73E79 /* UIBackgroundObserver.swift */,
-			);
-			path = Observers;
-			sourceTree = "<group>";
-		};
-		2359AB4D2162020900AC09D8 /* Observers */ = {
-			isa = PBXGroup;
-			children = (
-				2368702B206E4BE8004DFC17 /* BlockObserverTests.swift */,
-				232A53BE215B683A008B76AC /* UIBackgroundObserverTests.swift */,
-			);
-			path = Observers;
 			sourceTree = "<group>";
 		};
 		235D08A3206A494600F70142 /* Conditions */ = {
@@ -860,6 +845,7 @@
 				235D08B6206A498400F70142 /* OperationCondition.swift in Sources */,
 				2385616D200A6BF80061BAA1 /* GroupOperation.swift in Sources */,
 				23F24D362007BC2100B25A03 /* AdvancedOperationQueue.swift in Sources */,
+				2359AB4E216212CD00AC09D8 /* UIBackgroundObserver.swift in Sources */,
 				235D08B4206A498400F70142 /* SilentCondition.swift in Sources */,
 				23F24D3B2007C03D00B25A03 /* BlockObserver.swift in Sources */,
 			);
@@ -1084,7 +1070,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				MACOSX_DEPLOYMENT_TARGET = 10.12;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -1141,7 +1127,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				MACOSX_DEPLOYMENT_TARGET = 10.12;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
@@ -1168,12 +1154,15 @@
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.13;
 				PRODUCT_BUNDLE_IDENTIFIER = org.tinrobots.AdvancedOperation;
 				PRODUCT_NAME = AdvancedOperation;
 				SKIP_INSTALL = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
+				TVOS_DEPLOYMENT_TARGET = 11.0;
+				WATCHOS_DEPLOYMENT_TARGET = 4.0;
 			};
 			name = Debug;
 		};
@@ -1193,11 +1182,14 @@
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.13;
 				PRODUCT_BUNDLE_IDENTIFIER = org.tinrobots.AdvancedOperation;
 				PRODUCT_NAME = AdvancedOperation;
 				SKIP_INSTALL = YES;
 				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
+				TVOS_DEPLOYMENT_TARGET = 11.0;
+				WATCHOS_DEPLOYMENT_TARGET = 4.0;
 			};
 			name = Release;
 		};
@@ -1216,6 +1208,7 @@
 				FRAMEWORK_VERSION = A;
 				INFOPLIST_FILE = Support/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.13;
 				PRODUCT_BUNDLE_IDENTIFIER = org.tinrobots.AdvancedOperation;
@@ -1224,6 +1217,8 @@
 				SKIP_INSTALL = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 4.2;
+				TVOS_DEPLOYMENT_TARGET = 11.0;
+				WATCHOS_DEPLOYMENT_TARGET = 4.0;
 			};
 			name = Debug;
 		};
@@ -1242,6 +1237,7 @@
 				FRAMEWORK_VERSION = A;
 				INFOPLIST_FILE = Support/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.13;
 				PRODUCT_BUNDLE_IDENTIFIER = org.tinrobots.AdvancedOperation;
@@ -1249,6 +1245,8 @@
 				SDKROOT = macosx;
 				SKIP_INSTALL = YES;
 				SWIFT_VERSION = 4.2;
+				TVOS_DEPLOYMENT_TARGET = 11.0;
+				WATCHOS_DEPLOYMENT_TARGET = 4.0;
 			};
 			name = Release;
 		};
@@ -1265,7 +1263,9 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = Support/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.13;
 				PRODUCT_BUNDLE_IDENTIFIER = org.tinrobots.AdvancedOperation;
 				PRODUCT_NAME = AdvancedOperation;
 				SDKROOT = appletvos;
@@ -1274,6 +1274,7 @@
 				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = 3;
 				TVOS_DEPLOYMENT_TARGET = 11.0;
+				WATCHOS_DEPLOYMENT_TARGET = 4.0;
 			};
 			name = Debug;
 		};
@@ -1290,7 +1291,9 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = Support/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.13;
 				PRODUCT_BUNDLE_IDENTIFIER = org.tinrobots.AdvancedOperation;
 				PRODUCT_NAME = AdvancedOperation;
 				SDKROOT = appletvos;
@@ -1298,6 +1301,7 @@
 				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = 3;
 				TVOS_DEPLOYMENT_TARGET = 11.0;
+				WATCHOS_DEPLOYMENT_TARGET = 4.0;
 			};
 			name = Release;
 		};
@@ -1314,7 +1318,9 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = Support/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.13;
 				PRODUCT_BUNDLE_IDENTIFIER = org.tinrobots.AdvancedOperation;
 				PRODUCT_NAME = AdvancedOperation;
 				SDKROOT = watchos;
@@ -1322,6 +1328,7 @@
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = 4;
+				TVOS_DEPLOYMENT_TARGET = 11.0;
 				WATCHOS_DEPLOYMENT_TARGET = 4.0;
 			};
 			name = Debug;
@@ -1339,13 +1346,16 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = Support/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.13;
 				PRODUCT_BUNDLE_IDENTIFIER = org.tinrobots.AdvancedOperation;
 				PRODUCT_NAME = AdvancedOperation;
 				SDKROOT = watchos;
 				SKIP_INSTALL = YES;
 				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = 4;
+				TVOS_DEPLOYMENT_TARGET = 11.0;
 				WATCHOS_DEPLOYMENT_TARGET = 4.0;
 			};
 			name = Release;
@@ -1367,6 +1377,8 @@
 				SDKROOT = macosx;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 4.2;
+				TVOS_DEPLOYMENT_TARGET = 11.0;
+				WATCHOS_DEPLOYMENT_TARGET = 4.0;
 			};
 			name = Debug;
 		};
@@ -1386,6 +1398,8 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
 				SWIFT_VERSION = 4.2;
+				TVOS_DEPLOYMENT_TARGET = 11.0;
+				WATCHOS_DEPLOYMENT_TARGET = 4.0;
 			};
 			name = Release;
 		};
@@ -1398,11 +1412,14 @@
 				INFOPLIST_FILE = "Support/Info-Tests.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.13;
 				PRODUCT_BUNDLE_IDENTIFIER = "org.tinrobots.AdvancedOperation-Tests-iOS";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
+				TVOS_DEPLOYMENT_TARGET = 11.0;
+				WATCHOS_DEPLOYMENT_TARGET = 4.0;
 			};
 			name = Debug;
 		};
@@ -1415,10 +1432,13 @@
 				INFOPLIST_FILE = "Support/Info-Tests.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.13;
 				PRODUCT_BUNDLE_IDENTIFIER = "org.tinrobots.AdvancedOperation-Tests-iOS";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
+				TVOS_DEPLOYMENT_TARGET = 11.0;
+				WATCHOS_DEPLOYMENT_TARGET = 4.0;
 			};
 			name = Release;
 		};
@@ -1431,6 +1451,7 @@
 				INFOPLIST_FILE = "Support/Info-Tests.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.13;
 				PRODUCT_BUNDLE_IDENTIFIER = "org.tinrobots.AdvancedOperation-Tests-tvOS";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = appletvos;
@@ -1438,6 +1459,7 @@
 				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = 3;
 				TVOS_DEPLOYMENT_TARGET = 11.0;
+				WATCHOS_DEPLOYMENT_TARGET = 4.0;
 			};
 			name = Debug;
 		};
@@ -1450,12 +1472,14 @@
 				INFOPLIST_FILE = "Support/Info-Tests.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.13;
 				PRODUCT_BUNDLE_IDENTIFIER = "org.tinrobots.AdvancedOperation-Tests-tvOS";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = appletvos;
 				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = 3;
 				TVOS_DEPLOYMENT_TARGET = 11.0;
+				WATCHOS_DEPLOYMENT_TARGET = 4.0;
 			};
 			name = Release;
 		};

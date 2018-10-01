@@ -28,6 +28,8 @@ public struct NegatedCondition<T: OperationCondition>: OperationCondition {
 
   public var name: String { return "Not<\(condition.name)>" }
 
+  static var negatedConditionKey: String { return "NegatedCondition" }
+
   let condition: T
 
   init(condition: T) {
@@ -35,10 +37,16 @@ public struct NegatedCondition<T: OperationCondition>: OperationCondition {
   }
 
   public func evaluate(for operation: AdvancedOperation, completion: @escaping (OperationConditionResult) -> Void) {
+    let conditionName = self.name
+    let conditionKey = type(of: self).negatedConditionKey
+
     condition.evaluate(for: operation) { (result) in
       switch result {
       case .satisfied:
-        let error = AdvancedOperationError.conditionFailed(message: "The condition has been negated.")
+        let name = operation.name ?? "\(type(of: operation))"
+        let error = AdvancedOperationError.conditionFailed(message: "The condition has been negated.",
+                                                           userInfo: [operationConditionKey: conditionName,
+                                                                      conditionKey: name])
         return completion(.failed([error]))
       case .failed:
         return completion(.satisfied)

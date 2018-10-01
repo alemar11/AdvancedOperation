@@ -29,6 +29,8 @@ public struct NoCancelledDependeciesCondition: OperationCondition {
 
   public let ignoreCancellations: Bool
 
+  static var noCancelledDependeciesConditionKey: String { return "NoCancelledDependeciesCondition" }
+
   /// Create a new `NoCancelledDependeciesCondition` element.
   ///
   /// - Parameter ignoreCancellations: true if cancellations should be ignored.
@@ -41,7 +43,10 @@ public struct NoCancelledDependeciesCondition: OperationCondition {
     let cancellations = dependencies.filter { $0.isCancelled }
 
     if !cancellations.isEmpty {
-      let error = AdvancedOperationError.conditionFailed(message: "Some dependencies have been cancelled.")
+      let names = cancellations.map { $0.name ?? "\(type(of: $0))" }
+      let error = AdvancedOperationError.conditionFailed(message: "Some dependencies have been cancelled.",
+                                                         userInfo: [operationConditionKey: self.name,
+                                                                    type(of: self).noCancelledDependeciesConditionKey: names])
       completion(.failed([error]))
     } else {
       completion(.satisfied)
