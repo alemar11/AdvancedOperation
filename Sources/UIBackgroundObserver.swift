@@ -22,6 +22,8 @@
 // SOFTWARE.
 
 // TODO: https://developer.apple.com/documentation/foundation/processinfo/1617030-performexpiringactivity
+// TODO: add a way to decide if the operation should continue in background when it's already running or not
+// maybe we don't want to keep our app active if the operation hasn't started yet.
 
 #if canImport(UIKit) && !os(watchOS)
 
