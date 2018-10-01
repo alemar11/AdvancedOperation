@@ -559,8 +559,8 @@ final class AdvancedOperationQueueTests: XCTestCase {
       operation1 = nil
     }
 
-    XCTAssertNil(weakQueue)
-    XCTAssertNil(weakOperation1)
+    XCTAssertNil(weakQueue, "The queue should be nilled out.")
+    XCTAssertNil(weakOperation1, "operation1 should be nilled out.")
   }
 
   func testMemoryLeakFailOnceOperationsHaveBeenCompleted() {
