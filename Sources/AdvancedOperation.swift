@@ -59,8 +59,6 @@ open class AdvancedOperation: Operation {
 
   public final override var isCancelled: Bool { return lock.synchronized { return _cancelled && state != .evaluating } }
 
-  public let log = OSLog(subsystem: "\(identifier)", category: "AdvancedOperation")
-
   internal final var isCancelling: Bool { return lock.synchronized { return _cancelling } }
 
   // MARK: - OperationState
