@@ -53,6 +53,8 @@ public final class UIBackgroundObserver: NSObject {
 
   private let application: UIApplicationBackgroundTask
 
+  private var isExecuting: Bool = false
+
   /// Initializes a new `UIBackgroundObserver` instance.
   public init(application: UIApplicationBackgroundTask) {
     self.application = application
@@ -103,7 +105,12 @@ public final class UIBackgroundObserver: NSObject {
 
 extension UIBackgroundObserver: OperationDidFinishObserving {
 
+  public func operationWillExecute(operation: Operation) {
+    isExecuting = true
+  }
+
   public func operationDidFinish(operation: Operation, withErrors errors: [Error]) {
+    isExecuting = false
     endBackgroundTask()
   }
 
