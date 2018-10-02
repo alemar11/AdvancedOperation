@@ -3,8 +3,9 @@
 ### 1.1.0 (WIP)
 
 - Added a `UIBackgroundObserver` to let an `AdvancedOperation` run in background (for a small amount of time) on `iOS` and `tvOS`.
+- Added a `OSLogObserver` to log the main phases of an `AdvancedOperation`.
 - `ExclusivityManager` improvements.
-- Better` OperationCondition` errors.
+- Better `OperationCondition` errors.
 
 ### 1.0.0 ⭐
 
