@@ -42,7 +42,7 @@ private extension Selector {
   static let didEnterBackground = #selector(UIBackgroundObserver.didEnterBackground(notification:))
 }
 
-/// The `UIBackgroundObserver` let an `AdvancedOperation` run for a period of time after the app transitions to the background.
+/// An `UIBackgroundObserver` instance lets an `AdvancedOperation` run for a period of time after the app transitions to the background.
 public final class UIBackgroundObserver: NSObject {
 
   /// The task name.

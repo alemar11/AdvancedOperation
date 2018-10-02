@@ -25,6 +25,11 @@ import Foundation
 import os.log
 
 @available(iOS 11, tvOS 11, macOS 10.12, watchOS 4.0, *)
+public let log = OSLog(subsystem: identifier, category: "AdvancedOperation")
+
+
+/// An `OSLogObserver` instance logs the main phases of an AdvancedOperation using `OSLog`.
+@available(iOS 11, tvOS 11, macOS 10.12, watchOS 4.0, *)
 public final class OSLogObserver: OperationObserving {
   private let log: OSLog
 
@@ -74,23 +79,16 @@ public final class OSLogObserver: OperationObserving {
 
 }
 
-@available(iOS 11, tvOS 11, macOS 10.12, watchOS 4.0, *)
-public let log = OSLog(subsystem: identifier, category: "AdvancedOperation")
-
 extension AdvancedOperation {
 
-  @available(iOS 11, tvOS 11, macOS 10.12, watchOS 4.0, *)
-  public func enableLog(log: OSLog, using observer: OperationObserving) {
-    addObserver(observer)
-  }
-
+  /// Adds an instance of 'OSLogObserver' to `self`.
   @available(iOS 11, tvOS 11, macOS 10.12, watchOS 4.0, *)
   public func enableLog(log: OSLog) {
     let observer = OSLogObserver(log: log)
-    enableLog(log: log, using: observer)
+    addObserver(observer)
   }
 
-  // log stream --level debug --predicate 'subsystem contains "org.tinrobots.AdvancedOperation"'
+  /// Adds an instance of 'OSLogObserver' to `self`.
   @available(iOS 11, tvOS 11, macOS 10.12, watchOS 4.0, *)
   public func enableLog() {
     enableLog(log: log)
