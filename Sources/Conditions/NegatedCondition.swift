@@ -32,7 +32,7 @@ public struct NegatedCondition<T: OperationCondition>: OperationCondition {
 
   let condition: T
 
-  init(condition: T) {
+  public init(condition: T) {
     self.condition = condition
   }
 
