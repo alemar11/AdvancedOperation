@@ -6,6 +6,7 @@
 - Added a `OSLogObserver` to log the main phases of an `AdvancedOperation`.
 - `ExclusivityManager` improvements.
 - Better `OperationCondition` errors.
+- Bugfixes.
 
 ### 1.0.0 ⭐
 

@@ -21,6 +21,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
+/*
 import Foundation
 
 public protocol OperationQueueObservingType { }
@@ -46,3 +47,4 @@ public protocol OperationQueueCancelOperationObserving: OperationQueueObservingT
 
 // swiftlint:disable:next line_length
 public protocol OperationQueueObserving: OperationQueueAddOperationObserving, OperationQueueWillExecuteOperationObserving, OperationQueueFinishOperationObserving, OperationQueueCancelOperationObserving { }
+*/

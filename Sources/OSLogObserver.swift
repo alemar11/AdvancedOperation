@@ -27,7 +27,6 @@ import os.log
 @available(iOS 11, tvOS 11, macOS 10.12, watchOS 4.0, *)
 public let log = OSLog(subsystem: identifier, category: "AdvancedOperation")
 
-
 /// An `OSLogObserver` instance logs the main phases of an AdvancedOperation using `OSLog`.
 @available(iOS 11, tvOS 11, macOS 10.12, watchOS 4.0, *)
 public final class OSLogObserver: OperationObserving {
