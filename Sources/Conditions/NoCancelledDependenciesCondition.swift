@@ -27,16 +27,10 @@ import Foundation
 /// If any dependency was cancelled, the target operation will be cancelled as well.
 public struct NoCancelledDependeciesCondition: OperationCondition {
 
-  public let ignoreCancellations: Bool
-
   static var noCancelledDependeciesConditionKey: String { return "NoCancelledDependeciesCondition" }
 
   /// Create a new `NoCancelledDependeciesCondition` element.
-  ///
-  /// - Parameter ignoreCancellations: true if cancellations should be ignored.
-  public init(ignoreCancellations: Bool = false) {
-    self.ignoreCancellations = ignoreCancellations
-  }
+  public init() { }
 
   public func evaluate(for operation: AdvancedOperation, completion: @escaping (OperationConditionResult) -> Void) {
     let dependencies = operation.dependencies
