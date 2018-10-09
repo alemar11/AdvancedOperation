@@ -22,6 +22,7 @@
 // SOFTWARE.
 
 import Foundation
+import os.log
 
 /// An advanced subclass of `Operation`.
 open class AdvancedOperation: Operation {
@@ -123,6 +124,8 @@ open class AdvancedOperation: Operation {
       lock.synchronized { _errors = newValue }
     }
   }
+
+  private var log: OSLog? //WIP
 
   /// Returns `true` if the `AdvancedOperation` failed due to errors.
   public var failed: Bool { return lock.synchronized { !errors.isEmpty } }
