@@ -22,6 +22,8 @@
 // SOFTWARE.
 
 // TODO: https://developer.apple.com/documentation/foundation/processinfo/1617030-performexpiringactivity
+// TODO: add a way to decide if the operation should continue in background when it's already running or not
+// maybe we don't want to keep our app active if the operation hasn't started yet.
 
 #if canImport(UIKit) && !os(watchOS)
 
@@ -40,7 +42,7 @@ private extension Selector {
   static let didEnterBackground = #selector(UIBackgroundObserver.didEnterBackground(notification:))
 }
 
-/// The `UIBackgroundObserver` let an `AdvancedOperation` run for a period of time after the app transitions to the background.
+/// An `UIBackgroundObserver` instance lets an `AdvancedOperation` run for a period of time after the app transitions to the background.
 public final class UIBackgroundObserver: NSObject {
 
   /// The task name.
@@ -50,6 +52,8 @@ public final class UIBackgroundObserver: NSObject {
   public private(set) var taskIdentifier: UIBackgroundTaskIdentifier = .invalid
 
   private let application: UIApplicationBackgroundTask
+
+  private var isExecuting: Bool = false
 
   /// Initializes a new `UIBackgroundObserver` instance.
   public init(application: UIApplicationBackgroundTask) {
@@ -101,7 +105,12 @@ public final class UIBackgroundObserver: NSObject {
 
 extension UIBackgroundObserver: OperationDidFinishObserving {
 
+  public func operationWillExecute(operation: Operation) {
+    isExecuting = true
+  }
+
   public func operationDidFinish(operation: Operation, withErrors errors: [Error]) {
+    isExecuting = false
     endBackgroundTask()
   }
 

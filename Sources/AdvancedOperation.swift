@@ -22,6 +22,7 @@
 // SOFTWARE.
 
 import Foundation
+import os.log
 
 /// An advanced subclass of `Operation`.
 open class AdvancedOperation: Operation {
@@ -117,12 +118,15 @@ open class AdvancedOperation: Operation {
   /// Errors generated during the execution.
   public private(set) var errors: [Error] {
     get {
-     return lock.synchronized { return _errors }
+      return lock.synchronized { return _errors }
     }
     set {
       lock.synchronized { _errors = newValue }
     }
   }
+
+  /// An instance of `OSLog` (by default is disabled).
+  public private(set) var log = OSLog.disabled
 
   /// Returns `true` if the `AdvancedOperation` failed due to errors.
   public var failed: Bool { return lock.synchronized { !errors.isEmpty } }
@@ -179,30 +183,6 @@ open class AdvancedOperation: Operation {
   // MARK: - Observers
 
   private(set) var observers = [OperationObservingType]()
-
-  internal var willExecuteObservers: [OperationWillExecuteObserving] {
-    return observers.compactMap { $0 as? OperationWillExecuteObserving }
-  }
-
-  internal var didProduceOperationObservers: [OperationDidProduceOperationObserving] {
-    return observers.compactMap { $0 as? OperationDidProduceOperationObserving }
-  }
-
-  internal var willCancelObservers: [OperationWillCancelObserving] {
-    return observers.compactMap { $0 as? OperationWillCancelObserving }
-  }
-
-  internal var didCancelObservers: [OperationDidCancelObserving] {
-    return observers.compactMap { $0 as? OperationDidCancelObserving }
-  }
-
-  internal var willFinishObservers: [OperationWillFinishObserving] {
-    return observers.compactMap { $0 as? OperationWillFinishObserving }
-  }
-
-  internal var didFinishObservers: [OperationDidFinishObserving] {
-    return observers.compactMap { $0 as? OperationDidFinishObserving }
-  }
 
   // MARK: - Execution
 
@@ -285,6 +265,7 @@ open class AdvancedOperation: Operation {
     let canBeFinished = lock.synchronized { () -> Bool in
       guard _state.canTransition(to: .finishing) else { return false }
       _state = .finishing
+
       if !_finishing {
         _finishing = true
         return true
@@ -303,80 +284,6 @@ open class AdvancedOperation: Operation {
     state = .finished
     didFinish(errors: updatedErrors)
     lock.synchronized { _finishing = false }
-  }
-
-  // MARK: - Subclass
-
-  /// Subclass this method to know when the operation will start executing.
-  open func operationWillExecute() { }
-
-  /// Subclass this method to know when the operation has produced another `Operation`.
-  open func operationDidProduceOperation(_ operation: Operation) { }
-
-  /// Subclass this method to know when the operation will be cancelled.
-  open func operationWillCancel(errors: [Error]) { }
-
-  /// Subclass this method to know when the operation has been cancelled.
-  open func operationDidCancel(errors: [Error]) { }
-
-  /// Subclass this method to know when the operation will finish its execution.
-  open func operationWillFinish(errors: [Error]) { }
-
-  /// Subclass this method to know when the operation has finished executing.
-  open func operationDidFinish(errors: [Error]) { }
-
-  // MARK: - Observers
-
-  /// Add an observer to the to the operation, can only be done prior to the operation starting.
-  ///
-  /// - Parameter observer: the observer to add.
-  /// - Requires: `self must not have started.
-  public func addObserver(_ observer: OperationObservingType) {
-    assert(!isExecuting, "Cannot modify observers after execution has begun.")
-
-    observers.append(observer)
-  }
-
-  private func willExecute() {
-    operationWillExecute()
-    for observer in willExecuteObservers {
-      observer.operationWillExecute(operation: self)
-    }
-  }
-
-  private func didProduceOperation(_ operation: Operation) {
-    operationDidProduceOperation(operation)
-    for observer in didProduceOperationObservers {
-      observer.operation(operation: self, didProduce: operation)
-    }
-  }
-
-  private func willFinish(errors: [Error]) {
-    operationWillFinish(errors: errors)
-    for observer in willFinishObservers {
-      observer.operationWillFinish(operation: self, withErrors: errors)
-    }
-  }
-
-  private func didFinish(errors: [Error]) {
-    operationDidFinish(errors: errors)
-    for observer in didFinishObservers {
-      observer.operationDidFinish(operation: self, withErrors: errors)
-    }
-  }
-
-  private func willCancel(errors: [Error]) {
-    operationWillCancel(errors: errors)
-    for observer in willCancelObservers {
-      observer.operationWillCancel(operation: self, withErrors: errors)
-    }
-  }
-
-  private func didCancel(errors: [Error]) {
-    operationDidCancel(errors: errors)
-    for observer in didCancelObservers {
-      observer.operationDidCancel(operation: self, withErrors: errors)
-    }
   }
 
   // MARK: - Produced Operations
@@ -428,12 +335,163 @@ open class AdvancedOperation: Operation {
 
     guard canBeEvaluated else { return }
 
+    willEvaluateConditions()
+
     type(of: self).evaluate(conditions, operation: self) { [weak self] errors in
       self?.errors.append(contentsOf: errors)
       self?.state = .ready
     }
   }
 
+  // MARK: - Subclass
+
+  /// Subclass this method to know when the operation will start executing.
+  /// - Note: Calling the `super` implementation will keep the logging messages.
+  open func operationWillExecute() {
+      os_log("%{public}s has started.", log: log, type: .info, operationName)
+  }
+
+  /// Subclass this method to know when the operation has produced another `Operation`.
+  /// - Note: Calling the `super` implementation will keep the logging messages.
+  open func operationDidProduceOperation(_ operation: Operation) {
+      os_log("%{public}s has produced a new operation: %{public}s.", log: log, type: .info, operationName, operation.operationName)
+  }
+
+  /// Subclass this method to know when the operation will be cancelled.
+  /// - Note: Calling the `super` implementation will keep the logging messages.
+  open func operationWillCancel(errors: [Error]) {
+    os_log("%{public}s is cancelling.", log: log, type: .info, operationName)
+  }
+
+  /// Subclass this method to know when the operation has been cancelled.
+  /// - Note: Calling the `super` implementation will keep the logging messages.
+  open func operationDidCancel(errors: [Error]) {
+      os_log("%{public}s has been cancelled with %{public}d errors.", log: log, type: .info, operationName, errors.count)
+  }
+
+  /// Subclass this method to know when the operation will finish its execution.
+  /// - Note: Calling the `super` implementation will keep the logging messages.
+  open func operationWillFinish(errors: [Error]) {
+      os_log("%{public}s is finishing.", log: log, type: .info, operationName)
+  }
+
+  /// Subclass this method to know when the operation has finished executing.
+  /// - Note: Calling the `super` implementation will keep the logging messages.
+  open func operationDidFinish(errors: [Error]) {
+      os_log("%{public}s has finished with %{public}d errors.", log: log, type: .info, operationName, errors.count)
+  }
+
+  /// Subclass this method to know when the operation will start evaluating its conditions.
+  /// - Note: Calling the `super` implementation will keep the logging messages.
+  open func operationWillEvaluateConditions() {
+      os_log("%{public}s is evaluating %{public}d conditions.", log: log, type: .info, operationName, conditions.count)
+  }
+
+}
+
+// MARK: - OSLog
+
+extension AdvancedOperation {
+
+  /// Logs all the states of an `AdvancedOperation`.
+  ///
+  /// - Parameters:
+  ///   - log: A `OSLog` instance.
+  ///   - type: A `OSLogType`.
+  public func useOSLog(_ log: OSLog) {
+    self.log = log
+  }
+
+}
+
+// MARK: - Observers
+
+extension AdvancedOperation {
+  /// Add an observer to the to the operation, can only be done prior to the operation starting.
+  ///
+  /// - Parameter observer: the observer to add.
+  /// - Requires: `self must not have started.
+  public func addObserver(_ observer: OperationObservingType) {
+    assert(!isExecuting, "Cannot modify observers after execution has begun.")
+
+    observers.append(observer)
+  }
+
+  internal var willExecuteObservers: [OperationWillExecuteObserving] {
+    return observers.compactMap { $0 as? OperationWillExecuteObserving }
+  }
+
+  internal var didProduceOperationObservers: [OperationDidProduceOperationObserving] {
+    return observers.compactMap { $0 as? OperationDidProduceOperationObserving }
+  }
+
+  internal var willCancelObservers: [OperationWillCancelObserving] {
+    return observers.compactMap { $0 as? OperationWillCancelObserving }
+  }
+
+  internal var didCancelObservers: [OperationDidCancelObserving] {
+    return observers.compactMap { $0 as? OperationDidCancelObserving }
+  }
+
+  internal var willFinishObservers: [OperationWillFinishObserving] {
+    return observers.compactMap { $0 as? OperationWillFinishObserving }
+  }
+
+  internal var didFinishObservers: [OperationDidFinishObserving] {
+    return observers.compactMap { $0 as? OperationDidFinishObserving }
+  }
+
+  private func willEvaluateConditions() {
+    operationWillEvaluateConditions()
+  }
+
+  private func willExecute() {
+    operationWillExecute()
+
+    for observer in willExecuteObservers {
+      observer.operationWillExecute(operation: self)
+    }
+  }
+
+  private func didProduceOperation(_ operation: Operation) {
+    operationDidProduceOperation(operation)
+
+    for observer in didProduceOperationObservers {
+      observer.operation(operation: self, didProduce: operation)
+    }
+  }
+
+  private func willFinish(errors: [Error]) {
+    operationWillFinish(errors: errors)
+
+    for observer in willFinishObservers {
+      observer.operationWillFinish(operation: self, withErrors: errors)
+    }
+  }
+
+  private func didFinish(errors: [Error]) {
+    operationDidFinish(errors: errors)
+
+    for observer in didFinishObservers {
+      observer.operationDidFinish(operation: self, withErrors: errors)
+    }
+  }
+
+  private func willCancel(errors: [Error]) {
+    operationWillCancel(errors: errors)
+
+    for observer in willCancelObservers {
+      observer.operationWillCancel(operation: self, withErrors: errors)
+    }
+  }
+
+  private func didCancel(errors: [Error]) {
+    operationDidCancel(errors: errors)
+
+    for observer in didCancelObservers {
+      observer.operationDidCancel(operation: self, withErrors: errors)
+    }
+  }
 }
 
 // MARK: - Condition Evaluation
@@ -459,22 +517,22 @@ extension AdvancedOperation {
 
     conditionGroup.notify(queue: DispatchQueue.global()) {
       // Aggregate all the occurred errors.
-      let errors = results.compactMap { (result) -> [Error]? in
-        switch result {
-        case .failed(let errors)?:
+      let errors = results.compactMap { result -> [Error]? in
+        if case .failed(let errors)? = result {
           return errors
-        default:
-          return nil
         }
-      }.flatMap { $0 }
+        return nil
+      }
 
-//      if operation.isCancelled {
-//        var aggregatedErrors = operation.errors
-//        let error = AdvancedOperationError.executionCancelled(message: "Operation cancelled while evaluating its conditions.")
-//        errors.append(contentsOf: aggregatedErrors)
-//      }
+      let flattenedErrors = errors.flatMap { $0 }
 
-      completion(errors)
+      //      if operation.isCancelled {
+      //        var aggregatedErrors = operation.errors
+      //        let error = AdvancedOperationError.executionCancelled(message: "Operation cancelled while evaluating its conditions.")
+      //        errors.append(contentsOf: aggregatedErrors)
+      //      }
+
+      completion(flattenedErrors)
     }
   }
 

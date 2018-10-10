@@ -567,9 +567,13 @@ final class AdvancedOperationQueueTests: XCTestCase {
     let queue: AdvancedOperationQueue? = AdvancedOperationQueue()
 
     var operation1: AdvancedOperation? = SleepyAsyncOperation()
+    operation1!.name = "operation1"
     var operation2: AdvancedOperation? = SleepyOperation()
+    operation2!.name = "operation2"
     var operation3: AdvancedOperation? = SleepyAsyncOperation(interval1: 1, interval2: 2, interval3: 1)
+    operation3!.name = "operation3"
     var operation4: AdvancedOperation? = SleepyOperation()
+    operation4!.name = "operation4"
 
     weak var weakOperation1 = operation1
     weak var weakOperation2 = operation2
@@ -584,6 +588,8 @@ final class AdvancedOperationQueueTests: XCTestCase {
     autoreleasepool {
       queue!.addOperations([operation1!, operation2!, operation3!, operation4!], waitUntilFinished: true)
 
+      sleep(2) // It appears that the queue needs some time to "remove" the operations.
+
       operation1 = nil
       operation2 = nil
       operation3 = nil
@@ -591,9 +597,9 @@ final class AdvancedOperationQueueTests: XCTestCase {
     }
 
     // All the operations should have been deallocated by now.
-    XCTAssertNil(weakOperation1)
-    XCTAssertNil(weakOperation2)
-    XCTAssertNil(weakOperation3)
-    XCTAssertNil(weakOperation4)
+    XCTAssertNil(weakOperation1, "Leak: operation1 should be nilled out. The queue has still \(queue!.operations.count) operations.")
+    XCTAssertNil(weakOperation2, "Leak: operation2 should be nilled out. The queue has still \(queue!.operations.count) operations.")
+    XCTAssertNil(weakOperation3, "Leak: operation3 should be nilled out. The queue has still \(queue!.operations.count) operations.")
+    XCTAssertNil(weakOperation4, "Leak: operation4 should be nilled out. The queue has still \(queue!.operations.count) operations.")
   }
 }

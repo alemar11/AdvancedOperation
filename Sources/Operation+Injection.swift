@@ -33,7 +33,7 @@ public protocol OperationOutputHaving: AnyObject {
   var output: Output? { get set }
 }
 
-/// An `OptionSet` containing a list of option that an injectd input should have.
+/// An `OptionSet` containing a list of option that an injected input should have.
 public struct InjectedInputRequirements: OptionSet {
   public let rawValue: Int
   public init(rawValue: Int) {

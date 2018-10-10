@@ -55,3 +55,12 @@ public struct NegatedCondition<T: OperationCondition>: OperationCondition {
   }
 
 }
+
+extension OperationCondition {
+
+  /// Returns a condition that negates the evaluation of the current condition.
+  public var negated: NegatedCondition<Self> {
+    return NegatedCondition(condition: self)
+  }
+
+}

@@ -14,7 +14,7 @@
     <a title="AdvancedOperation Class Reference"></a>
     <header>
       <div class="content-wrapper">
-        <p><a href="../index.html">AdvancedOperation Docs</a> (55% documented)</p>
+        <p><a href="../index.html">AdvancedOperation Docs</a> (56% documented)</p>
       </div>
     </header>
     <div class="content-wrapper">
@@ -330,6 +330,33 @@
                 <li class="item">
                   <div>
                     <code>
+                    <a name="/s:17AdvancedOperationAAC3logSo06OS_os_C0Cvp"></a>
+                    <a name="//apple_ref/swift/Property/log" class="dashAnchor"></a>
+                    <a class="token" href="#/s:17AdvancedOperationAAC3logSo06OS_os_C0Cvp">log</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>An instance of <code>OSLog</code> (by default is disabled).</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">private(set)</span> <span class="k">var</span> <span class="nv">log</span><span class="p">:</span> <span class="kt">OSLog</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
                     <a name="/s:17AdvancedOperationAAC6failedSbvp"></a>
                     <a name="//apple_ref/swift/Property/failed" class="dashAnchor"></a>
                     <a class="token" href="#/s:17AdvancedOperationAAC6failedSbvp">failed</a>
@@ -531,241 +558,6 @@
             </div>
             <div class="task-group">
               <div class="task-name-container">
-                <a name="/Subclass"></a>
-                <a name="//apple_ref/swift/Section/Subclass" class="dashAnchor"></a>
-                <a href="#/Subclass">
-                  <h3 class="section-name">Subclass</h3>
-                </a>
-              </div>
-              <ul>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:17AdvancedOperationAAC20operationWillExecuteyyF"></a>
-                    <a name="//apple_ref/swift/Method/operationWillExecute()" class="dashAnchor"></a>
-                    <a class="token" href="#/s:17AdvancedOperationAAC20operationWillExecuteyyF">operationWillExecute()</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>Subclass this method to know when the operation will start executing.</p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">open</span> <span class="kd">func</span> <span class="nf">operationWillExecute</span><span class="p">()</span></code></pre>
-
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:17AdvancedOperationAAC019operationDidProduceB0yySo11NSOperationCF"></a>
-                    <a name="//apple_ref/swift/Method/operationDidProduceOperation(_:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:17AdvancedOperationAAC019operationDidProduceB0yySo11NSOperationCF">operationDidProduceOperation(_:)</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>Subclass this method to know when the operation has produced another <code>Operation</code>.</p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">open</span> <span class="kd">func</span> <span class="nf">operationDidProduceOperation</span><span class="p">(</span><span class="n">_</span> <span class="nv">operation</span><span class="p">:</span> <span class="kt">Operation</span><span class="p">)</span></code></pre>
-
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:17AdvancedOperationAAC19operationWillCancel6errorsySays5Error_pG_tF"></a>
-                    <a name="//apple_ref/swift/Method/operationWillCancel(errors:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:17AdvancedOperationAAC19operationWillCancel6errorsySays5Error_pG_tF">operationWillCancel(errors:)</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>Subclass this method to know when the operation will be cancelled.</p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">open</span> <span class="kd">func</span> <span class="nf">operationWillCancel</span><span class="p">(</span><span class="nv">errors</span><span class="p">:</span> <span class="p">[</span><span class="kt">Error</span><span class="p">])</span></code></pre>
-
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:17AdvancedOperationAAC18operationDidCancel6errorsySays5Error_pG_tF"></a>
-                    <a name="//apple_ref/swift/Method/operationDidCancel(errors:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:17AdvancedOperationAAC18operationDidCancel6errorsySays5Error_pG_tF">operationDidCancel(errors:)</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>Subclass this method to know when the operation has been cancelled.</p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">open</span> <span class="kd">func</span> <span class="nf">operationDidCancel</span><span class="p">(</span><span class="nv">errors</span><span class="p">:</span> <span class="p">[</span><span class="kt">Error</span><span class="p">])</span></code></pre>
-
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:17AdvancedOperationAAC19operationWillFinish6errorsySays5Error_pG_tF"></a>
-                    <a name="//apple_ref/swift/Method/operationWillFinish(errors:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:17AdvancedOperationAAC19operationWillFinish6errorsySays5Error_pG_tF">operationWillFinish(errors:)</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>Subclass this method to know when the operation will finish its execution.</p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">open</span> <span class="kd">func</span> <span class="nf">operationWillFinish</span><span class="p">(</span><span class="nv">errors</span><span class="p">:</span> <span class="p">[</span><span class="kt">Error</span><span class="p">])</span></code></pre>
-
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:17AdvancedOperationAAC18operationDidFinish6errorsySays5Error_pG_tF"></a>
-                    <a name="//apple_ref/swift/Method/operationDidFinish(errors:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:17AdvancedOperationAAC18operationDidFinish6errorsySays5Error_pG_tF">operationDidFinish(errors:)</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>Subclass this method to know when the operation has finished executing.</p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">open</span> <span class="kd">func</span> <span class="nf">operationDidFinish</span><span class="p">(</span><span class="nv">errors</span><span class="p">:</span> <span class="p">[</span><span class="kt">Error</span><span class="p">])</span></code></pre>
-
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-              </ul>
-            </div>
-            <div class="task-group">
-              <div class="task-name-container">
-                <a name="/Observers"></a>
-                <a name="//apple_ref/swift/Section/Observers" class="dashAnchor"></a>
-                <a href="#/Observers">
-                  <h3 class="section-name">Observers</h3>
-                </a>
-              </div>
-              <ul>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:17AdvancedOperationAAC11addObserveryyAA0B13ObservingType_pF"></a>
-                    <a name="//apple_ref/swift/Method/addObserver(_:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:17AdvancedOperationAAC11addObserveryyAA0B13ObservingType_pF">addObserver(_:)</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>Add an observer to the to the operation, can only be done prior to the operation starting.</p>
-<div class="aside aside-requires">
-    <p class="aside-title">Requires</p>
-    `self must not have started.
-
-</div>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">addObserver</span><span class="p">(</span><span class="n">_</span> <span class="nv">observer</span><span class="p">:</span> <span class="kt"><a href="../Protocols.html#/s:17AdvancedOperation0B13ObservingTypeP">OperationObservingType</a></span><span class="p">)</span></code></pre>
-
-                        </div>
-                      </div>
-                      <div>
-                        <h4>Parameters</h4>
-                        <table class="graybox">
-                          <tbody>
-                            <tr>
-                              <td>
-                                <code>
-                                <em>observer</em>
-                                </code>
-                              </td>
-                              <td>
-                                <div>
-                                  <p>the observer to add.</p>
-                                </div>
-                              </td>
-                            </tr>
-                          </tbody>
-                        </table>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-              </ul>
-            </div>
-            <div class="task-group">
-              <div class="task-name-container">
                 <a name="/Dependencies"></a>
                 <a name="//apple_ref/swift/Section/Dependencies" class="dashAnchor"></a>
                 <a href="#/Dependencies">
@@ -868,6 +660,372 @@
               </ul>
             </div>
             <div class="task-group">
+              <div class="task-name-container">
+                <a name="/Subclass"></a>
+                <a name="//apple_ref/swift/Section/Subclass" class="dashAnchor"></a>
+                <a href="#/Subclass">
+                  <h3 class="section-name">Subclass</h3>
+                </a>
+              </div>
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:17AdvancedOperationAAC20operationWillExecuteyyF"></a>
+                    <a name="//apple_ref/swift/Method/operationWillExecute()" class="dashAnchor"></a>
+                    <a class="token" href="#/s:17AdvancedOperationAAC20operationWillExecuteyyF">operationWillExecute()</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Subclass this method to know when the operation will start executing.</p>
+<div class="aside aside-note">
+    <p class="aside-title">Note</p>
+    Calling the <code>super</code> implementation will keep the logging messages.
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">open</span> <span class="kd">func</span> <span class="nf">operationWillExecute</span><span class="p">()</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:17AdvancedOperationAAC019operationDidProduceB0yySo11NSOperationCF"></a>
+                    <a name="//apple_ref/swift/Method/operationDidProduceOperation(_:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:17AdvancedOperationAAC019operationDidProduceB0yySo11NSOperationCF">operationDidProduceOperation(_:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Subclass this method to know when the operation has produced another <code>Operation</code>.</p>
+<div class="aside aside-note">
+    <p class="aside-title">Note</p>
+    Calling the <code>super</code> implementation will keep the logging messages.
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">open</span> <span class="kd">func</span> <span class="nf">operationDidProduceOperation</span><span class="p">(</span><span class="n">_</span> <span class="nv">operation</span><span class="p">:</span> <span class="kt">Operation</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:17AdvancedOperationAAC19operationWillCancel6errorsySays5Error_pG_tF"></a>
+                    <a name="//apple_ref/swift/Method/operationWillCancel(errors:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:17AdvancedOperationAAC19operationWillCancel6errorsySays5Error_pG_tF">operationWillCancel(errors:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Subclass this method to know when the operation will be cancelled.</p>
+<div class="aside aside-note">
+    <p class="aside-title">Note</p>
+    Calling the <code>super</code> implementation will keep the logging messages.
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">open</span> <span class="kd">func</span> <span class="nf">operationWillCancel</span><span class="p">(</span><span class="nv">errors</span><span class="p">:</span> <span class="p">[</span><span class="kt">Error</span><span class="p">])</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:17AdvancedOperationAAC18operationDidCancel6errorsySays5Error_pG_tF"></a>
+                    <a name="//apple_ref/swift/Method/operationDidCancel(errors:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:17AdvancedOperationAAC18operationDidCancel6errorsySays5Error_pG_tF">operationDidCancel(errors:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Subclass this method to know when the operation has been cancelled.</p>
+<div class="aside aside-note">
+    <p class="aside-title">Note</p>
+    Calling the <code>super</code> implementation will keep the logging messages.
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">open</span> <span class="kd">func</span> <span class="nf">operationDidCancel</span><span class="p">(</span><span class="nv">errors</span><span class="p">:</span> <span class="p">[</span><span class="kt">Error</span><span class="p">])</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:17AdvancedOperationAAC19operationWillFinish6errorsySays5Error_pG_tF"></a>
+                    <a name="//apple_ref/swift/Method/operationWillFinish(errors:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:17AdvancedOperationAAC19operationWillFinish6errorsySays5Error_pG_tF">operationWillFinish(errors:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Subclass this method to know when the operation will finish its execution.</p>
+<div class="aside aside-note">
+    <p class="aside-title">Note</p>
+    Calling the <code>super</code> implementation will keep the logging messages.
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">open</span> <span class="kd">func</span> <span class="nf">operationWillFinish</span><span class="p">(</span><span class="nv">errors</span><span class="p">:</span> <span class="p">[</span><span class="kt">Error</span><span class="p">])</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:17AdvancedOperationAAC18operationDidFinish6errorsySays5Error_pG_tF"></a>
+                    <a name="//apple_ref/swift/Method/operationDidFinish(errors:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:17AdvancedOperationAAC18operationDidFinish6errorsySays5Error_pG_tF">operationDidFinish(errors:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Subclass this method to know when the operation has finished executing.</p>
+<div class="aside aside-note">
+    <p class="aside-title">Note</p>
+    Calling the <code>super</code> implementation will keep the logging messages.
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">open</span> <span class="kd">func</span> <span class="nf">operationDidFinish</span><span class="p">(</span><span class="nv">errors</span><span class="p">:</span> <span class="p">[</span><span class="kt">Error</span><span class="p">])</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:17AdvancedOperationAAC31operationWillEvaluateConditionsyyF"></a>
+                    <a name="//apple_ref/swift/Method/operationWillEvaluateConditions()" class="dashAnchor"></a>
+                    <a class="token" href="#/s:17AdvancedOperationAAC31operationWillEvaluateConditionsyyF">operationWillEvaluateConditions()</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Subclass this method to know when the operation will start evaluating its conditions.</p>
+<div class="aside aside-note">
+    <p class="aside-title">Note</p>
+    Calling the <code>super</code> implementation will keep the logging messages.
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">open</span> <span class="kd">func</span> <span class="nf">operationWillEvaluateConditions</span><span class="p">()</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <div class="task-name-container">
+                <a name="/OSLog"></a>
+                <a name="//apple_ref/swift/Section/OSLog" class="dashAnchor"></a>
+                <a href="#/OSLog">
+                  <h3 class="section-name">OSLog</h3>
+                </a>
+              </div>
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:17AdvancedOperationAAC8useOSLogyySo9OS_os_logCF"></a>
+                    <a name="//apple_ref/swift/Method/useOSLog(_:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:17AdvancedOperationAAC8useOSLogyySo9OS_os_logCF">useOSLog(_:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Logs all the states of an <code>AdvancedOperation</code>.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">useOSLog</span><span class="p">(</span><span class="n">_</span> <span class="nv">log</span><span class="p">:</span> <span class="kt">OSLog</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>log</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>A <code>OSLog</code> instance.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>type</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>A <code>OSLogType</code>.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <div class="task-name-container">
+                <a name="/Observers"></a>
+                <a name="//apple_ref/swift/Section/Observers" class="dashAnchor"></a>
+                <a href="#/Observers">
+                  <h3 class="section-name">Observers</h3>
+                </a>
+              </div>
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:17AdvancedOperationAAC11addObserveryyAA0B13ObservingType_pF"></a>
+                    <a name="//apple_ref/swift/Method/addObserver(_:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:17AdvancedOperationAAC11addObserveryyAA0B13ObservingType_pF">addObserver(_:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Add an observer to the to the operation, can only be done prior to the operation starting.</p>
+<div class="aside aside-requires">
+    <p class="aside-title">Requires</p>
+    `self must not have started.
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">addObserver</span><span class="p">(</span><span class="n">_</span> <span class="nv">observer</span><span class="p">:</span> <span class="kt"><a href="../Protocols.html#/s:17AdvancedOperation0B13ObservingTypeP">OperationObservingType</a></span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>observer</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>the observer to add.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
               <ul>
                 <li class="item">
                   <div>
@@ -930,7 +1088,7 @@
           </section>
         </section>
         <section id="footer">
-          <p>&copy; 2018 <a class="link" href="https://github.com/tinrobots/AdvancedOperation" target="_blank" rel="external">Alessandro Marzoli</a>. All rights reserved. (Last updated: 2018-10-01)</p>
+          <p>&copy; 2018 <a class="link" href="https://github.com/tinrobots/AdvancedOperation" target="_blank" rel="external">Alessandro Marzoli</a>. All rights reserved. (Last updated: 2018-10-10)</p>
           <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.9.2</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
         </section>
       </article>

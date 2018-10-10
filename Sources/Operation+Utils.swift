@@ -25,6 +25,11 @@ import Foundation
 
 extension Operation {
 
+  /// Returns the `AdvancedOperation` name or its type if the name is nil.
+  public var operationName: String {
+    return name ?? "\(type(of: self))"
+  }
+
   /// Adds a completion block to be executed after the `Operation` enters the "finished" state.
   /// If there is already a completion block, they are chained together.
   ///
