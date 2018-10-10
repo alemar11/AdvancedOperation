@@ -125,9 +125,8 @@ open class AdvancedOperation: Operation {
     }
   }
 
-  /// A logger (is configured).
-  /// Use enableLog(_:withType:) to active the log.
-  public private(set) var log: Log?
+  /// An instance of `OSLog` (by default is disabled).
+  public private(set) var log = OSLog.disabled
 
   /// Returns `true` if the `AdvancedOperation` failed due to errors.
   public var failed: Bool { return lock.synchronized { !errors.isEmpty } }
@@ -287,26 +286,6 @@ open class AdvancedOperation: Operation {
     lock.synchronized { _finishing = false }
   }
 
-  // MARK: - Subclass
-
-  /// Subclass this method to know when the operation will start executing.
-  open func operationWillExecute() { }
-
-  /// Subclass this method to know when the operation has produced another `Operation`.
-  open func operationDidProduceOperation(_ operation: Operation) { }
-
-  /// Subclass this method to know when the operation will be cancelled.
-  open func operationWillCancel(errors: [Error]) { }
-
-  /// Subclass this method to know when the operation has been cancelled.
-  open func operationDidCancel(errors: [Error]) { }
-
-  /// Subclass this method to know when the operation will finish its execution.
-  open func operationWillFinish(errors: [Error]) { }
-
-  /// Subclass this method to know when the operation has finished executing.
-  open func operationDidFinish(errors: [Error]) { }
-
   // MARK: - Produced Operations
 
   /// Produce another operation on the same `AdvancedOperationQueue` that this instance is on.
@@ -364,6 +343,50 @@ open class AdvancedOperation: Operation {
     }
   }
 
+  // MARK: - Subclass
+
+  /// Subclass this method to know when the operation will start executing.
+  /// - Note: Calling the `super` implementation will keep the logging messages.
+  open func operationWillExecute() {
+      os_log("%{public}s has started.", log: log, type: .info, operationName)
+  }
+
+  /// Subclass this method to know when the operation has produced another `Operation`.
+  /// - Note: Calling the `super` implementation will keep the logging messages.
+  open func operationDidProduceOperation(_ operation: Operation) {
+      os_log("%{public}s has produced a new operation: %{public}s.", log: log, type: .info, operationName, operation.operationName)
+  }
+
+  /// Subclass this method to know when the operation will be cancelled.
+  /// - Note: Calling the `super` implementation will keep the logging messages.
+  open func operationWillCancel(errors: [Error]) {
+    os_log("%{public}s is cancelling.", log: log, type: .info, operationName)
+  }
+
+  /// Subclass this method to know when the operation has been cancelled.
+  /// - Note: Calling the `super` implementation will keep the logging messages.
+  open func operationDidCancel(errors: [Error]) {
+      os_log("%{public}s has been cancelled with %{public}d errors.", log: log, type: .info, operationName, errors.count)
+  }
+
+  /// Subclass this method to know when the operation will finish its execution.
+  /// - Note: Calling the `super` implementation will keep the logging messages.
+  open func operationWillFinish(errors: [Error]) {
+      os_log("%{public}s is finishing.", log: log, type: .info, operationName)
+  }
+
+  /// Subclass this method to know when the operation has finished executing.
+  /// - Note: Calling the `super` implementation will keep the logging messages.
+  open func operationDidFinish(errors: [Error]) {
+      os_log("%{public}s has finished with %{public}d errors.", log: log, type: .info, operationName, errors.count)
+  }
+
+  /// Subclass this method to know when the operation will start evaluating its conditions.
+  /// - Note: Calling the `super` implementation will keep the logging messages.
+  open func operationWillEvaluateConditions() {
+      os_log("%{public}s is evaluating %{public}d conditions.", log: log, type: .info, operationName, conditions.count)
+  }
+  
 }
 
 // MARK: - OSLog
@@ -375,8 +398,8 @@ extension AdvancedOperation {
   /// - Parameters:
   ///   - log: A `OSLog` instance.
   ///   - type: A `OSLogType`.
-  public func enableLog(_ log: OSLog = Log.shared.log, withType type: OSLogType = Log.shared.type) {
-    self.log = Log(log: log, type: type)
+  public func useOSLog(_ log: OSLog) {
+    self.log = log
   }
 
 }
@@ -419,16 +442,10 @@ extension AdvancedOperation {
   }
 
   private func willEvaluateConditions() {
-    if let log = self.log {
-      os_log("%{public}s is evaluating %{public}d conditions.", log: log.log, type: log.type, operationName, conditions.count)
-    }
+    operationWillEvaluateConditions()
   }
 
   private func willExecute() {
-    if let log = self.log {
-      os_log("%{public}s has started.", log: log.log, type: log.type, operationName)
-    }
-
     operationWillExecute()
 
     for observer in willExecuteObservers {
@@ -437,10 +454,6 @@ extension AdvancedOperation {
   }
 
   private func didProduceOperation(_ operation: Operation) {
-    if let log = self.log {
-      os_log("%{public}s has produced a new operation: %{public}s.", log: log.log, type: log.type, operationName, operation.operationName)
-    }
-
     operationDidProduceOperation(operation)
 
     for observer in didProduceOperationObservers {
@@ -449,10 +462,6 @@ extension AdvancedOperation {
   }
 
   private func willFinish(errors: [Error]) {
-    if let log = self.log {
-      os_log("%{public}s is finishing.", log: log.log, type: .default, operationName)
-    }
-
     operationWillFinish(errors: errors)
 
     for observer in willFinishObservers {
@@ -461,10 +470,6 @@ extension AdvancedOperation {
   }
 
   private func didFinish(errors: [Error]) {
-    if let log = self.log {
-      os_log("%{public}s has finished with %{public}d errors.", log: log.log, type: log.type, operationName, errors.count)
-    }
-
     operationDidFinish(errors: errors)
 
     for observer in didFinishObservers {
@@ -473,10 +478,6 @@ extension AdvancedOperation {
   }
 
   private func willCancel(errors: [Error]) {
-    if let log = self.log {
-      os_log("%{public}s is cancelling.", log: log.log, type: log.type, operationName)
-    }
-
     operationWillCancel(errors: errors)
 
     for observer in willCancelObservers {
@@ -485,10 +486,6 @@ extension AdvancedOperation {
   }
 
   private func didCancel(errors: [Error]) {
-    if let log = self.log {
-      os_log("%{public}s has been cancelled with %{public}d errors.", log: log.log, type: log.type, operationName, errors.count)
-    }
-
     operationDidCancel(errors: errors)
 
     for observer in didCancelObservers {

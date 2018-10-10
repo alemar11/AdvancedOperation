@@ -24,7 +24,12 @@
 import Foundation
 import Dispatch
 import XCTest
+import os.log
 @testable import AdvancedOperation
+
+// MARK: - OsLog
+
+let TestsLog = OSLog(subsystem: identifier, category: "Tests")
 
 // MARK: - Error
 
@@ -64,7 +69,7 @@ final internal class SelfObservigOperation: AdvancedOperation {
 
   override init() {
     super.init()
-    enableLog()
+    useOSLog(TestsLog)
   }
 
   override func main() {
@@ -127,7 +132,7 @@ final internal class SleepyAsyncOperation: AdvancedOperation {
     self.interval2 = interval2
     self.interval3 = interval3
     super.init()
-    enableLog()
+    useOSLog(TestsLog)
   }
 
   override func main() {
@@ -162,7 +167,7 @@ final internal class SleepyOperation: AdvancedOperation {
 
   override init() {
     super.init()
-    enableLog()
+    useOSLog(TestsLog)
   }
 
   override func main() {
@@ -176,7 +181,7 @@ final internal class XCTFailOperation: AdvancedOperation {
 
   override init() {
     super.init()
-    enableLog()
+    useOSLog(TestsLog)
   }
 
   override func main() {
@@ -193,7 +198,7 @@ final internal class FailingAsyncOperation: AdvancedOperation {
   init(errors: [MockError] = [MockError.failed, MockError.test]) {
     self.defaultErrors = errors
     super.init()
-    enableLog()
+    useOSLog(TestsLog)
   }
 
   override func main() {
@@ -375,7 +380,7 @@ internal class IntToStringOperation: AdvancedOperation & OperationInputHaving & 
 
   override init() {
     super.init()
-    enableLog()
+    useOSLog(TestsLog)
   }
 
   override func main() {
@@ -400,7 +405,7 @@ internal class StringToIntOperation: FunctionOperation<String, Int> {
 
   override init() {
     super.init()
-    enableLog()
+    useOSLog(TestsLog)
   }
 
   override func main() {

@@ -50,10 +50,6 @@
 		234130BC1F96076A002BE7FC /* AdvancedOperation.h in Headers */ = {isa = PBXBuildFile; fileRef = 2341308A1F9605F5002BE7FC /* AdvancedOperation.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		234130BD1F96076D002BE7FC /* AdvancedOperation.h in Headers */ = {isa = PBXBuildFile; fileRef = 2341308A1F9605F5002BE7FC /* AdvancedOperation.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		234130BE1F960770002BE7FC /* AdvancedOperation.h in Headers */ = {isa = PBXBuildFile; fileRef = 2341308A1F9605F5002BE7FC /* AdvancedOperation.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		234C2675216DF5D5004E816C /* Log.swift in Sources */ = {isa = PBXBuildFile; fileRef = 234C2674216DF5D5004E816C /* Log.swift */; };
-		234C2676216DF5D5004E816C /* Log.swift in Sources */ = {isa = PBXBuildFile; fileRef = 234C2674216DF5D5004E816C /* Log.swift */; };
-		234C2677216DF5D5004E816C /* Log.swift in Sources */ = {isa = PBXBuildFile; fileRef = 234C2674216DF5D5004E816C /* Log.swift */; };
-		234C2678216DF5D5004E816C /* Log.swift in Sources */ = {isa = PBXBuildFile; fileRef = 234C2674216DF5D5004E816C /* Log.swift */; };
 		2359AB4E216212CD00AC09D8 /* UIBackgroundObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 232C452D215A898000B73E79 /* UIBackgroundObserver.swift */; };
 		235D08AB206A498400F70142 /* ExclusivityManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 235D08AA206A494E00F70142 /* ExclusivityManager.swift */; };
 		235D08AC206A498400F70142 /* NegatedCondition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 235D08A6206A494D00F70142 /* NegatedCondition.swift */; };
@@ -223,7 +219,6 @@
 		234130A71F9606B8002BE7FC /* AdvancedOperation.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = AdvancedOperation.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		234130B41F9606CD002BE7FC /* AdvancedOperation.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = AdvancedOperation.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		234130B71F9606CD002BE7FC /* Info-tvOS.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Info-tvOS.plist"; sourceTree = "<group>"; };
-		234C2674216DF5D5004E816C /* Log.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Log.swift; sourceTree = "<group>"; };
 		235D08A4206A494D00F70142 /* NoCancelledDependenciesCondition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoCancelledDependenciesCondition.swift; sourceTree = "<group>"; };
 		235D08A5206A494D00F70142 /* NoFailedDependenciesCondition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoFailedDependenciesCondition.swift; sourceTree = "<group>"; };
 		235D08A6206A494D00F70142 /* NegatedCondition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NegatedCondition.swift; sourceTree = "<group>"; };
@@ -381,7 +376,6 @@
 				235D08A3206A494600F70142 /* Conditions */,
 				232F3AAD206041DE00FC45CB /* Globals.swift */,
 				2385616B200A6BF80061BAA1 /* GroupOperation.swift */,
-				234C2674216DF5D5004E816C /* Log.swift */,
 				23830CA220615E7C00F6EBC9 /* NSLock+Utils.swift */,
 				239BC52120EB7539009A36D9 /* Operation+Injection.swift */,
 				23F24D21200799B800B25A03 /* Operation+Utils.swift */,
@@ -812,7 +806,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				23F24D2720079CDE00B25A03 /* DelayOperation.swift in Sources */,
-				234C2675216DF5D5004E816C /* Log.swift in Sources */,
 				2372507D200524860000A442 /* AdvancedOperation.swift in Sources */,
 				23F24D22200799B800B25A03 /* Operation+Utils.swift in Sources */,
 				235D08AB206A498400F70142 /* ExclusivityManager.swift in Sources */,
@@ -842,7 +835,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				23F24D2820079CDE00B25A03 /* DelayOperation.swift in Sources */,
-				234C2676216DF5D5004E816C /* Log.swift in Sources */,
 				2372507E200524860000A442 /* AdvancedOperation.swift in Sources */,
 				23F24D23200799B800B25A03 /* Operation+Utils.swift in Sources */,
 				235D08B2206A498400F70142 /* ExclusivityManager.swift in Sources */,
@@ -872,7 +864,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				23F24D2920079CDE00B25A03 /* DelayOperation.swift in Sources */,
-				234C2677216DF5D5004E816C /* Log.swift in Sources */,
 				2372507F200524860000A442 /* AdvancedOperation.swift in Sources */,
 				23F24D24200799B800B25A03 /* Operation+Utils.swift in Sources */,
 				235D08B9206A498500F70142 /* ExclusivityManager.swift in Sources */,
@@ -902,7 +893,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				23F24D2A20079CDE00B25A03 /* DelayOperation.swift in Sources */,
-				234C2678216DF5D5004E816C /* Log.swift in Sources */,
 				23725080200524860000A442 /* AdvancedOperation.swift in Sources */,
 				23F24D25200799B800B25A03 /* Operation+Utils.swift in Sources */,
 				235D08C0206A498500F70142 /* ExclusivityManager.swift in Sources */,
