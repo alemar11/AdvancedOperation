@@ -125,7 +125,9 @@ open class AdvancedOperation: Operation {
     }
   }
 
-  private var log: OSLog? //WIP
+  /// A logger (is configured).
+  /// Use enableLog(_:withType:) to active the log.
+  public private(set) var log: Log?
 
   /// Returns `true` if the `AdvancedOperation` failed due to errors.
   public var failed: Bool { return lock.synchronized { !errors.isEmpty } }
@@ -354,10 +356,27 @@ open class AdvancedOperation: Operation {
 
     guard canBeEvaluated else { return }
 
+    willEvaluateConditions()
+
     type(of: self).evaluate(conditions, operation: self) { [weak self] errors in
       self?.errors.append(contentsOf: errors)
       self?.state = .ready
     }
+  }
+
+}
+
+// MARK: - OSLog
+
+extension AdvancedOperation {
+
+  /// Logs all the states of an `AdvancedOperation`.
+  ///
+  /// - Parameters:
+  ///   - log: A `OSLog` instance.
+  ///   - type: A `OSLogType`.
+  public func enableLog(_ log: OSLog = Log.shared.log, withType type: OSLogType = Log.shared.type) {
+    self.log = Log(log: log, type: type)
   }
 
 }
@@ -399,11 +418,19 @@ extension AdvancedOperation {
     return observers.compactMap { $0 as? OperationDidFinishObserving }
   }
 
+  private func willEvaluateConditions() {
+    if let log = self.log {
+      os_log("%{public}s is evaluating %{public}d conditions.", log: log.log, type: log.type, operationName, conditions.count)
+    }
+  }
+
   private func willExecute() {
     if let log = self.log {
-      os_log("%{public}s has started.", log: log, type: .default, operationName)
+      os_log("%{public}s has started.", log: log.log, type: log.type, operationName)
     }
+
     operationWillExecute()
+
     for observer in willExecuteObservers {
       observer.operationWillExecute(operation: self)
     }
@@ -411,7 +438,7 @@ extension AdvancedOperation {
 
   private func didProduceOperation(_ operation: Operation) {
     if let log = self.log {
-    os_log("%{public}s has produced a new operation: %{public}s.", log: log, type: .default, operationName, operation.operationName)
+      os_log("%{public}s has produced a new operation: %{public}s.", log: log.log, type: log.type, operationName, operation.operationName)
     }
 
     operationDidProduceOperation(operation)
@@ -423,7 +450,7 @@ extension AdvancedOperation {
 
   private func willFinish(errors: [Error]) {
     if let log = self.log {
-      os_log("%{public}s is finishing.", log: log, type: .default, operationName)
+      os_log("%{public}s is finishing.", log: log.log, type: .default, operationName)
     }
 
     operationWillFinish(errors: errors)
@@ -435,7 +462,7 @@ extension AdvancedOperation {
 
   private func didFinish(errors: [Error]) {
     if let log = self.log {
-      os_log("%{public}s has finished with %{public}d errors.", log: log, type: .error, operationName, errors.count)
+      os_log("%{public}s has finished with %{public}d errors.", log: log.log, type: log.type, operationName, errors.count)
     }
 
     operationDidFinish(errors: errors)
@@ -447,7 +474,7 @@ extension AdvancedOperation {
 
   private func willCancel(errors: [Error]) {
     if let log = self.log {
-      os_log("%{public}s is cancelling.", log: log, type: .default, operationName)
+      os_log("%{public}s is cancelling.", log: log.log, type: log.type, operationName)
     }
 
     operationWillCancel(errors: errors)
@@ -459,7 +486,7 @@ extension AdvancedOperation {
 
   private func didCancel(errors: [Error]) {
     if let log = self.log {
-      os_log("%{public}s has been cancelled with %{public}d errors.", log: log, type: .error, operationName, errors.count)
+      os_log("%{public}s has been cancelled with %{public}d errors.", log: log.log, type: log.type, operationName, errors.count)
     }
 
     operationDidCancel(errors: errors)
@@ -493,14 +520,14 @@ extension AdvancedOperation {
 
     conditionGroup.notify(queue: DispatchQueue.global()) {
       // Aggregate all the occurred errors.
-      let errors = results.compactMap { (result) -> [Error]? in
-        switch result {
-        case .failed(let errors)?:
+      let errors = results.compactMap { result -> [Error]? in
+        if case .failed(let errors)? = result {
           return errors
-        default:
-          return nil
         }
-        }.flatMap { $0 }
+        return nil
+      }
+
+      let flattenedErrors = errors.flatMap { $0 }
 
       //      if operation.isCancelled {
       //        var aggregatedErrors = operation.errors
@@ -508,7 +535,7 @@ extension AdvancedOperation {
       //        errors.append(contentsOf: aggregatedErrors)
       //      }
 
-      completion(errors)
+      completion(flattenedErrors)
     }
   }
 

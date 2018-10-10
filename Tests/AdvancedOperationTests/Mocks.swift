@@ -62,6 +62,11 @@ final internal class SelfObservigOperation: AdvancedOperation {
   var willFinishHandler: (([Error]) -> Void)? = nil
   var didFinishHandler: (([Error]) -> Void)? = nil
 
+  override init() {
+    super.init()
+    enableLog()
+  }
+
   override func main() {
     DispatchQueue.global().asyncAfter(deadline: .now() + 3) { [weak self] in
       guard let self = self else { return }
@@ -121,10 +126,11 @@ final internal class SleepyAsyncOperation: AdvancedOperation {
     self.interval1 = interval1
     self.interval2 = interval2
     self.interval3 = interval3
+    super.init()
+    enableLog()
   }
 
   override func main() {
-
     DispatchQueue.global().async { [weak weakSelf = self] in
       guard let strongSelf = weakSelf else { return self.finish() }
       if strongSelf.isCancelled {
@@ -154,6 +160,11 @@ final internal class SleepyAsyncOperation: AdvancedOperation {
 
 final internal class SleepyOperation: AdvancedOperation {
 
+  override init() {
+    super.init()
+    enableLog()
+  }
+
   override func main() {
     sleep(1)
     self.finish()
@@ -162,6 +173,11 @@ final internal class SleepyOperation: AdvancedOperation {
 }
 
 final internal class XCTFailOperation: AdvancedOperation {
+
+  override init() {
+    super.init()
+    enableLog()
+  }
 
   override func main() {
     XCTFail("This operation should't be executed.")
@@ -177,10 +193,7 @@ final internal class FailingAsyncOperation: AdvancedOperation {
   init(errors: [MockError] = [MockError.failed, MockError.test]) {
     self.defaultErrors = errors
     super.init()
-
-    if #available(iOS 11, tvOS 11, macOS 10.12, watchOS 4.0, *) {
-      self.enableLog()
-    }
+    enableLog()
   }
 
   override func main() {
@@ -360,6 +373,11 @@ internal class IntToStringOperation: AdvancedOperation & OperationInputHaving & 
   var input: Int?
   var output: String?
 
+  override init() {
+    super.init()
+    enableLog()
+  }
+
   override func main() {
     if let input = self.input {
       if input == 100 {
@@ -379,6 +397,12 @@ internal class IntToStringOperation: AdvancedOperation & OperationInputHaving & 
 }
 
 internal class StringToIntOperation: FunctionOperation<String, Int> {
+
+  override init() {
+    super.init()
+    enableLog()
+  }
+
   override func main() {
     if let input = self.input, let value = Int(input) {
       output = value
