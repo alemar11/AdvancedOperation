@@ -400,6 +400,9 @@ extension AdvancedOperation {
   }
 
   private func willExecute() {
+    if let log = self.log {
+      os_log("%{public}s has started.", log: log, type: .default, operationName)
+    }
     operationWillExecute()
     for observer in willExecuteObservers {
       observer.operationWillExecute(operation: self)
@@ -414,6 +417,9 @@ extension AdvancedOperation {
   }
 
   private func willFinish(errors: [Error]) {
+    if let log = self.log {
+      os_log("%{public}s is finishing.", log: log, type: .default, operationName)
+    }
     operationWillFinish(errors: errors)
     for observer in willFinishObservers {
       observer.operationWillFinish(operation: self, withErrors: errors)
@@ -440,6 +446,17 @@ extension AdvancedOperation {
       observer.operationDidCancel(operation: self, withErrors: errors)
     }
   }
+}
+
+// MARK: - Utils
+
+extension AdvancedOperation {
+
+  /// Returns the `AdvancedOperation` name or its type if the name is nil.
+  public var operationName: String {
+    return name ?? "\(type(of: self))"
+  }
+
 }
 
 // MARK: - Condition Evaluation
@@ -472,7 +489,7 @@ extension AdvancedOperation {
         default:
           return nil
         }
-      }.flatMap { $0 }
+        }.flatMap { $0 }
 
       //      if operation.isCancelled {
       //        var aggregatedErrors = operation.errors
