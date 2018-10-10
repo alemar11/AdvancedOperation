@@ -410,7 +410,12 @@ extension AdvancedOperation {
   }
 
   private func didProduceOperation(_ operation: Operation) {
+    if let log = self.log {
+    os_log("%{public}s has produced a new operation: %{public}s.", log: log, type: .default, operationName, operation.operationName)
+    }
+
     operationDidProduceOperation(operation)
+
     for observer in didProduceOperationObservers {
       observer.operation(operation: self, didProduce: operation)
     }
@@ -420,43 +425,49 @@ extension AdvancedOperation {
     if let log = self.log {
       os_log("%{public}s is finishing.", log: log, type: .default, operationName)
     }
+
     operationWillFinish(errors: errors)
+
     for observer in willFinishObservers {
       observer.operationWillFinish(operation: self, withErrors: errors)
     }
   }
 
   private func didFinish(errors: [Error]) {
+    if let log = self.log {
+      os_log("%{public}s has finished with %{public}d errors.", log: log, type: .error, operationName, errors.count)
+    }
+
     operationDidFinish(errors: errors)
+
     for observer in didFinishObservers {
       observer.operationDidFinish(operation: self, withErrors: errors)
     }
   }
 
   private func willCancel(errors: [Error]) {
+    if let log = self.log {
+      os_log("%{public}s is cancelling.", log: log, type: .default, operationName)
+    }
+
     operationWillCancel(errors: errors)
+
     for observer in willCancelObservers {
       observer.operationWillCancel(operation: self, withErrors: errors)
     }
   }
 
   private func didCancel(errors: [Error]) {
+    if let log = self.log {
+      os_log("%{public}s has been cancelled with %{public}d errors.", log: log, type: .error, operationName, errors.count)
+    }
+
     operationDidCancel(errors: errors)
+
     for observer in didCancelObservers {
       observer.operationDidCancel(operation: self, withErrors: errors)
     }
   }
-}
-
-// MARK: - Utils
-
-extension AdvancedOperation {
-
-  /// Returns the `AdvancedOperation` name or its type if the name is nil.
-  public var operationName: String {
-    return name ?? "\(type(of: self))"
-  }
-
 }
 
 // MARK: - Condition Evaluation
