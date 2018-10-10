@@ -386,7 +386,7 @@ open class AdvancedOperation: Operation {
   open func operationWillEvaluateConditions() {
       os_log("%{public}s is evaluating %{public}d conditions.", log: log, type: .info, operationName, conditions.count)
   }
-  
+
 }
 
 // MARK: - OSLog
