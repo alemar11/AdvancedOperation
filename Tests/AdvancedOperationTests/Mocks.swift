@@ -287,32 +287,32 @@ final internal class MockObserver: OperationObserving {
     }
   }
 
-  func operationWillExecute(operation: Operation) {
+  func operationWillExecute(operation: AdvancedOperation) {
     assert(operation.isExecuting)
     willExecutetCount += 1
   }
 
-  func operationDidFinish(operation: Operation, withErrors errors: [Error]) {
+  func operationDidFinish(operation: AdvancedOperation, withErrors errors: [Error]) {
     assert(operation.isFinished)
     didFinishCount += 1
   }
 
-  func operationDidCancel(operation: Operation, withErrors errors: [Error]) {
+  func operationDidCancel(operation: AdvancedOperation, withErrors errors: [Error]) {
     assert(operation.isCancelled)
     didCancelCount += 1
   }
 
-  func operationWillFinish(operation: Operation, withErrors errors: [Error]) {
+  func operationWillFinish(operation: AdvancedOperation, withErrors errors: [Error]) {
     assert(!operation.isFinished)
     willFinishCount += 1
   }
 
-  func operationWillCancel(operation: Operation, withErrors errors: [Error]) {
+  func operationWillCancel(operation: AdvancedOperation, withErrors errors: [Error]) {
     assert(!operation.isFinished)
     willCancelCount += 1
   }
 
-  func operation(operation: Operation, didProduce: Operation) {
+  func operation(operation: AdvancedOperation, didProduce: Operation) {
     didProduceCount += 1
   }
 

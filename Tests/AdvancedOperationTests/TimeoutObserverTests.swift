@@ -24,48 +24,36 @@
 import XCTest
 @testable import AdvancedOperation
 
-class BlockConditionTests: XCTestCase {
+class TimeoutObserverTests: XCTestCase {
 
-  func testFailedCondition() {
-    let queue = AdvancedOperationQueue()
-    let condition = BlockCondition { () -> Bool in
-      return false
+    func testOperationCancelledByTheTimeoutObserver() {
+      let expectation = self.expectation(description: "\(#function)\(#line)")
+      let operation = SleepyAsyncOperation(interval1: 5, interval2: 1, interval3: 1)
+      operation.name = "operation"
+      operation.addCompletionBlock {
+        expectation.fulfill()
+      }
+      operation.addObserver(TimeoutObserver(timeout: 3))
+      operation.start()
+      waitForExpectations(timeout: 7) // The SleepyAsyncOperation will check the cancelled state after each interval (so 0, 5, 1, 1)
+      XCTAssertTrue(operation.isCancelled)
+      XCTAssertTrue(operation.isFinished)
+      XCTAssertTrue(operation.failed)
     }
 
-    let operation = SleepyAsyncOperation()
-    operation.addCondition(condition)
-    queue.addOperations([operation], waitUntilFinished: true)
+  func testSuccessfullOperation() {
+    let expectation = self.expectation(description: "\(#function)\(#line)")
+    let operation = SleepyAsyncOperation(interval1: 1, interval2: 1, interval3: 1)
+    operation.name = "operation"
+    operation.addCompletionBlock {
+      expectation.fulfill()
+    }
+    operation.addObserver(TimeoutObserver(timeout: 5))
+    operation.start()
+    waitForExpectations(timeout: 7) // The SleepyAsyncOperation will check the cancelled state after each interval (so 0, 1, 1, 1)
     XCTAssertFalse(operation.isCancelled)
-    XCTAssertTrue(operation.failed)
     XCTAssertTrue(operation.isFinished)
-  }
-
-  func testFailedConditionAfterAThrowedError() {
-    let queue = AdvancedOperationQueue()
-    let condition = BlockCondition { () -> Bool in
-      throw MockError.failed
-    }
-
-    let operation = SleepyAsyncOperation()
-    operation.addCondition(condition)
-    queue.addOperations([operation], waitUntilFinished: true)
-    XCTAssertFalse(operation.isCancelled)
-    XCTAssertTrue(operation.failed)
-    XCTAssertTrue(operation.isFinished)
-  }
-
-  func testSuccessfulCondition() {
-    let queue = AdvancedOperationQueue()
-    let condition = BlockCondition { () -> Bool in
-      return true
-    }
-
-    let operation = SleepyAsyncOperation()
-    operation.addCondition(condition)
-    queue.addOperations([operation], waitUntilFinished: true)
-    XCTAssertFalse(operation.isCancelled)
     XCTAssertFalse(operation.failed)
-    XCTAssertTrue(operation.isFinished)
   }
 
 }

@@ -1,4 +1,4 @@
-// 
+//
 // AdvancedOperation
 //
 // Copyright © 2016-2018 Tinrobots.
@@ -45,7 +45,7 @@ public struct BlockCondition: OperationCondition {
         completion(.satisfied)
       } else {
         let conditionError = AdvancedOperationError.conditionFailed(message: "The BlockCondition has returned false.",
-                                                           userInfo: [operationConditionKey: name,])
+                                                           userInfo: [operationConditionKey: name])
          completion(.failed([conditionError]))
       }
     } catch {
