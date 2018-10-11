@@ -1,4 +1,4 @@
-//
+// 
 // AdvancedOperation
 //
 // Copyright © 2016-2018 Tinrobots.
@@ -23,43 +23,37 @@
 
 import Foundation
 
-/// A condition that negates the evaluation of another condition.
-public struct NegatedCondition<T: OperationCondition>: OperationCondition {
+/// A Condition which will be satisfied if the block returns ´true´.
+/// - Note: The block may ´throw´ an error, or return ´false´, both of which are considered as a condition failure.
+public struct BlockCondition: OperationCondition {
 
-  public var name: String { return "Not<\(condition.name)>" }
+  /// The block type which returns a Bool.
+  public typealias Block = () throws -> Bool
 
-  static var negatedConditionKey: String { return "NegatedCondition" }
+  static var blockConditionKey: String { return "BlockCondition" }
 
-  let condition: T
+  let block: Block
 
-  public init(condition: T) {
-    self.condition = condition
+  public init(block: @escaping Block) {
+    self.block = block
   }
 
   public func evaluate(for operation: AdvancedOperation, completion: @escaping (OperationConditionResult) -> Void) {
-    let conditionName = self.name
-    let conditionKey = type(of: self).negatedConditionKey
-
-    condition.evaluate(for: operation) { (result) in
-      switch result {
-      case .satisfied:
-        let error = AdvancedOperationError.conditionFailed(message: "The condition has been negated.",
-                                                           userInfo: [operationConditionKey: conditionName,
-                                                                      conditionKey: operation.operationName])
-        return completion(.failed([error]))
-      case .failed:
-        return completion(.satisfied)
+    do {
+      let result = try block()
+      if result {
+        completion(.satisfied)
+      } else {
+        let conditionError = AdvancedOperationError.conditionFailed(message: "The BlockCondition has returned false.",
+                                                           userInfo: [operationConditionKey: name,])
+         completion(.failed([conditionError]))
       }
+    } catch {
+      let conditionError = AdvancedOperationError.conditionFailed(message: "The BlockCondition has thrown an exception.",
+                                                         userInfo: [operationConditionKey: name,
+                                                                    type(of: self).blockConditionKey: error])
+       completion(.failed([conditionError]))
     }
-  }
-
-}
-
-extension OperationCondition {
-
-  /// Returns a condition that negates the evaluation of the current condition.
-  public var negated: NegatedCondition<Self> {
-    return NegatedCondition(condition: self)
   }
 
 }
