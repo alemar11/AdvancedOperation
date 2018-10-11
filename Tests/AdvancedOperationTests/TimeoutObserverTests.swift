@@ -38,7 +38,7 @@ class TimeoutObserverTests: XCTestCase {
       waitForExpectations(timeout: 7) // The SleepyAsyncOperation will check the cancelled state after each interval (so 0, 5, 1, 1)
       XCTAssertTrue(operation.isCancelled)
       XCTAssertTrue(operation.isFinished)
-      XCTAssertTrue(operation.failed)
+      XCTAssertTrue(operation.isFailed)
     }
 
   func testSuccessfullOperation() {
@@ -53,7 +53,7 @@ class TimeoutObserverTests: XCTestCase {
     waitForExpectations(timeout: 7) // The SleepyAsyncOperation will check the cancelled state after each interval (so 0, 1, 1, 1)
     XCTAssertFalse(operation.isCancelled)
     XCTAssertTrue(operation.isFinished)
-    XCTAssertFalse(operation.failed)
+    XCTAssertFalse(operation.isFailed)
   }
 
 }

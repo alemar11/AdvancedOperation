@@ -129,7 +129,7 @@ open class AdvancedOperation: Operation {
   public private(set) var log = OSLog.disabled
 
   /// Returns `true` if the `AdvancedOperation` failed due to errors.
-  public var failed: Bool { return lock.synchronized { !errors.isEmpty } }
+  public var isFailed: Bool { return lock.synchronized { !errors.isEmpty } }
 
   /// A lock to guard reads and writes to the `_state` property
   private let lock = NSRecursiveLock()
@@ -194,7 +194,7 @@ open class AdvancedOperation: Operation {
     }
 
     // Bail out early if cancelled or if there are some errors.
-    guard !failed && !isCancelled else {
+    guard !isFailed && !isCancelled else {
       finish() // fires KVO
       return
     }

@@ -45,7 +45,7 @@ public struct NoFailedDependenciesCondition: OperationCondition {
       dependencies = dependencies.filter { !$0.isCancelled }
     }
 
-    let failures = dependencies.compactMap { $0 as? AdvancedOperation }.filter { $0.failed }
+    let failures = dependencies.compactMap { $0 as? AdvancedOperation }.filter { $0.isFailed }
 
     if !failures.isEmpty {
       let names = failures.map { $0.name ?? "\(type(of: $0))" }
