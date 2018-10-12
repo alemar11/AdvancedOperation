@@ -108,7 +108,7 @@ final class GatedOperationTests: XCTestCase {
 
     gateOperation.useOSLog(TestsLog)
 
-    let expectation1 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isFinished), object: operation, expectedValue: true)
+    let expectation1 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isCancelled), object: operation, expectedValue: true)
     let expectation2 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isFinished), object: gateOperation, expectedValue: true)
 
     queue.addOperation(gateOperation)
@@ -116,7 +116,45 @@ final class GatedOperationTests: XCTestCase {
 
     XCTAssertTrue(operation.isCancelled)
     XCTAssertTrue(operation.isFailed)
+    XCTAssertFalse(operation.isFinished) // cancelled before executing
     XCTAssertTrue(gateOperation.isCancelled)
+  }
+
+  func testMixingGatedOperationWithDependencies() {
+    let queue = AdvancedOperationQueue()
+
+    let operation1 = SleepyAsyncOperation()
+    let operation2 = SleepyAsyncOperation()
+    let operation3 = SleepyAsyncOperation()
+    let operation4 = DelayOperation(interval: 1)
+
+    let gateOperation3 = GatedOperation(operation3) { () -> Bool in
+      return false
+    }
+
+    gateOperation3.addDependency(operation1)
+    operation2.addDependency(operation1)
+
+    operation4.addDependency(gateOperation3)
+    operation4.addDependency(operation2)
+
+    operation4.addCondition(NoCancelledDependeciesCondition())
+
+    queue.addOperations([operation1, operation2, gateOperation3, operation4], waitUntilFinished: true)
+
+    XCTAssertTrue(operation1.isFinished)
+    XCTAssertFalse(operation1.isFailed)
+
+    XCTAssertTrue(operation2.isFinished)
+    XCTAssertFalse(operation2.isFailed)
+
+    XCTAssertTrue(gateOperation3.isFinished)
+    XCTAssertTrue(gateOperation3.isFailed)
+    XCTAssertTrue(gateOperation3.isCancelled)
+
+    XCTAssertTrue(operation4.isFinished)
+    XCTAssertTrue(operation4.isFailed)
+    XCTAssertTrue(operation4.isCancelled)
   }
 
 }

@@ -54,8 +54,14 @@ open class GatedOperation<T: AdvancedOperation>: WrappedOperation<T> {
       if !errors.isEmpty {
         assert(self === operation)
         if let this = operation as? GatedOperation {
+          assert(!this.operation.isExecuting, "The GateOperation conditions must be evaluated before its underlying operation gets executed.")
+          /// Canceling an operation that is currently in an operation queue, but not yet executing, makes it possible to remove the operation from the queue sooner than usual.
           this.operation.cancel(errors: errors)
-          this.operation.finish()
+
+          /// Left for reference
+          /// An operation that is not executing cannot be finished: this line generates a warning in the `testMixingGatedOperationWithDependencies` test.
+          ///
+          // this.operation.finish()
         }
       }
     }))
