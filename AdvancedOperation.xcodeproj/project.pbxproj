@@ -341,8 +341,6 @@
 		230B47FD200EABEE00F46852 /* AdvancedOperationTests */ = {
 			isa = PBXGroup;
 			children = (
-				2368702B206E4BE8004DFC17 /* BlockObserverTests.swift */,
-				232A53BE215B683A008B76AC /* UIBackgroundObserverTests.swift */,
 				23A813B52020D111008A98E0 /* AdvancedBlockOperationTests.swift */,
 				23856174200A87070061BAA1 /* AdvancedOperationQueueTests.swift */,
 				23F24D1D200771FA00B25A03 /* AdvancedOperationTests.swift */,
@@ -354,7 +352,7 @@
 				23AC3ADC2038A050003E1B15 /* OperationUtilsTests.swift */,
 				23A56BAB200F984400509A65 /* XCTestCase+Utils.swift */,
 				235D08CF206A80ED00F70142 /* Conditions */,
-				23B1BE0B216FA2AD002D0A5B /* TimeoutObserverTests.swift */,
+				23555F9621709396009FBE81 /* Observers */,
 			);
 			path = AdvancedOperationTests;
 			sourceTree = "<group>";
@@ -386,17 +384,17 @@
 		234130921F960612002BE7FC /* Sources */ = {
 			isa = PBXGroup;
 			children = (
-				23555F9521709069009FBE81 /* Obervers */,
 				23A813B02020CF1E008A98E0 /* AdvancedBlockOperation.swift */,
 				2372507C200524860000A442 /* AdvancedOperation.swift */,
 				236F54B5206CDE070079B033 /* AdvancedOperationError.swift */,
 				23F24D342007BC2100B25A03 /* AdvancedOperationQueue.swift */,
-				235D08A3206A494600F70142 /* Conditions */,
 				232F3AAD206041DE00FC45CB /* Globals.swift */,
 				2385616B200A6BF80061BAA1 /* GroupOperation.swift */,
 				23830CA220615E7C00F6EBC9 /* NSLock+Utils.swift */,
 				239BC52120EB7539009A36D9 /* Operation+Injection.swift */,
 				23F24D21200799B800B25A03 /* Operation+Utils.swift */,
+				235D08A3206A494600F70142 /* Conditions */,
+				23555F9521709069009FBE81 /* Obervers */,
 				236F54BA206CE5390079B033 /* Operations */,
 			);
 			path = Sources;
@@ -434,6 +432,16 @@
 				23B1BE06216F9FA9002D0A5B /* TimeoutObserver.swift */,
 			);
 			path = Obervers;
+			sourceTree = "<group>";
+		};
+		23555F9621709396009FBE81 /* Observers */ = {
+			isa = PBXGroup;
+			children = (
+				2368702B206E4BE8004DFC17 /* BlockObserverTests.swift */,
+				232A53BE215B683A008B76AC /* UIBackgroundObserverTests.swift */,
+				23B1BE0B216FA2AD002D0A5B /* TimeoutObserverTests.swift */,
+			);
+			path = Observers;
 			sourceTree = "<group>";
 		};
 		235D08A3206A494600F70142 /* Conditions */ = {
