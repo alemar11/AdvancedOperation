@@ -557,6 +557,8 @@ final class AdvancedOperationQueueTests: XCTestCase {
 
       queue = nil
       operation1 = nil
+
+      sleep(2)
     }
 
     XCTAssertNil(weakQueue, "The queue should be nilled out.")
