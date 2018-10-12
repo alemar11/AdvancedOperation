@@ -386,22 +386,18 @@
 		234130921F960612002BE7FC /* Sources */ = {
 			isa = PBXGroup;
 			children = (
-				2398EE7321664C03002305B6 /* _OperationQueueObserving.swift */,
+				23555F9521709069009FBE81 /* Obervers */,
 				23A813B02020CF1E008A98E0 /* AdvancedBlockOperation.swift */,
 				2372507C200524860000A442 /* AdvancedOperation.swift */,
 				236F54B5206CDE070079B033 /* AdvancedOperationError.swift */,
 				23F24D342007BC2100B25A03 /* AdvancedOperationQueue.swift */,
-				23F24D392007C03D00B25A03 /* BlockObserver.swift */,
 				235D08A3206A494600F70142 /* Conditions */,
 				232F3AAD206041DE00FC45CB /* Globals.swift */,
 				2385616B200A6BF80061BAA1 /* GroupOperation.swift */,
 				23830CA220615E7C00F6EBC9 /* NSLock+Utils.swift */,
 				239BC52120EB7539009A36D9 /* Operation+Injection.swift */,
 				23F24D21200799B800B25A03 /* Operation+Utils.swift */,
-				23F24D2F2007B0D200B25A03 /* OperationObserving.swift */,
 				236F54BA206CE5390079B033 /* Operations */,
-				232C452D215A898000B73E79 /* UIBackgroundObserver.swift */,
-				23B1BE06216F9FA9002D0A5B /* TimeoutObserver.swift */,
 			);
 			path = Sources;
 			sourceTree = "<group>";
@@ -426,6 +422,18 @@
 				2341308B1F9605F5002BE7FC /* Info.plist */,
 			);
 			path = Support;
+			sourceTree = "<group>";
+		};
+		23555F9521709069009FBE81 /* Obervers */ = {
+			isa = PBXGroup;
+			children = (
+				23F24D2F2007B0D200B25A03 /* OperationObserving.swift */,
+				2398EE7321664C03002305B6 /* _OperationQueueObserving.swift */,
+				23F24D392007C03D00B25A03 /* BlockObserver.swift */,
+				232C452D215A898000B73E79 /* UIBackgroundObserver.swift */,
+				23B1BE06216F9FA9002D0A5B /* TimeoutObserver.swift */,
+			);
+			path = Obervers;
 			sourceTree = "<group>";
 		};
 		235D08A3206A494600F70142 /* Conditions */ = {
