@@ -108,8 +108,8 @@ final class UIBackgroundObserverTests: XCTestCase {
     applicationEntersBackground(application: application)
     waitForExpectations(timeout: 10, handler: nil)
 
-    XCTAssertFalse(operation.isCancelled)
-    XCTAssertTrue(operation.isFinished)
+    XCTAssertFalse(operation.isCancelled, "The operation shouldn't be cancelled.")
+    XCTAssertTrue(operation.isFinished, "The operation should be finished.")
     XCTAssertEqual(backgroundTaskIdentifier, endedBackgroundTaskIdentifier)
     XCTAssertTrue(observer.backgroundTaskName.starts(with: "\(identifier).UIBackgroundObserver."))
     XCTAssertEqual(observer.taskIdentifier, .invalid)
