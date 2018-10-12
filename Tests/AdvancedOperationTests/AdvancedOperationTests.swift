@@ -283,6 +283,7 @@ final class AdvancedOperationTests: XCTestCase {
   func testObservers() {
     let expectation1 = expectation(description: "\(#function)\(#line)")
     let observer = MockObserver()
+    let expectation2 = observer.didFinishExpectation
     let operation = SleepyAsyncOperation()
     operation.addObserver(observer)
 
@@ -290,7 +291,8 @@ final class AdvancedOperationTests: XCTestCase {
 
     operation.start()
     operation.start()
-    waitForExpectations(timeout: 10)
+
+    wait(for: [expectation1, expectation2], timeout: 10, enforceOrder: true)
 
     XCTAssertEqual(observer.willExecutetCount, 1)
     XCTAssertEqual(observer.willFinishCount, 1)
@@ -300,31 +302,41 @@ final class AdvancedOperationTests: XCTestCase {
     XCTAssertEqual(operation.errors.count, 0)
   }
 
-  func testObserversWithCancelCommand() {
-    let expectation1 = expectation(description: "\(#function)\(#line)")
+  func testObserversWithMultipleCancelCommands() {
     let observer = MockObserver()
-    let operation = SleepyAsyncOperation()
+    let operation = RunUntilCancelledOperation()
     operation.addObserver(observer)
 
-    operation.completionBlock = { expectation1.fulfill() }
+    let expectation1 = keyValueObservingExpectation(for: operation, keyPath: #keyPath(AdvancedOperation.isFinished)) { (operation, changes) -> Bool in
+      if let operation = operation as? AdvancedOperation {
+        return operation.isFinished
+      }
+      return false
+    }
+
+    let expectation2 = observer.didFinishExpectation
 
     operation.start()
     operation.cancel()
     operation.cancel(error: MockError.cancelled(date: Date()))
 
-    waitForExpectations(timeout: 10)
+    wait(for: [expectation1, expectation2], timeout: 10, enforceOrder: true)
 
-    XCTAssertEqual(observer.willExecutetCount, 1)
-    XCTAssertEqual(observer.willFinishCount, 1)
-    XCTAssertEqual(observer.didFinishCount, 1)
-    XCTAssertEqual(observer.willCancelCount, 1)
-    XCTAssertEqual(observer.didCancelCount, 1)
+    XCTAssertEqual(observer.willExecutetCount, 1, "willExecutetCount should be called 1 time instead of \(observer.willExecutetCount)")
+
+    XCTAssertEqual(observer.willCancelCount, 1, "willCancelCount should be called 1 time instead of \(observer.willCancelCount)")
+    XCTAssertEqual(observer.didCancelCount, 1, "didCancelCount should be called 1 time instead of \(observer.didCancelCount)")
+
+    XCTAssertEqual(observer.willFinishCount, 1, "willFinishCount should be called 1 time instead of \(observer.willFinishCount)")
+    XCTAssertEqual(observer.didFinishCount, 1, "didFinishCount should be called 1 time instead of \(observer.didFinishCount)")
+
     XCTAssertEqual(operation.errors.count, 0)
   }
 
   func testObserversWithOperationProduction() {
     let expectation1 = expectation(description: "\(#function)\(#line)")
     let observer = MockObserver()
+    let expectation2 = observer.didFinishExpectation
     let operation = SleepyAsyncOperation()
     operation.addObserver(observer)
 
@@ -333,7 +345,7 @@ final class AdvancedOperationTests: XCTestCase {
     operation.produceOperation(BlockOperation { })
     operation.start()
 
-    waitForExpectations(timeout: 10)
+    wait(for: [expectation1, expectation2], timeout: 10, enforceOrder: true)
 
     XCTAssertEqual(observer.willExecutetCount, 1)
     XCTAssertEqual(observer.didProduceCount, 2)

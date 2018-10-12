@@ -221,6 +221,10 @@ final internal class MockObserver: OperationObserving {
   var _willCancelCount = 0
   var _didCancelCount = 0
 
+  /// This expectation gets fulfilled after the operationDidFinish(operation:errors:) is called.
+  /// - Note: The operation `completionBlock` is called before this expecations is fulfilled.
+  let didFinishExpectation = XCTestExpectation(description: "finishExpectation")
+
   var willExecutetCount: Int {
     get {
       return lock.synchronized { return _willExecutetCount }
@@ -289,30 +293,39 @@ final internal class MockObserver: OperationObserving {
 
   func operationWillExecute(operation: AdvancedOperation) {
     assert(operation.isExecuting)
+    XCTAssertEqual(willExecutetCount, 0)
     willExecutetCount += 1
-  }
-
-  func operationDidFinish(operation: AdvancedOperation, withErrors errors: [Error]) {
-    assert(operation.isFinished)
-    didFinishCount += 1
-  }
-
-  func operationDidCancel(operation: AdvancedOperation, withErrors errors: [Error]) {
-    assert(operation.isCancelled)
-    didCancelCount += 1
   }
 
   func operationWillFinish(operation: AdvancedOperation, withErrors errors: [Error]) {
     assert(!operation.isFinished)
+    XCTAssertEqual(willFinishCount, 0)
     willFinishCount += 1
+  }
+
+  func operationDidFinish(operation: AdvancedOperation, withErrors errors: [Error]) {
+    assert(operation.isFinished)
+    XCTAssertEqual(willFinishCount, 1)
+    XCTAssertEqual(didFinishCount, 0)
+    didFinishCount += 1
+    didFinishExpectation.fulfill()
   }
 
   func operationWillCancel(operation: AdvancedOperation, withErrors errors: [Error]) {
     assert(!operation.isFinished)
+    XCTAssertEqual(willCancelCount, 0)
     willCancelCount += 1
   }
 
+  func operationDidCancel(operation: AdvancedOperation, withErrors errors: [Error]) {
+    assert(operation.isCancelled)
+    XCTAssertEqual(willCancelCount, 1)
+    XCTAssertEqual(didCancelCount, 0)
+    didCancelCount += 1
+  }
+
   func operation(operation: AdvancedOperation, didProduce: Operation) {
+    XCTAssertEqual(willExecutetCount, 0)
     didProduceCount += 1
   }
 

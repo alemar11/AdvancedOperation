@@ -619,12 +619,14 @@ final class GroupOperationTests: XCTestCase {
     let exepectation1 = expectation(description: "\(#function)\(#line)")
 
     let observer = MockObserver()
+    let expectation2 = observer.didFinishExpectation
     group.addObserver(observer)
 
     group.addCompletionBlock { exepectation1.fulfill() }
     group.start()
     group.qualityOfService = .userInitiated
-    waitForExpectations(timeout: 10)
+
+    wait(for: [exepectation1, expectation2], timeout: 10, enforceOrder: true)
 
     XCTAssertEqual(observer.willExecutetCount, 1)
     XCTAssertEqual(observer.didFinishCount, 1)

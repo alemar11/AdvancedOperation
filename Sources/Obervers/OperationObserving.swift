@@ -40,6 +40,7 @@ public protocol OperationWillFinishObserving: OperationObservingType {
 public protocol OperationDidFinishObserving: OperationObservingType {
   /// Invoked as an `Operation` finishes, along with any errors produced during execution.
   /// - Note: An operation can finish without starting (i.e. if cancelled before its execution)
+  /// - Warning: This method will be invoked **after** the operation `completionBlock`.
   func operationDidFinish(operation: AdvancedOperation, withErrors errors: [Error])
 }
 
