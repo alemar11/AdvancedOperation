@@ -144,6 +144,7 @@ open class AdvancedOperation: Operation {
   private var _cancelling = false
 
   /// Returns `true` if the `AdvancedOperation` is cancelled.
+  @objc
   private var _cancelled = false
 
   /// Errors generated during the execution.
@@ -167,6 +168,8 @@ open class AdvancedOperation: Operation {
          #keyPath(Operation.isExecuting),
          #keyPath(Operation.isFinished):
       return Set([#keyPath(state)])
+    case #keyPath(Operation.isCancelled):
+       return Set([#keyPath(state), #keyPath(_cancelled)])
     default:
       return super.keyPathsForValuesAffectingValue(forKey: key)
     }
@@ -195,6 +198,7 @@ open class AdvancedOperation: Operation {
 
     // Bail out early if cancelled or if there are some errors.
     guard !isFailed && !isCancelled else {
+      _cancelled = true // an operation not yet cancelled but starting with errors should finish as cancelled
       finish() // fires KVO
       return
     }
@@ -218,15 +222,23 @@ open class AdvancedOperation: Operation {
     fatalError("\(type(of: self)) must override `main()`.")
   }
 
-  public func cancel(error: Error? = nil) {
-    _cancel(error: error)
+  public func cancel(error: Error? = .none) {
+    if let error = error {
+      _cancel(errors: [error])
+    } else {
+      _cancel()
+    }
+  }
+
+  public func cancel(errors: [Error]? = .none) {
+    _cancel(errors: errors)
   }
 
   open override func cancel() {
     _cancel()
   }
 
-  private func _cancel(error: Error? = nil) {
+  private func _cancel(errors cancelErrors: [Error]? = nil) {
     let canBeCancelled = lock.synchronized { () -> Bool in
       guard !_finishing && !isFinished else { return false }
       guard !_cancelling && !_cancelled else { return false }
@@ -236,17 +248,17 @@ open class AdvancedOperation: Operation {
 
     guard canBeCancelled else { return }
 
-    var localErrors = errors
-    if let error = error {
-      localErrors.append(error)
+    var localErrors = self.errors
+    if let cancelErrors = cancelErrors {
+      localErrors.append(contentsOf: cancelErrors)
     }
 
     willChangeValue(forKey: #keyPath(AdvancedOperation.isCancelled))
     willCancel(errors: localErrors) // observers
 
     lock.synchronized {
-      if let error = error {
-        self.errors.append(error)
+      if let cancelErrors = cancelErrors {
+        self.errors.append(contentsOf: cancelErrors)
       }
       if _state == .pending { // conditions will not be evaluated anymore
         _state = .ready
@@ -338,8 +350,12 @@ open class AdvancedOperation: Operation {
     willEvaluateConditions()
 
     type(of: self).evaluate(conditions, operation: self) { [weak self] errors in
-      self?.errors.append(contentsOf: errors)
-      self?.state = .ready
+      guard let self = self else {
+        return
+      }
+      self.errors.append(contentsOf: errors)
+      self.didFinishConditionsEvaluation(errors: errors)
+      self.state = .ready
     }
   }
 
@@ -349,6 +365,12 @@ open class AdvancedOperation: Operation {
   /// - Note: Calling the `super` implementation will keep the logging messages.
   open func operationWillExecute() {
       os_log("%{public}s has started.", log: log, type: .info, operationName)
+  }
+
+  /// Subclass this method to know if the operation has finished the evaluation of its conditions.
+  /// - Note: Calling the `super` implementation will keep the logging messages.
+  open func operationDidFinishConditionsEvaluation(errors: [Error]) {
+    os_log("%{public}s has failed the conditions evaluation with %{public}d errors.", log: log, type: .info, operationName, errors.count)
   }
 
   /// Subclass this method to know when the operation has produced another `Operation`.
@@ -441,8 +463,20 @@ extension AdvancedOperation {
     return observers.compactMap { $0 as? OperationDidFinishObserving }
   }
 
+  internal var didFinishConditionsEvaluationObservers: [OperationDidFinishConditionsEvaluationsObserving] {
+    return observers.compactMap { $0 as? OperationDidFinishConditionsEvaluationsObserving }
+  }
+
   private func willEvaluateConditions() {
     operationWillEvaluateConditions()
+  }
+
+  private func didFinishConditionsEvaluation(errors: [Error]) {
+    operationDidFinishConditionsEvaluation(errors: errors)
+
+    for observer in didFinishConditionsEvaluationObservers {
+      observer.operationDidFailConditionsEvaluations(operation: self, withErrors: errors)
+    }
   }
 
   private func willExecute() {
