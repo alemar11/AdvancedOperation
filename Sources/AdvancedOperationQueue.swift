@@ -49,8 +49,10 @@ open class AdvancedOperationQueue: OperationQueue {
 
   private let lock = NSRecursiveLock()
 
-  public init(exclusivityManager: ExclusivityManager = .sharedInstance) {
+  public init(exclusivityManager: ExclusivityManager = .sharedInstance, underlyingQueue: DispatchQueue? = .none) {
     self.exclusivityManager = exclusivityManager
+    super.init()
+    self.underlyingQueue = underlyingQueue
   }
 
   // swiftlint:disable:next cyclomatic_complexity
