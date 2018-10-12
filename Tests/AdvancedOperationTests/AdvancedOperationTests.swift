@@ -292,7 +292,7 @@ final class AdvancedOperationTests: XCTestCase {
     operation.start()
     operation.start()
 
-    wait(for: [expectation1, expectation2], timeout: 10, enforceOrder: true)
+    wait(for: [expectation1, expectation2], timeout: 10)
 
     XCTAssertEqual(observer.willExecutetCount, 1)
     XCTAssertEqual(observer.willFinishCount, 1)
@@ -320,7 +320,7 @@ final class AdvancedOperationTests: XCTestCase {
     operation.cancel()
     operation.cancel(error: MockError.cancelled(date: Date()))
 
-    wait(for: [expectation1, expectation2], timeout: 10, enforceOrder: true)
+    wait(for: [expectation1, expectation2], timeout: 10)
 
     XCTAssertEqual(observer.willExecutetCount, 1, "willExecutetCount should be called 1 time instead of \(observer.willExecutetCount)")
 
@@ -345,7 +345,7 @@ final class AdvancedOperationTests: XCTestCase {
     operation.produceOperation(BlockOperation { })
     operation.start()
 
-    wait(for: [expectation1, expectation2], timeout: 10, enforceOrder: true)
+    wait(for: [expectation1, expectation2], timeout: 10)
 
     XCTAssertEqual(observer.willExecutetCount, 1)
     XCTAssertEqual(observer.didProduceCount, 2)

@@ -626,7 +626,7 @@ final class GroupOperationTests: XCTestCase {
     group.start()
     group.qualityOfService = .userInitiated
 
-    wait(for: [exepectation1, expectation2], timeout: 10, enforceOrder: true)
+    wait(for: [exepectation1, expectation2], timeout: 10)
 
     XCTAssertEqual(observer.willExecutetCount, 1)
     XCTAssertEqual(observer.didFinishCount, 1)
