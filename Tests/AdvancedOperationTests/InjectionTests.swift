@@ -131,7 +131,7 @@ class InjectionTests: XCTestCase {
     XCTAssertTrue(operation2.isCancelled)
   }
 
-  func testInjectionInputSuccessFullRequirement() {
+  func testInjectionInputSuccessFulRequirement() {
     let expectation1 = self.expectation(description: "\(#function)\(#line)")
     let operation1 = IntToStringOperation() // no input -> fails
     let operation2 = StringToIntOperation()

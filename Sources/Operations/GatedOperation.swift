@@ -23,3 +23,55 @@
 
 import Foundation
 
+open class GatedOperation<T: AdvancedOperation>: WrappedOperation<T> {
+  
+  public typealias Block = BlockCondition.Block
+  
+  public init(_ operation: T, exclusivityManager: ExclusivityManager = .sharedInstance, underlyingQueue: DispatchQueue? = .none, gate: @escaping Block) {
+    let condition = BlockCondition(block: gate)
+    
+    /// There are 2 possibile scenarios:
+    /// A - GatedOperation is not run in a queue.
+    /// B - GatdOperation is run in a queue.
+    /// For both of them, is the gate is closed, both the GateOpeation and its undelrying operation will be marked as cancelled.
+    
+    /// (A) if the GatedOperation is not added to a queue, the condition will be evaluated internally.
+    operation.addCondition(condition)
+    
+    super.init(operation: operation, exclusivityManager: exclusivityManager,underlyingQueue: underlyingQueue)
+    
+    /// (A) It operation is being evaluated internally, in case of failure the GatedOperation will be marked as cancelled.
+    operation.addObserver(DidFinishConditionsEvaluationObservers(closure: { [weak self] (operation, errors) in
+      if !errors.isEmpty {
+        self?._requiresCancellationBeforeFinishing = true
+      }
+    }))
+    
+    /// (B) If the gate is closed and the GatedOperation is being run on a queue, this observer will flag the undelrying operation as cancelled (for consistency).
+    addObserver(DidFinishConditionsEvaluationObservers(closure: { [weak self] (operation, errors) in
+      if !errors.isEmpty {
+        assert(self === operation)
+        if let this = operation as? GatedOperation {
+          this.operation.cancel(errors: errors)
+          this.operation.finish()
+        }
+      }
+    }))
+    
+    addCondition(BlockCondition(block: gate))
+    
+    name = "GatedOperation <\(operation.operationName)>"
+  }
+}
+
+private struct DidFinishConditionsEvaluationObservers: OperationDidFinishConditionsEvaluationsObserving {
+  let closure: (AdvancedOperation, [Error]) -> Void
+  
+  init(closure: @escaping (AdvancedOperation, [Error]) -> Void) {
+    self.closure = closure
+  }
+  
+  func operationDidFailConditionsEvaluations(operation: AdvancedOperation, withErrors errors: [Error]) {
+    closure(operation, errors)
+  }
+}

@@ -41,7 +41,7 @@ class TimeoutObserverTests: XCTestCase {
       XCTAssertTrue(operation.isFailed)
     }
 
-  func testSuccessfullOperation() {
+  func testSuccessfulOperation() {
     let expectation = self.expectation(description: "\(#function)\(#line)")
     let operation = SleepyAsyncOperation(interval1: 1, interval2: 1, interval3: 1)
     operation.name = "operation"

@@ -56,11 +56,12 @@ final class NoCancelledDependenciesConditionTests: XCTestCase {
     operation4.cancel()
 
     queue.addOperations([operation1, operation2, operation3, operation4], waitUntilFinished: true)
+
     XCTAssertTrue(operation4.isCancelled)
     XCTAssertTrue(operation3.isFailed)
     XCTAssertFalse(operation2.isCancelled)
-    XCTAssertFalse(operation1.isFailed)
-    XCTAssertFalse(operation1.isCancelled)
+    XCTAssertTrue(operation1.isFailed)
+    XCTAssertTrue(operation1.isCancelled)
   }
 
   func testAllOperationCancelled() {
@@ -136,7 +137,7 @@ final class NoCancelledDependenciesConditionTests: XCTestCase {
     XCTAssertFalse(operation2.isFailed)
 
     XCTAssertTrue(operation1.isFailed)
-    XCTAssertFalse(operation1.isCancelled)
+    XCTAssertTrue(operation1.isCancelled)
   }
 
 }

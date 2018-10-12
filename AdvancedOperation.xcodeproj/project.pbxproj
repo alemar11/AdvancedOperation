@@ -54,6 +54,16 @@
 		23555F9A2170A828009FBE81 /* GatedOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23555F982170A828009FBE81 /* GatedOperation.swift */; };
 		23555F9B2170A828009FBE81 /* GatedOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23555F982170A828009FBE81 /* GatedOperation.swift */; };
 		23555F9C2170A828009FBE81 /* GatedOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23555F982170A828009FBE81 /* GatedOperation.swift */; };
+		23555F9E2170B961009FBE81 /* WrappedOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23555F9D2170B961009FBE81 /* WrappedOperation.swift */; };
+		23555F9F2170B961009FBE81 /* WrappedOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23555F9D2170B961009FBE81 /* WrappedOperation.swift */; };
+		23555FA02170B961009FBE81 /* WrappedOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23555F9D2170B961009FBE81 /* WrappedOperation.swift */; };
+		23555FA12170B961009FBE81 /* WrappedOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23555F9D2170B961009FBE81 /* WrappedOperation.swift */; };
+		23555FA82170C7E0009FBE81 /* WrappedOperationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23555FA32170C7A1009FBE81 /* WrappedOperationTests.swift */; };
+		23555FA92170C7E0009FBE81 /* WrappedOperationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23555FA32170C7A1009FBE81 /* WrappedOperationTests.swift */; };
+		23555FAA2170C7E0009FBE81 /* WrappedOperationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23555FA32170C7A1009FBE81 /* WrappedOperationTests.swift */; };
+		23555FAC2170CB05009FBE81 /* GatedOperationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23555FAB2170CB05009FBE81 /* GatedOperationTests.swift */; };
+		23555FAD2170CB05009FBE81 /* GatedOperationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23555FAB2170CB05009FBE81 /* GatedOperationTests.swift */; };
+		23555FAE2170CB05009FBE81 /* GatedOperationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23555FAB2170CB05009FBE81 /* GatedOperationTests.swift */; };
 		2359AB4E216212CD00AC09D8 /* UIBackgroundObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 232C452D215A898000B73E79 /* UIBackgroundObserver.swift */; };
 		235D08AB206A498400F70142 /* ExclusivityManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 235D08AA206A494E00F70142 /* ExclusivityManager.swift */; };
 		235D08AC206A498400F70142 /* NegatedCondition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 235D08A6206A494D00F70142 /* NegatedCondition.swift */; };
@@ -238,6 +248,9 @@
 		234130B41F9606CD002BE7FC /* AdvancedOperation.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = AdvancedOperation.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		234130B71F9606CD002BE7FC /* Info-tvOS.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Info-tvOS.plist"; sourceTree = "<group>"; };
 		23555F982170A828009FBE81 /* GatedOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GatedOperation.swift; sourceTree = "<group>"; };
+		23555F9D2170B961009FBE81 /* WrappedOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WrappedOperation.swift; sourceTree = "<group>"; };
+		23555FA32170C7A1009FBE81 /* WrappedOperationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WrappedOperationTests.swift; sourceTree = "<group>"; };
+		23555FAB2170CB05009FBE81 /* GatedOperationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GatedOperationTests.swift; sourceTree = "<group>"; };
 		235D08A4206A494D00F70142 /* NoCancelledDependenciesCondition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoCancelledDependenciesCondition.swift; sourceTree = "<group>"; };
 		235D08A5206A494D00F70142 /* NoFailedDependenciesCondition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoFailedDependenciesCondition.swift; sourceTree = "<group>"; };
 		235D08A6206A494D00F70142 /* NegatedCondition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NegatedCondition.swift; sourceTree = "<group>"; };
@@ -350,7 +363,7 @@
 				23856174200A87070061BAA1 /* AdvancedOperationQueueTests.swift */,
 				23F24D1D200771FA00B25A03 /* AdvancedOperationTests.swift */,
 				23F24D2B2007A33F00B25A03 /* DelayOperationTests.swift */,
-				23856170200A6E9A0061BAA1 /* GroupOperationTests.swift */,
+				23555FA22170C789009FBE81 /* Operations */,
 				239BC52620EB7C47009A36D9 /* InjectionTests.swift */,
 				23856178200A873C0061BAA1 /* Mocks.swift */,
 				235D08D0206A941B00F70142 /* OperationStateTests.swift */,
@@ -449,6 +462,16 @@
 			path = Observers;
 			sourceTree = "<group>";
 		};
+		23555FA22170C789009FBE81 /* Operations */ = {
+			isa = PBXGroup;
+			children = (
+				23856170200A6E9A0061BAA1 /* GroupOperationTests.swift */,
+				23555FA32170C7A1009FBE81 /* WrappedOperationTests.swift */,
+				23555FAB2170CB05009FBE81 /* GatedOperationTests.swift */,
+			);
+			path = Operations;
+			sourceTree = "<group>";
+		};
 		235D08A3206A494600F70142 /* Conditions */ = {
 			isa = PBXGroup;
 			children = (
@@ -484,6 +507,7 @@
 			children = (
 				23F24D2620079CDE00B25A03 /* DelayOperation.swift */,
 				23555F982170A828009FBE81 /* GatedOperation.swift */,
+				23555F9D2170B961009FBE81 /* WrappedOperation.swift */,
 			);
 			path = Operations;
 			sourceTree = "<group>";
@@ -852,6 +876,7 @@
 				23F24D2720079CDE00B25A03 /* DelayOperation.swift in Sources */,
 				2372507D200524860000A442 /* AdvancedOperation.swift in Sources */,
 				23F24D22200799B800B25A03 /* Operation+Utils.swift in Sources */,
+				23555F9E2170B961009FBE81 /* WrappedOperation.swift in Sources */,
 				235D08AB206A498400F70142 /* ExclusivityManager.swift in Sources */,
 				232F3AAE206041DE00FC45CB /* Globals.swift in Sources */,
 				2398EE7521664C03002305B6 /* _OperationQueueObserving.swift in Sources */,
@@ -884,6 +909,7 @@
 				23F24D2820079CDE00B25A03 /* DelayOperation.swift in Sources */,
 				2372507E200524860000A442 /* AdvancedOperation.swift in Sources */,
 				23F24D23200799B800B25A03 /* Operation+Utils.swift in Sources */,
+				23555F9F2170B961009FBE81 /* WrappedOperation.swift in Sources */,
 				235D08B2206A498400F70142 /* ExclusivityManager.swift in Sources */,
 				232F3AAF206041DE00FC45CB /* Globals.swift in Sources */,
 				2398EE7621664C03002305B6 /* _OperationQueueObserving.swift in Sources */,
@@ -916,6 +942,7 @@
 				23F24D2920079CDE00B25A03 /* DelayOperation.swift in Sources */,
 				2372507F200524860000A442 /* AdvancedOperation.swift in Sources */,
 				23F24D24200799B800B25A03 /* Operation+Utils.swift in Sources */,
+				23555FA02170B961009FBE81 /* WrappedOperation.swift in Sources */,
 				235D08B9206A498500F70142 /* ExclusivityManager.swift in Sources */,
 				232F3AB0206041DE00FC45CB /* Globals.swift in Sources */,
 				2398EE7721664C03002305B6 /* _OperationQueueObserving.swift in Sources */,
@@ -948,6 +975,7 @@
 				23F24D2A20079CDE00B25A03 /* DelayOperation.swift in Sources */,
 				23725080200524860000A442 /* AdvancedOperation.swift in Sources */,
 				23F24D25200799B800B25A03 /* Operation+Utils.swift in Sources */,
+				23555FA12170B961009FBE81 /* WrappedOperation.swift in Sources */,
 				235D08C0206A498500F70142 /* ExclusivityManager.swift in Sources */,
 				232F3AB1206041DE00FC45CB /* Globals.swift in Sources */,
 				2398EE7821664C03002305B6 /* _OperationQueueObserving.swift in Sources */,
@@ -994,9 +1022,11 @@
 				235D08D3206A941B00F70142 /* OperationStateTests.swift in Sources */,
 				23AC3ADF2038A050003E1B15 /* OperationUtilsTests.swift in Sources */,
 				23856173200A6E9A0061BAA1 /* GroupOperationTests.swift in Sources */,
+				23555FAA2170C7E0009FBE81 /* WrappedOperationTests.swift in Sources */,
 				235F7B0B206B883800218F32 /* NegatedConditionTests.swift in Sources */,
 				2385617B200A873C0061BAA1 /* Mocks.swift in Sources */,
 				23B1BE0E216FA2AD002D0A5B /* TimeoutObserverTests.swift in Sources */,
+				23555FAE2170CB05009FBE81 /* GatedOperationTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1021,9 +1051,11 @@
 				235D08D1206A941B00F70142 /* OperationStateTests.swift in Sources */,
 				23AC3ADD2038A050003E1B15 /* OperationUtilsTests.swift in Sources */,
 				23856171200A6E9A0061BAA1 /* GroupOperationTests.swift in Sources */,
+				23555FA82170C7E0009FBE81 /* WrappedOperationTests.swift in Sources */,
 				235F7B09206B883800218F32 /* NegatedConditionTests.swift in Sources */,
 				23856179200A873C0061BAA1 /* Mocks.swift in Sources */,
 				23B1BE0C216FA2AD002D0A5B /* TimeoutObserverTests.swift in Sources */,
+				23555FAC2170CB05009FBE81 /* GatedOperationTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1048,9 +1080,11 @@
 				235D08D2206A941B00F70142 /* OperationStateTests.swift in Sources */,
 				23AC3ADE2038A050003E1B15 /* OperationUtilsTests.swift in Sources */,
 				23856172200A6E9A0061BAA1 /* GroupOperationTests.swift in Sources */,
+				23555FA92170C7E0009FBE81 /* WrappedOperationTests.swift in Sources */,
 				235F7B0A206B883800218F32 /* NegatedConditionTests.swift in Sources */,
 				2385617A200A873C0061BAA1 /* Mocks.swift in Sources */,
 				23B1BE0D216FA2AD002D0A5B /* TimeoutObserverTests.swift in Sources */,
+				23555FAD2170CB05009FBE81 /* GatedOperationTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
