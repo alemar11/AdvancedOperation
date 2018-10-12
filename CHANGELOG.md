@@ -1,5 +1,10 @@
 # Changelog
 
+### 1.2.0 (WIP
+)
+- Added `BlockCondition` and `TimeoutObserver`.
+- Bugfixes.
+
 ### 1.1.0
 
 - Added a `UIBackgroundObserver` to let an `AdvancedOperation` run in background (for a small amount of time) on `iOS` and `tvOS`.
