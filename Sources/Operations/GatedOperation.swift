@@ -23,6 +23,8 @@
 
 import Foundation
 
+/// An operation whose the underlying operation execution depends on a the result (Bool) of a block.
+/// - Note: if the result is `false` or an error is thrown, the operation will be cancelled.
 open class GatedOperation<T: AdvancedOperation>: WrappedOperation<T> {
   
   public typealias Block = BlockCondition.Block
@@ -40,15 +42,15 @@ open class GatedOperation<T: AdvancedOperation>: WrappedOperation<T> {
     
     super.init(operation: operation, exclusivityManager: exclusivityManager,underlyingQueue: underlyingQueue)
     
-    /// (A) It operation is being evaluated internally, in case of failure the GatedOperation will be marked as cancelled.
-    operation.addObserver(DidFinishConditionsEvaluationObservers(closure: { [weak self] (operation, errors) in
+    /// (A) If the operation is being evaluated internally, in case of failure the GatedOperation will be marked as cancelled.
+    operation.addObserver(DidFinishConditionsEvaluationObserver(closure: { [weak self] (operation, errors) in
       if !errors.isEmpty {
         self?.requiresCancellationBeforeFinishing = true
       }
     }))
     
     /// (B) If the gate is closed and the GatedOperation is being run on a queue, this observer will flag the undelrying operation as cancelled (for consistency).
-    addObserver(DidFinishConditionsEvaluationObservers(closure: { [weak self] (operation, errors) in
+    addObserver(DidFinishConditionsEvaluationObserver(closure: { [weak self] (operation, errors) in
       if !errors.isEmpty {
         assert(self === operation)
         if let this = operation as? GatedOperation {
@@ -64,8 +66,8 @@ open class GatedOperation<T: AdvancedOperation>: WrappedOperation<T> {
   }
 }
 
-private struct DidFinishConditionsEvaluationObservers: OperationDidFinishConditionsEvaluationsObserving {
-  let closure: (AdvancedOperation, [Error]) -> Void
+private struct DidFinishConditionsEvaluationObserver: OperationDidFinishConditionsEvaluationsObserving {
+  private let closure: (AdvancedOperation, [Error]) -> Void
   
   init(closure: @escaping (AdvancedOperation, [Error]) -> Void) {
     self.closure = closure
