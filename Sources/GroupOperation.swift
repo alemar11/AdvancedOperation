@@ -68,7 +68,7 @@ open class GroupOperation: AdvancedOperation {
   }
 
   /// If true, the finishing operation should fire a cancel to complete the cancellation procedure.
-  private var _requiresCancellationBeforeFinishing = false
+  internal var _requiresCancellationBeforeFinishing = false
 
   private var _aggregatedErrors = [Error]()
 
@@ -86,18 +86,30 @@ open class GroupOperation: AdvancedOperation {
 
   // MARK: - Initialization
 
-  public convenience init(exclusivityManager: ExclusivityManager = .sharedInstance, operations: Operation...) {
-    self.init(exclusivityManager: exclusivityManager, operations: operations)
+  /// Creates a `GroupOperation`instance.
+  ///
+  /// - Parameters:
+  ///   - operations: The operations of which the `GroupOperation` is composed of.
+  ///   - exclusivityManager: An instance of `ExclusivityManager`.
+  ///   - underlyingQueue: An optional DispatchQueue which defaults to nil, this parameter is set as the underlying queue of the group's own `AdvancedOperationQueue`.
+  public convenience init(operations: Operation..., exclusivityManager: ExclusivityManager = .sharedInstance, underlyingQueue: DispatchQueue? = .none) {
+    self.init(operations: operations, exclusivityManager: exclusivityManager, underlyingQueue: underlyingQueue)
   }
 
-  public init(exclusivityManager: ExclusivityManager = .sharedInstance, operations: [Operation]) {
+  /// Creates a `GroupOperation`instance.
+  ///
+  /// - Parameters:
+  ///   - operations: The operations of which the `GroupOperation` is composed of.
+  ///   - exclusivityManager: An instance of `ExclusivityManager`.
+  ///   - underlyingQueue: An optional DispatchQueue which defaults to nil, this parameter is set as the underlying queue of the group's own `AdvancedOperationQueue`.
+  public init(operations: [Operation], exclusivityManager: ExclusivityManager = .sharedInstance, underlyingQueue: DispatchQueue? = .none) {
     self.exclusivityManager = exclusivityManager
-    self.underlyingOperationQueue = AdvancedOperationQueue(exclusivityManager: exclusivityManager)
+    self.underlyingOperationQueue = AdvancedOperationQueue(exclusivityManager: exclusivityManager, underlyingQueue: underlyingQueue)
 
     super.init()
+    
     isSuspended = true
     underlyingOperationQueue.delegate = self
-
     finishingOperation.name = "Finishing Operation"
     finishingOperation.addDependency(startingOperation)
     finishingOperation.completionBlock = { [weak self] in
@@ -129,8 +141,8 @@ open class GroupOperation: AdvancedOperation {
     guard !isCancelling && !isCancelled && !isFinished else { return }
 
     lock.synchronized {
-    _requiresCancellationBeforeFinishing = true
-    _temporaryCancelError = error
+      _requiresCancellationBeforeFinishing = true
+      _temporaryCancelError = error
     }
 
     startingOperation.cancel()
