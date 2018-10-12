@@ -105,11 +105,11 @@ public final class UIBackgroundObserver: NSObject {
 
 extension UIBackgroundObserver: OperationDidFinishObserving {
 
-  public func operationWillExecute(operation: Operation) {
+  public func operationWillExecute(operation: AdvancedOperation) {
     isExecuting = true
   }
 
-  public func operationDidFinish(operation: Operation, withErrors errors: [Error]) {
+  public func operationDidFinish(operation: AdvancedOperation, withErrors errors: [Error]) {
     isExecuting = false
     endBackgroundTask()
   }
