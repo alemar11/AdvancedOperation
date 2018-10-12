@@ -114,6 +114,16 @@ final class AdvancedOperationTests: XCTestCase {
     XCTAssertTrue(operation.isFinished)
   }
 
+  func testCancelWithoutStarting() {
+    let operation = SleepyAsyncOperation()
+    //TODO: add KVO expectation
+    XCTAssertTrue(operation.isReady)
+    operation.cancel()
+    XCTAssertTrue(operation.isCancelled)
+    XCTAssertTrue(operation.isCancelled)
+    XCTAssertFalse(operation.isFinished)
+  }
+
   func testCancelBeforeStart() {
     let expectation1 = expectation(description: "\(#function)\(#line)")
 

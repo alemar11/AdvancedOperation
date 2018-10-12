@@ -122,7 +122,7 @@ final class GatedOperationTests: XCTestCase {
 
   func testMixingGatedOperationWithDependencies() {
     let queue = AdvancedOperationQueue()
-
+    //TODO: https://stackoverflow.com/questions/48137896/operation-went-isfinished-yes-without-being-started-by-the-queue-it-is-in
     let operation1 = SleepyAsyncOperation()
     let operation2 = SleepyAsyncOperation()
     let operation3 = SleepyAsyncOperation()
