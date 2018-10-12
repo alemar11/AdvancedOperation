@@ -67,8 +67,21 @@ open class GroupOperation: AdvancedOperation {
     }
   }
 
+  internal var requiresCancellationBeforeFinishing: Bool {
+    get {
+      return lock.synchronized { () -> Bool in
+        return _requiresCancellationBeforeFinishing }
+    }
+
+    set {
+      return lock.synchronized {
+        _requiresCancellationBeforeFinishing = newValue
+      }
+    }
+  }
+
   /// If true, the finishing operation should fire a cancel to complete the cancellation procedure.
-  internal var _requiresCancellationBeforeFinishing = false
+  private var _requiresCancellationBeforeFinishing = false
 
   private var _aggregatedErrors = [Error]()
 

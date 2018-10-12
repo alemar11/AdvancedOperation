@@ -43,7 +43,7 @@ open class GatedOperation<T: AdvancedOperation>: WrappedOperation<T> {
     /// (A) It operation is being evaluated internally, in case of failure the GatedOperation will be marked as cancelled.
     operation.addObserver(DidFinishConditionsEvaluationObservers(closure: { [weak self] (operation, errors) in
       if !errors.isEmpty {
-        self?._requiresCancellationBeforeFinishing = true
+        self?.requiresCancellationBeforeFinishing = true
       }
     }))
     
