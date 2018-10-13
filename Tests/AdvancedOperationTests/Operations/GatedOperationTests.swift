@@ -48,6 +48,26 @@ final class GatedOperationTests: XCTestCase {
     XCTAssertTrue(gateOperation.errors.isEmpty)
   }
 
+  func testOpenedGateAndGatedOperationStartedAndFinishedManually() {
+    let operation = SleepyAsyncOperation(interval1: 1, interval2: 1, interval3: 1)
+    let gateOperation = GatedOperation(operation) { () -> Bool in
+      return true
+    }
+
+    let expectation1 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isFinished), object: operation, expectedValue: true)
+    let expectation2 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isFinished), object: gateOperation, expectedValue: true)
+
+    gateOperation.start()
+    gateOperation.finish()
+    wait(for: [expectation1, expectation2], timeout: 10)
+
+    XCTAssertFalse(operation.isCancelled)
+    XCTAssertFalse(gateOperation.isCancelled)
+
+    XCTAssertTrue(operation.errors.isEmpty)
+    XCTAssertTrue(gateOperation.errors.isEmpty)
+  }
+
   func testOpenedGateAndFailingUnderlyingOperation() {
     let operation = FailingAsyncOperation(errors: [MockError.test, MockError.failed])
     let gateOperation = GatedOperation(operation) { () -> Bool in

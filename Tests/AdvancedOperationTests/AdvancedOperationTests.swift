@@ -116,7 +116,7 @@ final class AdvancedOperationTests: XCTestCase {
 
   func testCancelWithoutStarting() {
     let operation = SleepyAsyncOperation()
-    
+
     XCTAssertTrue(operation.isReady)
     let expectation = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isCancelled), object: operation, expectedValue: true)
     operation.cancel()
