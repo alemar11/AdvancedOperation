@@ -1,4 +1,4 @@
-// 
+//
 // AdvancedOperation
 //
 // Copyright © 2016-2018 Tinrobots.
@@ -24,62 +24,89 @@
 import Foundation
 
 /// An operation whose the underlying operation execution depends on a the result (Bool) of a block.
+///
+/// Even if the same result can be achieved by running an `AdvancedOperation` with a `BlockCondition` in an `AdvancedOperationQueue`,
+/// a `GatedOperation` doesn't require any queue to run.
+///
 /// - Note: if the result is `false` or an error is thrown, the operation will be cancelled.
-open class GatedOperation<T: AdvancedOperation>: WrappedOperation<T> {
-  
+open class GatedOperation<T: AdvancedOperation>: AdvancedOperation {
   public typealias Block = BlockCondition.Block
-  
-  public init(_ operation: T, exclusivityManager: ExclusivityManager = .sharedInstance, underlyingQueue: DispatchQueue? = .none, gate: @escaping Block) {
-    let condition = BlockCondition(block: gate)
-    
-    /// There are 2 possibile scenarios:
-    /// A - GatedOperation is not run in a queue.
-    /// B - GatdOperation is run in a queue.
-    /// For both of them, is the gate is closed, both the GateOpeation and its undelrying operation will be marked as cancelled.
-    
-    /// (A) if the GatedOperation is not added to a queue, the condition will be evaluated internally.
-    operation.addCondition(condition)
-    
-    super.init(operation: operation, exclusivityManager: exclusivityManager,underlyingQueue: underlyingQueue)
-    
-    /// (A) If the operation is being evaluated internally, in case of failure the GatedOperation will be marked as cancelled.
-    operation.addObserver(DidFinishConditionsEvaluationObserver(closure: { [weak self] (operation, errors) in
-      if !errors.isEmpty {
-        self?.requiresCancellationBeforeFinishing = true
-      }
-    }))
-    
-    /// (B) If the gate is closed and the GatedOperation is being run on a queue, this observer will flag the undelrying operation as cancelled (for consistency).
-    addObserver(DidFinishConditionsEvaluationObserver(closure: { [weak self] (operation, errors) in
-      if !errors.isEmpty {
-        assert(self === operation)
-        if let this = operation as? GatedOperation {
-          assert(!this.operation.isExecuting, "The GateOperation conditions must be evaluated before its underlying operation gets executed.")
-          /// Canceling an operation that is currently in an operation queue, but not yet executing, makes it possible to remove the operation from the queue sooner than usual.
-          this.operation.cancel(errors: errors)
 
-          /// Left for reference
-          /// An operation that is not executing cannot be finished: this line generates a warning in the `testMixingGatedOperationWithDependencies` test.
-          ///
-          // this.operation.finish()
-        }
-      }
-    }))
-    
-    addCondition(BlockCondition(block: gate))
-    
+  public let operation: T
+  public let gate: Block
+
+  /// Initializes a new `GatedOperation`.
+  ///
+  /// - Parameters:
+  ///   - operation: The `AdvancedOperation` to be run if the gate is opened.
+  ///   - gate: The block which determines the operation execution.
+  public init(_ operation: T, gate: @escaping Block) {
+    assert(operation.isReady, "The gated operation must be ready to be executed.")
+    self.gate = gate
+    self.operation = operation
+
+    super.init()
+
     name = "GatedOperation <\(operation.operationName)>"
-  }
-}
 
-private struct DidFinishConditionsEvaluationObserver: OperationDidFinishConditionsEvaluationsObserving {
-  private let closure: (AdvancedOperation, [Error]) -> Void
-  
-  init(closure: @escaping (AdvancedOperation, [Error]) -> Void) {
-    self.closure = closure
+    self.operation.addObserver(BlockObserver(willExecute: { (operation) in
+    }, didCancel: { [weak self] (operation, _) in
+      guard let self = self else {
+        return
+      }
+      assert(self.operation === operation)
+      // errors are ignored because they will be collected in the didFinish callback
+      self.superCancel(errors: [])
+
+      }, didFinish: { [weak self] (operation, errors) in
+        guard let self = self else {
+          return
+        }
+
+        assert(self.operation === operation)
+        self.superFinish(errors: errors)
+    }))
   }
-  
-  func operationDidFailConditionsEvaluations(operation: AdvancedOperation, withErrors errors: [Error]) {
-    closure(operation, errors)
+
+  private func superCancel(errors: [Error]) {
+    super.cancel(errors: errors)
   }
+
+  private func superFinish(errors: [Error]) {
+    super.finish(errors: errors)
+  }
+
+  open override func main() {
+    assert(operation.isReady, "The gated operation must be ready to be executed.")
+    do {
+      if try gate() {
+        operation.start()
+      } else {
+        let error = AdvancedOperationError.executionCancelled(message: "The gate has returned false.")
+        cancel(error: error)
+        finish()
+      }
+    } catch let thrownError {
+      let error = AdvancedOperationError.executionCancelled(message: "The gate has thrown an exception: \(thrownError).")
+      cancel(error: error)
+      finish()
+    }
+  }
+
+  open override func cancel(errors: [Error]?) {
+    operation.cancel(errors: errors)
+  }
+
+  open override func cancel(error: Error?) {
+    operation.cancel(error: error)
+  }
+
+  open override func cancel() {
+    operation.cancel()
+  }
+
+  open override func finish(errors: [Error] = []) {
+    operation.finish()
+  }
+
 }

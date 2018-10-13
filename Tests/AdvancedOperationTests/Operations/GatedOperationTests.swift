@@ -1,4 +1,4 @@
-// 
+//
 // AdvancedOperation
 //
 // Copyright © 2016-2018 Tinrobots.
@@ -27,6 +27,8 @@ import Foundation
 
 final class GatedOperationTests: XCTestCase {
 
+  // MARK: - Opened Gate
+
   func testOpenedGate() {
     let operation = SleepyAsyncOperation(interval1: 1, interval2: 1, interval3: 1)
     let gateOperation = GatedOperation(operation) { () -> Bool in
@@ -41,23 +43,69 @@ final class GatedOperationTests: XCTestCase {
 
     XCTAssertFalse(operation.isCancelled)
     XCTAssertFalse(gateOperation.isCancelled)
+
+    XCTAssertTrue(operation.errors.isEmpty)
+    XCTAssertTrue(gateOperation.errors.isEmpty)
   }
 
-  func testOpenedGateAndCancelledOperation() {
+  func testOpenedGateAndFailingUnderlyingOperation() {
+    let operation = FailingAsyncOperation(errors: [MockError.test, MockError.failed])
+    let gateOperation = GatedOperation(operation) { () -> Bool in
+      return true
+    }
+
+    let expectation1 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isFinished), object: operation, expectedValue: true)
+    let expectation2 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isFinished), object: gateOperation, expectedValue: true)
+
+    gateOperation.start()
+    wait(for: [expectation1, expectation2], timeout: 10)
+
+    XCTAssertFalse(operation.isCancelled)
+    XCTAssertFalse(gateOperation.isCancelled)
+
+    XCTAssertEqual(operation.errors.count, 2)
+    XCTAssertEqual(gateOperation.errors.count, 2)
+  }
+
+  func testOpenedGateAndCancellingUnderlyingOperation() {
+    let operation = CancellingAsyncOperation(errors: [MockError.test, MockError.failed])
+    let gateOperation = GatedOperation(operation) { () -> Bool in
+      return true
+    }
+
+    let expectation1 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isFinished), object: operation, expectedValue: true)
+    let expectation2 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isFinished), object: gateOperation, expectedValue: true)
+
+    gateOperation.start()
+    wait(for: [expectation1, expectation2], timeout: 10)
+
+    XCTAssertTrue(operation.isCancelled)
+    XCTAssertTrue(gateOperation.isCancelled)
+
+    XCTAssertEqual(operation.errors.count, 2)
+    XCTAssertEqual(gateOperation.errors.count, 2)
+  }
+
+  func testOpenGateAndUnderlyingOperationCancelled() {
     let operation = SleepyAsyncOperation(interval1: 1, interval2: 1, interval3: 1)
     let gateOperation = GatedOperation(operation) { () -> Bool in
       return true
     }
 
-    let expectation1 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isCancelled), object: operation, expectedValue: true)
-    let expectation2 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isCancelled), object: gateOperation, expectedValue: true)
+    gateOperation.useOSLog(TestsLog)
+
+    let expectation1 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isFinished), object: operation, expectedValue: true)
+    let expectation2 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isFinished), object: gateOperation, expectedValue: true)
 
     gateOperation.start()
-    gateOperation.cancel()
+    operation.cancel()
     wait(for: [expectation1, expectation2], timeout: 10)
 
     XCTAssertTrue(operation.isCancelled)
     XCTAssertTrue(gateOperation.isCancelled)
+
+    XCTAssertTrue(operation.errors.isEmpty)
+    XCTAssertTrue(gateOperation.errors.isEmpty)
   }
 
   func testOpenedGateUsingAdvancedOperationQueue() {
@@ -71,11 +119,17 @@ final class GatedOperationTests: XCTestCase {
     let expectation2 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isFinished), object: gateOperation, expectedValue: true)
 
     queue.addOperation(gateOperation)
+
     wait(for: [expectation1, expectation2], timeout: 10)
 
     XCTAssertFalse(operation.isCancelled)
     XCTAssertFalse(gateOperation.isCancelled)
+
+    XCTAssertTrue(operation.errors.isEmpty)
+    XCTAssertTrue(gateOperation.errors.isEmpty)
   }
+
+  // MARK: - Closed Gate
 
   func testClosedGate() {
     let operation = SleepyAsyncOperation(interval1: 1, interval2: 1, interval3: 1)
@@ -89,21 +143,24 @@ final class GatedOperationTests: XCTestCase {
     let expectation2 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isFinished), object: gateOperation, expectedValue: true)
 
     gateOperation.start()
+
     wait(for: [expectation1, expectation2], timeout: 10)
 
     XCTAssertTrue(operation.isFailed)
     XCTAssertTrue(gateOperation.isFailed)
 
     XCTAssertTrue(operation.isCancelled)
-    XCTAssertTrue(operation.isCancelled)
     XCTAssertTrue(gateOperation.isCancelled)
+
+    XCTAssertEqual(operation.errors.count, 1)
+    XCTAssertEqual(gateOperation.errors.count, 1)
   }
 
   func testClosedGateUsingAdvancedOperationQueue() {
     let queue = AdvancedOperationQueue()
     let operation = SleepyAsyncOperation(interval1: 1, interval2: 1, interval3: 1)
-    let gateOperation = GatedOperation(operation) { () -> Bool in
-      return false
+    let gateOperation = GatedOperation(operation) { () throws -> Bool in
+      throw MockError.failed
     }
 
     gateOperation.useOSLog(TestsLog)
@@ -116,45 +173,50 @@ final class GatedOperationTests: XCTestCase {
 
     XCTAssertTrue(operation.isCancelled)
     XCTAssertTrue(operation.isFailed)
-    XCTAssertFalse(operation.isFinished) // cancelled before executing
+
+    XCTAssertTrue(operation.isFinished)
     XCTAssertTrue(gateOperation.isCancelled)
+
+    XCTAssertEqual(operation.errors.count, 1)
+    XCTAssertEqual(gateOperation.errors.count, 1)
   }
 
-  func testMixingGatedOperationWithDependencies() {
-    let queue = AdvancedOperationQueue()
-    //TODO: https://stackoverflow.com/questions/48137896/operation-went-isfinished-yes-without-being-started-by-the-queue-it-is-in
-    let operation1 = SleepyAsyncOperation()
-    let operation2 = SleepyAsyncOperation()
-    let operation3 = SleepyAsyncOperation()
-    let operation4 = DelayOperation(interval: 1)
+  // MARK: - Gated Operation and Dependencies
 
-    let gateOperation3 = GatedOperation(operation3) { () -> Bool in
-      return false
+    func testMixingGatedOperationWithDependencies() {
+      let queue = AdvancedOperationQueue()
+      let operation1 = SleepyAsyncOperation()
+      let operation2 = SleepyAsyncOperation()
+      let operation3 = SleepyAsyncOperation()
+      let operation4 = DelayOperation(interval: 1)
+
+      let gateOperation3 = GatedOperation(operation3) { () -> Bool in
+        return false
+      }
+
+      gateOperation3.addDependency(operation1)
+      operation2.addDependency(operation1)
+
+      operation4.addDependency(gateOperation3)
+      operation4.addDependency(operation2)
+
+      operation4.addCondition(NoCancelledDependeciesCondition())
+
+      queue.addOperations([operation1, operation2, gateOperation3, operation4], waitUntilFinished: true)
+
+      XCTAssertTrue(operation1.isFinished)
+      XCTAssertFalse(operation1.isFailed)
+
+      XCTAssertTrue(operation2.isFinished)
+      XCTAssertFalse(operation2.isFailed)
+
+      XCTAssertTrue(gateOperation3.isFinished)
+      XCTAssertTrue(gateOperation3.isFailed)
+      XCTAssertTrue(gateOperation3.isCancelled)
+
+      XCTAssertTrue(operation4.isFinished)
+      XCTAssertTrue(operation4.isFailed)
+      XCTAssertTrue(operation4.isCancelled)
     }
-
-    gateOperation3.addDependency(operation1)
-    operation2.addDependency(operation1)
-
-    operation4.addDependency(gateOperation3)
-    operation4.addDependency(operation2)
-
-    operation4.addCondition(NoCancelledDependeciesCondition())
-
-    queue.addOperations([operation1, operation2, gateOperation3, operation4], waitUntilFinished: true)
-
-    XCTAssertTrue(operation1.isFinished)
-    XCTAssertFalse(operation1.isFailed)
-
-    XCTAssertTrue(operation2.isFinished)
-    XCTAssertFalse(operation2.isFailed)
-
-    XCTAssertTrue(gateOperation3.isFinished)
-    XCTAssertTrue(gateOperation3.isFailed)
-    XCTAssertTrue(gateOperation3.isCancelled)
-
-    XCTAssertTrue(operation4.isFinished)
-    XCTAssertTrue(operation4.isFailed)
-    XCTAssertTrue(operation4.isCancelled)
-  }
 
 }

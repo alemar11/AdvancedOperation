@@ -222,7 +222,7 @@ open class AdvancedOperation: Operation {
     fatalError("\(type(of: self)) must override `main()`.")
   }
 
-  public func cancel(error: Error? = .none) {
+  open func cancel(error: Error? = .none) {
     if let error = error {
       _cancel(errors: [error])
     } else {
@@ -230,7 +230,7 @@ open class AdvancedOperation: Operation {
     }
   }
 
-  public func cancel(errors: [Error]? = .none) {
+  open func cancel(errors: [Error]? = .none) {
     _cancel(errors: errors)
   }
 
@@ -238,7 +238,7 @@ open class AdvancedOperation: Operation {
     _cancel()
   }
 
-  private func _cancel(errors cancelErrors: [Error]? = nil) {
+  private final func _cancel(errors cancelErrors: [Error]? = nil) {
     let canBeCancelled = lock.synchronized { () -> Bool in
       guard !_finishing && !isFinished else { return false }
       guard !_cancelling && !_cancelled else { return false }
@@ -273,7 +273,11 @@ open class AdvancedOperation: Operation {
     super.cancel() // fires isReady KVO
   }
 
-  public final func finish(errors: [Error] = []) {
+  open func finish(errors: [Error] = []) {
+    _finish(errors: errors)
+  }
+
+  private final func _finish(errors: [Error] = []) {
     let canBeFinished = lock.synchronized { () -> Bool in
       guard _state.canTransition(to: .finishing) else { return false }
       _state = .finishing

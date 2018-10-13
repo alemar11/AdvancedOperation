@@ -67,18 +67,19 @@ open class GroupOperation: AdvancedOperation {
     }
   }
 
-  internal var requiresCancellationBeforeFinishing: Bool {
-    get {
-      return lock.synchronized { () -> Bool in
-        return _requiresCancellationBeforeFinishing }
-    }
-
-    set {
-      return lock.synchronized {
-        _requiresCancellationBeforeFinishing = newValue
-      }
-    }
-  }
+//  internal var requiresCancellationBeforeFinishing: Bool {
+//    get {
+//      return lock.synchronized { () -> Bool in
+//        return _requiresCancellationBeforeFinishing
+//      }
+//    }
+//
+//    set {
+//      return lock.synchronized {
+//        _requiresCancellationBeforeFinishing = newValue
+//      }
+//    }
+//  }
 
   /// If true, the finishing operation should fire a cancel to complete the cancellation procedure.
   private var _requiresCancellationBeforeFinishing = false
@@ -120,7 +121,7 @@ open class GroupOperation: AdvancedOperation {
     self.underlyingOperationQueue = AdvancedOperationQueue(exclusivityManager: exclusivityManager, underlyingQueue: underlyingQueue)
 
     super.init()
-    
+
     isSuspended = true
     underlyingOperationQueue.delegate = self
     finishingOperation.name = "Finishing Operation"

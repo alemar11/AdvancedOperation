@@ -191,6 +191,7 @@ final internal class XCTFailOperation: AdvancedOperation {
 
 }
 
+/// An operation that finishes with errors
 final internal class FailingAsyncOperation: AdvancedOperation {
 
   private let defaultErrors: [Error]
@@ -203,8 +204,33 @@ final internal class FailingAsyncOperation: AdvancedOperation {
 
   override func main() {
     DispatchQueue.global().asyncAfter(deadline: .now() + 2.0) { [weak weakSelf = self] in
-      guard let strongSelf = weakSelf else { return self.finish() }
+      guard let strongSelf = weakSelf else {
+        return self.finish()
+      }
       strongSelf.finish(errors: strongSelf.defaultErrors)
+    }
+  }
+}
+
+/// An operation that cancels itself with errors
+final internal class CancellingAsyncOperation: AdvancedOperation {
+
+  private let defaultErrors: [Error]
+
+  init(errors: [MockError] = [MockError.failed, MockError.test]) {
+    self.defaultErrors = errors
+    super.init()
+    useOSLog(TestsLog)
+  }
+
+  override func main() {
+    DispatchQueue.global().asyncAfter(deadline: .now() + 2.0) { [weak weakSelf = self] in
+      guard let strongSelf = weakSelf else {
+        return self.finish()
+      }
+
+      strongSelf.cancel(errors: strongSelf.defaultErrors)
+      strongSelf.finish()
     }
   }
 }
