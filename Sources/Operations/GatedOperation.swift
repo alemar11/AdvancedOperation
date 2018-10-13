@@ -24,6 +24,7 @@
 import Foundation
 
 /// An operation whose the underlying operation execution depends on a the result (Bool) of a block.
+/// If the gate is closed, the GatedOperation, as the underlying operation, will be cancelled with a proper error.
 ///
 /// Even if the same result can be achieved by running an `AdvancedOperation` with a `BlockCondition` in an `AdvancedOperationQueue`,
 /// a `GatedOperation` doesn't require any queue to run.
@@ -82,12 +83,12 @@ open class GatedOperation<T: AdvancedOperation>: AdvancedOperation {
       if try gate() {
         operation.start()
       } else {
-        let error = AdvancedOperationError.executionCancelled(message: "The gate has returned false.")
+        let error = AdvancedOperationError.executionCancelled(message: "The gate is closed with a false result.")
         cancel(error: error)
         finish()
       }
     } catch let thrownError {
-      let error = AdvancedOperationError.executionCancelled(message: "The gate has thrown an exception: \(thrownError).")
+      let error = AdvancedOperationError.executionCancelled(message: "The gate is closed with a thrown exception: \(thrownError).")
       cancel(error: error)
       finish()
     }
