@@ -1,8 +1,9 @@
 # Changelog
 
 ### 1.2.0 (WIP
-)
+
 - Added `BlockCondition` and `TimeoutObserver`.
+- Added `GatedOperation`.
 - Bugfixes.
 
 ### 1.1.0
