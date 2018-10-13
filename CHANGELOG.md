@@ -2,8 +2,10 @@
 
 ### 1.2.0 (WIP
 
-- Added `BlockCondition` and `TimeoutObserver`.
+- Added `BlockCondition`. 
+- Added `TimeoutObserver`.
 - Added `GatedOperation`.
+- Fixed KVO in `iSCancelled` property.
 - Bugfixes.
 
 ### 1.1.0

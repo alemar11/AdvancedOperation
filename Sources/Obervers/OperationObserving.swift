@@ -67,7 +67,3 @@ public protocol OperationDidFinishConditionsEvaluationsObserving: OperationObser
 /// The protocol that types may implement if they wish to be notified of significant operation lifecycle events.
 // swiftlint:disable:next line_length
 public protocol OperationObserving: OperationWillExecuteObserving, OperationWillFinishObserving, OperationDidFinishObserving, OperationWillCancelObserving, OperationDidCancelObserving, OperationDidProduceOperationObserving, OperationDidFinishConditionsEvaluationsObserving { }
-
-public extension OperationDidFinishConditionsEvaluationsObserving {
-  func operationDidFailConditionsEvaluations(operation: AdvancedOperation, withErrors errors: [Error]) { }
-}
