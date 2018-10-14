@@ -4,7 +4,6 @@
 
 - Added `BlockCondition`. 
 - Added `TimeoutObserver`.
-- Added `GatedOperation`.
 - Fixed KVO in `iSCancelled` property.
 - Bugfixes.
 
