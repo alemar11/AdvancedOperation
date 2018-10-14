@@ -4,7 +4,8 @@
 
 - Added `BlockCondition`. 
 - Added `TimeoutObserver`.
-- Fixed KVO in `iSCancelled` property.
+- Fixed KVO for the `iSCancelled` property in `AdvancedOperation`.
+- A `GroupOperation` can be cancelled correctly even if it's not yet started.
 - Bugfixes.
 
 ### 1.1.0

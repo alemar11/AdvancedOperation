@@ -50,7 +50,7 @@ final class GroupOperationTests: XCTestCase {
 //    }
 //  }
 
-  func testStandardFlow() {
+  func testStart() {
     let expectation1 = expectation(description: "\(#function)\(#line)")
     let operation1 = SleepyAsyncOperation()
     operation1.addCompletionBlock { expectation1.fulfill() }
@@ -67,6 +67,32 @@ final class GroupOperationTests: XCTestCase {
 
     XCTAssertTrue(group.isSuspended)
     group.start()
+    XCTAssertFalse(group.isSuspended)
+    waitForExpectations(timeout: 10)
+
+    XCTAssertTrue(group.isSuspended)
+    XCTAssertTrue(group.isFinished)
+  }
+
+  func testCancel() {
+    let expectation1 = expectation(description: "\(#function)\(#line)")
+    let operation1 = SleepyAsyncOperation()
+    operation1.addCompletionBlock { expectation1.fulfill() }
+
+    let expectation2 = expectation(description: "\(#function)\(#line)")
+    let operation2 = BlockOperation(block: { sleep(1)} )
+    operation2.addCompletionBlock { expectation2.fulfill() }
+
+    let expectation3 = expectation(description: "\(#function)\(#line)")
+    let group = GroupOperation(operations: operation1, operation2)
+    group.addCompletionBlock { expectation3.fulfill() }
+    XCTAssertEqual(group.maxConcurrentOperationCount, OperationQueue.defaultMaxConcurrentOperationCount)
+    XCTAssertTrue(group.isSuspended)
+
+    group.useOSLog(TestsLog)
+
+    XCTAssertTrue(group.isSuspended)
+    group.cancel()
     XCTAssertFalse(group.isSuspended)
     waitForExpectations(timeout: 10)
 

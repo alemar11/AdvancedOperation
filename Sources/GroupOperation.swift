@@ -67,20 +67,6 @@ open class GroupOperation: AdvancedOperation {
     }
   }
 
-//  internal var requiresCancellationBeforeFinishing: Bool {
-//    get {
-//      return lock.synchronized { () -> Bool in
-//        return _requiresCancellationBeforeFinishing
-//      }
-//    }
-//
-//    set {
-//      return lock.synchronized {
-//        _requiresCancellationBeforeFinishing = newValue
-//      }
-//    }
-//  }
-
   /// If true, the finishing operation should fire a cancel to complete the cancellation procedure.
   private var _requiresCancellationBeforeFinishing = false
 
@@ -164,6 +150,10 @@ open class GroupOperation: AdvancedOperation {
       operation.cancel()
     }
     // once all the operations will be cancelled, the finishing operation will be called
+
+    if isReady { // && !underlyingOperationQueue.operations.contains(finishingOperation) {
+      run()
+    }
   }
 
   open override func cancel() {
@@ -173,7 +163,13 @@ open class GroupOperation: AdvancedOperation {
   /// Performs the receiver’s non-concurrent task.
   /// - Note: If overridden, be sure to call the parent `main` as the end of the new implementation.
   open override func main() {
-    underlyingOperationQueue.addOperation(finishingOperation)
+    run()
+  }
+
+  private func run() {
+    if !underlyingOperationQueue.operations.contains(finishingOperation) {
+      underlyingOperationQueue.addOperation(finishingOperation)
+    }
     underlyingOperationQueue.isSuspended = false
   }
 
