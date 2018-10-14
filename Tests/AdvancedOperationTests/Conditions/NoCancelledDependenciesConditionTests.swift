@@ -58,9 +58,9 @@ final class NoCancelledDependenciesConditionTests: XCTestCase {
     queue.addOperations([operation1, operation2, operation3, operation4], waitUntilFinished: true)
 
     XCTAssertTrue(operation4.isCancelled)
-    XCTAssertTrue(operation3.isFailed)
+    XCTAssertTrue(operation3.hasErrors)
     XCTAssertFalse(operation2.isCancelled)
-    XCTAssertTrue(operation1.isFailed)
+    XCTAssertTrue(operation1.hasErrors)
     XCTAssertTrue(operation1.isCancelled)
   }
 
@@ -101,13 +101,13 @@ final class NoCancelledDependenciesConditionTests: XCTestCase {
     waitForExpectations(timeout: 10)
     XCTAssertTrue(operation4.isCancelled)
 
-    XCTAssertFalse(operation3.isFailed) // it's not failed because it's been cancelled before evaluating its conditions
+    XCTAssertFalse(operation3.hasErrors) // it's not failed because it's been cancelled before evaluating its conditions
     XCTAssertTrue(operation3.isCancelled)
 
-    XCTAssertFalse(operation2.isFailed)
+    XCTAssertFalse(operation2.hasErrors)
     XCTAssertTrue(operation2.isCancelled)
 
-    XCTAssertFalse(operation1.isFailed) // it's not failed because it's been cancelled before evaluating its conditions
+    XCTAssertFalse(operation1.hasErrors) // it's not failed because it's been cancelled before evaluating its conditions
     XCTAssertTrue(operation1.isCancelled)
   }
 
@@ -129,14 +129,14 @@ final class NoCancelledDependenciesConditionTests: XCTestCase {
 
     queue.addOperations([operation1, operation2, operation3, operation4], waitUntilFinished: true)
     XCTAssertTrue(operation4.isCancelled)
-    XCTAssertFalse(operation4.isFailed)
+    XCTAssertFalse(operation4.hasErrors)
 
-    XCTAssertTrue(operation3.isFailed)
+    XCTAssertTrue(operation3.hasErrors)
 
     XCTAssertFalse(operation2.isCancelled)
-    XCTAssertFalse(operation2.isFailed)
+    XCTAssertFalse(operation2.hasErrors)
 
-    XCTAssertTrue(operation1.isFailed)
+    XCTAssertTrue(operation1.hasErrors)
     XCTAssertTrue(operation1.isCancelled)
   }
 

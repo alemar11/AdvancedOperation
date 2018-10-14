@@ -95,7 +95,7 @@ class NegatedConditionTests: XCTestCase {
     [operation4, operation3, operation2].then(operation1)
     queue.addOperations([operation1, operation2, operation3, operation4], waitUntilFinished: false)
     waitForExpectations(timeout: 5)
-    XCTAssertFalse(operation1.isFailed)
+    XCTAssertFalse(operation1.hasErrors)
   }
 
 }

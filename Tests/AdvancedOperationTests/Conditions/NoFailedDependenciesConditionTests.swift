@@ -59,7 +59,7 @@ final class NoFailedDependenciesConditionTests: XCTestCase {
     [operation4, operation3, operation2].then(operation1)
     queue.addOperations([operation1, operation2, operation3, operation4], waitUntilFinished: false)
     waitForExpectations(timeout: 5)
-    XCTAssertTrue(operation1.isFailed)
+    XCTAssertTrue(operation1.hasErrors)
     XCTAssertEqual(operation1.errors.count, 2)
   }
 
@@ -94,7 +94,7 @@ final class NoFailedDependenciesConditionTests: XCTestCase {
     [operation4, operation3, operation2].then(operation1)
     queue.addOperations([operation1, operation2, operation3, operation4], waitUntilFinished: false)
     waitForExpectations(timeout: 5)
-    XCTAssertTrue(operation1.isFailed)
+    XCTAssertTrue(operation1.hasErrors)
     XCTAssertEqual(operation1.errors.count, 2)
   }
 
@@ -119,7 +119,7 @@ final class NoFailedDependenciesConditionTests: XCTestCase {
     [operation4, operation3, operation2].then(operation1)
 
     queue.addOperations([operation1, operation2, operation3, operation4], waitUntilFinished: true)
-    XCTAssertTrue(operation1.isFailed)
+    XCTAssertTrue(operation1.hasErrors)
     XCTAssertEqual(operation1.errors.count, 2)
   }
 
@@ -154,7 +154,7 @@ final class NoFailedDependenciesConditionTests: XCTestCase {
     [operation4, operation3, operation2].then(operation1)
     queue.addOperations([operation1, operation2, operation3, operation4], waitUntilFinished: false)
     waitForExpectations(timeout: 10)
-    XCTAssertFalse(operation1.isFailed)
+    XCTAssertFalse(operation1.hasErrors)
   }
 
   func testIgnoredCancelledAndFailedOperationAndFailedOperation() {
@@ -188,7 +188,7 @@ final class NoFailedDependenciesConditionTests: XCTestCase {
     [operation4, operation3, operation2].then(operation1)
     queue.addOperations([operation1, operation2, operation3, operation4], waitUntilFinished: false)
     waitForExpectations(timeout: 10)
-    XCTAssertTrue(operation1.isFailed)
+    XCTAssertTrue(operation1.hasErrors)
     XCTAssertEqual(operation1.errors.count, 3)
   }
 
@@ -221,7 +221,7 @@ final class NoFailedDependenciesConditionTests: XCTestCase {
     [operation4, operation3, operation2].then(operation1)
     queue.addOperations([operation1, operation2, operation3, operation4], waitUntilFinished: false)
     waitForExpectations(timeout: 5)
-    XCTAssertFalse(operation1.isFailed)
+    XCTAssertFalse(operation1.hasErrors)
   }
 
 }
