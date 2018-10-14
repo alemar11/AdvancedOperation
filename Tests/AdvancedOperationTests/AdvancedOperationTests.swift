@@ -347,13 +347,13 @@ final class AdvancedOperationTests: XCTestCase {
   }
 
   func testObserversWithOperationProduction() {
-    let expectation1 = expectation(description: "\(#function)\(#line)")
+    let operation = SleepyAsyncOperation()
+    let expectation1 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isFinished), object: operation, expectedValue: true)
     let observer = MockObserver()
     let expectation2 = observer.didFinishExpectation
-    let operation = SleepyAsyncOperation()
+
     operation.addObserver(observer)
 
-    operation.completionBlock = { expectation1.fulfill() }
     operation.produceOperation(BlockOperation { })
     operation.produceOperation(BlockOperation { })
     operation.start()
