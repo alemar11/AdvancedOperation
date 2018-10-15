@@ -24,6 +24,77 @@
 import Foundation
 import os.log
 
+//https://github.com/apple/swift-nio/issues/303
+public class SynchronizedArray<Element> {
+  fileprivate let queue = DispatchQueue(label: "\(identifier).SynchronizedArray")
+  fileprivate var array = [Element]()
+}
+
+// MARK: - Properties
+public extension SynchronizedArray {
+
+  var all: [Element] {
+    return queue.sync { self.array }
+  }
+
+  /// The first element of the collection.
+  var first: Element? {
+    return queue.sync { self.array.first }
+  }
+
+  func first(where predicate: (Element) throws -> Bool) rethrows -> Element? {
+    return try queue.sync {
+      try self.array.first(where: predicate)
+    }
+  }
+
+  /// The last element of the collection.
+  var last: Element? {
+    return queue.sync { self.array.last }
+  }
+
+  /// The number of elements in the array.
+  var count: Int {
+    return queue.sync { self.array.count }
+  }
+
+  /// A Boolean value indicating whether the collection is empty.
+  var isEmpty: Bool {
+    return queue.sync { self.array.isEmpty }
+  }
+
+  /// A textual representation of the array and its elements.
+  var description: String {
+    return queue.sync { self.array.description }
+  }
+}
+
+// MARK: - Mutable
+public extension SynchronizedArray {
+
+  /// Adds a new element at the end of the array.
+  ///
+  /// - Parameter element: The element to append to the array.
+  func append(contentsOf elements: [Element]) {
+    queue.sync {
+      self.array.append(contentsOf: elements)
+    }
+  }
+
+  func append(_ element: Element) {
+    queue.sync {
+      self.array.append(element)
+    }
+  }
+
+  func compactMap<K>(transform: (Element) throws -> K?) rethrows -> [K] {
+    return try queue.sync {
+      try self.array.compactMap(transform)
+    }
+  }
+
+}
+
 /// An advanced subclass of `Operation`.
 open class AdvancedOperation: Operation {
 
@@ -116,12 +187,9 @@ open class AdvancedOperation: Operation {
   // MARK: - Properties
 
   /// Errors generated during the execution.
-  public private(set) var errors: [Error] {
+  public var errors: [Error] {
     get {
-      return lock.synchronized { return _errors }
-    }
-    set {
-      lock.synchronized { _errors = newValue }
+      return _errors.all
     }
   }
 
@@ -148,7 +216,7 @@ open class AdvancedOperation: Operation {
   private var _cancelled = false
 
   /// Errors generated during the execution.
-  private var _errors = [Error]()
+  private var _errors = SynchronizedArray<Error>()
 
   /// The state of the operation.
   @objc dynamic
@@ -169,7 +237,7 @@ open class AdvancedOperation: Operation {
          #keyPath(Operation.isFinished):
       return Set([#keyPath(state)])
     case #keyPath(Operation.isCancelled):
-       return Set([#keyPath(state), #keyPath(_cancelled)])
+      return Set([#keyPath(state), #keyPath(_cancelled)])
     default:
       return super.keyPathsForValuesAffectingValue(forKey: key)
     }
@@ -185,7 +253,7 @@ open class AdvancedOperation: Operation {
 
   // MARK: - Observers
 
-  private(set) var observers = [OperationObservingType]()
+  private(set) var observers = SynchronizedArray<OperationObservingType>()
 
   // MARK: - Execution
 
@@ -258,7 +326,7 @@ open class AdvancedOperation: Operation {
 
     lock.synchronized {
       if let cancelErrors = cancelErrors {
-        self.errors.append(contentsOf: cancelErrors)
+        self._errors.append(contentsOf: cancelErrors)
       }
       if _state == .pending { // conditions will not be evaluated anymore
         _state = .ready
@@ -292,7 +360,7 @@ open class AdvancedOperation: Operation {
     guard canBeFinished else { return }
 
     let updatedErrors = lock.synchronized { () -> [Error] in
-      self.errors.append(contentsOf: errors)
+      self._errors.append(contentsOf: errors)
       return self.errors
     }
 
@@ -357,7 +425,7 @@ open class AdvancedOperation: Operation {
       guard let self = self else {
         return
       }
-      self.errors.append(contentsOf: errors)
+      self._errors.append(contentsOf: errors)
       self.didFinishConditionsEvaluation(errors: errors)
       self.state = .ready
     }
@@ -368,7 +436,7 @@ open class AdvancedOperation: Operation {
   /// Subclass this method to know when the operation will start executing.
   /// - Note: Calling the `super` implementation will keep the logging messages.
   open func operationWillExecute() {
-      os_log("%{public}s has started.", log: log, type: .info, operationName)
+    os_log("%{public}s has started.", log: log, type: .info, operationName)
   }
 
   /// Subclass this method to know if the operation has finished the evaluation of its conditions.
@@ -380,7 +448,7 @@ open class AdvancedOperation: Operation {
   /// Subclass this method to know when the operation has produced another `Operation`.
   /// - Note: Calling the `super` implementation will keep the logging messages.
   open func operationDidProduceOperation(_ operation: Operation) {
-      os_log("%{public}s has produced a new operation: %{public}s.", log: log, type: .info, operationName, operation.operationName)
+    os_log("%{public}s has produced a new operation: %{public}s.", log: log, type: .info, operationName, operation.operationName)
   }
 
   /// Subclass this method to know when the operation will be cancelled.
@@ -392,25 +460,25 @@ open class AdvancedOperation: Operation {
   /// Subclass this method to know when the operation has been cancelled.
   /// - Note: Calling the `super` implementation will keep the logging messages.
   open func operationDidCancel(errors: [Error]) {
-      os_log("%{public}s has been cancelled with %{public}d errors.", log: log, type: .info, operationName, errors.count)
+    os_log("%{public}s has been cancelled with %{public}d errors.", log: log, type: .info, operationName, errors.count)
   }
 
   /// Subclass this method to know when the operation will finish its execution.
   /// - Note: Calling the `super` implementation will keep the logging messages.
   open func operationWillFinish(errors: [Error]) {
-      os_log("%{public}s is finishing.", log: log, type: .info, operationName)
+    os_log("%{public}s is finishing.", log: log, type: .info, operationName)
   }
 
   /// Subclass this method to know when the operation has finished executing.
   /// - Note: Calling the `super` implementation will keep the logging messages.
   open func operationDidFinish(errors: [Error]) {
-      os_log("%{public}s has finished with %{public}d errors.", log: log, type: .info, operationName, errors.count)
+    os_log("%{public}s has finished with %{public}d errors.", log: log, type: .info, operationName, errors.count)
   }
 
   /// Subclass this method to know when the operation will start evaluating its conditions.
   /// - Note: Calling the `super` implementation will keep the logging messages.
   open func operationWillEvaluateConditions() {
-      os_log("%{public}s is evaluating %{public}d conditions.", log: log, type: .info, operationName, conditions.count)
+    os_log("%{public}s is evaluating %{public}d conditions.", log: log, type: .info, operationName, conditions.count)
   }
 
 }
