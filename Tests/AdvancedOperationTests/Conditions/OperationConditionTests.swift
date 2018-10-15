@@ -27,7 +27,8 @@ import XCTest
 class OperationConditionTests: XCTestCase {
 
   func testDependency() {
-    let queue = AdvancedOperationQueue()
+    let manager = ExclusivityManager()
+    let queue = AdvancedOperationQueue(exclusivityManager: manager)
 
     let expectation1 = expectation(description: "\(#function)\(#line)")
     let expectation2 = expectation(description: "\(#function)\(#line)")
@@ -69,7 +70,7 @@ class OperationConditionTests: XCTestCase {
     let operation2 = AdvancedBlockOperation { }
     operation2.completionBlock = { expectation2.fulfill() }
 
-    let group = GroupOperation()
+    let group = GroupOperation(exclusivityManager: ExclusivityManager())
     group.completionBlock = {
       expectation5.fulfill()
     }
@@ -138,7 +139,7 @@ class OperationConditionTests: XCTestCase {
     operation2.name = "operation2"
     operation2.completionBlock = { expectation2.fulfill() }
 
-    let group = GroupOperation()
+    let group = GroupOperation(exclusivityManager: ExclusivityManager())
     group.name = "group"
     group.completionBlock = { expectation5.fulfill() }
 
@@ -214,7 +215,8 @@ class OperationConditionTests: XCTestCase {
     operation1.addCondition(dependencyCondition2)
     operation1.addCondition(dependencyCondition3)
 
-    let queue = AdvancedOperationQueue()
+    let manager = ExclusivityManager()
+    let queue = AdvancedOperationQueue(exclusivityManager: manager)
     queue.addOperation(operation1)
 
     operation1.cancel() // at this point: all its dependecies are already running
@@ -236,7 +238,8 @@ class OperationConditionTests: XCTestCase {
       operation1.addCondition(SlowCondition())
     }
 
-    let queue = AdvancedOperationQueue()
+    let manager = ExclusivityManager()
+    let queue = AdvancedOperationQueue(exclusivityManager: manager)
     queue.addOperation(operation1)
 
     DispatchQueue.main.asyncAfter(deadline: .now() + 5.0) {

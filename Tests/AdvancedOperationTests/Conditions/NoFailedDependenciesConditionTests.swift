@@ -31,7 +31,8 @@ final class NoFailedDependenciesConditionTests: XCTestCase {
   }
 
   func testFinishedAndFailedOperation() {
-    let queue = AdvancedOperationQueue()
+    let manager = ExclusivityManager()
+    let queue = AdvancedOperationQueue(exclusivityManager: manager)
 
     let expectation1 = expectation(description: "\(#function)\(#line)")
     let expectation2 = expectation(description: "\(#function)\(#line)")
@@ -64,7 +65,8 @@ final class NoFailedDependenciesConditionTests: XCTestCase {
   }
 
   func testCancelledAndFailedOperation() {
-    let queue = AdvancedOperationQueue()
+    let manager = ExclusivityManager()
+    let queue = AdvancedOperationQueue(exclusivityManager: manager)
 
     let expectation1 = expectation(description: "\(#function)\(#line)")
     let expectation2 = expectation(description: "\(#function)\(#line)")
@@ -99,7 +101,8 @@ final class NoFailedDependenciesConditionTests: XCTestCase {
   }
 
   func testCancelledAndFailedOperationWaitUntilFinished() {
-    let queue = AdvancedOperationQueue()
+    let manager = ExclusivityManager()
+    let queue = AdvancedOperationQueue(exclusivityManager: manager)
 
     let operation1 = XCTFailOperation()
     operation1.name = "operation1"
@@ -124,7 +127,8 @@ final class NoFailedDependenciesConditionTests: XCTestCase {
   }
 
   func testIgnoredCancelledAndFailedOperation() {
-    let queue = AdvancedOperationQueue()
+    let manager = ExclusivityManager()
+    let queue = AdvancedOperationQueue(exclusivityManager: manager)
 
     let expectation1 = expectation(description: "\(#function)\(#line)")
     let expectation2 = expectation(description: "\(#function)\(#line)")
@@ -158,7 +162,8 @@ final class NoFailedDependenciesConditionTests: XCTestCase {
   }
 
   func testIgnoredCancelledAndFailedOperationAndFailedOperation() {
-    let queue = AdvancedOperationQueue()
+    let manager = ExclusivityManager()
+    let queue = AdvancedOperationQueue(exclusivityManager: manager)
 
     let expectation1 = expectation(description: "\(#function)\(#line)")
     let expectation2 = expectation(description: "\(#function)\(#line)")
@@ -193,7 +198,8 @@ final class NoFailedDependenciesConditionTests: XCTestCase {
   }
 
   func testFinishedAndFailedOperationNegated() {
-    let queue = AdvancedOperationQueue()
+    let manager = ExclusivityManager()
+    let queue = AdvancedOperationQueue(exclusivityManager: manager)
 
     let expectation1 = expectation(description: "\(#function)\(#line)")
     let expectation2 = expectation(description: "\(#function)\(#line)")

@@ -40,7 +40,8 @@ final class NoCancelledDependenciesConditionTests: XCTestCase {
   }
 
   func testTwoLevelCondition() {
-    let queue = AdvancedOperationQueue()
+    let manager = ExclusivityManager()
+    let queue = AdvancedOperationQueue(exclusivityManager: manager)
 
     let operation1 = SleepyAsyncOperation()
     let operation2 = SleepyAsyncOperation()
@@ -65,7 +66,8 @@ final class NoCancelledDependenciesConditionTests: XCTestCase {
   }
 
   func testAllOperationCancelled() {
-    let queue = AdvancedOperationQueue()
+    let manager = ExclusivityManager()
+    let queue = AdvancedOperationQueue(exclusivityManager: manager)
 
     let expectation1 = expectation(description: "\(#function)\(#line)")
     let expectation2 = expectation(description: "\(#function)\(#line)")
@@ -112,7 +114,8 @@ final class NoCancelledDependenciesConditionTests: XCTestCase {
   }
 
   func testWithNoFailedDependeciesCondition() {
-    let queue = AdvancedOperationQueue()
+    let manager = ExclusivityManager()
+    let queue = AdvancedOperationQueue(exclusivityManager: manager)
 
     let operation1 = XCTFailOperation()
     let operation2 = SleepyAsyncOperation()

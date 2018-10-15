@@ -43,7 +43,8 @@ class InjectionTests: XCTestCase {
     let operation2 = StringToIntOperation()
     operation1.input = 10
     let adapterOperation = AdvancedOperation.injectOperation(operation1, into: operation2)
-    let queue = AdvancedOperationQueue()
+    let manager = ExclusivityManager()
+    let queue = AdvancedOperationQueue(exclusivityManager: manager)
     queue.addOperations([operation1, operation2, adapterOperation], waitUntilFinished: true)
 
     XCTAssertEqual(operation2.output, 10)
@@ -54,7 +55,8 @@ class InjectionTests: XCTestCase {
     let operation2 = StringToIntOperation()
     operation1.input = 10
     let adapterOperation = operation1.inject(into: operation2)
-    let queue = AdvancedOperationQueue()
+    let manager = ExclusivityManager()
+    let queue = AdvancedOperationQueue(exclusivityManager: manager)
     queue.addOperations([operation1, operation2, adapterOperation], waitUntilFinished: true)
 
     XCTAssertEqual(operation2.output, 10)
@@ -71,7 +73,8 @@ class InjectionTests: XCTestCase {
         return nil
       }
     }
-    let queue = AdvancedOperationQueue()
+    let manager = ExclusivityManager()
+    let queue = AdvancedOperationQueue(exclusivityManager: manager)
     queue.addOperations([operation1, operation2, adapterOperation], waitUntilFinished: true)
 
     XCTAssertEqual(operation2.output, "10")
@@ -88,7 +91,8 @@ class InjectionTests: XCTestCase {
         return nil
       }
     }
-    let queue = AdvancedOperationQueue()
+    let manager = ExclusivityManager()
+    let queue = AdvancedOperationQueue(exclusivityManager: manager)
     queue.addOperations([operation1, operation2, adapterOperation], waitUntilFinished: true)
 
     XCTAssertNil(operation2.output)
@@ -105,7 +109,8 @@ class InjectionTests: XCTestCase {
 
     operation1.input = 10
     let adapterOperation = AdvancedOperation.injectOperation(operation1, into: operation2)
-    let queue = AdvancedOperationQueue()
+    let manager = ExclusivityManager()
+    let queue = AdvancedOperationQueue(exclusivityManager: manager)
     queue.addOperations([operation1, operation2, adapterOperation, operation3], waitUntilFinished: false)
 
     waitForExpectations(timeout: 3)
@@ -122,7 +127,8 @@ class InjectionTests: XCTestCase {
     }
     operation1.input = 2000 // values greater than 1000 will produce a nil output 😎
     let adapterOperation = operation1.inject(into: operation2)
-    let queue = AdvancedOperationQueue()
+    let manager = ExclusivityManager()
+    let queue = AdvancedOperationQueue(exclusivityManager: manager)
     queue.addOperations([operation1, operation2, adapterOperation], waitUntilFinished: false)
 
     waitForExpectations(timeout: 3)
@@ -140,7 +146,8 @@ class InjectionTests: XCTestCase {
     }
 
     let adapterOperation = operation1.inject(into: operation2, requirements: [.successful])
-    let queue = AdvancedOperationQueue()
+    let manager = ExclusivityManager()
+    let queue = AdvancedOperationQueue(exclusivityManager: manager)
     queue.addOperations([operation1, operation2, adapterOperation], waitUntilFinished: false)
 
     waitForExpectations(timeout: 3)
@@ -159,7 +166,8 @@ class InjectionTests: XCTestCase {
     operation1.input = 100 // special value to cancel the operation 😎
     operation1.cancel()
     let adapterOperation = operation1.inject(into: operation2, requirements: [.noCancellation])
-    let queue = AdvancedOperationQueue()
+    let manager = ExclusivityManager()
+    let queue = AdvancedOperationQueue(exclusivityManager: manager)
     queue.addOperations([operation1, operation2, adapterOperation], waitUntilFinished: false)
 
     waitForExpectations(timeout: 3)

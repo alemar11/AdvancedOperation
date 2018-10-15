@@ -67,7 +67,8 @@ class NegatedConditionTests: XCTestCase {
   }
 
   func testMutlipleNegatedConditions() {
-    let queue = AdvancedOperationQueue()
+    let manager = ExclusivityManager()
+    let queue = AdvancedOperationQueue(exclusivityManager: manager)
 
     let expectation1 = expectation(description: "\(#function)\(#line)")
     let expectation2 = expectation(description: "\(#function)\(#line)")
