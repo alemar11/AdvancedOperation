@@ -280,6 +280,7 @@ final class GroupOperationTests: XCTestCase {
     }
 
     group.start()
+    //TODO: check if the second cancell is being skipped
     group.cancel(error: MockError.test)
     group.cancel(error: MockError.test)
     group.cancel(error: MockError.test)
