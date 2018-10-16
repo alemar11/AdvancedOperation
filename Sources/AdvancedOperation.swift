@@ -77,12 +77,13 @@ public extension SynchronizedArray {
   /// - Parameter element: The element to append to the array.
   func append(contentsOf elements: [Element]) {
     queue.sync {
+      guard !elements.isEmpty else { return }
       self.array.append(contentsOf: elements)
     }
   }
 
   func append(_ element: Element) {
-    queue.sync {
+    queue.async {
       self.array.append(element)
     }
   }
@@ -188,9 +189,7 @@ open class AdvancedOperation: Operation {
 
   /// Errors generated during the execution.
   public var errors: [Error] {
-    get {
       return _errors.all
-    }
   }
 
   /// An instance of `OSLog` (by default is disabled).
@@ -216,7 +215,7 @@ open class AdvancedOperation: Operation {
   private var _cancelled = false
 
   /// Errors generated during the execution.
-  private var _errors = SynchronizedArray<Error>()
+  private let _errors = SynchronizedArray<Error>()
 
   /// The state of the operation.
   @objc dynamic
@@ -638,8 +637,10 @@ extension AdvancedOperation {
       //        errors.append(contentsOf: aggregatedErrors)
       //      }
 
+      print("\n\nMarzoli")
       completion(flattenedErrors)
     }
+    print("Alessandro\n\n")
   }
 
 }
