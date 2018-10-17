@@ -393,12 +393,12 @@ final class GroupOperationTests: XCTestCase {
     XCTAssertTrue(group.isFinished)
   }
 
-  func testStress() {
-    (1...100).forEach { i in
-      print(i)
-      testGroupOperationsCancelled()
-    }
-  }
+//  func testStress() {
+//    (1...100).forEach { i in
+//      print(i)
+//      testGroupOperationsCancelled()
+//    }
+//  }
 
   func testGroupOperationsCancelled() {
     let operation1 = SleepyAsyncOperation(interval1: 1, interval2: 1, interval3: 1)
