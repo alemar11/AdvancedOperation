@@ -123,7 +123,7 @@ final class MutuallyExclusiveConditionTests: XCTestCase {
     var text = ""
 
     let expectation1 = expectation(description: "\(#function)\(#line)")
-    let expectation2 = expectation(description: "\(#function)\(#line)")
+    //let expectation2 = expectation(description: "\(#function)\(#line)")
     let expectation3 = expectation(description: "\(#function)\(#line)")
 
     let operation1 = AdvancedBlockOperation { complete in
@@ -136,13 +136,14 @@ final class MutuallyExclusiveConditionTests: XCTestCase {
     }
 
     let operation2 = AdvancedBlockOperation { complete in
+      print("🍎")
       text += "B "
       complete([])
     }
+
+    operation2.useOSLog(TestsLog)
     operation2.addCondition(MutuallyExclusiveCondition(name: "AdvancedBlockOperation"))
-    operation2.completionBlock = {
-      expectation2.fulfill()
-    }
+    let expectation2 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isFinished), object: operation2, expectedValue: true)
 
     let operation3 = AdvancedBlockOperation {
       text += "C."
@@ -152,6 +153,10 @@ final class MutuallyExclusiveConditionTests: XCTestCase {
       expectation3.fulfill()
     }
 
+    operation1.name = "op1"
+    operation2.name = "op2"
+    operation3.name = "op3"
+
     queue.addOperations([operation1, operation2, operation3], waitUntilFinished: false)
     /// An operation may start without waiting the completion block of the running one, so we cannot use `enforceOrder` to true.
     /// https://marcosantadev.com/4-ways-pass-data-operations-swift/
@@ -160,8 +165,16 @@ final class MutuallyExclusiveConditionTests: XCTestCase {
 
     XCTAssertTrue(operation1.isFinished)
     XCTAssertTrue(operation2.isFinished)
-    XCTAssertTrue(operation3.isFinished, "The operation should be finished (isCancelled: \(operation3.isCancelled), isReady: \(operation3.isReady), isExecuting: \(operation3.isExecuting))")
+    XCTAssertTrue(operation3.isFinished, "The operation '\(operation3.operationName)' should be finished (isCancelled: \(operation3.isCancelled), isReady: \(operation3.isReady), isExecuting: \(operation3.isExecuting))")
     //XCTAssertEqual failed: ("A B ") is not equal to ("A B C.")
+    if !operation3.isFinished {
+      operation3.dependencies.forEach { operation in
+        print("\(operation.operationName)")
+        print("R \(operation.isReady)")
+        print("E \(operation.isExecuting)")
+        print("F \(operation.isFinished)")
+      }
+    }
   }
 
   func testMultipleMutuallyExclusiveConditionsWithBlockOperations() {
