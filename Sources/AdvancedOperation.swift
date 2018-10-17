@@ -78,6 +78,7 @@ public extension SynchronizedArray {
   func append(contentsOf elements: [Element]) {
     queue.sync {
       guard !elements.isEmpty else { return }
+
       self.array.append(contentsOf: elements)
     }
   }
@@ -204,8 +205,8 @@ open class AdvancedOperation: Operation {
   /// Private backing stored property for `state`.
   private var _state: OperationState = .ready
 
-  /// Returns `true` if the `AdvancedOperation` is finishing.
-  private var _finishing = false
+  /// Returns `true` if the finish command has been fired and the operation is processing it.
+  private var _finishProcessRunning = false
 
   /// Returns `true` if the `AdvancedOperation` is cancelling.
   private var _cancelling = false
@@ -223,7 +224,7 @@ open class AdvancedOperation: Operation {
     get { return stateLock.synchronized { _state } }
     set {
       stateLock.synchronized {
-        precondition(_state.canTransition(to: newValue), "Performing an invalid state transition for: \(_state) to: \(newValue).")
+        assert(_state.canTransition(to: newValue), "Performing an invalid state transition for: \(_state) to: \(newValue).")
         _state = newValue
       }
     }
@@ -307,10 +308,11 @@ open class AdvancedOperation: Operation {
 
   private final func _cancel(errors cancelErrors: [Error]? = nil) {
     let canBeCancelled = stateLock.synchronized { () -> Bool in
-      guard !_finishing && !isFinished else { return false }
+      guard !_finishProcessRunning && !isFinished else { return false }
       guard !_cancelling && !_cancelled else { return false }
+
       _cancelling = true
-      return _cancelling
+      return true
     }
 
     guard canBeCancelled else { return }
@@ -346,14 +348,13 @@ open class AdvancedOperation: Operation {
 
   private final func _finish(errors: [Error] = []) {
     let canBeFinished = stateLock.synchronized { () -> Bool in
-      guard _state.canTransition(to: .finishing) else { return false }
-      _state = .finishing
-
-      if !_finishing {
-        _finishing = true
-        return true
+      guard _state == .ready || _state == .executing else {
+        return false
       }
-      return false
+
+      _state = .finishing
+      _finishProcessRunning = true
+      return true
     }
 
     guard canBeFinished else { return }
@@ -366,7 +367,7 @@ open class AdvancedOperation: Operation {
     willFinish(errors: updatedErrors)
     state = .finished
     didFinish(errors: updatedErrors)
-    stateLock.synchronized { _finishing = false }
+    stateLock.synchronized { _finishProcessRunning = false }
   }
 
   // MARK: - Produced Operations
@@ -395,7 +396,7 @@ open class AdvancedOperation: Operation {
     guard !isCancelled else { return } // if it's cancelled, there's no point in evaluating the conditions
 
     let canBeEnqueued = stateLock.synchronized { () -> Bool in
-      return state.canTransition(to: .pending)
+      return state == .ready
     }
 
     guard canBeEnqueued else { return }
@@ -411,7 +412,8 @@ open class AdvancedOperation: Operation {
 
   private func evaluateConditions() {
     let canBeEvaluated = stateLock.synchronized { () -> Bool in
-      guard state.canTransition(to: .evaluating) else { return false }
+      guard state == .pending else { return false }
+
       state = .evaluating
       return true
     }
@@ -424,6 +426,7 @@ open class AdvancedOperation: Operation {
       guard let self = self else {
         return
       }
+
       self._errors.append(contentsOf: errors)
       self.didFinishConditionsEvaluation(errors: errors)
       self.state = .ready
@@ -636,11 +639,8 @@ extension AdvancedOperation {
       //        let error = AdvancedOperationError.executionCancelled(message: "Operation cancelled while evaluating its conditions.")
       //        errors.append(contentsOf: aggregatedErrors)
       //      }
-
-      print("\n\nMarzoli")
       completion(flattenedErrors)
     }
-    print("Alessandro\n\n")
   }
 
 }

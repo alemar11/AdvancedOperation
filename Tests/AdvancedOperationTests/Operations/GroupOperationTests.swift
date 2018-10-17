@@ -393,6 +393,13 @@ final class GroupOperationTests: XCTestCase {
     XCTAssertTrue(group.isFinished)
   }
 
+  func testStress() {
+    (1...100).forEach { i in
+      print(i)
+      testGroupOperationsCancelled()
+    }
+  }
+
   func testGroupOperationsCancelled() {
     let operation1 = SleepyAsyncOperation(interval1: 1, interval2: 1, interval3: 1)
     let operation2 = BlockOperation(block: { sleep(2) } )
@@ -404,6 +411,14 @@ final class GroupOperationTests: XCTestCase {
     let group2 = GroupOperation(operations: operation3, operation4, operation5, exclusivityManager: ExclusivityManager())
 
     let operation6 = SleepyAsyncOperation(interval1: 0, interval2: 0, interval3: 1)
+
+    XCTAssertFalse(operation1.isFinished)
+    XCTAssertFalse(operation2.isFinished)
+    XCTAssertFalse(group1.isFinished)
+    XCTAssertFalse(operation3.isFinished)
+    XCTAssertFalse(operation4.isFinished)
+    XCTAssertFalse(operation5.isFinished)
+    XCTAssertFalse(group2.isFinished)
 
     let group = GroupOperation(operations: group1, group2, operation6, exclusivityManager: ExclusivityManager())
     let exepectation1 = expectation(description: "\(#function)\(#line)")
