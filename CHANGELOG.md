@@ -1,6 +1,6 @@
 # Changelog
 
-### 1.2.0 (WIP
+### 1.2.0 (WIP)
 
 - Added `BlockCondition`. 
 - Added `TimeoutObserver`.
