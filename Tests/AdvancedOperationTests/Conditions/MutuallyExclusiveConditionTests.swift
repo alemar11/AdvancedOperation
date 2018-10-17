@@ -31,12 +31,13 @@ final class MutuallyExclusiveConditionTests: XCTestCase {
     XCTAssertEqual(MutuallyExclusiveCondition(name: "test").mutuallyExclusivityMode.description, "Enabled in enqueue mode")
   }
 
-//  func testStress() {
-//    (1...100).forEach { i in
-//      print(i)
-//      testMutuallyExclusiveCondition()
-//    }
-//  }
+  func testStress() {
+    (1...1000_000).forEach { i in
+      print(i)
+      //testMutuallyExclusiveCondition()
+      testMutuallyExclusiveConditionWithBlockOperations()
+    }
+  }
 
   // MARK: - Enqueue Mode
 
@@ -156,6 +157,11 @@ final class MutuallyExclusiveConditionTests: XCTestCase {
     /// https://marcosantadev.com/4-ways-pass-data-operations-swift/
     wait(for: [expectation1, expectation2, expectation3], timeout: 10, enforceOrder: false)
     XCTAssertEqual(text, "A B C.")
+
+    XCTAssertTrue(operation1.isFinished)
+    XCTAssertTrue(operation2.isFinished)
+    XCTAssertTrue(operation3.isFinished, "The operation should be finished (isCancelled: \(operation3.isCancelled), isReady: \(operation3.isReady), isExecuting: \(operation3.isExecuting))")
+    //XCTAssertEqual failed: ("A B ") is not equal to ("A B C.")
   }
 
   func testMultipleMutuallyExclusiveConditionsWithBlockOperations() {
