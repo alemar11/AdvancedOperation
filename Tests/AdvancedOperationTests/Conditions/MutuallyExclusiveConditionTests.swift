@@ -31,13 +31,13 @@ final class MutuallyExclusiveConditionTests: XCTestCase {
     XCTAssertEqual(MutuallyExclusiveCondition(name: "test").mutuallyExclusivityMode.description, "Enabled in enqueue mode")
   }
 
-  func testStress() {
-    (1...1000_000).forEach { i in
-      print(i)
-      //testMutuallyExclusiveCondition()
-      testMutuallyExclusiveConditionWithBlockOperations()
-    }
-  }
+//  func testStress() {
+//    (1...1000_000).forEach { i in
+//      print(i)
+//      //testMutuallyExclusiveCondition()
+//      testMutuallyExclusiveConditionWithBlockOperations()
+//    }
+//  }
 
   // MARK: - Enqueue Mode
 
@@ -136,7 +136,6 @@ final class MutuallyExclusiveConditionTests: XCTestCase {
     }
 
     let operation2 = AdvancedBlockOperation { complete in
-      print("🍎")
       text += "B "
       complete([])
     }
@@ -167,14 +166,14 @@ final class MutuallyExclusiveConditionTests: XCTestCase {
     XCTAssertTrue(operation2.isFinished)
     XCTAssertTrue(operation3.isFinished, "The operation '\(operation3.operationName)' should be finished (isCancelled: \(operation3.isCancelled), isReady: \(operation3.isReady), isExecuting: \(operation3.isExecuting))")
     //XCTAssertEqual failed: ("A B ") is not equal to ("A B C.")
-    if !operation3.isFinished {
-      operation3.dependencies.forEach { operation in
-        print("\(operation.operationName)")
-        print("R \(operation.isReady)")
-        print("E \(operation.isExecuting)")
-        print("F \(operation.isFinished)")
-      }
-    }
+//    if !operation3.isFinished {
+//      operation3.dependencies.forEach { operation in
+//        print("\(operation.operationName)")
+//        print("R \(operation.isReady)")
+//        print("E \(operation.isExecuting)")
+//        print("F \(operation.isFinished)")
+//      }
+//    }
   }
 
   func testMultipleMutuallyExclusiveConditionsWithBlockOperations() {

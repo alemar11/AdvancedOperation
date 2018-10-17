@@ -292,7 +292,9 @@ open class AdvancedOperation: Operation {
     }
 
     willFinish(errors: updatedErrors)
+    willChangeValue(forKey: #keyPath(AdvancedOperation.isFinished))
     state = .finished
+    didChangeValue(forKey: #keyPath(AdvancedOperation.isFinished))
     didFinish(errors: updatedErrors)
     stateLock.synchronized { _finishProcessRunning = false }
   }
