@@ -129,9 +129,9 @@ open class AdvancedOperation: Operation {
 
   public final override var isFinished: Bool { return state == .finished }
 
-  public final override var isCancelled: Bool { return lock.synchronized { return _cancelled && state != .evaluating } }
+  public final override var isCancelled: Bool { return stateLock.synchronized { return _cancelled && state != .evaluating } }
 
-  internal final var isCancelling: Bool { return lock.synchronized { return _cancelling } }
+  internal final var isCancelling: Bool { return stateLock.synchronized { return _cancelling } }
 
   // MARK: - OperationState
 
@@ -196,10 +196,10 @@ open class AdvancedOperation: Operation {
   public private(set) var log = OSLog.disabled
 
   /// Returns `true` if the `AdvancedOperation` has generated errors during its lifetime.
-  public var hasErrors: Bool { return lock.synchronized { !errors.isEmpty } }
+  public var hasErrors: Bool { return stateLock.synchronized { !errors.isEmpty } }
 
   /// A lock to guard reads and writes to the `_state` property
-  private let lock = NSRecursiveLock()
+  private let stateLock = NSRecursiveLock()
 
   /// Private backing stored property for `state`.
   private var _state: OperationState = .ready
@@ -220,9 +220,9 @@ open class AdvancedOperation: Operation {
   /// The state of the operation.
   @objc dynamic
   internal var state: OperationState {
-    get { return lock.synchronized { _state } }
+    get { return stateLock.synchronized { _state } }
     set {
-      lock.synchronized {
+      stateLock.synchronized {
         precondition(_state.canTransition(to: newValue), "Performing an invalid state transition for: \(_state) to: \(newValue).")
         _state = newValue
       }
@@ -270,7 +270,7 @@ open class AdvancedOperation: Operation {
       return
     }
 
-    let canBeExecuted = lock.synchronized { () -> Bool in
+    let canBeExecuted = stateLock.synchronized { () -> Bool in
       guard isReady else { return false }
 
       guard !isExecuting else { return false }
@@ -306,7 +306,7 @@ open class AdvancedOperation: Operation {
   }
 
   private final func _cancel(errors cancelErrors: [Error]? = nil) {
-    let canBeCancelled = lock.synchronized { () -> Bool in
+    let canBeCancelled = stateLock.synchronized { () -> Bool in
       guard !_finishing && !isFinished else { return false }
       guard !_cancelling && !_cancelled else { return false }
       _cancelling = true
@@ -323,7 +323,7 @@ open class AdvancedOperation: Operation {
     willChangeValue(forKey: #keyPath(AdvancedOperation.isCancelled))
     willCancel(errors: localErrors) // observers
 
-    lock.synchronized {
+    stateLock.synchronized {
       if let cancelErrors = cancelErrors {
         self._errors.append(contentsOf: cancelErrors)
       }
@@ -345,7 +345,7 @@ open class AdvancedOperation: Operation {
   }
 
   private final func _finish(errors: [Error] = []) {
-    let canBeFinished = lock.synchronized { () -> Bool in
+    let canBeFinished = stateLock.synchronized { () -> Bool in
       guard _state.canTransition(to: .finishing) else { return false }
       _state = .finishing
 
@@ -358,7 +358,7 @@ open class AdvancedOperation: Operation {
 
     guard canBeFinished else { return }
 
-    let updatedErrors = lock.synchronized { () -> [Error] in
+    let updatedErrors = stateLock.synchronized { () -> [Error] in
       self._errors.append(contentsOf: errors)
       return self.errors
     }
@@ -366,7 +366,7 @@ open class AdvancedOperation: Operation {
     willFinish(errors: updatedErrors)
     state = .finished
     didFinish(errors: updatedErrors)
-    lock.synchronized { _finishing = false }
+    stateLock.synchronized { _finishing = false }
   }
 
   // MARK: - Produced Operations
@@ -394,7 +394,7 @@ open class AdvancedOperation: Operation {
   internal func willEnqueue() {
     guard !isCancelled else { return } // if it's cancelled, there's no point in evaluating the conditions
 
-    let canBeEnqueued = lock.synchronized { () -> Bool in
+    let canBeEnqueued = stateLock.synchronized { () -> Bool in
       return state.canTransition(to: .pending)
     }
 
@@ -410,7 +410,7 @@ open class AdvancedOperation: Operation {
   }
 
   private func evaluateConditions() {
-    let canBeEvaluated = lock.synchronized { () -> Bool in
+    let canBeEvaluated = stateLock.synchronized { () -> Bool in
       guard state.canTransition(to: .evaluating) else { return false }
       state = .evaluating
       return true
