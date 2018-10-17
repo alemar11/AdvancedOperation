@@ -32,10 +32,13 @@ internal final class SynchronizedArray<Element> {
 // MARK: - Properties
 internal extension SynchronizedArray {
 
+  /// Returns all the elements in the underlying array.
+  /// - Note: Use this property only for read operations.
   var all: [Element] {
     return queue.sync { self.array }
   }
 
+  /// Returns the first element of the sequence that satisfies the given predicate.
   func first(where predicate: (Element) throws -> Bool) rethrows -> Element? {
     return try queue.sync {
       try self.array.first(where: predicate)
@@ -58,12 +61,14 @@ internal extension SynchronizedArray {
     }
   }
 
+  /// Adds a new element at the end of the array.
   func append(_ element: Element) {
     queue.async {
       self.array.append(element)
     }
   }
 
+  /// Returns an array containing the non-nil results of calling the given transformation with each element of this sequence.
   func compactMap<K>(transform: (Element) throws -> K?) rethrows -> [K] {
     return try queue.sync {
       try self.array.compactMap(transform)

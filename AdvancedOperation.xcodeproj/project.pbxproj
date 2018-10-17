@@ -398,10 +398,10 @@
 				23830CA220615E7C00F6EBC9 /* NSLock+Utils.swift */,
 				239BC52120EB7539009A36D9 /* Operation+Injection.swift */,
 				23F24D21200799B800B25A03 /* Operation+Utils.swift */,
+				23778DF4217747F300224A62 /* SynchronizedArray.swift */,
 				235D08A3206A494600F70142 /* Conditions */,
 				23555F9521709069009FBE81 /* Obervers */,
 				236F54BA206CE5390079B033 /* Operations */,
-				23778DF4217747F300224A62 /* SynchronizedArray.swift */,
 			);
 			path = Sources;
 			sourceTree = "<group>";

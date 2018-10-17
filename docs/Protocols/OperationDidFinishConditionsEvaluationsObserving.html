@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>OperationWillCancelObserving Protocol Reference</title>
+    <title>OperationDidFinishConditionsEvaluationsObserving Protocol Reference</title>
     <link rel="stylesheet" type="text/css" href="../css/jazzy.css" />
     <link rel="stylesheet" type="text/css" href="../css/highlight.css" />
     <meta charset='utf-8'>
@@ -10,8 +10,8 @@
     
   </head>
   <body>
-    <a name="//apple_ref/swift/Protocol/OperationWillCancelObserving" class="dashAnchor"></a>
-    <a title="OperationWillCancelObserving Protocol Reference"></a>
+    <a name="//apple_ref/swift/Protocol/OperationDidFinishConditionsEvaluationsObserving" class="dashAnchor"></a>
+    <a title="OperationDidFinishConditionsEvaluationsObserving Protocol Reference"></a>
     <header>
       <div class="content-wrapper">
         <p><a href="../index.html">AdvancedOperation Docs</a> (57% documented)</p>
@@ -21,7 +21,7 @@
       <p id="breadcrumbs">
         <a href="../index.html">AdvancedOperation Reference</a>
         <img id="carat" src="../img/carat.png" />
-        OperationWillCancelObserving Protocol Reference
+        OperationDidFinishConditionsEvaluationsObserving Protocol Reference
       </p>
     </div>
     <div class="content-wrapper">
@@ -173,10 +173,10 @@
       <article class="main-content">
         <section>
           <section class="section">
-            <h1>OperationWillCancelObserving</h1>
+            <h1>OperationDidFinishConditionsEvaluationsObserving</h1>
               <div class="declaration">
                 <div class="language">
-                  <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">protocol</span> <span class="kt">OperationWillCancelObserving</span> <span class="p">:</span> <span class="kt"><a href="../Protocols.html#/s:17AdvancedOperation0B13ObservingTypeP">OperationObservingType</a></span></code></pre>
+                  <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">protocol</span> <span class="kt">OperationDidFinishConditionsEvaluationsObserving</span> <span class="p">:</span> <span class="kt"><a href="../Protocols.html#/s:17AdvancedOperation0B13ObservingTypeP">OperationObservingType</a></span></code></pre>
 
                 </div>
               </div>
@@ -189,9 +189,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:17AdvancedOperation0B19WillCancelObservingP09operationcD00F010withErrorsyA2AC_Says5Error_pGtF"></a>
-                    <a name="//apple_ref/swift/Method/operationWillCancel(operation:withErrors:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:17AdvancedOperation0B19WillCancelObservingP09operationcD00F010withErrorsyA2AC_Says5Error_pGtF">operationWillCancel(operation:withErrors:)</a>
+                    <a name="/s:17AdvancedOperation0B39DidFinishConditionsEvaluationsObservingP09operationc4FaileF00H010withErrorsyA2AC_Says5Error_pGtF"></a>
+                    <a name="//apple_ref/swift/Method/operationDidFailConditionsEvaluations(operation:withErrors:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:17AdvancedOperation0B39DidFinishConditionsEvaluationsObservingP09operationc4FaileF00H010withErrorsyA2AC_Says5Error_pGtF">operationDidFailConditionsEvaluations(operation:withErrors:)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -199,14 +199,14 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Invoked as an <code>Operation</code> is cancelled, along with any errors produced during execution.</p>
+                        <p>Invoked as an <code>Operation</code> has fineshed the evaluation of its conditions, along with any errors produced during the evaluation.</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">operationWillCancel</span><span class="p">(</span><span class="nv">operation</span><span class="p">:</span> <span class="kt"><a href="../Classes/AdvancedOperation.html">AdvancedOperation</a></span><span class="p">,</span> <span class="n">withErrors</span> <span class="nv">errors</span><span class="p">:</span> <span class="p">[</span><span class="kt">Error</span><span class="p">])</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">operationDidFailConditionsEvaluations</span><span class="p">(</span><span class="nv">operation</span><span class="p">:</span> <span class="kt"><a href="../Classes/AdvancedOperation.html">AdvancedOperation</a></span><span class="p">,</span> <span class="n">withErrors</span> <span class="nv">errors</span><span class="p">:</span> <span class="p">[</span><span class="kt">Error</span><span class="p">])</span></code></pre>
 
                         </div>
                       </div>
