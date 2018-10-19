@@ -27,16 +27,20 @@ import XCTest
 final class MutuallyExclusiveConditionTests: XCTestCase {
 
   func testStress() {
-    (1...5000).forEach { i in
+    (1...500).forEach { i in
       print(i)
 //      testMutuallyExclusiveCondition()
 //      testMutuallyExclusiveConditionWithtDifferentQueues()
 //      testMutuallyExclusiveConditionWithBlockOperations()
-//      testMultipleMutuallyExclusiveConditionsWithBlockOperations()
-      testMultipleMutuallyExclusiveConditionsInsideAGroupOperation()
+
+
+//      testMultipleMutuallyExclusiveConditionsWithBlockOperations() //TODO
+//
+//      testMultipleMutuallyExclusiveConditionsInsideAGroupOperation()
+//
 //      testMultipleMutuallyExclusiveConditionsAndDependencies()
 //      testExclusivityManager()
-//      testMutuallyExclusiveConditionWithCancelMode()
+//      testMutuallyExclusiveConditionWithCancelMode() // FIXED
 //      testMutuallyExclusiveConditionWithtDifferentQueuesWithCancelMode()
 //      testExclusivityManagerWithCancelMode()
 //      testMultipleMutuallyExclusiveConditionsAndDependenciesWithCancelMode()
@@ -342,13 +346,15 @@ final class MutuallyExclusiveConditionTests: XCTestCase {
     let queue = AdvancedOperationQueue(exclusivityManager: exclusivityManager)
     queue.maxConcurrentOperationCount = 10
 
-    let operation1 = SleepyAsyncOperation(interval1: 0, interval2: 0, interval3: 0)
+    //let operation1 = SleepyAsyncOperation(interval1: 0, interval2: 0, interval3: 0)
+    let operation1 = AdvancedBlockOperation { complete in complete([]) }
     let condition = MutuallyExclusiveCondition(name: "SleepyAsyncOperation", mode: .cancel)
     XCTAssertEqual(condition.mutuallyExclusivityMode.description, "Enabled in cancel mode")
 
     operation1.addCondition(condition)
 
-    let operation2 = SleepyAsyncOperation(interval1: 2, interval2: 2, interval3: 2)
+    //let operation2 = SleepyAsyncOperation(interval1: 2, interval2: 2, interval3: 2)
+    let operation2 = SleepyAsyncOperation(interval1: 0, interval2: 0, interval3: 0)
     operation2.addCondition(MutuallyExclusiveCondition(name: "SleepyAsyncOperation"))
 
     queue.addOperations([operation2, operation1], waitUntilFinished: true)
