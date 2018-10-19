@@ -101,19 +101,7 @@ class OperationConditionTests: XCTestCase {
     waitForExpectations(timeout: 10)
   }
 
-//    func testStress() {
-//      for i in 1...100 {
-//        print("\(i)")
-//        //testGroupOperationWithDependencies()
-//        testCancelledGroupOperationWithDependencies()
-//      }
-//    }
-
   func testCancelledGroupOperationWithDependencies() {
-    //TODO
-
-    //operation is already enqueued on a queue
-
     let expectation1 = expectation(description: "\(#function)\(#line)")
     let expectation2 = expectation(description: "\(#function)\(#line)")
     let expectation3 = expectation(description: "\(#function)\(#line)")

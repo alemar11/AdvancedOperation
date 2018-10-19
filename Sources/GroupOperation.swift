@@ -167,9 +167,11 @@ open class GroupOperation: AdvancedOperation {
   }
 
   private func run() {
+    lock.lock()
     if !underlyingOperationQueue.operations.contains(finishingOperation) && !finishingOperation.isFinished {
       underlyingOperationQueue.addOperation(finishingOperation)
     }
+    lock.unlock()
 
     underlyingOperationQueue.isSuspended = false
   }

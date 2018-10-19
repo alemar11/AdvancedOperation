@@ -103,7 +103,7 @@ final public class ExclusivityManager {
       _operations[category] = mutableOperationsWithThisCategory
     }
 
-    //TODO: keep this?
+    // TODO: keep this?
 //    if _operations[category]?.count ?? 0 == 0 {
 //      _operations[category] = nil
 //    }

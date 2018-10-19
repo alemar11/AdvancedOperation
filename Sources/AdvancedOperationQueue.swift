@@ -95,6 +95,7 @@ open class AdvancedOperationQueue: OperationQueue {
         operation.addObserver(observer)
 
         let evaluator = operation.evaluateConditions2(exclusivityManager: exclusivityManager)
+
         if let evaluator = evaluator {
           super.addOperation(evaluator)
         }
@@ -122,8 +123,8 @@ open class AdvancedOperationQueue: OperationQueue {
     }
 
     if wait {
-      // waitUntilAllOperationsAreFinished()
-      for operation in operations { //TODO: this is only a subset of all the operations!
+      //waitUntilAllOperationsAreFinished()
+      for operation in super.operations {
         operation.waitUntilFinished()
       }
     }
