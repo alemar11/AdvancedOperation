@@ -26,18 +26,27 @@ import XCTest
 
 final class MutuallyExclusiveConditionTests: XCTestCase {
 
+  func testStress() {
+    (1...5000).forEach { i in
+      print(i)
+//      testMutuallyExclusiveCondition()
+//      testMutuallyExclusiveConditionWithtDifferentQueues()
+//      testMutuallyExclusiveConditionWithBlockOperations()
+//      testMultipleMutuallyExclusiveConditionsWithBlockOperations()
+      testMultipleMutuallyExclusiveConditionsInsideAGroupOperation()
+//      testMultipleMutuallyExclusiveConditionsAndDependencies()
+//      testExclusivityManager()
+//      testMutuallyExclusiveConditionWithCancelMode()
+//      testMutuallyExclusiveConditionWithtDifferentQueuesWithCancelMode()
+//      testExclusivityManagerWithCancelMode()
+//      testMultipleMutuallyExclusiveConditionsAndDependenciesWithCancelMode()
+    }
+  }
+
   func testIsMutuallyExclusive() {
     XCTAssertTrue(MutuallyExclusiveCondition(name: "test").mutuallyExclusivityMode == .enqueue)
     XCTAssertEqual(MutuallyExclusiveCondition(name: "test").mutuallyExclusivityMode.description, "Enabled in enqueue mode")
   }
-
-//  func testStress() {
-//    (1...500).forEach { i in
-//      print(i)
-//      testMutuallyExclusiveCondition()
-//      testMutuallyExclusiveConditionWithBlockOperations()
-//    }
-//  }
 
   // MARK: - Enqueue Mode
 
@@ -198,45 +207,6 @@ final class MutuallyExclusiveConditionTests: XCTestCase {
     XCTAssertEqual(text, "A B C. 🎉")
   }
 
-  func testMultipleMutuallyExclusiveConditionsWithGroupOperations() {
-    let exclusivityManager = ExclusivityManager()
-    let queue = AdvancedOperationQueue(exclusivityManager: exclusivityManager)
-    queue.maxConcurrentOperationCount = 10
-    var text = ""
-
-    let expectation1 = expectation(description: "\(#function)\(#line)")
-    let expectation2 = expectation(description: "\(#function)\(#line)")
-    let expectation3 = expectation(description: "\(#function)\(#line)")
-    let expectation4 = expectation(description: "\(#function)\(#line)")
-
-    let operation1 = AdvancedBlockOperation { text += "A " }
-    operation1.completionBlock = { expectation1.fulfill() }
-    operation1.addCondition(MutuallyExclusiveCondition(name: "AdvancedBlockOperation"))
-
-    let operation2 = AdvancedBlockOperation { text += "B " }
-    operation2.completionBlock = { expectation2.fulfill() }
-    operation2.addCondition(MutuallyExclusiveCondition(name: "AdvancedBlockOperation"))
-
-    let delay = DelayOperation(interval: 2) // otherwise we actually don't know wich operation will start first
-
-    let group1 = GroupOperation(operations: operation1, operation2, exclusivityManager: ExclusivityManager())
-    group1.addDependency(delay)
-
-    let operation3 = AdvancedBlockOperation { text += "C. " }
-    operation3.completionBlock = { expectation3.fulfill() }
-    operation3.addCondition(MutuallyExclusiveCondition(name: "AdvancedBlockOperation"))
-    operation3.addCondition(MutuallyExclusiveCondition(name: "test"))
-
-    let operation4 = AdvancedBlockOperation { text += "🎉" }
-    operation4.completionBlock = { expectation4.fulfill() }
-    operation4.addCondition(MutuallyExclusiveCondition(name: "AdvancedBlockOperation"))
-    operation4.addCondition(MutuallyExclusiveCondition(name: "test"))
-
-    queue.addOperations([delay, group1, operation3, operation4], waitUntilFinished: false)
-    waitForExpectations(timeout: 10)
-    XCTAssertEqual(text, "C. 🎉A B ")
-  }
-
   func testMultipleMutuallyExclusiveConditionsInsideAGroupOperation() {
     var text = ""
 
@@ -311,15 +281,22 @@ final class MutuallyExclusiveConditionTests: XCTestCase {
   }
 
   func testExclusivityManager() {
-    var text = ""
-    let manager = ExclusivityManager()
-    let queue = AdvancedOperationQueue(exclusivityManager: manager)
-    queue.isSuspended = true
-
+    let expectation0 = expectation(description: "\(#function)\(#line)")
     let expectation1 = expectation(description: "\(#function)\(#line)")
     let expectation2 = expectation(description: "\(#function)\(#line)")
     let expectation3 = expectation(description: "\(#function)\(#line)")
     let expectation4 = expectation(description: "\(#function)\(#line)")
+
+    var text = ""
+    let manager = ExclusivityManager()
+    manager.onOperationsChange = { operations in
+      let values = operations.values.flatMap { $0 }
+      if values.isEmpty {
+        expectation0.fulfill()
+      }
+    }
+    let queue = AdvancedOperationQueue(exclusivityManager: manager)
+    queue.isSuspended = true
 
     let operation1 = AdvancedBlockOperation { text += "A " }
     operation1.completionBlock = { expectation1.fulfill() }
@@ -356,9 +333,6 @@ final class MutuallyExclusiveConditionTests: XCTestCase {
     waitForExpectations(timeout: 10)
 
     XCTAssertEqual(text, "A B C.")
-    //TODO test in a different way
-//    XCTAssertEqual(manager.operations.keys.count, 0)
-//    XCTAssertEqual((manager.operations[key] ?? []).count, 0)
   }
 
   // MARK: - Cancel Mode
@@ -435,15 +409,21 @@ final class MutuallyExclusiveConditionTests: XCTestCase {
   }
 
   func testExclusivityManagerWithCancelMode() {
-    var text = ""
-    let exclusivityManager = ExclusivityManager()
-    let queue = AdvancedOperationQueue(exclusivityManager: exclusivityManager)
-    queue.isSuspended = true
-
+    let expectation0 = expectation(description: "\(#function)\(#line)")
     let expectation1 = expectation(description: "\(#function)\(#line)")
     let expectation2 = expectation(description: "\(#function)\(#line)")
     let expectation3 = expectation(description: "\(#function)\(#line)")
-    //let expectation4 = expectation(description: "\(#function)\(#line)")
+
+    var text = ""
+    let exclusivityManager = ExclusivityManager()
+    exclusivityManager.onOperationsChange = { operations in
+      let values = operations.values.flatMap { $0 }
+      if values.isEmpty {
+        expectation0.fulfill()
+      }
+    }
+    let queue = AdvancedOperationQueue(exclusivityManager: exclusivityManager)
+    queue.isSuspended = true
 
     let operation1 = AdvancedBlockOperation { text += "A " }
     operation1.completionBlock = { expectation1.fulfill() }
@@ -463,13 +443,6 @@ final class MutuallyExclusiveConditionTests: XCTestCase {
     queue.addOperation(operation2)
     queue.addOperation(operation3)
 
-    // this observer is added as the last one for the last operation
-    //    let finalObserver = BlockObserver(didFinish: { (_, _) in
-    //      sleep(2) // wait a bit longer...
-    //      expectation4.fulfill()
-    //    })
-    //operation3.addObserver(finalObserver)
-
     XCTAssertEqual(exclusivityManager.operations.keys.count, 1)
     guard let key = exclusivityManager.operations.keys.first else {
       return XCTAssertNotNil(exclusivityManager.operations.keys.first)
@@ -480,8 +453,6 @@ final class MutuallyExclusiveConditionTests: XCTestCase {
     waitForExpectations(timeout: 10)
 
     XCTAssertEqual(text, "A C.")
-//    XCTAssertEqual(exclusivityManager.operations.keys.count, 0)
-//    XCTAssertEqual((exclusivityManager.operations[key] ?? []).count, 0)
   }
 
   func testMultipleMutuallyExclusiveConditionsAndDependenciesWithCancelMode() {

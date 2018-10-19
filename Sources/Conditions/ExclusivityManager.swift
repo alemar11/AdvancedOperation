@@ -43,6 +43,8 @@ final public class ExclusivityManager {
     return queue.sync { return _operations }
   }
 
+  internal var onOperationsChange: (([String: [Operation]]) -> Void)? = .none
+
   /// Adds an `AdvancedOperation` the the `ExclusivityManager` instance.
   ///
   /// - Parameters:
@@ -50,14 +52,16 @@ final public class ExclusivityManager {
   ///   - category: The category to identify an `AdvancedOperation`.
   ///   - cancellable: True if the operation should be cancelled instead of enqueue if another operation with the same category exists.
   internal func addOperation(_ operation: AdvancedOperation, category: String, cancellable: Bool = false) {
-    _ = queue.sync(execute: {
+    _ = queue.sync {
       self._addOperation(operation, category: category, cancellable: cancellable)
-    })
+      self.onOperationsChange?(self._operations)
+    }
   }
 
   internal func removeOperation(_ operation: AdvancedOperation, category: String) {
     queue.async {
       self._removeOperation(operation, category: category)
+      self.onOperationsChange?(self._operations)
     }
   }
 
@@ -102,11 +106,6 @@ final public class ExclusivityManager {
       mutableOperationsWithThisCategory.remove(at: index)
       _operations[category] = mutableOperationsWithThisCategory
     }
-
-    // TODO: keep this?
-//    if _operations[category]?.count ?? 0 == 0 {
-//      _operations[category] = nil
-//    }
   }
 
 }
