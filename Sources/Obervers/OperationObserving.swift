@@ -61,7 +61,7 @@ public protocol OperationDidProduceOperationObserving: OperationObservingType {
 
 public protocol OperationDidFinishConditionsEvaluationsObserving: OperationObservingType {
   /// Invoked as an `Operation` has fineshed the evaluation of its conditions, along with any errors produced during the evaluation.
-  func operationDidFailConditionsEvaluations(operation: AdvancedOperation, withErrors errors: [Error])
+  func operationDidCompleteConditionsEvaluations(operation: AdvancedOperation, withErrors errors: [Error])
 }
 
 /// The protocol that types may implement if they wish to be notified of significant operation lifecycle events.

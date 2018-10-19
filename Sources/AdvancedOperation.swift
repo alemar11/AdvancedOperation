@@ -357,7 +357,7 @@ open class AdvancedOperation: Operation {
       }
 
       self._errors.append(contentsOf: errors)
-      self.didFinishConditionsEvaluation(errors: errors)
+      self.didCompleteConditionsEvaluation(errors: errors)
       self.state = .ready
     }
   }
@@ -370,10 +370,10 @@ open class AdvancedOperation: Operation {
     os_log("%{public}s has started.", log: log, type: .info, operationName)
   }
 
-  /// Subclass this method to know if the operation has finished the evaluation of its conditions.
+  /// Subclass this method to know if the operation has completed the evaluation of its conditions.
   /// - Note: Calling the `super` implementation will keep the logging messages.
-  open func operationDidFinishConditionsEvaluation(errors: [Error]) {
-    os_log("%{public}s has failed the conditions evaluation with %{public}d errors.", log: log, type: .info, operationName, errors.count)
+  open func operationDidCompleteConditionsEvaluation(errors: [Error]) {
+    os_log("%{public}s has completed the conditions evaluation with %{public}d errors.", log: log, type: .info, operationName, errors.count)
   }
 
   /// Subclass this method to know when the operation has produced another `Operation`.
@@ -466,7 +466,7 @@ extension AdvancedOperation {
     return observers.compactMap { $0 as? OperationDidFinishObserving }
   }
 
-  internal var didFinishConditionsEvaluationObservers: [OperationDidFinishConditionsEvaluationsObserving] {
+  internal var didCompleteConditionsEvaluationObservers: [OperationDidFinishConditionsEvaluationsObserving] {
     return observers.compactMap { $0 as? OperationDidFinishConditionsEvaluationsObserving }
   }
 
@@ -474,11 +474,11 @@ extension AdvancedOperation {
     operationWillEvaluateConditions()
   }
 
-  private func didFinishConditionsEvaluation(errors: [Error]) {
-    operationDidFinishConditionsEvaluation(errors: errors)
+  private func didCompleteConditionsEvaluation(errors: [Error]) {
+    operationDidCompleteConditionsEvaluation(errors: errors)
 
-    for observer in didFinishConditionsEvaluationObservers {
-      observer.operationDidFailConditionsEvaluations(operation: self, withErrors: errors)
+    for observer in didCompleteConditionsEvaluationObservers {
+      observer.operationDidCompleteConditionsEvaluations(operation: self, withErrors: errors)
     }
   }
 

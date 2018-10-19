@@ -34,7 +34,7 @@ public class BlockObserver: OperationObserving {
   private let willCancelHandler: ((AdvancedOperation, [Error]) -> Void)?
   private let didCancelHandler: ((AdvancedOperation, [Error]) -> Void)?
   private let didProduceOperationHandler: ((Operation, Operation) -> Void)?
-  private let didFailConditionsEvaluationsHandler: ((AdvancedOperation, [Error]) -> Void)?
+  private let didCompleteConditionsEvaluationsHandler: ((AdvancedOperation, [Error]) -> Void)?
 
   public init (willExecute: ((AdvancedOperation) -> Void)? = nil,
                didProduce: ((Operation, Operation) -> Void)? = nil,
@@ -45,7 +45,7 @@ public class BlockObserver: OperationObserving {
                didFinish: ((AdvancedOperation, [Error]) -> Void)? = nil) {
     self.willExecuteHandler = willExecute
     self.didProduceOperationHandler = didProduce
-    self.didFailConditionsEvaluationsHandler = didFailConditionsEvaluations
+    self.didCompleteConditionsEvaluationsHandler = didFailConditionsEvaluations
     self.willFinishHandler = willFinish
     self.didFinishHandler = didFinish
     self.willCancelHandler = willCancel
@@ -78,8 +78,8 @@ public class BlockObserver: OperationObserving {
     didProduceOperationHandler?(operation, producedOperation)
   }
 
-  public func operationDidFailConditionsEvaluations(operation: AdvancedOperation, withErrors errors: [Error]) {
-    didFailConditionsEvaluationsHandler?(operation, errors)
+  public func operationDidCompleteConditionsEvaluations(operation: AdvancedOperation, withErrors errors: [Error]) {
+    didCompleteConditionsEvaluationsHandler?(operation, errors)
   }
 
 }

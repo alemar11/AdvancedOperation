@@ -355,7 +355,7 @@ final internal class MockObserver: OperationObserving {
     didProduceCount += 1
   }
 
-  func operationDidFailConditionsEvaluations(operation: AdvancedOperation, withErrors errors: [Error]) {
+  func operationDidCompleteConditionsEvaluations(operation: AdvancedOperation, withErrors errors: [Error]) {
     //TODO
   }
 

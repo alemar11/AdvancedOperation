@@ -24,6 +24,28 @@
 import Dispatch
 import Foundation
 
+internal final class SynchronizedDictionary<Key: Hashable, Value> {
+  fileprivate let queue = DispatchQueue(label: "\(identifier).SynchronizedDictionary")
+  fileprivate var dictionary = [Key: Value]()
+
+  var all: [Key: Value] {
+    return queue.sync { self.dictionary }
+  }
+
+  subscript(key: Key) -> Value? {
+    get {
+      return queue.sync {
+        dictionary[key]
+      }
+    }
+    set(newValue) {
+      queue.sync {
+        dictionary[key] = newValue
+      }
+    }
+  }
+}
+
 internal final class SynchronizedArray<Element> {
   fileprivate let queue = DispatchQueue(label: "\(identifier).SynchronizedArray")
   fileprivate var array = [Element]()
