@@ -33,15 +33,13 @@ final class AdvancedBlockOperationTests: XCTestCase {
       }
     }
 
-    let expectation1 = expectation(description: "\(#function)\(#line)")
-    operation.addCompletionBlock { expectation1.fulfill() }
+    let expectation1 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isFinished), object: operation, expectedValue: true)
     operation.start()
     operation.cancel()
 
-    waitForExpectations(timeout: 4)
+    wait(for: [expectation1], timeout: 4)
 
     XCTAssertTrue(operation.isCancelled)
-    XCTAssertTrue(operation.isFinished)
   }
 
   func testEarlyBailOut() {
@@ -49,14 +47,13 @@ final class AdvancedBlockOperationTests: XCTestCase {
       complete([])
     }
 
-    let expectation1 = expectation(description: "\(#function)\(#line)")
-    operation.addCompletionBlock { expectation1.fulfill() }
+    let expectation1 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isFinished), object: operation, expectedValue: true)
     operation.cancel()
     operation.start()
 
-    waitForExpectations(timeout: 4)
+    wait(for: [expectation1], timeout: 4)
+
     XCTAssertTrue(operation.isCancelled)
-    XCTAssertTrue(operation.isFinished)
   }
 
   func testBlockOperationWithAsyncQueue() {
@@ -67,12 +64,11 @@ final class AdvancedBlockOperationTests: XCTestCase {
       }
     }
 
-    let expectation1 = expectation(description: "\(#function)\(#line)")
-    operation.addCompletionBlock { expectation1.fulfill() }
+    let expectation1 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isFinished), object: operation, expectedValue: true)
     operation.start()
 
-    waitForExpectations(timeout: 4)
-    XCTAssertTrue(operation.isFinished)
+    wait(for: [expectation1], timeout: 4)
+
   }
 
   func testBlockOperationWithAsyncQueueFinishedWithErrors () {
