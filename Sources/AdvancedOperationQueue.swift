@@ -123,7 +123,7 @@ open class AdvancedOperationQueue: OperationQueue {
     }
 
     if wait {
-      //waitUntilAllOperationsAreFinished()
+      // waitUntilAllOperationsAreFinished()
       for operation in super.operations {
         operation.waitUntilFinished()
       }
