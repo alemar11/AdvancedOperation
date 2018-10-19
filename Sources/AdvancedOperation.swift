@@ -27,31 +27,9 @@ import os.log
 /// An advanced subclass of `Operation`.
 open class AdvancedOperation: Operation {
 
-  // MARK: - State
+  // TODO: cancel conditions evaluation if the operation is cancelled?
 
-  //  public final override var isReady: Bool {
-  //    switch state {
-  //
-  //    case .pending:
-  //      //      if isCancelled {
-  //      //        return true
-  //      //      }
-  //
-  //      if super.isReady {
-  //        evaluateConditions()
-  //        return false
-  //      }
-  //
-  //      return false // Until conditions have been evaluated
-  //
-  //    case .ready:
-  //      return super.isReady
-  //
-  //    default:
-  //      return false
-  //    }
-  //
-  //  }
+  // MARK: - State
 
   public final override var isExecuting: Bool { return state == .executing }
 
@@ -234,9 +212,7 @@ open class AdvancedOperation: Operation {
       if let cancelErrors = cancelErrors {
         self._errors.append(contentsOf: cancelErrors)
       }
-//      if _state == .pending { // conditions will not be evaluated anymore
-//        _state = .ready
-//      }
+
       _cancelled = true
       _cancelling = false
     }
@@ -297,19 +273,6 @@ open class AdvancedOperation: Operation {
   // MARK: - Conditions
 
   public private(set) var conditions = [OperationCondition]()
-
-  /// Indicate to the operation running on a `AdvancedOperationQueue` that it can proceed with evaluating conditions (if it's not cancelled or finished).
-//  internal func willEnqueue() {
-//    guard !isCancelled else { return } // if it's cancelled, there's no point in evaluating the conditions
-//
-//    let canBeEnqueued = stateLock.synchronized { () -> Bool in
-//      return state == .ready
-//    }
-//
-//    guard canBeEnqueued else { return }
-//
-//    state = .pending
-//  }
 
   public func addCondition(_ condition: OperationCondition) {
     assert(state == .ready, "Cannot add conditions if the operation is \(state).")
@@ -502,6 +465,7 @@ extension AdvancedOperation {
 
 }
 
+/// Evalutes all the `OperationCondition`: the evaluation fails if it, once finished, contains errors.
 internal final class ConditionEvaluatorOperation: GroupOperation {
 
   init(conditions: [OperationCondition], operation: AdvancedOperation, exclusivityManager: ExclusivityManager) { //TODO: set
@@ -537,6 +501,7 @@ internal final class ConditionEvaluatorOperation: GroupOperation {
 
 }
 
+/// Operation responsible to evaluate a single `OperationCondition`.
 internal final class EvaluateConditionOperation: AdvancedOperation, OperationInputHaving, OperationOutputHaving {
 
   internal weak var input: AdvancedOperation? = .none

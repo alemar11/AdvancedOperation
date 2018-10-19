@@ -101,41 +101,30 @@ class OperationConditionTests: XCTestCase {
     waitForExpectations(timeout: 10)
   }
 
-  //  func testStress() {
-  //    for i in 1...100 {
-  //      print("\(i)")
-  //      testGroupOperationWithDependencies()
-  //      testCancelledGroupOperationWithDependencies()
-  //    }
-  //  }
+//    func testStress() {
+//      for i in 1...100 {
+//        print("\(i)")
+//        //testGroupOperationWithDependencies()
+//        testCancelledGroupOperationWithDependencies()
+//      }
+//    }
 
   func testCancelledGroupOperationWithDependencies() {
+    //TODO
+
+    //operation is already enqueued on a queue
+
     let expectation1 = expectation(description: "\(#function)\(#line)")
     let expectation2 = expectation(description: "\(#function)\(#line)")
     let expectation3 = expectation(description: "\(#function)\(#line)")
     let expectation4 = expectation(description: "\(#function)\(#line)")
     let expectation5 = expectation(description: "\(#function)\(#line)")
 
-    //    let observer = BlockObserver(willExecute: { (operation) in
-    //      print("\(operation.name!) willExecute")
-    //    }, didProduce: { (from, to) in
-    //
-    //    }, willCancel: { (operation, errors) in
-    //      print("\(operation.name!) willCancel")
-    //    }, didCancel: { (operation, errors) in
-    //      print("\(operation.name!) didCancel")
-    //    }, willFinish: { (operation, errors) in
-    //      print("\(operation.name!) willFinish")
-    //    }) { (operation, errors) in
-    //      print("\(operation.name!) didFinish")
-    //    }
-
     let operation1 = AdvancedBlockOperation { }
     operation1.name = "operation1"
     operation1.completionBlock = { expectation1.fulfill() }
 
     let operation2 = AdvancedBlockOperation { }
-    //operation2.addObserver(observer)
     operation2.name = "operation2"
     operation2.completionBlock = { expectation2.fulfill() }
 

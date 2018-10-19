@@ -81,7 +81,6 @@ final class AdvancedOperationTests: XCTestCase {
     XCTAssertFalse(operation.isCancelled)
     XCTAssertFalse(operation.isFinished)
 
-
     queue.async {
       operation.start()
     }

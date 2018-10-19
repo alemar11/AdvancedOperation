@@ -31,13 +31,13 @@ final class MutuallyExclusiveConditionTests: XCTestCase {
     XCTAssertEqual(MutuallyExclusiveCondition(name: "test").mutuallyExclusivityMode.description, "Enabled in enqueue mode")
   }
 
-  func testStress() {
-    (1...5000).forEach { i in
-      print(i)
-      //testMutuallyExclusiveCondition()
-      testMutuallyExclusiveConditionWithBlockOperations()
-    }
-  }
+//  func testStress() {
+//    (1...500).forEach { i in
+//      print(i)
+//      testMutuallyExclusiveCondition()
+//      testMutuallyExclusiveConditionWithBlockOperations()
+//    }
+//  }
 
   // MARK: - Enqueue Mode
 
@@ -118,34 +118,27 @@ final class MutuallyExclusiveConditionTests: XCTestCase {
   }
 
   func testMutuallyExclusiveConditionWithBlockOperations() {
-    let lock = NSLock()
     let queue = AdvancedOperationQueue(exclusivityManager: ExclusivityManager())
     queue.maxConcurrentOperationCount = 10
     var text = ""
 
     let operation1 = AdvancedBlockOperation { complete in
-      lock.lock()
       text += "A "
-      lock.unlock()
       complete([])
     }
     operation1.addCondition(MutuallyExclusiveCondition(name: "AdvancedBlockOperation"))
     let expectation1 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isFinished), object: operation1, expectedValue: true)
 
     let operation2 = AdvancedBlockOperation { complete in
-       lock.lock()
       text += "B "
-       lock.unlock()
       complete([])
     }
     operation2.addCondition(MutuallyExclusiveCondition(name: "AdvancedBlockOperation"))
     let expectation2 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isFinished), object: operation2, expectedValue: true)
 
     let operation3 = AdvancedBlockOperation { complete in
-       lock.lock()
       text += "C."
-      lock.unlock()
-        complete([])
+      complete([])
     }
     operation3.addCondition(MutuallyExclusiveCondition(name: "AdvancedBlockOperation"))
     let expectation3 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isFinished), object: operation3, expectedValue: true)
