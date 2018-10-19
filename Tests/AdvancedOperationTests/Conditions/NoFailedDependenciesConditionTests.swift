@@ -73,16 +73,16 @@ final class NoFailedDependenciesConditionTests: XCTestCase {
     let expectation3 = expectation(description: "\(#function)\(#line)")
     let expectation4 = expectation(description: "\(#function)\(#line)")
 
-    let operation1 = XCTFailOperation()
+    let operation1 = AdvancedBlockOperation { complete in complete([]) }
     operation1.name = "operation1"
 
-    let operation2 = SleepyAsyncOperation()
+    let operation2 = AdvancedBlockOperation { complete in complete([]) }
     operation2.name = "operation2"
 
-    let operation3 = SleepyAsyncOperation()
+    let operation3 = AdvancedBlockOperation { complete in complete([]) }
     operation3.name = "operation3"
 
-    let operation4 = DelayOperation(interval: 1)
+    let operation4 = AdvancedBlockOperation { complete in complete([]) }
     operation4.name = "operation4"
 
     operation2.cancel(error: MockError.failed)
@@ -94,9 +94,13 @@ final class NoFailedDependenciesConditionTests: XCTestCase {
 
     operation1.addCondition(NoFailedDependenciesCondition())
     [operation4, operation3, operation2].then(operation1)
+
     queue.addOperations([operation1, operation2, operation3, operation4], waitUntilFinished: false)
+
     waitForExpectations(timeout: 5)
+
     XCTAssertTrue(operation1.hasErrors)
+    XCTAssertTrue(operation2.isCancelled)
     XCTAssertEqual(operation1.errors.count, 2)
   }
 
