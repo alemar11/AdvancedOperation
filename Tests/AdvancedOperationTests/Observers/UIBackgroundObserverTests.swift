@@ -80,7 +80,7 @@ final class UIBackgroundObserverTests: XCTestCase {
     XCTAssertTrue(observer2 === observer3)
   }
 
-  func testUIBackgroundObserverStartsBackgroundTask() {
+  func testUIBackgroundObserverStartsBackgroundTask() { //TODO
     // Given
     var backgroundTaskIdentifier: UIBackgroundTaskIdentifier!
     var endedBackgroundTaskIdentifier: UIBackgroundTaskIdentifier!
