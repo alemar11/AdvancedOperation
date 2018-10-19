@@ -29,35 +29,35 @@ open class AdvancedOperation: Operation {
 
   // MARK: - State
 
-  public final override var isReady: Bool {
-    switch state {
-
-    case .pending:
-      //      if isCancelled {
-      //        return true
-      //      }
-
-      if super.isReady {
-        evaluateConditions()
-        return false
-      }
-
-      return false // Until conditions have been evaluated
-
-    case .ready:
-      return super.isReady
-
-    default:
-      return false
-    }
-
-  }
+  //  public final override var isReady: Bool {
+  //    switch state {
+  //
+  //    case .pending:
+  //      //      if isCancelled {
+  //      //        return true
+  //      //      }
+  //
+  //      if super.isReady {
+  //        evaluateConditions()
+  //        return false
+  //      }
+  //
+  //      return false // Until conditions have been evaluated
+  //
+  //    case .ready:
+  //      return super.isReady
+  //
+  //    default:
+  //      return false
+  //    }
+  //
+  //  }
 
   public final override var isExecuting: Bool { return state == .executing }
 
   public final override var isFinished: Bool { return state == .finished }
 
-  public final override var isCancelled: Bool { return stateLock.synchronized { return _cancelled && state != .evaluating } }
+  public final override var isCancelled: Bool { return stateLock.synchronized { return _cancelled } }
 
   internal final var isCancelling: Bool { return stateLock.synchronized { return _cancelling } }
 
@@ -67,8 +67,6 @@ open class AdvancedOperation: Operation {
   internal enum OperationState: Int, CustomDebugStringConvertible {
 
     case ready
-    case pending
-    case evaluating
     case executing
     case finishing
     case finished
@@ -77,13 +75,7 @@ open class AdvancedOperation: Operation {
       switch (self, state) {
       case (.ready, .executing):
         return true
-      case (.ready, .pending):
-        return true
       case (.ready, .finishing): // early bailing out
-        return true
-      case (.pending, .evaluating):
-        return true
-      case (.evaluating, .ready):
         return true
       case (.executing, .finishing):
         return true
@@ -98,10 +90,6 @@ open class AdvancedOperation: Operation {
       switch self {
       case .ready:
         return "ready"
-      case .pending:
-        return "pending"
-      case .evaluating:
-        return "evaluating conditions"
       case .executing:
         return "executing"
       case .finishing:
@@ -117,7 +105,7 @@ open class AdvancedOperation: Operation {
 
   /// Errors generated during the execution.
   public var errors: [Error] {
-      return _errors.all
+    return _errors.all
   }
 
   /// An instance of `OSLog` (by default is disabled).
@@ -157,20 +145,6 @@ open class AdvancedOperation: Operation {
     }
   }
 
-//  open override class func keyPathsForValuesAffectingValue(forKey key: String) -> Set<String> {
-//    switch key {
-//    case
-//        #keyPath(Operation.isReady),
-//         #keyPath(Operation.isExecuting),
-//         #keyPath(Operation.isFinished):
-//      return Set([#keyPath(state)])
-//    case #keyPath(Operation.isCancelled):
-//      return Set([#keyPath(state), #keyPath(_cancelled)])
-//    default:
-//      return super.keyPathsForValuesAffectingValue(forKey: key)
-//    }
-//  }
-
   // MARK: - Life Cycle
 
   deinit {
@@ -209,7 +183,7 @@ open class AdvancedOperation: Operation {
 
     willChangeValue(forKey: #keyPath(AdvancedOperation.isExecuting))
     stateLock.synchronized {
-    state = .executing
+      state = .executing
     }
     didChangeValue(forKey: #keyPath(AdvancedOperation.isExecuting))
 
@@ -260,9 +234,9 @@ open class AdvancedOperation: Operation {
       if let cancelErrors = cancelErrors {
         self._errors.append(contentsOf: cancelErrors)
       }
-      if _state == .pending { // conditions will not be evaluated anymore
-        _state = .ready
-      }
+//      if _state == .pending { // conditions will not be evaluated anymore
+//        _state = .ready
+//      }
       _cancelled = true
       _cancelling = false
     }
@@ -325,48 +299,22 @@ open class AdvancedOperation: Operation {
   public private(set) var conditions = [OperationCondition]()
 
   /// Indicate to the operation running on a `AdvancedOperationQueue` that it can proceed with evaluating conditions (if it's not cancelled or finished).
-  internal func willEnqueue() {
-    guard !isCancelled else { return } // if it's cancelled, there's no point in evaluating the conditions
-
-    let canBeEnqueued = stateLock.synchronized { () -> Bool in
-      return state == .ready
-    }
-
-    guard canBeEnqueued else { return }
-
-    state = .pending
-  }
+//  internal func willEnqueue() {
+//    guard !isCancelled else { return } // if it's cancelled, there's no point in evaluating the conditions
+//
+//    let canBeEnqueued = stateLock.synchronized { () -> Bool in
+//      return state == .ready
+//    }
+//
+//    guard canBeEnqueued else { return }
+//
+//    state = .pending
+//  }
 
   public func addCondition(_ condition: OperationCondition) {
-    assert(state == .ready || state == .pending, "Cannot add conditions if the operation is \(state).")
+    assert(state == .ready, "Cannot add conditions if the operation is \(state).")
 
     conditions.append(condition)
-  }
-
-  private func evaluateConditions() {
-    let canBeEvaluated = stateLock.synchronized { () -> Bool in
-      guard state == .pending else { return false }
-
-      state = .evaluating
-      return true
-    }
-
-    guard canBeEvaluated else { return }
-
-    willEvaluateConditions()
-
-    type(of: self).evaluate(conditions, operation: self) { [weak self] errors in
-      guard let self = self else {
-        return
-      }
-
-      self._errors.append(contentsOf: errors)
-      self.didCompleteConditionsEvaluation(errors: errors)
-
-      self.willChangeValue(forKey: #keyPath(AdvancedOperation.isReady))
-      self.state = .ready
-      self.didChangeValue(forKey: #keyPath(AdvancedOperation.isReady))
-    }
   }
 
   // MARK: - Subclass
@@ -473,20 +421,8 @@ extension AdvancedOperation {
     return observers.compactMap { $0 as? OperationDidFinishObserving }
   }
 
-  internal var didCompleteConditionsEvaluationObservers: [OperationDidFinishConditionsEvaluationsObserving] {
-    return observers.compactMap { $0 as? OperationDidFinishConditionsEvaluationsObserving }
-  }
-
   private func willEvaluateConditions() {
     operationWillEvaluateConditions()
-  }
-
-  private func didCompleteConditionsEvaluation(errors: [Error]) {
-    operationDidCompleteConditionsEvaluation(errors: errors)
-
-    for observer in didCompleteConditionsEvaluationObservers {
-      observer.operationDidCompleteConditionsEvaluations(operation: self, withErrors: errors)
-    }
   }
 
   private func willExecute() {
@@ -541,42 +477,100 @@ extension AdvancedOperation {
 // MARK: - Condition Evaluation
 
 extension AdvancedOperation {
-
-  private static func evaluate(_ conditions: [OperationCondition], operation: AdvancedOperation, completion: @escaping ([Error]) -> Void) {
-    let conditionGroup = DispatchGroup()
-    var results = [OperationConditionResult?](repeating: nil, count: conditions.count)
-    let lock = NSLock()
-
-    // Even if an operation is cancelled, the conditions are evaluated nonetheless.
-    for (index, condition) in conditions.enumerated() {
-      conditionGroup.enter()
-      condition.evaluate(for: operation) { result in
-        lock.synchronized {
-          results[index] = result
-        }
-
-        conditionGroup.leave()
-      }
+  internal func evaluateConditions2(exclusivityManager: ExclusivityManager) -> GroupOperation? {
+    guard !conditions.isEmpty else {
+      return nil
     }
 
-    conditionGroup.notify(queue: DispatchQueue.global()) {
-      // Aggregate all the occurred errors.
-      let errors = results.compactMap { result -> [Error]? in
-        if case .failed(let errors)? = result {
-          return errors
-        }
-        return nil
+    let evaluator = ConditionEvaluatorOperation(conditions: self.conditions, operation: self, exclusivityManager: exclusivityManager)
+    let observer = BlockObserver(willFinish: { [weak self] _, errors in
+      if !errors.isEmpty {
+        self?.cancel(errors: errors)
       }
+      }, didFinish: nil)
+    evaluator.addObserver(observer)
 
-      let flattenedErrors = errors.flatMap { $0 }
+    evaluator.useOSLog(log)
 
-      //      if operation.isCancelled {
-      //        var aggregatedErrors = operation.errors
-      //        let error = AdvancedOperationError.executionCancelled(message: "Operation cancelled while evaluating its conditions.")
-      //        errors.append(contentsOf: aggregatedErrors)
-      //      }
-      completion(flattenedErrors)
+    for dependency in dependencies {
+      evaluator.addDependency(dependency)
     }
+    addDependency(evaluator)
+
+    return evaluator
   }
 
+}
+
+internal final class ConditionEvaluatorOperation: GroupOperation {
+
+  init(conditions: [OperationCondition], operation: AdvancedOperation, exclusivityManager: ExclusivityManager) { //TODO: set
+    super.init(operations: [])
+
+    conditions.forEach { condition in
+      let evaluatingOperation = EvaluateConditionOperation(condition: condition, for: operation)
+
+      if let dependency = condition.dependency(for: operation) {
+        evaluatingOperation.addDependency(dependency)
+        addOperation(operation: dependency)
+      }
+
+      if condition.mutuallyExclusivityMode != .disabled {
+        let category = condition.name
+        let cancellable = condition.mutuallyExclusivityMode == .cancel
+        exclusivityManager.addOperation(operation, category: category, cancellable: cancellable)
+      }
+
+      addOperation(operation: evaluatingOperation)
+    }
+
+    name = "ConditionEvaluatorOperation<\(operation.operationName)>"
+  }
+
+  override func operationWillExecute() {
+    os_log("%{public}s has started evaluating the conditions.", log: log, type: .info, operationName)
+  }
+
+  override func operationDidFinish(errors: [Error]) {
+    os_log("%{public}s has finished evaluating the conditions with %{public}d errors.", log: log, type: .info, operationName, errors.count)
+  }
+
+}
+
+internal final class EvaluateConditionOperation: AdvancedOperation, OperationInputHaving, OperationOutputHaving {
+
+  internal weak var input: AdvancedOperation? = .none
+  internal var output: OperationConditionResult? = .none
+
+  let condition: OperationCondition
+
+  internal convenience init(condition: OperationCondition, for operation: AdvancedOperation) {
+    self.init(condition: condition)
+    self.input = operation
+  }
+
+  internal init(condition: OperationCondition) {
+    self.condition = condition
+    super.init()
+    self.name = condition.name
+  }
+
+  internal override func main() {
+    guard let evaluatedOperation = input else {
+      // TODO: add error
+      output = OperationConditionResult.failed([])
+      finish()
+      return
+    }
+
+    condition.evaluate(for: evaluatedOperation) { [weak self] result in
+      guard let self = self else {
+        return
+      }
+
+      self.output = result
+      let errors = result.errors ?? []
+      self.finish(errors: errors)
+    }
+  }
 }

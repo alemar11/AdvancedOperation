@@ -59,11 +59,6 @@ public protocol OperationDidProduceOperationObserving: OperationObservingType {
   func operation(operation: AdvancedOperation, didProduce: Operation)
 }
 
-public protocol OperationDidFinishConditionsEvaluationsObserving: OperationObservingType {
-  /// Invoked as an `Operation` has fineshed the evaluation of its conditions, along with any errors produced during the evaluation.
-  func operationDidCompleteConditionsEvaluations(operation: AdvancedOperation, withErrors errors: [Error])
-}
-
 /// The protocol that types may implement if they wish to be notified of significant operation lifecycle events.
 // swiftlint:disable:next line_length
-public protocol OperationObserving: OperationWillExecuteObserving, OperationWillFinishObserving, OperationDidFinishObserving, OperationWillCancelObserving, OperationDidCancelObserving, OperationDidProduceOperationObserving, OperationDidFinishConditionsEvaluationsObserving { }
+public protocol OperationObserving: OperationWillExecuteObserving, OperationWillFinishObserving, OperationDidFinishObserving, OperationWillCancelObserving, OperationDidCancelObserving, OperationDidProduceOperationObserving { }

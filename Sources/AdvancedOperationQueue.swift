@@ -55,7 +55,6 @@ open class AdvancedOperationQueue: OperationQueue {
     self.underlyingQueue = underlyingQueue
   }
 
-  // swiftlint:disable:next cyclomatic_complexity
   open override func addOperation (_ operation: Operation) {
     lock.synchronized {
       if let operation = operation as? AdvancedOperation { /// AdvancedOperation
@@ -95,25 +94,9 @@ open class AdvancedOperationQueue: OperationQueue {
 
         operation.addObserver(observer)
 
-        // Conditions
-        if !operation.conditions.isEmpty {
-
-          let dependencies = operation.conditions.compactMap { $0.dependency(for: operation) }
-          for dependency in dependencies {
-            self.addOperation(dependency)
-            operation.addDependency(dependency)
-          }
-
-          let mutuallyExclusiveConditions = operation.conditions.filter { $0.mutuallyExclusivityMode != .disabled }
-          if !mutuallyExclusiveConditions.isEmpty {
-            for condition in mutuallyExclusiveConditions {
-              let category = condition.name
-              let cancellable = condition.mutuallyExclusivityMode == .cancel
-              exclusivityManager.addOperation(operation, category: category, cancellable: cancellable)
-            }
-          }
-
-          operation.willEnqueue()
+        let evaluator = operation.evaluateConditions2(exclusivityManager: exclusivityManager)
+        if let evaluator = evaluator {
+          super.addOperation(evaluator)
         }
 
       } else { /// Operation
@@ -140,7 +123,7 @@ open class AdvancedOperationQueue: OperationQueue {
 
     if wait {
       // waitUntilAllOperationsAreFinished()
-      for operation in operations {
+      for operation in operations { //TODO: this is only a subset of all the operations!
         operation.waitUntilFinished()
       }
     }

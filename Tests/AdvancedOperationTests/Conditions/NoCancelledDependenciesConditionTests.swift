@@ -122,11 +122,19 @@ final class NoCancelledDependenciesConditionTests: XCTestCase {
     let operation3 = XCTFailOperation()
     let operation4 = DelayOperation(interval: 1)
 
+    operation1.name = "op1"
+    operation2.name = "op2"
+    operation3.name = "op3"
+    operation4.name = "op4"
+
     operation1.addDependencies([operation2, operation3])
     operation1.addCondition(NoCancelledDependeciesCondition())
     operation1.addCondition(NoFailedDependenciesCondition())
+
     operation3.addDependency(operation4)
     operation3.addCondition(NoCancelledDependeciesCondition())
+
+    operation1.useOSLog(TestsLog)
 
     operation4.cancel()
 
@@ -135,10 +143,13 @@ final class NoCancelledDependenciesConditionTests: XCTestCase {
     XCTAssertFalse(operation4.hasErrors)
 
     XCTAssertTrue(operation3.hasErrors)
+    XCTAssertTrue(operation3.isCancelled)
+    XCTAssertTrue(operation3.isFinished)
 
     XCTAssertFalse(operation2.isCancelled)
     XCTAssertFalse(operation2.hasErrors)
 
+    print(operation1.isFinished)
     XCTAssertTrue(operation1.hasErrors)
     XCTAssertTrue(operation1.isCancelled)
   }

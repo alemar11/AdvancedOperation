@@ -174,7 +174,7 @@ class OperationConditionTests: XCTestCase {
     XCTAssertTrue(operation1.isCancelled)
     XCTAssertTrue(operation1.isFinished)
     XCTAssertTrue(operation2.isCancelled)
-    XCTAssertTrue(operation2.isFinished, "🔴 \(operation2.state)")
+    XCTAssertTrue(operation2.isFinished)
   }
 
   func testCancelledOperationWithMultipleConditions() {
@@ -248,8 +248,7 @@ class OperationConditionTests: XCTestCase {
     }
 
     wait(for: [expectation1], timeout: 10)
-    XCTAssertFalse(operation1.isCancelled, "The operation is not cancelled yet because it's still evaluating some conditions.")
-    XCTAssertTrue(operation1.state == .evaluating)
+    XCTAssertTrue(operation1.isCancelled) // It's cancelled but the conditions are beeing evaluted.
 
     wait(for: [expectation2], timeout: 10)
     XCTAssertTrue(operation1.isCancelled)

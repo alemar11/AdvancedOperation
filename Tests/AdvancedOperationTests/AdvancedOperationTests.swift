@@ -419,7 +419,7 @@ final class AdvancedOperationTests: XCTestCase {
     XCTAssertTrue(operation1.isReady)
     operation1.start()
     waitForExpectations(timeout: 5)
-    XCTAssertFalse(operation1.isReady) // its state is finished
+    XCTAssertTrue(operation1.isFinished)
   }
 
   func testSubclassableObservers() {
