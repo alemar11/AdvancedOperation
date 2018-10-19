@@ -26,26 +26,23 @@ import XCTest
 
 final class MutuallyExclusiveConditionTests: XCTestCase {
 
-  func testStress() {
-    (1...500).forEach { i in
-      print(i)
+//  func testStress() {
+//    (1...500).forEach { i in
+//      print(i)
 //      testMutuallyExclusiveCondition()
 //      testMutuallyExclusiveConditionWithtDifferentQueues()
 //      testMutuallyExclusiveConditionWithBlockOperations()
-
-
-//      testMultipleMutuallyExclusiveConditionsWithBlockOperations() //TODO
+//      testMultipleMutuallyExclusiveConditionsWithBlockOperations() // ??
 //
 //      testMultipleMutuallyExclusiveConditionsInsideAGroupOperation()
-//
 //      testMultipleMutuallyExclusiveConditionsAndDependencies()
 //      testExclusivityManager()
 //      testMutuallyExclusiveConditionWithCancelMode() // FIXED
 //      testMutuallyExclusiveConditionWithtDifferentQueuesWithCancelMode()
 //      testExclusivityManagerWithCancelMode()
 //      testMultipleMutuallyExclusiveConditionsAndDependenciesWithCancelMode()
-    }
-  }
+//    }
+//  }
 
   func testIsMutuallyExclusive() {
     XCTAssertTrue(MutuallyExclusiveCondition(name: "test").mutuallyExclusivityMode == .enqueue)
@@ -72,9 +69,6 @@ final class MutuallyExclusiveConditionTests: XCTestCase {
 
     operation1.name = "operation1"
     operation2.name = "operation2"
-
-     operation1.useOSLog(TestsLog)
-     operation2.useOSLog(TestsLog)
 
     queue.addOperations([operation1, operation2], waitUntilFinished: true)
     wait(for: [expectation1, expectation2], timeout: 10)
@@ -160,9 +154,9 @@ final class MutuallyExclusiveConditionTests: XCTestCase {
     operation2.name = "op2"
     operation3.name = "op3"
 
-    operation1.useOSLog(TestsLog)
-    operation2.useOSLog(TestsLog)
-    operation3.useOSLog(TestsLog)
+//    operation1.useOSLog(TestsLog)
+//    operation2.useOSLog(TestsLog)
+//    operation3.useOSLog(TestsLog)
 
     queue.addOperations([operation1, operation2, operation3], waitUntilFinished: false)
 
@@ -200,7 +194,8 @@ final class MutuallyExclusiveConditionTests: XCTestCase {
     operation4.completionBlock = { expectation4.fulfill() }
     operation4.addCondition(MutuallyExclusiveCondition(name: "test"))
 
-    let operation5 = SleepyAsyncOperation(interval1: 2, interval2: 1, interval3: 2)
+    //let operation5 = SleepyAsyncOperation(interval1: 2, interval2: 1, interval3: 2)
+    let operation5 = AdvancedBlockOperation { complete in complete([]) }
     operation5.completionBlock = {
       expectation5.fulfill()
     }
