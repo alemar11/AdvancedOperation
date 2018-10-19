@@ -157,18 +157,19 @@ open class AdvancedOperation: Operation {
     }
   }
 
-  open override class func keyPathsForValuesAffectingValue(forKey key: String) -> Set<String> {
-    switch key {
-    case #keyPath(Operation.isReady),
-         #keyPath(Operation.isExecuting),
-         #keyPath(Operation.isFinished):
-      return Set([#keyPath(state)])
-    case #keyPath(Operation.isCancelled):
-      return Set([#keyPath(state), #keyPath(_cancelled)])
-    default:
-      return super.keyPathsForValuesAffectingValue(forKey: key)
-    }
-  }
+//  open override class func keyPathsForValuesAffectingValue(forKey key: String) -> Set<String> {
+//    switch key {
+//    case
+//        #keyPath(Operation.isReady),
+//         #keyPath(Operation.isExecuting),
+//         #keyPath(Operation.isFinished):
+//      return Set([#keyPath(state)])
+//    case #keyPath(Operation.isCancelled):
+//      return Set([#keyPath(state), #keyPath(_cancelled)])
+//    default:
+//      return super.keyPathsForValuesAffectingValue(forKey: key)
+//    }
+//  }
 
   // MARK: - Life Cycle
 
@@ -200,14 +201,17 @@ open class AdvancedOperation: Operation {
 
     let canBeExecuted = stateLock.synchronized { () -> Bool in
       guard isReady else { return false }
-
       guard !isExecuting else { return false }
-
-      state = .executing // recursive lock
       return true
     }
 
     guard canBeExecuted else { return }
+
+    willChangeValue(forKey: #keyPath(AdvancedOperation.isExecuting))
+    stateLock.synchronized {
+    state = .executing
+    }
+    didChangeValue(forKey: #keyPath(AdvancedOperation.isExecuting))
 
     willExecute()
     main()
@@ -358,7 +362,10 @@ open class AdvancedOperation: Operation {
 
       self._errors.append(contentsOf: errors)
       self.didCompleteConditionsEvaluation(errors: errors)
+
+      self.willChangeValue(forKey: #keyPath(AdvancedOperation.isReady))
       self.state = .ready
+      self.didChangeValue(forKey: #keyPath(AdvancedOperation.isReady))
     }
   }
 

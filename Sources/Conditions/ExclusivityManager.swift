@@ -83,12 +83,6 @@ final public class ExclusivityManager {
 
         return previous // early exit because there is no need to add a cancelled operation to the manager
       } else {
-        print("adding \(previous.operationName) as dependency of \(operation.operationName)")
-        print("\(previous.operationName):")
-        print("R: \(previous.isReady), E: \(previous.isExecuting), C: \(previous.isCancelled), F: \(previous.isFinished)")
-        print("\n")
-        print("\(operation.operationName):")
-        print("R: \(operation.isReady), E: \(operation.isExecuting), C: \(operation.isCancelled), F: \(operation.isFinished)")
         operation.addDependency(previous)
       }
     }

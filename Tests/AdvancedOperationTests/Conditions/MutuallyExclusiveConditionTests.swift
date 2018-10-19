@@ -31,13 +31,13 @@ final class MutuallyExclusiveConditionTests: XCTestCase {
     XCTAssertEqual(MutuallyExclusiveCondition(name: "test").mutuallyExclusivityMode.description, "Enabled in enqueue mode")
   }
 
-//  func testStress() {
-//    (1...1000_000).forEach { i in
-//      print(i)
-//      //testMutuallyExclusiveCondition()
-//      testMutuallyExclusiveConditionWithBlockOperations()
-//    }
-//  }
+  func testStress() {
+    (1...10_000).forEach { i in
+      print(i)
+      testMutuallyExclusiveCondition()
+      //testMutuallyExclusiveConditionWithBlockOperations()
+    }
+  }
 
   // MARK: - Enqueue Mode
 
@@ -46,24 +46,28 @@ final class MutuallyExclusiveConditionTests: XCTestCase {
     let queue = AdvancedOperationQueue(exclusivityManager: exclusivityManager)
     queue.maxConcurrentOperationCount = 10
 
-    let expectation1 = expectation(description: "\(#function)\(#line)")
-    let expectation2 = expectation(description: "\(#function)\(#line)")
-
-    let operation1 = SleepyAsyncOperation(interval1: 0, interval2: 0, interval3: 0)
-    operation1.completionBlock = {
-      expectation1.fulfill()
-    }
+    //let operation1 = SleepyAsyncOperation(interval1: 0, interval2: 0, interval3: 0)
+    let operation1 = AdvancedBlockOperation { complete in complete([]) }
+    let expectation1 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isFinished), object: operation1, expectedValue: true)
     operation1.addCondition(MutuallyExclusiveCondition(name: "SleepyAsyncOperation"))
 
 
-    let operation2 = SleepyAsyncOperation(interval1: 1, interval2: 1, interval3: 1)
+    //let operation2 = SleepyAsyncOperation(interval1: 1, interval2: 1, interval3: 1)
+    let operation2 = AdvancedBlockOperation { complete in complete([]) }
+    let expectation2 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isFinished), object: operation2, expectedValue: true)
     operation2.completionBlock = {
       expectation2.fulfill()
     }
     operation2.addCondition(MutuallyExclusiveCondition(name: "SleepyAsyncOperation"))
 
-    queue.addOperations([operation2, operation1], waitUntilFinished: true)
-    waitForExpectations(timeout: 5)
+    operation1.name = "operation1"
+    operation2.name = "operation2"
+
+     operation1.useOSLog(TestsLog)
+     operation2.useOSLog(TestsLog)
+
+    queue.addOperations([operation1, operation2], waitUntilFinished: false) //TODO set to true once ok
+    wait(for: [expectation1, expectation2], timeout: 10)
     let remainingOperations = exclusivityManager.operations.count
     XCTAssertEqual(remainingOperations, 0, "Expected 0 operations instead of \(remainingOperations).")
   }
@@ -144,8 +148,9 @@ final class MutuallyExclusiveConditionTests: XCTestCase {
     operation2.addCondition(MutuallyExclusiveCondition(name: "AdvancedBlockOperation"))
     let expectation2 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isFinished), object: operation2, expectedValue: true)
 
-    let operation3 = AdvancedBlockOperation {
+    let operation3 = AdvancedBlockOperation { complete in
       text += "C."
+        complete([])
     }
     operation3.addCondition(MutuallyExclusiveCondition(name: "AdvancedBlockOperation"))
     operation3.completionBlock = {
@@ -165,6 +170,7 @@ final class MutuallyExclusiveConditionTests: XCTestCase {
     XCTAssertTrue(operation1.isFinished)
     XCTAssertTrue(operation2.isFinished)
     XCTAssertTrue(operation3.isFinished, "The operation '\(operation3.operationName)' should be finished (isCancelled: \(operation3.isCancelled), isReady: \(operation3.isReady), isExecuting: \(operation3.isExecuting))")
+
     //XCTAssertEqual failed: ("A B ") is not equal to ("A B C.")
 //    if !operation3.isFinished {
 //      operation3.dependencies.forEach { operation in
