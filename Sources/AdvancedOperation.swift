@@ -24,10 +24,11 @@
 import Foundation
 import os.log
 
+// TODO: cancel conditions evaluation if the operation is cancelled?
+// TODO: better move exclusivity manager to the dependencies if any
+
 /// An advanced subclass of `Operation`.
 open class AdvancedOperation: Operation {
-
-  // TODO: cancel conditions evaluation if the operation is cancelled?
 
   // MARK: - State
 
@@ -35,27 +36,24 @@ open class AdvancedOperation: Operation {
   public final override var isFinished: Bool { return state == .finished }
   public final override var isCancelled: Bool { return stateLock.synchronized { return _cancelled } }
 
-  internal final var isCancelling: Bool { return stateLock.synchronized { return _cancelHandlerRunning } }
+  internal final var isCancelling: Bool { return stateLock.synchronized { return _cancelling } }
+  internal final var isFinishing: Bool { return stateLock.synchronized { return _finishing } }
 
   // MARK: - OperationState
 
-  @objc
   internal enum OperationState: Int, CustomDebugStringConvertible {
 
     case ready
     case executing
-    case finishing
     case finished
 
     func canTransition(to state: OperationState) -> Bool {
       switch (self, state) {
       case (.ready, .executing):
         return true
-      case (.ready, .finishing): // early bailing out
+      case (.ready, .finished): // early bailing out
         return true
-      case (.executing, .finishing):
-        return true
-      case (.finishing, .finished):
+      case (.executing, .finished):
         return true
       default:
         return false
@@ -68,8 +66,6 @@ open class AdvancedOperation: Operation {
         return "ready"
       case .executing:
         return "executing"
-      case .finishing:
-        return "finishing"
       case .finished:
         return "finished"
       }
@@ -95,22 +91,22 @@ open class AdvancedOperation: Operation {
   private var _state: OperationState = .ready
 
   /// Returns `true` if the finish command has been fired and the operation is processing it.
-  private var _finishHandlerRunning = false
+  private var _finishing = false
 
   /// Returns `true` if the `AdvancedOperation` is cancelling.
-  private var _cancelHandlerRunning = false
+  private var _cancelling = false
 
   /// Returns `true` if the `AdvancedOperation` is cancelled.
-  @objc
   private var _cancelled = false
 
   /// Errors generated during the execution.
   private let _errors = SynchronizedArray<Error>()
 
   /// The state of the operation.
-  @objc dynamic
   internal var state: OperationState {
-    get { return stateLock.synchronized { _state } }
+    get {
+      return stateLock.synchronized { _state }
+    }
     set {
       stateLock.synchronized {
         assert(_state.canTransition(to: newValue), "Performing an invalid state transition for: \(_state) to: \(newValue).")
@@ -136,7 +132,7 @@ open class AdvancedOperation: Operation {
   public final override func start() {
 
     // Do not start if it's finishing
-    guard state != .finishing else {
+    guard !isFinishing else {
       return
     }
 
@@ -179,10 +175,12 @@ open class AdvancedOperation: Operation {
 
   private final func _cancel(errors cancelErrors: [Error]? = nil) {
     let canBeCancelled = stateLock.synchronized { () -> Bool in
-      guard !_finishHandlerRunning && !isFinished else { return false }
-      guard !_cancelHandlerRunning && !_cancelled else { return false }
+      guard !_cancelling else { return false }
+      guard !_cancelled else { return false }
+      guard !_finishing else { return false }
+      guard state != .finished else { return false }
 
-      _cancelHandlerRunning = true
+      _cancelling = true
       return true
     }
 
@@ -202,7 +200,7 @@ open class AdvancedOperation: Operation {
       }
 
       _cancelled = true
-      _cancelHandlerRunning = false
+      _cancelling = false
     }
 
     didCancel(errors: errors) // observers
@@ -217,12 +215,10 @@ open class AdvancedOperation: Operation {
 
   private final func _finish(errors: [Error] = []) {
     let canBeFinished = stateLock.synchronized { () -> Bool in
-      guard _state == .ready || _state == .executing else {
-        return false
-      }
+      guard !_finishing else { return false }
+      guard _state != .finished else { return false }
 
-      _state = .finishing
-      _finishHandlerRunning = true
+      _finishing = true
       return true
     }
 
@@ -238,7 +234,7 @@ open class AdvancedOperation: Operation {
     state = .finished
     didChangeValue(forKey: #keyPath(AdvancedOperation.isFinished))
     didFinish(errors: updatedErrors)
-    stateLock.synchronized { _finishHandlerRunning = false }
+    stateLock.synchronized { _finishing = false }
   }
 
   // MARK: - Produced Operations
