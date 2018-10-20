@@ -131,30 +131,28 @@ open class AdvancedOperation: Operation {
 
   public final override func start() {
 
-    // Do not start if it's finishing
-    guard !isFinishing else {
+    // Do not start if it's finishing or it's finished
+    guard !isFinishing || !isFinished else {
       return
     }
 
     // Bail out early if cancelled or if there are some errors.
     guard !hasErrors && !isCancelled else {
-      _cancelled = true // an operation not yet cancelled but starting with errors should finish as cancelled
+      _cancelled = true // an operation starting with errors should finish as cancelled
       finish() // fires KVO
       return
     }
 
     let canBeExecuted = stateLock.synchronized { () -> Bool in
-      guard isReady else { return false }
-      guard !isExecuting else { return false }
+      guard _state == .ready else { return false }
+      guard _state != .executing else { return false }
       return true
     }
 
     guard canBeExecuted else { return }
 
     willChangeValue(forKey: #keyPath(AdvancedOperation.isExecuting))
-    stateLock.synchronized {
-      state = .executing
-    }
+    state = .executing
     didChangeValue(forKey: #keyPath(AdvancedOperation.isExecuting))
 
     willExecute()
@@ -186,10 +184,7 @@ open class AdvancedOperation: Operation {
 
     guard canBeCancelled else { return }
 
-    var localErrors = self.errors
-    if let cancelErrors = cancelErrors {
-      localErrors.append(contentsOf: cancelErrors)
-    }
+    let localErrors = errors + (cancelErrors ?? [])
 
     willChangeValue(forKey: #keyPath(AdvancedOperation.isCancelled))
     willCancel(errors: localErrors) // observers
@@ -203,7 +198,7 @@ open class AdvancedOperation: Operation {
       _cancelling = false
     }
 
-    didCancel(errors: errors) // observers
+    didCancel(errors: errors)
     didChangeValue(forKey: #keyPath(AdvancedOperation.isCancelled))
 
     super.cancel() // fires isReady KVO
