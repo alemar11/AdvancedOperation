@@ -27,85 +27,104 @@ final public class ExclusivityManager {
 
   public static let sharedInstance = ExclusivityManager()
 
-  static let exclusivityManagerKey = "ExclusivityManager"
-
-  /// Creates a new `ExclusivityManager` instance.
-  public init() { }
-
   /// The private queue used for thread safe operations.
   private lazy var queue = DispatchQueue(label: "\(identifier).\(type(of: self)).\(UUID().uuidString)")
 
-  /// Holds all the running operations.
-  private var _operations: [String: [Operation]] = [:]
+  private var _queues: [QueueContainer] = []
 
-  /// Running operations
-  internal var operations: [String: [Operation]] {
-    return queue.sync { return _operations }
-  }
+  public init() { }
 
-  internal var onOperationsChange: (([String: [Operation]]) -> Void)? = .none
+  func register(queue: AdvancedOperationQueue) {
+    let results = _queues.filter { $0.queue?.identifier == queue.identifier }
 
-  /// Adds an `AdvancedOperation` the the `ExclusivityManager` instance.
-  ///
-  /// - Parameters:
-  ///   - operation: The `AdvancedOperation` to add.
-  ///   - category: The category to identify an `AdvancedOperation`.
-  ///   - cancellable: True if the operation should be cancelled instead of enqueue if another operation with the same category exists.
-  internal func addOperation(_ operation: AdvancedOperation, category: String, cancellable: Bool = false) {
-    _ = queue.sync {
-      self._addOperation(operation, category: category, cancellable: cancellable)
-      self.onOperationsChange?(self._operations)
+    if results.isEmpty {
+      let token = queue.observe(\.isSuspended, options: [.prior]) { [weak self] queue, change in
+        print("🚩")
+        // is suspended:
+        // check all the other queues and remove all the dependencies of this queue
+
+        // not suspended
+        // get all mutual exclusivity operation and set the dependencers
+      }
+
+      let container = QueueContainer(queue: queue, token: token)
+      _queues.append(container)
     }
   }
 
-  internal func removeOperation(_ operation: AdvancedOperation, category: String) {
-    queue.async {
-      self._removeOperation(operation, category: category)
-      self.onOperationsChange?(self._operations)
-    }
+  func unregister(queue: AdvancedOperationQueue) {
+    _queues.removeAll { $0.queue?.identifier == queue.identifier }
   }
 
-  @discardableResult
-  private func _addOperation(_ operation: AdvancedOperation, category: String, cancellable: Bool) -> Operation? {
-    let didFinishObserver = BlockObserver {  [weak self] currentOperation, _ in
-      self?.removeOperation(currentOperation, category: category)
+  // is suspended remove the dependencies
+  //  private func xxx(queue: Queue, category: String) {
+  //    guard let advancedQueue = queue.queue else {
+  //      return
+  //    }
+  //
+  //    let exclusivities = advancedQueue.operations.filter { $0 is MutualExclusivityOperation }.compactMap { $0 as? MutualExclusivityOperation}
+  //
+  //    guard !exclusivities.isEmpty else {
+  //      return
+  //    }
+  //
+  //    let remainingQueues = _queues.filter { $0.queue?.identifier != queue.queue?.identifier }
+  //
+  //    let operations = remainingQueues.compactMap { $0.queue?.operations }.flatMap { $0 }.compactMap { $0 as? MutualExclusivityOperation}
+  //
+  //
+  //    for operation in operations {
+  //      for exclusivity in exclusivities {
+  //        if operation.category == exclusivity.category {
+  //          operation.removeDependency(exclusivity)
+  //        }
+  //      }
+  //    }
+  //  }
+  //
+  //  // if not suspended re-add dependencies
+  //  private func yyy(queue: AdvancedOperationQueue, category: String) {
+  //
+  //  }
+
+  internal func addOperation(_ operation: AdvancedOperation, for queue: AdvancedOperationQueue) {
+    guard !operation.categories.isEmpty else {
+      return
     }
-    operation.addObserver(didFinishObserver)
 
-    var operationsWithThisCategory = _operations[category] ?? []
-    let previous = operationsWithThisCategory.last
+    self.queue.sync {
+      self.register(queue: queue)
+      let categories = operation.categories
 
-    if let previous = previous {
-      if cancellable {
-        let name = previous.name ?? "\(type(of: self))"
-        let error = AdvancedOperationError.executionCancelled(
-          message: "The operation has been cancelled by the ExclusivityManager because there is already an operation for the category: \(category) running.",
-          userInfo: [type(of: self).exclusivityManagerKey: name]
-        )
+      /// Searches all the operations already enqueued for these categories in the current queue or in
+      /// all the not suspended queues.
+      let queues = _queues.compactMap { $0.queue }.filter { $0 === queue || !$0.isSuspended }
+      let operations = queues.flatMap { $0.operations }.compactMap { $0 as? AdvancedOperation }.filter {
+        $0.categories.contains(where: categories.contains)
+      }
 
-        operation.cancel(errors: [error])
+      print("🔴 found \(operations.count) for categories: \(categories)")
 
-        return previous // early exit because there is no need to add a cancelled operation to the manager
-      } else {
-        operation.addDependency(previous)
+      for ope in operations where ope !== operation {
+        if !operation.dependencies.contains(ope) {
+          operation.addDependency(ope)
+        }
       }
     }
-
-    operationsWithThisCategory.append(operation)
-    _operations[category] = operationsWithThisCategory
-
-    return previous
   }
 
-  private func _removeOperation(_ operation: AdvancedOperation, category: String) {
-    if
-      let operationsWithThisCategory = _operations[category],
-      let index = operationsWithThisCategory.index(of: operation)
-    {
-      var mutableOperationsWithThisCategory = operationsWithThisCategory
-      mutableOperationsWithThisCategory.remove(at: index)
-      _operations[category] = mutableOperationsWithThisCategory
-    }
+}
+
+private final class QueueContainer {
+  let token: NSKeyValueObservation
+  weak var queue: AdvancedOperationQueue?
+
+  init(queue: AdvancedOperationQueue, token: NSKeyValueObservation) {
+    self.queue = queue
+    self.token = token
   }
 
+  deinit {
+    token.invalidate()
+  }
 }

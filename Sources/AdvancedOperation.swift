@@ -39,6 +39,8 @@ open class AdvancedOperation: Operation {
   internal final var isCancelling: Bool { return stateLock.synchronized { return _cancelling } }
   internal final var isFinishing: Bool { return stateLock.synchronized { return _finishing } }
 
+  public var categories = [String]()
+
   // MARK: - OperationState
 
   internal enum OperationState: Int, CustomDebugStringConvertible {
@@ -420,7 +422,8 @@ extension AdvancedOperation {
 
 extension AdvancedOperation {
   internal func evaluateConditions(exclusivityManager: ExclusivityManager) -> GroupOperation? {
-    guard !conditions.isEmpty else {
+    let standardConditions = self.conditions.filter { $0.mutuallyExclusivityMode == .disabled }
+    guard !standardConditions.isEmpty else {
       return nil
     }
 
@@ -455,6 +458,11 @@ internal final class ConditionEvaluatorOperation: GroupOperation {
     super.init(operations: [])
 
     conditions.forEach { condition in
+
+      guard condition.mutuallyExclusivityMode == .disabled else {
+        return
+      }
+
       let evaluatingOperation = EvaluateConditionOperation(condition: condition, for: operation)
 
       if let dependency = condition.dependency(for: operation) {
@@ -462,12 +470,15 @@ internal final class ConditionEvaluatorOperation: GroupOperation {
         addOperation(operation: dependency)
       }
 
-      if condition.mutuallyExclusivityMode != .disabled {
-        let category = condition.name
-        let cancellable = condition.mutuallyExclusivityMode == .cancel
-        exclusivityManager.addOperation(operation, category: category, cancellable: cancellable)
-      }
+//      if condition.mutuallyExclusivityMode != .disabled {
+//        let category = condition.name
+//        let cancellable = condition.mutuallyExclusivityMode == .cancel
+//        //exclusivityManager.addOperation(operation, category: category, cancellable: cancellable)
+//        exclusivityOperation = MutualExclusivityOperation(category: category)
+//
+//      }
 
+      //exclusivityManager.addOperation(operation: exclusivityOperation, for: self)
       addOperation(operation: evaluatingOperation)
     }
 
