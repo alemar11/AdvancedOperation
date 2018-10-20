@@ -83,7 +83,7 @@ final public class ExclusivityManager {
           userInfo: [type(of: self).exclusivityManagerKey: name]
         )
 
-        operation.cancel(error: error)
+        operation.cancel(errors: [error])
 
         return previous // early exit because there is no need to add a cancelled operation to the manager
       } else {

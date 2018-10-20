@@ -140,7 +140,7 @@ class OperationConditionTests: XCTestCase {
     group.addOperation(operation: operation2)
 
     group.start()
-    group.cancel(error: MockError.failed)
+    group.cancel(errors: [MockError.failed])
 
     waitForExpectations(timeout: 15)
 

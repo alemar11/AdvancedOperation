@@ -32,12 +32,10 @@ open class AdvancedOperation: Operation {
   // MARK: - State
 
   public final override var isExecuting: Bool { return state == .executing }
-
   public final override var isFinished: Bool { return state == .finished }
-
   public final override var isCancelled: Bool { return stateLock.synchronized { return _cancelled } }
 
-  internal final var isCancelling: Bool { return stateLock.synchronized { return _cancelling } }
+  internal final var isCancelling: Bool { return stateLock.synchronized { return _cancelHandlerRunning } }
 
   // MARK: - OperationState
 
@@ -82,9 +80,7 @@ open class AdvancedOperation: Operation {
   // MARK: - Properties
 
   /// Errors generated during the execution.
-  public var errors: [Error] {
-    return _errors.all
-  }
+  public var errors: [Error] { return _errors.all }
 
   /// An instance of `OSLog` (by default is disabled).
   public private(set) var log = OSLog.disabled
@@ -99,10 +95,10 @@ open class AdvancedOperation: Operation {
   private var _state: OperationState = .ready
 
   /// Returns `true` if the finish command has been fired and the operation is processing it.
-  private var _finishProcessRunning = false
+  private var _finishHandlerRunning = false
 
   /// Returns `true` if the `AdvancedOperation` is cancelling.
-  private var _cancelling = false
+  private var _cancelHandlerRunning = false
 
   /// Returns `true` if the `AdvancedOperation` is cancelled.
   @objc
@@ -173,14 +169,6 @@ open class AdvancedOperation: Operation {
     fatalError("\(type(of: self)) must override `main()`.")
   }
 
-  open func cancel(error: Error? = .none) {
-    if let error = error {
-      _cancel(errors: [error])
-    } else {
-      _cancel()
-    }
-  }
-
   open func cancel(errors: [Error]? = .none) {
     _cancel(errors: errors)
   }
@@ -191,10 +179,10 @@ open class AdvancedOperation: Operation {
 
   private final func _cancel(errors cancelErrors: [Error]? = nil) {
     let canBeCancelled = stateLock.synchronized { () -> Bool in
-      guard !_finishProcessRunning && !isFinished else { return false }
-      guard !_cancelling && !_cancelled else { return false }
+      guard !_finishHandlerRunning && !isFinished else { return false }
+      guard !_cancelHandlerRunning && !_cancelled else { return false }
 
-      _cancelling = true
+      _cancelHandlerRunning = true
       return true
     }
 
@@ -214,7 +202,7 @@ open class AdvancedOperation: Operation {
       }
 
       _cancelled = true
-      _cancelling = false
+      _cancelHandlerRunning = false
     }
 
     didCancel(errors: errors) // observers
@@ -234,7 +222,7 @@ open class AdvancedOperation: Operation {
       }
 
       _state = .finishing
-      _finishProcessRunning = true
+      _finishHandlerRunning = true
       return true
     }
 
@@ -250,7 +238,7 @@ open class AdvancedOperation: Operation {
     state = .finished
     didChangeValue(forKey: #keyPath(AdvancedOperation.isFinished))
     didFinish(errors: updatedErrors)
-    stateLock.synchronized { _finishProcessRunning = false }
+    stateLock.synchronized { _finishHandlerRunning = false }
   }
 
   // MARK: - Produced Operations

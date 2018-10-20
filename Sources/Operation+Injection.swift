@@ -98,7 +98,7 @@ extension AdvancedOperation {
 
       inputOpertion.input = outputOperation.output
       if let error = error {
-        inputOpertion.cancel(error: error)
+        inputOpertion.cancel(errors: [error])
       }
       complete([])
     }
@@ -130,7 +130,7 @@ extension AdvancedOperation {
 
       inputOpertion.input = transform(outputOperation.output)
       if let error = error {
-        inputOpertion.cancel(error: error)
+        inputOpertion.cancel(errors: [error])
       }
       complete([])
     }

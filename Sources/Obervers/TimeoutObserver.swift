@@ -46,7 +46,7 @@ public struct TimeoutObserver: OperationWillExecuteObserving {
     queue.asyncAfter(deadline: when) {
       if !operation.isFinished && !operation.isCancelled {
         let error = AdvancedOperationError.executionCancelled(message: "\(operation.operationName) has been cancelled by the TimeoutObserver with a timeout of \(delay) seconds.")
-        operation.cancel(error: error)
+        operation.cancel(errors: [error])
       }
     }
   }

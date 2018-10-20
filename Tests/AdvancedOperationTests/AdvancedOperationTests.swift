@@ -155,8 +155,8 @@ final class AdvancedOperationTests: XCTestCase {
     XCTAssertTrue(operation.isExecuting)
 
     operation.cancel()
-    operation.cancel(error: MockError.test)
-    operation.cancel(error: MockError.failed)
+    operation.cancel(errors: [MockError.test])
+    operation.cancel(errors: [MockError.failed])
     XCTAssertTrue(operation.isCancelled)
 
     waitForExpectations(timeout: 10)
@@ -184,9 +184,9 @@ final class AdvancedOperationTests: XCTestCase {
     operation.cancel()
 
     queue.async {
-      operation.cancel(error: MockError.test)
+      operation.cancel(errors: [MockError.test])
     }
-    operation.cancel(error: MockError.failed)
+    operation.cancel(errors: [MockError.failed])
     XCTAssertTrue(operation.isCancelled)
 
     waitForExpectations(timeout: 10)
@@ -212,8 +212,8 @@ final class AdvancedOperationTests: XCTestCase {
     XCTAssertTrue(operation.isCancelled, "Should be cancelled for state: \(operation.state)")
 
     // Those errors will be ignored since the operation is already cancelled
-    operation.cancel(error: MockError.test)
-    operation.cancel(error: MockError.failed)
+    operation.cancel(errors: [MockError.test])
+    operation.cancel(errors: [MockError.failed])
 
     XCTAssertFalse(operation.isExecuting)
     XCTAssertTrue(operation.isCancelled)
@@ -236,11 +236,11 @@ final class AdvancedOperationTests: XCTestCase {
     operation.start()
     XCTAssertTrue(operation.isExecuting)
 
-    operation.cancel(error: MockError.test)
+    operation.cancel(errors: [MockError.test])
     operation.start()
     XCTAssertFalse(operation.isExecuting)
     operation.cancel()
-    operation.cancel(error: MockError.failed)
+    operation.cancel(errors: [MockError.failed])
     XCTAssertTrue(operation.isCancelled)
 
     waitForExpectations(timeout: 10)
@@ -262,9 +262,9 @@ final class AdvancedOperationTests: XCTestCase {
     XCTAssertTrue(operation.isExecuting)
 
     let error = MockError.cancelled(date: Date())
-    operation.cancel(error: error)
-    operation.cancel(error: MockError.test)
-    operation.cancel(error: MockError.failed)
+    operation.cancel(errors: [error])
+    operation.cancel(errors: [MockError.test])
+    operation.cancel(errors: [MockError.failed])
     XCTAssertTrue(operation.isCancelled)
 
     waitForExpectations(timeout: 10)
@@ -330,7 +330,7 @@ final class AdvancedOperationTests: XCTestCase {
 
     operation.start()
     operation.cancel()
-    operation.cancel(error: MockError.cancelled(date: Date()))
+    operation.cancel(errors: [MockError.cancelled(date: Date())])
 
     wait(for: [expectation1, expectation2], timeout: 10)
 
@@ -377,7 +377,7 @@ final class AdvancedOperationTests: XCTestCase {
 
     XCTAssertTrue(operation.isExecuting)
 
-    operation.cancel(error: MockError.test)
+    operation.cancel(errors: [MockError.test])
     XCTAssertTrue(operation.isCancelled)
 
     waitForExpectations(timeout: 10)
@@ -468,7 +468,7 @@ final class AdvancedOperationTests: XCTestCase {
 
     operation1.start()
     operation1.produceOperation(operation2)
-    operation1.cancel(error: error)
+    operation1.cancel(errors: [error])
     waitForExpectations(timeout: 10)
   }
 

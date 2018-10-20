@@ -120,7 +120,7 @@ final class GroupOperationTests: XCTestCase {
     XCTAssertTrue(group.isSuspended)
     group.start()
     XCTAssertFalse(group.isSuspended)
-    operation1.cancel(error: MockError.test)
+    operation1.cancel(errors: [MockError.test])
 
     waitForExpectations(timeout: 10)
 
@@ -152,7 +152,7 @@ final class GroupOperationTests: XCTestCase {
     group.start()
     XCTAssertFalse(group.isSuspended)
     DispatchQueue.global().async {
-      operation1.cancel(error: MockError.test)
+      operation1.cancel(errors: [MockError.test])
     }
 
     waitForExpectations(timeout: 10)
@@ -280,9 +280,9 @@ final class GroupOperationTests: XCTestCase {
     }
 
     group.start()
-    group.cancel(error: MockError.test)
-    group.cancel(error: MockError.test)
-    group.cancel(error: MockError.test)
+    group.cancel(errors: [MockError.test])
+    group.cancel(errors: [MockError.test])
+    group.cancel(errors: [MockError.test])
 
     waitForExpectations(timeout: 10)
   }
@@ -383,7 +383,7 @@ final class GroupOperationTests: XCTestCase {
     let exepectation1 = expectation(description: "\(#function)\(#line)")
     group.addCompletionBlock { exepectation1.fulfill() }
 
-    group2.cancel(error: MockError.test)
+    group2.cancel(errors: [MockError.test])
     group.start()
     waitForExpectations(timeout: 10)
 
@@ -424,7 +424,7 @@ final class GroupOperationTests: XCTestCase {
     let exepectation1 = expectation(description: "\(#function)\(#line)")
     group.addCompletionBlock { exepectation1.fulfill() }
 
-    group.cancel(error: MockError.test)
+    group.cancel(errors: [MockError.test])
     group.start()
     waitForExpectations(timeout: 10)
 
@@ -449,7 +449,7 @@ final class GroupOperationTests: XCTestCase {
     let exepectation1 = expectation(description: "\(#function)\(#line)")
     group.addCompletionBlock { exepectation1.fulfill() }
 
-    group.cancel(error: MockError.test)
+    group.cancel(errors: [MockError.test])
     group.start()
     waitForExpectations(timeout: 10)
 
@@ -463,7 +463,7 @@ final class GroupOperationTests: XCTestCase {
 
     let operation1 = SleepyAsyncOperation(interval1: 3, interval2: 4, interval3: 1)
     let group1 = GroupOperation(operations: operation1, exclusivityManager: ExclusivityManager())
-    operation1.cancel(error: MockError.test)
+    operation1.cancel(errors: [MockError.test])
 
     let group = GroupOperation(operations: group1, exclusivityManager: ExclusivityManager())
     let exepectation1 = expectation(description: "\(#function)\(#line)")
@@ -513,7 +513,7 @@ final class GroupOperationTests: XCTestCase {
     group.addCompletionBlock { exepectation1.fulfill() }
 
     group.start()
-    operation3.cancel(error: MockError.failed)
+    operation3.cancel(errors: [MockError.failed])
     waitForExpectations(timeout: 10)
 
     XCTAssertTrue(operation3.isCancelled)

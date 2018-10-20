@@ -85,7 +85,7 @@ final class NoFailedDependenciesConditionTests: XCTestCase {
     let operation4 = AdvancedBlockOperation { complete in complete([]) }
     operation4.name = "operation4"
 
-    operation2.cancel(error: MockError.failed)
+    operation2.cancel(errors: [MockError.failed])
 
     operation1.addCompletionBlock { expectation1.fulfill() }
     operation2.addCompletionBlock { expectation2.fulfill() }
@@ -120,7 +120,7 @@ final class NoFailedDependenciesConditionTests: XCTestCase {
     let operation4 = DelayOperation(interval: 1)
     operation4.name = "operation4"
 
-    operation2.cancel(error: MockError.failed)
+    operation2.cancel(errors: [MockError.failed])
 
     operation1.addCondition(NoFailedDependenciesCondition())
     [operation4, operation3, operation2].then(operation1)
@@ -151,7 +151,7 @@ final class NoFailedDependenciesConditionTests: XCTestCase {
     let operation4 = DelayOperation(interval: 1)
     operation4.name = "operation4"
 
-    operation2.cancel(error: MockError.failed)
+    operation2.cancel(errors: [MockError.failed])
 
     operation1.addCompletionBlock { expectation1.fulfill() }
     operation2.addCompletionBlock { expectation2.fulfill() }
@@ -186,7 +186,7 @@ final class NoFailedDependenciesConditionTests: XCTestCase {
     let operation4 = FailingAsyncOperation(errors: [.failed, .cancelled(date: Date())])
     operation4.name = "operation4"
 
-    operation2.cancel(error: MockError.failed)
+    operation2.cancel(errors: [MockError.failed])
 
     operation1.addCompletionBlock { expectation1.fulfill() }
     operation2.addCompletionBlock { expectation2.fulfill() }
