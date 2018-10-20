@@ -94,7 +94,7 @@ open class AdvancedOperationQueue: OperationQueue {
 
         operation.addObserver(observer)
 
-        let evaluator = operation.evaluateConditions2(exclusivityManager: exclusivityManager)
+        let evaluator = operation.evaluateConditions(exclusivityManager: exclusivityManager)
 
         if let evaluator = evaluator {
           super.addOperation(evaluator)

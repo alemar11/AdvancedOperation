@@ -100,7 +100,7 @@ open class AdvancedOperation: Operation {
   private var _cancelled = false
 
   /// Errors generated during the execution.
-  private let _errors = SynchronizedArray<Error>()
+  private let _errors = SynchronizedArray<Error>() //TOOD: maybe a SynchronizedArray is not necessary
 
   /// The state of the operation.
   internal var state: OperationState {
@@ -419,7 +419,7 @@ extension AdvancedOperation {
 // MARK: - Condition Evaluation
 
 extension AdvancedOperation {
-  internal func evaluateConditions2(exclusivityManager: ExclusivityManager) -> GroupOperation? {
+  internal func evaluateConditions(exclusivityManager: ExclusivityManager) -> GroupOperation? {
     guard !conditions.isEmpty else {
       return nil
     }
