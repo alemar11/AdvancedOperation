@@ -142,4 +142,8 @@ open class AdvancedOperationQueue: OperationQueue {
     }
   }
 
+  deinit {
+    exclusivityManager.unregister(queue: self)
+  }
+
 }

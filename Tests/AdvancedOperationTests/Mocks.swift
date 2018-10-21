@@ -177,7 +177,25 @@ final internal class SleepyOperation: AdvancedOperation {
 
 }
 
-final internal class XCTFailOperation: AdvancedOperation {
+final internal class SleepyBlockOperation: AdvancedOperation {
+
+  let block: () -> Void
+  let interval: UInt32
+
+  init(interval: UInt32, block: @escaping () -> Void) {
+    self.block = block
+    self.interval = interval
+  }
+
+  override func main() {
+    sleep(self.interval)
+    block()
+    self.finish()
+  }
+
+}
+
+final internal class XCTFailOperation: AdvancedOperation { //TODO rename
 
   override init() {
     super.init()
