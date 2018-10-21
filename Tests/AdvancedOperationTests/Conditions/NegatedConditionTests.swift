@@ -66,13 +66,6 @@ class NegatedConditionTests: XCTestCase {
     waitForExpectations(timeout: 2)
   }
 
-//  func testStress() {
-//    (1...500).forEach { i in
-//      print(i)
-//      testMutitpleNegatedConditions()
-//    }
-//  }
-
   func testMutitpleNegatedConditions() {
     let manager = ExclusivityManager()
     let queue = AdvancedOperationQueue(exclusivityManager: manager)
