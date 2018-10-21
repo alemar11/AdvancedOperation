@@ -34,26 +34,28 @@ final public class ExclusivityManager {
 
   public init() { }
 
-  func register(queue: AdvancedOperationQueue) {
-    let results = _queues.filter { $0.queue?.identifier == queue.identifier }
+  internal func register(queue: AdvancedOperationQueue) {
+      let results = _queues.filter { $0.queue?.identifier == queue.identifier }
 
-    if results.isEmpty {
-      let token = queue.observe(\.isSuspended, options: [.prior]) { [weak self] queue, change in
-        print("🚩")
-        // is suspended:
-        // check all the other queues and remove all the dependencies of this queue
+      if results.isEmpty {
+        let token = queue.observe(\.isSuspended, options: [.prior]) { [weak self] queue, change in
+          print("🚩")
+          // is suspended:
+          // check all the other queues and remove all the dependencies of this queue
 
-        // not suspended
-        // get all mutual exclusivity operation and set the dependencers
+          // not suspended
+          // get all mutual exclusivity operation and set the dependencers
+        }
+
+        let container = QueueContainer(queue: queue, token: token)
+        _queues.append(container)
       }
-
-      let container = QueueContainer(queue: queue, token: token)
-      _queues.append(container)
-    }
   }
 
-  func unregister(queue: AdvancedOperationQueue) {
-    _queues.removeAll { $0.queue?.identifier == queue.identifier }
+  internal func unregister(queue: AdvancedOperationQueue) {
+    self.queue.sync {
+      _queues.removeAll { $0.queue?.identifier == queue.identifier }
+    }
   }
 
   // is suspended remove the dependencies
@@ -107,6 +109,7 @@ final public class ExclusivityManager {
 
       for ope in operations where ope !== operation {
         if !operation.dependencies.contains(ope) {
+          print("\t\t--> adding \(ope.operationName) as dependency for  \(operation.operationName)")
           operation.addDependency(ope)
         }
       }

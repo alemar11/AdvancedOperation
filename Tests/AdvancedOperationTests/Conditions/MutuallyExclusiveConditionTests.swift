@@ -29,9 +29,9 @@ final class MutuallyExclusiveConditionTests: XCTestCase {
 //  func testStress() {
 //    (1...500).forEach { i in
 //      print(i)
-//      testMutuallyExclusiveCondition()
-//      testMutuallyExclusiveConditionWithtDifferentQueues()
-////      testMutuallyExclusiveConditionWithBlockOperations()
+//      //testMutuallyExclusiveCondition()
+//      //testMutuallyExclusiveConditionWithtDifferentQueues()
+//      testMutuallyExclusiveConditionWithBlockOperations()
 ////      testMultipleMutuallyExclusiveConditionsWithBlockOperations() // ??
 ////
 ////      testMultipleMutuallyExclusiveConditionsInsideAGroupOperation()
@@ -117,6 +117,11 @@ final class MutuallyExclusiveConditionTests: XCTestCase {
     let expectation4 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isFinished), object: operation4, expectedValue: true)
     operation4.addCondition(MutuallyExclusiveCondition(name: "AdvancedBlockOperation"))
 
+    operation1.name = "operation1"
+    operation2.name = "operation2"
+    operation3.name = "operation3"
+    operation4.name = "operation4"
+
     queue1.addOperations([operation1, operation2], waitUntilFinished: true)
     queue2.addOperations([operation3, operation4], waitUntilFinished: true)
 
@@ -150,15 +155,14 @@ final class MutuallyExclusiveConditionTests: XCTestCase {
     operation3.addCondition(MutuallyExclusiveCondition(name: "AdvancedBlockOperation"))
     let expectation3 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isFinished), object: operation3, expectedValue: true)
 
-    operation1.name = "op1"
-    operation2.name = "op2"
-    operation3.name = "op3"
+    operation1.name = "operation1"
+    operation2.name = "operation2"
+    operation3.name = "operation3"
 
     queue.addOperations([operation1, operation2, operation3], waitUntilFinished: false)
 
-    wait(for: [expectation1, expectation2, expectation3], timeout: 10, enforceOrder: true)
+    wait(for: [expectation1, expectation2, expectation3], timeout: 10)
     XCTAssertEqual(text, "A B C.")
-
   }
 
   func testMultipleMutuallyExclusiveConditionsWithBlockOperations() {
@@ -185,8 +189,13 @@ final class MutuallyExclusiveConditionTests: XCTestCase {
     operation4.completionBlock = { expectation4.fulfill() }
     operation4.addCondition(MutuallyExclusiveCondition(name: "test"))
 
+    operation1.name = "operation1"
+    operation2.name = "operation2"
+    operation3.name = "operation3"
+    operation4.name = "operation4"
+
     queue.addOperations([operation1, operation2, operation3, operation4], waitUntilFinished: false)
-    wait(for: [expectation1, expectation2, expectation3, expectation4], timeout: 10, enforceOrder: true)
+    wait(for: [expectation1, expectation2, expectation3, expectation4], timeout: 10)
     XCTAssertEqual(text, "A B C. 🎉")
   }
 
@@ -217,6 +226,11 @@ final class MutuallyExclusiveConditionTests: XCTestCase {
     operation4.addCondition(MutuallyExclusiveCondition(name: "AdvancedBlockOperation"))
     operation4.addCondition(MutuallyExclusiveCondition(name: "test"))
 
+    operation1.name = "operation1"
+    operation2.name = "operation2"
+    operation3.name = "operation3"
+    operation4.name = "operation4"
+
     let group = GroupOperation(operations: operation1, operation2, operation3, operation4, exclusivityManager: ExclusivityManager())
     group.addCompletionBlock { expectation5.fulfill() }
     group.start()
@@ -224,7 +238,7 @@ final class MutuallyExclusiveConditionTests: XCTestCase {
     XCTAssertEqual(text, "A B C. 🎉")
   }
 
-  func testMultipleMutuallyExclusiveConditionsAndDependencies() {
+  func testMultipleMutuallyExclusiveConditionsAndDependencies() { //TODO debug this test
     let exclusivityManager = ExclusivityManager()
     let queue = AdvancedOperationQueue(exclusivityManager: exclusivityManager)
     var text1 = ""
@@ -257,6 +271,11 @@ final class MutuallyExclusiveConditionTests: XCTestCase {
     operation2.addCondition(MutuallyExclusiveCondition(name: "AdvancedBlockOperation"))
     operation2.addCondition(dependencyCondition2)
 
+    dependency1.name = "dependency1"
+    dependency2.name = "dependency2"
+    operation1.name = "operation1"
+    operation2.name = "operation2"
+
     queue.addOperations([operation1, operation2], waitUntilFinished: false)
     waitForExpectations(timeout: 10)
     XCTAssertEqual(text1, "1 2")
@@ -264,7 +283,6 @@ final class MutuallyExclusiveConditionTests: XCTestCase {
   }
 
   func testExclusivityManager() {
-    //let expectation0 = expectation(description: "\(#function)\(#line)")
     let expectation1 = expectation(description: "\(#function)\(#line)")
     let expectation2 = expectation(description: "\(#function)\(#line)")
     let expectation3 = expectation(description: "\(#function)\(#line)")
@@ -272,12 +290,6 @@ final class MutuallyExclusiveConditionTests: XCTestCase {
 
     var text = ""
     let manager = ExclusivityManager()
-//    manager.onOperationsChange = { operations in
-//      let values = operations.values.flatMap { $0 }
-//      if values.isEmpty {
-//        expectation0.fulfill()
-//      }
-//    }
     let queue = AdvancedOperationQueue(exclusivityManager: manager)
     queue.isSuspended = true
 
@@ -294,7 +306,10 @@ final class MutuallyExclusiveConditionTests: XCTestCase {
     operation2.addCondition(MutuallyExclusiveCondition(name: "AdvancedBlockOperation"))
     operation3.addCondition(MutuallyExclusiveCondition(name: "AdvancedBlockOperation"))
 
-    //XCTAssertEqual(manager.operations.keys.count, 0)
+    operation1.name = "operation1"
+    operation2.name = "operation2"
+    operation3.name = "operation3"
+
     queue.addOperation(operation1)
     queue.addOperation(operation2)
     queue.addOperation(operation3)
@@ -305,12 +320,6 @@ final class MutuallyExclusiveConditionTests: XCTestCase {
       expectation4.fulfill()
     })
     operation3.addObserver(finalObserver)
-
-//    XCTAssertEqual(manager.operations.keys.count, 1)
-//    guard let key = manager.operations.keys.first else {
-//      return XCTAssertNotNil(manager.operations.keys.first)
-//    }
-//    XCTAssertEqual((manager.operations[key] ?? []).count, 3)
 
     queue.isSuspended = false
     waitForExpectations(timeout: 10)
