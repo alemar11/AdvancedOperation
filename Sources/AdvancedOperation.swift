@@ -38,6 +38,7 @@ open class AdvancedOperation: Operation {
 
   internal final var isCancelling: Bool { return stateLock.synchronized { return _cancelling } }
   internal final var isFinishing: Bool { return stateLock.synchronized { return _finishing } }
+  internal final var isStarting: Bool { return stateLock.synchronized { return _starting } }
 
   public var categories = [String]()
 
@@ -98,6 +99,8 @@ open class AdvancedOperation: Operation {
   /// Returns `true` if the `AdvancedOperation` is cancelling.
   private var _cancelling = false
 
+  private var _starting = false
+
   /// Returns `true` if the `AdvancedOperation` is cancelled.
   private var _cancelled = false
 
@@ -132,6 +135,16 @@ open class AdvancedOperation: Operation {
   // MARK: - Execution
 
   public final override func start() {
+    let canBeStarted = stateLock.synchronized { () -> Bool in
+      guard !_starting else { return false }
+
+      _starting = true
+      return true
+    }
+
+    guard canBeStarted else {
+      return
+    }
 
     // Do not start if it's finishing or it's finished
     guard !isFinishing || !isFinished else {
@@ -147,7 +160,7 @@ open class AdvancedOperation: Operation {
 
     let canBeExecuted = stateLock.synchronized { () -> Bool in
       guard _state == .ready else { return false }
-      guard _state != .executing else { return false }
+      //guard _state != .executing else { return false }
       return true
     }
 
@@ -156,6 +169,9 @@ open class AdvancedOperation: Operation {
     willChangeValue(forKey: #keyPath(AdvancedOperation.isExecuting))
     state = .executing
     didChangeValue(forKey: #keyPath(AdvancedOperation.isExecuting))
+    stateLock.synchronized {
+      _starting = false
+    }
 
     willExecute()
     main()
