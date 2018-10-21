@@ -95,22 +95,14 @@ open class AdvancedOperationQueue: OperationQueue {
         )
 
         operation.addObserver(observer)
-
-        let exclusivityConditions = operation.conditions.filter { $0.mutuallyExclusivityMode != .disabled }.compactMap { $0 as? MutuallyExclusiveCondition }
-        let categories = exclusivityConditions.compactMap { $0.name }
-        operation.categories = categories
-
         let evaluator = operation.evaluateConditions(exclusivityManager: exclusivityManager)
 
         if let evaluator = evaluator {
-          evaluator.categories = categories
-           exclusivityManager.addOperation(evaluator, for: self)
+          exclusivityManager.addOperation(evaluator, for: self)
           super.addOperation(evaluator)
         }
 
-
         exclusivityManager.addOperation(operation, for: self)
-
 
       } else { /// Operation
 

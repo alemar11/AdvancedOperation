@@ -273,8 +273,15 @@ open class AdvancedOperation: Operation {
 
   public func addCondition(_ condition: OperationCondition) {
     assert(state == .ready, "Cannot add conditions if the operation is \(state).")
+    assert(!isStarting, "Cannot add conditions while the operation is starting.")
 
-    conditions.append(condition)
+    //TODO
+    //let exclusivityConditions = operation.conditions.filter { $0.mutuallyExclusivityMode != .disabled }.compactMap { $0 as? MutuallyExclusiveCondition }
+    if let exclusivityCondition = condition as? MutuallyExclusiveCondition {
+      categories.append(exclusivityCondition.name)
+    } else {
+      conditions.append(condition)
+    }
   }
 
   // MARK: - Subclass
@@ -352,6 +359,7 @@ extension AdvancedOperation {
   /// - Parameter observer: the observer to add.
   /// - Requires: `self must not have started.
   public func addObserver(_ observer: OperationObservingType) {
+    assert(!isStarting, "Cannot modify observers after execution has begun.")
     assert(!isExecuting, "Cannot modify observers after execution has begun.")
 
     observers.append(observer)
@@ -438,8 +446,8 @@ extension AdvancedOperation {
 
 extension AdvancedOperation {
   internal func evaluateConditions(exclusivityManager: ExclusivityManager) -> GroupOperation? {
-    let standardConditions = self.conditions.filter { $0.mutuallyExclusivityMode == .disabled }
-    guard !standardConditions.isEmpty else {
+    //let standardConditions = self.conditions.filter { $0.mutuallyExclusivityMode == .disabled }
+    guard !conditions.isEmpty else {
       return nil
     }
 
@@ -457,7 +465,7 @@ extension AdvancedOperation {
       evaluator.addDependency(dependency)
     }
     addDependency(evaluator)
-
+    evaluator.categories = categories //TODO in this way the conditions are not evaluated too soon
     return evaluator
   }
 
