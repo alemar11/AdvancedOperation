@@ -221,7 +221,7 @@ final internal class FailingAsyncOperation: AdvancedOperation {
   }
 
   override func main() {
-    DispatchQueue.global().asyncAfter(deadline: .now() + 2.0) { [weak weakSelf = self] in
+    DispatchQueue.global().asyncAfter(deadline: .now() + 1.0) { [weak weakSelf = self] in
       guard let strongSelf = weakSelf else {
         return self.finish()
       }

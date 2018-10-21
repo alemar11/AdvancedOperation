@@ -40,7 +40,7 @@ open class AdvancedOperation: Operation {
   internal final var isFinishing: Bool { return stateLock.synchronized { return _finishing } }
   internal final var isStarting: Bool { return stateLock.synchronized { return _starting } }
 
-  public var categories = [String]()
+  public var categories = Set<String>()
 
   // MARK: - OperationState
 
@@ -278,7 +278,7 @@ open class AdvancedOperation: Operation {
     //TODO
     //let exclusivityConditions = operation.conditions.filter { $0.mutuallyExclusivityMode != .disabled }.compactMap { $0 as? MutuallyExclusiveCondition }
     if let exclusivityCondition = condition as? MutuallyExclusiveCondition {
-      categories.append(exclusivityCondition.name)
+      categories.insert(exclusivityCondition.name)
     } else {
       conditions.append(condition)
     }
