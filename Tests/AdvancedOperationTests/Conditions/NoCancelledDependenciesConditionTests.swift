@@ -40,7 +40,7 @@ final class NoCancelledDependenciesConditionTests: XCTestCase {
 
     let operation1 = SleepyAsyncOperation()
     let operation2 = SleepyAsyncOperation()
-    let operation3 = XCTFailOperation()
+    let operation3 = NotExecutableOperation()
     let operation4 = DelayOperation(interval: 1)
 
     operation1.addDependencies([operation2, operation3])
@@ -73,7 +73,7 @@ final class NoCancelledDependenciesConditionTests: XCTestCase {
     operation1.name = "operation1"
     let operation2 = SleepyAsyncOperation()
     operation2.name = "operation2"
-    let operation3 = XCTFailOperation()
+    let operation3 = NotExecutableOperation()
     operation3.name = "operation3"
     let operation4 = DelayOperation(interval: 1)
     operation4.name = "operation4"
@@ -112,9 +112,9 @@ final class NoCancelledDependenciesConditionTests: XCTestCase {
     let manager = ExclusivityManager()
     let queue = AdvancedOperationQueue(exclusivityManager: manager)
 
-    let operation1 = XCTFailOperation()
+    let operation1 = NotExecutableOperation()
     let operation2 = SleepyAsyncOperation()
-    let operation3 = XCTFailOperation()
+    let operation3 = NotExecutableOperation()
     let operation4 = DelayOperation(interval: 1)
 
     operation1.name = "op1"

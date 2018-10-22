@@ -35,7 +35,7 @@ final class NoFailedDependenciesConditionTests: XCTestCase {
     let expectation3 = expectation(description: "\(#function)\(#line)")
     let expectation4 = expectation(description: "\(#function)\(#line)")
 
-    let operation1 = XCTFailOperation()
+    let operation1 = NotExecutableOperation()
     operation1.name = "operation1"
 
     let operation2 = FailingAsyncOperation(errors: [.failed])
@@ -104,7 +104,7 @@ final class NoFailedDependenciesConditionTests: XCTestCase {
     let manager = ExclusivityManager()
     let queue = AdvancedOperationQueue(exclusivityManager: manager)
 
-    let operation1 = XCTFailOperation()
+    let operation1 = NotExecutableOperation()
     operation1.name = "operation1"
 
     let operation2 = SleepyAsyncOperation()
@@ -170,7 +170,7 @@ final class NoFailedDependenciesConditionTests: XCTestCase {
     let expectation3 = expectation(description: "\(#function)\(#line)")
     let expectation4 = expectation(description: "\(#function)\(#line)")
 
-    let operation1 = XCTFailOperation()
+    let operation1 = NotExecutableOperation()
     operation1.name = "operation1"
 
     let operation2 = SleepyAsyncOperation()

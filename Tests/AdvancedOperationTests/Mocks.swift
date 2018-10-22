@@ -195,7 +195,7 @@ final internal class SleepyBlockOperation: AdvancedOperation {
 
 }
 
-final internal class XCTFailOperation: AdvancedOperation { //TODO rename
+final internal class NotExecutableOperation: AdvancedOperation {
 
   override init() {
     super.init()
