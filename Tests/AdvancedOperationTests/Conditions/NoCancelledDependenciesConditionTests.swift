@@ -60,7 +60,7 @@ final class NoCancelledDependenciesConditionTests: XCTestCase {
     XCTAssertTrue(operation1.isCancelled)
   }
 
-  func testAllOperationCancelled() {
+  func testAllOperationCancelled() { // TODO: data race
     let manager = ExclusivityManager()
     let queue = AdvancedOperationQueue(exclusivityManager: manager)
 
