@@ -26,10 +26,6 @@ import XCTest
 
 final class NoFailedDependenciesConditionTests: XCTestCase {
 
-  func testIsMutuallyExclusive() {
-    XCTAssertTrue(NoFailedDependenciesCondition().mutuallyExclusivityMode == .disabled)
-  }
-
   func testFinishedAndFailedOperation() {
     let manager = ExclusivityManager()
     let queue = AdvancedOperationQueue(exclusivityManager: manager)

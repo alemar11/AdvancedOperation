@@ -36,7 +36,7 @@ internal final class ConditionEvaluatorOperation: GroupOperation {
 
     conditions.forEach { condition in
 
-      guard condition.mutuallyExclusivityMode == .disabled else {
+      if condition is MutuallyExclusiveCondition {
         return
       }
 

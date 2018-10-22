@@ -34,11 +34,6 @@ final class NoCancelledDependenciesConditionTests: XCTestCase {
 //    }
 //  }
 
-  func testIsMutuallyExclusive() {
-    XCTAssertTrue(NoCancelledDependeciesCondition().mutuallyExclusivityMode == .disabled)
-    XCTAssertEqual(NoCancelledDependeciesCondition().mutuallyExclusivityMode.description, "Disabled")
-  }
-
   func testTwoLevelCondition() {
     let manager = ExclusivityManager()
     let queue = AdvancedOperationQueue(exclusivityManager: manager)

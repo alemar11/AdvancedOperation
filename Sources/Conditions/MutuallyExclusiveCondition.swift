@@ -41,3 +41,18 @@ public struct MutuallyExclusiveCondition: OperationCondition {
   }
 
 }
+
+/// Defines the mutual exclusivity behaviour for an operation's condition.
+public enum MutualExclusivityMode: CustomStringConvertible {
+  /// Enabled, but only one operation can be evaluated at a time.
+  case enqueue
+  /// Enabled, but only one operation will be executed.
+  case cancel
+
+  public var description: String {
+    switch self {
+    case .enqueue: return "Enabled in enqueue mode"
+    case .cancel: return "Enabled in cancel mode"
+    }
+  }
+}
