@@ -441,7 +441,7 @@ extension AdvancedOperation {
   }
 
   private func didFinish(errors: [Error]) {
-    var loggedErrors = [Error]() // avoid TSAN _swiftEmptyArrayStorage
+    var loggedErrors = [Error]() // TODO avoid TSAN _swiftEmptyArrayStorage
     if !errors.isEmpty {
       loggedErrors = errors
     }
