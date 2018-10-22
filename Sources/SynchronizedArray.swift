@@ -45,6 +45,12 @@ internal extension SynchronizedArray {
     }
   }
 
+  var isEmpty: Bool {
+    return queue.sync {
+      self.array.isEmpty
+    }
+  }
+
 }
 
 // MARK: - Mutable
