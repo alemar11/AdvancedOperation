@@ -26,14 +26,6 @@ import XCTest
 
 final class NoCancelledDependenciesConditionTests: XCTestCase {
 
-  /// queue with waitUntilFinished set to true may stuck in a loop
-//  func testStress() {
-//    for count in 1...100 {
-//      print("\(count)")
-//      testAllOperationCancelled()
-//    }
-//  }
-
   func testTwoLevelCondition() {
     let manager = ExclusivityManager()
     let queue = AdvancedOperationQueue(exclusivityManager: manager)
@@ -60,7 +52,7 @@ final class NoCancelledDependenciesConditionTests: XCTestCase {
     XCTAssertTrue(operation1.isCancelled)
   }
 
-  func testAllOperationCancelled() { // TODO: data race
+  func testAllOperationCancelled() {
     let manager = ExclusivityManager()
     let queue = AdvancedOperationQueue(exclusivityManager: manager)
 
@@ -78,6 +70,11 @@ final class NoCancelledDependenciesConditionTests: XCTestCase {
     let operation4 = DelayOperation(interval: 1)
     operation4.name = "operation4"
 
+    operation1.useOSLog(TestsLog)
+    operation2.useOSLog(TestsLog)
+    operation3.useOSLog(TestsLog)
+    operation4.useOSLog(TestsLog)
+
     operation1.addCompletionBlock { expectation1.fulfill() }
     operation2.addCompletionBlock { expectation2.fulfill() }
     operation3.addCompletionBlock { expectation3.fulfill() }
@@ -89,7 +86,7 @@ final class NoCancelledDependenciesConditionTests: XCTestCase {
     operation3.addCondition(NoCancelledDependeciesCondition()) // this operation will fail
 
     operation4.cancel()
-    operation3.cancel() // it's pending and cancelled at the same time
+    operation3.cancel()
     operation2.cancel()
     operation1.cancel()
 
@@ -98,13 +95,13 @@ final class NoCancelledDependenciesConditionTests: XCTestCase {
     waitForExpectations(timeout: 10)
     XCTAssertTrue(operation4.isCancelled)
 
-    XCTAssertFalse(operation3.hasErrors) // it's not failed because it's been cancelled before evaluating its conditions
+    XCTAssertFalse(operation3.hasErrors)
     XCTAssertTrue(operation3.isCancelled)
 
     XCTAssertFalse(operation2.hasErrors)
     XCTAssertTrue(operation2.isCancelled)
 
-    XCTAssertFalse(operation1.hasErrors) // it's not failed because it's been cancelled before evaluating its conditions
+    XCTAssertFalse(operation1.hasErrors)
     XCTAssertTrue(operation1.isCancelled)
   }
 

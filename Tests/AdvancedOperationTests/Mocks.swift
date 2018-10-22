@@ -131,8 +131,6 @@ final internal class SleepyAsyncOperation: AdvancedOperation {
     self.interval1 = interval1
     self.interval2 = interval2
     self.interval3 = interval3
-    super.init()
-    useOSLog(TestsLog)
   }
 
   override func main() {
@@ -203,7 +201,7 @@ final internal class NotExecutableOperation: AdvancedOperation {
   }
 
   override func main() {
-    XCTFail("This operation should't be executed.")
+    XCTFail("This operation shouldn't be executed.")
     self.finish()
   }
 
