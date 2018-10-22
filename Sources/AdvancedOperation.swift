@@ -44,6 +44,7 @@ open class AdvancedOperation: Operation {
 
   // MARK: - OperationState
 
+  @objc
   internal enum OperationState: Int, CustomDebugStringConvertible {
 
     case ready
@@ -108,7 +109,7 @@ open class AdvancedOperation: Operation {
   private let _errors = SynchronizedArray<Error>() //TOOD: maybe a SynchronizedArray is not necessary
 
   /// The state of the operation.
-  internal var state: OperationState {
+  @objc internal var state: OperationState {
     get {
       return stateLock.synchronized { _state }
     }
@@ -117,6 +118,17 @@ open class AdvancedOperation: Operation {
         assert(_state.canTransition(to: newValue), "Performing an invalid state transition for: \(_state) to: \(newValue).")
         _state = newValue
       }
+    }
+  }
+
+  open override class func keyPathsForValuesAffectingValue(forKey key: String) -> Set<String> {
+    switch key {
+    case #keyPath(Operation.isReady),
+         #keyPath(Operation.isExecuting),
+         #keyPath(Operation.isFinished):
+      return Set([#keyPath(state)])
+    default:
+      return super.keyPathsForValuesAffectingValue(forKey: key)
     }
   }
 
@@ -166,9 +178,7 @@ open class AdvancedOperation: Operation {
 
     guard canBeExecuted else { return }
 
-    willChangeValue(forKey: #keyPath(AdvancedOperation.isExecuting))
     state = .executing
-    didChangeValue(forKey: #keyPath(AdvancedOperation.isExecuting))
     stateLock.synchronized {
       _starting = false
     }
@@ -243,9 +253,7 @@ open class AdvancedOperation: Operation {
     }
 
     willFinish(errors: updatedErrors)
-    willChangeValue(forKey: #keyPath(AdvancedOperation.isFinished))
     state = .finished
-    didChangeValue(forKey: #keyPath(AdvancedOperation.isFinished))
     didFinish(errors: updatedErrors)
     stateLock.synchronized { _finishing = false }
   }
