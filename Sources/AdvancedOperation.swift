@@ -441,10 +441,14 @@ extension AdvancedOperation {
   }
 
   private func didFinish(errors: [Error]) {
-    operationDidFinish(errors: errors)
+    var loggedErrors = [Error]() // avoid TSAN _swiftEmptyArrayStorage
+    if !errors.isEmpty {
+      loggedErrors = errors
+    }
+    operationDidFinish(errors: loggedErrors)
 
     for observer in didFinishObservers {
-      observer.operationDidFinish(operation: self, withErrors: errors)
+      observer.operationDidFinish(operation: self, withErrors: loggedErrors)
     }
   }
 
@@ -474,13 +478,22 @@ extension AdvancedOperation {
     }
 
     let evaluator = ConditionEvaluatorOperation(conditions: self.conditions, operation: self, exclusivityManager: exclusivityManager)
-    let observer = BlockObserver(willFinish: { [weak self] _, errors in
-      if !errors.isEmpty {
+    let evaluatorObserver = BlockObserver(willFinish: { [weak self] operation, errors in
+      if operation.isCancelled || !errors.isEmpty {
         self?.cancel(errors: errors)
       }
     })
 
-    evaluator.addObserver(observer)
+    let selfObserver = BlockObserver(willFinish: { [weak evaluator] operation, errors in
+      if operation.isCancelled || !errors.isEmpty {
+        // TODO check if the evaluator is already finished or cancelled?
+        print("🚩\(operation.operationName) has been cancelled --> cancelling \(evaluator?.operationName)")
+        evaluator?.cancel(errors: errors)
+      }
+    })
+
+    addObserver(selfObserver)
+    evaluator.addObserver(evaluatorObserver)
     evaluator.useOSLog(log)
 
     for dependency in dependencies {
