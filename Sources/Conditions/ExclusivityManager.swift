@@ -102,17 +102,8 @@ final public class ExclusivityManager {
       /// all the not suspended queues.
       let queues = _queues.compactMap { $0.queue }.filter { $0 === queue || !$0.isSuspended }
       let allOperations = queues.flatMap { $0.operations }
-
-      if allOperations.isEmpty {
-        return
-      }
-
       let advancedOperations = allOperations.compactMap { $0 as? AdvancedOperation }
-
-       let operations = advancedOperations.filter {
-        $0.categories.contains(where: categories.contains)
-      }
-
+      let operations = advancedOperations.filter { $0.categories.contains(where: categories.contains) }
       print("🔴 found \(operations.count) for categories: \(categories)")
 
       for ope in operations where ope !== operation {

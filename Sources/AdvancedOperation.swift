@@ -165,11 +165,24 @@ open class AdvancedOperation: Operation {
     }
 
     // Bail out early if cancelled or if there are some errors.
-    guard !hasErrors && !isCancelled else {
-      _cancelled = true // an operation starting with errors should finish as cancelled
-      finish() // fires KVO
+    let shouldBeFinished = stateLock.synchronized { () -> Bool in
+      if !_errors.isEmpty || _cancelled {
+         _cancelled = true // if there are errors, the operation should be considered as cancelled
+        return true
+      }
+      return false
+    }
+
+    guard !shouldBeFinished else {
+      finish()
       return
     }
+
+//    guard !hasErrors && !isCancelled else {
+//      _cancelled = true // an operation starting with errors should finish as cancelled
+//      finish() // fires KVO
+//      return
+//    }
 
     let canBeExecuted = stateLock.synchronized { () -> Bool in
       guard _state == .ready else { return false }
@@ -210,12 +223,9 @@ open class AdvancedOperation: Operation {
       return true
     }
 
-    guard canBeCancelled else { return }
-
-//    var localErrors = errors
-//    if let nonEmptyErrors = cancelErrors, !nonEmptyErrors.isEmpty {
-//      localErrors += nonEmptyErrors
-//    }
+    guard canBeCancelled else {
+      return
+    }
 
     willChangeValue(forKey: #keyPath(AdvancedOperation.isCancelled))
     willCancel(errors: cancelErrors) // observers

@@ -197,7 +197,7 @@ final class AdvancedOperationTests: XCTestCase {
   func testMultipleStartsAndCancels() {
     let expectation1 = expectation(description: "\(#function)\(#line)")
 
-    let operation = SleepyAsyncOperation(interval1: 2, interval2: 2, interval3: 2)
+    let operation = RunUntilCancelledOperation()
     operation.completionBlock = { expectation1.fulfill() }
 
     XCTAssertTrue(operation.isReady)
@@ -218,17 +218,14 @@ final class AdvancedOperationTests: XCTestCase {
     XCTAssertFalse(operation.isExecuting)
     XCTAssertTrue(operation.isCancelled)
 
-    XCTAssertFalse(operation.isExecuting)
-
     waitForExpectations(timeout: 10)
     XCTAssertTrue(operation.isCancelled)
-
   }
 
   func testMultipleStartAndCancelWithErrors() {
     let expectation1 = expectation(description: "\(#function)\(#line)")
 
-    let operation = SleepyAsyncOperation()
+    let operation = RunUntilCancelledOperation()
     operation.completionBlock = { expectation1.fulfill() }
 
     XCTAssertTrue(operation.isReady)
@@ -253,7 +250,7 @@ final class AdvancedOperationTests: XCTestCase {
   func testMultipleCancelWithError() {
     let expectation1 = expectation(description: "\(#function)\(#line)")
 
-    let operation = SleepyAsyncOperation()
+    let operation = RunUntilCancelledOperation()
     operation.completionBlock = { expectation1.fulfill() }
 
     XCTAssertTrue(operation.isReady)
