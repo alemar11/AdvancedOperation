@@ -469,7 +469,6 @@ extension AdvancedOperation {
 
 extension AdvancedOperation {
   internal func evaluateConditions(exclusivityManager: ExclusivityManager) -> GroupOperation? {
-    // let standardConditions = self.conditions.filter { $0.mutuallyExclusivityMode == .disabled }
     guard !conditions.isEmpty else {
       return nil
     }
@@ -479,16 +478,18 @@ extension AdvancedOperation {
       if !errors.isEmpty {
         self?.cancel(errors: errors)
       }
-      }, didFinish: nil)
-    evaluator.addObserver(observer)
+    })
 
+    evaluator.addObserver(observer)
     evaluator.useOSLog(log)
 
     for dependency in dependencies {
       evaluator.addDependency(dependency)
     }
     addDependency(evaluator)
-    evaluator.categories = categories //TODO in this way the conditions are not evaluated too soon
+
+    // giving the same categories to the evaluator, it can only start only when the exclusivity conditions are met
+    evaluator.categories = categories
     return evaluator
   }
 
