@@ -93,7 +93,7 @@ final class AdvancedBlockOperationTests: XCTestCase {
     XCTAssertSameErrorQuantity(errors: operation.errors, expectedErrors: errors)
 
     // Memory leaks test: once release the operation, the captured object (by reference) should be nil (weakObject)
-    operation = AdvancedBlockOperation(block: {})
+    operation = AdvancedBlockOperation { }
     object = NSObject()
     XCTAssertNil(weakObject)
   }

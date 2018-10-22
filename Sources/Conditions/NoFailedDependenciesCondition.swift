@@ -40,7 +40,8 @@ public struct NoFailedDependenciesCondition: OperationCondition {
 
   public func evaluate(for operation: AdvancedOperation, completion: @escaping (OperationConditionResult) -> Void) {
     var dependencies = operation.dependencies
-
+    // TODO this condition should be evaluated as the last one
+    // TODO we should remove the ConditonOperation from the dependencies
     if ignoreCancellations {
       dependencies = dependencies.filter { !$0.isCancelled }
     }

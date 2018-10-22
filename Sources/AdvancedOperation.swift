@@ -173,7 +173,6 @@ open class AdvancedOperation: Operation {
 
     let canBeExecuted = stateLock.synchronized { () -> Bool in
       guard _state == .ready else { return false }
-      //guard _state != .executing else { return false }
       return true
     }
 
@@ -252,7 +251,7 @@ open class AdvancedOperation: Operation {
     guard canBeFinished else { return }
 
     let updatedErrors = stateLock.synchronized { () -> [Error] in
-      if !finishErrors.isEmpty { // to void _swiftEmptyArrayStorage race condition
+      if !finishErrors.isEmpty { // to avoid _swiftEmptyArrayStorage race condition
       _errors.append(contentsOf: finishErrors)
       }
       return _errors
@@ -289,8 +288,8 @@ open class AdvancedOperation: Operation {
     assert(state == .ready, "Cannot add conditions if the operation is \(state).")
     assert(!isStarting, "Cannot add conditions while the operation is starting.")
 
-    //TODO
-    //let exclusivityConditions = operation.conditions.filter { $0.mutuallyExclusivityMode != .disabled }.compactMap { $0 as? MutuallyExclusiveCondition }
+    // TODO
+    // let exclusivityConditions = operation.conditions.filter { $0.mutuallyExclusivityMode != .disabled }.compactMap { $0 as? MutuallyExclusiveCondition }
     if let exclusivityCondition = condition as? MutuallyExclusiveCondition {
       categories.insert(exclusivityCondition.name)
     } else {
@@ -460,7 +459,7 @@ extension AdvancedOperation {
 
 extension AdvancedOperation {
   internal func evaluateConditions(exclusivityManager: ExclusivityManager) -> GroupOperation? {
-    //let standardConditions = self.conditions.filter { $0.mutuallyExclusivityMode == .disabled }
+    // let standardConditions = self.conditions.filter { $0.mutuallyExclusivityMode == .disabled }
     guard !conditions.isEmpty else {
       return nil
     }
@@ -483,91 +482,4 @@ extension AdvancedOperation {
     return evaluator
   }
 
-}
-
-/// Evalutes all the `OperationCondition`: the evaluation fails if it, once finished, contains errors.
-internal final class ConditionEvaluatorOperation: GroupOperation {
-
-  private var _operationName: String
-
-  init(conditions: [OperationCondition], operation: AdvancedOperation, exclusivityManager: ExclusivityManager) { //TODO: set
-    _operationName = operation.operationName
-
-    super.init(operations: [])
-
-    conditions.forEach { condition in
-
-      guard condition.mutuallyExclusivityMode == .disabled else {
-        return
-      }
-
-      let evaluatingOperation = EvaluateConditionOperation(condition: condition, for: operation)
-
-      if let dependency = condition.dependency(for: operation) {
-        evaluatingOperation.addDependency(dependency)
-        addOperation(operation: dependency)
-      }
-
-//      if condition.mutuallyExclusivityMode != .disabled {
-//        let category = condition.name
-//        let cancellable = condition.mutuallyExclusivityMode == .cancel
-//        //exclusivityManager.addOperation(operation, category: category, cancellable: cancellable)
-//        exclusivityOperation = MutualExclusivityOperation(category: category)
-//
-//      }
-
-      //exclusivityManager.addOperation(operation: exclusivityOperation, for: self)
-      addOperation(operation: evaluatingOperation)
-    }
-
-    name = "ConditionEvaluatorOperation<\(operation.operationName)>"
-  }
-
-  override func operationWillExecute() {
-    os_log("%{public}s conditions are being evaluated.", log: log, type: .info, _operationName)
-  }
-
-  override func operationDidFinish(errors: [Error]) {
-    os_log("%{public}s conditions have been evaluated with %{public}d errors.", log: log, type: .info, _operationName, errors.count)
-  }
-
-}
-
-/// Operation responsible to evaluate a single `OperationCondition`.
-internal final class EvaluateConditionOperation: AdvancedOperation, OperationInputHaving, OperationOutputHaving {
-
-  internal weak var input: AdvancedOperation? = .none
-  internal var output: OperationConditionResult? = .none
-
-  let condition: OperationCondition
-
-  internal convenience init(condition: OperationCondition, for operation: AdvancedOperation) {
-    self.init(condition: condition)
-    self.input = operation
-  }
-
-  internal init(condition: OperationCondition) {
-    self.condition = condition
-    super.init()
-    self.name = condition.name
-  }
-
-  internal override func main() {
-    guard let evaluatedOperation = input else {
-      // TODO: add error
-      output = OperationConditionResult.failed([])
-      finish()
-      return
-    }
-
-    condition.evaluate(for: evaluatedOperation) { [weak self] result in
-      guard let self = self else {
-        return
-      }
-
-      self.output = result
-      let errors = result.errors ?? []
-      self.finish(errors: errors)
-    }
-  }
 }
