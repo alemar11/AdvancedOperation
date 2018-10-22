@@ -95,14 +95,17 @@ open class AdvancedOperationQueue: OperationQueue {
         )
 
         operation.addObserver(observer)
-        let evaluator = operation.evaluateConditions(exclusivityManager: exclusivityManager)
 
-        if let evaluator = evaluator {
-          exclusivityManager.addOperation(evaluator, for: self)
-          super.addOperation(evaluator)
+        if !operation.isCancelled && !operation.isFinished && !operation.isExecuting {
+          let evaluator = operation.evaluateConditions(exclusivityManager: exclusivityManager)
+
+          if let evaluator = evaluator {
+            exclusivityManager.addOperation(evaluator, for: self)
+            super.addOperation(evaluator)
+          }
+
+          exclusivityManager.addOperation(operation, for: self)
         }
-
-        exclusivityManager.addOperation(operation, for: self)
 
       } else { /// Operation
 
