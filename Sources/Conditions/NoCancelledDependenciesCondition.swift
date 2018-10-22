@@ -33,10 +33,9 @@ public struct NoCancelledDependeciesCondition: OperationCondition {
   public init() { }
 
   public func evaluate(for operation: AdvancedOperation, completion: @escaping (OperationConditionResult) -> Void) {
-    let dependencies = operation.dependencies
+    let dependencies = operation.dependencies.filter { !($0 is ConditionEvaluatorOperation) }
     let cancellations = dependencies.filter { $0.isCancelled }
-    // TODO this condition should be evaluated as the last one
-    // TODO we should remove the ConditonOperation from the dependencies
+
     if !cancellations.isEmpty {
       let names = cancellations.map { $0.name ?? "\(type(of: $0))" }
       let error = AdvancedOperationError.conditionFailed(message: "Some dependencies have been cancelled.",

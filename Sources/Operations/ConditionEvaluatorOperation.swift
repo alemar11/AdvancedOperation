@@ -24,7 +24,8 @@
 import Foundation
 import os.log
 
-/// Evalutes all the `OperationCondition`: the evaluation fails if it, once finished, contains errors.
+/// Evalutes all the `OperationCondition`.
+/// The evaluation fails if this operation, once finished, contains errors.
 internal final class ConditionEvaluatorOperation: GroupOperation {
 
   private var _operationName: String
@@ -35,7 +36,6 @@ internal final class ConditionEvaluatorOperation: GroupOperation {
     super.init(operations: [])
 
     conditions.forEach { condition in
-
       if condition is MutuallyExclusiveCondition {
         return
       }
@@ -47,15 +47,6 @@ internal final class ConditionEvaluatorOperation: GroupOperation {
         addOperation(operation: dependency)
       }
 
-      //      if condition.mutuallyExclusivityMode != .disabled {
-      //        let category = condition.name
-      //        let cancellable = condition.mutuallyExclusivityMode == .cancel
-      //        //exclusivityManager.addOperation(operation, category: category, cancellable: cancellable)
-      //        exclusivityOperation = MutualExclusivityOperation(category: category)
-      //
-      //      }
-
-      // exclusivityManager.addOperation(operation: exclusivityOperation, for: self)
       addOperation(operation: evaluatingOperation)
     }
 
