@@ -53,10 +53,10 @@ open class GroupOperation: AdvancedOperation {
 
   private let lock = NSLock()
 
-  private var _temporaryCancelErrors: [Error]?
+  private var _temporaryCancelErrors = [Error]()
 
   /// Holds the cancellation error.
-  private var temporaryCancelErrors: [Error]? {
+  private var temporaryCancelErrors: [Error] {
     get {
       return lock.synchronized { _temporaryCancelErrors }
     }
@@ -137,7 +137,7 @@ open class GroupOperation: AdvancedOperation {
   }
 
   /// Advises the `GroupOperation` object that it should stop executing its tasks.
-  public final override func cancel(errors: [Error]?) {
+  public final override func cancel(errors: [Error]) {
     guard !isCancelling && !isCancelled && !isFinished else { return }
 
     lock.synchronized {
@@ -157,7 +157,7 @@ open class GroupOperation: AdvancedOperation {
   }
 
   open override func cancel() {
-    cancel(errors: nil)
+    cancel(errors: [])
   }
 
   /// Performs the receiver’s non-concurrent task.

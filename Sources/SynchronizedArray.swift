@@ -63,7 +63,7 @@ internal extension SynchronizedArray {
 
   /// Adds a new element at the end of the array.
   func append(_ element: Element) {
-    queue.async {
+    queue.sync {
       self.array.append(element)
     }
   }

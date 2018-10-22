@@ -80,13 +80,13 @@ open class AdvancedOperation: Operation {
   // MARK: - Properties
 
   /// Errors generated during the execution.
-  public var errors: [Error] { return _errors.all }
+  public var errors: [Error] { return stateLock.synchronized { _errors } }
 
   /// An instance of `OSLog` (by default is disabled).
   public private(set) var log = OSLog.disabled
 
   /// Returns `true` if the `AdvancedOperation` has generated errors during its lifetime.
-  public var hasErrors: Bool { return stateLock.synchronized { !errors.isEmpty } }
+  public var hasErrors: Bool { return !errors.isEmpty }
 
   /// A lock to guard reads and writes to the `_state` property
   private let stateLock = NSRecursiveLock()
@@ -106,10 +106,11 @@ open class AdvancedOperation: Operation {
   private var _cancelled = false
 
   /// Errors generated during the execution.
-  private let _errors = SynchronizedArray<Error>() //TOOD: maybe a SynchronizedArray is not necessary
+  private var _errors = [Error]()
 
   /// The state of the operation.
-  @objc internal var state: OperationState {
+  @objc dynamic
+  internal var state: OperationState {
     get {
       return stateLock.synchronized { _state }
     }
@@ -191,7 +192,7 @@ open class AdvancedOperation: Operation {
     fatalError("\(type(of: self)) must override `main()`.")
   }
 
-  open func cancel(errors: [Error]? = .none) {
+  open func cancel(errors: [Error] = []) {
     _cancel(errors: errors)
   }
 
@@ -199,7 +200,7 @@ open class AdvancedOperation: Operation {
     _cancel()
   }
 
-  private final func _cancel(errors cancelErrors: [Error]? = nil) {
+  private final func _cancel(errors cancelErrors: [Error] = []) {
     let canBeCancelled = stateLock.synchronized { () -> Bool in
       guard !_cancelling else { return false }
       guard !_cancelled else { return false }
@@ -212,13 +213,16 @@ open class AdvancedOperation: Operation {
 
     guard canBeCancelled else { return }
 
-    let localErrors = errors + (cancelErrors ?? [])
+//    var localErrors = errors
+//    if let nonEmptyErrors = cancelErrors, !nonEmptyErrors.isEmpty {
+//      localErrors += nonEmptyErrors
+//    }
 
     willChangeValue(forKey: #keyPath(AdvancedOperation.isCancelled))
-    willCancel(errors: localErrors) // observers
+    willCancel(errors: cancelErrors) // observers
 
     stateLock.synchronized {
-      if let cancelErrors = cancelErrors {
+      if !cancelErrors.isEmpty {
         self._errors.append(contentsOf: cancelErrors)
       }
 
@@ -236,7 +240,7 @@ open class AdvancedOperation: Operation {
     _finish(errors: errors)
   }
 
-  private final func _finish(errors: [Error] = []) {
+  private final func _finish(errors finishErrors: [Error] = []) {
     let canBeFinished = stateLock.synchronized { () -> Bool in
       guard !_finishing else { return false }
       guard _state != .finished else { return false }
@@ -248,8 +252,10 @@ open class AdvancedOperation: Operation {
     guard canBeFinished else { return }
 
     let updatedErrors = stateLock.synchronized { () -> [Error] in
-      self._errors.append(contentsOf: errors)
-      return self.errors
+      if !finishErrors.isEmpty { // to void _swiftEmptyArrayStorage race condition
+      _errors.append(contentsOf: finishErrors)
+      }
+      return _errors
     }
 
     willFinish(errors: updatedErrors)
