@@ -62,7 +62,6 @@ final class AdvancedOperationTests: XCTestCase {
   }
 
   func testMultipleAsyncStart() {
-
     let queue = DispatchQueue(label: "test")
     let operation = SleepyAsyncOperation()
 
