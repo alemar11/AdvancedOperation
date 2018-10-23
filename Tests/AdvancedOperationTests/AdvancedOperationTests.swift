@@ -185,36 +185,20 @@ final class AdvancedOperationTests: XCTestCase {
     XCTAssertTrue(operation.isFinished)
   }
 
-//    func testStress() {
-//      for i in 1...100 {
-//        print(i)
-//        //testStart()
-//        //testMultipleCancel()
-//        testMultipleStartsAndCancels()
-//      }
-//    }
-
   func testMultipleStartsAndCancels() {
     let operation = RunUntilCancelledOperation()
     let expectation1 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isFinished), object: operation, expectedValue: true)
 
-    operation.useOSLog(TestsLog)
-
     XCTAssertTrue(operation.isReady)
-    operation.start()
-    XCTAssertTrue(operation.isExecuting)
 
+    operation.start()
     operation.cancel()
-    XCTAssertTrue(operation.isCancelled)
-
-    print(operation.isCancelling)
     operation.start()
-
     operation.cancel(errors: [MockError.test])
     operation.cancel(errors: [MockError.failed])
 
-
     wait(for: [expectation1], timeout: 10)
+
     XCTAssertFalse(operation.isExecuting)
     XCTAssertFalse(operation.hasErrors)
     XCTAssertTrue(operation.isCancelled)
