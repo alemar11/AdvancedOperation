@@ -202,41 +202,42 @@ class OperationConditionTests: XCTestCase {
     XCTAssertTrue(operation1.isCancelled)
   }
 
-  func testCancelledOperationWhileEvaluatingConditions() {
-    let expectation1 = expectation(description: "\(#function)\(#line)")
-    let expectation2 = expectation(description: "\(#function)\(#line)")
-    let operation1 = SleepyOperation()
-    operation1.completionBlock = { expectation2.fulfill() }
+//  func testCancelledOperationWhileEvaluatingConditions() {
+////    let expectation1 = expectation(description: "\(#function)\(#line)")
+////    let expectation2 = expectation(description: "\(#function)\(#line)")
+//    let operation1 = SleepyOperation()
+//
+//    //operation1.completionBlock = { expectation2.fulfill() }
+//
+//    DispatchQueue.global().asyncAfter(deadline: .now() + 3.0) {
+//      operation1.cancel() // at this point the operation itself is cancelled, but its conditions are still evaluating
+//    }
+//    for _ in 1...100 {
+//      operation1.addCondition(SlowCondition())
+//    }
+//
+//    let manager = ExclusivityManager()
+//    let queue = AdvancedOperationQueue(exclusivityManager: manager)
+//    let expectation1 = XCTKVOExpectation(keyPath: #keyPath(queue.isFinished), object: queue, expectedValue: true)
+//    queue.addOperation(operation1)
+//
+////    DispatchQueue.main.asyncAfter(deadline: .now() + 5.0) {
+////      expectation1.fulfill()
+////    }
+//
+////    wait(for: [expectation1], timeout: 10)
+////    XCTAssertTrue(operation1.isCancelled) // It's cancelled but the conditions are beeing evaluted.
+////
+////    wait(for: [expectation2], timeout: 10)
+//    XCTAssertTrue(operation1.isCancelled)
+//    XCTAssertTrue(operation1.state == .finished)
+//  }
 
-    DispatchQueue.global().asyncAfter(deadline: .now() + 3.0) {
-      operation1.cancel() // at this point the operation itself is cancelled, but its conditions are still evaluating
-    }
-    for _ in 1...100 {
-      operation1.addCondition(SlowCondition())
-    }
-
-    let manager = ExclusivityManager()
-    let queue = AdvancedOperationQueue(exclusivityManager: manager)
-    queue.addOperation(operation1)
-
-    DispatchQueue.main.asyncAfter(deadline: .now() + 5.0) {
-
-      expectation1.fulfill()
-    }
-
-    wait(for: [expectation1], timeout: 10)
-    XCTAssertTrue(operation1.isCancelled) // It's cancelled but the conditions are beeing evaluted.
-
-    wait(for: [expectation2], timeout: 10)
-    XCTAssertTrue(operation1.isCancelled)
-    XCTAssertTrue(operation1.state == .finished)
-  }
-
-  //    func testStress() {
-  //      for i in 1...200 {
-  //        print(i)
-  //        testCancelledOperationWhileEvaluatingConditions()
-  //      }
-  //    }
+//      func testStress() {
+//        for i in 1...200 {
+//          print(i)
+//          testCancelledOperationWhileEvaluatingConditions()
+//        }
+//      }
 
 }

@@ -110,7 +110,7 @@ open class GroupOperation: AdvancedOperation {
 
     isSuspended = true
     underlyingOperationQueue.delegate = self
-    finishingOperation.name = "Finishing Operation"
+    finishingOperation.name = "Finishing Operation<\(operationName)>"
     finishingOperation.addDependency(startingOperation)
     finishingOperation.completionBlock = { [weak self] in
       // always executed
@@ -119,7 +119,7 @@ open class GroupOperation: AdvancedOperation {
       self.complete()
     }
 
-    startingOperation.name = "Starting Operation"
+    startingOperation.name = "Starting Operation<\(operationName)>"
     underlyingOperationQueue.addOperation(startingOperation)
 
     for operation in operations {

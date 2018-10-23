@@ -469,11 +469,12 @@ internal extension AdvancedOperation {
     evaluator.useOSLog(log)
 
     for dependency in dependencies {
+      print("🚩 adding \(dependency.operationName) as dependency for \(evaluator.operationName)")
       evaluator.addDependency(dependency)
     }
     addDependency(evaluator)
 
-    // giving the same categories to the evaluator, it can only start only when the exclusivity conditions are met
+    // giving the same categories to the evaluator: it can start only when the exclusivity conditions are met
     evaluator.categories = categories
     return evaluator
   }

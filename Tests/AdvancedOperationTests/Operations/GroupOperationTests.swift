@@ -393,13 +393,6 @@ final class GroupOperationTests: XCTestCase {
     XCTAssertTrue(group.isFinished)
   }
 
-//  func testStress() {
-//    (1...100).forEach { i in
-//      print(i)
-//      testGroupOperationsCancelled()
-//    }
-//  }
-
   func testGroupOperationsCancelled() {
     let operation1 = SleepyAsyncOperation(interval1: 1, interval2: 1, interval3: 1)
     let operation2 = BlockOperation(block: { sleep(2) } )
@@ -603,38 +596,36 @@ final class GroupOperationTests: XCTestCase {
   }
 
   func testCompositionWithCondition() {
-    let expectationGroup = expectation(description: "\(#function)\(#line)")
-    let expectationAdapter = expectation(description: "\(#function)\(#line)")
+    let operation1 = AdvancedBlockOperation { complete in complete([]) }
 
-    let expectation1 = expectation(description: "\(#function)\(#line)")
-    let expectation2 = expectation(description: "\(#function)\(#line)")
-    let expectation3 = expectation(description: "\(#function)\(#line)")
+    let operation2 = AdvancedBlockOperation { complete in complete([]) }
+    operation2.addCondition(NoFailedDependenciesCondition())
 
-    let operation1 = SleepyOperation()
-    operation1.addCompletionBlock { expectation1.fulfill() }
-
-    let operation2 = SleepyAsyncOperation()
-    operation2.addCompletionBlock { expectation2.fulfill() }
-    operation2.addCondition(NoFailedDependenciesCondition()) // this condition will set operation2 as pending
-
-    let operation3 = SleepyOperation()
-    operation3.addCompletionBlock { expectation3.fulfill() }
+    let operation3 = AdvancedBlockOperation { complete in complete([]) }
 
     let adapterOperation = AdvancedBlockOperation { [unowned operation2] in
       operation2.cancel()
     }
-    adapterOperation.addCompletionBlock { expectationAdapter.fulfill() }
 
     adapterOperation.addDependency(operation1)
     operation2.addDependency(adapterOperation)
     operation3.addDependency(operation2)
 
+    operation1.name = "operation1"
+    operation2.name = "operation2"
+    operation3.name = "operation3"
+    adapterOperation.name = "adapterOperation"
+
     let group = GroupOperation(operations: [operation1, operation2, operation3, adapterOperation], exclusivityManager: ExclusivityManager())
-    group.addCompletionBlock { expectationGroup.fulfill() }
+    let expectation1 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isFinished), object: group, expectedValue: true)
+
     group.start()
-    waitForExpectations(timeout: 10)
+
+    wait(for: [expectation1], timeout: 10)
+
     XCTAssertTrue(operation1.isFinished)
     XCTAssertTrue(operation2.isCancelled)
+    XCTAssertTrue(operation2.isFinished)
     XCTAssertTrue(operation3.isFinished)
     XCTAssertTrue(adapterOperation.isFinished)
   }
