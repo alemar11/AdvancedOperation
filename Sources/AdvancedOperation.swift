@@ -141,6 +141,8 @@ open class AdvancedOperation: Operation {
     }
   }
 
+  private var _forceFinish = false
+
   // MARK: - Observers
 
   private(set) var observers = SynchronizedArray<OperationObservingType>()
@@ -150,7 +152,6 @@ open class AdvancedOperation: Operation {
   public final override func start() {
     let canBeStarted = stateLock.synchronized { () -> Bool in
       guard !_starting else { return false }
-
       _starting = true
       return true
     }
@@ -163,6 +164,11 @@ open class AdvancedOperation: Operation {
     guard !isFinishing || !isFinished else {
       return
     }
+
+    // if cancelling, wait until it's not
+    repeat {
+      print("\(operationName) has been started while cancelling.\n")
+    } while isCancelling
 
     // Bail out early if cancelled or if there are some errors.
     let shouldBeFinished = stateLock.synchronized { () -> Bool in
@@ -178,12 +184,6 @@ open class AdvancedOperation: Operation {
       return
     }
 
-    //    guard !hasErrors && !isCancelled else {
-    //      _cancelled = true // an operation starting with errors should finish as cancelled
-    //      finish() // fires KVO
-    //      return
-    //    }
-
     let canBeExecuted = stateLock.synchronized { () -> Bool in
       guard _state == .ready else { return false }
       return true
@@ -192,9 +192,10 @@ open class AdvancedOperation: Operation {
     guard canBeExecuted else { return }
 
     state = .executing
-    stateLock.synchronized {
-      _starting = false
-    }
+
+    //    stateLock.synchronized {
+    //      _starting = false
+    //    }
 
     willExecute()
     main()
@@ -236,13 +237,17 @@ open class AdvancedOperation: Operation {
       }
 
       _cancelled = true
-      _cancelling = false
     }
 
     didCancel(errors: errors)
     didChangeValue(forKey: #keyPath(AdvancedOperation.isCancelled))
 
     super.cancel() // fires isReady KVO
+
+    stateLock.synchronized {
+      _cancelling = false
+    }
+
   }
 
   open func finish(errors: [Error] = []) {
@@ -270,7 +275,9 @@ open class AdvancedOperation: Operation {
     willFinish(errors: updatedErrors)
     state = .finished
     didFinish(errors: updatedErrors)
-    stateLock.synchronized { _finishing = false }
+    //    stateLock.synchronized {
+    //      _finishing = false
+    //    }
   }
 
   // MARK: - Produced Operations

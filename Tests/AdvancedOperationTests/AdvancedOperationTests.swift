@@ -26,15 +26,6 @@ import XCTest
 
 final class AdvancedOperationTests: XCTestCase {
 
-  //  func testStress() {
-  //    for i in 1...100 {
-  //      print(i)
-  //      //testStart()
-  //      //testMultipleCancel()
-  //      testMultipleStartsAndCancels()
-  //    }
-  //  }
-
   func testStart() {
     let expectation1 = expectation(description: "\(#function)\(#line)")
 
@@ -194,11 +185,20 @@ final class AdvancedOperationTests: XCTestCase {
     XCTAssertTrue(operation.isFinished)
   }
 
-  func testMultipleStartsAndCancels() {
-    let expectation1 = expectation(description: "\(#function)\(#line)")
+//    func testStress() {
+//      for i in 1...100 {
+//        print(i)
+//        //testStart()
+//        //testMultipleCancel()
+//        testMultipleStartsAndCancels()
+//      }
+//    }
 
+  func testMultipleStartsAndCancels() {
     let operation = RunUntilCancelledOperation()
-    operation.completionBlock = { expectation1.fulfill() }
+    let expectation1 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isFinished), object: operation, expectedValue: true)
+
+    operation.useOSLog(TestsLog)
 
     XCTAssertTrue(operation.isReady)
     operation.start()
@@ -207,27 +207,24 @@ final class AdvancedOperationTests: XCTestCase {
     operation.cancel()
     XCTAssertTrue(operation.isCancelled)
 
+    print(operation.isCancelling)
     operation.start()
-    XCTAssertFalse(operation.isExecuting, "Should not executing for state: \(operation.state)")
-    XCTAssertTrue(operation.isCancelled, "Should be cancelled for state: \(operation.state)")
 
-    // Those errors will be ignored since the operation is already cancelled
     operation.cancel(errors: [MockError.test])
     operation.cancel(errors: [MockError.failed])
 
-    XCTAssertFalse(operation.isExecuting)
-    XCTAssertTrue(operation.isCancelled)
 
-    waitForExpectations(timeout: 10)
+    wait(for: [expectation1], timeout: 10)
+    XCTAssertFalse(operation.isExecuting)
+    XCTAssertFalse(operation.hasErrors)
     XCTAssertTrue(operation.isCancelled)
   }
 
   func testMultipleStartAndCancelWithErrors() {
-    let expectation1 = expectation(description: "\(#function)\(#line)")
+    let operation = RunUntilCancelledOperation(queue: .main)
+    let expectation1 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isFinished), object: operation, expectedValue: true)
 
-    let operation = RunUntilCancelledOperation()
-    operation.completionBlock = { expectation1.fulfill() }
-
+    operation.useOSLog(TestsLog)
     XCTAssertTrue(operation.isReady)
 
     operation.start()
@@ -235,12 +232,10 @@ final class AdvancedOperationTests: XCTestCase {
 
     operation.cancel(errors: [MockError.test])
     operation.start()
-    XCTAssertFalse(operation.isExecuting)
     operation.cancel()
     operation.cancel(errors: [MockError.failed])
-    XCTAssertTrue(operation.isCancelled)
 
-    waitForExpectations(timeout: 10)
+    wait(for: [expectation1], timeout: 10)
 
     XCTAssertTrue(operation.isCancelled)
     XCTAssertTrue(operation.isFinished)

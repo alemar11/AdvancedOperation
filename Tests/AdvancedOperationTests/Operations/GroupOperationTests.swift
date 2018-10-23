@@ -594,6 +594,7 @@ final class GroupOperationTests: XCTestCase {
     let group = GroupOperation(operations: [operation1, operation2, operation3, adapterOperation], exclusivityManager: ExclusivityManager())
     group.addCompletionBlock { expectationGroup.fulfill() }
     group.start()
+
     waitForExpectations(timeout: 10)
     XCTAssertTrue(operation1.isFinished)
     XCTAssertTrue(operation2.isCancelled)

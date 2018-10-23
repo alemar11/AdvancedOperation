@@ -111,8 +111,14 @@ final internal class SelfObservigOperation: AdvancedOperation {
 }
 
 final internal class RunUntilCancelledOperation: AdvancedOperation {
+  let queue: DispatchQueue
+
+  init(queue: DispatchQueue = DispatchQueue.global()) {
+    self.queue = queue
+  }
+
   override func main() {
-    DispatchQueue.global().async {
+    queue.async {
       while !self.isCancelled {
         sleep(1)
       }
