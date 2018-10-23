@@ -62,10 +62,12 @@ final class AdvancedOperationTests: XCTestCase {
   }
 
   func testMultipleAsyncStart() {
-    let expectation1 = expectation(description: "\(#function)\(#line)")
+
     let queue = DispatchQueue(label: "test")
     let operation = SleepyAsyncOperation()
-    operation.completionBlock = { expectation1.fulfill() }
+
+     let expectation1 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isExecuting), object: operation, expectedValue: true)
+     let expectation2 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isFinished), object: operation, expectedValue: true)
 
     XCTAssertTrue(operation.isReady)
     XCTAssertFalse(operation.isExecuting)
@@ -79,9 +81,8 @@ final class AdvancedOperationTests: XCTestCase {
     queue.async {
       operation.start()
     }
-    XCTAssertTrue(operation.isExecuting)
 
-    waitForExpectations(timeout: 10)
+    wait(for: [expectation1, expectation2], timeout: 10)
     XCTAssertTrue(operation.isFinished)
   }
 
