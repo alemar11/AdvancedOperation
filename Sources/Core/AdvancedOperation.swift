@@ -24,9 +24,6 @@
 import Foundation
 import os.log
 
-// TODO: cancel conditions evaluation if the operation is cancelled?
-// TODO: better move exclusivity manager to the dependencies if any
-
 /// An advanced subclass of `Operation`.
 open class AdvancedOperation: Operation {
 
@@ -36,51 +33,20 @@ open class AdvancedOperation: Operation {
   public final override var isFinished: Bool { return state == .finished }
   public final override var isCancelled: Bool { return stateLock.synchronized { return _cancelled } }
 
+  /// Returns `true` is the cancel command has been issued but not yet completed
   internal final var isCancelling: Bool { return stateLock.synchronized { return _cancelling } }
+  /// Returns `true` is the finish command has been triggered.
   internal final var isFinishing: Bool { return stateLock.synchronized { return _finishing } }
+  /// Returns `true` is the start command has been triggered.
   internal final var isStarting: Bool { return stateLock.synchronized { return _starting } }
-
-  public var categories = Set<String>()
-
-  // MARK: - OperationState
-
-  @objc
-  internal enum OperationState: Int, CustomDebugStringConvertible {
-
-    case ready
-    case executing
-    case finished
-
-    func canTransition(to state: OperationState) -> Bool {
-      switch (self, state) {
-      case (.ready, .executing):
-        return true
-      case (.ready, .finished): // early bailing out
-        return true
-      case (.executing, .finished):
-        return true
-      default:
-        return false
-      }
-    }
-
-    var debugDescription: String {
-      switch self {
-      case .ready:
-        return "ready"
-      case .executing:
-        return "executing"
-      case .finished:
-        return "finished"
-      }
-    }
-
-  }
 
   // MARK: - Properties
 
   /// Errors generated during the execution.
   public var errors: [Error] { return stateLock.synchronized { _errors } }
+
+  /// Exclusivity categories.
+  internal private(set) var categories = Set<String>()
 
   /// An instance of `OSLog` (by default is disabled).
   public private(set) var log = OSLog.disabled
@@ -136,12 +102,9 @@ open class AdvancedOperation: Operation {
   // MARK: - Life Cycle
 
   deinit {
-    for dependency in dependencies {
-      removeDependency(dependency)
-    }
+    removeDependencies()
+    observers.removeAll()
   }
-
-  private var _forceFinish = false
 
   // MARK: - Observers
 
@@ -160,17 +123,17 @@ open class AdvancedOperation: Operation {
       return
     }
 
-    // Do not start if it's finishing or it's finished
+    /// Do not start if it's finishing or it's finished
     guard !isFinishing || !isFinished else {
       return
     }
 
-    // if cancelling, wait until it's not
+    /// if cancelling, wait until it's not before proceeding
+    /// to avoid undefined behaviours
     repeat {
-      print("\(operationName) has been started while cancelling.\n")
     } while isCancelling
 
-    // Bail out early if cancelled or if there are some errors.
+    /// Bail out early if cancelled or if there are some errors.
     let shouldBeFinished = stateLock.synchronized { () -> Bool in
       if !_errors.isEmpty || _cancelled {
         _cancelled = true // if there are errors, the operation should be considered as cancelled
@@ -275,6 +238,7 @@ open class AdvancedOperation: Operation {
     willFinish(errors: updatedErrors)
     state = .finished
     didFinish(errors: updatedErrors)
+
     //    stateLock.synchronized {
     //      _finishing = false
     //    }
@@ -478,8 +442,9 @@ extension AdvancedOperation {
 
 // MARK: - Condition Evaluation
 
-extension AdvancedOperation {
-  internal func evaluateConditions(exclusivityManager: ExclusivityManager) -> GroupOperation? {
+internal extension AdvancedOperation {
+
+  func evaluateConditions(exclusivityManager: ExclusivityManager) -> GroupOperation? {
     guard !conditions.isEmpty else {
       return nil
     }
