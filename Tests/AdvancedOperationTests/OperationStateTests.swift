@@ -29,12 +29,12 @@ final class OperationStateTests: XCTestCase {
   func testTransition() {
     // Ready
     XCTAssertTrue(AdvancedOperation.OperationState.ready.canTransition(to: .executing))
-    XCTAssertFalse(AdvancedOperation.OperationState.ready.canTransition(to: .finished))
+    XCTAssertTrue(AdvancedOperation.OperationState.ready.canTransition(to: .finished))
     XCTAssertFalse(AdvancedOperation.OperationState.ready.canTransition(to: .ready))
 
     // Executing
     XCTAssertFalse(AdvancedOperation.OperationState.executing.canTransition(to: .executing))
-    XCTAssertFalse(AdvancedOperation.OperationState.executing.canTransition(to: .finished))
+    XCTAssertTrue(AdvancedOperation.OperationState.executing.canTransition(to: .finished))
     XCTAssertFalse(AdvancedOperation.OperationState.executing.canTransition(to: .ready))
   }
 
