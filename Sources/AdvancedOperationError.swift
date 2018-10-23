@@ -28,12 +28,13 @@ public struct AdvancedOperationError {
   public enum Code {
     static let conditionFailed = 100
     static let executionCancelled = 200
+    static let executionFinished = 300
   }
 
   static var domain = identifier
 
-  /// Creates an error usable when a condition has failed..
-  public static func conditionFailed(message: String, userInfo: [String: Any]? = nil) -> NSError {
+  /// Creates an error usable when a condition has failed.
+  public static func conditionFailed(message: String, userInfo: [String: Any]? = .none) -> NSError {
     var info: [String: Any] =  [
       NSLocalizedFailureReasonErrorKey: "The operation condition wasn't satisfied.",
       NSLocalizedDescriptionKey: message
@@ -57,6 +58,20 @@ public struct AdvancedOperationError {
       info[key] = value
     }
 
+  /// Creates an error usable when an operation finishes with errors.
     return NSError(domain: domain, code: Code.executionCancelled, userInfo: info)
+  }
+
+  public static func executionFinished(message: String, userInfo: [String: Any]? = .none) -> NSError {
+    var info: [String: Any] =  [
+      NSLocalizedFailureReasonErrorKey: "The operation has finished.",
+      NSLocalizedDescriptionKey: message
+    ]
+
+    userInfo?.forEach { (key, value) in
+      info[key] = value
+    }
+
+    return NSError(domain: domain, code: Code.executionFinished, userInfo: info)
   }
 }

@@ -40,7 +40,7 @@ internal final class ConditionEvaluatorOperation: GroupOperation {
         return
       }
 
-      let evaluatingOperation = EvaluateConditionOperation(condition: condition, for: operation)
+      let evaluatingOperation = EvaluateConditionOperation(condition: condition, operation: operation)
 
       if let dependency = condition.dependency(for: operation) {
         evaluatingOperation.addDependency(dependency)

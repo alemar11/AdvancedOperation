@@ -31,7 +31,7 @@ internal final class EvaluateConditionOperation: AdvancedOperation, OperationInp
 
   let condition: OperationCondition
 
-  internal convenience init(condition: OperationCondition, for operation: AdvancedOperation) {
+  internal convenience init(condition: OperationCondition, operation: AdvancedOperation) {
     self.init(condition: condition)
     self.input = operation
   }
@@ -44,9 +44,9 @@ internal final class EvaluateConditionOperation: AdvancedOperation, OperationInp
 
   internal override func main() {
     guard let evaluatedOperation = input else {
-      // TODO: add error
-      output = OperationConditionResult.failed([])
-      finish()
+      let error = AdvancedOperationError.executionFinished(message: "The operation to evaluate doesn't exist anymore.")
+      output = OperationConditionResult.failed([error])
+      finish(errors: [error])
       return
     }
 

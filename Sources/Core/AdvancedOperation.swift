@@ -457,10 +457,17 @@ internal extension AdvancedOperation {
     })
 
     let selfObserver = BlockObserver(willFinish: { [weak evaluator] operation, errors in
+      guard let evaluator = evaluator else {
+        return
+      }
+
+      guard !evaluator.isFinished && !evaluator.isCancelled else {
+        return
+      }
+
       if operation.isCancelled || !errors.isEmpty {
-        // TODO check if the evaluator is already finished or cancelled?
-        print("🚩\(operation.operationName) has been cancelled --> cancelling \(evaluator?.operationName)")
-        evaluator?.cancel(errors: errors)
+        print("🚩\(operation.operationName) has been cancelled --> cancelling \(evaluator.operationName)")
+        evaluator.cancel(errors: errors)
       }
     })
 

@@ -252,7 +252,7 @@ final class MutuallyExclusiveConditionTests: XCTestCase {
     XCTAssertEqual(text, "A B C. 🎉")
   }
 
-  func testMultipleMutuallyExclusiveConditionsAndDependencies() { //TODO debug this test
+  func testMultipleMutuallyExclusiveConditionsAndDependencies() {
     let exclusivityManager = ExclusivityManager()
     let queue = AdvancedOperationQueue(exclusivityManager: exclusivityManager)
     var text1 = ""
