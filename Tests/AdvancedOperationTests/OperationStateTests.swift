@@ -26,55 +26,22 @@ import XCTest
 
 final class OperationStateTests: XCTestCase {
 
-//  func testTransition() { //TODO
-//    // Ready
-//    XCTAssertTrue(AdvancedOperation.OperationState.ready.canTransition(to: .executing))
-//    //XCTAssertTrue(AdvancedOperation.OperationState.ready.canTransition(to: .pending))
-//    XCTAssertTrue(AdvancedOperation.OperationState.ready.canTransition(to: .finishing))
-//    //XCTAssertFalse(AdvancedOperation.OperationState.ready.canTransition(to: .evaluating))
-//    XCTAssertFalse(AdvancedOperation.OperationState.ready.canTransition(to: .finished))
-//    XCTAssertFalse(AdvancedOperation.OperationState.ready.canTransition(to: .ready))
-//
-//    // Pending
-////    XCTAssertTrue(AdvancedOperation.OperationState.pending.canTransition(to: .evaluating))
-////    XCTAssertFalse(AdvancedOperation.OperationState.pending.canTransition(to: .ready))
-////    XCTAssertFalse(AdvancedOperation.OperationState.pending.canTransition(to: .finished))
-////    XCTAssertFalse(AdvancedOperation.OperationState.pending.canTransition(to: .executing))
-////    XCTAssertFalse(AdvancedOperation.OperationState.pending.canTransition(to: .finishing))
-////    XCTAssertFalse(AdvancedOperation.OperationState.pending.canTransition(to: .pending))
-//
-//    // Evaluating
-////    XCTAssertTrue(AdvancedOperation.OperationState.evaluating.canTransition(to: .ready))
-////    XCTAssertFalse(AdvancedOperation.OperationState.evaluating.canTransition(to: .executing))
-////    XCTAssertFalse(AdvancedOperation.OperationState.evaluating.canTransition(to: .finished))
-////    XCTAssertFalse(AdvancedOperation.OperationState.evaluating.canTransition(to: .evaluating))
-////    XCTAssertFalse(AdvancedOperation.OperationState.evaluating.canTransition(to: .finishing))
-//    //XCTAssertFalse(AdvancedOperation.OperationState.evaluating.canTransition(to: .pending))
-//
-//    // Executing
-//    XCTAssertTrue(AdvancedOperation.OperationState.executing.canTransition(to: .finishing))
-//    XCTAssertFalse(AdvancedOperation.OperationState.executing.canTransition(to: .executing))
-//    XCTAssertFalse(AdvancedOperation.OperationState.executing.canTransition(to: .finished))
-//    //XCTAssertFalse(AdvancedOperation.OperationState.executing.canTransition(to: .evaluating))
-//    XCTAssertFalse(AdvancedOperation.OperationState.executing.canTransition(to: .ready))
-//    //XCTAssertFalse(AdvancedOperation.OperationState.executing.canTransition(to: .pending))
-//
-//    // Finishing
-//    XCTAssertTrue(AdvancedOperation.OperationState.finishing.canTransition(to: .finished))
-//    XCTAssertFalse(AdvancedOperation.OperationState.finishing.canTransition(to: .executing))
-//    //XCTAssertFalse(AdvancedOperation.OperationState.finishing.canTransition(to: .evaluating))
-//    XCTAssertFalse(AdvancedOperation.OperationState.finishing.canTransition(to: .ready))
-//    //XCTAssertFalse(AdvancedOperation.OperationState.finishing.canTransition(to: .pending))
-//    XCTAssertFalse(AdvancedOperation.OperationState.finishing.canTransition(to: .finishing))
-//  }
-//
-//  func testDebugDescription() {
-//    XCTAssertEqual(AdvancedOperation.OperationState.ready.debugDescription.lowercased(), "ready")
-//    //XCTAssertEqual(AdvancedOperation.OperationState.pending.debugDescription.lowercased(), "pending")
-//    //XCTAssertEqual(AdvancedOperation.OperationState.evaluating.debugDescription.lowercased(), "evaluating conditions")
-//    XCTAssertEqual(AdvancedOperation.OperationState.executing.debugDescription.lowercased(), "executing")
-//    XCTAssertEqual(AdvancedOperation.OperationState.finishing.debugDescription.lowercased(), "finishing")
-//    XCTAssertEqual(AdvancedOperation.OperationState.finished.debugDescription.lowercased(), "finished")
-//  }
+  func testTransition() {
+    // Ready
+    XCTAssertTrue(AdvancedOperation.OperationState.ready.canTransition(to: .executing))
+    XCTAssertTrue(AdvancedOperation.OperationState.ready.canTransition(to: .finished))
+    XCTAssertFalse(AdvancedOperation.OperationState.ready.canTransition(to: .ready))
+
+    // Executing
+    XCTAssertFalse(AdvancedOperation.OperationState.executing.canTransition(to: .executing))
+    XCTAssertTrue(AdvancedOperation.OperationState.executing.canTransition(to: .finished))
+    XCTAssertFalse(AdvancedOperation.OperationState.executing.canTransition(to: .ready))
+  }
+
+  func testDebugDescription() {
+    XCTAssertEqual(AdvancedOperation.OperationState.ready.debugDescription.lowercased(), "ready")
+    XCTAssertEqual(AdvancedOperation.OperationState.executing.debugDescription.lowercased(), "executing")
+    XCTAssertEqual(AdvancedOperation.OperationState.finished.debugDescription.lowercased(), "finished")
+  }
 
 }

@@ -23,36 +23,39 @@
 
 import Foundation
 
-/// A generic condition for describing kinds of operations that may not execute concurrently.
-public struct MutuallyExclusiveCondition: OperationCondition {
+internal extension AdvancedOperation {
 
-  public let name: String
+  @objc
+  enum OperationState: Int, CustomDebugStringConvertible {
 
-  public let mutuallyExclusivityMode: MutualExclusivityMode
+    case ready
+    case executing
+    case finished
 
-  /// Creates a new `MutuallyExclusiveCondition` element.
-  public init(name: String, mode: MutualExclusivityMode = .enqueue) {
-    self.name = name
-    self.mutuallyExclusivityMode = mode
-  }
-
-  public func evaluate(for operation: AdvancedOperation, completion: @escaping (OperationConditionResult) -> Void) {
-    completion(.satisfied)
-  }
-
-}
-
-/// Defines the mutual exclusivity behaviour for an operation's condition.
-public enum MutualExclusivityMode: CustomStringConvertible {
-  /// Enabled, but only one operation can be evaluated at a time.
-  case enqueue
-  /// Enabled, but only one operation will be executed.
-  case cancel
-
-  public var description: String {
-    switch self {
-    case .enqueue: return "Enabled in enqueue mode"
-    case .cancel: return "Enabled in cancel mode"
+    func canTransition(to state: OperationState) -> Bool {
+      switch (self, state) {
+      case (.ready, .executing):
+        return true
+      case (.ready, .finished): // early bailing out
+        return true
+      case (.executing, .finished):
+        return true
+      default:
+        return false
+      }
     }
+
+    var debugDescription: String {
+      switch self {
+      case .ready:
+        return "ready"
+      case .executing:
+        return "executing"
+      case .finished:
+        return "finished"
+      }
+    }
+
   }
+
 }

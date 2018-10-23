@@ -90,21 +90,26 @@ final public class ExclusivityManager {
   //  }
 
   internal func addOperation(_ operation: AdvancedOperation, for queue: AdvancedOperationQueue) {
-    guard !operation.categories.isEmpty else {
-      return
-    }
-
     self.queue.sync {
-      self.register(queue: queue)
       let categories = operation.categories
+
+      guard !categories.isEmpty else {
+        return
+      }
+
+      self.register(queue: queue)
 
       /// Searches all the operations already enqueued for these categories in the current queue or in
       /// all the not suspended queues.
-      let queues = _queues.compactMap { $0.queue }.filter { $0 === queue || !$0.isSuspended }
-      let operations = queues.flatMap { $0.operations }.compactMap { $0 as? AdvancedOperation }.filter {
-        $0.categories.contains(where: categories.contains)
+      let queues = _queues.compactMap { $0.queue }.filter { $0 === queue || !$0.isSuspended && !$0.operations.isEmpty }
+
+      guard !queues.isEmpty else {
+        return
       }
 
+      let allOperations = queues.flatMap { $0.operations }
+      let advancedOperations = allOperations.compactMap { $0 as? AdvancedOperation }
+      let operations = advancedOperations.filter { $0.categories.contains(where: categories.contains) }
       print("🔴 found \(operations.count) for categories: \(categories)")
 
       for ope in operations where ope !== operation {

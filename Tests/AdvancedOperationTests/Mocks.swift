@@ -111,8 +111,14 @@ final internal class SelfObservigOperation: AdvancedOperation {
 }
 
 final internal class RunUntilCancelledOperation: AdvancedOperation {
+  let queue: DispatchQueue
+
+  init(queue: DispatchQueue = DispatchQueue.global()) {
+    self.queue = queue
+  }
+
   override func main() {
-    DispatchQueue.global().async {
+    queue.async {
       while !self.isCancelled {
         sleep(1)
       }
@@ -131,8 +137,6 @@ final internal class SleepyAsyncOperation: AdvancedOperation {
     self.interval1 = interval1
     self.interval2 = interval2
     self.interval3 = interval3
-    super.init()
-    useOSLog(TestsLog)
   }
 
   override func main() {
@@ -195,7 +199,7 @@ final internal class SleepyBlockOperation: AdvancedOperation {
 
 }
 
-final internal class XCTFailOperation: AdvancedOperation { //TODO rename
+final internal class NotExecutableOperation: AdvancedOperation {
 
   override init() {
     super.init()
@@ -203,7 +207,7 @@ final internal class XCTFailOperation: AdvancedOperation { //TODO rename
   }
 
   override func main() {
-    XCTFail("This operation should't be executed.")
+    XCTFail("This operation shouldn't be executed.")
     self.finish()
   }
 
@@ -371,10 +375,6 @@ final internal class MockObserver: OperationObserving {
   func operation(operation: AdvancedOperation, didProduce: Operation) {
     XCTAssertEqual(willExecutetCount, 0)
     didProduceCount += 1
-  }
-
-  func operationDidCompleteConditionsEvaluations(operation: AdvancedOperation, withErrors errors: [Error]) {
-    //TODO
   }
 
 }

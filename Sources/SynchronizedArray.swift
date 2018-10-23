@@ -45,6 +45,12 @@ internal extension SynchronizedArray {
     }
   }
 
+  var isEmpty: Bool {
+    return queue.sync {
+      self.array.isEmpty
+    }
+  }
+
 }
 
 // MARK: - Mutable
@@ -72,6 +78,12 @@ internal extension SynchronizedArray {
   func compactMap<K>(transform: (Element) throws -> K?) rethrows -> [K] {
     return try queue.sync {
       try self.array.compactMap(transform)
+    }
+  }
+
+  func removeAll() -> Void {
+    return queue.sync {
+      self.array.removeAll()
     }
   }
 

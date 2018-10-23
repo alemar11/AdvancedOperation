@@ -23,36 +23,41 @@
 
 import Foundation
 
-/// A generic condition for describing kinds of operations that may not execute concurrently.
-public struct MutuallyExclusiveCondition: OperationCondition {
+/// Operation responsible to evaluate a single `OperationCondition`.
+internal final class EvaluateConditionOperation: AdvancedOperation, OperationInputHaving, OperationOutputHaving {
 
-  public let name: String
+  internal weak var input: AdvancedOperation? = .none
+  internal var output: OperationConditionResult? = .none
 
-  public let mutuallyExclusivityMode: MutualExclusivityMode
+  let condition: OperationCondition
 
-  /// Creates a new `MutuallyExclusiveCondition` element.
-  public init(name: String, mode: MutualExclusivityMode = .enqueue) {
-    self.name = name
-    self.mutuallyExclusivityMode = mode
+  internal convenience init(condition: OperationCondition, operation: AdvancedOperation) {
+    self.init(condition: condition)
+    self.input = operation
   }
 
-  public func evaluate(for operation: AdvancedOperation, completion: @escaping (OperationConditionResult) -> Void) {
-    completion(.satisfied)
+  internal init(condition: OperationCondition) {
+    self.condition = condition
+    super.init()
+    self.name = condition.name
   }
 
-}
+  internal override func main() {
+    guard let evaluatedOperation = input else {
+      let error = AdvancedOperationError.executionFinished(message: "The operation to evaluate doesn't exist anymore.")
+      output = OperationConditionResult.failed([error])
+      finish(errors: [error])
+      return
+    }
 
-/// Defines the mutual exclusivity behaviour for an operation's condition.
-public enum MutualExclusivityMode: CustomStringConvertible {
-  /// Enabled, but only one operation can be evaluated at a time.
-  case enqueue
-  /// Enabled, but only one operation will be executed.
-  case cancel
+    condition.evaluate(for: evaluatedOperation) { [weak self] result in
+      guard let self = self else {
+        return
+      }
 
-  public var description: String {
-    switch self {
-    case .enqueue: return "Enabled in enqueue mode"
-    case .cancel: return "Enabled in cancel mode"
+      self.output = result
+      let errors = result.errors ?? []
+      self.finish(errors: errors)
     }
   }
 }

@@ -26,10 +26,6 @@ import XCTest
 
 class NegatedConditionTests: XCTestCase {
 
-  func testIsMutuallyExclusive() {
-    XCTAssertTrue(NegatedCondition(condition: NoFailedDependenciesCondition()).mutuallyExclusivityMode == .disabled)
-  }
-
   func testName() {
     let conditionName = NoFailedDependenciesCondition().name
     XCTAssertEqual(NegatedCondition(condition: NoFailedDependenciesCondition()).name, "Not<\(conditionName)>")

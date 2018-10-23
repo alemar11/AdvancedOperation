@@ -33,7 +33,7 @@ public struct NoCancelledDependeciesCondition: OperationCondition {
   public init() { }
 
   public func evaluate(for operation: AdvancedOperation, completion: @escaping (OperationConditionResult) -> Void) {
-    let dependencies = operation.dependencies
+    let dependencies = operation.dependencies.filter { !($0 is ConditionEvaluatorOperation) }
     let cancellations = dependencies.filter { $0.isCancelled }
 
     if !cancellations.isEmpty {
