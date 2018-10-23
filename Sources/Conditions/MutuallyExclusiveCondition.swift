@@ -56,3 +56,9 @@ public enum MutualExclusivityMode: CustomStringConvertible {
     }
   }
 }
+
+
+internal struct MutualExclusivityCategory: Hashable {
+  let name: String
+  let mode: MutualExclusivityMode
+}

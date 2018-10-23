@@ -46,7 +46,7 @@ open class AdvancedOperation: Operation {
   public var errors: [Error] { return stateLock.synchronized { _errors } }
 
   /// Exclusivity categories.
-  internal private(set) var categories = Set<String>()
+  internal private(set) var categories = Set<MutualExclusivityCategory>()
 
   /// An instance of `OSLog` (by default is disabled).
   public private(set) var log = OSLog.disabled
@@ -272,7 +272,8 @@ open class AdvancedOperation: Operation {
     // TODO
     // let exclusivityConditions = operation.conditions.filter { $0.mutuallyExclusivityMode != .disabled }.compactMap { $0 as? MutuallyExclusiveCondition }
     if let exclusivityCondition = condition as? MutuallyExclusiveCondition {
-      categories.insert(exclusivityCondition.name)
+      let category = MutualExclusivityCategory(name: exclusivityCondition.name, mode: .enqueue)
+      categories.insert(category)
     } else {
       conditions.append(condition)
     }
