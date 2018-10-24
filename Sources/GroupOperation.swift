@@ -168,7 +168,8 @@ open class GroupOperation: AdvancedOperation {
     underlyingOperationQueue.addOperation(operation)
   }
 
-  let queueLock = NSLock()
+  /// Lock to manage the underlyingOperationQueue properties.
+  private let queueLock = NSLock()
 
   /// The maximum number of queued operations that can execute at the same time.
   /// - Note: Reducing the number of concurrent operations does not affect any operations that are currently executing.
