@@ -229,9 +229,13 @@ extension GroupOperation: AdvancedOperationQueueDelegate {
   public func operationQueue(operationQueue: AdvancedOperationQueue, didAddOperation operation: Operation) { }
 
   public func operationQueue(operationQueue: AdvancedOperationQueue, operationWillFinish operation: Operation, withErrors errors: [Error]) {
-    guard operationQueue === underlyingOperationQueue else { return }
+    guard operationQueue === underlyingOperationQueue else {
+      return
+    }
 
-    guard operation !== finishingOperation && operation !== startingOperation else { return }
+    guard operation !== finishingOperation && operation !== startingOperation else {
+      return
+    }
 
     if !errors.isEmpty { // avoid TSAN _swiftEmptyArrayStorage
       aggregatedErrors.append(contentsOf: errors)
