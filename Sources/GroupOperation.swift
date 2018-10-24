@@ -233,7 +233,7 @@ extension GroupOperation: AdvancedOperationQueueDelegate {
 
     guard operation !== finishingOperation && operation !== startingOperation else { return }
 
-    if !errors.isEmpty {
+    if !errors.isEmpty { // avoid TSAN _swiftEmptyArrayStorage
       aggregatedErrors.append(contentsOf: errors)
     }
   }

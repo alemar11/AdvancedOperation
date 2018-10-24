@@ -61,7 +61,9 @@ internal extension SynchronizedArray {
   /// - Parameter element: The element to append to the array.
   func append(contentsOf elements: [Element]) {
     queue.sync {
-      guard !elements.isEmpty else { return }
+      guard !elements.isEmpty else {
+        return // avoid TSAN _swiftEmptyArrayStorage
+      }
 
       self.array.append(contentsOf: elements)
     }

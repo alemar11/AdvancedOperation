@@ -195,7 +195,7 @@ open class AdvancedOperation: Operation {
     willCancel(errors: cancelErrors) // observers
 
     stateLock.synchronized {
-      if !cancelErrors.isEmpty {
+      if !cancelErrors.isEmpty { // avoid TSAN _swiftEmptyArrayStorage
         self._errors.append(contentsOf: cancelErrors)
       }
 
@@ -412,14 +412,14 @@ extension AdvancedOperation {
   }
 
   private func didFinish(errors: [Error]) {
-    var loggedErrors = [Error]() // TODO avoid TSAN _swiftEmptyArrayStorage
-    if !errors.isEmpty {
-      loggedErrors = errors
-    }
-    operationDidFinish(errors: loggedErrors)
+//    var loggedErrors = [Error]() // TODO avoid TSAN _swiftEmptyArrayStorage
+//    if !errors.isEmpty {
+//      loggedErrors = errors
+//    }
+    operationDidFinish(errors: errors)
 
     for observer in didFinishObservers {
-      observer.operationDidFinish(operation: self, withErrors: loggedErrors)
+      observer.operationDidFinish(operation: self, withErrors: errors)
     }
   }
 
