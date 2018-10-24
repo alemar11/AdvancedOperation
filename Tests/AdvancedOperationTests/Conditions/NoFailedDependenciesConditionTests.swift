@@ -99,10 +99,10 @@ final class NoFailedDependenciesConditionTests: XCTestCase {
     let operation1 = NotExecutableOperation()
     operation1.name = "operation1"
 
-    let operation2 = SleepyAsyncOperation()
+    let operation2 = SleepyAsyncOperation(interval1: 0, interval2: 1, interval3: 0)
     operation2.name = "operation2"
 
-    let operation3 = SleepyAsyncOperation()
+    let operation3 = SleepyAsyncOperation(interval1: 0, interval2: 1, interval3: 0)
     operation3.name = "operation3"
 
     let operation4 = DelayOperation(interval: 1)
@@ -114,7 +114,7 @@ final class NoFailedDependenciesConditionTests: XCTestCase {
     [operation4, operation3, operation2].then(operation1)
 
     queue.addOperations([operation1, operation2, operation3, operation4], waitUntilFinished: true)
-    
+
     XCTAssertTrue(operation1.hasErrors)
     XCTAssertEqual(operation1.errors.count, 2)
   }
