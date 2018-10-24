@@ -110,16 +110,9 @@ open class GroupOperation: AdvancedOperation {
 
     isSuspended = true
     underlyingOperationQueue.delegate = self
-    finishingOperation.name = "Finishing Operation<\(operationName)>"
+    finishingOperation.name = "FinishingOperation<\(operationName)>"
     finishingOperation.addDependency(startingOperation)
-    finishingOperation.completionBlock = { [weak self] in
-      // always executed
-      guard let self = self else { return }
-
-      self.complete()
-    }
-
-    startingOperation.name = "Starting Operation<\(operationName)>"
+    startingOperation.name = "StartingOperation<\(operationName)>"
     underlyingOperationQueue.addOperation(startingOperation)
 
     for operation in operations {
@@ -129,11 +122,11 @@ open class GroupOperation: AdvancedOperation {
 
   /// The GroupOperation completion command, called by the finishing operation.
   private func complete() {
-    isSuspended = true
     if lock.synchronized({ () -> Bool in return _requiresCancellationBeforeFinishing }) {
       super.cancel(errors: temporaryCancelErrors)
     }
     finish(errors: self.aggregatedErrors)
+    isSuspended = true
   }
 
   /// Advises the `GroupOperation` object that it should stop executing its tasks.
@@ -195,6 +188,7 @@ open class GroupOperation: AdvancedOperation {
   }
 
   /// A Boolean value indicating whether the GroupOpeation is actively scheduling operations for execution.
+  @objc
   public final var isSuspended: Bool {
     get {
       return underlyingOperationQueue.isSuspended
@@ -242,7 +236,11 @@ extension GroupOperation: AdvancedOperationQueueDelegate {
     }
   }
 
-  public func operationQueue(operationQueue: AdvancedOperationQueue, operationDidFinish operation: Operation, withErrors errors: [Error]) { }
+  public func operationQueue(operationQueue: AdvancedOperationQueue, operationDidFinish operation: Operation, withErrors errors: [Error]) {
+    if operation === finishingOperation {
+      self.complete()
+    }
+  }
 
   public func operationQueue(operationQueue: AdvancedOperationQueue, operationWillCancel operation: Operation, withErrors errors: [Error]) { }
 
