@@ -26,13 +26,6 @@ import XCTest
 
 final class AdvancedOperationQueueTests: XCTestCase {
 
-  //  func testStress() {
-  //    for i in 1...20 {
-  //      print(i)
-  //      testQueueWithAdvancedOperationsUsingWaitUntilFinished()
-  //    }
-  //  }
-
   func testQueueWithAdvancedOperationsUsingWaitUntilFinished() {
     let manager = ExclusivityManager()
     let queue = AdvancedOperationQueue(exclusivityManager: manager)

@@ -105,13 +105,6 @@ final class NoCancelledDependenciesConditionTests: XCTestCase {
     XCTAssertTrue(operation1.isCancelled)
   }
 
-  func testStress() {
-    (1...1000).forEach { i in
-      print(i)
-      testWithNoFailedDependeciesCondition()
-    }
-  }
-
   func testWithNoFailedDependeciesCondition() {
     let manager = ExclusivityManager()
     let queue = AdvancedOperationQueue(exclusivityManager: manager)
