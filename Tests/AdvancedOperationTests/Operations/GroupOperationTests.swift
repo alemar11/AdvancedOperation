@@ -88,28 +88,22 @@ final class GroupOperationTests: XCTestCase {
   }
 
   func testOperationCancelled() {
-    let expectation1 = expectation(description: "\(#function)\(#line)")
     let operation1 = RunUntilCancelledOperation()
-    operation1.addCompletionBlock { [unowned operation1] in
-      XCTAssertTrue(operation1.isCancelled, "It should be cancelled for state: \(operation1.state).")
-      expectation1.fulfill()
-    }
-
-    let expectation2 = expectation(description: "\(#function)\(#line)")
-    let operation2 = BlockOperation(block: { sleep(1)} )
-    operation2.addCompletionBlock { expectation2.fulfill() }
-
-    let expectation3 = expectation(description: "\(#function)\(#line)")
+    let operation2 = BlockOperation { }
     let group = GroupOperation(operations: operation1, operation2, exclusivityManager: ExclusivityManager())
-    group.addCompletionBlock { expectation3.fulfill() }
-    XCTAssertEqual(group.maxConcurrentOperationCount, OperationQueue.defaultMaxConcurrentOperationCount)
 
+    let expectation1 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isFinished), object: operation1, expectedValue: true)
+    let expectation2 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isFinished), object: operation2, expectedValue: true)
+    let expectation3 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isFinished), object: group, expectedValue: true)
+    let expectation4 = XCTKVOExpectation(keyPath: #keyPath(GroupOperation.isSuspended), object: group, expectedValue: true)
+
+    XCTAssertEqual(group.maxConcurrentOperationCount, OperationQueue.defaultMaxConcurrentOperationCount)
     XCTAssertTrue(group.isSuspended)
+
     group.start()
-    XCTAssertFalse(group.isSuspended)
     operation1.cancel(errors: [MockError.test])
 
-    waitForExpectations(timeout: 10)
+    wait(for: [expectation1, expectation2, expectation3, expectation4], timeout: 10)
 
     XCTAssertTrue(operation1.isCancelled, "It should be cancelled for state: \(operation1.state).")
     XCTAssertTrue(operation1.isFinished, "It should be finished for state: \(operation1.state).")
