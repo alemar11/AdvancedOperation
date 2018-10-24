@@ -30,15 +30,15 @@ final class NoCancelledDependenciesConditionTests: XCTestCase {
     let manager = ExclusivityManager()
     let queue = AdvancedOperationQueue(exclusivityManager: manager)
 
-    let operation1 = SleepyAsyncOperation()
-    let operation2 = SleepyAsyncOperation()
+    let operation1 = SleepyAsyncOperation(interval1: 1, interval2: 1, interval3: 1)
+    let operation2 = SleepyAsyncOperation(interval1: 1, interval2: 1, interval3: 1)
     let operation3 = NotExecutableOperation()
-    let operation4 = DelayOperation(interval: 1)
+    let operation4 = DelayOperation(interval: 0.2)
 
     operation1.addDependencies([operation2, operation3])
     operation1.addCondition(NoCancelledDependeciesCondition())
     operation3.addDependency(operation4)
-    operation3.addCondition(NoCancelledDependeciesCondition()) // this operation will fail
+    operation3.addCondition(NoCancelledDependeciesCondition()) // this condition will fail and operation3 won't be executed
     operation4.name = "DelayOperation - Cancelled"
 
     operation4.cancel()
