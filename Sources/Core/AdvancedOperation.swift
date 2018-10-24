@@ -449,7 +449,8 @@ internal extension AdvancedOperation {
       return nil
     }
 
-    let evaluator = ConditionEvaluatorOperation(conditions: self.conditions, operation: self, exclusivityManager: exclusivityManager)
+    let evaluator = ConditionEvaluatorOperation(conditions: conditions, operation: self, exclusivityManager: exclusivityManager)
+
     let evaluatorObserver = BlockObserver(willFinish: { [weak self] operation, errors in
       if operation.isCancelled || !errors.isEmpty {
         self?.cancel(errors: errors)

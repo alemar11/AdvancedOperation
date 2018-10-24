@@ -96,7 +96,7 @@ open class AdvancedOperationQueue: OperationQueue {
 
         operation.addObserver(observer)
 
-        if !operation.isCancelled && !operation.isFinished && !operation.isExecuting {
+        if !operation.isCancelled && !operation.isFinished && !operation.isExecuting && !operation.isCancelling && !operation.isFinishing {
           let evaluator = operation.evaluateConditions(exclusivityManager: exclusivityManager)
 
           if let evaluator = evaluator {
@@ -112,9 +112,11 @@ open class AdvancedOperationQueue: OperationQueue {
         // For regular `Operation`s, we'll manually call out to the queue's delegate we don't want
         // to just capture "operation" because that would lead to the operation strongly referencing itself and that's the pure definition of a memory leak.
         operation.addCompletionBlock(asEndingBlock: false) { [weak self, weak operation] in
-          guard let queue = self, let operation = operation else { return }
+          guard let self = self, let operation = operation else {
+            return
+          }
 
-          queue.delegate?.operationQueue(operationQueue: queue, operationDidFinish: operation, withErrors: [])
+          self.delegate?.operationQueue(operationQueue: self, operationDidFinish: operation, withErrors: [])
         }
       }
 

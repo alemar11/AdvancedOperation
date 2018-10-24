@@ -84,9 +84,14 @@ class NegatedConditionTests: XCTestCase {
     let expectation4 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isFinished), object: operation4, expectedValue: true)
 
     operation1.addCondition(NoFailedDependenciesCondition().negated)
-    [operation4, operation3, operation2].then(operation1)
-    queue.addOperations([operation1, operation2, operation3, operation4], waitUntilFinished: false)
+    operation1.addDependency(operation2)
+    operation1.addDependency(operation3)
+    operation1.addDependency(operation4)
+
+    queue.addOperations([operation2, operation1, operation3, operation4], waitUntilFinished: false)
+
     wait(for: [expectation1, expectation2, expectation3, expectation4], timeout: 10)
+
     XCTAssertFalse(operation1.hasErrors)
   }
 
