@@ -79,7 +79,9 @@ public final class DelayOperation: AdvancedOperation {
     guard delay.seconds > 0 else { finish(); return }
 
     queue.asyncAfter(deadline: .now() + delay.seconds) { [weak self] in
-      guard let self = self else { return }
+      guard let self = self else {
+        return
+      }
 
       self.finish()
     }
