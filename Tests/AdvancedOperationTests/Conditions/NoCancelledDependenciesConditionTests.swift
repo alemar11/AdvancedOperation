@@ -105,6 +105,13 @@ final class NoCancelledDependenciesConditionTests: XCTestCase {
     XCTAssertTrue(operation1.isCancelled)
   }
 
+  func testStress() {
+    (1...1000).forEach { i in
+      print(i)
+      testWithNoFailedDependeciesCondition()
+    }
+  }
+
   func testWithNoFailedDependeciesCondition() {
     let manager = ExclusivityManager()
     let queue = AdvancedOperationQueue(exclusivityManager: manager)
@@ -119,18 +126,18 @@ final class NoCancelledDependenciesConditionTests: XCTestCase {
     operation3.name = "op3"
     operation4.name = "op4"
 
+    operation1.useOSLog(TestsLog)
+
     operation1.addDependencies([operation2, operation3])
     operation1.addCondition(NoCancelledDependeciesCondition())
     operation1.addCondition(NoFailedDependenciesCondition())
-
     operation3.addDependency(operation4)
     operation3.addCondition(NoCancelledDependeciesCondition())
-
-    operation1.useOSLog(TestsLog)
 
     operation4.cancel()
 
     queue.addOperations([operation1, operation2, operation3, operation4], waitUntilFinished: true)
+
     XCTAssertTrue(operation4.isCancelled)
     XCTAssertFalse(operation4.hasErrors)
 
@@ -141,7 +148,6 @@ final class NoCancelledDependenciesConditionTests: XCTestCase {
     XCTAssertFalse(operation2.isCancelled)
     XCTAssertFalse(operation2.hasErrors)
 
-    print(operation1.isFinished)
     XCTAssertTrue(operation1.hasErrors)
     XCTAssertTrue(operation1.isCancelled)
   }

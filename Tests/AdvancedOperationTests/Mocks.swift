@@ -141,19 +141,25 @@ final internal class SleepyAsyncOperation: AdvancedOperation {
 
   override func main() {
     DispatchQueue.global().async { [weak weakSelf = self] in
-      guard let strongSelf = weakSelf else { return self.finish() }
+      guard let strongSelf = weakSelf else {
+        self.finish()
+        return
+      }
+
       if strongSelf.isCancelled {
         strongSelf.finish()
         return
       }
 
       sleep(self.interval1)
+
       if strongSelf.isCancelled {
         strongSelf.finish()
         return
       }
 
       sleep(self.interval2)
+
       if strongSelf.isCancelled {
         strongSelf.finish()
         return
@@ -227,7 +233,8 @@ final internal class FailingAsyncOperation: AdvancedOperation {
   override func main() {
     DispatchQueue.global().asyncAfter(deadline: .now() + 1.0) { [weak weakSelf = self] in
       guard let strongSelf = weakSelf else {
-        return self.finish()
+        self.finish()
+        return
       }
       strongSelf.finish(errors: strongSelf.defaultErrors)
     }
@@ -248,7 +255,8 @@ final internal class CancellingAsyncOperation: AdvancedOperation {
   override func main() {
     DispatchQueue.global().asyncAfter(deadline: .now() + 2.0) { [weak weakSelf = self] in
       guard let strongSelf = weakSelf else {
-        return self.finish()
+        self.finish()
+        return
       }
 
       strongSelf.cancel(errors: strongSelf.defaultErrors)
