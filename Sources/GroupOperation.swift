@@ -237,6 +237,10 @@ extension GroupOperation: AdvancedOperationQueueDelegate {
   }
 
   public func operationQueue(operationQueue: AdvancedOperationQueue, operationDidFinish operation: Operation, withErrors errors: [Error]) {
+    guard operationQueue === underlyingOperationQueue else {
+      return
+    }
+    
     if operation === finishingOperation {
       self.complete()
     }
