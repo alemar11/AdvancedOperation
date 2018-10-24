@@ -39,7 +39,7 @@ final public class ExclusivityManager {
 
       if results.isEmpty {
         let token = queue.observe(\.isSuspended, options: [.prior]) { [weak self] queue, change in
-          print("🚩")
+          print("🚩 \(String(describing: self)) \(change)")
           // is suspended:
           // check all the other queues and remove all the dependencies of this queue
 

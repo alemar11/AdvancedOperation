@@ -81,7 +81,7 @@ internal extension SynchronizedArray {
     }
   }
 
-  func removeAll() -> Void {
+  func removeAll() {
     return queue.sync {
       self.array.removeAll()
     }
