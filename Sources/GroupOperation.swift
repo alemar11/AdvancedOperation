@@ -30,26 +30,16 @@ open class GroupOperation: AdvancedOperation {
   /// ExclusivityManager used by `AdvancedOperationQueue`.
   public let exclusivityManager: ExclusivityManager
 
-  /// Accesses the group operation queue's quality of service. It defaults to background quality.
-  public final override var qualityOfService: QualityOfService {
-    get {
-      return underlyingOperationQueue.qualityOfService
-    }
-    set(value) {
-      underlyingOperationQueue.qualityOfService = value
-    }
-  }
-
   // MARK: - Private Properties
 
   /// Internal `AdvancedOperationQueue`.
   private let underlyingOperationQueue: AdvancedOperationQueue
 
   /// Internal starting operation.
-  private lazy var startingOperation = BlockOperation { } //AdvancedBlockOperation { complete in complete([]) }
+  private lazy var startingOperation = BlockOperation { }
 
   /// Internal finishing operation.
-  private lazy var finishingOperation = BlockOperation { } //AdvancedBlockOperation { complete in complete([]) }
+  private lazy var finishingOperation = BlockOperation { }
 
   private let lock = NSLock()
 
@@ -122,11 +112,13 @@ open class GroupOperation: AdvancedOperation {
 
   /// The GroupOperation completion command, called by the finishing operation.
   private func complete() {
+    isSuspended = true
+
     if lock.synchronized({ () -> Bool in return _requiresCancellationBeforeFinishing }) {
       super.cancel(errors: temporaryCancelErrors)
     }
+
     finish(errors: self.aggregatedErrors)
-    isSuspended = true
   }
 
   /// Advises the `GroupOperation` object that it should stop executing its tasks.
@@ -142,7 +134,7 @@ open class GroupOperation: AdvancedOperation {
     for operation in underlyingOperationQueue.operations where operation !== finishingOperation && operation !== startingOperation {
       operation.cancel()
     }
-    // once all the operations will be cancelled, the finishing operation will be called
+    /// once all the operations will be cancelled and then finished, the finishing operation will be called
 
     if isReady { // && !underlyingOperationQueue.operations.contains(finishingOperation) {
       run()
@@ -164,7 +156,7 @@ open class GroupOperation: AdvancedOperation {
     if !underlyingOperationQueue.operations.contains(finishingOperation) && !finishingOperation.isFinished {
       underlyingOperationQueue.addOperation(finishingOperation)
     }
-    underlyingOperationQueue.isSuspended = false
+    isSuspended = false
     lock.unlock()
   }
 
@@ -176,14 +168,18 @@ open class GroupOperation: AdvancedOperation {
     underlyingOperationQueue.addOperation(operation)
   }
 
+  let queueLock = NSLock()
+
   /// The maximum number of queued operations that can execute at the same time.
   /// - Note: Reducing the number of concurrent operations does not affect any operations that are currently executing.
   public final var maxConcurrentOperationCount: Int {
     get {
-      return underlyingOperationQueue.maxConcurrentOperationCount
+      return queueLock.synchronized { underlyingOperationQueue.maxConcurrentOperationCount }
     }
     set {
-      underlyingOperationQueue.maxConcurrentOperationCount = newValue
+      queueLock.synchronized {
+        underlyingOperationQueue.maxConcurrentOperationCount = newValue
+      }
     }
   }
 
@@ -191,10 +187,22 @@ open class GroupOperation: AdvancedOperation {
   @objc
   public final var isSuspended: Bool {
     get {
-      return underlyingOperationQueue.isSuspended
+      return queueLock.synchronized { underlyingOperationQueue.isSuspended }
     }
     set {
-      underlyingOperationQueue.isSuspended = newValue
+      queueLock.synchronized {
+        underlyingOperationQueue.isSuspended = newValue
+      }
+    }
+  }
+
+  /// Accesses the group operation queue's quality of service. It defaults to background quality.
+  public final override var qualityOfService: QualityOfService {
+    get {
+      return queueLock.synchronized { underlyingOperationQueue.qualityOfService }
+    }
+    set(value) {
+      queueLock.synchronized { underlyingOperationQueue.qualityOfService = value }
     }
   }
 
@@ -240,7 +248,7 @@ extension GroupOperation: AdvancedOperationQueueDelegate {
     guard operationQueue === underlyingOperationQueue else {
       return
     }
-    
+
     if operation === finishingOperation {
       self.complete()
     }
