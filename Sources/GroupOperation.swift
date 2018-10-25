@@ -157,13 +157,14 @@ open class GroupOperation: AdvancedOperation {
     run()
   }
 
+  /// Prepares the underalying queue to run.
   private func run() {
-    lock.lock()
-    if !underlyingOperationQueue.operations.contains(finishingOperation) && !finishingOperation.isFinished {
-      underlyingOperationQueue.addOperation(finishingOperation)
+    lock.synchronized {
+      if !underlyingOperationQueue.operations.contains(finishingOperation) && !finishingOperation.isFinished {
+        underlyingOperationQueue.addOperation(finishingOperation)
+      }
+      isSuspended = false
     }
-    isSuspended = false
-    lock.unlock()
   }
 
   public func addOperation(operation: Operation) {
@@ -220,16 +221,16 @@ extension GroupOperation: AdvancedOperationQueueDelegate {
   public func operationQueue(operationQueue: AdvancedOperationQueue, willAddOperation operation: Operation) {
     assert(!finishingOperation.isFinished && !finishingOperation.isExecuting, "The GroupOperation is finished and cannot accept more operations.")
 
-    // An operation is added to the group or an operation in this group has produced a new operation to execute.
+    /// An operation is added to the group or an operation in this group has produced a new operation to execute.
 
-    // make the finishing operation dependent on this newly-produced operation.
+    /// make the finishing operation dependent on this newly-produced operation.
     if operation !== finishingOperation && !operation.dependencies.contains(finishingOperation) {
       finishingOperation.addDependency(operation)
     }
 
-    // All operations should be dependent on the "startingOperation". This way, we can guarantee that the conditions for other operations
-    // will not evaluate until just before the operation is about to run. Otherwise, the conditions could be evaluated at any time, even
-    // before the internal operation queue is unsuspended.
+    /// All operations should be dependent on the "startingOperation". This way, we can guarantee that the conditions for other operations
+    /// will not evaluate until just before the operation is about to run. Otherwise, the conditions could be evaluated at any time, even
+    /// before the internal operation queue is unsuspended.
     if operation !== startingOperation && !operation.dependencies.contains(startingOperation) {
       operation.addDependency(startingOperation)
     }
