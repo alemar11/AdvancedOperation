@@ -32,6 +32,10 @@
 /* End PBXAggregateTarget section */
 
 /* Begin PBXBuildFile section */
+		2306482E21820FB000295516 /* AdvancedOperation+Conditions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2306482D21820FB000295516 /* AdvancedOperation+Conditions.swift */; };
+		2306482F21820FB000295516 /* AdvancedOperation+Conditions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2306482D21820FB000295516 /* AdvancedOperation+Conditions.swift */; };
+		2306483021820FB000295516 /* AdvancedOperation+Conditions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2306482D21820FB000295516 /* AdvancedOperation+Conditions.swift */; };
+		2306483121820FB000295516 /* AdvancedOperation+Conditions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2306482D21820FB000295516 /* AdvancedOperation+Conditions.swift */; };
 		2326CC25206E6199001876A2 /* OperationConditionResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2326CC24206E6199001876A2 /* OperationConditionResult.swift */; };
 		2326CC26206E6199001876A2 /* OperationConditionResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2326CC24206E6199001876A2 /* OperationConditionResult.swift */; };
 		2326CC27206E6199001876A2 /* OperationConditionResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2326CC24206E6199001876A2 /* OperationConditionResult.swift */; };
@@ -238,6 +242,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		2306482D21820FB000295516 /* AdvancedOperation+Conditions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AdvancedOperation+Conditions.swift"; sourceTree = "<group>"; };
 		2326CC24206E6199001876A2 /* OperationConditionResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OperationConditionResult.swift; sourceTree = "<group>"; };
 		232A53BE215B683A008B76AC /* UIBackgroundObserverTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIBackgroundObserverTests.swift; sourceTree = "<group>"; };
 		232C452D215A898000B73E79 /* UIBackgroundObserver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIBackgroundObserver.swift; sourceTree = "<group>"; };
@@ -382,6 +387,7 @@
 			children = (
 				2372507C200524860000A442 /* AdvancedOperation.swift */,
 				232F9443217F29AE00A86699 /* AdvancedOperation+OperationState.swift */,
+				2306482D21820FB000295516 /* AdvancedOperation+Conditions.swift */,
 			);
 			path = Core;
 			sourceTree = "<group>";
@@ -906,6 +912,7 @@
 				235D08AF206A498400F70142 /* OperationCondition.swift in Sources */,
 				2385616C200A6BF80061BAA1 /* GroupOperation.swift in Sources */,
 				23F24D352007BC2100B25A03 /* AdvancedOperationQueue.swift in Sources */,
+				2306482E21820FB000295516 /* AdvancedOperation+Conditions.swift in Sources */,
 				23B1BDFE216F99BA002D0A5B /* BlockCondition.swift in Sources */,
 				232C452E215A898000B73E79 /* UIBackgroundObserver.swift in Sources */,
 				235D08AD206A498400F70142 /* SilentCondition.swift in Sources */,
@@ -941,6 +948,7 @@
 				235D08B6206A498400F70142 /* OperationCondition.swift in Sources */,
 				2385616D200A6BF80061BAA1 /* GroupOperation.swift in Sources */,
 				23F24D362007BC2100B25A03 /* AdvancedOperationQueue.swift in Sources */,
+				2306482F21820FB000295516 /* AdvancedOperation+Conditions.swift in Sources */,
 				23B1BDFF216F99BA002D0A5B /* BlockCondition.swift in Sources */,
 				2359AB4E216212CD00AC09D8 /* UIBackgroundObserver.swift in Sources */,
 				235D08B4206A498400F70142 /* SilentCondition.swift in Sources */,
@@ -976,6 +984,7 @@
 				235D08BD206A498500F70142 /* OperationCondition.swift in Sources */,
 				2385616E200A6BF80061BAA1 /* GroupOperation.swift in Sources */,
 				23F24D372007BC2100B25A03 /* AdvancedOperationQueue.swift in Sources */,
+				2306483021820FB000295516 /* AdvancedOperation+Conditions.swift in Sources */,
 				23B1BE00216F99BA002D0A5B /* BlockCondition.swift in Sources */,
 				232C452F215A898000B73E79 /* UIBackgroundObserver.swift in Sources */,
 				235D08BB206A498500F70142 /* SilentCondition.swift in Sources */,
@@ -1011,6 +1020,7 @@
 				235D08C4206A498500F70142 /* OperationCondition.swift in Sources */,
 				2385616F200A6BF80061BAA1 /* GroupOperation.swift in Sources */,
 				23F24D382007BC2100B25A03 /* AdvancedOperationQueue.swift in Sources */,
+				2306483121820FB000295516 /* AdvancedOperation+Conditions.swift in Sources */,
 				23B1BE01216F99BA002D0A5B /* BlockCondition.swift in Sources */,
 				232C4530215A898000B73E79 /* UIBackgroundObserver.swift in Sources */,
 				235D08C2206A498500F70142 /* SilentCondition.swift in Sources */,

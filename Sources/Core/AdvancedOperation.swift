@@ -46,7 +46,7 @@ open class AdvancedOperation: Operation {
   public var errors: [Error] { return stateLock.synchronized { _errors } }
 
   /// Exclusivity categories.
-  internal private(set) var categories = Set<String>()
+  internal var categories = Set<String>()
 
   /// An instance of `OSLog` (by default is disabled).
   public private(set) var log = OSLog.disabled
@@ -130,8 +130,8 @@ open class AdvancedOperation: Operation {
 
     /// if cancelling, wait until it's not before proceeding
     /// to avoid undefined behaviours
-    repeat {
-    } while isCancelling
+//    repeat {
+//    } while isCancelling
 
     /// Bail out early if cancelled or if there are some errors.
     let shouldBeFinished = stateLock.synchronized { () -> Bool in
@@ -438,53 +438,4 @@ extension AdvancedOperation {
       observer.operationDidCancel(operation: self, withErrors: errors)
     }
   }
-}
-
-// MARK: - Condition Evaluation
-
-internal extension AdvancedOperation {
-
-  func evaluateConditions(exclusivityManager: ExclusivityManager) -> GroupOperation? {
-    guard !conditions.isEmpty else {
-      return nil
-    }
-
-    let evaluator = ConditionEvaluatorOperation(conditions: conditions, operation: self, exclusivityManager: exclusivityManager)
-
-    let evaluatorObserver = BlockObserver(willFinish: { [weak self] operation, errors in
-      if operation.isCancelled || !errors.isEmpty {
-        self?.cancel(errors: errors)
-      }
-    })
-
-    let selfObserver = BlockObserver(willFinish: { [weak evaluator] operation, errors in
-      guard let evaluator = evaluator else {
-        return
-      }
-
-      guard !evaluator.isFinished && !evaluator.isCancelled else {
-        return
-      }
-
-      if operation.isCancelled || !errors.isEmpty {
-        print("🚩\(operation.operationName) has been cancelled --> cancelling \(evaluator.operationName)")
-        evaluator.cancel(errors: errors)
-      }
-    })
-
-    addObserver(selfObserver)
-    evaluator.addObserver(evaluatorObserver)
-    evaluator.useOSLog(log)
-
-    for dependency in dependencies {
-      print("🚩 adding \(dependency.operationName) as dependency for \(evaluator.operationName)")
-      evaluator.addDependency(dependency)
-    }
-    addDependency(evaluator)
-
-    // giving the same categories to the evaluator: it can start only when the exclusivity conditions are met
-    evaluator.categories = categories
-    return evaluator
-  }
-
 }

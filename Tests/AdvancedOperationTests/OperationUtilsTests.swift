@@ -24,15 +24,6 @@
 import XCTest
 @testable import AdvancedOperation
 
-extension OperationUtilsTests {
-
-  static var allTests = [
-    ("testAddCompletionBlock", testAddCompletionBlock),
-    ("testAddCompletionBlockAsEndingBlock", testAddCompletionBlockAsEndingBlock)
-  ]
-
-}
-
 final class OperationUtilsTests: XCTestCase {
 
   func testAddCompletionBlock() {

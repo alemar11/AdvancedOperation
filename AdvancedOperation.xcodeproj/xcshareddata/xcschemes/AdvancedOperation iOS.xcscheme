@@ -23,7 +23,7 @@
       </BuildActionEntries>
    </BuildAction>
    <TestAction
-      buildConfiguration = "Release"
+      buildConfiguration = "Debug"
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       enableASanStackUseAfterReturn = "YES"
@@ -43,6 +43,53 @@
                BlueprintName = "AdvancedOperation Tests iOS"
                ReferencedContainer = "container:AdvancedOperation.xcodeproj">
             </BuildableReference>
+            <SkippedTests>
+               <Test
+                  Identifier = "AdvancedBlockOperationTests">
+               </Test>
+               <Test
+                  Identifier = "AdvancedOperationQueueTests">
+               </Test>
+               <Test
+                  Identifier = "BlockConditionTests">
+               </Test>
+               <Test
+                  Identifier = "BlockObserverTests">
+               </Test>
+               <Test
+                  Identifier = "DelayOperationTests">
+               </Test>
+               <Test
+                  Identifier = "GroupOperationTests">
+               </Test>
+               <Test
+                  Identifier = "InjectionTests">
+               </Test>
+               <Test
+                  Identifier = "MutuallyExclusiveConditionTests">
+               </Test>
+               <Test
+                  Identifier = "NegatedConditionTests">
+               </Test>
+               <Test
+                  Identifier = "NoCancelledDependenciesConditionTests">
+               </Test>
+               <Test
+                  Identifier = "NoFailedDependenciesConditionTests">
+               </Test>
+               <Test
+                  Identifier = "OperationConditionTests">
+               </Test>
+               <Test
+                  Identifier = "SilentConditionTests">
+               </Test>
+               <Test
+                  Identifier = "TimeoutObserverTests">
+               </Test>
+               <Test
+                  Identifier = "UIBackgroundObserverTests">
+               </Test>
+            </SkippedTests>
          </TestableReference>
       </Testables>
       <MacroExpansion>
