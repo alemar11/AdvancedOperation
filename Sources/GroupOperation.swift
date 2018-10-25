@@ -57,9 +57,6 @@ open class GroupOperation: AdvancedOperation {
     }
   }
 
-  /// If true, the finishing operation should fire a cancel to complete the cancellation procedure.
-  private var _requiresCancellationBeforeFinishing = false
-
   private var _aggregatedErrors = [Error]()
 
   /// Stores all of the `AdvancedOperation` errors during the execution.
@@ -114,21 +111,30 @@ open class GroupOperation: AdvancedOperation {
   private func complete() {
     isSuspended = true
 
-    if lock.synchronized({ () -> Bool in return _requiresCancellationBeforeFinishing }) {
+    if lock.synchronized({ () -> Bool in return _cancellationTriggered }) {
       super.cancel(errors: temporaryCancelErrors)
     }
 
     finish(errors: self.aggregatedErrors)
   }
 
+  private var _cancellationTriggered = false
+
   /// Advises the `GroupOperation` object that it should stop executing its tasks.
   public final override func cancel(errors: [Error]) {
-    guard !isCancelling && !isCancelled && !isFinished else { return }
-
-    lock.synchronized {
-      _requiresCancellationBeforeFinishing = true
-      _temporaryCancelErrors = errors
+    let canBeCancelled = lock.synchronized { () -> Bool in
+      if _cancellationTriggered {
+        return false
+      } else {
+        _cancellationTriggered = true
+        _temporaryCancelErrors = errors
+        return true
+      }
     }
+
+    guard canBeCancelled else { return }
+
+    guard !isCancelling && !isCancelled && !isFinished else { return }
 
     startingOperation.cancel()
     for operation in underlyingOperationQueue.operations where operation !== finishingOperation && operation !== startingOperation {
@@ -136,7 +142,7 @@ open class GroupOperation: AdvancedOperation {
     }
     /// once all the operations will be cancelled and then finished, the finishing operation will be called
 
-    if isReady { // && !underlyingOperationQueue.operations.contains(finishingOperation) {
+    if isReady {
       run()
     }
   }
