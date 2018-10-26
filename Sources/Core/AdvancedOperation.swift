@@ -33,13 +33,6 @@ open class AdvancedOperation: Operation {
   public final override var isFinished: Bool { return state == .finished }
   public final override var isCancelled: Bool { return stateLock.synchronized { return _cancelled } }
 
-  /// Returns `true` is the cancel command has been issued but not yet completed
-  internal final var isCancelling: Bool { return stateLock.synchronized { return _cancelling } }
-  /// Returns `true` is the finish command has been triggered.
-  internal final var isFinishing: Bool { return stateLock.synchronized { return _finishing } }
-  /// Returns `true` is the start command has been triggered.
-  internal final var isStarting: Bool { return stateLock.synchronized { return _starting } }
-
   // MARK: - Properties
 
   /// Errors generated during the execution.
@@ -54,11 +47,17 @@ open class AdvancedOperation: Operation {
   /// Returns `true` if the `AdvancedOperation` has generated errors during its lifetime.
   public var hasErrors: Bool { return !errors.isEmpty }
 
-  /// A lock to guard reads and writes to the `_state` property
-  private let stateLock = NSRecursiveLock()
+  /// Errors generated during the execution.
+  private var _errors = [Error]()
 
-  /// Private backing stored property for `state`.
-  private var _state: OperationState = .ready
+  // MARK: - Gates
+
+  /// Returns `true` is the cancel command has been issued but not yet completed
+  internal final var isCancelling: Bool { return stateLock.synchronized { return _cancelling } }
+  /// Returns `true` is the finish command has been triggered.
+  internal final var isFinishing: Bool { return stateLock.synchronized { return _finishing } }
+  /// Returns `true` is the start command has been triggered.
+  internal final var isStarting: Bool { return stateLock.synchronized { return _starting } }
 
   /// Returns `true` if the finish command has been fired and the operation is processing it.
   private var _finishing = false
@@ -71,8 +70,13 @@ open class AdvancedOperation: Operation {
   /// Returns `true` if the `AdvancedOperation` is cancelled.
   private var _cancelled = false
 
-  /// Errors generated during the execution.
-  private var _errors = [Error]()
+  // MARK: - State
+
+  /// A lock to guard reads and writes to the `_state` property
+  private let stateLock = NSRecursiveLock()
+
+  /// Private backing stored property for `state`.
+  private var _state: OperationState = .ready
 
   /// The state of the operation.
   @objc dynamic
@@ -115,6 +119,8 @@ open class AdvancedOperation: Operation {
   public final override func start() {
     let canBeStarted = stateLock.synchronized { () -> Bool in
       guard !_starting else { return false }
+      guard _state == .ready else { return false }
+      guard !_finishing || !isFinished else { return false }
       _starting = true
       return true
     }
@@ -123,45 +129,12 @@ open class AdvancedOperation: Operation {
       return
     }
 
-    /// Do not start if it's finishing or it's finished
-    guard !isFinishing || !isFinished else {
-      return
-    }
-
-    /// if cancelling, wait until it's not before proceeding
-    /// to avoid undefined behaviours
-//    repeat {
-//    } while isCancelling
-
-    /// Bail out early if cancelled or if there are some errors.
-    let shouldBeFinished = stateLock.synchronized { () -> Bool in
-      if !_errors.isEmpty || _cancelled {
-        _cancelled = true // if there are errors, the operation should be considered as cancelled
-        return true
-      }
-      return false
-    }
-
-    guard !shouldBeFinished else {
-      finish()
-      return
-    }
-
-    let canBeExecuted = stateLock.synchronized { () -> Bool in
-      guard _state == .ready else { return false }
-      return true
-    }
-
-    guard canBeExecuted else { return }
-
     state = .executing
-
-    //    stateLock.synchronized {
-    //      _starting = false
-    //    }
 
     willExecute()
     main()
+
+    // TODO check if asynchronous/concurrent to call finish or not automatically
   }
 
   open override func main() {
@@ -178,10 +151,8 @@ open class AdvancedOperation: Operation {
 
   private final func _cancel(errors cancelErrors: [Error] = []) {
     let canBeCancelled = stateLock.synchronized { () -> Bool in
-      guard !_cancelling else { return false }
-      guard !_cancelled else { return false }
-      guard !_finishing else { return false }
-      guard state != .finished else { return false }
+      guard !_cancelling || !_cancelled else { return false }
+      guard !_finishing || state != .finished else { return false }
 
       _cancelling = true
       return true
@@ -192,7 +163,7 @@ open class AdvancedOperation: Operation {
     }
 
     willChangeValue(forKey: #keyPath(AdvancedOperation.isCancelled))
-    willCancel(errors: cancelErrors) // observers
+    willCancel(errors: cancelErrors)
 
     stateLock.synchronized {
       if !cancelErrors.isEmpty { // avoid TSAN _swiftEmptyArrayStorage
@@ -206,11 +177,6 @@ open class AdvancedOperation: Operation {
     didChangeValue(forKey: #keyPath(AdvancedOperation.isCancelled))
 
     super.cancel() // fires isReady KVO
-
-    stateLock.synchronized {
-      _cancelling = false
-    }
-
   }
 
   open func finish(errors: [Error] = []) {
@@ -220,13 +186,15 @@ open class AdvancedOperation: Operation {
   private final func _finish(errors finishErrors: [Error] = []) {
     let canBeFinished = stateLock.synchronized { () -> Bool in
       guard !_finishing else { return false }
-      guard _state != .finished else { return false }
+      guard _state == .executing else { return false }
 
       _finishing = true
       return true
     }
 
-    guard canBeFinished else { return }
+    guard canBeFinished else {
+      return
+    }
 
     let updatedErrors = stateLock.synchronized { () -> [Error] in
       if !finishErrors.isEmpty { // avoid TSAN _swiftEmptyArrayStorage
@@ -238,10 +206,6 @@ open class AdvancedOperation: Operation {
     willFinish(errors: updatedErrors)
     state = .finished
     didFinish(errors: updatedErrors)
-
-    //    stateLock.synchronized {
-    //      _finishing = false
-    //    }
   }
 
   // MARK: - Produced Operations

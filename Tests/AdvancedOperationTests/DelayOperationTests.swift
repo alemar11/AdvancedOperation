@@ -81,7 +81,7 @@ final class DelayOperationTests: XCTestCase {
     XCTAssertTrue(operation.isFinished)
   }
 
-  func testBailingOutEarly() {
+  func testCancelBeforeStart() {
     let start = Date()
     let operation = DelayOperation(interval: 2)
     let expectation1 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isFinished), object: operation, expectedValue: true)

@@ -96,16 +96,16 @@ open class AdvancedOperationQueue: OperationQueue {
 
         operation.addObserver(observer)
 
-        if !operation.isCancelled && !operation.isFinished && !operation.isExecuting && !operation.isCancelling && !operation.isFinishing {
-          let evaluator = operation.evaluateConditions(exclusivityManager: exclusivityManager)
-
-          if let evaluator = evaluator {
-            exclusivityManager.addOperation(evaluator, for: self)
-            super.addOperation(evaluator)
-          }
-
-          exclusivityManager.addOperation(operation, for: self)
-        }
+//        if !operation.isCancelled && !operation.isFinished && !operation.isExecuting && !operation.isCancelling && !operation.isFinishing {
+//          let evaluator = operation.evaluateConditions(exclusivityManager: exclusivityManager)
+//
+//          if let evaluator = evaluator {
+//            exclusivityManager.addOperation(evaluator, for: self)
+//            super.addOperation(evaluator)
+//          }
+//
+//          exclusivityManager.addOperation(operation, for: self)
+//        }
 
       } else { /// Operation
 
@@ -140,7 +140,7 @@ open class AdvancedOperationQueue: OperationQueue {
   }
 
   deinit {
-    exclusivityManager.unregister(queue: self)
+    //exclusivityManager.unregister(queue: self)
   }
 
 }

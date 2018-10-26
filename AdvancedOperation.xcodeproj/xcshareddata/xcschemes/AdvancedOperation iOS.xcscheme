@@ -45,12 +45,6 @@
             </BuildableReference>
             <SkippedTests>
                <Test
-                  Identifier = "AdvancedBlockOperationTests">
-               </Test>
-               <Test
-                  Identifier = "AdvancedOperationQueueTests">
-               </Test>
-               <Test
                   Identifier = "BlockConditionTests">
                </Test>
                <Test
@@ -82,12 +76,6 @@
                </Test>
                <Test
                   Identifier = "SilentConditionTests">
-               </Test>
-               <Test
-                  Identifier = "TimeoutObserverTests">
-               </Test>
-               <Test
-                  Identifier = "UIBackgroundObserverTests">
                </Test>
             </SkippedTests>
          </TestableReference>

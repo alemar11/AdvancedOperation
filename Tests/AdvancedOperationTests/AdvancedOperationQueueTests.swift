@@ -33,7 +33,7 @@ final class AdvancedOperationQueueTests: XCTestCase {
 
     queue.delegate = delegate
 
-    let operation1 = SleepyAsyncOperation()
+    let operation1 = SleepyAsyncOperation(interval1: 1, interval2: 0, interval3: 1)
     let operation2 = AdvancedBlockOperation { complete in
       complete([])
     }
