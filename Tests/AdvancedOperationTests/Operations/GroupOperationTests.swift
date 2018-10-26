@@ -72,8 +72,6 @@ final class GroupOperationTests: XCTestCase {
 
     group.cancel()
 
-    // Note: group is set to finish if, after the cancel, the operations cancelled are finished, that's why this test requires expectations on the operations too.
-
     wait(for: [expectation1, expectation2], timeout: 10)
 
     /// These operations are finished because the queue they are running into is cancelled and suspended
