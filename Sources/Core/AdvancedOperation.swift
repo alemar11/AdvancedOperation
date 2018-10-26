@@ -50,6 +50,12 @@ open class AdvancedOperation: Operation {
   /// Errors generated during the execution.
   private var _errors = [Error]()
 
+  /// You can use this method from within the running operation object to get a reference to the operation queue that started it.
+  //// Calling this method from outside the context of a running operation typically results in nil being returned.
+  public var operationQueue: OperationQueue? {
+    return OperationQueue.current
+  }
+
   // MARK: - Gates
 
   /// Returns `true` is the cancel command has been issued but not yet completed

@@ -54,9 +54,6 @@
                   Identifier = "DelayOperationTests">
                </Test>
                <Test
-                  Identifier = "GroupOperationTests">
-               </Test>
-               <Test
                   Identifier = "InjectionTests">
                </Test>
                <Test

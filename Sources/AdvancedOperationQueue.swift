@@ -51,9 +51,14 @@ open class AdvancedOperationQueue: OperationQueue {
 
   private let lock = NSRecursiveLock()
 
+  //TODO: The quality-of-service level set for the underlying dispatch queue overrides any value set for the operation queue's qualityOfService property.
   public init(exclusivityManager: ExclusivityManager = .sharedInstance, underlyingQueue: DispatchQueue? = .none) {
     self.exclusivityManager = exclusivityManager
     super.init()
+
+    /// Apple engineer:
+    /// Unless the property has been set, there is no underlying queue for an NSOperationQueue.
+    /// An NSOperationQueue which hasn't been told to just use a specific one may use (start operations on) MANY different dispatch queues, for various reasons.
     self.underlyingQueue = underlyingQueue
   }
 

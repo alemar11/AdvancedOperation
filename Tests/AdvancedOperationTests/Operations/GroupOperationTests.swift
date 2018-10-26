@@ -27,24 +27,21 @@ import XCTest
 final class GroupOperationTests: XCTestCase {
 
   func testStart() {
-    let expectation1 = expectation(description: "\(#function)\(#line)")
     let operation1 = SleepyAsyncOperation()
-    operation1.addCompletionBlock { expectation1.fulfill() }
+    let expectation1 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isFinished), object: operation1, expectedValue: true)
 
-    let expectation2 = expectation(description: "\(#function)\(#line)")
     let operation2 = BlockOperation(block: { sleep(1)} )
-    operation2.addCompletionBlock { expectation2.fulfill() }
+    let expectation2 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isFinished), object: operation2, expectedValue: true)
 
-    let expectation3 = expectation(description: "\(#function)\(#line)")
     let group = GroupOperation(operations: operation1, operation2, exclusivityManager: ExclusivityManager())
-    group.addCompletionBlock { expectation3.fulfill() }
+    let expectation3 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isFinished), object: group, expectedValue: true)
+
     XCTAssertEqual(group.maxConcurrentOperationCount, OperationQueue.defaultMaxConcurrentOperationCount)
     XCTAssertTrue(group.isSuspended)
 
-    XCTAssertTrue(group.isSuspended)
     group.start()
-    XCTAssertFalse(group.isSuspended)
-    waitForExpectations(timeout: 10)
+
+    wait(for: [expectation1, expectation2, expectation3], timeout: 10)
 
     XCTAssertTrue(group.isSuspended)
     XCTAssertTrue(group.isFinished)
@@ -59,9 +56,7 @@ final class GroupOperationTests: XCTestCase {
 
     let group = GroupOperation(operations: operation1, operation2, exclusivityManager: ExclusivityManager())
     let expectation1 = XCTKVOExpectation(keyPath: #keyPath(GroupOperation.isSuspended), object: group, expectedValue: true)
-    let expectation2 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isFinished), object: operation1, expectedValue: true)
-    let expectation3 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isFinished), object: operation2, expectedValue: true)
-    let expectation4 = XCTKVOExpectation(keyPath: #keyPath(GroupOperation.isFinished), object: group, expectedValue: true)
+    let expectation2 = XCTKVOExpectation(keyPath: #keyPath(GroupOperation.isCancelled), object: group, expectedValue: true)
 
     operation1.name = "operation1"
     operation1.useOSLog(TestsLog)
@@ -79,11 +74,51 @@ final class GroupOperationTests: XCTestCase {
 
     // Note: group is set to finish if, after the cancel, the operations cancelled are finished, that's why this test requires expectations on the operations too.
 
-    wait(for: [expectation1, expectation2, expectation3, expectation4], timeout: 10)
+    wait(for: [expectation1, expectation2], timeout: 10)
 
+    /// These operations are finished because the queue they are running into is cancelled and suspended
+    XCTAssertTrue(operation1.isFinished)
+    XCTAssertTrue(operation2.isFinished) // an operation that is not yet started or executing cannot be finished
+
+    XCTAssertTrue(group.isSuspended)
+    XCTAssertTrue(group.isCancelled)
+    XCTAssertFalse(group.isFinished) /// an operation that is not yet started or that is executing can't be finished (in this case we are in the first situation)
+  }
+
+  func testStartAfterCancel() {
+    let operation1 = SleepyAsyncOperation()
+    let operation2 = AdvancedBlockOperation { complete in
+      sleep(1)
+      complete([])
+    }
+
+    let group = GroupOperation(operations: operation1, operation2, exclusivityManager: ExclusivityManager())
+    let expectation1 = XCTKVOExpectation(keyPath: #keyPath(GroupOperation.isSuspended), object: group, expectedValue: true)
+    let expectation2 = XCTKVOExpectation(keyPath: #keyPath(GroupOperation.isCancelled), object: group, expectedValue: true)
+    let expectation3 = XCTKVOExpectation(keyPath: #keyPath(GroupOperation.isFinished), object: group, expectedValue: true)
+
+    operation1.name = "operation1"
+    operation1.useOSLog(TestsLog)
+
+    operation2.name = "operation2"
+    operation2.useOSLog(TestsLog)
+
+    group.name = "group"
+    group.useOSLog(TestsLog)
+
+    XCTAssertEqual(group.maxConcurrentOperationCount, OperationQueue.defaultMaxConcurrentOperationCount)
+    XCTAssertTrue(group.isSuspended)
+
+    group.cancel()
+    group.start()
+
+    wait(for: [expectation1, expectation2, expectation3], timeout: 10)
+
+    /// These operations are finished because the queue they are running into is cancelled and suspended
     XCTAssertTrue(operation1.isFinished)
     XCTAssertTrue(operation2.isFinished)
     XCTAssertTrue(group.isSuspended)
+    XCTAssertTrue(group.isCancelled)
     XCTAssertTrue(group.isFinished)
   }
 
@@ -127,11 +162,13 @@ final class GroupOperationTests: XCTestCase {
     let expectation3 = expectation(description: "\(#function)\(#line)")
     let group = GroupOperation(operations: operation1, operation2, exclusivityManager: ExclusivityManager())
     group.addCompletionBlock { expectation3.fulfill() }
+
     XCTAssertEqual(group.maxConcurrentOperationCount, OperationQueue.defaultMaxConcurrentOperationCount)
 
-    XCTAssertTrue(group.isSuspended)
     group.start()
+
     XCTAssertFalse(group.isSuspended)
+
     DispatchQueue.global().async {
       operation1.cancel(errors: [MockError.test])
     }
@@ -411,17 +448,20 @@ final class GroupOperationTests: XCTestCase {
     let operation1 = BlockOperation {  }
     let operation2 = BlockOperation(block: { sleep(2) } )
     let group1 = GroupOperation(operations: [operation1, operation2], exclusivityManager: ExclusivityManager())
+    group1.name = "group1"
 
     let operation3 = BlockOperation(block: { sleep(2) } )
     let operation4 = BlockOperation { }
     let operation5 = BlockOperation(block: { sleep(2) } )
     let group2 = GroupOperation(operations: operation3, operation4, operation5, exclusivityManager: ExclusivityManager())
+    group2.name = "group2"
 
     let operation6 = BlockOperation(block: { sleep(2) } )
 
     let group = GroupOperation(operations: group1, group2, operation6, exclusivityManager: ExclusivityManager())
     let exepectation1 = expectation(description: "\(#function)\(#line)")
     group.addCompletionBlock { exepectation1.fulfill() }
+    group.name = "group"
 
     group.cancel(errors: [MockError.test])
     group.start()
@@ -439,11 +479,16 @@ final class GroupOperationTests: XCTestCase {
     let group1 = GroupOperation(operations: operation1, exclusivityManager: ExclusivityManager())
     operation1.cancel(errors: [MockError.test])
 
+    group1.name = "group1"
+
     let group = GroupOperation(operations: group1, exclusivityManager: ExclusivityManager())
     let exepectation1 = expectation(description: "\(#function)\(#line)")
     group.addCompletionBlock { exepectation1.fulfill() }
 
+    group1.name = "group"
+
     group.start()
+
     waitForExpectations(timeout: 10)
     XCTAssertTrue(group.isFinished)
     XCTAssertSameErrorQuantity(errors: group.errors, expectedErrors: errors)

@@ -96,26 +96,18 @@ open class GroupOperation: AdvancedOperation {
     super.init()
 
     isSuspended = true
-    underlyingOperationQueue.delegate = self
-    finishingOperation.name = "FinishingOperation<\(operationName)>"
-    finishingOperation.addDependency(startingOperation)
+    underlyingOperationQueue.delegate = self //TODO lock?
+
     startingOperation.name = "StartingOperation<\(operationName)>"
     underlyingOperationQueue.addOperation(startingOperation)
+
+    finishingOperation.name = "FinishingOperation<\(operationName)>"
+    finishingOperation.addDependency(startingOperation)
+    underlyingOperationQueue.addOperation(finishingOperation)
 
     for operation in operations {
       addOperation(operation: operation)
     }
-  }
-
-  /// The GroupOperation completion command, called by the finishing operation.
-  private func complete() {
-    isSuspended = true
-
-    if lock.synchronized({ () -> Bool in return _cancellationTriggered }) {
-      super.cancel(errors: temporaryCancelErrors)
-    }
-
-    finish(errors: self.aggregatedErrors)
   }
 
   private var _cancellationTriggered = false
@@ -132,19 +124,28 @@ open class GroupOperation: AdvancedOperation {
       }
     }
 
-    guard canBeCancelled else { return }
+    guard canBeCancelled else {
+      return
+    }
 
-    guard !isCancelling && !isCancelled && !isFinished else { return }
+    guard !isCancelling && !isCancelled && !isFinished else {
+      return
+    }
 
-    startingOperation.cancel()
-    for operation in underlyingOperationQueue.operations where operation !== finishingOperation && operation !== startingOperation {
+    for operation in underlyingOperationQueue.operations where operation !== finishingOperation && operation !== startingOperation && !operation.isFinished && !operation.isCancelled {
       operation.cancel()
     }
+
     /// once all the operations will be cancelled and then finished, the finishing operation will be called
 
+    /// every operation is finished after a cancellation
     if isReady {
-      run()
+      isSuspended = false
     }
+
+//    if isReady {
+//      run()
+//    }
   }
 
   open override func cancel() {
@@ -152,19 +153,19 @@ open class GroupOperation: AdvancedOperation {
   }
 
   /// Performs the receiver’s non-concurrent task.
-  /// - Note: If overridden, be sure to call the parent `main` as the end of the new implementation.
+  /// - Note: If overridden, be sure to call the parent `main` as the **end** of the new implementation.
   open override func main() {
-    run()
+    if isCancelled {
+      finish()
+      return
+    }
+
+    isSuspended = false
   }
 
-  /// Prepares the underalying queue to run.
-  private func run() {
-    lock.synchronized {
-      if !underlyingOperationQueue.operations.contains(finishingOperation) && !finishingOperation.isFinished {
-        underlyingOperationQueue.addOperation(finishingOperation)
-      }
-      isSuspended = false
-    }
+  open override func finish(errors: [Error] = []) {
+    isSuspended = true
+    super.finish(errors: errors)
   }
 
   public func addOperation(operation: Operation) {
@@ -258,8 +259,14 @@ extension GroupOperation: AdvancedOperationQueueDelegate {
     }
 
     if operation === finishingOperation {
-      self.complete()
+      let allOperationsCancelled = lock.synchronized { _cancellationTriggered }
+      if allOperationsCancelled {
+        super.cancel(errors: temporaryCancelErrors)
+        finish()
+      } else {
+        finish(errors: self.aggregatedErrors)
     }
+  }
   }
 
   public func operationQueue(operationQueue: AdvancedOperationQueue, operationWillCancel operation: Operation, withErrors errors: [Error]) { }
