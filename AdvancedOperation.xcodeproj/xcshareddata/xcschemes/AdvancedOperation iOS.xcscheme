@@ -51,9 +51,6 @@
                   Identifier = "BlockObserverTests">
                </Test>
                <Test
-                  Identifier = "DelayOperationTests">
-               </Test>
-               <Test
                   Identifier = "InjectionTests">
                </Test>
                <Test

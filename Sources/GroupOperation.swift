@@ -128,7 +128,7 @@ open class GroupOperation: AdvancedOperation {
       return
     }
 
-    guard !isCancelling && !isCancelled && !isFinished else {
+    guard !isCancelled && !isFinished else {
       return
     }
 
