@@ -190,7 +190,9 @@ open class AdvancedOperation: Operation {
 
     willChangeValue(forKey: #keyPath(AdvancedOperation.isCancelled))
     willCancel(errors: cancelErrors)
+    stateLock.synchronized {
     _cancelled = true
+    }
     didCancel(errors: errors)
     didChangeValue(forKey: #keyPath(AdvancedOperation.isCancelled))
 
