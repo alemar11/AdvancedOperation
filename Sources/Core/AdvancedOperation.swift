@@ -340,8 +340,7 @@ open class AdvancedOperation: Operation {
   /// Logs all the states of an `AdvancedOperation`.
   ///
   /// - Parameters:
-  ///   - log: A `OSLog` instance.
-  ///   - type: A `OSLogType`.
+  ///   - log: an `OSLog` instance.
   public func useOSLog(_ log: OSLog) {
     self.log = log
   }
