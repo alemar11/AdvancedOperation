@@ -78,7 +78,6 @@ final class GroupOperationTests: XCTestCase {
     XCTAssertTrue(operation1.isFinished)
     XCTAssertTrue(operation2.isFinished) // an operation that is not yet started or executing cannot be finished
 
-    XCTAssertTrue(group.isSuspended)
     XCTAssertTrue(group.isCancelled)
     XCTAssertFalse(group.isFinished) /// an operation that is not yet started or that is executing can't be finished (in this case we are in the first situation)
   }

@@ -176,22 +176,25 @@ open class AdvancedOperation: Operation {
 
   private final func _cancel(errors cancelErrors: [Error] = []) {
     let canBeCancelled = stateLock.synchronized { () -> Bool in
-      guard !_cancelled else { return false }
+      guard !_cancelling && !_cancelled else { return false }
       guard !_finishing || _state != .finished else { return false }
 
-      willChangeValue(forKey: #keyPath(AdvancedOperation.isCancelled))
-      willCancel(errors: cancelErrors)
-      self._errors.append(contentsOf: cancelErrors)
-      _cancelled = true
-      didCancel(errors: errors)
-      didChangeValue(forKey: #keyPath(AdvancedOperation.isCancelled))
-       super.cancel()
+      _cancelling = true
+      _errors.append(contentsOf: cancelErrors)
       return true
     }
 
     guard canBeCancelled else {
       return
     }
+
+    willChangeValue(forKey: #keyPath(AdvancedOperation.isCancelled))
+    willCancel(errors: cancelErrors)
+    _cancelled = true
+    didCancel(errors: errors)
+    didChangeValue(forKey: #keyPath(AdvancedOperation.isCancelled))
+
+    super.cancel() // fires isReady KVO
 
 //    willChangeValue(forKey: #keyPath(AdvancedOperation.isCancelled))
 //    willCancel(errors: cancelErrors)
@@ -216,20 +219,23 @@ open class AdvancedOperation: Operation {
 
   private final func _finish(errors finishErrors: [Error] = []) {
     let canBeFinished = stateLock.synchronized { () -> Bool in
+      guard !_finishing else { return false }
       guard _state == .executing else { return false }
 
+      _finishing = true
       _errors.append(contentsOf: finishErrors)
-
-      willFinish(errors: _errors)
-      state = .finished
-      didFinish(errors: _errors)
-
       return true
     }
 
     guard canBeFinished else {
       return
     }
+
+    willFinish(errors: _errors)
+    state = .finished
+    didFinish(errors: _errors)
+
+
 
 //    let updatedErrors = stateLock.synchronized { () -> [Error] in
 //      if !finishErrors.isEmpty { // avoid TSAN _swiftEmptyArrayStorage
@@ -327,11 +333,7 @@ open class AdvancedOperation: Operation {
     os_log("%{public}s is evaluating %{public}d conditions.", log: log, type: .info, operationName, conditions.count)
   }
 
-}
-
 // MARK: - OSLog
-
-extension AdvancedOperation {
 
   /// Logs all the states of an `AdvancedOperation`.
   ///

@@ -22,6 +22,7 @@
 // SOFTWARE.
 
 import Foundation
+import os.log
 
 open class GroupOperation: AdvancedOperation {
 
@@ -67,6 +68,15 @@ open class GroupOperation: AdvancedOperation {
     set {
       lock.synchronized {
         _aggregatedErrors = newValue
+      }
+    }
+  }
+
+  public override func useOSLog(_ log: OSLog) {
+    super.useOSLog(log) //TODO improve this for addOperation
+    underlyingOperationQueue.operations.forEach { operation in
+      if let advancedOperation = operation as? AdvancedOperation {
+        advancedOperation.useOSLog(log)
       }
     }
   }

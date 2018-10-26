@@ -45,12 +45,6 @@
             </BuildableReference>
             <SkippedTests>
                <Test
-                  Identifier = "BlockConditionTests">
-               </Test>
-               <Test
-                  Identifier = "BlockObserverTests">
-               </Test>
-               <Test
                   Identifier = "InjectionTests">
                </Test>
                <Test

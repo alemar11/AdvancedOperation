@@ -41,6 +41,7 @@ internal final class ConditionEvaluatorOperation: GroupOperation {
       }
 
       let evaluatingOperation = EvaluateConditionOperation(condition: condition, operation: operation)
+      evaluatingOperation.useOSLog(log)
 
       if let dependency = condition.dependency(for: operation) {
         evaluatingOperation.addDependency(dependency)
@@ -55,6 +56,10 @@ internal final class ConditionEvaluatorOperation: GroupOperation {
 
   override func operationWillExecute() {
     os_log("%{public}s conditions are being evaluated.", log: log, type: .info, _operationName)
+  }
+
+  override func operationWillFinish(errors: [Error]) {
+     os_log("%{public}s conditions are finishing the evaluation with %{public}d errors.", log: log, type: .info, _operationName, errors.count)
   }
 
   override func operationDidFinish(errors: [Error]) {
