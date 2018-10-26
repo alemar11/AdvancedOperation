@@ -58,12 +58,12 @@ open class AdvancedOperation: Operation {
 
   // MARK: - Gates
 
-//  /// Returns `true` is the cancel command has been issued but not yet completed
-//  internal final var isCancelling: Bool { return stateLock.synchronized { return _cancelling } }
-//  /// Returns `true` is the finish command has been triggered.
-//  internal final var isFinishing: Bool { return stateLock.synchronized { return _finishing } }
-//  /// Returns `true` is the start command has been triggered.
-//  internal final var isStarting: Bool { return stateLock.synchronized { return _starting } }
+  //  /// Returns `true` is the cancel command has been issued but not yet completed
+  //  internal final var isCancelling: Bool { return stateLock.synchronized { return _cancelling } }
+  //  /// Returns `true` is the finish command has been triggered.
+  //  internal final var isFinishing: Bool { return stateLock.synchronized { return _finishing } }
+  //  /// Returns `true` is the start command has been triggered.
+  //  internal final var isStarting: Bool { return stateLock.synchronized { return _starting } }
 
   /// Returns `true` if the finish command has been fired and the operation is processing it.
   private var _finishing = false
@@ -122,24 +122,24 @@ open class AdvancedOperation: Operation {
 
   // MARK: - Execution
 
-//  lazy var dispatchQueue: DispatchQueue = {
-//    var qos =  DispatchQoS.unspecified
-//    switch qualityOfService {
-//    case .background:
-//      qos = .background
-//    case .default:
-//      qos = .default
-//    case .utility:
-//      qos = .utility
-//    case .userInitiated:
-//      qos = .userInitiated
-//    case .userInteractive:
-//      qos = .userInteractive
-//    }
-//
-//    let queue = DispatchQueue(label: operationName, qos: qos) //, attributes: .concurrent)
-//    return queue
-//  }()
+  //  lazy var dispatchQueue: DispatchQueue = {
+  //    var qos =  DispatchQoS.unspecified
+  //    switch qualityOfService {
+  //    case .background:
+  //      qos = .background
+  //    case .default:
+  //      qos = .default
+  //    case .utility:
+  //      qos = .utility
+  //    case .userInitiated:
+  //      qos = .userInitiated
+  //    case .userInteractive:
+  //      qos = .userInteractive
+  //    }
+  //
+  //    let queue = DispatchQueue(label: operationName, qos: qos) //, attributes: .concurrent)
+  //    return queue
+  //  }()
 
   public final override func start() {
     let canBeStarted = stateLock.synchronized { () -> Bool in
@@ -191,26 +191,26 @@ open class AdvancedOperation: Operation {
     willChangeValue(forKey: #keyPath(AdvancedOperation.isCancelled))
     willCancel(errors: cancelErrors)
     stateLock.synchronized {
-    _cancelled = true
+      _cancelled = true
     }
     didCancel(errors: errors)
     didChangeValue(forKey: #keyPath(AdvancedOperation.isCancelled))
 
     super.cancel() // fires isReady KVO
 
-//    willChangeValue(forKey: #keyPath(AdvancedOperation.isCancelled))
-//    willCancel(errors: cancelErrors)
-//
-//    stateLock.synchronized {
-//      if !cancelErrors.isEmpty { // avoid TSAN _swiftEmptyArrayStorage
-//        self._errors.append(contentsOf: cancelErrors)
-//      }
-//
-//      _cancelled = true
-//    }
-//
-//    didCancel(errors: errors)
-//    didChangeValue(forKey: #keyPath(AdvancedOperation.isCancelled))
+    //    willChangeValue(forKey: #keyPath(AdvancedOperation.isCancelled))
+    //    willCancel(errors: cancelErrors)
+    //
+    //    stateLock.synchronized {
+    //      if !cancelErrors.isEmpty { // avoid TSAN _swiftEmptyArrayStorage
+    //        self._errors.append(contentsOf: cancelErrors)
+    //      }
+    //
+    //      _cancelled = true
+    //    }
+    //
+    //    didCancel(errors: errors)
+    //    didChangeValue(forKey: #keyPath(AdvancedOperation.isCancelled))
 
     //super.cancel() // fires isReady KVO
   }
@@ -239,16 +239,16 @@ open class AdvancedOperation: Operation {
 
 
 
-//    let updatedErrors = stateLock.synchronized { () -> [Error] in
-//      if !finishErrors.isEmpty { // avoid TSAN _swiftEmptyArrayStorage
-//        _errors.append(contentsOf: finishErrors)
-//      }
-//      return _errors
-//    }
-//
-//    willFinish(errors: updatedErrors)
-//    state = .finished
-//    didFinish(errors: updatedErrors)
+    //    let updatedErrors = stateLock.synchronized { () -> [Error] in
+    //      if !finishErrors.isEmpty { // avoid TSAN _swiftEmptyArrayStorage
+    //        _errors.append(contentsOf: finishErrors)
+    //      }
+    //      return _errors
+    //    }
+    //
+    //    willFinish(errors: updatedErrors)
+    //    state = .finished
+    //    didFinish(errors: updatedErrors)
   }
 
   // MARK: - Produced Operations
@@ -335,7 +335,7 @@ open class AdvancedOperation: Operation {
     os_log("%{public}s is evaluating %{public}d conditions.", log: log, type: .info, operationName, conditions.count)
   }
 
-// MARK: - OSLog
+  // MARK: - OSLog
 
   /// Logs all the states of an `AdvancedOperation`.
   ///
@@ -415,10 +415,6 @@ extension AdvancedOperation {
   }
 
   private func didFinish(errors: [Error]) {
-    //    var loggedErrors = [Error]() // TODO avoid TSAN _swiftEmptyArrayStorage
-    //    if !errors.isEmpty {
-    //      loggedErrors = errors
-    //    }
     operationDidFinish(errors: errors)
 
     for observer in didFinishObservers {
