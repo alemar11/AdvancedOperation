@@ -145,8 +145,10 @@ open class AdvancedOperation: Operation {
   public final override func start() {
     let canBeStarted = stateLock.synchronized { () -> Bool in
       guard !_starting else { return false }
+
+      guard !_finishing else { return false }
+
       guard _state == .ready else { return false }
-      guard !_finishing || !isFinished else { return false }
 
       _starting = true
       state = .executing
