@@ -96,10 +96,12 @@ extension AdvancedOperation {
 
       let error = AdvancedOperation.evaluateOutputOperation(outputOperation, forRequirements: requirements)
 
-      inputOpertion.input = outputOperation.output
       if let error = error {
         inputOpertion.cancel(errors: [error])
+      } else {
+        inputOpertion.input = outputOperation.output
       }
+
       complete([])
     }
 
@@ -128,10 +130,12 @@ extension AdvancedOperation {
 
       let error = AdvancedOperation.evaluateOutputOperation(outputOperation, forRequirements: requirements)
 
-      inputOpertion.input = transform(outputOperation.output)
       if let error = error {
         inputOpertion.cancel(errors: [error])
+      } else {
+        inputOpertion.input = transform(outputOperation.output)
       }
+
       complete([])
     }
 
@@ -151,7 +155,7 @@ extension AdvancedOperation {
     }
 
     if requirements.contains(.noCancellation), outputOperation.isCancelled {
-      return AdvancedOperationError.executionCancelled(message: "The injectable operation is cancelledand it doesn't satisfy the requirements (\(requirements).")
+      return AdvancedOperationError.executionCancelled(message: "The injectable operation is cancelled and it doesn't satisfy the requirements (\(requirements).")
     }
 
     return nil

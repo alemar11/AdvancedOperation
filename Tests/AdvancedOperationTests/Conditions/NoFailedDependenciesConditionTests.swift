@@ -49,6 +49,12 @@ final class NoFailedDependenciesConditionTests: XCTestCase {
 
     operation1.addCondition(NoFailedDependenciesCondition())
     [operation4, operation3, operation2].then(operation1)
+
+    XCTAssertFalse(operation1.isExecuting)
+    XCTAssertFalse(operation2.isExecuting)
+    XCTAssertFalse(operation3.isExecuting)
+    XCTAssertFalse(operation4.isExecuting)
+
     queue.addOperations([operation1, operation2, operation3, operation4], waitUntilFinished: false)
 
     wait(for: [expectation1, expectation2, expectation3, expectation4], timeout: 10)

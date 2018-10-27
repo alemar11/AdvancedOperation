@@ -184,6 +184,14 @@ class OperationConditionTests: XCTestCase {
       expectation4.fulfill()
     }
 
+    operation1.name = "operation1"
+    dependency1.name = "dependency1"
+    dependency2.name = "dependency2"
+    dependency3.name = "dependency3"
+    dependency1.useOSLog(TestsLog)
+    dependency2.useOSLog(TestsLog)
+    dependency3.useOSLog(TestsLog)
+
     let dependencyCondition1 = DependencyCondition(dependency: dependency1)
     let dependencyCondition2 = DependencyCondition(dependency: dependency2)
     let dependencyCondition3 = DependencyCondition(dependency: dependency3)
@@ -192,8 +200,7 @@ class OperationConditionTests: XCTestCase {
     operation1.addCondition(dependencyCondition2)
     operation1.addCondition(dependencyCondition3)
 
-    let manager = ExclusivityManager()
-    let queue = AdvancedOperationQueue(exclusivityManager: manager)
+    let queue = AdvancedOperationQueue(exclusivityManager: ExclusivityManager())
     queue.addOperation(operation1)
 
     operation1.cancel() // at this point: all its dependecies are already running

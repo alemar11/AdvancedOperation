@@ -151,7 +151,6 @@ open class AdvancedOperation: Operation {
       guard _state == .ready else { return false }
 
       _starting = true
-      state = .executing
       return true
     }
 
@@ -159,6 +158,7 @@ open class AdvancedOperation: Operation {
       return
     }
 
+    state = .executing
     willExecute()
     main()
 
@@ -340,7 +340,7 @@ extension AdvancedOperation {
   /// - Requires: `self must not have started.
   public func addObserver(_ observer: OperationObservingType) {
     //assert(!isStarting, "Cannot modify observers after execution has begun.")
-    assert(!isExecuting, "Cannot modify observers after execution has begun.")
+    assert(state == .ready, "Cannot modify observers after execution has begun.")
 
     observers.append(observer)
   }

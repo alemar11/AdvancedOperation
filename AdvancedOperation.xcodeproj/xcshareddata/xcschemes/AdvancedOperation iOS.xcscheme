@@ -45,25 +45,7 @@
             </BuildableReference>
             <SkippedTests>
                <Test
-                  Identifier = "InjectionTests">
-               </Test>
-               <Test
-                  Identifier = "MutuallyExclusiveConditionTests">
-               </Test>
-               <Test
-                  Identifier = "NegatedConditionTests">
-               </Test>
-               <Test
                   Identifier = "NoCancelledDependenciesConditionTests">
-               </Test>
-               <Test
-                  Identifier = "NoFailedDependenciesConditionTests">
-               </Test>
-               <Test
-                  Identifier = "OperationConditionTests">
-               </Test>
-               <Test
-                  Identifier = "SilentConditionTests">
                </Test>
             </SkippedTests>
          </TestableReference>

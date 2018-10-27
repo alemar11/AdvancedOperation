@@ -36,7 +36,7 @@ public protocol OperationCondition {
   /// - Returns: An `Operation`, if a dependency should be automatically added. Otherwise, `nil`.
   /// - Note: Only a single operation may be returned as a dependency. If you find that you need to return multiple operations, then you should be expressing that as multiple conditions.
   ///         Alternatively, you could return a single `GroupOperation` that executes multiple operations internally.
-  func dependency(for operation: AdvancedOperation) -> Operation?
+  func dependency(for operation: AdvancedOperation) -> AdvancedOperation?
 
   /// Evaluate the condition, to see if it has been satisfied or not.
   ///
@@ -47,7 +47,7 @@ public protocol OperationCondition {
 }
 
 public extension OperationCondition {
-  func dependency(for operation: AdvancedOperation) -> Operation? { return nil }
+  func dependency(for operation: AdvancedOperation) -> AdvancedOperation? { return nil }
 }
 
 public extension OperationCondition {

@@ -213,8 +213,13 @@ final internal class NotExecutableOperation: AdvancedOperation {
   }
 
   override func main() {
+    if isCancelled {
+      finish()
+      return
+    }
+
     XCTFail("This operation shouldn't be executed.")
-    self.finish()
+    finish()
   }
 
 }
@@ -517,13 +522,15 @@ internal struct AlwaysSuccessingCondition: OperationCondition {
 
 internal struct DependencyCondition: OperationCondition {
 
-  private var dependency: Operation
+  let dependency: AdvancedOperation
 
   init(dependency: AdvancedOperation) {
-    self.dependency = dependency as Operation
+    self.dependency = dependency
   }
 
-  func dependency(for operation: AdvancedOperation) -> Operation? { return dependency }
+  func dependency(for operation: AdvancedOperation) -> AdvancedOperation? {
+    return dependency
+  }
 
   func evaluate(for operation: AdvancedOperation, completion: @escaping (OperationConditionResult) -> Void) {
     completion(.satisfied)

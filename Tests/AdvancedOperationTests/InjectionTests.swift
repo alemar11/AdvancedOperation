@@ -157,20 +157,22 @@ class InjectionTests: XCTestCase {
   }
 
   func testInjectionInputNotCancelledRequirement() {
-    let expectation1 = self.expectation(description: "\(#function)\(#line)")
+
     let operation1 = IntToStringOperation() // no input -> fails
     let operation2 = StringToIntOperation()
-    operation2.completionBlock = {
-      expectation1.fulfill()
-    }
+    let expectation1 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isFinished), object: operation2, expectedValue: true)
+
     operation1.input = 100 // special value to cancel the operation 😎
     operation1.cancel()
+    XCTAssertTrue(operation1.isCancelled)
+
     let adapterOperation = operation1.inject(into: operation2, requirements: [.noCancellation])
-    let manager = ExclusivityManager()
-    let queue = AdvancedOperationQueue(exclusivityManager: manager)
+    let queue = AdvancedOperationQueue(exclusivityManager: ExclusivityManager())
+
     queue.addOperations([operation1, operation2, adapterOperation], waitUntilFinished: false)
 
-    waitForExpectations(timeout: 3)
+    wait(for: [expectation1], timeout: 10)
+
     XCTAssertNil(operation2.input)
     XCTAssertNil(operation2.output)
     XCTAssertTrue(operation2.isCancelled)

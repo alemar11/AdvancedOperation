@@ -26,33 +26,81 @@ import os.log
 
 /// Evalutes all the `OperationCondition`.
 /// The evaluation fails if this operation, once finished, contains errors.
-internal final class ConditionEvaluatorOperation: GroupOperation {
+internal final class ConditionEvaluatorOperation: AdvancedOperation {
 
   private var _operationName: String
+  private let _conditions: [OperationCondition]
+  private weak var evaluatedOperation: AdvancedOperation?
 
-  init(conditions: [OperationCondition], operation: AdvancedOperation, exclusivityManager: ExclusivityManager) { //TODO: set
+  init(conditions: [OperationCondition], operation: AdvancedOperation, exclusivityManager: ExclusivityManager) { //TODO: remove exclusivity manager
     _operationName = operation.operationName
+    _conditions = conditions
+    evaluatedOperation = operation
 
-    super.init(operations: [])
-
-    conditions.forEach { condition in
-      if condition is MutuallyExclusiveCondition {
-        return
-      }
-
-      let evaluatingOperation = EvaluateConditionOperation(condition: condition, operation: operation)
-      evaluatingOperation.useOSLog(log)
-
-      if let dependency = condition.dependency(for: operation) {
-        evaluatingOperation.addDependency(dependency)
-        addOperation(operation: dependency)
-      }
-
-      addOperation(operation: evaluatingOperation)
-    }
+    super.init()
 
     name = "ConditionEvaluatorOperation<\(operation.operationName)>"
   }
+
+  override func main() {
+    if isCancelled {
+      finish()
+      return
+    }
+
+    guard let operation = evaluatedOperation else {
+      let error = AdvancedOperationError.executionFinished(message: "The operation to evaluate doesn't exist anymore.")
+      finish(errors: [error])
+      return
+    }
+
+    ConditionEvaluatorOperation.evaluate(_conditions, for: operation) { [weak self] errors in
+      if !errors.isEmpty {
+        //self?.cancel(errors: errors)
+        operation.cancel(errors: errors) //TODO instead of using an observer we can cance here the operation
+      }
+      self?.finish(errors: errors)
+    }
+
+    }
+
+  private static func evaluate(_ conditions: [OperationCondition], for operation: AdvancedOperation, completion: @escaping ([Error]) -> Void) {
+    let conditionGroup = DispatchGroup()
+    var results = [OperationConditionResult?](repeating: nil, count: conditions.count)
+    let lock = NSLock()
+
+    // Even if an operation is cancelled, the conditions are evaluated nonetheless.
+    for (index, condition) in conditions.enumerated() {
+      conditionGroup.enter()
+      condition.evaluate(for: operation) { result in
+        lock.synchronized {
+          results[index] = result
+        }
+
+        conditionGroup.leave()
+      }
+    }
+
+    conditionGroup.notify(queue: DispatchQueue.global()) {
+      // Aggregate all the occurred errors.
+      let errors = results.compactMap { result -> [Error]? in
+        if case .failed(let errors)? = result {
+          return errors
+        }
+        return nil
+      }
+
+      let flattenedErrors = errors.flatMap { $0 }
+
+      //      if operation.isCancelled {
+      //        var aggregatedErrors = operation.errors
+      //        let error = AdvancedOperationError.executionCancelled(message: "Operation cancelled while evaluating its conditions.")
+      //        errors.append(contentsOf: aggregatedErrors)
+      //      }
+      completion(flattenedErrors)
+    }
+  }
+
 
   override func operationWillExecute() {
     os_log("%{public}s conditions are being evaluated.", log: log, type: .info, _operationName)

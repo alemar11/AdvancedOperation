@@ -39,15 +39,19 @@ class SilentConditionTests: XCTestCase {
 
     let operation1 = SleepyOperation()
     operation1.completionBlock = { expectation1.fulfill() }
+    operation1.name = "operation1"
 
     let operation2 = SleepyOperation()
     operation2.completionBlock = { expectation2.fulfill() }
+    operation2.name = "operation2"
 
     let dependency1 = AdvancedBlockOperation { }
     dependency1.completionBlock = { expectation3.fulfill() }
+    dependency1.name = "dependency1"
 
     let dependency2 = AdvancedBlockOperation { }
     dependency2.completionBlock = { expectation4.fulfill() }
+    dependency2.name = "dependency2"
 
     let dependencyCondition1 = DependencyCondition(dependency: dependency1)
     let dependencyCondition2 = DependencyCondition(dependency: dependency2)
@@ -57,6 +61,11 @@ class SilentConditionTests: XCTestCase {
 
     queue.addOperations([operation1, operation2], waitUntilFinished: false)
     waitForExpectations(timeout: 10)
+
+    XCTAssertTrue(operation1.isFinished)
+    XCTAssertTrue(operation2.isFinished)
+    XCTAssertTrue(dependency1.isFinished)
+    XCTAssertFalse(dependency2.isFinished)
   }
 
 }
