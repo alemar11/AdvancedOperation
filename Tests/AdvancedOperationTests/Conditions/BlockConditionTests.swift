@@ -41,14 +41,6 @@ class BlockConditionTests: XCTestCase {
     XCTAssertTrue(operation.isFinished)
   }
 
-  func testStress() {
-    (1...100).forEach { (i) in
-      print(i)
-      testFailedConditionAfterAThrowedError()
-      print("\n")
-    }
-  }
-
   func testFailedConditionAfterAThrowedError() {
     let manager = ExclusivityManager()
     let queue = AdvancedOperationQueue(exclusivityManager: manager)

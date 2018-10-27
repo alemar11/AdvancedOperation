@@ -29,6 +29,7 @@ open class AdvancedOperation: Operation {
 
   // MARK: - State
 
+  public final  override var isReady: Bool { return super.isReady && !stateLock.synchronized { return _cancelling } }
   public final override var isExecuting: Bool { return state == .executing }
   public final override var isFinished: Bool { return state == .finished }
   public final override var isCancelled: Bool { return stateLock.synchronized { return _cancelled } }
@@ -196,23 +197,11 @@ open class AdvancedOperation: Operation {
     didCancel(errors: errors)
     didChangeValue(forKey: #keyPath(AdvancedOperation.isCancelled))
 
+    stateLock.synchronized {
+      _cancelling = false
+    }
+
     super.cancel() // fires isReady KVO
-
-    //    willChangeValue(forKey: #keyPath(AdvancedOperation.isCancelled))
-    //    willCancel(errors: cancelErrors)
-    //
-    //    stateLock.synchronized {
-    //      if !cancelErrors.isEmpty { // avoid TSAN _swiftEmptyArrayStorage
-    //        self._errors.append(contentsOf: cancelErrors)
-    //      }
-    //
-    //      _cancelled = true
-    //    }
-    //
-    //    didCancel(errors: errors)
-    //    didChangeValue(forKey: #keyPath(AdvancedOperation.isCancelled))
-
-    //super.cancel() // fires isReady KVO
   }
 
   open func finish(errors: [Error] = []) {
@@ -221,8 +210,13 @@ open class AdvancedOperation: Operation {
 
   private final func _finish(errors finishErrors: [Error] = []) {
     let canBeFinished = stateLock.synchronized { () -> Bool in
-      guard !_finishing else { return false }
-      guard _state == .executing else { return false }
+      guard !_finishing else {
+        return false
+      }
+
+      guard _state == .executing else {
+        return false
+      }
 
       _finishing = true
       _errors.append(contentsOf: finishErrors)
@@ -237,18 +231,6 @@ open class AdvancedOperation: Operation {
     state = .finished
     didFinish(errors: _errors)
 
-
-
-    //    let updatedErrors = stateLock.synchronized { () -> [Error] in
-    //      if !finishErrors.isEmpty { // avoid TSAN _swiftEmptyArrayStorage
-    //        _errors.append(contentsOf: finishErrors)
-    //      }
-    //      return _errors
-    //    }
-    //
-    //    willFinish(errors: updatedErrors)
-    //    state = .finished
-    //    didFinish(errors: updatedErrors)
   }
 
   // MARK: - Produced Operations
