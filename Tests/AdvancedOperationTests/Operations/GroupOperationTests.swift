@@ -147,9 +147,9 @@ final class GroupOperationTests: XCTestCase {
     XCTAssertEqual(group.aggregatedErrors.count, 1)
   }
 
-  func testOperationCancelledAsynchronously() {
+  func testOperationCancelledAsynchronously() { //TODO
     let expectation1 = expectation(description: "\(#function)\(#line)")
-    let operation1 = SleepyAsyncOperation()
+    let operation1 = CancellingAsyncOperation()
     operation1.addCompletionBlock { expectation1.fulfill() }
 
     let expectation2 = expectation(description: "\(#function)\(#line)")
@@ -166,20 +166,16 @@ final class GroupOperationTests: XCTestCase {
 
     XCTAssertFalse(group.isSuspended)
 
-    DispatchQueue.global().async {
-      operation1.cancel(errors: [MockError.test])
-    }
-
     waitForExpectations(timeout: 10)
 
     XCTAssertTrue(operation1.isCancelled)
     XCTAssertTrue(operation1.isFinished)
-    XCTAssertEqual(operation1.errors.count, 1)
+    XCTAssertEqual(operation1.errors.count, 2)
 
     XCTAssertFalse(group.isCancelled)
     XCTAssertTrue(group.isFinished)
     XCTAssertTrue(group.isSuspended)
-    XCTAssertEqual(group.aggregatedErrors.count, 1)
+    XCTAssertEqual(group.aggregatedErrors.count, 2)
   }
 
   func testBlockOperationCancelled() {
