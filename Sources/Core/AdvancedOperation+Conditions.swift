@@ -35,31 +35,27 @@ internal extension AdvancedOperation {
     let evaluator = ConditionEvaluatorOperation(conditions: conditions, operation: self, exclusivityManager: exclusivityManager)
     let producedOperations = conditions.compactMap { $0.dependency(for: self) }
 
-//    let evaluatorObserver = BlockObserver(willFinish: { [weak self] operation, errors in
-//      if operation.isCancelled || !errors.isEmpty {
-//        self?.cancel(errors: errors)
-//      }
-//    })
+    //    let evaluatorObserver = BlockObserver(willFinish: { [weak self] operation, errors in
+    //      if operation.isCancelled || !errors.isEmpty {
+    //        self?.cancel(errors: errors)
+    //      }
+    //    })
 
-    let selfObserver = BlockObserver(willFinish: { [weak evaluator, producedOperations] operation, errors in
-      guard let evaluator = evaluator else {
-        return
-      }
+    let selfObserver = BlockObserver(
+      willCancel: { [weak evaluator, producedOperations] operation, errors in
+        guard let evaluator = evaluator else {
+          return
+        }
 
-      guard !evaluator.isFinished && !evaluator.isCancelled else {
-        return
-      }
-
-      if operation.isCancelled || !errors.isEmpty {
         print("🚩\(operation.operationName) has been cancelled --> cancelling \(evaluator.operationName) and \(producedOperations)")
         evaluator.cancel(errors: errors)
         _ = producedOperations.map { $0.cancel() }
-      }
+        //}
     })
 
     _ = producedOperations.map { evaluator.addDependency($0) }
 
-    print("🥇🥇🥇🥇🥇 \(producedOperations.count) 🥇🥇🥇🥇🥇")
+    print("🥇\(producedOperations.count)")
 
     addObserver(selfObserver)
     //evaluator.addObserver(evaluatorObserver)

@@ -43,11 +43,6 @@
                BlueprintName = "AdvancedOperation Tests iOS"
                ReferencedContainer = "container:AdvancedOperation.xcodeproj">
             </BuildableReference>
-            <SkippedTests>
-               <Test
-                  Identifier = "NoCancelledDependenciesConditionTests">
-               </Test>
-            </SkippedTests>
          </TestableReference>
       </Testables>
       <MacroExpansion>

@@ -403,9 +403,13 @@ final class GroupOperationTests: XCTestCase {
     waitForExpectations(timeout: 10)
 
     XCTAssertTrue(group.isReady)
-    XCTAssertTrue(!group.isExecuting)
-    XCTAssertTrue(!group.isCancelled)
+    XCTAssertFalse(group.isExecuting)
+    XCTAssertFalse(group.isCancelled)
     XCTAssertTrue(group.isFinished)
+
+    let op = BlockOperation {}
+    op.cancel()
+    print(op)
   }
 
   func testGroupOperationsCancelled() {

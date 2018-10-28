@@ -29,7 +29,7 @@ open class AdvancedOperation: Operation {
 
   // MARK: - State
 
-  public final  override var isReady: Bool { return super.isReady && !stateLock.synchronized { return _cancelling } }
+  public final  override var isReady: Bool { return super.isReady && stateLock.synchronized { return !_cancelling } }
   public final override var isExecuting: Bool { return state == .executing }
   public final override var isFinished: Bool { return state == .finished }
   public final override var isCancelled: Bool { return stateLock.synchronized { return _cancelled } }

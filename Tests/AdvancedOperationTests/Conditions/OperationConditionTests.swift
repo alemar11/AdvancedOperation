@@ -176,8 +176,9 @@ class OperationConditionTests: XCTestCase {
     }
     dependency2.completionBlock = { expectation3.fulfill() }
 
-    let dependency3 = AdvancedBlockOperation {
+    let dependency3 = AdvancedBlockOperation { complete in
       XCTAssertFalse(operation1.isExecuting)
+      complete([])
     }
 
     dependency3.completionBlock = {

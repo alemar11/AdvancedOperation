@@ -36,8 +36,6 @@ internal extension AdvancedOperation {
       switch (self, state) {
       case (.ready, .executing):
         return true
-      case (.ready, .finished): // early bailing out
-        return true
       case (.executing, .finished):
         return true
       default:
