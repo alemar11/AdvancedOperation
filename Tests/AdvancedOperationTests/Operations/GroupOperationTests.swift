@@ -319,7 +319,7 @@ final class GroupOperationTests: XCTestCase {
     }
   }
 
-  func testNestedGroupOperations() {
+  func testNestedGroupOperations() { // TODO: test crashed
     let operation1 = BlockOperation(block: { } )
     let operation2 = BlockOperation(block: { sleep(2) } )
     let group1 = GroupOperation(operations: [operation1, operation2], exclusivityManager: ExclusivityManager())
