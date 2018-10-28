@@ -343,38 +343,44 @@ final class GroupOperationTests: XCTestCase {
 
 
   func testMultipleNestedGroupOperations() {
-    let exepectation0 = expectation(description: "\(#function)\(#line)")
-    let exepectation1 = expectation(description: "\(#function)\(#line)")
-    let exepectation2 = expectation(description: "\(#function)\(#line)")
-    let exepectation3 = expectation(description: "\(#function)\(#line)")
-    let exepectation4 = expectation(description: "\(#function)\(#line)")
-
     let operation1 = BlockOperation(block: { } )
-    let operation2 = BlockOperation(block: { sleep(0) } )
+    let operation2 = BlockOperation(block: { sleep(2) } )
     let group1 = GroupOperation(operations: [operation1, operation2], exclusivityManager: ExclusivityManager())
-    group1.addCompletionBlock { exepectation1.fulfill() }
+    let expectation1 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isFinished), object: group1, expectedValue: true)
 
-    let operation3 = SleepyOperation(interval: 0)
-    let operation4 = SleepyAsyncOperation(interval1: 0, interval2: 0, interval3: 0)
-    let operation5 = BlockOperation(block: { sleep(0) } )
+    let operation3 = SleepyOperation()
+    let operation4 = SleepyAsyncOperation(interval1: 1, interval2: 1, interval3: 1)
+    let operation5 = BlockOperation(block: { sleep(1) } )
 
-    let operation6 = SleepyAsyncOperation(interval1: 0, interval2: 0, interval3: 0)
+    let operation6 = SleepyAsyncOperation(interval1: 1, interval2: 1, interval3: 1)
     let group3 = GroupOperation(operations: operation6, exclusivityManager: ExclusivityManager())
-    group3.addCompletionBlock { exepectation3.fulfill() }
+    let expectation3 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isFinished), object: group3, expectedValue: true)
 
     let group2 = GroupOperation(operations: operation3, operation4, operation5, group3, exclusivityManager: ExclusivityManager())
-    group2.addCompletionBlock { exepectation2.fulfill() }
+    let expectation2 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isFinished), object: group2, expectedValue: true)
 
     let group4 = GroupOperation(operations: [], exclusivityManager: ExclusivityManager())
-    group4.addCompletionBlock { exepectation4.fulfill() }
+    let expectation4 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isFinished), object: group4, expectedValue: true)
 
-    let operation7 = SleepyAsyncOperation(interval1: 0, interval2: 0, interval3: 0)
+    let operation7 = SleepyAsyncOperation(interval1: 0, interval2: 0, interval3: 1)
     let group0 = GroupOperation(operations: group1, group2, operation7, group4, exclusivityManager: ExclusivityManager())
+    let expectation0 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isFinished), object: group0, expectedValue: true)
 
-    group0.addCompletionBlock { exepectation0.fulfill() }
+    group0.name = "group0"
+    group1.name = "group1"
+    group2.name = "group2"
+    group3.name = "group3"
+    group4.name = "group4"
+
+    group0.useOSLog(TestsLog)
+    group1.useOSLog(TestsLog)
+    group2.useOSLog(TestsLog)
+    group3.useOSLog(TestsLog)
+    group4.useOSLog(TestsLog)
 
     group0.start()
-    waitForExpectations(timeout: 10)
+
+    wait(for: [expectation0, expectation1, expectation2, expectation3, expectation4], timeout: 10)
 
     XCTAssertTrue(group0.isFinished)
   }
