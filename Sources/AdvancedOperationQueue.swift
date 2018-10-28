@@ -103,7 +103,7 @@ open class AdvancedOperationQueue: OperationQueue {
 
         // if !operation.isCancelled && !operation.isFinished && !operation.isExecuting {
 
-        if let evaluator = operation.evaluateConditions(exclusivityManager: exclusivityManager) {
+        if let evaluator = operation.makeConditionsEvaluator() {
           addOperation(evaluator)
         }
 
