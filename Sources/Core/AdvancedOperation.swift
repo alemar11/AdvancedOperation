@@ -262,7 +262,6 @@ open class AdvancedOperation: Operation {
 
   public func addCondition(_ condition: OperationCondition) {
     assert(state == .ready, "Cannot add conditions if the operation is \(state).")
-    //assert(!isStarting, "Cannot add conditions while the operation is starting.")
 
     // TODO
     // let exclusivityConditions = operation.conditions.filter { $0.mutuallyExclusivityMode != .disabled }.compactMap { $0 as? MutuallyExclusiveCondition }
@@ -343,7 +342,6 @@ extension AdvancedOperation {
   /// - Parameter observer: the observer to add.
   /// - Requires: `self must not have started.
   public func addObserver(_ observer: OperationObservingType) {
-    //assert(!isStarting, "Cannot modify observers after execution has begun.")
     assert(state == .ready, "Cannot modify observers after execution has begun.")
 
     observers.append(observer)

@@ -24,7 +24,7 @@
 import Foundation
 
 ///// Operation responsible to evaluate a single `OperationCondition`.
-//internal final class EvaluateConditionOperation: AdvancedOperation, OperationInputHaving, OperationOutputHaving {
+// internal final class EvaluateConditionOperation: AdvancedOperation, OperationInputHaving, OperationOutputHaving {
 //
 //  internal weak var input: AdvancedOperation? = .none
 //  internal var output: OperationConditionResult? = .none
@@ -60,4 +60,4 @@ import Foundation
 //      self.finish(errors: errors)
 //    }
 //  }
-//}
+// }

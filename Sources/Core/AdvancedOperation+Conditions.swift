@@ -27,19 +27,12 @@ import Foundation
 
 internal extension AdvancedOperation {
 
-  func evaluateConditions(exclusivityManager: ExclusivityManager) -> [AdvancedOperation] {
+  func evaluateConditions(exclusivityManager: ExclusivityManager) -> AdvancedOperation? {
     guard !conditions.isEmpty else {
-      return []
+      return nil
     }
 
     let evaluator = ConditionEvaluatorOperation(conditions: conditions, operation: self, exclusivityManager: exclusivityManager)
-    //let producedOperations = conditions.compactMap { $0.dependency(for: self) }
-
-    //    let evaluatorObserver = BlockObserver(willFinish: { [weak self] operation, errors in
-    //      if operation.isCancelled || !errors.isEmpty {
-    //        self?.cancel(errors: errors)
-    //      }
-    //    })
 
     let selfObserver = BlockObserver(
       willCancel: { [weak evaluator] operation, errors in
@@ -49,13 +42,9 @@ internal extension AdvancedOperation {
 
         print("🚩\(operation.operationName) has been cancelled --> cancelling \(evaluator.operationName)")
         evaluator.cancel(errors: errors)
-
-        //}
     })
 
-
     addObserver(selfObserver)
-    //evaluator.addObserver(evaluatorObserver)
     evaluator.useOSLog(log)
 
     for dependency in dependencies {
@@ -64,16 +53,11 @@ internal extension AdvancedOperation {
 
     }
     addDependency(evaluator)
-    //_ = producedOperations.map { addDependency($0) } //not sure about this
 
     // giving the same categories to the evaluator: it can start only when the exclusivity conditions are met
     evaluator.categories = categories
-    //TODO
-    // add categories to producedOperations too?
 
-    var operations = [AdvancedOperation]() //TODO
-    operations.append(evaluator)
-    return operations
+    return evaluator
   }
 
 }
