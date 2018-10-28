@@ -342,7 +342,7 @@ final class GroupOperationTests: XCTestCase {
   }
 
 
-  func testMultipleNestedGroupOperations() {
+  func testMultipleNestedGroupOperations() { // TODO: test crashed
     let operation1 = BlockOperation { }
     let operation2 = BlockOperation(block: { sleep(2) } )
     let group1 = GroupOperation(operations: [operation1, operation2], exclusivityManager: ExclusivityManager())

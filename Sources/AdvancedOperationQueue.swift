@@ -160,7 +160,7 @@ open class AdvancedOperationQueue: OperationQueue {
   }
 
   deinit {
-    // exclusivityManager.unregister(queue: self) //TODO
+    exclusivityManager.unregister(queue: self)
   }
 
 }
