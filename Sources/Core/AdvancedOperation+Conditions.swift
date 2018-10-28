@@ -33,7 +33,7 @@ internal extension AdvancedOperation {
     }
 
     let evaluator = ConditionEvaluatorOperation(conditions: conditions, operation: self, exclusivityManager: exclusivityManager)
-    let producedOperations = conditions.compactMap { $0.dependency(for: self) }
+    //let producedOperations = conditions.compactMap { $0.dependency(for: self) }
 
     //    let evaluatorObserver = BlockObserver(willFinish: { [weak self] operation, errors in
     //      if operation.isCancelled || !errors.isEmpty {
@@ -42,20 +42,17 @@ internal extension AdvancedOperation {
     //    })
 
     let selfObserver = BlockObserver(
-      willCancel: { [weak evaluator, producedOperations] operation, errors in
+      willCancel: { [weak evaluator] operation, errors in
         guard let evaluator = evaluator else {
           return
         }
 
-        print("🚩\(operation.operationName) has been cancelled --> cancelling \(evaluator.operationName) and \(producedOperations)")
+        print("🚩\(operation.operationName) has been cancelled --> cancelling \(evaluator.operationName)")
         evaluator.cancel(errors: errors)
-        _ = producedOperations.map { $0.cancel() }
+
         //}
     })
 
-    _ = producedOperations.map { evaluator.addDependency($0) }
-
-    print("🥇\(producedOperations.count)")
 
     addObserver(selfObserver)
     //evaluator.addObserver(evaluatorObserver)
@@ -64,17 +61,17 @@ internal extension AdvancedOperation {
     for dependency in dependencies {
       print("🚩 adding \(dependency.operationName) as dependency for \(evaluator.operationName)")
       evaluator.addDependency(dependency)
-      _ = producedOperations.map { $0.addDependency(dependency) }
+
     }
     addDependency(evaluator)
-    _ = producedOperations.map { addDependency($0) } //not sure about this
+    //_ = producedOperations.map { addDependency($0) } //not sure about this
 
     // giving the same categories to the evaluator: it can start only when the exclusivity conditions are met
     evaluator.categories = categories
     //TODO
     // add categories to producedOperations too?
 
-    var operations = producedOperations
+    var operations = [AdvancedOperation]() //TODO
     operations.append(evaluator)
     return operations
   }

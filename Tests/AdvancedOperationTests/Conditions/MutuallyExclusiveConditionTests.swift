@@ -252,44 +252,6 @@ final class MutuallyExclusiveConditionTests: XCTestCase {
     XCTAssertEqual(text, "A B C. 🎉")
   }
 
-  func testMultipleMutuallyExclusiveConditionsAndDependencies() {
-    let exclusivityManager = ExclusivityManager()
-    let queue = AdvancedOperationQueue(exclusivityManager: exclusivityManager)
-    var text1 = ""
-    var text2 = ""
-
-    let dependency1 = AdvancedBlockOperation { text1 += "1 " }
-    dependency1.addCondition(MutuallyExclusiveCondition(name: "test"))
-    let expectation1 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isFinished), object: dependency1, expectedValue: true)
-
-    let dependency2 = AdvancedBlockOperation { text1 += "2" }
-    dependency2.addCondition(MutuallyExclusiveCondition(name: "test"))
-    let expectation2 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isFinished), object: dependency2, expectedValue: true)
-
-    let dependencyCondition1 = DependencyCondition(dependency: dependency1)
-    let dependencyCondition2 = DependencyCondition(dependency: dependency2)
-
-    let operation1 = AdvancedBlockOperation { text2 += "A " }
-    let expectation3 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isFinished), object: operation1, expectedValue: true)
-    operation1.addCondition(MutuallyExclusiveCondition(name: "AdvancedBlockOperation"))
-    operation1.addCondition(dependencyCondition1)
-
-    let operation2 = AdvancedBlockOperation { text2 += "B" }
-    let expectation4 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isFinished), object: operation2, expectedValue: true)
-    operation2.addCondition(MutuallyExclusiveCondition(name: "AdvancedBlockOperation"))
-    operation2.addCondition(dependencyCondition2)
-
-    dependency1.name = "dependency1"
-    dependency2.name = "dependency2"
-    operation1.name = "operation1"
-    operation2.name = "operation2"
-
-    queue.addOperations([operation1, operation2], waitUntilFinished: false)
-    wait(for: [expectation1, expectation2, expectation3, expectation4], timeout: 10)
-    XCTAssertEqual(text1, "1 2")
-    XCTAssertEqual(text2, "A B")
-  }
-
   func testExclusivityManager() {
     let expectation1 = expectation(description: "\(#function)\(#line)")
     let expectation2 = expectation(description: "\(#function)\(#line)")

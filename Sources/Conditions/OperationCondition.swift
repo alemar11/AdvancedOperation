@@ -30,24 +30,12 @@ public protocol OperationCondition {
   /// The name of the condition.
   var name: String { get }
 
-  /// Some conditions may have the ability to satisfy the condition if another operation is executed first.
-  ///
-  /// - Parameter operation: The `AdvancedOperation` to which the Condition has been added.
-  /// - Returns: An `Operation`, if a dependency should be automatically added. Otherwise, `nil`.
-  /// - Note: Only a single operation may be returned as a dependency. If you find that you need to return multiple operations, then you should be expressing that as multiple conditions.
-  ///         Alternatively, you could return a single `GroupOperation` that executes multiple operations internally.
-  func dependency(for operation: AdvancedOperation) -> AdvancedOperation?
-
   /// Evaluate the condition, to see if it has been satisfied or not.
   ///
   /// - Parameters:
   ///   - operation: the `AdvancedOperation` which this condition is attached to.
   ///   - completion: a closure which receives an `OperationConditionResult`.
   func evaluate(for operation: AdvancedOperation, completion: @escaping (OperationConditionResult) -> Void)
-}
-
-public extension OperationCondition {
-  func dependency(for operation: AdvancedOperation) -> AdvancedOperation? { return nil }
 }
 
 public extension OperationCondition {
