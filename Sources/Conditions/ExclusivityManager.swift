@@ -108,7 +108,7 @@ final public class ExclusivityManager {
       }
 
       let allAdvancedOperations = queues.flatMap { $0.operations }.compactMap { $0 as? AdvancedOperation }
-      let operationsFilteredByCategories = advancedOperations.filter { $0.categories.contains(where: categories.contains) }
+      let operationsFilteredByCategories = allAdvancedOperations.filter { $0.categories.contains(where: categories.contains) }
 
       print("🔴 \(operation.operationName) has found \(operationsFilteredByCategories.count) for categories: \(categories)")
 
