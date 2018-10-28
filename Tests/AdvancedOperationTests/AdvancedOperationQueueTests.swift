@@ -602,6 +602,7 @@ final class AdvancedOperationQueueTests: XCTestCase {
     XCTAssertNil(weakOperation4, "Leak: operation4 should be nilled out. The queue has still \(queue!.operations.count) operations.")
   }
 
+  /// OperationQueue behaviour when is deallocated with operations to run.
   func testOperationRetainedUnitisExecuted() {
     let expectation1 = self.expectation(description: "test")
     let operation1 = AdvancedBlockOperation { complete in complete([]) }
