@@ -27,12 +27,13 @@ import Foundation
 
 internal extension AdvancedOperation {
 
-  func evaluateConditions(exclusivityManager: ExclusivityManager) -> AdvancedOperation? {
+  // TODO: this can be an initializer for ConditionEvaluatorOperation
+  func makeConditionsEvaluator() -> AdvancedOperation? {
     guard !conditions.isEmpty else {
       return nil
     }
 
-    let evaluator = ConditionEvaluatorOperation(conditions: conditions, operation: self, exclusivityManager: exclusivityManager)
+    let evaluator = ConditionEvaluatorOperation(conditions: conditions, operation: self)
 
     let selfObserver = BlockObserver(
       willCancel: { [weak evaluator] operation, errors in
