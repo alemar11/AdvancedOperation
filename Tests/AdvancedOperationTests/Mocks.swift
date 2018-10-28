@@ -69,7 +69,6 @@ final internal class SelfObservigOperation: AdvancedOperation {
 
   override init() {
     super.init()
-    useOSLog(TestsLog)
   }
 
   override func main() {
@@ -175,13 +174,15 @@ final internal class SleepyAsyncOperation: AdvancedOperation {
 
 final internal class SleepyOperation: AdvancedOperation {
 
-  override init() {
+  private let interval: UInt32
+
+  init(interval: UInt32 = 1) {
+    self.interval = interval
     super.init()
-    useOSLog(TestsLog)
   }
 
   override func main() {
-    sleep(1)
+    sleep(interval)
     self.finish()
   }
 
@@ -209,7 +210,6 @@ final internal class NotExecutableOperation: AdvancedOperation {
 
   override init() {
     super.init()
-    useOSLog(TestsLog)
   }
 
   override func main() {
@@ -231,8 +231,6 @@ final internal class FailingAsyncOperation: AdvancedOperation {
 
   init(errors: [MockError] = [MockError.failed, MockError.test]) {
     self.defaultErrors = errors
-    super.init()
-    useOSLog(TestsLog)
   }
 
   override func main() {
@@ -254,7 +252,6 @@ final internal class CancellingAsyncOperation: AdvancedOperation {
   init(errors: [MockError] = [MockError.failed, MockError.test]) {
     self.defaultErrors = errors
     super.init()
-    useOSLog(TestsLog)
   }
 
   override func main() {
@@ -454,7 +451,6 @@ internal class IntToStringOperation: AdvancedOperation & OperationInputHaving & 
 
   override init() {
     super.init()
-    useOSLog(TestsLog)
   }
 
   override func main() {
@@ -479,7 +475,6 @@ internal class StringToIntOperation: FunctionOperation<String, Int> {
 
   override init() {
     super.init()
-    useOSLog(TestsLog)
   }
 
   override func main() {
