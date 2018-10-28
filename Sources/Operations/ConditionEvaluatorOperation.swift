@@ -32,7 +32,7 @@ internal final class ConditionEvaluatorOperation: AdvancedOperation {
   private let evaluatedConditions: [OperationCondition]
   private weak var evaluatedOperation: AdvancedOperation?
 
-  init(conditions: [OperationCondition], operation: AdvancedOperation) {
+  init(operation: AdvancedOperation, conditions: [OperationCondition]) {
     evaluatedOperationName = operation.operationName
     evaluatedConditions = conditions
     evaluatedOperation = operation

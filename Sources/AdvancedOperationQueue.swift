@@ -51,7 +51,7 @@ open class AdvancedOperationQueue: OperationQueue {
 
   private let lock = NSRecursiveLock()
 
-  //TODO: The quality-of-service level set for the underlying dispatch queue overrides any value set for the operation queue's qualityOfService property.
+  // TODO: The quality-of-service level set for the underlying dispatch queue overrides any value set for the operation queue's qualityOfService property.
   public init(exclusivityManager: ExclusivityManager = .sharedInstance, underlyingQueue: DispatchQueue? = .none) {
     self.exclusivityManager = exclusivityManager
     super.init()

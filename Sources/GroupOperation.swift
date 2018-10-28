@@ -105,8 +105,8 @@ open class GroupOperation: AdvancedOperation {
 
     super.init()
 
-    isSuspended = true
-    underlyingOperationQueue.delegate = self //TODO lock?
+    underlyingOperationQueue.isSuspended = true
+    underlyingOperationQueue.delegate = self
 
     startingOperation.name = "StartingOperation<\(operationName)>"
     underlyingOperationQueue.addOperation(startingOperation)
