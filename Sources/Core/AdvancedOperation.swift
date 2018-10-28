@@ -183,7 +183,9 @@ open class AdvancedOperation: Operation {
       guard !_finishing || _state != .finished else { return false }
 
       _cancelling = true
+      if !cancelErrors.isEmpty { // TSAN _swiftEmptyArrayStorage
       _errors.append(contentsOf: cancelErrors)
+      }
       return true
     }
 
@@ -221,7 +223,9 @@ open class AdvancedOperation: Operation {
       }
 
       _finishing = true
+      if !finishErrors.isEmpty { // TSAN _swiftEmptyArrayStorage
       _errors.append(contentsOf: finishErrors)
+      }
       return true
     }
 

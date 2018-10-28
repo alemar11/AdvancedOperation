@@ -28,13 +28,13 @@ import os.log
 /// The evaluation fails if this operation, once finished, contains errors.
 internal final class ConditionEvaluatorOperation: AdvancedOperation {
 
-  private var _operationName: String
-  private let _conditions: [OperationCondition]
+  private let evaluatedOperationName: String
+  private let evaluatedConditions: [OperationCondition]
   private weak var evaluatedOperation: AdvancedOperation?
 
   init(conditions: [OperationCondition], operation: AdvancedOperation, exclusivityManager: ExclusivityManager) { //TODO: remove exclusivity manager
-    _operationName = operation.operationName
-    _conditions = conditions
+    evaluatedOperationName = operation.operationName
+    evaluatedConditions = conditions
     evaluatedOperation = operation
 
     super.init()
@@ -49,27 +49,25 @@ internal final class ConditionEvaluatorOperation: AdvancedOperation {
     }
 
     guard let operation = evaluatedOperation else {
-      let error = AdvancedOperationError.executionFinished(message: "The operation to evaluate doesn't exist anymore.")
+      let error = AdvancedOperationError.executionFinished(message: "The operation to evaluate \(evaluatedOperationName) doesn't exist anymore.")
       finish(errors: [error])
       return
     }
 
-    ConditionEvaluatorOperation.evaluate(_conditions, for: operation) { [weak self] errors in
+    ConditionEvaluatorOperation.evaluate(evaluatedConditions, for: operation) { [weak self] errors in
       if !errors.isEmpty {
-        //self?.cancel(errors: errors)
-        operation.cancel(errors: errors) //TODO instead of using an observer we can cance here the operation
+        operation.cancel(errors: errors)
       }
       self?.finish(errors: errors)
     }
 
-    }
+  }
 
   private static func evaluate(_ conditions: [OperationCondition], for operation: AdvancedOperation, completion: @escaping ([Error]) -> Void) {
     let conditionGroup = DispatchGroup()
     var results = [OperationConditionResult?](repeating: nil, count: conditions.count)
     let lock = NSLock()
 
-    // Even if an operation is cancelled, the conditions are evaluated nonetheless.
     for (index, condition) in conditions.enumerated() {
       conditionGroup.enter()
       condition.evaluate(for: operation) { result in
@@ -91,27 +89,24 @@ internal final class ConditionEvaluatorOperation: AdvancedOperation {
       }
 
       let flattenedErrors = errors.flatMap { $0 }
-
-      //      if operation.isCancelled {
-      //        var aggregatedErrors = operation.errors
-      //        let error = AdvancedOperationError.executionCancelled(message: "Operation cancelled while evaluating its conditions.")
-      //        errors.append(contentsOf: aggregatedErrors)
-      //      }
       completion(flattenedErrors)
     }
   }
 
-
   override func operationWillExecute() {
-    os_log("%{public}s conditions are being evaluated.", log: log, type: .info, _operationName)
+    os_log("%{public}s conditions are being evaluated.", log: log, type: .info, evaluatedOperationName)
   }
 
-  override func operationWillFinish(errors: [Error]) {
-     os_log("%{public}s conditions are finishing the evaluation with %{public}d errors.", log: log, type: .info, _operationName, errors.count)
+  override func operationWillCancel(errors: [Error]) { }
+
+  override func operationDidCancel(errors: [Error]) {
+    os_log("%{public}s conditions have been cancelled with %{public}d errors.", log: log, type: .info, evaluatedOperationName, errors.count)
   }
+
+  override func operationWillFinish(errors: [Error]) { }
 
   override func operationDidFinish(errors: [Error]) {
-    os_log("%{public}s conditions have been evaluated with %{public}d errors.", log: log, type: .info, _operationName, errors.count)
+    os_log("%{public}s conditions have been evaluated with %{public}d errors.", log: log, type: .info, evaluatedOperationName, errors.count)
   }
 
 }

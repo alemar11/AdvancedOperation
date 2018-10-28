@@ -35,6 +35,16 @@ final class NoCancelledDependenciesConditionTests: XCTestCase {
     let operation3 = NotExecutableOperation()
     let operation4 = DelayOperation(interval: 0.2)
 
+    operation1.name = "operation1"
+    operation2.name = "operation2"
+    operation3.name = "operation3"
+    operation4.name = "operation4"
+
+    operation1.useOSLog(TestsLog)
+    operation2.useOSLog(TestsLog)
+    operation3.useOSLog(TestsLog)
+    operation4.useOSLog(TestsLog)
+
     operation1.addDependencies([operation2, operation3])
     operation1.addCondition(NoCancelledDependeciesCondition())
     operation3.addDependency(operation4)
