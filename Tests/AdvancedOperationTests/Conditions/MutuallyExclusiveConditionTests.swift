@@ -53,33 +53,32 @@ final class MutuallyExclusiveConditionTests: XCTestCase {
 
   // MARK: - Enqueue Mode
 
-//  func testMutuallyExclusiveCondition() {
-//    let exclusivityManager = ExclusivityManager()
-//    let queue = AdvancedOperationQueue(exclusivityManager: exclusivityManager)
-//    queue.maxConcurrentOperationCount = 10
-//
-//    //let operation1 = SleepyAsyncOperation(interval1: 0, interval2: 0, interval3: 0)
-//    let operation1 = AdvancedBlockOperation { complete in complete([]) }
-//    let expectation1 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isFinished), object: operation1, expectedValue: true)
-//    operation1.addCondition(MutuallyExclusiveCondition(name: "SleepyAsyncOperation"))
-//
-//
-//    //let operation2 = SleepyAsyncOperation(interval1: 1, interval2: 1, interval3: 1)
-//    let operation2 = AdvancedBlockOperation { complete in complete([]) }
-//    let expectation2 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isFinished), object: operation2, expectedValue: true)
-//    operation2.addCondition(MutuallyExclusiveCondition(name: "SleepyAsyncOperation"))
-//
-//    operation1.name = "operation1"
-//    operation2.name = "operation2"
-//
-//    operation1.useOSLog(TestsLog)
-//    operation2.useOSLog(TestsLog)
-//
-//    queue.addOperations([operation1, operation2], waitUntilFinished: true)
-//    wait(for: [expectation1, expectation2], timeout: 10)
-//    //let remainingOperations = exclusivityManager.operations.count
-//    //XCTAssertEqual(remainingOperations, 0, "Expected 0 operations instead of \(remainingOperations).")
-//  }
+  func testDependencyCycle() {
+    let queue = AdvancedOperationQueue(exclusivityManager: ExclusivityManager())
+
+    let operation1 = SleepyAsyncOperation()
+    operation1.addCondition(MutuallyExclusiveCondition(name: "A"))
+    operation1.name = "operation1"
+
+    let operation2 = SleepyAsyncOperation()
+    operation2.addCondition(MutuallyExclusiveCondition(name: "A"))
+    operation2.name = "operation2"
+
+    operation1.useOSLog(TestsLog)
+    operation2.useOSLog(TestsLog)
+
+    operation2.addDependency(operation1)
+
+    // if operation2 is added before operation1 but operation2 depends on operation1, then the exclusivity category is "skipped"
+    // to avoid a dependecy cycle between the two operations.
+    queue.addOperation(operation2)
+    queue.addOperation(operation1)
+
+    let expectation1 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isFinished), object: operation1, expectedValue: true)
+    let expectation2 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isFinished), object: operation2, expectedValue: true)
+
+    wait(for: [expectation1, expectation2], timeout: 15)
+  }
 
   func testMutuallyExclusiveConditionWithtDifferentQueues() {
     let manager = ExclusivityManager()

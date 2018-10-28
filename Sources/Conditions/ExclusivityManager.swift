@@ -107,15 +107,15 @@ final public class ExclusivityManager {
         return
       }
 
-      let allOperations = queues.flatMap { $0.operations }
-      let advancedOperations = allOperations.compactMap { $0 as? AdvancedOperation }
-      let operations = advancedOperations.filter { $0.categories.contains(where: categories.contains) }
-      print("🔴 found \(operations.count) for categories: \(categories)")
+      let allAdvancedOperations = queues.flatMap { $0.operations }.compactMap { $0 as? AdvancedOperation }
+      let operationsFilteredByCategories = advancedOperations.filter { $0.categories.contains(where: categories.contains) }
 
-      for ope in operations where ope !== operation {
-        if !operation.dependencies.contains(ope) {
-          print("\t\t--> adding \(ope.operationName) as dependency for  \(operation.operationName)")
-          operation.addDependency(ope)
+      print("🔴 \(operation.operationName) has found \(operationsFilteredByCategories.count) for categories: \(categories)")
+
+      for operationForCategory in operationsFilteredByCategories where operationForCategory !== operation {
+        if !operation.dependencies.contains(operationForCategory) && !operationForCategory.dependencies.contains(operation) {
+          print("\t\t--> adding \(operationForCategory.operationName) as dependency for  \(operation.operationName)")
+          operation.addDependency(operationForCategory)
         }
       }
     }
