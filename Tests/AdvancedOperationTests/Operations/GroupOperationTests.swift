@@ -341,6 +341,7 @@ final class GroupOperationTests: XCTestCase {
     XCTAssertTrue(group.isFinished)
   }
 
+
   func testMultipleNestedGroupOperations() {
     let exepectation0 = expectation(description: "\(#function)\(#line)")
     let exepectation1 = expectation(description: "\(#function)\(#line)")
@@ -349,15 +350,15 @@ final class GroupOperationTests: XCTestCase {
     let exepectation4 = expectation(description: "\(#function)\(#line)")
 
     let operation1 = BlockOperation(block: { } )
-    let operation2 = BlockOperation(block: { sleep(2) } )
+    let operation2 = BlockOperation(block: { sleep(0) } )
     let group1 = GroupOperation(operations: [operation1, operation2], exclusivityManager: ExclusivityManager())
     group1.addCompletionBlock { exepectation1.fulfill() }
 
-    let operation3 = SleepyOperation()
-    let operation4 = SleepyAsyncOperation(interval1: 1, interval2: 1, interval3: 1)
-    let operation5 = BlockOperation(block: { sleep(1) } )
+    let operation3 = SleepyOperation(interval: 0)
+    let operation4 = SleepyAsyncOperation(interval1: 0, interval2: 0, interval3: 0)
+    let operation5 = BlockOperation(block: { sleep(0) } )
 
-    let operation6 = SleepyAsyncOperation(interval1: 1, interval2: 1, interval3: 1)
+    let operation6 = SleepyAsyncOperation(interval1: 0, interval2: 0, interval3: 0)
     let group3 = GroupOperation(operations: operation6, exclusivityManager: ExclusivityManager())
     group3.addCompletionBlock { exepectation3.fulfill() }
 
@@ -367,7 +368,7 @@ final class GroupOperationTests: XCTestCase {
     let group4 = GroupOperation(operations: [], exclusivityManager: ExclusivityManager())
     group4.addCompletionBlock { exepectation4.fulfill() }
 
-    let operation7 = SleepyAsyncOperation(interval1: 0, interval2: 0, interval3: 1)
+    let operation7 = SleepyAsyncOperation(interval1: 0, interval2: 0, interval3: 0)
     let group0 = GroupOperation(operations: group1, group2, operation7, group4, exclusivityManager: ExclusivityManager())
 
     group0.addCompletionBlock { exepectation0.fulfill() }

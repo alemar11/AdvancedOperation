@@ -105,15 +105,15 @@ open class GroupOperation: AdvancedOperation {
 
     super.init()
 
-    underlyingOperationQueue.isSuspended = true
-    underlyingOperationQueue.delegate = self
+    self.underlyingOperationQueue.isSuspended = true
+    self.underlyingOperationQueue.delegate = self
 
-    startingOperation.name = "StartingOperation<\(operationName)>"
-    underlyingOperationQueue.addOperation(startingOperation)
+    self.startingOperation.name = "Star<\(operationName)>"
+    self.underlyingOperationQueue.addOperation(startingOperation)
 
-    finishingOperation.name = "FinishingOperation<\(operationName)>"
-    finishingOperation.addDependency(startingOperation)
-    underlyingOperationQueue.addOperation(finishingOperation)
+    self.finishingOperation.name = "End<\(operationName)>"
+    self.finishingOperation.addDependency(startingOperation)
+    self.underlyingOperationQueue.addOperation(finishingOperation)
 
     for operation in operations {
       addOperation(operation: operation)

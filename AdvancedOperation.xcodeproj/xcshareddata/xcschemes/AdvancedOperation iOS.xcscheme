@@ -55,6 +55,11 @@
          </BuildableReference>
       </MacroExpansion>
       <AdditionalOptions>
+         <AdditionalOption
+            key = "NSZombieEnabled"
+            value = "YES"
+            isEnabled = "YES">
+         </AdditionalOption>
       </AdditionalOptions>
    </TestAction>
    <LaunchAction
