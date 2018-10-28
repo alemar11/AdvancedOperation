@@ -133,7 +133,7 @@ final class AdvancedOperationQueueTests: XCTestCase {
     waitForExpectations(timeout: 3)
   }
 
-  func testQueueWithAdvancedOperationsWithoutUsingWaitUntilFinished() { //TODO
+  func testQueueWithAdvancedOperationsWithoutUsingWaitUntilFinished() {
     let queue = AdvancedOperationQueue(exclusivityManager: ExclusivityManager())
     let delegate = MockOperationQueueDelegate()
 

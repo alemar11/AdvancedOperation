@@ -147,7 +147,7 @@ final class GroupOperationTests: XCTestCase {
     XCTAssertEqual(group.aggregatedErrors.count, 1)
   }
 
-  func testOperationCancelledAsynchronously() { //TODO
+  func testOperationCancelledAsynchronously() {
     let expectation1 = expectation(description: "\(#function)\(#line)")
     let operation1 = CancellingAsyncOperation()
     operation1.addCompletionBlock { expectation1.fulfill() }

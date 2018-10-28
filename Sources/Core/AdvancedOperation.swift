@@ -263,8 +263,7 @@ open class AdvancedOperation: Operation {
   public func addCondition(_ condition: OperationCondition) {
     assert(state == .ready, "Cannot add conditions if the operation is \(state).")
 
-    // TODO
-    // let exclusivityConditions = operation.conditions.filter { $0.mutuallyExclusivityMode != .disabled }.compactMap { $0 as? MutuallyExclusiveCondition }
+    // TODO, cancellable categories
     if let exclusivityCondition = condition as? MutuallyExclusiveCondition {
       categories.insert(exclusivityCondition.name)
     } else {
