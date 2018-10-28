@@ -73,6 +73,23 @@ public class BlockObserver: OperationObserving {
 
   public func operation(operation: AdvancedOperation, didProduce producedOperation: Operation) {
     didProduceOperationHandler?(operation, producedOperation)
+}
+}
+
+/// The `BlockObserver` is a way to attach arbitrary blocks to significant events in an `Operation`'s lifecycle.
+internal final class WillCancelObserver: OperationWillCancelObserving {
+
+  // MARK: - Properties
+
+  private let willCancelHandler: ((AdvancedOperation, [Error]) -> Void)?
+
+  public init (willCancel: ((AdvancedOperation, [Error]) -> Void)? = nil) {
+    self.willCancelHandler = willCancel
   }
 
+  // MARK: - OperationObserving
+
+  public func operationWillCancel(operation: AdvancedOperation, withErrors errors: [Error]) {
+    willCancelHandler?(operation, errors)
+  }
 }
