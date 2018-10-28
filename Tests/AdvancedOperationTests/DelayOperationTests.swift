@@ -26,87 +26,74 @@ import XCTest
 
 final class DelayOperationTests: XCTestCase {
 
-  func testStandardFlowWithInterval() {
-    let expectation1 = expectation(description: "\(#function)\(#line)")
-
+  func testInterval() {
     let start = Date()
     let operation = DelayOperation(interval: 2)
-
-    operation.completionBlock = {
-      let seconds = Date().timeIntervalSince(start)
-      XCTAssertEqual(seconds, 2, accuracy: 0.3)
-      expectation1.fulfill()
-    }
-
+    let expectation1 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isFinished), object: operation, expectedValue: true)
     operation.start()
-    waitForExpectations(timeout: 3)
-    XCTAssertTrue(operation.isFinished)
+
+    wait(for: [expectation1], timeout: 3)
+
+    let seconds = Date().timeIntervalSince(start)
+    XCTAssertEqual(seconds, 2, accuracy: 0.3)
   }
 
-  func testStandardFlowWithDate() {
-    let expectation1 = expectation(description: "\(#function)\(#line)")
-
+  func testDate() {
     let start = Date()
     let end = start.addingTimeInterval(2)
     let operation = DelayOperation(until: end)
-
-    operation.completionBlock = {
-      let seconds = Date().timeIntervalSince(start)
-      XCTAssertEqual(seconds, 2, accuracy: 0.3)
-      expectation1.fulfill()
-    }
-
+    let expectation1 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isFinished), object: operation, expectedValue: true)
     operation.start()
-    waitForExpectations(timeout: 3)
-    XCTAssertTrue(operation.isFinished)
+
+    wait(for: [expectation1], timeout: 3)
+
+    let seconds = Date().timeIntervalSince(start)
+    XCTAssertEqual(seconds, 2, accuracy: 0.3)
+
   }
 
   func testNegativeInterval() {
-    let expectation1 = expectation(description: "\(#function)\(#line)")
-
     let operation = DelayOperation(interval: -2)
-    operation.completionBlock = { expectation1.fulfill() }
+    let expectation1 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isFinished), object: operation, expectedValue: true)
 
     operation.start()
-    waitForExpectations(timeout: 3)
+
+    wait(for: [expectation1], timeout: 3)
+
     XCTAssertFalse(operation.isCancelled)
-    XCTAssertTrue(operation.isFinished)
   }
 
   func testCancel() {
-    let expectation1 = expectation(description: "\(#function)\(#line)")
-
     let start = Date()
-    let end = start.addingTimeInterval(5)
+    let end = start.addingTimeInterval(4)
     let operation = DelayOperation(until: end)
-
-    operation.completionBlock = {
-      let seconds = Date().timeIntervalSince(start)
-      XCTAssertEqual(seconds, 5, accuracy: 0.3)
-      expectation1.fulfill()
-    }
+    let expectation1 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isFinished), object: operation, expectedValue: true)
 
     operation.start()
     operation.cancel()
-    waitForExpectations(timeout: 10)
+
+    wait(for: [expectation1], timeout: 10)
+
+    let seconds = Date().timeIntervalSince(start)
+    XCTAssertEqual(seconds, 4, accuracy: 0.3)
+
     XCTAssertTrue(operation.isCancelled)
     XCTAssertTrue(operation.isFinished)
   }
 
-  func testBailingOutEarly() {
-    let expectation1 = expectation(description: "\(#function)\(#line)")
-
+  func testCancelBeforeStart() {
     let start = Date()
     let operation = DelayOperation(interval: 2)
-    operation.completionBlock = {
-      let seconds = Date().timeIntervalSince(start)
-      XCTAssertEqual(seconds, 0, accuracy: 0.3)
-      expectation1.fulfill()
-    }
+    let expectation1 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isFinished), object: operation, expectedValue: true)
 
     operation.cancel()
     operation.start()
-    waitForExpectations(timeout: 3)
+
+    wait(for: [expectation1], timeout: 3)
+
+    let seconds = Date().timeIntervalSince(start)
+    XCTAssertEqual(seconds, 0, accuracy: 0.3)
+
     XCTAssertTrue(operation.isCancelled)
     XCTAssertTrue(operation.isFinished)
   }

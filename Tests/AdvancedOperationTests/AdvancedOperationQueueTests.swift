@@ -26,21 +26,14 @@ import XCTest
 
 final class AdvancedOperationQueueTests: XCTestCase {
 
-  //  func testStress() {
-  //    for i in 1...20 {
-  //      print(i)
-  //      testQueueWithAdvancedOperationsUsingWaitUntilFinished()
-  //    }
-  //  }
-
-  func testQueueWithAdvancedOperationsUsingWaitUntilFinished() {
+  func testQueueDelegateWithAdvancedOperationsUsingWaitUntilFinished() {
     let manager = ExclusivityManager()
     let queue = AdvancedOperationQueue(exclusivityManager: manager)
     let delegate = MockOperationQueueDelegate()
 
     queue.delegate = delegate
 
-    let operation1 = SleepyAsyncOperation()
+    let operation1 = SleepyAsyncOperation(interval1: 1, interval2: 0, interval3: 1)
     let operation2 = AdvancedBlockOperation { complete in
       complete([])
     }
@@ -141,8 +134,7 @@ final class AdvancedOperationQueueTests: XCTestCase {
   }
 
   func testQueueWithAdvancedOperationsWithoutUsingWaitUntilFinished() {
-    let manager = ExclusivityManager()
-    let queue = AdvancedOperationQueue(exclusivityManager: manager)
+    let queue = AdvancedOperationQueue(exclusivityManager: ExclusivityManager())
     let delegate = MockOperationQueueDelegate()
 
     queue.delegate = delegate
@@ -241,23 +233,23 @@ final class AdvancedOperationQueueTests: XCTestCase {
     queue.addOperation(operation2)
     queue.addOperation(operation3)
     queue.addOperation(operation4)
+
     queue.isSuspended = false
 
     waitForExpectations(timeout: 10)
   }
 
   func testQueueWithMixedOperations() {
-    let manager = ExclusivityManager()
-    let queue = AdvancedOperationQueue(exclusivityManager: manager)
+    let queue = AdvancedOperationQueue(exclusivityManager: ExclusivityManager())
     let delegate = MockOperationQueueDelegate()
 
     queue.delegate = delegate
     queue.isSuspended = true
 
-    let operation1 = SleepyOperation()
+    let operation1 = SleepyOperation(interval: 0)
     let operation2 = BlockOperation { }
-    let operation3 = DelayOperation(interval: 2)
-    let operation4 = DelayOperation(interval: 1)
+    let operation3 = DelayOperation(interval: 0)
+    let operation4 = DelayOperation(interval: 0)
 
     let willAddExpectation1 = expectation(description: "\(#function)\(#line)")
     let willAddExpectation2 = expectation(description: "\(#function)\(#line)")
@@ -292,7 +284,6 @@ final class AdvancedOperationQueueTests: XCTestCase {
     }
 
     let willExecuteExpectation1 = expectation(description: "\(#function)\(#line)")
-    //let willExecuteExpectation2 = expectation(description: "\(#function)\(#line)")
     let willExecuteExpectation3 = expectation(description: "\(#function)\(#line)")
     let willExecuteExpectation4 = expectation(description: "\(#function)\(#line)")
 
@@ -308,7 +299,6 @@ final class AdvancedOperationQueueTests: XCTestCase {
     }
 
     let willFinishExpectation1 = expectation(description: "\(#function)\(#line)")
-    //let willFinishExpectation2 = expectation(description: "\(#function)\(#line)")
     let willFinishExpectation3 = expectation(description: "\(#function)\(#line)")
     let willFinishExpectation4 = expectation(description: "\(#function)\(#line)")
 
@@ -343,11 +333,11 @@ final class AdvancedOperationQueueTests: XCTestCase {
       XCTFail("There should'nt be any cancelled operations.")
     }
 
+    queue.isSuspended = false
     queue.addOperation(operation1)
     queue.addOperation(operation2)
     queue.addOperation(operation3)
     queue.addOperation(operation4)
-    queue.isSuspended = false
 
     waitForExpectations(timeout: 10)
   }

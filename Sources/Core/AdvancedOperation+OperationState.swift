@@ -23,17 +23,37 @@
 
 import Foundation
 
-/// A simple condition that causes another condition to not enqueue its dependency.
-public struct SilentCondition<T: OperationCondition>: OperationCondition {
+internal extension AdvancedOperation {
 
-  let condition: T
+  @objc
+  enum OperationState: Int, CustomDebugStringConvertible {
 
-  init(condition: T) {
-    self.condition = condition
-  }
+    case ready
+    case executing
+    case finished
 
-  public func evaluate(for operation: AdvancedOperation, completion: @escaping (OperationConditionResult) -> Void) {
-   condition.evaluate(for: operation, completion: completion)
+    func canTransition(to state: OperationState) -> Bool {
+      switch (self, state) {
+      case (.ready, .executing):
+        return true
+      case (.executing, .finished):
+        return true
+      default:
+        return false
+      }
+    }
+
+    var debugDescription: String {
+      switch self {
+      case .ready:
+        return "ready"
+      case .executing:
+        return "executing"
+      case .finished:
+        return "finished"
+      }
+    }
+
   }
 
 }

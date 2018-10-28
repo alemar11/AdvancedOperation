@@ -23,25 +23,40 @@
 
 import Foundation
 
-let operationConditionKey = "OperationCondition"
+// MARK: - Condition Evaluation
 
-public protocol OperationCondition {
+internal extension AdvancedOperation {
 
-  /// The name of the condition.
-  var name: String { get }
+  func makeConditionsEvaluator() -> AdvancedOperation? {
+    guard !conditions.isEmpty else {
+      return nil
+    }
 
-  /// Evaluate the condition, to see if it has been satisfied or not.
-  ///
-  /// - Parameters:
-  ///   - operation: the `AdvancedOperation` which this condition is attached to.
-  ///   - completion: a closure which receives an `OperationConditionResult`.
-  func evaluate(for operation: AdvancedOperation, completion: @escaping (OperationConditionResult) -> Void)
-}
+    let evaluator = ConditionEvaluatorOperation(operation: self, conditions: conditions)
 
-public extension OperationCondition {
+    let selfObserver = WillCancelObserver { [weak evaluator] operation, errors in
+        guard let evaluator = evaluator else {
+          return
+        }
 
-  public var name: String {
-    return String(describing: type(of: self))
+        print("🚩\(operation.operationName) has been cancelled --> cancelling \(evaluator.operationName)")
+        evaluator.cancel(errors: errors)
+    }
+
+    addObserver(selfObserver)
+    evaluator.useOSLog(log)
+
+    for dependency in dependencies {
+      print("🚩 adding \(dependency.operationName) as dependency for \(evaluator.operationName)")
+      evaluator.addDependency(dependency)
+
+    }
+    addDependency(evaluator)
+
+    // giving the same categories to the evaluator: it can start only when the exclusivity conditions are met
+    evaluator.categories = categories
+
+    return evaluator
   }
 
 }

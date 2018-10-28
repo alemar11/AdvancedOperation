@@ -69,7 +69,6 @@ final internal class SelfObservigOperation: AdvancedOperation {
 
   override init() {
     super.init()
-    useOSLog(TestsLog)
   }
 
   override func main() {
@@ -111,8 +110,14 @@ final internal class SelfObservigOperation: AdvancedOperation {
 }
 
 final internal class RunUntilCancelledOperation: AdvancedOperation {
+  let queue: DispatchQueue
+
+  init(queue: DispatchQueue = DispatchQueue.global()) {
+    self.queue = queue
+  }
+
   override func main() {
-    DispatchQueue.global().async {
+    queue.async {
       while !self.isCancelled {
         sleep(1)
       }
@@ -127,29 +132,33 @@ final internal class SleepyAsyncOperation: AdvancedOperation {
   private let interval2: UInt32
   private let interval3: UInt32
 
-  init(interval1: UInt32 = 1, interval2: UInt32 = 2, interval3: UInt32 = 1) {
+  init(interval1: UInt32 = 1, interval2: UInt32 = 1, interval3: UInt32 = 1) {
     self.interval1 = interval1
     self.interval2 = interval2
     self.interval3 = interval3
-    super.init()
-    useOSLog(TestsLog)
   }
 
   override func main() {
     DispatchQueue.global().async { [weak weakSelf = self] in
-      guard let strongSelf = weakSelf else { return self.finish() }
+      guard let strongSelf = weakSelf else {
+        self.finish()
+        return
+      }
+
       if strongSelf.isCancelled {
         strongSelf.finish()
         return
       }
 
       sleep(self.interval1)
+
       if strongSelf.isCancelled {
         strongSelf.finish()
         return
       }
 
       sleep(self.interval2)
+
       if strongSelf.isCancelled {
         strongSelf.finish()
         return
@@ -165,28 +174,52 @@ final internal class SleepyAsyncOperation: AdvancedOperation {
 
 final internal class SleepyOperation: AdvancedOperation {
 
-  override init() {
+  private let interval: UInt32
+
+  init(interval: UInt32 = 1) {
+    self.interval = interval
     super.init()
-    useOSLog(TestsLog)
   }
 
   override func main() {
-    sleep(1)
+    sleep(interval)
     self.finish()
   }
 
 }
 
-final internal class XCTFailOperation: AdvancedOperation {
+final internal class SleepyBlockOperation: AdvancedOperation {
 
-  override init() {
-    super.init()
-    useOSLog(TestsLog)
+  let block: () -> Void
+  let interval: UInt32
+
+  init(interval: UInt32, block: @escaping () -> Void) {
+    self.block = block
+    self.interval = interval
   }
 
   override func main() {
-    XCTFail("This operation should't be executed.")
+    sleep(self.interval)
+    block()
     self.finish()
+  }
+
+}
+
+final internal class NotExecutableOperation: AdvancedOperation {
+
+  override init() {
+    super.init()
+  }
+
+  override func main() {
+    if isCancelled {
+      finish()
+      return
+    }
+
+    XCTFail("This operation shouldn't be executed.")
+    finish()
   }
 
 }
@@ -198,14 +231,13 @@ final internal class FailingAsyncOperation: AdvancedOperation {
 
   init(errors: [MockError] = [MockError.failed, MockError.test]) {
     self.defaultErrors = errors
-    super.init()
-    useOSLog(TestsLog)
   }
 
   override func main() {
-    DispatchQueue.global().asyncAfter(deadline: .now() + 2.0) { [weak weakSelf = self] in
+    DispatchQueue.global().asyncAfter(deadline: .now() + 1.0) { [weak weakSelf = self] in
       guard let strongSelf = weakSelf else {
-        return self.finish()
+        self.finish()
+        return
       }
       strongSelf.finish(errors: strongSelf.defaultErrors)
     }
@@ -220,13 +252,13 @@ final internal class CancellingAsyncOperation: AdvancedOperation {
   init(errors: [MockError] = [MockError.failed, MockError.test]) {
     self.defaultErrors = errors
     super.init()
-    useOSLog(TestsLog)
   }
 
   override func main() {
     DispatchQueue.global().asyncAfter(deadline: .now() + 2.0) { [weak weakSelf = self] in
       guard let strongSelf = weakSelf else {
-        return self.finish()
+        self.finish()
+        return
       }
 
       strongSelf.cancel(errors: strongSelf.defaultErrors)
@@ -355,10 +387,6 @@ final internal class MockObserver: OperationObserving {
     didProduceCount += 1
   }
 
-  func operationDidCompleteConditionsEvaluations(operation: AdvancedOperation, withErrors errors: [Error]) {
-    //TODO
-  }
-
 }
 
 // MARK: - AdvancedOperationQueueDelegate
@@ -423,7 +451,6 @@ internal class IntToStringOperation: AdvancedOperation & OperationInputHaving & 
 
   override init() {
     super.init()
-    useOSLog(TestsLog)
   }
 
   override func main() {
@@ -448,7 +475,6 @@ internal class StringToIntOperation: FunctionOperation<String, Int> {
 
   override init() {
     super.init()
-    useOSLog(TestsLog)
   }
 
   override func main() {
@@ -484,22 +510,6 @@ internal struct AlwaysFailingCondition: OperationCondition {
 internal struct AlwaysSuccessingCondition: OperationCondition {
 
   public func evaluate(for operation: AdvancedOperation, completion: @escaping (OperationConditionResult) -> Void) {
-    completion(.satisfied)
-  }
-
-}
-
-internal struct DependencyCondition: OperationCondition {
-
-  private var dependency: Operation
-
-  init(dependency: AdvancedOperation) {
-    self.dependency = dependency as Operation
-  }
-
-  func dependency(for operation: AdvancedOperation) -> Operation? { return dependency }
-
-  func evaluate(for operation: AdvancedOperation, completion: @escaping (OperationConditionResult) -> Void) {
     completion(.satisfied)
   }
 

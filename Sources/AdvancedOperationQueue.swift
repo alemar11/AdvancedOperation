@@ -45,13 +45,20 @@ open class AdvancedOperationQueue: OperationQueue {
 
   public weak var delegate: AdvancedOperationQueueDelegate?
 
+  public let identifier = UUID()
+
   private let exclusivityManager: ExclusivityManager
 
   private let lock = NSRecursiveLock()
 
+  // TODO: The quality-of-service level set for the underlying dispatch queue overrides any value set for the operation queue's qualityOfService property.
   public init(exclusivityManager: ExclusivityManager = .sharedInstance, underlyingQueue: DispatchQueue? = .none) {
     self.exclusivityManager = exclusivityManager
     super.init()
+
+    /// Apple engineer:
+    /// Unless the property has been set, there is no underlying queue for an NSOperationQueue.
+    /// An NSOperationQueue which hasn't been told to just use a specific one may use (start operations on) MANY different dispatch queues, for various reasons.
     self.underlyingQueue = underlyingQueue
   }
 
@@ -94,20 +101,42 @@ open class AdvancedOperationQueue: OperationQueue {
 
         operation.addObserver(observer)
 
-        let evaluator = operation.evaluateConditions2(exclusivityManager: exclusivityManager)
+        // if !operation.isCancelled && !operation.isFinished && !operation.isExecuting {
 
-        if let evaluator = evaluator {
-          super.addOperation(evaluator)
+        if let evaluator = operation.makeConditionsEvaluator() {
+          addOperation(evaluator)
         }
+
+//          evaluatorOperations.forEach { operation in
+//            //exclusivityManager.addOperation(operation, for: self)
+//            addOperation(operation)
+//          }
+
+//          if let evaluator = evaluator {
+//            exclusivityManager.addOperation(evaluator, for: self)
+//
+//            evaluator.dependencies.forEach{ dependency in
+//              if !super.operations.contains(dependency) {
+//                super.addOperation(dependency)
+//              }
+//            }
+//
+//            super.addOperation(evaluator)
+//          }
+
+          exclusivityManager.addOperation(operation, for: self)
+        //}
 
       } else { /// Operation
 
         // For regular `Operation`s, we'll manually call out to the queue's delegate we don't want
         // to just capture "operation" because that would lead to the operation strongly referencing itself and that's the pure definition of a memory leak.
         operation.addCompletionBlock(asEndingBlock: false) { [weak self, weak operation] in
-          guard let queue = self, let operation = operation else { return }
+          guard let self = self, let operation = operation else {
+            return
+          }
 
-          queue.delegate?.operationQueue(operationQueue: queue, operationDidFinish: operation, withErrors: [])
+          self.delegate?.operationQueue(operationQueue: self, operationDidFinish: operation, withErrors: [])
         }
       }
 
@@ -128,6 +157,10 @@ open class AdvancedOperationQueue: OperationQueue {
         operation.waitUntilFinished()
       }
     }
+  }
+
+  deinit {
+    // exclusivityManager.unregister(queue: self) //TODO
   }
 
 }

@@ -27,66 +27,57 @@ import os.log
 /// An advanced subclass of `Operation`.
 open class AdvancedOperation: Operation {
 
-  // TODO: cancel conditions evaluation if the operation is cancelled?
-
   // MARK: - State
 
+  public final  override var isReady: Bool { return super.isReady && stateLock.synchronized { return !_cancelling } }
   public final override var isExecuting: Bool { return state == .executing }
   public final override var isFinished: Bool { return state == .finished }
   public final override var isCancelled: Bool { return stateLock.synchronized { return _cancelled } }
 
-  internal final var isCancelling: Bool { return stateLock.synchronized { return _cancelHandlerRunning } }
-
-  // MARK: - OperationState
-
-  @objc
-  internal enum OperationState: Int, CustomDebugStringConvertible {
-
-    case ready
-    case executing
-    case finishing
-    case finished
-
-    func canTransition(to state: OperationState) -> Bool {
-      switch (self, state) {
-      case (.ready, .executing):
-        return true
-      case (.ready, .finishing): // early bailing out
-        return true
-      case (.executing, .finishing):
-        return true
-      case (.finishing, .finished):
-        return true
-      default:
-        return false
-      }
-    }
-
-    var debugDescription: String {
-      switch self {
-      case .ready:
-        return "ready"
-      case .executing:
-        return "executing"
-      case .finishing:
-        return "finishing"
-      case .finished:
-        return "finished"
-      }
-    }
-
-  }
-
   // MARK: - Properties
 
   /// Errors generated during the execution.
-  public var errors: [Error] { return _errors.all }
+  public var errors: [Error] { return stateLock.synchronized { _errors } }
+
+  /// Exclusivity categories.
+  internal var categories = Set<String>()
 
   /// An instance of `OSLog` (by default is disabled).
   public private(set) var log = OSLog.disabled
 
   /// Returns `true` if the `AdvancedOperation` has generated errors during its lifetime.
-  public var hasErrors: Bool { return stateLock.synchronized { !errors.isEmpty } }
+  public var hasErrors: Bool { return !errors.isEmpty }
+
+  /// Errors generated during the execution.
+  private var _errors = [Error]()
+
+  /// You can use this method from within the running operation object to get a reference to the operation queue that started it.
+  //// Calling this method from outside the context of a running operation typically results in nil being returned.
+  public var operationQueue: OperationQueue? {
+    return OperationQueue.current
+  }
+
+  // MARK: - Gates
+
+  //  /// Returns `true` is the cancel command has been issued but not yet completed
+  //  internal final var isCancelling: Bool { return stateLock.synchronized { return _cancelling } }
+  //  /// Returns `true` is the finish command has been triggered.
+  //  internal final var isFinishing: Bool { return stateLock.synchronized { return _finishing } }
+  //  /// Returns `true` is the start command has been triggered.
+  //  internal final var isStarting: Bool { return stateLock.synchronized { return _starting } }
+
+  /// Returns `true` if the finish command has been fired and the operation is processing it.
+  private var _finishing = false
+
+  /// Returns `true` if the `AdvancedOperation` is cancelling.
+  private var _cancelling = false
+
+  private var _starting = false
+
+  /// Returns `true` if the `AdvancedOperation` is cancelled.
+  private var _cancelled = false
+
+  // MARK: - State
 
   /// A lock to guard reads and writes to the `_state` property
   private let stateLock = NSRecursiveLock()
@@ -94,23 +85,12 @@ open class AdvancedOperation: Operation {
   /// Private backing stored property for `state`.
   private var _state: OperationState = .ready
 
-  /// Returns `true` if the finish command has been fired and the operation is processing it.
-  private var _finishHandlerRunning = false
-
-  /// Returns `true` if the `AdvancedOperation` is cancelling.
-  private var _cancelHandlerRunning = false
-
-  /// Returns `true` if the `AdvancedOperation` is cancelled.
-  @objc
-  private var _cancelled = false
-
-  /// Errors generated during the execution.
-  private let _errors = SynchronizedArray<Error>()
-
   /// The state of the operation.
   @objc dynamic
   internal var state: OperationState {
-    get { return stateLock.synchronized { _state } }
+    get {
+      return stateLock.synchronized { _state }
+    }
     set {
       stateLock.synchronized {
         assert(_state.canTransition(to: newValue), "Performing an invalid state transition for: \(_state) to: \(newValue).")
@@ -119,12 +99,22 @@ open class AdvancedOperation: Operation {
     }
   }
 
+  open override class func keyPathsForValuesAffectingValue(forKey key: String) -> Set<String> {
+    switch key {
+    case #keyPath(Operation.isReady),
+         #keyPath(Operation.isExecuting),
+         #keyPath(Operation.isFinished):
+      return Set([#keyPath(state)])
+    default:
+      return super.keyPathsForValuesAffectingValue(forKey: key)
+    }
+  }
+
   // MARK: - Life Cycle
 
   deinit {
-    for dependency in dependencies {
-      removeDependency(dependency)
-    }
+    removeDependencies()
+    observers.removeAll()
   }
 
   // MARK: - Observers
@@ -133,43 +123,53 @@ open class AdvancedOperation: Operation {
 
   // MARK: - Execution
 
+  //  lazy var dispatchQueue: DispatchQueue = {
+  //    var qos =  DispatchQoS.unspecified
+  //    switch qualityOfService {
+  //    case .background:
+  //      qos = .background
+  //    case .default:
+  //      qos = .default
+  //    case .utility:
+  //      qos = .utility
+  //    case .userInitiated:
+  //      qos = .userInitiated
+  //    case .userInteractive:
+  //      qos = .userInteractive
+  //    }
+  //
+  //    let queue = DispatchQueue(label: operationName, qos: qos) //, attributes: .concurrent)
+  //    return queue
+  //  }()
+
   public final override func start() {
+    let canBeStarted = stateLock.synchronized { () -> Bool in
+      guard !_starting else { return false }
 
-    // Do not start if it's finishing
-    guard state != .finishing else {
-      return
-    }
+      guard !_finishing else { return false }
 
-    // Bail out early if cancelled or if there are some errors.
-    guard !hasErrors && !isCancelled else {
-      _cancelled = true // an operation not yet cancelled but starting with errors should finish as cancelled
-      finish() // fires KVO
-      return
-    }
+      guard _state == .ready else { return false }
 
-    let canBeExecuted = stateLock.synchronized { () -> Bool in
-      guard isReady else { return false }
-      guard !isExecuting else { return false }
+      _starting = true
       return true
     }
 
-    guard canBeExecuted else { return }
-
-    willChangeValue(forKey: #keyPath(AdvancedOperation.isExecuting))
-    stateLock.synchronized {
-      state = .executing
+    guard canBeStarted else {
+      return
     }
-    didChangeValue(forKey: #keyPath(AdvancedOperation.isExecuting))
 
+    state = .executing
     willExecute()
     main()
+
+    // TODO check if asynchronous/concurrent to call finish() or not automatically
   }
 
   open override func main() {
     fatalError("\(type(of: self)) must override `main()`.")
   }
 
-  open func cancel(errors: [Error]? = .none) {
+  open func cancel(errors: [Error] = []) {
     _cancel(errors: errors)
   }
 
@@ -177,36 +177,33 @@ open class AdvancedOperation: Operation {
     _cancel()
   }
 
-  private final func _cancel(errors cancelErrors: [Error]? = nil) {
+  private final func _cancel(errors cancelErrors: [Error] = []) {
     let canBeCancelled = stateLock.synchronized { () -> Bool in
-      guard !_finishHandlerRunning && !isFinished else { return false }
-      guard !_cancelHandlerRunning && !_cancelled else { return false }
+      guard !_cancelling && !_cancelled else { return false }
+      guard !_finishing || _state != .finished else { return false }
 
-      _cancelHandlerRunning = true
+      _cancelling = true
+      if !cancelErrors.isEmpty { // TSAN _swiftEmptyArrayStorage
+      _errors.append(contentsOf: cancelErrors)
+      }
       return true
     }
 
-    guard canBeCancelled else { return }
-
-    var localErrors = self.errors
-    if let cancelErrors = cancelErrors {
-      localErrors.append(contentsOf: cancelErrors)
+    guard canBeCancelled else {
+      return
     }
 
     willChangeValue(forKey: #keyPath(AdvancedOperation.isCancelled))
-    willCancel(errors: localErrors) // observers
+    willCancel(errors: cancelErrors)
+    stateLock.synchronized {
+      _cancelled = true
+    }
+    didCancel(errors: errors)
+    didChangeValue(forKey: #keyPath(AdvancedOperation.isCancelled))
 
     stateLock.synchronized {
-      if let cancelErrors = cancelErrors {
-        self._errors.append(contentsOf: cancelErrors)
-      }
-
-      _cancelled = true
-      _cancelHandlerRunning = false
+      _cancelling = false
     }
-
-    didCancel(errors: errors) // observers
-    didChangeValue(forKey: #keyPath(AdvancedOperation.isCancelled))
 
     super.cancel() // fires isReady KVO
   }
@@ -215,30 +212,31 @@ open class AdvancedOperation: Operation {
     _finish(errors: errors)
   }
 
-  private final func _finish(errors: [Error] = []) {
+  private final func _finish(errors finishErrors: [Error] = []) {
     let canBeFinished = stateLock.synchronized { () -> Bool in
-      guard _state == .ready || _state == .executing else {
+      guard !_finishing else {
         return false
       }
 
-      _state = .finishing
-      _finishHandlerRunning = true
+      guard _state == .executing else {
+        return false
+      }
+
+      _finishing = true
+      if !finishErrors.isEmpty { // TSAN _swiftEmptyArrayStorage
+      _errors.append(contentsOf: finishErrors)
+      }
       return true
     }
 
-    guard canBeFinished else { return }
-
-    let updatedErrors = stateLock.synchronized { () -> [Error] in
-      self._errors.append(contentsOf: errors)
-      return self.errors
+    guard canBeFinished else {
+      return
     }
 
-    willFinish(errors: updatedErrors)
-    willChangeValue(forKey: #keyPath(AdvancedOperation.isFinished))
+    willFinish(errors: _errors)
     state = .finished
-    didChangeValue(forKey: #keyPath(AdvancedOperation.isFinished))
-    didFinish(errors: updatedErrors)
-    stateLock.synchronized { _finishHandlerRunning = false }
+    didFinish(errors: _errors)
+
   }
 
   // MARK: - Produced Operations
@@ -265,7 +263,12 @@ open class AdvancedOperation: Operation {
   public func addCondition(_ condition: OperationCondition) {
     assert(state == .ready, "Cannot add conditions if the operation is \(state).")
 
-    conditions.append(condition)
+    // TODO, cancellable categories
+    if let exclusivityCondition = condition as? MutuallyExclusiveCondition {
+      categories.insert(exclusivityCondition.name)
+    } else {
+      conditions.append(condition)
+    }
   }
 
   // MARK: - Subclass
@@ -318,17 +321,12 @@ open class AdvancedOperation: Operation {
     os_log("%{public}s is evaluating %{public}d conditions.", log: log, type: .info, operationName, conditions.count)
   }
 
-}
-
-// MARK: - OSLog
-
-extension AdvancedOperation {
+  // MARK: - OSLog
 
   /// Logs all the states of an `AdvancedOperation`.
   ///
   /// - Parameters:
-  ///   - log: A `OSLog` instance.
-  ///   - type: A `OSLogType`.
+  ///   - log: an `OSLog` instance.
   public func useOSLog(_ log: OSLog) {
     self.log = log
   }
@@ -343,7 +341,7 @@ extension AdvancedOperation {
   /// - Parameter observer: the observer to add.
   /// - Requires: `self must not have started.
   public func addObserver(_ observer: OperationObservingType) {
-    assert(!isExecuting, "Cannot modify observers after execution has begun.")
+    assert(state == .ready, "Cannot modify observers after execution has begun.")
 
     observers.append(observer)
   }
@@ -421,109 +419,6 @@ extension AdvancedOperation {
 
     for observer in didCancelObservers {
       observer.operationDidCancel(operation: self, withErrors: errors)
-    }
-  }
-}
-
-// MARK: - Condition Evaluation
-
-extension AdvancedOperation {
-  internal func evaluateConditions2(exclusivityManager: ExclusivityManager) -> GroupOperation? {
-    guard !conditions.isEmpty else {
-      return nil
-    }
-
-    let evaluator = ConditionEvaluatorOperation(conditions: self.conditions, operation: self, exclusivityManager: exclusivityManager)
-    let observer = BlockObserver(willFinish: { [weak self] _, errors in
-      if !errors.isEmpty {
-        self?.cancel(errors: errors)
-      }
-      }, didFinish: nil)
-    evaluator.addObserver(observer)
-
-    evaluator.useOSLog(log)
-
-    for dependency in dependencies {
-      evaluator.addDependency(dependency)
-    }
-    addDependency(evaluator)
-
-    return evaluator
-  }
-
-}
-
-/// Evalutes all the `OperationCondition`: the evaluation fails if it, once finished, contains errors.
-internal final class ConditionEvaluatorOperation: GroupOperation {
-
-  init(conditions: [OperationCondition], operation: AdvancedOperation, exclusivityManager: ExclusivityManager) { //TODO: set
-    super.init(operations: [])
-
-    conditions.forEach { condition in
-      let evaluatingOperation = EvaluateConditionOperation(condition: condition, for: operation)
-
-      if let dependency = condition.dependency(for: operation) {
-        evaluatingOperation.addDependency(dependency)
-        addOperation(operation: dependency)
-      }
-
-      if condition.mutuallyExclusivityMode != .disabled {
-        let category = condition.name
-        let cancellable = condition.mutuallyExclusivityMode == .cancel
-        exclusivityManager.addOperation(operation, category: category, cancellable: cancellable)
-      }
-
-      addOperation(operation: evaluatingOperation)
-    }
-
-    name = "ConditionEvaluatorOperation<\(operation.operationName)>"
-  }
-
-  override func operationWillExecute() {
-    os_log("%{public}s has started evaluating the conditions.", log: log, type: .info, operationName)
-  }
-
-  override func operationDidFinish(errors: [Error]) {
-    os_log("%{public}s has finished evaluating the conditions with %{public}d errors.", log: log, type: .info, operationName, errors.count)
-  }
-
-}
-
-/// Operation responsible to evaluate a single `OperationCondition`.
-internal final class EvaluateConditionOperation: AdvancedOperation, OperationInputHaving, OperationOutputHaving {
-
-  internal weak var input: AdvancedOperation? = .none
-  internal var output: OperationConditionResult? = .none
-
-  let condition: OperationCondition
-
-  internal convenience init(condition: OperationCondition, for operation: AdvancedOperation) {
-    self.init(condition: condition)
-    self.input = operation
-  }
-
-  internal init(condition: OperationCondition) {
-    self.condition = condition
-    super.init()
-    self.name = condition.name
-  }
-
-  internal override func main() {
-    guard let evaluatedOperation = input else {
-      // TODO: add error
-      output = OperationConditionResult.failed([])
-      finish()
-      return
-    }
-
-    condition.evaluate(for: evaluatedOperation) { [weak self] result in
-      guard let self = self else {
-        return
-      }
-
-      self.output = result
-      let errors = result.errors ?? []
-      self.finish(errors: errors)
     }
   }
 }

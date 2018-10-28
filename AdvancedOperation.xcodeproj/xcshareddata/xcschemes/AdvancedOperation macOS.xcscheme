@@ -29,6 +29,7 @@
       enableASanStackUseAfterReturn = "YES"
       enableThreadSanitizer = "YES"
       enableUBSanitizer = "YES"
+      disableMainThreadChecker = "YES"
       codeCoverageEnabled = "YES"
       shouldUseLaunchSchemeArgsEnv = "YES">
       <Testables>

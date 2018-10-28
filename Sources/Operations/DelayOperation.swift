@@ -76,10 +76,20 @@ public final class DelayOperation: AdvancedOperation {
   // MARK: - Methods
 
   public override func main() {
-    guard delay.seconds > 0 else { finish(); return }
+    guard !isCancelled else {
+      finish()
+      return
+    }
+
+    guard delay.seconds > 0 else {
+      finish()
+      return
+    }
 
     queue.asyncAfter(deadline: .now() + delay.seconds) { [weak self] in
-      guard let self = self else { return }
+      guard let self = self else {
+        return
+      }
 
       self.finish()
     }
