@@ -343,7 +343,7 @@ final class GroupOperationTests: XCTestCase {
 
 
   func testMultipleNestedGroupOperations() {
-    let operation1 = BlockOperation(block: { } )
+    let operation1 = BlockOperation { }
     let operation2 = BlockOperation(block: { sleep(2) } )
     let group1 = GroupOperation(operations: [operation1, operation2], exclusivityManager: ExclusivityManager())
     let expectation1 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isFinished), object: group1, expectedValue: true)
