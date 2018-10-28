@@ -125,5 +125,9 @@ script:
       fi
     fi
 
+after_failure:
+  - cat ~/Library/Developer/Xcode/DerivedData/AdvancedOperation-*/Logs/Test/*/*/*/AdvancedOperation*/*/Session-AdvancedOperation*.log
+
 after_success:
-  - sleep 5      
+  - cat ~/Library/Developer/Xcode/DerivedData/AdvancedOperation-*/Logs/Test/*/*/*/AdvancedOperation*/*/Session-AdvancedOperation*.log
+  #- sleep 5      
