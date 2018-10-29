@@ -99,6 +99,7 @@ open class AdvancedOperation: Operation {
     }
   }
 
+  // TODO remove this -> for KVO on every single change?
   open override class func keyPathsForValuesAffectingValue(forKey key: String) -> Set<String> {
     switch key {
     case #keyPath(Operation.isReady),
