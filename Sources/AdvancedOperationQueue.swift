@@ -134,10 +134,10 @@ open class AdvancedOperationQueue: OperationQueue {
     }
 
     if wait {
-      // waitUntilAllOperationsAreFinished()
-      for operation in super.operations {
-        operation.waitUntilFinished()
-      }
+      waitUntilAllOperationsAreFinished()
+//      for operation in super.operations {
+//        operation.waitUntilFinished()
+//      }
     }
   }
 

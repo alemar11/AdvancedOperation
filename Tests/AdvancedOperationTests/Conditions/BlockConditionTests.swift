@@ -35,7 +35,11 @@ class BlockConditionTests: XCTestCase {
 
     let operation = SleepyAsyncOperation()
     operation.addCondition(condition)
+    operation.name = "operation"
+    operation.useOSLog(TestsLog)
+
     queue.addOperations([operation], waitUntilFinished: true)
+
     XCTAssertTrue(operation.isCancelled)
     XCTAssertTrue(operation.hasErrors)
     XCTAssertTrue(operation.isFinished)

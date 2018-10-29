@@ -234,9 +234,7 @@ open class AdvancedOperation: Operation {
     }
 
     willFinish(errors: _errors)
-    stateLock.synchronized {
-      state = .finished
-    }
+    state = .finished
     didFinish(errors: _errors)
 
   }
