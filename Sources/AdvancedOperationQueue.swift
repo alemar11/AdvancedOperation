@@ -124,7 +124,9 @@ open class AdvancedOperationQueue: OperationQueue {
 //            super.addOperation(evaluator)
 //          }
 
+        if !operation.categories.isEmpty {
           exclusivityManager.addOperation(operation, for: self)
+        }
         //}
 
       } else { /// Operation
