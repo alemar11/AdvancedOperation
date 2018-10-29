@@ -61,13 +61,6 @@ open class AdvancedOperation: Operation {
 
   // TODO: rename these variables
 
-  //  /// Returns `true` is the cancel command has been issued but not yet completed
-  //  internal final var isCancelling: Bool { return stateLock.synchronized { return _cancelling } }
-  //  /// Returns `true` is the finish command has been triggered.
-  //  internal final var isFinishing: Bool { return stateLock.synchronized { return _finishing } }
-  //  /// Returns `true` is the start command has been triggered.
-  //  internal final var isStarting: Bool { return stateLock.synchronized { return _starting } }
-
   /// Returns `true` if the finish command has been fired and the operation is processing it.
   private var _finishing = false
 
