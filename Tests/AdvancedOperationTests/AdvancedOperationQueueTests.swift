@@ -340,6 +340,11 @@ final class AdvancedOperationQueueTests: XCTestCase {
     queue.addOperation(operation4)
 
     waitForExpectations(timeout: 10)
+
+    XCTAssertTrue(operation1.isFinished)
+    XCTAssertTrue(operation2.isFinished)
+    XCTAssertTrue(operation3.isFinished)
+    XCTAssertTrue(operation4.isFinished)
   }
 
   func testQueueWithCancel() {
