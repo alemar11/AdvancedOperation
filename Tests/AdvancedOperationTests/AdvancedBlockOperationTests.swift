@@ -124,8 +124,11 @@ final class AdvancedBlockOperationTests: XCTestCase {
     operation1.then(adapterOperation).then(operation2).then(operation3)
     let manager = ExclusivityManager()
     let queue = AdvancedOperationQueue(exclusivityManager: manager)
+
     queue.addOperations([operation1, operation2, operation3, adapterOperation], waitUntilFinished: false)
+
     waitForExpectations(timeout: 10)
+    
     XCTAssertTrue(operation1.isFinished)
     XCTAssertTrue(operation2.isCancelled)
     XCTAssertTrue(operation3.isFinished)

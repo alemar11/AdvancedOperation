@@ -43,7 +43,7 @@ public extension AdvancedOperationQueueDelegate {
 /// `AdvancedOperationQueue` is an `OperationQueue` subclass that implements a large number of "extra features" related to the `Operation` class.
 open class AdvancedOperationQueue: OperationQueue {
 
-  public weak var delegate: AdvancedOperationQueueDelegate?
+  public weak var delegate: AdvancedOperationQueueDelegate? = .none
 
   public let identifier = UUID()
 

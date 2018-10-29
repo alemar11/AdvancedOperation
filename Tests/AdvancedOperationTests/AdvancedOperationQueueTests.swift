@@ -244,7 +244,7 @@ final class AdvancedOperationQueueTests: XCTestCase {
     let delegate = MockOperationQueueDelegate()
 
     queue.delegate = delegate
-    queue.isSuspended = true
+    queue.isSuspended = true // https://api.travis-ci.org/v3/job/447679744/log.txt
 
     let operation1 = SleepyOperation(interval: 0)
     let operation2 = BlockOperation { }
