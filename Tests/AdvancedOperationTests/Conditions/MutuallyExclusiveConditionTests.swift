@@ -251,7 +251,7 @@ final class MutuallyExclusiveConditionTests: XCTestCase {
     XCTAssertEqual(text, "A B C. 🎉")
   }
 
-  func testExclusivityManager() {
+  func testExclusivityManager() { // TODO: test crashed
     let expectation1 = expectation(description: "\(#function)\(#line)")
     let expectation2 = expectation(description: "\(#function)\(#line)")
     let expectation3 = expectation(description: "\(#function)\(#line)")

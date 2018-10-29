@@ -34,7 +34,7 @@ open class GroupOperation: AdvancedOperation {
   // MARK: - Private Properties
 
   /// Internal `AdvancedOperationQueue`.
-  private let underlyingOperationQueue: AdvancedOperationQueue
+  private let underlyingOperationQueue = AdvancedOperationQueue() // TODO remove exclusivity manager
 
   /// Internal starting operation.
   private lazy var startingOperation = BlockOperation { }
@@ -101,12 +101,12 @@ open class GroupOperation: AdvancedOperation {
   ///   - underlyingQueue: An optional DispatchQueue which defaults to nil, this parameter is set as the underlying queue of the group's own `AdvancedOperationQueue`.
   public init(operations: [Operation], exclusivityManager: ExclusivityManager = .sharedInstance, underlyingQueue: DispatchQueue? = .none) {
     self.exclusivityManager = exclusivityManager
-    self.underlyingOperationQueue = AdvancedOperationQueue(exclusivityManager: exclusivityManager, underlyingQueue: underlyingQueue)
 
     super.init()
 
     self.underlyingOperationQueue.isSuspended = true
     self.underlyingOperationQueue.delegate = self
+    self.underlyingOperationQueue.underlyingQueue = underlyingQueue
 
     self.startingOperation.name = "Star<\(operationName)>"
     self.underlyingOperationQueue.addOperation(startingOperation)
@@ -153,12 +153,11 @@ open class GroupOperation: AdvancedOperation {
 
     /// every operation is finished after a cancellation
     if isReady {
-      isSuspended = false
+      queueSuspendLock.synchronized {
+        underlyingOperationQueue.isSuspended = false
+      }
     }
 
-//    if isReady {
-//      run()
-//    }
   }
 
   open override func cancel() {
@@ -173,11 +172,17 @@ open class GroupOperation: AdvancedOperation {
       return
     }
 
-    isSuspended = false
+    queueSuspendLock.synchronized {
+      if !_suspended {
+        underlyingOperationQueue.isSuspended = false
+      }
+    }
   }
 
   open override func finish(errors: [Error] = []) {
-    isSuspended = true
+    queueSuspendLock.synchronized {
+      underlyingOperationQueue.isSuspended = true
+    }
     super.finish(errors: errors)
   }
 
@@ -189,31 +194,33 @@ open class GroupOperation: AdvancedOperation {
     underlyingOperationQueue.addOperation(operation)
   }
 
-  /// Lock to manage the underlyingOperationQueue properties.
-  private let queueLock = NSLock()
-
   /// The maximum number of queued operations that can execute at the same time.
   /// - Note: Reducing the number of concurrent operations does not affect any operations that are currently executing.
   public final var maxConcurrentOperationCount: Int {
     get {
-      return queueLock.synchronized { underlyingOperationQueue.maxConcurrentOperationCount }
+      return queueSuspendLock.synchronized { underlyingOperationQueue.maxConcurrentOperationCount }
     }
     set {
-      queueLock.synchronized {
+      queueSuspendLock.synchronized {
         underlyingOperationQueue.maxConcurrentOperationCount = newValue
       }
     }
   }
 
+  /// Lock to manage the underlyingOperationQueue isSuspended property.
+  private let queueSuspendLock = NSLock() //TODO rename or use different lock for different properties
+
+  private var _suspended = false
+
   /// A Boolean value indicating whether the GroupOpeation is actively scheduling operations for execution.
-  @objc
   public final var isSuspended: Bool {
     get {
-      return queueLock.synchronized { underlyingOperationQueue.isSuspended }
+      return queueSuspendLock.synchronized { _suspended }
     }
     set {
-      queueLock.synchronized {
+      queueSuspendLock.synchronized {
         underlyingOperationQueue.isSuspended = newValue
+        _suspended = newValue
       }
     }
   }
@@ -221,10 +228,10 @@ open class GroupOperation: AdvancedOperation {
   /// Accesses the group operation queue's quality of service. It defaults to background quality.
   public final override var qualityOfService: QualityOfService {
     get {
-      return queueLock.synchronized { underlyingOperationQueue.qualityOfService }
+      return queueSuspendLock.synchronized { underlyingOperationQueue.qualityOfService }
     }
     set(value) {
-      queueLock.synchronized { underlyingOperationQueue.qualityOfService = value }
+      queueSuspendLock.synchronized { underlyingOperationQueue.qualityOfService = value }
     }
   }
 
