@@ -101,33 +101,13 @@ open class AdvancedOperationQueue: OperationQueue {
 
         operation.addObserver(observer)
 
-        // if !operation.isCancelled && !operation.isFinished && !operation.isExecuting {
-
         if let evaluator = operation.makeConditionsEvaluator() {
           addOperation(evaluator)
         }
 
-//          evaluatorOperations.forEach { operation in
-//            //exclusivityManager.addOperation(operation, for: self)
-//            addOperation(operation)
-//          }
-
-//          if let evaluator = evaluator {
-//            exclusivityManager.addOperation(evaluator, for: self)
-//
-//            evaluator.dependencies.forEach{ dependency in
-//              if !super.operations.contains(dependency) {
-//                super.addOperation(dependency)
-//              }
-//            }
-//
-//            super.addOperation(evaluator)
-//          }
-
         if !operation.categories.isEmpty {
           exclusivityManager.addOperation(operation, for: self)
         }
-        //}
 
       } else { /// Operation
 
