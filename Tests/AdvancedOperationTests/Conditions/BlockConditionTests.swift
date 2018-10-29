@@ -26,7 +26,7 @@ import XCTest
 
 class BlockConditionTests: XCTestCase {
 
-  func testFailedCondition() {
+  func testFailedCondition() { //TODO: infinite wait
     let manager = ExclusivityManager()
     let queue = AdvancedOperationQueue(exclusivityManager: manager)
     let condition = BlockCondition { () -> Bool in

@@ -27,17 +27,17 @@ public protocol AdvancedOperationQueueDelegate: class {
   func operationQueue(operationQueue: AdvancedOperationQueue, willAddOperation operation: Operation)
   func operationQueue(operationQueue: AdvancedOperationQueue, didAddOperation operation: Operation)
 
-  func operationQueue(operationQueue: AdvancedOperationQueue, operationWillExecute operation: Operation)
+  func operationQueue(operationQueue: AdvancedOperationQueue, operationWillExecute operation: AdvancedOperation)
   func operationQueue(operationQueue: AdvancedOperationQueue, operationDidFinish operation: Operation, withErrors errors: [Error])
-  func operationQueue(operationQueue: AdvancedOperationQueue, operationDidCancel operation: Operation, withErrors errors: [Error])
+  func operationQueue(operationQueue: AdvancedOperationQueue, operationDidCancel operation: AdvancedOperation, withErrors errors: [Error])
 
-  func operationQueue(operationQueue: AdvancedOperationQueue, operationWillFinish operation: Operation, withErrors errors: [Error])
-  func operationQueue(operationQueue: AdvancedOperationQueue, operationWillCancel operation: Operation, withErrors errors: [Error])
+  func operationQueue(operationQueue: AdvancedOperationQueue, operationWillFinish operation: AdvancedOperation, withErrors errors: [Error])
+  func operationQueue(operationQueue: AdvancedOperationQueue, operationWillCancel operation: AdvancedOperation, withErrors errors: [Error])
 }
 
 public extension AdvancedOperationQueueDelegate {
   func operationQueue(operationQueue: AdvancedOperationQueue, willAddOperation operation: Operation) {}
-  func operationQueue(operationQueue: AdvancedOperationQueue, operationWillExecute operation: Operation) {}
+  func operationQueue(operationQueue: AdvancedOperationQueue, operationWillExecute operation: AdvancedOperation) {}
 }
 
 /// `AdvancedOperationQueue` is an `OperationQueue` subclass that implements a large number of "extra features" related to the `Operation` class.

@@ -259,12 +259,13 @@ extension GroupOperation: AdvancedOperationQueueDelegate {
 
   public func operationQueue(operationQueue: AdvancedOperationQueue, didAddOperation operation: Operation) { }
 
-  public func operationQueue(operationQueue: AdvancedOperationQueue, operationWillFinish operation: Operation, withErrors errors: [Error]) {
+  public func operationQueue(operationQueue: AdvancedOperationQueue, operationWillFinish operation: AdvancedOperation, withErrors errors: [Error]) {
     guard operationQueue === underlyingOperationQueue else {
       return
     }
 
     guard operation !== finishingOperation && operation !== startingOperation else {
+      assertionFailure("There shouldn't be Operations but only AdvancedOperations in this delegate implementation call.")
       return
     }
 
@@ -289,8 +290,8 @@ extension GroupOperation: AdvancedOperationQueueDelegate {
   }
   }
 
-  public func operationQueue(operationQueue: AdvancedOperationQueue, operationWillCancel operation: Operation, withErrors errors: [Error]) { }
+  public func operationQueue(operationQueue: AdvancedOperationQueue, operationWillCancel operation: AdvancedOperation, withErrors errors: [Error]) { }
 
-  public func operationQueue(operationQueue: AdvancedOperationQueue, operationDidCancel operation: Operation, withErrors errors: [Error]) { }
+  public func operationQueue(operationQueue: AdvancedOperationQueue, operationDidCancel operation: AdvancedOperation, withErrors errors: [Error]) { }
 
 }
