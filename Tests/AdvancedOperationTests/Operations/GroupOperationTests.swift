@@ -324,12 +324,12 @@ final class GroupOperationTests: XCTestCase {
     let operation2 = BlockOperation(block: { sleep(2) } )
     let group1 = GroupOperation(operations: [operation1, operation2], exclusivityManager: ExclusivityManager())
 
-    let operation3 = SleepyOperation()
-    let operation4 = SleepyAsyncOperation(interval1: 1, interval2: 1, interval3: 1)
+    let operation3 = BlockOperation(block: { } )
+    let operation4 = BlockOperation(block: { } )
     let operation5 = BlockOperation(block: { sleep(1) } )
     let group2 = GroupOperation(operations: operation3, operation4, operation5, exclusivityManager: ExclusivityManager())
 
-    let operation6 = SleepyAsyncOperation(interval1: 0, interval2: 0, interval3: 1)
+    let operation6 = BlockOperation(block: { } )
 
     let group = GroupOperation(operations: group1, group2, operation6, exclusivityManager: ExclusivityManager())
     let exepectation1 = expectation(description: "\(#function)\(#line)")
