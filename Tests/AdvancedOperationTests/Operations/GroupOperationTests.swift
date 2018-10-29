@@ -58,13 +58,8 @@ final class GroupOperationTests: XCTestCase {
     let expectation1 = XCTKVOExpectation(keyPath: #keyPath(GroupOperation.isCancelled), object: group, expectedValue: true)
 
     operation1.name = "operation1"
-    operation1.useOSLog(TestsLog)
-
     operation2.name = "operation2"
-    operation2.useOSLog(TestsLog)
-
     group.name = "group"
-    group.useOSLog(TestsLog)
 
     XCTAssertEqual(group.maxConcurrentOperationCount, OperationQueue.defaultMaxConcurrentOperationCount)
     XCTAssertFalse(group.isSuspended)
@@ -93,13 +88,8 @@ final class GroupOperationTests: XCTestCase {
     let expectation2 = XCTKVOExpectation(keyPath: #keyPath(GroupOperation.isFinished), object: group, expectedValue: true)
 
     operation1.name = "operation1"
-    operation1.useOSLog(TestsLog)
-
     operation2.name = "operation2"
-    operation2.useOSLog(TestsLog)
-
     group.name = "group"
-    group.useOSLog(TestsLog)
 
     XCTAssertEqual(group.maxConcurrentOperationCount, OperationQueue.defaultMaxConcurrentOperationCount)
     XCTAssertFalse(group.isSuspended)
