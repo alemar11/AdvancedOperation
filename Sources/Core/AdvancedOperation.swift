@@ -59,6 +59,8 @@ open class AdvancedOperation: Operation {
 
   // MARK: - Gates
 
+  // TODO: rename these variables
+
   //  /// Returns `true` is the cancel command has been issued but not yet completed
   //  internal final var isCancelling: Bool { return stateLock.synchronized { return _cancelling } }
   //  /// Returns `true` is the finish command has been triggered.
