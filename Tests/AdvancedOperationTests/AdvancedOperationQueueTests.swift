@@ -607,27 +607,4 @@ final class AdvancedOperationQueueTests: XCTestCase {
     XCTAssertNil(weakOperation4, "Leak: operation4 should be nilled out. The queue has still \(queue!.operations.count) operations.")
   }
 
-  /// OperationQueue behaviour when is deallocated with operations to run.
-  func testOperationRetainedUnitisExecuted() {
-    let expectation1 = self.expectation(description: "test")
-    let operation1 = AdvancedBlockOperation { complete in complete([]) }
-    operation1.completionBlock = {
-      expectation1.fulfill()
-    }
-
-    var queue1: AdvancedOperationQueue? = AdvancedOperationQueue(exclusivityManager: ExclusivityManager())
-    weak var weakQueue1 = queue1
-    queue1!.isSuspended = true
-    queue1!.addOperation(operation1)
-
-    autoreleasepool {
-      queue1 = nil
-    }
-
-    // https://stackoverflow.com/questions/24415246/are-nsoperationqueues-retained-automatically-while-running
-    XCTAssertNotNil(weakQueue1) // a queue is not released until its operation are not finished
-    weakQueue1!.isSuspended = false
-    waitForExpectations(timeout: 10)
-    XCTAssertNil(weakQueue1)
-  }
 }
