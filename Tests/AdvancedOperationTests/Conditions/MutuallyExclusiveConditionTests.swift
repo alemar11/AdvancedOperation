@@ -258,8 +258,7 @@ final class MutuallyExclusiveConditionTests: XCTestCase {
     let expectation4 = expectation(description: "\(#function)\(#line)")
 
     var text = ""
-    let manager = ExclusivityManager()
-    let queue = AdvancedOperationQueue(exclusivityManager: manager)
+    let queue = AdvancedOperationQueue(exclusivityManager: ExclusivityManager())
     queue.isSuspended = true
 
     let operation1 = AdvancedBlockOperation { text += "A " }
