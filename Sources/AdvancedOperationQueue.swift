@@ -110,9 +110,6 @@ open class AdvancedOperationQueue: OperationQueue {
         }
 
       } else { /// Operation
-
-        // For regular `Operation`s, we'll manually call out to the queue's delegate we don't want
-        // to just capture "operation" because that would lead to the operation strongly referencing itself and that's the pure definition of a memory leak.
         operation.addCompletionBlock(asEndingBlock: false) { [weak self, weak operation] in
           guard let self = self, let operation = operation else {
             return
