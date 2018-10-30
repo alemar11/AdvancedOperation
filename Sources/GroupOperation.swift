@@ -122,7 +122,7 @@ open class GroupOperation: AdvancedOperation {
     super.init()
 
     self.underlyingOperationQueue.delegate = self
-    self.startingOperation.name = "Star<\(operationName)>"
+    self.startingOperation.name = "Start<\(operationName)>"
     self.underlyingOperationQueue.addOperation(startingOperation)
     self.finishingOperation.name = "End<\(operationName)>"
     self.finishingOperation.addDependency(startingOperation)
