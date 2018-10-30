@@ -146,6 +146,7 @@ open class GroupOperation: AdvancedOperation {
       operation.cancel()
     }
 
+    // TODO
     // find opeartion not executing, reverse the order (hoping that they are enqueue in a serial way) --> cancel
     // find operation executing, reverse the order -> cancel and wait
 
