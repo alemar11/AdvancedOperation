@@ -64,8 +64,8 @@ final class MutuallyExclusiveConditionTests: XCTestCase {
     operation2.addCondition(MutuallyExclusiveCondition(name: "A"))
     operation2.name = "operation2"
 
-    operation1.useOSLog(TestsLog)
-    operation2.useOSLog(TestsLog)
+    let expectation1 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isFinished), object: operation1, expectedValue: true)
+    let expectation2 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isFinished), object: operation2, expectedValue: true)
 
     operation2.addDependency(operation1)
 
@@ -73,9 +73,6 @@ final class MutuallyExclusiveConditionTests: XCTestCase {
     // to avoid a dependecy cycle between the two operations.
     queue.addOperation(operation2)
     queue.addOperation(operation1)
-
-    let expectation1 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isFinished), object: operation1, expectedValue: true)
-    let expectation2 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isFinished), object: operation2, expectedValue: true)
 
     wait(for: [expectation1, expectation2], timeout: 15)
   }
