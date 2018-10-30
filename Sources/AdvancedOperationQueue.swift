@@ -127,7 +127,7 @@ open class AdvancedOperationQueue: OperationQueue {
 
   open override func addOperations(_ operations: [Operation], waitUntilFinished wait: Bool) {
     operations.forEach(addOperation)
-    
+
     if wait {
       waitUntilAllOperationsAreFinished()
 //      for operation in super.operations {
