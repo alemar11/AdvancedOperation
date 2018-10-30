@@ -214,7 +214,7 @@ open class GroupOperation: AdvancedOperation {
   }
 
   /// Lock to manage the underlyingOperationQueue isSuspended property.
-  private let queueLock = NSLock() //TODO rename or use different lock for different properties
+  private let queueLock = NSLock()
 
   private var _suspended = false
 
