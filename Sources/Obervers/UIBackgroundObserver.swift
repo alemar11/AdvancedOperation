@@ -103,7 +103,7 @@ public final class UIBackgroundObserver: NSObject {
 
 }
 
-extension UIBackgroundObserver: OperationDidFinishObserving {
+extension UIBackgroundObserver: OperationWillExecuteObserving & OperationDidFinishObserving {
 
   public func operationWillExecute(operation: AdvancedOperation) {
     isExecuting = true

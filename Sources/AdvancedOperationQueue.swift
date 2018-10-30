@@ -75,7 +75,7 @@ open class AdvancedOperationQueue: OperationQueue {
           }, didProduce: { [weak self] in
             guard let self = self else { return }
 
-            self.addOperation($1)
+            self.addOperation($1) //TODO: test this code
 
           }, willCancel: { [weak self] (operation, errors) in
             guard let self = self else { return }
@@ -127,7 +127,7 @@ open class AdvancedOperationQueue: OperationQueue {
 
   open override func addOperations(_ operations: [Operation], waitUntilFinished wait: Bool) {
     operations.forEach(addOperation)
-    
+
     if wait {
       waitUntilAllOperationsAreFinished()
 //      for operation in super.operations {

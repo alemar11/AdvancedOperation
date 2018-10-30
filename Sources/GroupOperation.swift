@@ -26,15 +26,10 @@ import os.log
 
 open class GroupOperation: AdvancedOperation {
 
-  // MARK: - Public Properties
-
-  /// ExclusivityManager used by `AdvancedOperationQueue`.
-  public let exclusivityManager: ExclusivityManager
-
   // MARK: - Private Properties
 
   /// Internal `AdvancedOperationQueue`.
-  private let underlyingOperationQueue = AdvancedOperationQueue() // TODO remove exclusivity manager
+  private let underlyingOperationQueue: AdvancedOperationQueue
 
   /// Internal starting operation.
   private lazy var startingOperation = BlockOperation { }
@@ -73,9 +68,9 @@ open class GroupOperation: AdvancedOperation {
   }
 
   public override func useOSLog(_ log: OSLog) {
-    super.useOSLog(log) //TODO improve this for addOperation
+    super.useOSLog(log)
     underlyingOperationQueue.operations.forEach { operation in
-      if let advancedOperation = operation as? AdvancedOperation {
+      if let advancedOperation = operation as? AdvancedOperation, advancedOperation.log === OSLog.disabled {
         advancedOperation.useOSLog(log)
       }
     }
@@ -88,9 +83,20 @@ open class GroupOperation: AdvancedOperation {
   /// - Parameters:
   ///   - operations: The operations of which the `GroupOperation` is composed of.
   ///   - exclusivityManager: An instance of `ExclusivityManager`.
+  ///   - qualityOfService: The default service level to apply to operations executed using the queue.
+  ///   - maxConcurrentOperationCount: The maximum number of queued operations that can execute at the same time.
   ///   - underlyingQueue: An optional DispatchQueue which defaults to nil, this parameter is set as the underlying queue of the group's own `AdvancedOperationQueue`.
-  public convenience init(operations: Operation..., exclusivityManager: ExclusivityManager = .sharedInstance, underlyingQueue: DispatchQueue? = .none) {
-    self.init(operations: operations, exclusivityManager: exclusivityManager, underlyingQueue: underlyingQueue)
+  /// - Note: If the operation object has an explicit quality of service level set, that value is used instead.
+  public convenience init(operations: Operation...,
+                          exclusivityManager: ExclusivityManager = .sharedInstance,
+                          qualityOfService: QualityOfService = .default,
+                          maxConcurrentOperationCount: Int = OperationQueue.defaultMaxConcurrentOperationCount,
+                          underlyingQueue: DispatchQueue? = .none) {
+    self.init(operations: operations,
+              exclusivityManager: exclusivityManager,
+              qualityOfService: qualityOfService,
+              maxConcurrentOperationCount: maxConcurrentOperationCount,
+              underlyingQueue: underlyingQueue)
   }
 
   /// Creates a `GroupOperation`instance.
@@ -98,19 +104,26 @@ open class GroupOperation: AdvancedOperation {
   /// - Parameters:
   ///   - operations: The operations of which the `GroupOperation` is composed of.
   ///   - exclusivityManager: An instance of `ExclusivityManager`.
+  ///   - qualityOfService: The default service level to apply to operations executed using the queue.
+  ///   - maxConcurrentOperationCount: The maximum number of queued operations that can execute at the same time.
   ///   - underlyingQueue: An optional DispatchQueue which defaults to nil, this parameter is set as the underlying queue of the group's own `AdvancedOperationQueue`.
-  public init(operations: [Operation], exclusivityManager: ExclusivityManager = .sharedInstance, underlyingQueue: DispatchQueue? = .none) {
-    self.exclusivityManager = exclusivityManager
+  /// - Note: If the operation object has an explicit quality of service level set, that value is used instead.
+  public init(operations: [Operation],
+              exclusivityManager: ExclusivityManager = .sharedInstance,
+              qualityOfService: QualityOfService = .default,
+              maxConcurrentOperationCount: Int = OperationQueue.defaultMaxConcurrentOperationCount,
+              underlyingQueue: DispatchQueue? = .none) {
+    let queue = AdvancedOperationQueue(exclusivityManager: exclusivityManager, underlyingQueue: underlyingQueue)
+    queue.qualityOfService = qualityOfService
+    queue.maxConcurrentOperationCount = maxConcurrentOperationCount
+    queue.isSuspended = true
+    self.underlyingOperationQueue = queue //EXC_BAD_ACCESS possible fix
 
     super.init()
 
-    self.underlyingOperationQueue.isSuspended = true
     self.underlyingOperationQueue.delegate = self
-    self.underlyingOperationQueue.underlyingQueue = underlyingQueue
-
     self.startingOperation.name = "Star<\(operationName)>"
     self.underlyingOperationQueue.addOperation(startingOperation)
-
     self.finishingOperation.name = "End<\(operationName)>"
     self.finishingOperation.addDependency(startingOperation)
     self.underlyingOperationQueue.addOperation(finishingOperation)
@@ -118,6 +131,10 @@ open class GroupOperation: AdvancedOperation {
     for operation in operations {
       addOperation(operation: operation)
     }
+  }
+
+  deinit {
+    self.underlyingOperationQueue.delegate = nil
   }
 
   private var _cancellationTriggered = false
@@ -198,6 +215,10 @@ open class GroupOperation: AdvancedOperation {
     finishingOperation.addDependency(operation)
     operation.addDependency(startingOperation)
     underlyingOperationQueue.addOperation(operation)
+
+    if let advancedOperation = operation as? AdvancedOperation, advancedOperation.log === OSLog.disabled {
+      advancedOperation.useOSLog(log)
+    }
   }
 
   /// The maximum number of queued operations that can execute at the same time.
@@ -231,7 +252,8 @@ open class GroupOperation: AdvancedOperation {
     }
   }
 
-  /// Accesses the group operation queue's quality of service. It defaults to background quality.
+  /// This property specifies the service level applied to operation objects added to the `GroupOperation`. (It defaults to the `default` quality.)
+  /// If the operation object has an explicit service level set, that value is used instead.
   public final override var qualityOfService: QualityOfService {
     get {
       return queueLock.synchronized { underlyingOperationQueue.qualityOfService }
