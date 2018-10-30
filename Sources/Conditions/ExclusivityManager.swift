@@ -53,7 +53,6 @@ final public class ExclusivityManager { //TODO: implement cancel mode
   }
 
   internal func unregister(queue: AdvancedOperationQueue) {
-    print("☠️☠️☠️")
     self.queue.sync {
       _queues.removeAll { $0.queue?.identifier == queue.identifier }
     }
@@ -134,7 +133,6 @@ private final class QueueContainer {
   }
 
   deinit {
-    print("☠️")
     token.invalidate()
   }
 }
