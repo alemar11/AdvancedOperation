@@ -68,9 +68,9 @@ open class GroupOperation: AdvancedOperation {
   }
 
   public override func useOSLog(_ log: OSLog) {
-    super.useOSLog(log) //TODO improve this for addOperation
+    super.useOSLog(log)
     underlyingOperationQueue.operations.forEach { operation in
-      if let advancedOperation = operation as? AdvancedOperation {
+      if let advancedOperation = operation as? AdvancedOperation, advancedOperation.log === OSLog.disabled {
         advancedOperation.useOSLog(log)
       }
     }
@@ -113,17 +113,17 @@ open class GroupOperation: AdvancedOperation {
               qualityOfService: QualityOfService = .default,
               maxConcurrentOperationCount: Int = OperationQueue.defaultMaxConcurrentOperationCount,
               underlyingQueue: DispatchQueue? = .none) {
-    self.underlyingOperationQueue = AdvancedOperationQueue(exclusivityManager: exclusivityManager, underlyingQueue: underlyingQueue)
+    let queue = AdvancedOperationQueue(exclusivityManager: exclusivityManager, underlyingQueue: underlyingQueue)
+    queue.qualityOfService = qualityOfService
+    queue.maxConcurrentOperationCount = maxConcurrentOperationCount
+    queue.isSuspended = true
+    self.underlyingOperationQueue = queue //EXC_BAD_ACCESS possible fix
+
     super.init()
 
-    self.underlyingOperationQueue.isSuspended = true
     self.underlyingOperationQueue.delegate = self
-    self.underlyingOperationQueue.qualityOfService = qualityOfService
-    self.underlyingOperationQueue.maxConcurrentOperationCount = maxConcurrentOperationCount
-
     self.startingOperation.name = "Star<\(operationName)>"
     self.underlyingOperationQueue.addOperation(startingOperation)
-
     self.finishingOperation.name = "End<\(operationName)>"
     self.finishingOperation.addDependency(startingOperation)
     self.underlyingOperationQueue.addOperation(finishingOperation)
@@ -131,6 +131,10 @@ open class GroupOperation: AdvancedOperation {
     for operation in operations {
       addOperation(operation: operation)
     }
+  }
+
+  deinit {
+    self.underlyingOperationQueue.delegate = nil
   }
 
   private var _cancellationTriggered = false
@@ -211,6 +215,10 @@ open class GroupOperation: AdvancedOperation {
     finishingOperation.addDependency(operation)
     operation.addDependency(startingOperation)
     underlyingOperationQueue.addOperation(operation)
+
+    if let advancedOperation = operation as? AdvancedOperation, advancedOperation.log === OSLog.disabled {
+      advancedOperation.useOSLog(log)
+    }
   }
 
   /// The maximum number of queued operations that can execute at the same time.

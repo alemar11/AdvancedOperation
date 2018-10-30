@@ -128,7 +128,7 @@ final class AdvancedBlockOperationTests: XCTestCase {
     queue.addOperations([operation1, operation2, operation3, adapterOperation], waitUntilFinished: false)
 
     waitForExpectations(timeout: 10)
-    
+
     XCTAssertTrue(operation1.isFinished)
     XCTAssertTrue(operation2.isCancelled)
     XCTAssertTrue(operation3.isFinished)
