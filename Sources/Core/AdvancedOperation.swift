@@ -39,9 +39,6 @@ open class AdvancedOperation: Operation {
   /// Errors generated during the execution.
   public var errors: [Error] { return stateLock.synchronized { _errors } }
 
-  /// Exclusivity categories.
-  internal var categories = Set<String>()
-
   /// An instance of `OSLog` (by default is disabled).
   public private(set) var log = OSLog.disabled
 
@@ -256,15 +253,23 @@ open class AdvancedOperation: Operation {
 
   public private(set) var conditions = [OperationCondition]()
 
+  internal var mutuallyExclusiveConditions: [MutuallyExclusiveCondition] {
+    guard !conditions.isEmpty else { // TSAN _swiftEmptyArrayStorage
+      return []
+    }
+    return conditions.compactMap { $0 as? MutuallyExclusiveCondition }
+  }
+
+  internal var executionConditions: [OperationCondition] {
+    guard !conditions.isEmpty else { // TSAN _swiftEmptyArrayStorage
+      return []
+    }
+    return conditions.filter{ !($0 is MutuallyExclusiveCondition) }
+  }
+
   public func addCondition(_ condition: OperationCondition) {
     assert(state == .ready, "Cannot add conditions if the operation is \(state).")
-
-    // TODO, cancellable categories
-    if let exclusivityCondition = condition as? MutuallyExclusiveCondition {
-      categories.insert(exclusivityCondition.name)
-    } else {
-      conditions.append(condition)
-    }
+    conditions.append(condition)
   }
 
   // MARK: - Subclass

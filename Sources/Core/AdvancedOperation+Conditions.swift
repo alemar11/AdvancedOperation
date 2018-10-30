@@ -28,7 +28,12 @@ import Foundation
 internal extension AdvancedOperation {
 
   func makeConditionsEvaluator() -> AdvancedOperation? {
-    guard !conditions.isEmpty else {
+    // The evaluator works only with execution conditions
+    guard !executionConditions.isEmpty else {
+      return nil
+    }
+
+    guard !(self is ConditionEvaluatorOperation) else {
       return nil
     }
 
@@ -53,8 +58,8 @@ internal extension AdvancedOperation {
     }
     addDependency(evaluator)
 
-    // giving the same categories to the evaluator: it can start only when the exclusivity conditions are met
-    evaluator.categories = categories
+    // giving the same mutually execlusive conditions to the evaluator so it can start only when the exclusivity conditions are met
+    mutuallyExclusiveConditions.forEach(evaluator.addCondition)
 
     return evaluator
   }

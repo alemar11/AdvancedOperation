@@ -105,7 +105,7 @@ open class AdvancedOperationQueue: OperationQueue {
           addOperation(evaluator)
         }
 
-        if !operation.categories.isEmpty {
+        if !operation.mutuallyExclusiveConditions.isEmpty {
           exclusivityManager.addOperation(operation, for: self)
         }
 

@@ -35,21 +35,21 @@ final public class ExclusivityManager { //TODO: implement cancel mode
   public init() { }
 
   internal func register(queue: AdvancedOperationQueue) {
-      let results = _queues.filter { $0.queue?.identifier == queue.identifier }
+    let results = _queues.filter { $0.queue?.identifier == queue.identifier }
 
-      if results.isEmpty {
-        let token = queue.observe(\.isSuspended, options: [.prior]) { [weak self] queue, change in
-        print("🚩 \(String(describing: self)) \(change) - \(queue)")
-          // is suspended:
-          // check all the other queues and remove all the dependencies of this queue
+    if results.isEmpty {
+      let token = queue.observe(\.isSuspended, options: [.prior]) { [weak self] queue, change in
+        print("⍟ \(String(describing: self)) \(change) - \(queue)")
+        // is suspended:
+        // check all the other queues and remove all the dependencies of this queue
 
-          // not suspended
-          // get all mutual exclusivity operation and set the dependencers
-        }
-
-        let container = QueueContainer(queue: queue, token: token)
-        _queues.append(container)
+        // not suspended
+        // get all mutual exclusivity operation and set the dependencers
       }
+
+      let container = QueueContainer(queue: queue, token: token)
+      _queues.append(container)
+    }
   }
 
   internal func unregister(queue: AdvancedOperationQueue) {
@@ -91,9 +91,9 @@ final public class ExclusivityManager { //TODO: implement cancel mode
 
   internal func addOperation(_ operation: AdvancedOperation, for queue: AdvancedOperationQueue) {
     self.queue.sync {
-      let categories = operation.categories
+      let conditions = operation.mutuallyExclusiveConditions
 
-      guard !categories.isEmpty else {
+      guard !conditions.isEmpty else {
         return
       }
 
@@ -101,25 +101,83 @@ final public class ExclusivityManager { //TODO: implement cancel mode
 
       /// Searches all the operations already enqueued for these categories in the current queue or in
       /// all the not suspended queues.
+      //      let queues = _queues.compactMap { $0.queue }.filter { $0 === queue || !$0.isSuspended && !$0.operations.isEmpty }
+      //
+      //      guard !queues.isEmpty else {
+      //        return
+      //      }
+
       let queues = _queues.compactMap { $0.queue }.filter { $0 === queue || !$0.isSuspended && !$0.operations.isEmpty }
 
-      guard !queues.isEmpty else {
-        return
+      let cancelConditions = conditions.filter { return $0.mutuallyExclusivityMode == .cancel }
+
+      for condition in cancelConditions {
+        let operations = searchAdvancedOperations(in: queues, forExclusivityName: condition.name).filter { $0 !== operation && !operation.dependencies.contains($0) && !$0.dependencies.contains(operation)}
+
+        if !operations.isEmpty {
+          operation.cancel()
+          return
+        }
       }
 
-      let allAdvancedOperations = queues.flatMap { $0.operations }.compactMap { $0 as? AdvancedOperation }
-      let operationsFilteredByCategories = allAdvancedOperations.filter { $0.categories.contains(where: categories.contains) }
+      let enqueueConditions = conditions.filter { return $0.mutuallyExclusivityMode == .enqueue }
 
-      print("🔴 \(operation.operationName) has found \(operationsFilteredByCategories.count) for categories: \(categories)")
+      for condition in enqueueConditions {
+        let operations = searchAdvancedOperations(in: queues, forExclusivityName: condition.name).filter { $0 !== operation && !operation.dependencies.contains($0) && !$0.dependencies.contains(operation) }
+        //          operations.forEach { operation.addDependency($0) }
+        //          operations.forEach({ ope in
+        //            print("\t\t--> adding \(ope.operationName) as dependency for  \(operation.operationName)")
+        //          })
+        //print("\t\t--> adding \(operationForCategory.operationName) as dependency for  \(operation.operationName)")
+        //operation.addDependency(operationForCategory)
 
-      for operationForCategory in operationsFilteredByCategories where operationForCategory !== operation {
-        if !operation.dependencies.contains(operationForCategory) && !operationForCategory.dependencies.contains(operation) {
-          print("\t\t--> adding \(operationForCategory.operationName) as dependency for  \(operation.operationName)")
-          operation.addDependency(operationForCategory)
+        print("\n \(operation.operationName): found \(operations.count) operations for \(condition.name)")
+
+        for operationForCategory in operations where operationForCategory !== operation {
+          if !operation.dependencies.contains(operationForCategory) && !operationForCategory.dependencies.contains(operation) {
+            print("\t\t--> 🔹 adding \(operationForCategory.operationName) as dependency for  \(operation.operationName)")
+            operation.addDependency(operationForCategory)
+          }
         }
+
       }
     }
   }
+
+  //  private var advancedOperations: [AdvancedOperation] {
+  //    let queues = _queues.compactMap { $0.queue }.filter { $0 === current_queue || !$0.isSuspended && !$0.operations.isEmpty }
+  //
+  //    guard !queues.isEmpty else {
+  //      return []
+  //    }
+  //
+  //    let operations = queues.flatMap { $0.operations }.compactMap { $0 as? AdvancedOperation }
+  //    return operations
+  //  }
+
+  private func searchAdvancedOperations(in queues: [AdvancedOperationQueue], forExclusivityName category: String) -> [AdvancedOperation] {
+    guard !queues.isEmpty else {
+      return []
+    }
+
+    let advancedOperations = queues.flatMap { $0.operations }.compactMap { $0 as? AdvancedOperation }
+
+    let operations = advancedOperations.filter { return $0.mutuallyExclusiveConditions.contains(where: { (condition) -> Bool in
+      condition.name == category
+    }) }
+
+    return operations
+  }
+
+  /// Searches for all the operations with a given category in every **not** suspended queue.
+  //  private func operationsForCategory(_ category: String) -> [AdvancedOperation] {
+  //    //let operations = advancedOperations.filter { $0.executionConditions.compactMap { $0.name }.contains(category) }
+  //    print(advancedOperations.count)
+  //    let operations = advancedOperations.filter { return $0.exclusivityConditions.contains(where: { (condition) -> Bool in
+  //      condition.name == category
+  //    }) }
+  //    return operations
+  //  }
 
 }
 

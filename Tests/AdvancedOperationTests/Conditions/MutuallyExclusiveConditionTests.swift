@@ -56,11 +56,11 @@ final class MutuallyExclusiveConditionTests: XCTestCase {
   func testDependencyCycle() {
     let queue = AdvancedOperationQueue(exclusivityManager: ExclusivityManager())
 
-    let operation1 = SleepyAsyncOperation()
+    let operation1 = SleepyAsyncOperation(interval1: 0, interval2: 0, interval3: 1)
     operation1.addCondition(MutuallyExclusiveCondition(name: "A"))
     operation1.name = "operation1"
 
-    let operation2 = SleepyAsyncOperation()
+    let operation2 = SleepyAsyncOperation(interval1: 1, interval2: 0, interval3: 0)
     operation2.addCondition(MutuallyExclusiveCondition(name: "A"))
     operation2.name = "operation2"
 
