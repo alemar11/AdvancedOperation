@@ -107,6 +107,8 @@ final public class ExclusivityManager { //TODO: implement cancel mode
       //        return
       //      }
 
+
+      //TODO: improve these nested loops
       let queues = _queues.compactMap { $0.queue }.filter { $0 === queue || !$0.isSuspended && !$0.operations.isEmpty }
 
       let cancelConditions = conditions.filter { return $0.mutuallyExclusivityMode == .cancel }

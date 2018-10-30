@@ -23,6 +23,8 @@
 
 import Foundation
 
+// TODO create another protocol to differentiate between ExecutionCondition And ExclusiveCondition
+
 /// A generic condition for describing kinds of operations that may not execute concurrently.
 public struct MutuallyExclusiveCondition: OperationCondition {
 
