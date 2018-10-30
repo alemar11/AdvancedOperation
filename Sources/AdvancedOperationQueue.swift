@@ -75,7 +75,7 @@ open class AdvancedOperationQueue: OperationQueue {
           }, didProduce: { [weak self] in
             guard let self = self else { return }
 
-            self.addOperation($1)
+            self.addOperation($1) //TODO: test this code
 
           }, willCancel: { [weak self] (operation, errors) in
             guard let self = self else { return }
