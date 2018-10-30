@@ -239,12 +239,12 @@ final class AdvancedOperationQueueTests: XCTestCase {
     waitForExpectations(timeout: 10)
   }
 
-  func testQueueWithMixedOperations() {
+  func testQueueWithMixedOperations() {  // TODO: test crashed
     let queue = AdvancedOperationQueue(exclusivityManager: ExclusivityManager())
     let delegate = MockOperationQueueDelegate()
 
     queue.delegate = delegate
-    queue.isSuspended = true
+    queue.isSuspended = true // https://api.travis-ci.org/v3/job/447679744/log.txt
 
     let operation1 = SleepyOperation(interval: 0)
     let operation2 = BlockOperation { }
@@ -340,6 +340,11 @@ final class AdvancedOperationQueueTests: XCTestCase {
     queue.addOperation(operation4)
 
     waitForExpectations(timeout: 10)
+
+    XCTAssertTrue(operation1.isFinished)
+    XCTAssertTrue(operation2.isFinished)
+    XCTAssertTrue(operation3.isFinished)
+    XCTAssertTrue(operation4.isFinished)
   }
 
   func testQueueWithCancel() {
@@ -601,4 +606,5 @@ final class AdvancedOperationQueueTests: XCTestCase {
     XCTAssertNil(weakOperation3, "Leak: operation3 should be nilled out. The queue has still \(queue!.operations.count) operations.")
     XCTAssertNil(weakOperation4, "Leak: operation4 should be nilled out. The queue has still \(queue!.operations.count) operations.")
   }
+
 }

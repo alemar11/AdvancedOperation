@@ -27,23 +27,23 @@ public protocol AdvancedOperationQueueDelegate: class {
   func operationQueue(operationQueue: AdvancedOperationQueue, willAddOperation operation: Operation)
   func operationQueue(operationQueue: AdvancedOperationQueue, didAddOperation operation: Operation)
 
-  func operationQueue(operationQueue: AdvancedOperationQueue, operationWillExecute operation: Operation)
+  func operationQueue(operationQueue: AdvancedOperationQueue, operationWillExecute operation: AdvancedOperation)
   func operationQueue(operationQueue: AdvancedOperationQueue, operationDidFinish operation: Operation, withErrors errors: [Error])
-  func operationQueue(operationQueue: AdvancedOperationQueue, operationDidCancel operation: Operation, withErrors errors: [Error])
+  func operationQueue(operationQueue: AdvancedOperationQueue, operationDidCancel operation: AdvancedOperation, withErrors errors: [Error])
 
-  func operationQueue(operationQueue: AdvancedOperationQueue, operationWillFinish operation: Operation, withErrors errors: [Error])
-  func operationQueue(operationQueue: AdvancedOperationQueue, operationWillCancel operation: Operation, withErrors errors: [Error])
+  func operationQueue(operationQueue: AdvancedOperationQueue, operationWillFinish operation: AdvancedOperation, withErrors errors: [Error])
+  func operationQueue(operationQueue: AdvancedOperationQueue, operationWillCancel operation: AdvancedOperation, withErrors errors: [Error])
 }
 
 public extension AdvancedOperationQueueDelegate {
   func operationQueue(operationQueue: AdvancedOperationQueue, willAddOperation operation: Operation) {}
-  func operationQueue(operationQueue: AdvancedOperationQueue, operationWillExecute operation: Operation) {}
+  func operationQueue(operationQueue: AdvancedOperationQueue, operationWillExecute operation: AdvancedOperation) {}
 }
 
 /// `AdvancedOperationQueue` is an `OperationQueue` subclass that implements a large number of "extra features" related to the `Operation` class.
 open class AdvancedOperationQueue: OperationQueue {
 
-  public weak var delegate: AdvancedOperationQueueDelegate?
+  public weak var delegate: AdvancedOperationQueueDelegate? = .none
 
   public let identifier = UUID()
 
@@ -101,36 +101,15 @@ open class AdvancedOperationQueue: OperationQueue {
 
         operation.addObserver(observer)
 
-        // if !operation.isCancelled && !operation.isFinished && !operation.isExecuting {
-
         if let evaluator = operation.makeConditionsEvaluator() {
           addOperation(evaluator)
         }
 
-//          evaluatorOperations.forEach { operation in
-//            //exclusivityManager.addOperation(operation, for: self)
-//            addOperation(operation)
-//          }
-
-//          if let evaluator = evaluator {
-//            exclusivityManager.addOperation(evaluator, for: self)
-//
-//            evaluator.dependencies.forEach{ dependency in
-//              if !super.operations.contains(dependency) {
-//                super.addOperation(dependency)
-//              }
-//            }
-//
-//            super.addOperation(evaluator)
-//          }
-
+        if !operation.categories.isEmpty {
           exclusivityManager.addOperation(operation, for: self)
-        //}
+        }
 
       } else { /// Operation
-
-        // For regular `Operation`s, we'll manually call out to the queue's delegate we don't want
-        // to just capture "operation" because that would lead to the operation strongly referencing itself and that's the pure definition of a memory leak.
         operation.addCompletionBlock(asEndingBlock: false) { [weak self, weak operation] in
           guard let self = self, let operation = operation else {
             return
@@ -147,20 +126,18 @@ open class AdvancedOperationQueue: OperationQueue {
   }
 
   open override func addOperations(_ operations: [Operation], waitUntilFinished wait: Bool) {
-    for operation in operations {
-      addOperation(operation)
-    }
-
+    operations.forEach(addOperation)
+    
     if wait {
-      // waitUntilAllOperationsAreFinished()
-      for operation in super.operations {
-        operation.waitUntilFinished()
-      }
+      waitUntilAllOperationsAreFinished()
+//      for operation in super.operations {
+//        operation.waitUntilFinished()
+//      }
     }
   }
 
   deinit {
-    // exclusivityManager.unregister(queue: self) //TODO
+    exclusivityManager.unregister(queue: self)
   }
 
 }

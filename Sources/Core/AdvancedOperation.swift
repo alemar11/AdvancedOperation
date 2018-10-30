@@ -59,12 +59,7 @@ open class AdvancedOperation: Operation {
 
   // MARK: - Gates
 
-  //  /// Returns `true` is the cancel command has been issued but not yet completed
-  //  internal final var isCancelling: Bool { return stateLock.synchronized { return _cancelling } }
-  //  /// Returns `true` is the finish command has been triggered.
-  //  internal final var isFinishing: Bool { return stateLock.synchronized { return _finishing } }
-  //  /// Returns `true` is the start command has been triggered.
-  //  internal final var isStarting: Bool { return stateLock.synchronized { return _starting } }
+  // TODO: rename these variables
 
   /// Returns `true` if the finish command has been fired and the operation is processing it.
   private var _finishing = false
@@ -99,6 +94,7 @@ open class AdvancedOperation: Operation {
     }
   }
 
+  // TODO remove this -> for KVO on every single change?
   open override class func keyPathsForValuesAffectingValue(forKey key: String) -> Set<String> {
     switch key {
     case #keyPath(Operation.isReady),
@@ -347,26 +343,44 @@ extension AdvancedOperation {
   }
 
   internal var willExecuteObservers: [OperationWillExecuteObserving] {
+    guard !observers.isEmpty else { // TSAN _swiftEmptyArrayStorage
+      return []
+    }
     return observers.compactMap { $0 as? OperationWillExecuteObserving }
   }
 
   internal var didProduceOperationObservers: [OperationDidProduceOperationObserving] {
+    guard !observers.isEmpty else { // TSAN _swiftEmptyArrayStorage
+      return []
+    }
     return observers.compactMap { $0 as? OperationDidProduceOperationObserving }
   }
 
   internal var willCancelObservers: [OperationWillCancelObserving] {
+    guard !observers.isEmpty else { // TSAN _swiftEmptyArrayStorage
+      return []
+    }
     return observers.compactMap { $0 as? OperationWillCancelObserving }
   }
 
   internal var didCancelObservers: [OperationDidCancelObserving] {
+    guard !observers.isEmpty else { // TSAN _swiftEmptyArrayStorage
+      return []
+    }
     return observers.compactMap { $0 as? OperationDidCancelObserving }
   }
 
   internal var willFinishObservers: [OperationWillFinishObserving] {
+    guard !observers.isEmpty else { // TSAN _swiftEmptyArrayStorage
+      return []
+    }
     return observers.compactMap { $0 as? OperationWillFinishObserving }
   }
 
   internal var didFinishObservers: [OperationDidFinishObserving] {
+    guard !observers.isEmpty else { // TSAN _swiftEmptyArrayStorage
+      return []
+    }
     return observers.compactMap { $0 as? OperationDidFinishObserving }
   }
 

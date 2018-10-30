@@ -34,7 +34,7 @@ open class GroupOperation: AdvancedOperation {
   // MARK: - Private Properties
 
   /// Internal `AdvancedOperationQueue`.
-  private let underlyingOperationQueue: AdvancedOperationQueue
+  private let underlyingOperationQueue = AdvancedOperationQueue() // TODO remove exclusivity manager
 
   /// Internal starting operation.
   private lazy var startingOperation = BlockOperation { }
@@ -101,19 +101,19 @@ open class GroupOperation: AdvancedOperation {
   ///   - underlyingQueue: An optional DispatchQueue which defaults to nil, this parameter is set as the underlying queue of the group's own `AdvancedOperationQueue`.
   public init(operations: [Operation], exclusivityManager: ExclusivityManager = .sharedInstance, underlyingQueue: DispatchQueue? = .none) {
     self.exclusivityManager = exclusivityManager
-    self.underlyingOperationQueue = AdvancedOperationQueue(exclusivityManager: exclusivityManager, underlyingQueue: underlyingQueue)
 
     super.init()
 
-    underlyingOperationQueue.isSuspended = true
-    underlyingOperationQueue.delegate = self
+    self.underlyingOperationQueue.isSuspended = true
+    self.underlyingOperationQueue.delegate = self
+    self.underlyingOperationQueue.underlyingQueue = underlyingQueue
 
-    startingOperation.name = "StartingOperation<\(operationName)>"
-    underlyingOperationQueue.addOperation(startingOperation)
+    self.startingOperation.name = "Star<\(operationName)>"
+    self.underlyingOperationQueue.addOperation(startingOperation)
 
-    finishingOperation.name = "FinishingOperation<\(operationName)>"
-    finishingOperation.addDependency(startingOperation)
-    underlyingOperationQueue.addOperation(finishingOperation)
+    self.finishingOperation.name = "End<\(operationName)>"
+    self.finishingOperation.addDependency(startingOperation)
+    self.underlyingOperationQueue.addOperation(finishingOperation)
 
     for operation in operations {
       addOperation(operation: operation)
@@ -146,19 +146,19 @@ open class GroupOperation: AdvancedOperation {
       operation.cancel()
     }
 
+    // TODO
     // find opeartion not executing, reverse the order (hoping that they are enqueue in a serial way) --> cancel
     // find operation executing, reverse the order -> cancel and wait
 
     /// once all the operations will be cancelled and then finished, the finishing operation will be called
 
-    /// every operation is finished after a cancellation
-    if isReady {
-      isSuspended = false
+    if !isExecuting && !isFinished {
+      // if it's ready or pending (waiting for depedencies)
+      queueLock.synchronized {
+        underlyingOperationQueue.isSuspended = false
+      }
     }
 
-//    if isReady {
-//      run()
-//    }
   }
 
   open override func cancel() {
@@ -168,16 +168,27 @@ open class GroupOperation: AdvancedOperation {
   /// Performs the receiver’s non-concurrent task.
   /// - Note: If overridden, be sure to call the parent `main` as the **end** of the new implementation.
   open override func main() {
+    // if it's cancelling, the finish command we be called automatically
+    if lock.synchronized({ _cancellationTriggered }) && !isCancelled {
+      return
+    }
+
     if isCancelled {
       finish()
       return
     }
 
-    isSuspended = false
+    queueLock.synchronized {
+      if !_suspended {
+        underlyingOperationQueue.isSuspended = false
+      }
+    }
   }
 
   open override func finish(errors: [Error] = []) {
-    isSuspended = true
+    queueLock.synchronized {
+      underlyingOperationQueue.isSuspended = true
+    }
     super.finish(errors: errors)
   }
 
@@ -188,9 +199,6 @@ open class GroupOperation: AdvancedOperation {
     operation.addDependency(startingOperation)
     underlyingOperationQueue.addOperation(operation)
   }
-
-  /// Lock to manage the underlyingOperationQueue properties.
-  private let queueLock = NSLock()
 
   /// The maximum number of queued operations that can execute at the same time.
   /// - Note: Reducing the number of concurrent operations does not affect any operations that are currently executing.
@@ -205,15 +213,20 @@ open class GroupOperation: AdvancedOperation {
     }
   }
 
+  /// Lock to manage the underlyingOperationQueue isSuspended property.
+  private let queueLock = NSLock()
+
+  private var _suspended = false
+
   /// A Boolean value indicating whether the GroupOpeation is actively scheduling operations for execution.
-  @objc
   public final var isSuspended: Bool {
     get {
-      return queueLock.synchronized { underlyingOperationQueue.isSuspended }
+      return queueLock.synchronized { _suspended }
     }
     set {
       queueLock.synchronized {
         underlyingOperationQueue.isSuspended = newValue
+        _suspended = newValue
       }
     }
   }
@@ -252,12 +265,13 @@ extension GroupOperation: AdvancedOperationQueueDelegate {
 
   public func operationQueue(operationQueue: AdvancedOperationQueue, didAddOperation operation: Operation) { }
 
-  public func operationQueue(operationQueue: AdvancedOperationQueue, operationWillFinish operation: Operation, withErrors errors: [Error]) {
+  public func operationQueue(operationQueue: AdvancedOperationQueue, operationWillFinish operation: AdvancedOperation, withErrors errors: [Error]) {
     guard operationQueue === underlyingOperationQueue else {
       return
     }
 
     guard operation !== finishingOperation && operation !== startingOperation else {
+      assertionFailure("There shouldn't be Operations but only AdvancedOperations in this delegate implementation call.")
       return
     }
 
@@ -282,8 +296,8 @@ extension GroupOperation: AdvancedOperationQueueDelegate {
   }
   }
 
-  public func operationQueue(operationQueue: AdvancedOperationQueue, operationWillCancel operation: Operation, withErrors errors: [Error]) { }
+  public func operationQueue(operationQueue: AdvancedOperationQueue, operationWillCancel operation: AdvancedOperation, withErrors errors: [Error]) { }
 
-  public func operationQueue(operationQueue: AdvancedOperationQueue, operationDidCancel operation: Operation, withErrors errors: [Error]) { }
+  public func operationQueue(operationQueue: AdvancedOperationQueue, operationDidCancel operation: AdvancedOperation, withErrors errors: [Error]) { }
 
 }

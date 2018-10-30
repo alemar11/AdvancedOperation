@@ -79,7 +79,7 @@ internal extension SynchronizedArray {
   /// Returns an array containing the non-nil results of calling the given transformation with each element of this sequence.
   func compactMap<K>(transform: (Element) throws -> K?) rethrows -> [K] {
     return try queue.sync {
-      if self.array.isEmpty { // TSAN _swiftEmptyArrayStorage
+      guard !self.array.isEmpty else { // TSAN _swiftEmptyArrayStorage
         return []
       }
       let result = try self.array.compactMap(transform)

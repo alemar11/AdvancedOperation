@@ -54,10 +54,6 @@
 		232F9445217F29AE00A86699 /* AdvancedOperation+OperationState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 232F9443217F29AE00A86699 /* AdvancedOperation+OperationState.swift */; };
 		232F9446217F29AE00A86699 /* AdvancedOperation+OperationState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 232F9443217F29AE00A86699 /* AdvancedOperation+OperationState.swift */; };
 		232F9447217F29AE00A86699 /* AdvancedOperation+OperationState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 232F9443217F29AE00A86699 /* AdvancedOperation+OperationState.swift */; };
-		233078BB217DF81000BE5AB5 /* _EvaluateConditionOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 233078BA217DF81000BE5AB5 /* _EvaluateConditionOperation.swift */; };
-		233078BC217DF81000BE5AB5 /* _EvaluateConditionOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 233078BA217DF81000BE5AB5 /* _EvaluateConditionOperation.swift */; };
-		233078BD217DF81000BE5AB5 /* _EvaluateConditionOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 233078BA217DF81000BE5AB5 /* _EvaluateConditionOperation.swift */; };
-		233078BE217DF81000BE5AB5 /* _EvaluateConditionOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 233078BA217DF81000BE5AB5 /* _EvaluateConditionOperation.swift */; };
 		233078C0217DF83000BE5AB5 /* ConditionEvaluatorOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 233078BF217DF83000BE5AB5 /* ConditionEvaluatorOperation.swift */; };
 		233078C1217DF83000BE5AB5 /* ConditionEvaluatorOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 233078BF217DF83000BE5AB5 /* ConditionEvaluatorOperation.swift */; };
 		233078C2217DF83000BE5AB5 /* ConditionEvaluatorOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 233078BF217DF83000BE5AB5 /* ConditionEvaluatorOperation.swift */; };
@@ -238,7 +234,6 @@
 		232C452D215A898000B73E79 /* UIBackgroundObserver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIBackgroundObserver.swift; sourceTree = "<group>"; };
 		232F3AAD206041DE00FC45CB /* Globals.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Globals.swift; sourceTree = "<group>"; };
 		232F9443217F29AE00A86699 /* AdvancedOperation+OperationState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AdvancedOperation+OperationState.swift"; sourceTree = "<group>"; };
-		233078BA217DF81000BE5AB5 /* _EvaluateConditionOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = _EvaluateConditionOperation.swift; sourceTree = "<group>"; };
 		233078BF217DF83000BE5AB5 /* ConditionEvaluatorOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConditionEvaluatorOperation.swift; sourceTree = "<group>"; };
 		234130871F9605F5002BE7FC /* AdvancedOperation.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = AdvancedOperation.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		2341308A1F9605F5002BE7FC /* AdvancedOperation.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AdvancedOperation.h; sourceTree = "<group>"; };
@@ -505,7 +500,6 @@
 		236F54BA206CE5390079B033 /* Operations */ = {
 			isa = PBXGroup;
 			children = (
-				233078BA217DF81000BE5AB5 /* _EvaluateConditionOperation.swift */,
 				23F24D2620079CDE00B25A03 /* DelayOperation.swift */,
 				233078BF217DF83000BE5AB5 /* ConditionEvaluatorOperation.swift */,
 			);
@@ -558,8 +552,6 @@
 				234130831F9605F5002BE7FC /* Frameworks */,
 				234130841F9605F5002BE7FC /* Headers */,
 				234130851F9605F5002BE7FC /* Resources */,
-				23FA7FB8210C7B54004F7AE7 /* Cleanup */,
-				23FA7FB9210C7B64004F7AE7 /* Swift Lint */,
 			);
 			buildRules = (
 			);
@@ -823,7 +815,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "if which swiftlint >/dev/null; then\nswiftlint\nelse\necho \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi";
+			shellScript = "if which swiftlint >/dev/null; then\nswiftlint\nelse\necho \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\n";
 		};
 		23DC2C822014F5E000270CA3 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -837,34 +829,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "#!/bin/sh\ndirectories=(Sources Tests)\n\nfor directory in \"${directories[@]}\"\ndo\necho \"Cleaning whitespace in directory: $directory\"\nfind $directory -iregex '.*\\.swift' -exec sed -E -i '' -e 's/[[:blank:]]*$//' {} \\;\ndone";
-		};
-		23FA7FB8210C7B54004F7AE7 /* Cleanup */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = Cleanup;
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "#!/bin/sh\ndirectories=(Sources Tests)\n\nfor directory in \"${directories[@]}\"\ndo\necho \"Cleaning whitespace in directory: $directory\"\nfind $directory -iregex '.*\\.swift' -exec sed -E -i '' -e 's/[[:blank:]]*$//' {} \\;\ndone";
-		};
-		23FA7FB9210C7B64004F7AE7 /* Swift Lint */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "Swift Lint";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "if which swiftlint >/dev/null; then\nswiftlint\nelse\necho \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -885,7 +849,6 @@
 				232F9444217F29AE00A86699 /* AdvancedOperation+OperationState.swift in Sources */,
 				239BC52220EB7539009A36D9 /* Operation+Injection.swift in Sources */,
 				23830CA320615E7C00F6EBC9 /* NSLock+Utils.swift in Sources */,
-				233078BB217DF81000BE5AB5 /* _EvaluateConditionOperation.swift in Sources */,
 				2326CC25206E6199001876A2 /* OperationConditionResult.swift in Sources */,
 				23A813B12020CF1E008A98E0 /* AdvancedBlockOperation.swift in Sources */,
 				235D08B0206A498400F70142 /* NoCancelledDependenciesCondition.swift in Sources */,
@@ -920,7 +883,6 @@
 				232F9445217F29AE00A86699 /* AdvancedOperation+OperationState.swift in Sources */,
 				239BC52320EB7539009A36D9 /* Operation+Injection.swift in Sources */,
 				23830CA420615E7C00F6EBC9 /* NSLock+Utils.swift in Sources */,
-				233078BC217DF81000BE5AB5 /* _EvaluateConditionOperation.swift in Sources */,
 				2326CC26206E6199001876A2 /* OperationConditionResult.swift in Sources */,
 				23A813B22020CF1E008A98E0 /* AdvancedBlockOperation.swift in Sources */,
 				235D08B7206A498400F70142 /* NoCancelledDependenciesCondition.swift in Sources */,
@@ -955,7 +917,6 @@
 				232F9446217F29AE00A86699 /* AdvancedOperation+OperationState.swift in Sources */,
 				239BC52420EB7539009A36D9 /* Operation+Injection.swift in Sources */,
 				23830CA520615E7C00F6EBC9 /* NSLock+Utils.swift in Sources */,
-				233078BD217DF81000BE5AB5 /* _EvaluateConditionOperation.swift in Sources */,
 				2326CC27206E6199001876A2 /* OperationConditionResult.swift in Sources */,
 				23A813B32020CF1E008A98E0 /* AdvancedBlockOperation.swift in Sources */,
 				235D08BE206A498500F70142 /* NoCancelledDependenciesCondition.swift in Sources */,
@@ -990,7 +951,6 @@
 				232F9447217F29AE00A86699 /* AdvancedOperation+OperationState.swift in Sources */,
 				239BC52520EB7539009A36D9 /* Operation+Injection.swift in Sources */,
 				23830CA620615E7C00F6EBC9 /* NSLock+Utils.swift in Sources */,
-				233078BE217DF81000BE5AB5 /* _EvaluateConditionOperation.swift in Sources */,
 				2326CC28206E6199001876A2 /* OperationConditionResult.swift in Sources */,
 				23A813B42020CF1E008A98E0 /* AdvancedBlockOperation.swift in Sources */,
 				235D08C5206A498500F70142 /* NoCancelledDependenciesCondition.swift in Sources */,
@@ -1246,6 +1206,7 @@
 				APPLICATION_EXTENSION_API_ONLY = YES;
 				BITCODE_GENERATION_MODE = marker;
 				CLANG_ENABLE_MODULES = YES;
+				CLANG_STATIC_ANALYZER_MODE = shallow;
 				CODE_SIGN_IDENTITY = "";
 				CODE_SIGN_STYLE = Automatic;
 				DEFINES_MODULE = YES;
@@ -1259,6 +1220,7 @@
 				MACOSX_DEPLOYMENT_TARGET = 10.13;
 				PRODUCT_BUNDLE_IDENTIFIER = org.tinrobots.AdvancedOperation;
 				PRODUCT_NAME = AdvancedOperation;
+				RUN_CLANG_STATIC_ANALYZER = YES;
 				SKIP_INSTALL = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 4.2;
@@ -1274,6 +1236,7 @@
 				APPLICATION_EXTENSION_API_ONLY = YES;
 				BITCODE_GENERATION_MODE = bitcode;
 				CLANG_ENABLE_MODULES = YES;
+				CLANG_STATIC_ANALYZER_MODE = shallow;
 				CODE_SIGN_IDENTITY = "";
 				CODE_SIGN_STYLE = Automatic;
 				DEFINES_MODULE = YES;
@@ -1288,6 +1251,7 @@
 				MACOSX_DEPLOYMENT_TARGET = 10.13;
 				PRODUCT_BUNDLE_IDENTIFIER = org.tinrobots.AdvancedOperation;
 				PRODUCT_NAME = AdvancedOperation;
+				RUN_CLANG_STATIC_ANALYZER = YES;
 				SKIP_INSTALL = YES;
 				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -1316,6 +1280,7 @@
 				MACOSX_DEPLOYMENT_TARGET = 10.13;
 				PRODUCT_BUNDLE_IDENTIFIER = org.tinrobots.AdvancedOperation;
 				PRODUCT_NAME = AdvancedOperation;
+				RUN_CLANG_STATIC_ANALYZER = YES;
 				SDKROOT = macosx;
 				SKIP_INSTALL = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -1345,6 +1310,7 @@
 				MACOSX_DEPLOYMENT_TARGET = 10.13;
 				PRODUCT_BUNDLE_IDENTIFIER = org.tinrobots.AdvancedOperation;
 				PRODUCT_NAME = AdvancedOperation;
+				RUN_CLANG_STATIC_ANALYZER = YES;
 				SDKROOT = macosx;
 				SKIP_INSTALL = YES;
 				SWIFT_VERSION = 4.2;
@@ -1371,6 +1337,7 @@
 				MACOSX_DEPLOYMENT_TARGET = 10.13;
 				PRODUCT_BUNDLE_IDENTIFIER = org.tinrobots.AdvancedOperation;
 				PRODUCT_NAME = AdvancedOperation;
+				RUN_CLANG_STATIC_ANALYZER = YES;
 				SDKROOT = appletvos;
 				SKIP_INSTALL = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -1400,6 +1367,7 @@
 				MACOSX_DEPLOYMENT_TARGET = 10.13;
 				PRODUCT_BUNDLE_IDENTIFIER = org.tinrobots.AdvancedOperation;
 				PRODUCT_NAME = AdvancedOperation;
+				RUN_CLANG_STATIC_ANALYZER = YES;
 				SDKROOT = appletvos;
 				SKIP_INSTALL = YES;
 				SWIFT_VERSION = 4.2;
@@ -1427,6 +1395,7 @@
 				MACOSX_DEPLOYMENT_TARGET = 10.13;
 				PRODUCT_BUNDLE_IDENTIFIER = org.tinrobots.AdvancedOperation;
 				PRODUCT_NAME = AdvancedOperation;
+				RUN_CLANG_STATIC_ANALYZER = YES;
 				SDKROOT = watchos;
 				SKIP_INSTALL = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -1455,6 +1424,7 @@
 				MACOSX_DEPLOYMENT_TARGET = 10.13;
 				PRODUCT_BUNDLE_IDENTIFIER = org.tinrobots.AdvancedOperation;
 				PRODUCT_NAME = AdvancedOperation;
+				RUN_CLANG_STATIC_ANALYZER = YES;
 				SDKROOT = watchos;
 				SKIP_INSTALL = YES;
 				SWIFT_VERSION = 4.2;
@@ -1469,6 +1439,7 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CLANG_ENABLE_MODULES = YES;
+				CLANG_STATIC_ANALYZER_MODE = deep;
 				CODE_SIGN_IDENTITY = "-";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
@@ -1478,6 +1449,7 @@
 				MACOSX_DEPLOYMENT_TARGET = 10.13;
 				PRODUCT_BUNDLE_IDENTIFIER = "org.tinrobots.AdvancedOperation-Tests-macOS";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				RUN_CLANG_STATIC_ANALYZER = YES;
 				SDKROOT = macosx;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 4.2;
@@ -1491,6 +1463,7 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CLANG_ENABLE_MODULES = YES;
+				CLANG_STATIC_ANALYZER_MODE = deep;
 				CODE_SIGN_IDENTITY = "-";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
@@ -1500,6 +1473,7 @@
 				MACOSX_DEPLOYMENT_TARGET = 10.13;
 				PRODUCT_BUNDLE_IDENTIFIER = "org.tinrobots.AdvancedOperation-Tests-macOS";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				RUN_CLANG_STATIC_ANALYZER = YES;
 				SDKROOT = macosx;
 				SWIFT_VERSION = 4.2;
 				TVOS_DEPLOYMENT_TARGET = 11.0;
@@ -1512,6 +1486,7 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CLANG_ENABLE_MODULES = YES;
+				CLANG_STATIC_ANALYZER_MODE = deep;
 				CODE_SIGN_STYLE = Automatic;
 				INFOPLIST_FILE = "Support/Info-Tests.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
@@ -1519,6 +1494,7 @@
 				MACOSX_DEPLOYMENT_TARGET = 10.13;
 				PRODUCT_BUNDLE_IDENTIFIER = "org.tinrobots.AdvancedOperation-Tests-iOS";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				RUN_CLANG_STATIC_ANALYZER = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -1532,6 +1508,7 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CLANG_ENABLE_MODULES = YES;
+				CLANG_STATIC_ANALYZER_MODE = deep;
 				CODE_SIGN_STYLE = Automatic;
 				INFOPLIST_FILE = "Support/Info-Tests.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
@@ -1539,6 +1516,7 @@
 				MACOSX_DEPLOYMENT_TARGET = 10.13;
 				PRODUCT_BUNDLE_IDENTIFIER = "org.tinrobots.AdvancedOperation-Tests-iOS";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				RUN_CLANG_STATIC_ANALYZER = YES;
 				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TVOS_DEPLOYMENT_TARGET = 11.0;
@@ -1551,6 +1529,7 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CLANG_ENABLE_MODULES = YES;
+				CLANG_STATIC_ANALYZER_MODE = deep;
 				CODE_SIGN_STYLE = Automatic;
 				INFOPLIST_FILE = "Support/Info-Tests.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
@@ -1558,6 +1537,7 @@
 				MACOSX_DEPLOYMENT_TARGET = 10.13;
 				PRODUCT_BUNDLE_IDENTIFIER = "org.tinrobots.AdvancedOperation-Tests-tvOS";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				RUN_CLANG_STATIC_ANALYZER = YES;
 				SDKROOT = appletvos;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 4.2;
@@ -1572,6 +1552,7 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CLANG_ENABLE_MODULES = YES;
+				CLANG_STATIC_ANALYZER_MODE = deep;
 				CODE_SIGN_STYLE = Automatic;
 				INFOPLIST_FILE = "Support/Info-Tests.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
@@ -1579,6 +1560,7 @@
 				MACOSX_DEPLOYMENT_TARGET = 10.13;
 				PRODUCT_BUNDLE_IDENTIFIER = "org.tinrobots.AdvancedOperation-Tests-tvOS";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				RUN_CLANG_STATIC_ANALYZER = YES;
 				SDKROOT = appletvos;
 				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = 3;

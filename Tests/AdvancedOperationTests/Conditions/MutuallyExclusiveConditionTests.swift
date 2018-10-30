@@ -64,8 +64,8 @@ final class MutuallyExclusiveConditionTests: XCTestCase {
     operation2.addCondition(MutuallyExclusiveCondition(name: "A"))
     operation2.name = "operation2"
 
-    operation1.useOSLog(TestsLog)
-    operation2.useOSLog(TestsLog)
+    let expectation1 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isFinished), object: operation1, expectedValue: true)
+    let expectation2 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isFinished), object: operation2, expectedValue: true)
 
     operation2.addDependency(operation1)
 
@@ -73,9 +73,6 @@ final class MutuallyExclusiveConditionTests: XCTestCase {
     // to avoid a dependecy cycle between the two operations.
     queue.addOperation(operation2)
     queue.addOperation(operation1)
-
-    let expectation1 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isFinished), object: operation1, expectedValue: true)
-    let expectation2 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isFinished), object: operation2, expectedValue: true)
 
     wait(for: [expectation1, expectation2], timeout: 15)
   }
@@ -251,15 +248,14 @@ final class MutuallyExclusiveConditionTests: XCTestCase {
     XCTAssertEqual(text, "A B C. 🎉")
   }
 
-  func testExclusivityManager() {
+  func testExclusivityManager() { // TODO: test crashed
     let expectation1 = expectation(description: "\(#function)\(#line)")
     let expectation2 = expectation(description: "\(#function)\(#line)")
     let expectation3 = expectation(description: "\(#function)\(#line)")
     let expectation4 = expectation(description: "\(#function)\(#line)")
 
     var text = ""
-    let manager = ExclusivityManager()
-    let queue = AdvancedOperationQueue(exclusivityManager: manager)
+    let queue = AdvancedOperationQueue(exclusivityManager: ExclusivityManager())
     queue.isSuspended = true
 
     let operation1 = AdvancedBlockOperation { text += "A " }

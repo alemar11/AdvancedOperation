@@ -23,7 +23,7 @@
 
 import Foundation
 
-final public class ExclusivityManager {
+final public class ExclusivityManager { //TODO: implement cancel mode
 
   public static let sharedInstance = ExclusivityManager()
 
