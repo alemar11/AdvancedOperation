@@ -343,26 +343,44 @@ extension AdvancedOperation {
   }
 
   internal var willExecuteObservers: [OperationWillExecuteObserving] {
+    guard !observers.isEmpty else { // TSAN _swiftEmptyArrayStorage
+      return []
+    }
     return observers.compactMap { $0 as? OperationWillExecuteObserving }
   }
 
   internal var didProduceOperationObservers: [OperationDidProduceOperationObserving] {
+    guard !observers.isEmpty else { // TSAN _swiftEmptyArrayStorage
+      return []
+    }
     return observers.compactMap { $0 as? OperationDidProduceOperationObserving }
   }
 
   internal var willCancelObservers: [OperationWillCancelObserving] {
+    guard !observers.isEmpty else { // TSAN _swiftEmptyArrayStorage
+      return []
+    }
     return observers.compactMap { $0 as? OperationWillCancelObserving }
   }
 
   internal var didCancelObservers: [OperationDidCancelObserving] {
+    guard !observers.isEmpty else { // TSAN _swiftEmptyArrayStorage
+      return []
+    }
     return observers.compactMap { $0 as? OperationDidCancelObserving }
   }
 
   internal var willFinishObservers: [OperationWillFinishObserving] {
+    guard !observers.isEmpty else { // TSAN _swiftEmptyArrayStorage
+      return []
+    }
     return observers.compactMap { $0 as? OperationWillFinishObserving }
   }
 
   internal var didFinishObservers: [OperationDidFinishObserving] {
+    guard !observers.isEmpty else { // TSAN _swiftEmptyArrayStorage
+      return []
+    }
     return observers.compactMap { $0 as? OperationDidFinishObserving }
   }
 
