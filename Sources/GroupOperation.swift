@@ -154,7 +154,7 @@ open class GroupOperation: AdvancedOperation {
 
     if !isExecuting && !isFinished {
       // if it's ready or pending (waiting for depedencies)
-      queueSuspendLock.synchronized {
+      queueLock.synchronized {
         underlyingOperationQueue.isSuspended = false
       }
     }
@@ -178,7 +178,7 @@ open class GroupOperation: AdvancedOperation {
       return
     }
 
-    queueSuspendLock.synchronized {
+    queueLock.synchronized {
       if !_suspended {
         underlyingOperationQueue.isSuspended = false
       }
@@ -186,7 +186,7 @@ open class GroupOperation: AdvancedOperation {
   }
 
   open override func finish(errors: [Error] = []) {
-    queueSuspendLock.synchronized {
+    queueLock.synchronized {
       underlyingOperationQueue.isSuspended = true
     }
     super.finish(errors: errors)
@@ -204,27 +204,27 @@ open class GroupOperation: AdvancedOperation {
   /// - Note: Reducing the number of concurrent operations does not affect any operations that are currently executing.
   public final var maxConcurrentOperationCount: Int {
     get {
-      return queueSuspendLock.synchronized { underlyingOperationQueue.maxConcurrentOperationCount }
+      return queueLock.synchronized { underlyingOperationQueue.maxConcurrentOperationCount }
     }
     set {
-      queueSuspendLock.synchronized {
+      queueLock.synchronized {
         underlyingOperationQueue.maxConcurrentOperationCount = newValue
       }
     }
   }
 
   /// Lock to manage the underlyingOperationQueue isSuspended property.
-  private let queueSuspendLock = NSLock() //TODO rename or use different lock for different properties
+  private let queueLock = NSLock() //TODO rename or use different lock for different properties
 
   private var _suspended = false
 
   /// A Boolean value indicating whether the GroupOpeation is actively scheduling operations for execution.
   public final var isSuspended: Bool {
     get {
-      return queueSuspendLock.synchronized { _suspended }
+      return queueLock.synchronized { _suspended }
     }
     set {
-      queueSuspendLock.synchronized {
+      queueLock.synchronized {
         underlyingOperationQueue.isSuspended = newValue
         _suspended = newValue
       }
@@ -234,10 +234,10 @@ open class GroupOperation: AdvancedOperation {
   /// Accesses the group operation queue's quality of service. It defaults to background quality.
   public final override var qualityOfService: QualityOfService {
     get {
-      return queueSuspendLock.synchronized { underlyingOperationQueue.qualityOfService }
+      return queueLock.synchronized { underlyingOperationQueue.qualityOfService }
     }
     set(value) {
-      queueSuspendLock.synchronized { underlyingOperationQueue.qualityOfService = value }
+      queueLock.synchronized { underlyingOperationQueue.qualityOfService = value }
     }
   }
 
