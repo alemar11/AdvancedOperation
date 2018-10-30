@@ -151,8 +151,8 @@ open class GroupOperation: AdvancedOperation {
 
     /// once all the operations will be cancelled and then finished, the finishing operation will be called
 
-    /// every operation is finished after a cancellation
-    if isReady {
+    if !isExecuting && !isFinished {
+      // if it's ready or pending (waiting for depedencies)
       queueSuspendLock.synchronized {
         underlyingOperationQueue.isSuspended = false
       }
