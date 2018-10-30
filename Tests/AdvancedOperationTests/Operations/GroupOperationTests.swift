@@ -661,6 +661,7 @@ final class GroupOperationTests: XCTestCase {
     let group = GroupOperation(operations: operation1, exclusivityManager: ExclusivityManager())
     let exepectation1 = expectation(description: "\(#function)\(#line)")
     XCTAssertEqual(group.qualityOfService, .default)
+
     group.addCompletionBlock { exepectation1.fulfill() }
 
     group.start()
