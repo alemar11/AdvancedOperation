@@ -49,7 +49,9 @@ internal final class ConditionEvaluatorOperation: AdvancedOperation {
     }
 
     guard let operation = evaluatedOperation else {
-      let error = AdvancedOperationError.executionFinished(message: "The operation to evaluate \(evaluatedOperationName) doesn't exist anymore.")
+      let message = "The operation to evaluate \(evaluatedOperationName) doesn't exist anymore."
+      let error = AdvancedOperationError.executionFinished(message: message,
+                                                           userInfo: ["AdvancedOperation": operationName])
       finish(errors: [error])
       return
     }

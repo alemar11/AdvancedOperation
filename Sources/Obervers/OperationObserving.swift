@@ -23,6 +23,8 @@
 
 import Foundation
 
+let observerKey = "Observer"
+
 /// Types which conform to this protocol, can be attached to `AdvancedOperation` subclasses before they are executed or added to a queue.
 public protocol OperationObservingType { }
 
