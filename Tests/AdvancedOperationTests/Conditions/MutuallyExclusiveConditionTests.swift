@@ -294,171 +294,115 @@ final class MutuallyExclusiveConditionTests: XCTestCase {
 
   // MARK: - Cancel Mode
 
-//  func testMutuallyExclusiveConditionWithCancelMode() {
-//    let exclusivityManager = ExclusivityManager()
-//    let queue = AdvancedOperationQueue(exclusivityManager: exclusivityManager)
-//    queue.maxConcurrentOperationCount = 10
-//
-//    //let operation1 = SleepyAsyncOperation(interval1: 0, interval2: 0, interval3: 0)
-//    let operation1 = AdvancedBlockOperation { complete in complete([]) }
-//    let condition = MutuallyExclusiveCondition(name: "SleepyAsyncOperation", mode: .cancel)
-//    XCTAssertEqual(condition.mutuallyExclusivityMode.description, "Enabled in cancel mode")
-//
-//    operation1.addCondition(condition)
-//
-//    //let operation2 = SleepyAsyncOperation(interval1: 2, interval2: 2, interval3: 2)
-//    let operation2 = SleepyAsyncOperation(interval1: 0, interval2: 0, interval3: 0)
-//    operation2.addCondition(MutuallyExclusiveCondition(name: "SleepyAsyncOperation"))
-//
-//    queue.addOperations([operation2, operation1], waitUntilFinished: true)
-//    XCTAssertTrue(operation1.isCancelled)
-//    XCTAssertNotNil(operation1.errors)
-//    XCTAssertTrue(operation2.isFinished)
-//    XCTAssertTrue(operation2.errors.isEmpty)
-//  }
-//
-//  func testMutuallyExclusiveConditionWithtDifferentQueuesWithCancelMode() {
-//    let exclusivityManager = ExclusivityManager()
-//    let queue1 = AdvancedOperationQueue(exclusivityManager: exclusivityManager)
-//    queue1.maxConcurrentOperationCount = 10
-//    var text = ""
-//
-//    let queue2 = AdvancedOperationQueue(exclusivityManager: exclusivityManager)
-//
-//    let expectation1 = expectation(description: "\(#function)\(#line)")
-//    let expectation2 = expectation(description: "\(#function)\(#line)")
-//    let expectation3 = expectation(description: "\(#function)\(#line)")
-//    let expectation4 = expectation(description: "\(#function)\(#line)")
-//
-//    let operation1 = AdvancedBlockOperation { complete in
-//      text += "A"
-//      sleep(1) // simulate a "time consuming" job
-//      complete([])
-//    }
-//    operation1.completionBlock = { expectation1.fulfill() }
-//    operation1.addCondition(MutuallyExclusiveCondition(name: "AdvancedBlockOperation"))
-//
-//    let operation2 = AdvancedBlockOperation { complete in
-//      text += "B"
-//      complete([])
-//    }
-//    operation2.completionBlock = { expectation2.fulfill() }
-//    operation2.addCondition(MutuallyExclusiveCondition(name: "AdvancedBlockOperation", mode: .cancel))
-//
-//    let operation3 = AdvancedBlockOperation { complete in
-//      text += "C"
-//      sleep(1)
-//      complete([])
-//    }
-//    operation3.completionBlock = { expectation3.fulfill() }
-//    operation3.addCondition(MutuallyExclusiveCondition(name: "AdvancedBlockOperation"))
-//
-//    let operation4 = AdvancedBlockOperation { complete in
-//      text += "D"
-//      complete([])
-//    }
-//    operation4.completionBlock = { expectation4.fulfill() }
-//    operation4.addCondition(MutuallyExclusiveCondition(name: "AdvancedBlockOperation", mode: .cancel))
-//
-//    queue1.addOperations([operation1, operation2], waitUntilFinished: true)
-//    queue2.addOperations([operation3, operation4], waitUntilFinished: true)
-//
-//    waitForExpectations(timeout: 10)
-//    XCTAssertEqual(text, "AC")
-//  }
-//
-//  func testExclusivityManagerWithCancelMode() {
-//    //let expectation0 = expectation(description: "\(#function)\(#line)")
-//    let expectation1 = expectation(description: "\(#function)\(#line)")
-//    let expectation2 = expectation(description: "\(#function)\(#line)")
-//    let expectation3 = expectation(description: "\(#function)\(#line)")
-//
-//    var text = ""
-//    let exclusivityManager = ExclusivityManager()
-////    exclusivityManager.onOperationsChange = { operations in
-////      let values = operations.values.flatMap { $0 }
-////      if values.isEmpty {
-////        expectation0.fulfill()
-////      }
-////    }
-//    let queue = AdvancedOperationQueue(exclusivityManager: exclusivityManager)
-//    queue.isSuspended = true
-//
-//    let operation1 = AdvancedBlockOperation { text += "A " }
-//    operation1.completionBlock = { expectation1.fulfill() }
-//
-//    let operation2 = AdvancedBlockOperation { text += "B " }
-//    operation2.completionBlock = { expectation2.fulfill() }
-//
-//    let operation3 = AdvancedBlockOperation { text += "C." }
-//    operation3.completionBlock = { expectation3.fulfill() }
-//
-//    operation1.addCondition(MutuallyExclusiveCondition(name: "AdvancedBlockOperation"))
-//    operation2.addCondition(MutuallyExclusiveCondition(name: "AdvancedBlockOperation", mode: .cancel))
-//    operation3.addCondition(MutuallyExclusiveCondition(name: "AdvancedBlockOperation", mode: .enqueue))
-//
-//    //XCTAssertEqual(exclusivityManager.operations.keys.count, 0)
-//    queue.addOperation(operation1)
-//    queue.addOperation(operation2)
-//    queue.addOperation(operation3)
-//
-////    XCTAssertEqual(exclusivityManager.operations.keys.count, 1)
-////    guard let key = exclusivityManager.operations.keys.first else {
-////      return XCTAssertNotNil(exclusivityManager.operations.keys.first)
-////    }
-////   XCTAssertEqual((exclusivityManager.operations[key] ?? []).count, 2)
-//
-//    queue.isSuspended = false
-//    waitForExpectations(timeout: 10)
-//
-//    XCTAssertEqual(text, "A C.")
-//  }
-//
-//  func testMultipleMutuallyExclusiveConditionsAndDependenciesWithCancelMode() {
-//    let queue = AdvancedOperationQueue(exclusivityManager: ExclusivityManager())
-//    var text1 = ""
-//    var text2 = ""
-//
-//    let dependency1 = AdvancedBlockOperation { text1 += "1 " }
-//    dependency1.addCondition(MutuallyExclusiveCondition(name: "test", mode: .cancel))
-//    let expectation1 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isFinished), object: dependency1, expectedValue: true)
-//
-//    // dependency2 is going to be cancelled because it's added to the queue before dependency1 is completed (in this case is not yet started)
-//    let dependency2 = AdvancedBlockOperation { text1 += "2" }
-//    dependency2.addCondition(MutuallyExclusiveCondition(name: "test", mode: .cancel))
-//    let expectation2 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isFinished), object: dependency2, expectedValue: true)
-//
-//    let dependencyCondition1 = DependencyCondition(dependency: dependency1)
-//    let dependencyCondition2 = DependencyCondition(dependency: dependency2)
-//
-//    let operation1 = AdvancedBlockOperation { text2 += "A " }
-//    let expectation3 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isFinished), object: operation1, expectedValue: true)
-//    operation1.addCondition(MutuallyExclusiveCondition(name: "AdvancedBlockOperation"))
-//    operation1.addCondition(dependencyCondition1)
-//
-//    // operation2 is going to get cancelled because the dependency2 created as pre-condition is cancelled
-//    let operation2 = AdvancedBlockOperation { text2 += "B" }
-//    let expectation4 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isFinished), object: operation2, expectedValue: true)
-//    operation2.addCondition(MutuallyExclusiveCondition(name: "AdvancedBlockOperation"))
-//    operation2.addCondition(dependencyCondition2)
-//
-//    dependency1.name = "dep1"
-//    dependency2.name = "dep2"
-//
-//    operation1.name = "op1"
-//    operation2.name = "op2"
-//
-////    operation1.useOSLog(TestsLog)
-////    operation2.useOSLog(TestsLog)
-//
-//    queue.addOperations([operation1, operation2], waitUntilFinished: false)
-//    wait(for: [expectation1, expectation2, expectation3, expectation4], timeout: 10)
-//    XCTAssertEqual(text1, "1 ")
-//    XCTAssertEqual(text2, "A ")
-//
-//    XCTAssertTrue(dependency2.isCancelled)
-//    XCTAssertTrue(operation2.isCancelled)
-//  }
+  func testMutuallyExclusiveConditionWithCancelMode() {
+    let exclusivityManager = ExclusivityManager()
+    let queue = AdvancedOperationQueue(exclusivityManager: exclusivityManager)
+    queue.maxConcurrentOperationCount = 10
+
+    //let operation1 = SleepyAsyncOperation(interval1: 0, interval2: 0, interval3: 0)
+    let operation1 = AdvancedBlockOperation { complete in complete([]) }
+    let condition = MutuallyExclusiveCondition(name: "SleepyAsyncOperation", mode: .cancel)
+    XCTAssertEqual(condition.mutuallyExclusivityMode.description, "Enabled in cancel mode")
+
+    operation1.addCondition(condition)
+
+    //let operation2 = SleepyAsyncOperation(interval1: 2, interval2: 2, interval3: 2)
+    let operation2 = SleepyAsyncOperation(interval1: 0, interval2: 0, interval3: 0)
+    operation2.addCondition(MutuallyExclusiveCondition(name: "SleepyAsyncOperation"))
+
+    queue.addOperations([operation2, operation1], waitUntilFinished: true)
+    XCTAssertTrue(operation1.isCancelled)
+    XCTAssertNotNil(operation1.errors)
+    XCTAssertTrue(operation2.isFinished)
+    XCTAssertTrue(operation2.errors.isEmpty)
+  }
+
+  func testMutuallyExclusiveConditionWithtDifferentQueuesWithCancelMode() {
+    let exclusivityManager = ExclusivityManager()
+    let queue1 = AdvancedOperationQueue(exclusivityManager: exclusivityManager)
+    queue1.maxConcurrentOperationCount = 10
+    var text = ""
+
+    let queue2 = AdvancedOperationQueue(exclusivityManager: exclusivityManager)
+
+    let expectation1 = expectation(description: "\(#function)\(#line)")
+    let expectation2 = expectation(description: "\(#function)\(#line)")
+    let expectation3 = expectation(description: "\(#function)\(#line)")
+    let expectation4 = expectation(description: "\(#function)\(#line)")
+
+    let operation1 = AdvancedBlockOperation { complete in
+      text += "A"
+      sleep(1) // simulate a "time consuming" job
+      complete([])
+    }
+    operation1.completionBlock = { expectation1.fulfill() }
+    operation1.addCondition(MutuallyExclusiveCondition(name: "AdvancedBlockOperation"))
+
+    let operation2 = AdvancedBlockOperation { complete in
+      text += "B"
+      complete([])
+    }
+    operation2.completionBlock = { expectation2.fulfill() }
+    operation2.addCondition(MutuallyExclusiveCondition(name: "AdvancedBlockOperation", mode: .cancel))
+
+    let operation3 = AdvancedBlockOperation { complete in
+      text += "C"
+      sleep(1)
+      complete([])
+    }
+    operation3.completionBlock = { expectation3.fulfill() }
+    operation3.addCondition(MutuallyExclusiveCondition(name: "AdvancedBlockOperation"))
+
+    let operation4 = AdvancedBlockOperation { complete in
+      text += "D"
+      complete([])
+    }
+    operation4.completionBlock = { expectation4.fulfill() }
+    operation4.addCondition(MutuallyExclusiveCondition(name: "AdvancedBlockOperation", mode: .cancel))
+
+    queue1.addOperations([operation1, operation2], waitUntilFinished: true)
+    queue2.addOperations([operation3, operation4], waitUntilFinished: true)
+
+    waitForExpectations(timeout: 10)
+    XCTAssertEqual(text, "AC")
+
+    XCTAssertTrue(operation4.isCancelled)
+  }
+
+  func testExclusivityManagerWithCancelMode() {
+    let expectation1 = expectation(description: "\(#function)\(#line)")
+    let expectation2 = expectation(description: "\(#function)\(#line)")
+    let expectation3 = expectation(description: "\(#function)\(#line)")
+
+    var text = ""
+    let exclusivityManager = ExclusivityManager()
+
+    let queue = AdvancedOperationQueue(exclusivityManager: exclusivityManager)
+    queue.isSuspended = true
+
+    let operation1 = AdvancedBlockOperation { text += "A " }
+    operation1.completionBlock = { expectation1.fulfill() }
+
+    let operation2 = AdvancedBlockOperation { text += "B " }
+    operation2.completionBlock = { expectation2.fulfill() }
+
+    let operation3 = AdvancedBlockOperation { text += "C." }
+    operation3.completionBlock = { expectation3.fulfill() }
+
+    operation1.addCondition(MutuallyExclusiveCondition(name: "AdvancedBlockOperation"))
+    operation2.addCondition(MutuallyExclusiveCondition(name: "AdvancedBlockOperation", mode: .cancel))
+    operation3.addCondition(MutuallyExclusiveCondition(name: "AdvancedBlockOperation", mode: .enqueue))
+
+    queue.addOperation(operation1)
+    queue.addOperation(operation2)
+    queue.addOperation(operation3)
+
+    queue.isSuspended = false
+
+    waitForExpectations(timeout: 10)
+
+    XCTAssertEqual(text, "A C.")
+  }
 
 }
 
