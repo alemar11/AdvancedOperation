@@ -101,11 +101,6 @@ final public class ExclusivityManager { //TODO: implement cancel mode
 
       /// Searches all the operations already enqueued for these categories in the current queue or in
       /// all the not suspended queues.
-      //      let queues = _queues.compactMap { $0.queue }.filter { $0 === queue || !$0.isSuspended && !$0.operations.isEmpty }
-      //
-      //      guard !queues.isEmpty else {
-      //        return
-      //      }
 
 
       //TODO: improve these nested loops
@@ -146,40 +141,16 @@ final public class ExclusivityManager { //TODO: implement cancel mode
     }
   }
 
-  //  private var advancedOperations: [AdvancedOperation] {
-  //    let queues = _queues.compactMap { $0.queue }.filter { $0 === current_queue || !$0.isSuspended && !$0.operations.isEmpty }
-  //
-  //    guard !queues.isEmpty else {
-  //      return []
-  //    }
-  //
-  //    let operations = queues.flatMap { $0.operations }.compactMap { $0 as? AdvancedOperation }
-  //    return operations
-  //  }
-
   private func searchAdvancedOperations(in queues: [AdvancedOperationQueue], forExclusivityName category: String) -> [AdvancedOperation] {
     guard !queues.isEmpty else {
       return []
     }
 
     let advancedOperations = queues.flatMap { $0.operations }.compactMap { $0 as? AdvancedOperation }
-
-    let operations = advancedOperations.filter { return $0.mutuallyExclusiveConditions.contains(where: { (condition) -> Bool in
-      condition.name == category
-    }) }
+    let operations = advancedOperations.filter { $0.mutuallyExclusiveConditions.contains(where: { $0.name == category }) }
 
     return operations
   }
-
-  /// Searches for all the operations with a given category in every **not** suspended queue.
-  //  private func operationsForCategory(_ category: String) -> [AdvancedOperation] {
-  //    //let operations = advancedOperations.filter { $0.executionConditions.compactMap { $0.name }.contains(category) }
-  //    print(advancedOperations.count)
-  //    let operations = advancedOperations.filter { return $0.exclusivityConditions.contains(where: { (condition) -> Bool in
-  //      condition.name == category
-  //    }) }
-  //    return operations
-  //  }
 
 }
 
