@@ -396,10 +396,6 @@ final class GroupOperationTests: XCTestCase {
     XCTAssertFalse(group.isExecuting)
     XCTAssertFalse(group.isCancelled)
     XCTAssertTrue(group.isFinished)
-
-    let op = BlockOperation {}
-    op.cancel()
-    print(op)
   }
 
   func testGroupOperationsCancelled() {
