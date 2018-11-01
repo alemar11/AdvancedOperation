@@ -116,25 +116,6 @@ open class AdvancedOperation: Operation {
 
   // MARK: - Execution
 
-  //  lazy var dispatchQueue: DispatchQueue = {
-  //    var qos =  DispatchQoS.unspecified
-  //    switch qualityOfService {
-  //    case .background:
-  //      qos = .background
-  //    case .default:
-  //      qos = .default
-  //    case .utility:
-  //      qos = .utility
-  //    case .userInitiated:
-  //      qos = .userInitiated
-  //    case .userInteractive:
-  //      qos = .userInteractive
-  //    }
-  //
-  //    let queue = DispatchQueue(label: operationName, qos: qos) //, attributes: .concurrent)
-  //    return queue
-  //  }()
-
   public final override func start() {
     let canBeStarted = stateLock.synchronized { () -> Bool in
       guard !_starting else { return false }
