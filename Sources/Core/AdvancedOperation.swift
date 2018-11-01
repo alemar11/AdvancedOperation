@@ -253,20 +253,6 @@ open class AdvancedOperation: Operation {
 
   public private(set) var conditions = [OperationCondition]()
 
-  internal var mutuallyExclusiveConditions: [MutuallyExclusiveCondition] {
-    guard !conditions.isEmpty else { // TSAN _swiftEmptyArrayStorage
-      return []
-    }
-    return conditions.compactMap { $0 as? MutuallyExclusiveCondition }
-  }
-
-  internal var executionConditions: [OperationCondition] {
-    guard !conditions.isEmpty else { // TSAN _swiftEmptyArrayStorage
-      return []
-    }
-    return conditions.filter{ !($0 is MutuallyExclusiveCondition) }
-  }
-
   public func addCondition(_ condition: OperationCondition) {
     assert(state == .ready, "Cannot add conditions if the operation is \(state).")
     conditions.append(condition)

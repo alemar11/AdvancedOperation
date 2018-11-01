@@ -47,21 +47,16 @@ open class AdvancedOperationQueue: OperationQueue {
 
   public let identifier = UUID()
 
-  internal let categories = MutuallyExclusiveCategories()
-
-  private let exclusivityManager: ExclusivityManager
-
   private let lock = NSRecursiveLock()
 
   // TODO: The quality-of-service level set for the underlying dispatch queue overrides any value set for the operation queue's qualityOfService property.
-  public init(exclusivityManager: ExclusivityManager = .sharedInstance, underlyingQueue: DispatchQueue? = .none) {
-    self.exclusivityManager = exclusivityManager
+  public init(underlyingQueue: DispatchQueue? = .none) {
     super.init()
 
     /// Apple engineer:
     /// Unless the property has been set, there is no underlying queue for an NSOperationQueue.
     /// An NSOperationQueue which hasn't been told to just use a specific one may use (start operations on) MANY different dispatch queues, for various reasons.
-    self.underlyingQueue = underlyingQueue
+    self.underlyingQueue = underlyingQueue //TODO is it necessary to have this init?
   }
 
   open override func addOperation (_ operation: Operation) {
@@ -97,8 +92,6 @@ open class AdvancedOperationQueue: OperationQueue {
           }, didFinish: { [weak self] (operation, errors) in
             guard let self = self else { return }
 
-            _ = operation.mutuallyExclusiveConditions.map { self.categories.unregisterCategory($0.name) }
-
             self.delegate?.operationQueue(operationQueue: self, operationDidFinish: operation, withErrors: errors)
           }
         )
@@ -107,12 +100,6 @@ open class AdvancedOperationQueue: OperationQueue {
 
         if let evaluator = operation.makeConditionsEvaluator() {
           addOperation(evaluator)
-        }
-
-        if !operation.mutuallyExclusiveConditions.isEmpty {
-          _ = operation.mutuallyExclusiveConditions.map { self.categories.registerCategory($0.name) }
-
-          exclusivityManager.addOperation(operation, for: self)
         }
 
       } else { /// Operation
@@ -140,10 +127,6 @@ open class AdvancedOperationQueue: OperationQueue {
 //        operation.waitUntilFinished()
 //      }
     }
-  }
-
-  deinit {
-    exclusivityManager.unregister(queue: self)
   }
 
 }

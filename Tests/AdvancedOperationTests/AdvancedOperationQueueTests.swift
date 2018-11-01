@@ -27,8 +27,7 @@ import XCTest
 final class AdvancedOperationQueueTests: XCTestCase {
 
   func testQueueDelegateWithAdvancedOperationsUsingWaitUntilFinished() {
-    let manager = ExclusivityManager()
-    let queue = AdvancedOperationQueue(exclusivityManager: manager)
+    let queue = AdvancedOperationQueue()
     let delegate = MockOperationQueueDelegate()
 
     queue.delegate = delegate
@@ -134,7 +133,7 @@ final class AdvancedOperationQueueTests: XCTestCase {
   }
 
   func testQueueWithAdvancedOperationsWithoutUsingWaitUntilFinished() {
-    let queue = AdvancedOperationQueue(exclusivityManager: ExclusivityManager())
+    let queue = AdvancedOperationQueue()
     let delegate = MockOperationQueueDelegate()
 
     queue.delegate = delegate
@@ -240,7 +239,7 @@ final class AdvancedOperationQueueTests: XCTestCase {
   }
 
   func testQueueWithMixedOperations() {  // TODO: test crashed
-    let queue = AdvancedOperationQueue(exclusivityManager: ExclusivityManager())
+    let queue = AdvancedOperationQueue()
     let delegate = MockOperationQueueDelegate()
 
     queue.delegate = delegate
@@ -348,8 +347,7 @@ final class AdvancedOperationQueueTests: XCTestCase {
   }
 
   func testQueueWithCancel() {
-    let manager = ExclusivityManager()
-    let queue = AdvancedOperationQueue(exclusivityManager: manager)
+    let queue = AdvancedOperationQueue()
     let delegate = MockOperationQueueDelegate()
 
     queue.delegate = delegate
@@ -482,8 +480,7 @@ final class AdvancedOperationQueueTests: XCTestCase {
   }
 
   func testFailIfAtLeastOnDependencyHasBeenCancelled() {
-    let manager = ExclusivityManager()
-    let queue = AdvancedOperationQueue(exclusivityManager: manager)
+    let queue = AdvancedOperationQueue()
     let expectation1 = expectation(description: "\(#function)\(#line)")
     let operation1 = SleepyOperation()
     let operation2 = SleepyAsyncOperation()
@@ -518,8 +515,7 @@ final class AdvancedOperationQueueTests: XCTestCase {
   }
 
   func testMemoryLeakFailIfAtLeastOnDependencyHasBeenCancelled() {
-    let manager = ExclusivityManager()
-    var queue: AdvancedOperationQueue? = AdvancedOperationQueue(exclusivityManager: manager)
+    var queue: AdvancedOperationQueue? = AdvancedOperationQueue()
     weak var weakQueue = queue
 
     let expectation1 = expectation(description: "\(#function)\(#line)")
@@ -567,8 +563,7 @@ final class AdvancedOperationQueueTests: XCTestCase {
   }
 
   func testMemoryLeakFailOnceOperationsHaveBeenCompleted() {
-    let manager = ExclusivityManager()
-    let queue: AdvancedOperationQueue? = AdvancedOperationQueue(exclusivityManager: manager)
+    let queue: AdvancedOperationQueue? = AdvancedOperationQueue()
 
     var operation1: AdvancedOperation? = SleepyAsyncOperation()
     operation1!.name = "operation1"

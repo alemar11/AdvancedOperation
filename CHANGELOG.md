@@ -7,6 +7,8 @@
 - Fixed KVO for the `iSCancelled` property in `AdvancedOperation`.
 - A `GroupOperation` can be cancelled correctly even if it's not yet started.
 - The propery `failed` in `AdvancedOperation` has been renamed `hasErrors` to better reflect its intent.
+- Removed `ExclusivityManager`.
+- Conditions are evaluated as a dependency operation.
 - Bugfixes.
 
 ### 1.1.0
