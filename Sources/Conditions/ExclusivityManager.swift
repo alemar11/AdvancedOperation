@@ -24,40 +24,40 @@
 import Foundation
 
 final public class ExclusivityManager { //TODO: implement cancel mode
-
+  
   public static let sharedInstance = ExclusivityManager()
-
+  
   /// The private queue used for thread safe operations.
   private lazy var queue = DispatchQueue(label: "\(identifier).\(type(of: self)).\(UUID().uuidString)")
-
+  
   private var _queues: [QueueContainer] = []
-
+  
   public init() { }
-
+  
   internal func register(queue: AdvancedOperationQueue) {
     let results = _queues.filter { $0.queue?.identifier == queue.identifier }
-
+    
     if results.isEmpty {
       let token = queue.observe(\.isSuspended, options: [.prior]) { [weak self] queue, change in
         print("⍟ \(String(describing: self)) \(change) - \(queue)")
         // is suspended:
         // check all the other queues and remove all the dependencies of this queue
-
+        
         // not suspended
         // get all mutual exclusivity operation and set the dependencers
       }
-
+      
       let container = QueueContainer(queue: queue, token: token)
       _queues.append(container)
     }
   }
-
+  
   internal func unregister(queue: AdvancedOperationQueue) {
     self.queue.sync {
       _queues.removeAll { $0.queue?.identifier == queue.identifier }
     }
   }
-
+  
   // is suspended remove the dependencies
   //  private func xxx(queue: Queue, category: String) {
   //    guard let advancedQueue = queue.queue else {
@@ -88,37 +88,37 @@ final public class ExclusivityManager { //TODO: implement cancel mode
   //  private func yyy(queue: AdvancedOperationQueue, category: String) {
   //
   //  }
-
+  
   internal func addOperation(_ operation: AdvancedOperation, for queue: AdvancedOperationQueue) {
     self.queue.sync {
       let conditions = operation.mutuallyExclusiveConditions
-
+      
       guard !conditions.isEmpty else {
         return
       }
-
+      
       self.register(queue: queue)
-
+      
       /// Searches all the operations already enqueued for these categories in the current queue or in
       /// all the not suspended queues.
-
-
+      
+      
       //TODO: improve these nested loops
       let queues = _queues.compactMap { $0.queue }.filter { $0 === queue || !$0.isSuspended && !$0.operations.isEmpty }
-
+      
       let cancelConditions = conditions.filter { return $0.mutuallyExclusivityMode == .cancel }
-
+      
       for condition in cancelConditions {
         let operations = searchAdvancedOperations(in: queues, forExclusivityName: condition.name).filter { $0 !== operation && !operation.dependencies.contains($0) && !$0.dependencies.contains(operation)}
-
+        
         if !operations.isEmpty {
           operation.cancel()
           return
         }
       }
-
+      
       let enqueueConditions = conditions.filter { return $0.mutuallyExclusivityMode == .enqueue }
-
+      
       for condition in enqueueConditions {
         let operations = searchAdvancedOperations(in: queues, forExclusivityName: condition.name).filter { $0 !== operation && !operation.dependencies.contains($0) && !$0.dependencies.contains(operation) }
         //          operations.forEach { operation.addDependency($0) }
@@ -127,43 +127,80 @@ final public class ExclusivityManager { //TODO: implement cancel mode
         //          })
         //print("\t\t--> adding \(operationForCategory.operationName) as dependency for  \(operation.operationName)")
         //operation.addDependency(operationForCategory)
-
+        
         print("\n \(operation.operationName): found \(operations.count) operations for \(condition.name)")
-
+        
         for operationForCategory in operations where operationForCategory !== operation {
           if !operation.dependencies.contains(operationForCategory) && !operationForCategory.dependencies.contains(operation) {
             print("\t\t--> 🔹 adding \(operationForCategory.operationName) as dependency for  \(operation.operationName)")
             operation.addDependency(operationForCategory)
           }
         }
-
+        
       }
     }
   }
-
+  
   private func searchAdvancedOperations(in queues: [AdvancedOperationQueue], forExclusivityName category: String) -> [AdvancedOperation] {
     guard !queues.isEmpty else {
       return []
     }
-
+    
     let advancedOperations = queues.flatMap { $0.operations }.compactMap { $0 as? AdvancedOperation }
     let operations = advancedOperations.filter { $0.mutuallyExclusiveConditions.contains(where: { $0.name == category }) }
-
+    
     return operations
   }
-
+  
 }
 
 private final class QueueContainer {
   let token: NSKeyValueObservation
   weak var queue: AdvancedOperationQueue?
-
+  
   init(queue: AdvancedOperationQueue, token: NSKeyValueObservation) {
     self.queue = queue
     self.token = token
   }
-
+  
   deinit {
     token.invalidate()
+  }
+}
+
+internal class MutuallyExclusiveCategories {
+  private lazy var queue = DispatchQueue(label: "\(identifier).\(type(of: self))")
+  
+  private var dictionary = [String:Int]()
+  
+  internal var categories: [String] {
+    return queue.sync { Array(dictionary.keys) }
+  }
+  
+  internal func registerCategory(_ category: String) -> Int {
+    return queue.sync {
+      var result = 0
+      if let count = dictionary[category] {
+        result = count + 1
+        dictionary[category] = count + 1
+      } else {
+        result = 1
+        dictionary[category] = 1
+      }
+      return result
+    }
+  }
+  
+  internal func unregisterCategory(_ category: String) {
+    return queue.sync {
+      if let count = dictionary[category] {
+        let newCount = count - 1
+        if newCount > 0 {
+          dictionary[category] = newCount
+        } else {
+          dictionary.removeValue(forKey: category)
+        }
+      }
+    }
   }
 }

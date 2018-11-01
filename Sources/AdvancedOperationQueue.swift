@@ -47,6 +47,8 @@ open class AdvancedOperationQueue: OperationQueue {
 
   public let identifier = UUID()
 
+  internal let categories = MutuallyExclusiveCategories()
+
   private let exclusivityManager: ExclusivityManager
 
   private let lock = NSRecursiveLock()
@@ -95,6 +97,8 @@ open class AdvancedOperationQueue: OperationQueue {
           }, didFinish: { [weak self] (operation, errors) in
             guard let self = self else { return }
 
+            _ = operation.mutuallyExclusiveConditions.map { self.categories.unregisterCategory($0.name) }
+
             self.delegate?.operationQueue(operationQueue: self, operationDidFinish: operation, withErrors: errors)
           }
         )
@@ -106,6 +110,8 @@ open class AdvancedOperationQueue: OperationQueue {
         }
 
         if !operation.mutuallyExclusiveConditions.isEmpty {
+          _ = operation.mutuallyExclusiveConditions.map { self.categories.registerCategory($0.name) }
+
           exclusivityManager.addOperation(operation, for: self)
         }
 
