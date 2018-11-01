@@ -113,7 +113,7 @@ open class GroupOperation: AdvancedOperation {
     queue.qualityOfService = qualityOfService
     queue.maxConcurrentOperationCount = maxConcurrentOperationCount
     queue.isSuspended = true
-    self.underlyingOperationQueue = queue //EXC_BAD_ACCESS possible fix
+    self.underlyingOperationQueue = queue // TODO: EXC_BAD_ACCESS possible fix
 
     super.init()
 
