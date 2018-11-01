@@ -45,19 +45,7 @@ open class AdvancedOperationQueue: OperationQueue {
 
   public weak var delegate: AdvancedOperationQueueDelegate? = .none
 
-  public let identifier = UUID()
-
   private let lock = NSRecursiveLock()
-
-  // TODO: The quality-of-service level set for the underlying dispatch queue overrides any value set for the operation queue's qualityOfService property.
-  public init(underlyingQueue: DispatchQueue? = .none) {
-    super.init()
-
-    /// Apple engineer:
-    /// Unless the property has been set, there is no underlying queue for an NSOperationQueue.
-    /// An NSOperationQueue which hasn't been told to just use a specific one may use (start operations on) MANY different dispatch queues, for various reasons.
-    self.underlyingQueue = underlyingQueue //TODO is it necessary to have this init?
-  }
 
   open override func addOperation (_ operation: Operation) {
     lock.synchronized {

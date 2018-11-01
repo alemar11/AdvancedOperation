@@ -108,7 +108,8 @@ open class GroupOperation: AdvancedOperation {
               qualityOfService: QualityOfService = .default,
               maxConcurrentOperationCount: Int = OperationQueue.defaultMaxConcurrentOperationCount,
               underlyingQueue: DispatchQueue? = .none) {
-    let queue = AdvancedOperationQueue(underlyingQueue: underlyingQueue)
+    let queue = AdvancedOperationQueue()
+    queue.underlyingQueue = underlyingQueue
     queue.qualityOfService = qualityOfService
     queue.maxConcurrentOperationCount = maxConcurrentOperationCount
     queue.isSuspended = true
