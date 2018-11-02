@@ -59,6 +59,7 @@ final class NoCancelledDependenciesConditionTests: XCTestCase {
     XCTAssertFalse(operation2.isCancelled)
     XCTAssertTrue(operation1.hasErrors)
     XCTAssertTrue(operation1.isCancelled)
+    XCTAssertTrue(operation1.isFinished)
   }
 
   func testAllOperationCancelled() {
