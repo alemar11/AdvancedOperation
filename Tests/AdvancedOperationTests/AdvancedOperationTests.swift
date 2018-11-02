@@ -378,7 +378,7 @@ final class AdvancedOperationTests: XCTestCase {
     let expectation1 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isFinished), object: operation1, expectedValue: true)
     XCTAssertTrue(operation1.isReady)
 
-    let operation2 = BlockOperation(block: {} )
+    let operation2 = BlockOperation(block: { } )
     let expectation2 = expectation(description: "\(#function)\(#line)")
     operation2.addExecutionBlock { expectation2.fulfill() }
 

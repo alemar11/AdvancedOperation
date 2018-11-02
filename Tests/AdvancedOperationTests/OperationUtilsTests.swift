@@ -179,9 +179,9 @@ final class OperationUtilsTests: XCTestCase {
   }
 
   func testRemoveDependencies() {
-    let operation1 = AdvancedBlockOperation(block: {})
+    let operation1 = AdvancedBlockOperation(block: { })
     let operation2 = SleepyOperation()
-    let operation3 = BlockOperation(block: {})
+    let operation3 = BlockOperation { }
     let operation4 = SleepyAsyncOperation()
 
     operation4.addDependencies([operation1, operation2, operation3])
