@@ -89,9 +89,9 @@ open class GroupOperation: AdvancedOperation {
   ///   - underlyingQueue: An optional DispatchQueue which defaults to nil, this parameter is set as the underlying queue of the group's own `AdvancedOperationQueue`.
   /// - Note: If the operation object has an explicit quality of service level set, that value is used instead.
   public convenience init(operations: Operation...,
-    qualityOfService: QualityOfService = .default,
-    maxConcurrentOperationCount: Int = OperationQueue.defaultMaxConcurrentOperationCount,
-    underlyingQueue: DispatchQueue? = .none) {
+                          qualityOfService: QualityOfService = .default,
+                          maxConcurrentOperationCount: Int = OperationQueue.defaultMaxConcurrentOperationCount,
+                          underlyingQueue: DispatchQueue? = .none) {
     self.init(operations: operations,
               qualityOfService: qualityOfService,
               maxConcurrentOperationCount: maxConcurrentOperationCount,
