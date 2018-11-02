@@ -88,8 +88,7 @@ final class OperationUtilsTests: XCTestCase {
 
     operation1.then(operation2).then(operation3)
 
-    let manager = ExclusivityManager()
-    let queue = AdvancedOperationQueue(exclusivityManager: manager)
+    let queue = AdvancedOperationQueue()
     queue.addOperations([operation2, operation1, operation3], waitUntilFinished: false)
 
     wait(for: [expectation1, expectation2, expectation3], timeout: 30, enforceOrder: true)
@@ -107,8 +106,7 @@ final class OperationUtilsTests: XCTestCase {
 
     [operation1].then(operation3, operation2)
 
-    let manager = ExclusivityManager()
-    let queue = AdvancedOperationQueue(exclusivityManager: manager)
+    let queue = AdvancedOperationQueue()
     queue.addOperations([operation2, operation1, operation3], waitUntilFinished: false)
 
     wait(for: [expectation2, expectation3], timeout: 30)
@@ -127,8 +125,7 @@ final class OperationUtilsTests: XCTestCase {
 
     [operation1, operation2].then(operation3)
 
-    let manager = ExclusivityManager()
-    let queue = AdvancedOperationQueue(exclusivityManager: manager)
+    let queue = AdvancedOperationQueue()
     queue.addOperations([operation2, operation1, operation3], waitUntilFinished: false)
 
     wait(for: [expectation3], timeout: 30)
@@ -150,8 +147,7 @@ final class OperationUtilsTests: XCTestCase {
 
     [operation1, operation2].then(operation3, operation4)
 
-    let manager = ExclusivityManager()
-    let queue = AdvancedOperationQueue(exclusivityManager: manager)
+    let queue = AdvancedOperationQueue()
     queue.addOperations([operation2, operation1, operation3, operation4], waitUntilFinished: false)
 
     wait(for: [expectation3, expectation4], timeout: 30)

@@ -27,8 +27,7 @@ import XCTest
 final class NoFailedDependenciesConditionTests: XCTestCase {
 
   func testFinishedAndFailedOperation() {
-    let manager = ExclusivityManager()
-    let queue = AdvancedOperationQueue(exclusivityManager: manager)
+    let queue = AdvancedOperationQueue()
 
     let operation1 = NotExecutableOperation()
     operation1.name = "operation1"
@@ -64,8 +63,7 @@ final class NoFailedDependenciesConditionTests: XCTestCase {
   }
 
   func testCancelledAndFailedOperation() {
-    let manager = ExclusivityManager()
-    let queue = AdvancedOperationQueue(exclusivityManager: manager)
+    let queue = AdvancedOperationQueue()
 
     let operation1 = AdvancedBlockOperation { complete in complete([]) }
     operation1.name = "operation1"
@@ -99,8 +97,7 @@ final class NoFailedDependenciesConditionTests: XCTestCase {
   }
 
   func testCancelledAndFailedOperationWaitUntilFinished() {
-    let manager = ExclusivityManager()
-    let queue = AdvancedOperationQueue(exclusivityManager: manager)
+    let queue = AdvancedOperationQueue()
 
     let operation1 = NotExecutableOperation()
     operation1.name = "operation1"
@@ -126,8 +123,7 @@ final class NoFailedDependenciesConditionTests: XCTestCase {
   }
 
   func testIgnoredCancelledAndFailedOperation() {
-    let manager = ExclusivityManager()
-    let queue = AdvancedOperationQueue(exclusivityManager: manager)
+    let queue = AdvancedOperationQueue()
 
     let operation1 = AdvancedBlockOperation { }
     operation1.name = "operation1"
@@ -158,8 +154,7 @@ final class NoFailedDependenciesConditionTests: XCTestCase {
   }
 
   func testIgnoredCancelledAndFailedOperations() {
-    let manager = ExclusivityManager()
-    let queue = AdvancedOperationQueue(exclusivityManager: manager)
+    let queue = AdvancedOperationQueue()
 
     let operation1 = NotExecutableOperation()
     operation1.name = "operation1"
@@ -192,8 +187,7 @@ final class NoFailedDependenciesConditionTests: XCTestCase {
   }
 
   func testFinishedAndFailedOperationNegated() {
-    let manager = ExclusivityManager()
-    let queue = AdvancedOperationQueue(exclusivityManager: manager)
+    let queue = AdvancedOperationQueue()
 
     let operation1 = AdvancedBlockOperation { }
     operation1.name = "operation1"

@@ -45,22 +45,7 @@ open class AdvancedOperationQueue: OperationQueue {
 
   public weak var delegate: AdvancedOperationQueueDelegate? = .none
 
-  public let identifier = UUID()
-
-  private let exclusivityManager: ExclusivityManager
-
   private let lock = NSRecursiveLock()
-
-  // TODO: The quality-of-service level set for the underlying dispatch queue overrides any value set for the operation queue's qualityOfService property.
-  public init(exclusivityManager: ExclusivityManager = .sharedInstance, underlyingQueue: DispatchQueue? = .none) {
-    self.exclusivityManager = exclusivityManager
-    super.init()
-
-    /// Apple engineer:
-    /// Unless the property has been set, there is no underlying queue for an NSOperationQueue.
-    /// An NSOperationQueue which hasn't been told to just use a specific one may use (start operations on) MANY different dispatch queues, for various reasons.
-    self.underlyingQueue = underlyingQueue
-  }
 
   open override func addOperation (_ operation: Operation) {
     lock.synchronized {
@@ -105,10 +90,6 @@ open class AdvancedOperationQueue: OperationQueue {
           addOperation(evaluator)
         }
 
-        if !operation.categories.isEmpty {
-          exclusivityManager.addOperation(operation, for: self)
-        }
-
       } else { /// Operation
         operation.addCompletionBlock(asEndingBlock: false) { [weak self, weak operation] in
           guard let self = self, let operation = operation else {
@@ -134,10 +115,6 @@ open class AdvancedOperationQueue: OperationQueue {
 //        operation.waitUntilFinished()
 //      }
     }
-  }
-
-  deinit {
-    exclusivityManager.unregister(queue: self)
   }
 
 }

@@ -37,7 +37,7 @@ extension XCTestCase {
   private func checkSameErrorQuantity(generatedErrors: [Error], expectedErrors: [Error]) -> Bool {
     guard generatedErrors.count == expectedErrors.count else { return false }
     var generatedErrorsDictionary = [String: Int]()
-    generatedErrors.forEach { (error) in
+    generatedErrors.forEach { error in
       let description = error.localizedDescription
       if let count = generatedErrorsDictionary[description] {
         generatedErrorsDictionary[description] = count + 1
@@ -47,7 +47,7 @@ extension XCTestCase {
     }
 
     var expectedErrorsDictionary = [String: Int]()
-    expectedErrors.forEach { (error) in
+    expectedErrors.forEach { error in
       let description = error.localizedDescription
       if let count = expectedErrorsDictionary[description] {
         expectedErrorsDictionary[description] = count + 1

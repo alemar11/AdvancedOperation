@@ -27,8 +27,7 @@ import XCTest
 class BlockConditionTests: XCTestCase {
 
   func testFailedCondition() {
-    let manager = ExclusivityManager()
-    let queue = AdvancedOperationQueue(exclusivityManager: manager)
+    let queue = AdvancedOperationQueue()
     let condition = BlockCondition { () -> Bool in
       return false
     }
@@ -46,8 +45,7 @@ class BlockConditionTests: XCTestCase {
   }
 
   func testFailedConditionAfterAThrowedError() {
-    let manager = ExclusivityManager()
-    let queue = AdvancedOperationQueue(exclusivityManager: manager)
+    let queue = AdvancedOperationQueue()
     let condition = BlockCondition { () -> Bool in
       throw MockError.failed
     }
@@ -65,8 +63,7 @@ class BlockConditionTests: XCTestCase {
   }
 
   func testSuccessfulCondition() {
-    let manager = ExclusivityManager()
-    let queue = AdvancedOperationQueue(exclusivityManager: manager)
+    let queue = AdvancedOperationQueue()
     let condition = BlockCondition { () -> Bool in
       return true
     }

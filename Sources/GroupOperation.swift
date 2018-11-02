@@ -82,18 +82,15 @@ open class GroupOperation: AdvancedOperation {
   ///
   /// - Parameters:
   ///   - operations: The operations of which the `GroupOperation` is composed of.
-  ///   - exclusivityManager: An instance of `ExclusivityManager`.
   ///   - qualityOfService: The default service level to apply to operations executed using the queue.
   ///   - maxConcurrentOperationCount: The maximum number of queued operations that can execute at the same time.
   ///   - underlyingQueue: An optional DispatchQueue which defaults to nil, this parameter is set as the underlying queue of the group's own `AdvancedOperationQueue`.
   /// - Note: If the operation object has an explicit quality of service level set, that value is used instead.
   public convenience init(operations: Operation...,
-                          exclusivityManager: ExclusivityManager = .sharedInstance,
                           qualityOfService: QualityOfService = .default,
                           maxConcurrentOperationCount: Int = OperationQueue.defaultMaxConcurrentOperationCount,
                           underlyingQueue: DispatchQueue? = .none) {
     self.init(operations: operations,
-              exclusivityManager: exclusivityManager,
               qualityOfService: qualityOfService,
               maxConcurrentOperationCount: maxConcurrentOperationCount,
               underlyingQueue: underlyingQueue)
@@ -103,26 +100,25 @@ open class GroupOperation: AdvancedOperation {
   ///
   /// - Parameters:
   ///   - operations: The operations of which the `GroupOperation` is composed of.
-  ///   - exclusivityManager: An instance of `ExclusivityManager`.
   ///   - qualityOfService: The default service level to apply to operations executed using the queue.
   ///   - maxConcurrentOperationCount: The maximum number of queued operations that can execute at the same time.
   ///   - underlyingQueue: An optional DispatchQueue which defaults to nil, this parameter is set as the underlying queue of the group's own `AdvancedOperationQueue`.
   /// - Note: If the operation object has an explicit quality of service level set, that value is used instead.
   public init(operations: [Operation],
-              exclusivityManager: ExclusivityManager = .sharedInstance,
               qualityOfService: QualityOfService = .default,
               maxConcurrentOperationCount: Int = OperationQueue.defaultMaxConcurrentOperationCount,
               underlyingQueue: DispatchQueue? = .none) {
-    let queue = AdvancedOperationQueue(exclusivityManager: exclusivityManager, underlyingQueue: underlyingQueue)
+    let queue = AdvancedOperationQueue()
+    queue.underlyingQueue = underlyingQueue
     queue.qualityOfService = qualityOfService
     queue.maxConcurrentOperationCount = maxConcurrentOperationCount
     queue.isSuspended = true
-    self.underlyingOperationQueue = queue //EXC_BAD_ACCESS possible fix
+    self.underlyingOperationQueue = queue // TODO: EXC_BAD_ACCESS possible fix
 
     super.init()
 
     self.underlyingOperationQueue.delegate = self
-    self.startingOperation.name = "Star<\(operationName)>"
+    self.startingOperation.name = "Start<\(operationName)>"
     self.underlyingOperationQueue.addOperation(startingOperation)
     self.finishingOperation.name = "End<\(operationName)>"
     self.finishingOperation.addDependency(startingOperation)

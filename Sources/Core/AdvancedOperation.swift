@@ -39,9 +39,6 @@ open class AdvancedOperation: Operation {
   /// Errors generated during the execution.
   public var errors: [Error] { return stateLock.synchronized { _errors } }
 
-  /// Exclusivity categories.
-  internal var categories = Set<String>()
-
   /// An instance of `OSLog` (by default is disabled).
   public private(set) var log = OSLog.disabled
 
@@ -94,11 +91,9 @@ open class AdvancedOperation: Operation {
     }
   }
 
-  // TODO remove this -> for KVO on every single change?
   open override class func keyPathsForValuesAffectingValue(forKey key: String) -> Set<String> {
     switch key {
-    case #keyPath(Operation.isReady),
-         #keyPath(Operation.isExecuting),
+    case #keyPath(Operation.isExecuting),
          #keyPath(Operation.isFinished):
       return Set([#keyPath(state)])
     default:
@@ -118,25 +113,6 @@ open class AdvancedOperation: Operation {
   private(set) var observers = SynchronizedArray<OperationObservingType>()
 
   // MARK: - Execution
-
-  //  lazy var dispatchQueue: DispatchQueue = {
-  //    var qos =  DispatchQoS.unspecified
-  //    switch qualityOfService {
-  //    case .background:
-  //      qos = .background
-  //    case .default:
-  //      qos = .default
-  //    case .utility:
-  //      qos = .utility
-  //    case .userInitiated:
-  //      qos = .userInitiated
-  //    case .userInteractive:
-  //      qos = .userInteractive
-  //    }
-  //
-  //    let queue = DispatchQueue(label: operationName, qos: qos) //, attributes: .concurrent)
-  //    return queue
-  //  }()
 
   public final override func start() {
     let canBeStarted = stateLock.synchronized { () -> Bool in
@@ -258,13 +234,7 @@ open class AdvancedOperation: Operation {
 
   public func addCondition(_ condition: OperationCondition) {
     assert(state == .ready, "Cannot add conditions if the operation is \(state).")
-
-    // TODO, cancellable categories
-    if let exclusivityCondition = condition as? MutuallyExclusiveCondition {
-      categories.insert(exclusivityCondition.name)
-    } else {
-      conditions.append(condition)
-    }
+    conditions.append(condition)
   }
 
   // MARK: - Subclass

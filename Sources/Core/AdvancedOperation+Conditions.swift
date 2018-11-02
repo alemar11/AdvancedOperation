@@ -26,37 +26,36 @@ import Foundation
 // MARK: - Condition Evaluation
 
 internal extension AdvancedOperation {
-
+  
   func makeConditionsEvaluator() -> AdvancedOperation? {
     guard !conditions.isEmpty else {
       return nil
     }
-
+    
+    guard !(self is ConditionEvaluatorOperation) else {
+      return nil
+    }
+    
     let evaluator = ConditionEvaluatorOperation(operation: self, conditions: conditions)
-
-    let selfObserver = WillCancelObserver { [weak evaluator] operation, errors in
-        guard let evaluator = evaluator else {
-          return
-        }
-
-        print("🚩\(operation.operationName) has been cancelled --> cancelling \(evaluator.operationName)")
-        evaluator.cancel(errors: errors)
+    
+    let willCancelObserver = WillCancelObserver { [weak evaluator] operation, errors in
+      guard let evaluator = evaluator else {
+        return
+      }
+      
+      evaluator.cancel(errors: errors)
     }
-
-    addObserver(selfObserver)
+    
+    addObserver(willCancelObserver)
     evaluator.useOSLog(log)
-
-    for dependency in dependencies {
-      print("🚩 adding \(dependency.operationName) as dependency for \(evaluator.operationName)")
-      evaluator.addDependency(dependency)
-
-    }
+    
+    //    for dependency in dependencies {
+    //      evaluator.addDependency(dependency)
+    //    }
+    dependencies.forEach(evaluator.addDependency)
     addDependency(evaluator)
-
-    // giving the same categories to the evaluator: it can start only when the exclusivity conditions are met
-    evaluator.categories = categories
-
+    
     return evaluator
   }
-
+  
 }
