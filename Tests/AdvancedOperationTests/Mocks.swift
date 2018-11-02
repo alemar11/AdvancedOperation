@@ -267,6 +267,26 @@ final internal class CancellingAsyncOperation: AdvancedOperation {
   }
 }
 
+/// An operation that produces another operation
+final internal class ProducingOperation: AdvancedOperation {
+  let operation: AdvancedOperation
+
+  init(operation: AdvancedOperation) {
+    self.operation = operation
+  }
+
+  override func main() {
+    guard !isCancelled else {
+      finish()
+      return
+    }
+
+    produceOperation(operation)
+    finish()
+  }
+
+}
+
 // MARK: - OperationObserving
 
 final internal class MockObserver: OperationObserving {

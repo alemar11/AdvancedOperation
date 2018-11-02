@@ -602,4 +602,18 @@ final class AdvancedOperationQueueTests: XCTestCase {
     XCTAssertNil(weakOperation4, "Leak: operation4 should be nilled out. The queue has still \(queue!.operations.count) operations.")
   }
 
+  func testProducedOperation() {
+    let producedOperation = SleepyAsyncOperation()
+    let producingOperation = ProducingOperation(operation: producedOperation)
+    let expectation1 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isFinished), object: producedOperation, expectedValue: true)
+    let expectation2 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isFinished), object: producingOperation, expectedValue: true)
+    let queue = AdvancedOperationQueue()
+    queue.addOperation(producingOperation)
+
+    wait(for: [expectation1, expectation2], timeout: 10)
+
+    XCTAssertFalse(producingOperation.isCancelled)
+    XCTAssertFalse(producedOperation.isCancelled)
+  }
+
 }

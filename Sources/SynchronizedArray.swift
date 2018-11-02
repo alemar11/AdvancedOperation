@@ -24,7 +24,6 @@
 import Dispatch
 import Foundation
 
-// TODO: remove this?
 internal final class SynchronizedArray<Element> {
   fileprivate let queue = DispatchQueue(label: "\(identifier).SynchronizedArray")
   fileprivate var array = [Element]()
