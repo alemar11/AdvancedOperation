@@ -14,7 +14,7 @@
     <a title="OperationCondition Protocol Reference"></a>
     <header>
       <div class="content-wrapper">
-        <p><a href="../index.html">AdvancedOperation Docs</a> (57% documented)</p>
+        <p><a href="../index.html">AdvancedOperation Docs</a> (54% documented)</p>
       </div>
     </header>
     <div class="content-wrapper">
@@ -46,9 +46,6 @@
                 <a href="../Classes/DelayOperation.html">DelayOperation</a>
               </li>
               <li class="nav-group-task">
-                <a href="../Classes/ExclusivityManager.html">ExclusivityManager</a>
-              </li>
-              <li class="nav-group-task">
                 <a href="../Classes/GroupOperation.html">GroupOperation</a>
               </li>
               <li class="nav-group-task">
@@ -59,9 +56,6 @@
           <li class="nav-group-name">
             <a href="../Enums.html">Enumerations</a>
             <ul class="nav-group-tasks">
-              <li class="nav-group-task">
-                <a href="../Enums/MutualExclusivityMode.html">MutualExclusivityMode</a>
-              </li>
               <li class="nav-group-task">
                 <a href="../Enums/OperationConditionResult.html">OperationConditionResult</a>
               </li>
@@ -89,9 +83,6 @@
               </li>
               <li class="nav-group-task">
                 <a href="../Protocols/OperationDidCancelObserving.html">OperationDidCancelObserving</a>
-              </li>
-              <li class="nav-group-task">
-                <a href="../Protocols/OperationDidFinishConditionsEvaluationsObserving.html">OperationDidFinishConditionsEvaluationsObserving</a>
               </li>
               <li class="nav-group-task">
                 <a href="../Protocols/OperationDidFinishObserving.html">OperationDidFinishObserving</a>
@@ -141,9 +132,6 @@
                 <a href="../Structs/InjectedInputRequirements.html">InjectedInputRequirements</a>
               </li>
               <li class="nav-group-task">
-                <a href="../Structs/MutuallyExclusiveCondition.html">MutuallyExclusiveCondition</a>
-              </li>
-              <li class="nav-group-task">
                 <a href="../Structs/NegatedCondition.html">NegatedCondition</a>
               </li>
               <li class="nav-group-task">
@@ -151,9 +139,6 @@
               </li>
               <li class="nav-group-task">
                 <a href="../Structs/NoFailedDependenciesCondition.html">NoFailedDependenciesCondition</a>
-              </li>
-              <li class="nav-group-task">
-                <a href="../Structs/SilentCondition.html">SilentCondition</a>
               </li>
               <li class="nav-group-task">
                 <a href="../Structs/TimeoutObserver.html">TimeoutObserver</a>
@@ -213,106 +198,9 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="k">var</span> <span class="nv">name</span><span class="p">:</span> <span class="kt">String</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
+                          <pre class="highlight swift"><code><span class="k">var</span> <span class="nv">name</span><span class="p">:</span> <span class="nf">String</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
 
                         </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:17AdvancedOperation0B9ConditionP23mutuallyExclusivityModeAA06MutualeF0Ovp"></a>
-                    <a name="//apple_ref/swift/Property/mutuallyExclusivityMode" class="dashAnchor"></a>
-                    <a class="token" href="#/s:17AdvancedOperation0B9ConditionP23mutuallyExclusivityModeAA06MutualeF0Ovp">mutuallyExclusivityMode</a>
-                    </code>
-                      <span class="declaration-note">
-                        Default implementation
-                      </span>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>Indicates how this condition is mutually exclusive.</p>
-
-                      </div>
-                      <h4>Default Implementation</h4>
-                      <div class="default_impl abstract">
-                        
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="k">var</span> <span class="nv">mutuallyExclusivityMode</span><span class="p">:</span> <span class="kt"><a href="../Enums/MutualExclusivityMode.html">MutualExclusivityMode</a></span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
-
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:17AdvancedOperation0B9ConditionP10dependency3forSo11NSOperationCSgA2AC_tF"></a>
-                    <a name="//apple_ref/swift/Method/dependency(for:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:17AdvancedOperation0B9ConditionP10dependency3forSo11NSOperationCSgA2AC_tF">dependency(for:)</a>
-                    </code>
-                      <span class="declaration-note">
-                        Default implementation
-                      </span>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>Some conditions may have the ability to satisfy the condition if another operation is executed first.</p>
-<div class="aside aside-note">
-    <p class="aside-title">Note</p>
-    Only a single operation may be returned as a dependency. If you find that you need to return multiple operations, then you should be expressing that as multiple conditions.
-    Alternatively, you could return a single <code><a href="../Classes/GroupOperation.html">GroupOperation</a></code> that executes multiple operations internally.
-
-</div>
-
-                      </div>
-                      <h4>Default Implementation</h4>
-                      <div class="default_impl abstract">
-                        
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">dependency</span><span class="p">(</span><span class="k">for</span> <span class="nv">operation</span><span class="p">:</span> <span class="kt"><a href="../Classes/AdvancedOperation.html">AdvancedOperation</a></span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Operation</span><span class="p">?</span></code></pre>
-
-                        </div>
-                      </div>
-                      <div>
-                        <h4>Parameters</h4>
-                        <table class="graybox">
-                          <tbody>
-                            <tr>
-                              <td>
-                                <code>
-                                <em>operation</em>
-                                </code>
-                              </td>
-                              <td>
-                                <div>
-                                  <p>The <code><a href="../Classes/AdvancedOperation.html">AdvancedOperation</a></code> to which the Condition has been added.</p>
-                                </div>
-                              </td>
-                            </tr>
-                          </tbody>
-                        </table>
-                      </div>
-                      <div>
-                        <h4>Return Value</h4>
-                        <p>An <code>Operation</code>, if a dependency should be automatically added. Otherwise, <code>nil</code>.</p>
                       </div>
                     </section>
                   </div>
@@ -414,7 +302,7 @@
           </section>
         </section>
         <section id="footer">
-          <p>&copy; 2018 <a class="link" href="https://github.com/tinrobots/AdvancedOperation" target="_blank" rel="external">Alessandro Marzoli</a>. All rights reserved. (Last updated: 2018-10-17)</p>
+          <p>&copy; 2018 <a class="link" href="https://github.com/tinrobots/AdvancedOperation" target="_blank" rel="external">Alessandro Marzoli</a>. All rights reserved. (Last updated: 2018-11-02)</p>
           <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.9.2</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
         </section>
       </article>
