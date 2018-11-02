@@ -120,6 +120,10 @@ open class AdvancedOperation: Operation {
     }
 
     guard canBeStarted else {
+      if isCancelled {
+        // if the the cancellation event has been processed, mark the operation as finished.
+        finish()
+      }
       return
     }
 
@@ -238,12 +242,6 @@ open class AdvancedOperation: Operation {
     os_log("%{public}s has started.", log: log, type: .info, operationName)
   }
 
-  /// Subclass this method to know if the operation has completed the evaluation of its conditions.
-  /// - Note: Calling the `super` implementation will keep the logging messages.
-  open func operationDidCompleteConditionsEvaluation(errors: [Error]) {
-    os_log("%{public}s has completed the conditions evaluation with %{public}d errors.", log: log, type: .info, operationName, errors.count)
-  }
-
   /// Subclass this method to know when the operation has produced another `Operation`.
   /// - Note: Calling the `super` implementation will keep the logging messages.
   open func operationDidProduceOperation(_ operation: Operation) {
@@ -272,12 +270,6 @@ open class AdvancedOperation: Operation {
   /// - Note: Calling the `super` implementation will keep the logging messages.
   open func operationDidFinish(errors: [Error]) {
     os_log("%{public}s has finished with %{public}d errors.", log: log, type: .info, operationName, errors.count)
-  }
-
-  /// Subclass this method to know when the operation will start evaluating its conditions.
-  /// - Note: Calling the `super` implementation will keep the logging messages.
-  open func operationWillEvaluateConditions() {
-    os_log("%{public}s is evaluating %{public}d conditions.", log: log, type: .info, operationName, conditions.count)
   }
 
   // MARK: - OSLog
@@ -345,10 +337,6 @@ extension AdvancedOperation {
       return []
     }
     return observers.compactMap { $0 as? OperationDidFinishObserving }
-  }
-
-  private func willEvaluateConditions() {
-    operationWillEvaluateConditions()
   }
 
   private func willExecute() {
