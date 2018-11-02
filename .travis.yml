@@ -6,10 +6,10 @@ env:
     - MACOS_FRAMEWORK_SCHEME="AdvancedOperation macOS"
     - TVOS_FRAMEWORK_SCHEME="AdvancedOperation tvOS"
     - WATCHOS_FRAMEWORK_SCHEME="AdvancedOperation watchOS"
-    - IOS_SDK=iphonesimulator12.0
+    - IOS_SDK=iphonesimulator12.1
     - MACOS_SDK=macosx10.14
-    - TVOS_SDK=appletvsimulator12.0
-    - WATCHOS_SDK=watchsimulator5
+    - TVOS_SDK=appletvsimulator12.1
+    - WATCHOS_SDK=watchsimulator5.1
     - XCODE_RUN_TESTS="NO"
     - XCODE_CONFIGURATION="DEBUG"
 
