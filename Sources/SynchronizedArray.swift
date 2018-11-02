@@ -24,7 +24,6 @@
 import Dispatch
 import Foundation
 
-
 // TODO: remove this?
 internal final class SynchronizedArray<Element> {
   fileprivate let queue = DispatchQueue(label: "\(identifier).SynchronizedArray")
@@ -51,19 +50,6 @@ internal extension SynchronizedArray {
 
 // MARK: - Mutable
 internal extension SynchronizedArray {
-
-  /// Adds a new element at the end of the array.
-  ///
-  /// - Parameter element: The element to append to the array.
-  func append(contentsOf elements: [Element]) {
-    queue.sync {
-      guard !elements.isEmpty else {
-        return // avoid TSAN _swiftEmptyArrayStorage
-      }
-
-      self.array.append(contentsOf: elements)
-    }
-  }
 
   /// Adds a new element at the end of the array.
   func append(_ element: Element) {
