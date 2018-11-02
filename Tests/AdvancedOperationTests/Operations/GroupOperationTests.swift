@@ -689,4 +689,27 @@ final class GroupOperationTests: XCTestCase {
     XCTAssertEqual(observer.didCancelCount, 0)
   }
 
+  func testGroupOperationInsideAnotherQueue() {
+    let queue = AdvancedOperationQueue()
+    let operation = SleepyAsyncOperation(interval1: 6)
+    let group = GroupOperation(operations: [operation])
+
+    operation.name = "operation"
+    group.name = "group"
+
+    operation.useOSLog(TestsLog)
+    group.useOSLog(TestsLog)
+
+    let expectation1 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isCancelled), object: operation, expectedValue: true)
+    let expectation2 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isFinished), object: operation, expectedValue: true)
+    let expectation3 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isCancelled), object: group, expectedValue: true)
+    let expectation4 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isFinished), object: group, expectedValue: true)
+    queue.addOperation(group)
+    DispatchQueue.global().asyncAfter(deadline: .now() + 2) {
+      group.cancel()
+    }
+
+    wait(for: [expectation1, expectation2, expectation3, expectation4], timeout: 10, enforceOrder: true)
+  }
+
 }

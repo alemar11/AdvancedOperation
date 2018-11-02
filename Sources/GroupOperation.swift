@@ -150,12 +150,7 @@ open class GroupOperation: AdvancedOperation {
     }
 
     for operation in underlyingOperationQueue.operations.reversed() where operation !== finishingOperation && operation !== startingOperation && !operation.isFinished && !operation.isCancelled {
-      if operation.isExecuting {
         operation.cancel()
-        //operation.waitUntilFinished() // TODO: is it worth waiting?
-      } else {
-        operation.cancel()
-      }
     }
 
     if !isExecuting && !isFinished {
@@ -296,6 +291,8 @@ extension GroupOperation: AdvancedOperationQueueDelegate {
       return
     }
 
+    /// The finishingOperation finishes when all the other operations have been finished.
+    /// If some operations have been cancelled but not finished, the finishingOperation will not finish.
     if operation === finishingOperation {
       let cancellation = lock.synchronized { _cancellationTriggered }
       if cancellation {
