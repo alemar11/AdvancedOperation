@@ -28,13 +28,13 @@ internal extension AdvancedOperation {
   @objc
   enum OperationState: Int, CustomDebugStringConvertible {
 
-    case ready
+    case pending
     case executing
     case finished
 
     func canTransition(to state: OperationState) -> Bool {
       switch (self, state) {
-      case (.ready, .executing):
+      case (.pending, .executing):
         return true
       case (.executing, .finished):
         return true
@@ -45,8 +45,8 @@ internal extension AdvancedOperation {
 
     var debugDescription: String {
       switch self {
-      case .ready:
-        return "ready"
+      case .pending:
+        return "pending"
       case .executing:
         return "executing"
       case .finished:

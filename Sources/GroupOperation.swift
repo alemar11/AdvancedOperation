@@ -26,7 +26,30 @@ import os.log
 
 open class GroupOperation: AdvancedOperation {
 
-  // MARK: - Private Properties
+  // MARK: - Properties
+
+  public override func useOSLog(_ log: OSLog) {
+    super.useOSLog(log)
+    underlyingOperationQueue.operations.forEach { operation in
+      if let advancedOperation = operation as? AdvancedOperation, advancedOperation.log === OSLog.disabled {
+        advancedOperation.useOSLog(log)
+      }
+    }
+  }
+
+  /// Stores all of the `AdvancedOperation` errors during the execution.
+  internal private(set) var aggregatedErrors: [Error] {
+    get {
+      return lock.synchronized { _aggregatedErrors }
+    }
+    set {
+      lock.synchronized {
+        _aggregatedErrors = newValue
+      }
+    }
+  }
+
+  private var _aggregatedErrors = [Error]()
 
   /// Internal `AdvancedOperationQueue`.
   private let underlyingOperationQueue: AdvancedOperationQueue
@@ -41,6 +64,8 @@ open class GroupOperation: AdvancedOperation {
 
   private var _temporaryCancelErrors = [Error]()
 
+  private var _cancellationTriggered = false
+
   /// Holds the cancellation error.
   private var temporaryCancelErrors: [Error] {
     get {
@@ -49,29 +74,6 @@ open class GroupOperation: AdvancedOperation {
     set {
       lock.synchronized {
         _temporaryCancelErrors = newValue
-      }
-    }
-  }
-
-  private var _aggregatedErrors = [Error]()
-
-  /// Stores all of the `AdvancedOperation` errors during the execution.
-  internal var aggregatedErrors: [Error] {
-    get {
-      return lock.synchronized { _aggregatedErrors }
-    }
-    set {
-      lock.synchronized {
-        _aggregatedErrors = newValue
-      }
-    }
-  }
-
-  public override func useOSLog(_ log: OSLog) {
-    super.useOSLog(log)
-    underlyingOperationQueue.operations.forEach { operation in
-      if let advancedOperation = operation as? AdvancedOperation, advancedOperation.log === OSLog.disabled {
-        advancedOperation.useOSLog(log)
       }
     }
   }
@@ -87,9 +89,9 @@ open class GroupOperation: AdvancedOperation {
   ///   - underlyingQueue: An optional DispatchQueue which defaults to nil, this parameter is set as the underlying queue of the group's own `AdvancedOperationQueue`.
   /// - Note: If the operation object has an explicit quality of service level set, that value is used instead.
   public convenience init(operations: Operation...,
-                          qualityOfService: QualityOfService = .default,
-                          maxConcurrentOperationCount: Int = OperationQueue.defaultMaxConcurrentOperationCount,
-                          underlyingQueue: DispatchQueue? = .none) {
+    qualityOfService: QualityOfService = .default,
+    maxConcurrentOperationCount: Int = OperationQueue.defaultMaxConcurrentOperationCount,
+    underlyingQueue: DispatchQueue? = .none) {
     self.init(operations: operations,
               qualityOfService: qualityOfService,
               maxConcurrentOperationCount: maxConcurrentOperationCount,
@@ -132,8 +134,6 @@ open class GroupOperation: AdvancedOperation {
   deinit {
     self.underlyingOperationQueue.delegate = nil
   }
-
-  private var _cancellationTriggered = false
 
   /// Advises the `GroupOperation` object that it should stop executing its tasks.
   public final override func cancel(errors: [Error]) {
@@ -310,8 +310,8 @@ extension GroupOperation: AdvancedOperationQueueDelegate {
         finish()
       } else {
         finish(errors: self.aggregatedErrors)
+      }
     }
-  }
   }
 
   public func operationQueue(operationQueue: AdvancedOperationQueue, operationWillCancel operation: AdvancedOperation, withErrors errors: [Error]) { }

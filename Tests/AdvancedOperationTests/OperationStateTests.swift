@@ -28,17 +28,17 @@ final class OperationStateTests: XCTestCase {
 
   func testTransition() {
     // Ready
-    XCTAssertTrue(AdvancedOperation.OperationState.ready.canTransition(to: .executing))
-    XCTAssertFalse(AdvancedOperation.OperationState.ready.canTransition(to: .ready))
+    XCTAssertTrue(AdvancedOperation.OperationState.pending.canTransition(to: .executing))
+    XCTAssertFalse(AdvancedOperation.OperationState.pending.canTransition(to: .pending))
 
     // Executing
     XCTAssertFalse(AdvancedOperation.OperationState.executing.canTransition(to: .executing))
     XCTAssertTrue(AdvancedOperation.OperationState.executing.canTransition(to: .finished))
-    XCTAssertFalse(AdvancedOperation.OperationState.executing.canTransition(to: .ready))
+    XCTAssertFalse(AdvancedOperation.OperationState.executing.canTransition(to: .pending))
   }
 
   func testDebugDescription() {
-    XCTAssertEqual(AdvancedOperation.OperationState.ready.debugDescription.lowercased(), "ready")
+    XCTAssertEqual(AdvancedOperation.OperationState.pending.debugDescription.lowercased(), "pending")
     XCTAssertEqual(AdvancedOperation.OperationState.executing.debugDescription.lowercased(), "executing")
     XCTAssertEqual(AdvancedOperation.OperationState.finished.debugDescription.lowercased(), "finished")
   }

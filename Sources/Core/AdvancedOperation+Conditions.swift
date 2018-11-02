@@ -48,10 +48,6 @@ internal extension AdvancedOperation {
     
     addObserver(willCancelObserver)
     evaluator.useOSLog(log)
-    
-    //    for dependency in dependencies {
-    //      evaluator.addDependency(dependency)
-    //    }
     dependencies.forEach(evaluator.addDependency)
     addDependency(evaluator)
     

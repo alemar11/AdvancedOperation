@@ -27,14 +27,15 @@ import os.log
 /// An advanced subclass of `Operation`.
 open class AdvancedOperation: Operation {
 
-  // MARK: - State
+  // MARK: - Properties
 
   public final  override var isReady: Bool { return super.isReady && stateLock.synchronized { return !_cancelling } }
-  public final override var isExecuting: Bool { return state == .executing }
-  public final override var isFinished: Bool { return state == .finished }
-  public final override var isCancelled: Bool { return stateLock.synchronized { return _cancelled } }
 
-  // MARK: - Properties
+  public final override var isExecuting: Bool { return state == .executing }
+
+  public final override var isFinished: Bool { return state == .finished }
+
+  public final override var isCancelled: Bool { return stateLock.synchronized { return _cancelled } }
 
   /// Errors generated during the execution.
   public var errors: [Error] { return stateLock.synchronized { _errors } }
@@ -45,18 +46,14 @@ open class AdvancedOperation: Operation {
   /// Returns `true` if the `AdvancedOperation` has generated errors during its lifetime.
   public var hasErrors: Bool { return !errors.isEmpty }
 
-  /// Errors generated during the execution.
-  private var _errors = [Error]()
-
   /// You can use this method from within the running operation object to get a reference to the operation queue that started it.
   //// Calling this method from outside the context of a running operation typically results in nil being returned.
-  public var operationQueue: OperationQueue? {
-    return OperationQueue.current
-  }
+  public var operationQueue: OperationQueue? { return OperationQueue.current }
 
-  // MARK: - Gates
+  internal private(set) var observers = SynchronizedArray<OperationObservingType>()
 
-  // TODO: rename these variables
+  /// Errors generated during the execution.
+  private var _errors = [Error]()
 
   /// Returns `true` if the finish command has been fired and the operation is processing it.
   private var _finishing = false
@@ -75,7 +72,7 @@ open class AdvancedOperation: Operation {
   private let stateLock = NSRecursiveLock()
 
   /// Private backing stored property for `state`.
-  private var _state: OperationState = .ready
+  private var _state: OperationState = .pending
 
   /// The state of the operation.
   @objc dynamic
@@ -108,10 +105,6 @@ open class AdvancedOperation: Operation {
     observers.removeAll()
   }
 
-  // MARK: - Observers
-
-  private(set) var observers = SynchronizedArray<OperationObservingType>()
-
   // MARK: - Execution
 
   public final override func start() {
@@ -120,7 +113,7 @@ open class AdvancedOperation: Operation {
 
       guard !_finishing else { return false }
 
-      guard _state == .ready else { return false }
+      guard _state == .pending else { return false }
 
       _starting = true
       return true
@@ -233,7 +226,7 @@ open class AdvancedOperation: Operation {
   public private(set) var conditions = [OperationCondition]()
 
   public func addCondition(_ condition: OperationCondition) {
-    assert(state == .ready, "Cannot add conditions if the operation is \(state).")
+    assert(state == .pending, "Cannot add conditions if the operation is \(state).")
     conditions.append(condition)
   }
 
@@ -307,7 +300,7 @@ extension AdvancedOperation {
   /// - Parameter observer: the observer to add.
   /// - Requires: `self must not have started.
   public func addObserver(_ observer: OperationObservingType) {
-    assert(state == .ready, "Cannot modify observers after execution has begun.")
+    assert(state == .pending, "Cannot modify observers after execution has begun.")
 
     observers.append(observer)
   }
