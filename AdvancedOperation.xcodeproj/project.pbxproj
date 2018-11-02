@@ -126,10 +126,6 @@
 		23856179200A873C0061BAA1 /* Mocks.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23856178200A873C0061BAA1 /* Mocks.swift */; };
 		2385617A200A873C0061BAA1 /* Mocks.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23856178200A873C0061BAA1 /* Mocks.swift */; };
 		2385617B200A873C0061BAA1 /* Mocks.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23856178200A873C0061BAA1 /* Mocks.swift */; };
-		2398EE7521664C03002305B6 /* _OperationQueueObserving.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2398EE7321664C03002305B6 /* _OperationQueueObserving.swift */; };
-		2398EE7621664C03002305B6 /* _OperationQueueObserving.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2398EE7321664C03002305B6 /* _OperationQueueObserving.swift */; };
-		2398EE7721664C03002305B6 /* _OperationQueueObserving.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2398EE7321664C03002305B6 /* _OperationQueueObserving.swift */; };
-		2398EE7821664C03002305B6 /* _OperationQueueObserving.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2398EE7321664C03002305B6 /* _OperationQueueObserving.swift */; };
 		239BC52220EB7539009A36D9 /* Operation+Injection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 239BC52120EB7539009A36D9 /* Operation+Injection.swift */; };
 		239BC52320EB7539009A36D9 /* Operation+Injection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 239BC52120EB7539009A36D9 /* Operation+Injection.swift */; };
 		239BC52420EB7539009A36D9 /* Operation+Injection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 239BC52120EB7539009A36D9 /* Operation+Injection.swift */; };
@@ -254,7 +250,6 @@
 		23856174200A87070061BAA1 /* AdvancedOperationQueueTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdvancedOperationQueueTests.swift; sourceTree = "<group>"; };
 		23856178200A873C0061BAA1 /* Mocks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Mocks.swift; sourceTree = "<group>"; };
 		2385617C200A8DC50061BAA1 /* Package.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Package.swift; sourceTree = SOURCE_ROOT; };
-		2398EE7321664C03002305B6 /* _OperationQueueObserving.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = _OperationQueueObserving.swift; sourceTree = "<group>"; };
 		239BC52120EB7539009A36D9 /* Operation+Injection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Operation+Injection.swift"; sourceTree = "<group>"; };
 		239BC52620EB7C47009A36D9 /* InjectionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InjectionTests.swift; sourceTree = "<group>"; };
 		23A1A85720F4AD9100EA3350 /* CHANGELOG.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = CHANGELOG.md; sourceTree = SOURCE_ROOT; };
@@ -430,7 +425,6 @@
 			isa = PBXGroup;
 			children = (
 				23F24D2F2007B0D200B25A03 /* OperationObserving.swift */,
-				2398EE7321664C03002305B6 /* _OperationQueueObserving.swift */,
 				23F24D392007C03D00B25A03 /* BlockObserver.swift */,
 				232C452D215A898000B73E79 /* UIBackgroundObserver.swift */,
 				23B1BE06216F9FA9002D0A5B /* TimeoutObserver.swift */,
@@ -825,7 +819,6 @@
 				233078C0217DF83000BE5AB5 /* ConditionEvaluatorOperation.swift in Sources */,
 				23F24D22200799B800B25A03 /* Operation+Utils.swift in Sources */,
 				232F3AAE206041DE00FC45CB /* Globals.swift in Sources */,
-				2398EE7521664C03002305B6 /* _OperationQueueObserving.swift in Sources */,
 				235D08AC206A498400F70142 /* NegatedCondition.swift in Sources */,
 				232F9444217F29AE00A86699 /* AdvancedOperation+OperationState.swift in Sources */,
 				239BC52220EB7539009A36D9 /* Operation+Injection.swift in Sources */,
@@ -857,7 +850,6 @@
 				233078C1217DF83000BE5AB5 /* ConditionEvaluatorOperation.swift in Sources */,
 				23F24D23200799B800B25A03 /* Operation+Utils.swift in Sources */,
 				232F3AAF206041DE00FC45CB /* Globals.swift in Sources */,
-				2398EE7621664C03002305B6 /* _OperationQueueObserving.swift in Sources */,
 				235D08B3206A498400F70142 /* NegatedCondition.swift in Sources */,
 				232F9445217F29AE00A86699 /* AdvancedOperation+OperationState.swift in Sources */,
 				239BC52320EB7539009A36D9 /* Operation+Injection.swift in Sources */,
@@ -889,7 +881,6 @@
 				233078C2217DF83000BE5AB5 /* ConditionEvaluatorOperation.swift in Sources */,
 				23F24D24200799B800B25A03 /* Operation+Utils.swift in Sources */,
 				232F3AB0206041DE00FC45CB /* Globals.swift in Sources */,
-				2398EE7721664C03002305B6 /* _OperationQueueObserving.swift in Sources */,
 				235D08BA206A498500F70142 /* NegatedCondition.swift in Sources */,
 				232F9446217F29AE00A86699 /* AdvancedOperation+OperationState.swift in Sources */,
 				239BC52420EB7539009A36D9 /* Operation+Injection.swift in Sources */,
@@ -921,7 +912,6 @@
 				233078C3217DF83000BE5AB5 /* ConditionEvaluatorOperation.swift in Sources */,
 				23F24D25200799B800B25A03 /* Operation+Utils.swift in Sources */,
 				232F3AB1206041DE00FC45CB /* Globals.swift in Sources */,
-				2398EE7821664C03002305B6 /* _OperationQueueObserving.swift in Sources */,
 				235D08C1206A498500F70142 /* NegatedCondition.swift in Sources */,
 				232F9447217F29AE00A86699 /* AdvancedOperation+OperationState.swift in Sources */,
 				239BC52520EB7539009A36D9 /* Operation+Injection.swift in Sources */,
