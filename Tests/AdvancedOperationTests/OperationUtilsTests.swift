@@ -29,19 +29,40 @@ final class OperationUtilsTests: XCTestCase {
   func testAddCompletionBlock() {
     let operation = SleepyOperation()
     let expectation1 = expectation(description: "\(#function)\(#line)")
-
-    var blockExecuted = false
+    let expectation2 = expectation(description: "\(#function)\(#line)")
 
     operation.completionBlock = {
-      blockExecuted = true
+      expectation1.fulfill()
     }
 
     operation.addCompletionBlock(asEndingBlock: false) {
-      XCTAssertFalse(blockExecuted)
+      expectation2.fulfill()
+    }
+
+    operation.start()
+    wait(for: [expectation2, expectation1], timeout: 10, enforceOrder: true)
+  }
+
+  func testAddMultipleCompletionBlock() {
+    let operation = SleepyOperation()
+    let expectation1 = expectation(description: "\(#function)\(#line)")
+    let expectation2 = expectation(description: "\(#function)\(#line)")
+    let expectation3 = expectation(description: "\(#function)\(#line)")
+
+    operation.completionBlock = {
       expectation1.fulfill()
     }
+
+    operation.addCompletionBlock(asEndingBlock: false) {
+      expectation2.fulfill()
+    }
+
+    operation.addCompletionBlock(asEndingBlock: false) {
+      expectation3.fulfill()
+    }
+
     operation.start()
-    waitForExpectations(timeout: 10)
+    wait(for: [expectation3, expectation2, expectation1], timeout: 10, enforceOrder: true)
   }
 
   func testAddCompletionBlockWhileExecuting() {
