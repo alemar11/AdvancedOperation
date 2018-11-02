@@ -68,14 +68,7 @@ open class GroupOperation: AdvancedOperation {
 
   /// Holds the cancellation error.
   private var temporaryCancelErrors: [Error] {
-    get {
       return lock.synchronized { _temporaryCancelErrors }
-    }
-    set {
-      lock.synchronized {
-        _temporaryCancelErrors = newValue
-      }
-    }
   }
 
   // MARK: - Initialization
@@ -89,9 +82,9 @@ open class GroupOperation: AdvancedOperation {
   ///   - underlyingQueue: An optional DispatchQueue which defaults to nil, this parameter is set as the underlying queue of the group's own `AdvancedOperationQueue`.
   /// - Note: If the operation object has an explicit quality of service level set, that value is used instead.
   public convenience init(operations: Operation...,
-                          qualityOfService: QualityOfService = .default,
-                          maxConcurrentOperationCount: Int = OperationQueue.defaultMaxConcurrentOperationCount,
-                          underlyingQueue: DispatchQueue? = .none) {
+    qualityOfService: QualityOfService = .default,
+    maxConcurrentOperationCount: Int = OperationQueue.defaultMaxConcurrentOperationCount,
+    underlyingQueue: DispatchQueue? = .none) {
     self.init(operations: operations,
               qualityOfService: qualityOfService,
               maxConcurrentOperationCount: maxConcurrentOperationCount,
@@ -157,14 +150,13 @@ open class GroupOperation: AdvancedOperation {
     }
 
     for operation in underlyingOperationQueue.operations.reversed() where operation !== finishingOperation && operation !== startingOperation && !operation.isFinished && !operation.isCancelled {
-      operation.cancel()
+      if operation.isExecuting {
+        operation.cancel()
+        //operation.waitUntilFinished() // TODO: is it worth waiting?
+      } else {
+        operation.cancel()
+      }
     }
-
-    // TODO
-    // find opeartion not executing, reverse the order (hoping that they are enqueue in a serial way) --> cancel
-    // find operation executing, reverse the order -> cancel and wait
-
-    /// once all the operations will be cancelled and then finished, the finishing operation will be called
 
     if !isExecuting && !isFinished {
       // if it's ready or pending (waiting for depedencies to be finished)
@@ -305,8 +297,8 @@ extension GroupOperation: AdvancedOperationQueueDelegate {
     }
 
     if operation === finishingOperation {
-      let allOperationsCancelled = lock.synchronized { _cancellationTriggered }
-      if allOperationsCancelled {
+      let cancellation = lock.synchronized { _cancellationTriggered }
+      if cancellation {
         super.cancel(errors: temporaryCancelErrors)
         finish()
       } else {
