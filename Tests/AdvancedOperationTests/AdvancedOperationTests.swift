@@ -222,6 +222,7 @@ final class AdvancedOperationTests: XCTestCase {
     XCTAssertFalse(operation.isExecuting)
     XCTAssertFalse(operation.hasErrors)
     XCTAssertTrue(operation.isCancelled)
+    XCTAssertTrue(operation.isFinished)
   }
 
   func testMultipleStartAndCancelWithErrors() {
