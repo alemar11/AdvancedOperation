@@ -27,7 +27,7 @@ import Foundation
 /// A closure type that takes a closure as its parameter.
 public typealias OperationBlock = (@escaping ([Error]) -> Void) -> Void
 
-/// A sublcass of `AdvancedOperation` to execute a closure.
+/// A concurrent sublcass of `AdvancedOperation` to execute a closure.
 public final class AdvancedBlockOperation: AdvancedOperation {
 
   // MARK: - Private Properties

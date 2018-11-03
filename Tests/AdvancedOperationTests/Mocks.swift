@@ -109,7 +109,29 @@ final internal class SelfObservigOperation: AdvancedOperation {
 
 }
 
-final internal class RunUntilCancelledOperation: AdvancedOperation {
+final internal class SynchronousOperation: AdvancedOperation {
+  override var isAsynchronous: Bool { return false }
+  let finishingErrors: [Error]
+
+  init(errors: [Error] = []) {
+    self.finishingErrors = errors
+  }
+
+  override func main() {
+    if isCancelled {
+      return
+    }
+
+    if !finishingErrors.isEmpty {
+      finish(errors: finishingErrors)
+    }
+
+    // There's no need to call finish if we don't need to register errors upon completion.
+  }
+
+}
+
+final internal class RunUntilCancelledAsyncOperation: AdvancedOperation {
   let queue: DispatchQueue
 
   init(queue: DispatchQueue = DispatchQueue.global()) {
@@ -136,6 +158,7 @@ final internal class SleepyAsyncOperation: AdvancedOperation {
     self.interval1 = interval1
     self.interval2 = interval2
     self.interval3 = interval3
+    super.init()
   }
 
   override func main() {
@@ -174,6 +197,7 @@ final internal class SleepyAsyncOperation: AdvancedOperation {
 
 final internal class SleepyOperation: AdvancedOperation {
 
+  override var isAsynchronous: Bool { return false }
   private let interval: UInt32
 
   init(interval: UInt32 = 1) {
@@ -183,43 +207,39 @@ final internal class SleepyOperation: AdvancedOperation {
 
   override func main() {
     sleep(interval)
-    self.finish()
   }
 
 }
 
 final internal class SleepyBlockOperation: AdvancedOperation {
 
+  override public var isAsynchronous: Bool { return false }
   let block: () -> Void
   let interval: UInt32
 
   init(interval: UInt32, block: @escaping () -> Void) {
     self.block = block
     self.interval = interval
+    super.init()
   }
 
   override func main() {
     sleep(self.interval)
     block()
-    self.finish()
   }
 
 }
 
 final internal class NotExecutableOperation: AdvancedOperation {
 
-  override init() {
-    super.init()
-  }
+  override public var isAsynchronous: Bool { return false }
 
   override func main() {
     if isCancelled {
-      finish()
       return
     }
 
     XCTFail("This operation shouldn't be executed.")
-    finish()
   }
 
 }
@@ -269,20 +289,20 @@ final internal class CancellingAsyncOperation: AdvancedOperation {
 
 /// An operation that produces another operation
 final internal class ProducingOperation: AdvancedOperation {
+  override public var isAsynchronous: Bool { return false }
   let operation: AdvancedOperation
 
   init(operation: AdvancedOperation) {
     self.operation = operation
+    super.init()
   }
 
   override func main() {
     guard !isCancelled else {
-      finish()
       return
     }
 
     produceOperation(operation)
-    finish()
   }
 
 }

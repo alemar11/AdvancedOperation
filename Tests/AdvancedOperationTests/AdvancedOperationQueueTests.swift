@@ -616,4 +616,25 @@ final class AdvancedOperationQueueTests: XCTestCase {
     XCTAssertFalse(producedOperation.isCancelled)
   }
 
+  func testSynchronousOperationFinishedWithoutErrors() {
+    let operation = SynchronousOperation(errors: [])
+    let queue = AdvancedOperationQueue()
+    let expectation1 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isFinished), object: operation, expectedValue: true)
+
+    queue.addOperation(operation)
+    
+    wait(for: [expectation1], timeout: 10)
+  }
+
+  func testSynchronousOperationFinishedWithErrors() {
+    let operation = SynchronousOperation(errors: [MockError.failed, MockError.test])
+    let queue = AdvancedOperationQueue()
+    let expectation1 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isFinished), object: operation, expectedValue: true)
+    queue.addOperation(operation)
+
+    wait(for: [expectation1], timeout: 10)
+
+    XCTAssertTrue(operation.hasErrors)
+  }
+
 }

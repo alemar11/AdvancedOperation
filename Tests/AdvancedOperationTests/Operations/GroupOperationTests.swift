@@ -108,7 +108,7 @@ final class GroupOperationTests: XCTestCase {
   }
 
   func testOperationCancelled() {
-    let operation1 = RunUntilCancelledOperation()
+    let operation1 = RunUntilCancelledAsyncOperation()
     let operation2 = BlockOperation { }
     let group = GroupOperation(operations: operation1, operation2)
 
@@ -171,7 +171,7 @@ final class GroupOperationTests: XCTestCase {
     operation1.addCompletionBlock { expectation1.fulfill() }
 
     let expectation2 = expectation(description: "\(#function)\(#line)")
-    let operation2 = RunUntilCancelledOperation()
+    let operation2 = RunUntilCancelledAsyncOperation()
     operation2.addCompletionBlock { expectation2.fulfill() }
 
     let expectation3 = expectation(description: "\(#function)\(#line)")
@@ -194,7 +194,7 @@ final class GroupOperationTests: XCTestCase {
 
   func testGroupOperationCancelled() {
     let expectation1 = expectation(description: "\(#function)\(#line)")
-    let operation1 = RunUntilCancelledOperation()
+    let operation1 = RunUntilCancelledAsyncOperation()
     operation1.addCompletionBlock {
       XCTAssertFalse(operation1.isExecuting)
       XCTAssertTrue(operation1.isCancelled, "It should be cancelled for state: \(operation1.state).")
@@ -203,7 +203,7 @@ final class GroupOperationTests: XCTestCase {
     }
 
     let expectation2 = expectation(description: "\(#function)\(#line)")
-    let operation2 = RunUntilCancelledOperation()
+    let operation2 = RunUntilCancelledAsyncOperation()
     operation2.addCompletionBlock {
       XCTAssertFalse(operation2.isExecuting)
       XCTAssertTrue(operation2.isCancelled, "It should be cancelled for state: \(operation1.state).")
@@ -212,7 +212,7 @@ final class GroupOperationTests: XCTestCase {
     }
 
     let expectation3 = expectation(description: "\(#function)\(#line)")
-    let operation3 = RunUntilCancelledOperation()
+    let operation3 = RunUntilCancelledAsyncOperation()
     operation3.addCompletionBlock {
       XCTAssertFalse(operation3.isExecuting)
       XCTAssertTrue(operation3.isCancelled, "It should be cancelled for state: \(operation1.state).")
@@ -237,7 +237,7 @@ final class GroupOperationTests: XCTestCase {
 
   func testGroupOperationCancelledWithError() {
     let expectation1 = expectation(description: "\(#function)\(#line)")
-    let operation1 = RunUntilCancelledOperation()
+    let operation1 = RunUntilCancelledAsyncOperation()
     operation1.completionBlock = {
       XCTAssertFalse(operation1.isExecuting)
       XCTAssertTrue(operation1.isCancelled)
@@ -247,7 +247,7 @@ final class GroupOperationTests: XCTestCase {
     }
 
     let expectation2 = expectation(description: "\(#function)\(#line)")
-    let operation2 = RunUntilCancelledOperation()
+    let operation2 = RunUntilCancelledAsyncOperation()
     operation2.completionBlock = {
       XCTAssertFalse(operation2.isExecuting)
       XCTAssertTrue(operation2.isCancelled)
@@ -257,7 +257,7 @@ final class GroupOperationTests: XCTestCase {
     }
 
     let expectation3 = expectation(description: "\(#function)\(#line)")
-    let operation3 = RunUntilCancelledOperation()
+    let operation3 = RunUntilCancelledAsyncOperation()
     operation3.completionBlock = {
       XCTAssertFalse(operation3.isExecuting)
       XCTAssertTrue(operation3.isCancelled)

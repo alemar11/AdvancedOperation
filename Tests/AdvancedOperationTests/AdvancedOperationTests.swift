@@ -206,7 +206,7 @@ final class AdvancedOperationTests: XCTestCase {
   }
 
   func testMultipleStartsAndCancels() {
-    let operation = RunUntilCancelledOperation()
+    let operation = RunUntilCancelledAsyncOperation()
     let expectation1 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isFinished), object: operation, expectedValue: true)
 
     XCTAssertTrue(operation.isReady)
@@ -226,7 +226,7 @@ final class AdvancedOperationTests: XCTestCase {
   }
 
   func testMultipleStartAndCancelWithErrors() {
-    let operation = RunUntilCancelledOperation(queue: .main)
+    let operation = RunUntilCancelledAsyncOperation(queue: .main)
     let expectation1 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isFinished), object: operation, expectedValue: true)
 
     operation.useOSLog(TestsLog)
@@ -248,7 +248,7 @@ final class AdvancedOperationTests: XCTestCase {
   }
 
   func testMultipleCancelWithError() {
-    let operation = RunUntilCancelledOperation()
+    let operation = RunUntilCancelledAsyncOperation()
     let expectation1 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isFinished), object: operation, expectedValue: true)
 
     XCTAssertTrue(operation.isReady)
@@ -292,7 +292,7 @@ final class AdvancedOperationTests: XCTestCase {
 
   func testObserversWithMultipleCancelCommands() {
     let observer = MockObserver()
-    let operation = RunUntilCancelledOperation()
+    let operation = RunUntilCancelledAsyncOperation()
     operation.addObserver(observer)
 
     let expectation1 = keyValueObservingExpectation(for: operation, keyPath: #keyPath(AdvancedOperation.isFinished)) { (operation, changes) -> Bool in
@@ -446,6 +446,19 @@ final class AdvancedOperationTests: XCTestCase {
     operation1.produceOperation(operation2)
     operation1.cancel(errors: [error])
     waitForExpectations(timeout: 10)
+  }
+
+  func testSynchronousOperationFinishedWithoutErrors() {
+    let operation = SynchronousOperation(errors: [])
+    operation.start()
+    XCTAssertTrue(operation.isFinished)
+  }
+
+  func testSynchronousOperationFinishedWithErrors() {
+    let operation = SynchronousOperation(errors: [MockError.failed])
+    operation.start()
+    XCTAssertTrue(operation.isFinished)
+    XCTAssertTrue(operation.hasErrors)
   }
 
 }

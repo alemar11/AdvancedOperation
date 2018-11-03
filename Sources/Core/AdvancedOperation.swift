@@ -37,6 +37,10 @@ open class AdvancedOperation: Operation {
 
   public final override var isCancelled: Bool { return stateLock.synchronized { return _cancelled } }
 
+  open override var isAsynchronous: Bool { return true }
+
+  public final override var isConcurrent: Bool { return isAsynchronous }
+
   /// Errors generated during the execution.
   public var errors: [Error] { return stateLock.synchronized { _errors } }
 
@@ -131,7 +135,9 @@ open class AdvancedOperation: Operation {
     willExecute()
     main()
 
-    // TODO check if asynchronous/concurrent to call finish() or not automatically
+    if !isAsynchronous {
+      finish()
+    }
   }
 
   open override func main() {
@@ -153,7 +159,7 @@ open class AdvancedOperation: Operation {
 
       _cancelling = true
       if !cancelErrors.isEmpty { // TSAN _swiftEmptyArrayStorage
-      _errors.append(contentsOf: cancelErrors)
+        _errors.append(contentsOf: cancelErrors)
       }
       return true
     }
@@ -177,6 +183,10 @@ open class AdvancedOperation: Operation {
     super.cancel() // fires isReady KVO
   }
 
+  /// Finishes the operations with errors (if any).
+  ///
+  /// Use this method to complete an **isAsynchronous**/**isConcurret** operation or to complete a synchronous operation with errors.
+  /// - Note: For synchronous operations it's not needed to call this method unless there are errors to register upon completion.
   open func finish(errors: [Error] = []) {
     _finish(errors: errors)
   }
@@ -193,7 +203,7 @@ open class AdvancedOperation: Operation {
 
       _finishing = true
       if !finishErrors.isEmpty { // TSAN _swiftEmptyArrayStorage
-      _errors.append(contentsOf: finishErrors)
+        _errors.append(contentsOf: finishErrors)
       }
       return true
     }
@@ -205,7 +215,6 @@ open class AdvancedOperation: Operation {
     willFinish(errors: _errors)
     state = .finished
     didFinish(errors: _errors)
-
   }
 
   // MARK: - Produced Operations
@@ -220,8 +229,7 @@ open class AdvancedOperation: Operation {
   // MARK: - Dependencies
 
   open override func addDependency(_ operation: Operation) {
-    assert(!isExecuting, "Dependencies cannot be modified after execution has begun.")
-
+    assert(state == .pending, "Dependencies cannot be modified after execution has begun.")
     super.addDependency(operation)
   }
 
