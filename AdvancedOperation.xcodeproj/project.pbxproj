@@ -133,6 +133,9 @@
 		239BC52720EB7C47009A36D9 /* InjectionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 239BC52620EB7C47009A36D9 /* InjectionTests.swift */; };
 		239BC52820EB7C47009A36D9 /* InjectionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 239BC52620EB7C47009A36D9 /* InjectionTests.swift */; };
 		239BC52920EB7C47009A36D9 /* InjectionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 239BC52620EB7C47009A36D9 /* InjectionTests.swift */; };
+		239ECD31218E11AF00F640F2 /* AdvancedOperationErrorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 239ECD30218E11AF00F640F2 /* AdvancedOperationErrorTests.swift */; };
+		239ECD32218E11AF00F640F2 /* AdvancedOperationErrorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 239ECD30218E11AF00F640F2 /* AdvancedOperationErrorTests.swift */; };
+		239ECD33218E11AF00F640F2 /* AdvancedOperationErrorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 239ECD30218E11AF00F640F2 /* AdvancedOperationErrorTests.swift */; };
 		23A56BAC200F984400509A65 /* XCTestCase+Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23A56BAB200F984400509A65 /* XCTestCase+Utils.swift */; };
 		23A56BAD200F984400509A65 /* XCTestCase+Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23A56BAB200F984400509A65 /* XCTestCase+Utils.swift */; };
 		23A56BAE200F984400509A65 /* XCTestCase+Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23A56BAB200F984400509A65 /* XCTestCase+Utils.swift */; };
@@ -252,6 +255,7 @@
 		2385617C200A8DC50061BAA1 /* Package.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Package.swift; sourceTree = SOURCE_ROOT; };
 		239BC52120EB7539009A36D9 /* Operation+Injection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Operation+Injection.swift"; sourceTree = "<group>"; };
 		239BC52620EB7C47009A36D9 /* InjectionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InjectionTests.swift; sourceTree = "<group>"; };
+		239ECD30218E11AF00F640F2 /* AdvancedOperationErrorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdvancedOperationErrorTests.swift; sourceTree = "<group>"; };
 		23A1A85720F4AD9100EA3350 /* CHANGELOG.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = CHANGELOG.md; sourceTree = SOURCE_ROOT; };
 		23A56BAB200F984400509A65 /* XCTestCase+Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "XCTestCase+Utils.swift"; sourceTree = "<group>"; };
 		23A813B02020CF1E008A98E0 /* AdvancedBlockOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdvancedBlockOperation.swift; sourceTree = "<group>"; };
@@ -330,10 +334,10 @@
 			isa = PBXGroup;
 			children = (
 				23A813B52020D111008A98E0 /* AdvancedBlockOperationTests.swift */,
+				239ECD30218E11AF00F640F2 /* AdvancedOperationErrorTests.swift */,
 				23856174200A87070061BAA1 /* AdvancedOperationQueueTests.swift */,
 				23F24D1D200771FA00B25A03 /* AdvancedOperationTests.swift */,
 				23F24D2B2007A33F00B25A03 /* DelayOperationTests.swift */,
-				23555FA22170C789009FBE81 /* Operations */,
 				239BC52620EB7C47009A36D9 /* InjectionTests.swift */,
 				23856178200A873C0061BAA1 /* Mocks.swift */,
 				235D08D0206A941B00F70142 /* OperationStateTests.swift */,
@@ -341,6 +345,7 @@
 				23A56BAB200F984400509A65 /* XCTestCase+Utils.swift */,
 				235D08CF206A80ED00F70142 /* Conditions */,
 				23555F9621709396009FBE81 /* Observers */,
+				23555FA22170C789009FBE81 /* Operations */,
 			);
 			path = AdvancedOperationTests;
 			sourceTree = "<group>";
@@ -944,6 +949,7 @@
 				235D08CE206A6FCA00F70142 /* NoCancelledDependenciesConditionTests.swift in Sources */,
 				235D08CB206A6FCA00F70142 /* NoFailedDependenciesConditionTests.swift in Sources */,
 				23A56BAE200F984400509A65 /* XCTestCase+Utils.swift in Sources */,
+				239ECD33218E11AF00F640F2 /* AdvancedOperationErrorTests.swift in Sources */,
 				239BC52920EB7C47009A36D9 /* InjectionTests.swift in Sources */,
 				2368702E206E4BE8004DFC17 /* BlockObserverTests.swift in Sources */,
 				23B1BE05216F9CE2002D0A5B /* BlockConditionTests.swift in Sources */,
@@ -968,6 +974,7 @@
 				235D08CC206A6FCA00F70142 /* NoCancelledDependenciesConditionTests.swift in Sources */,
 				235D08C9206A6FCA00F70142 /* NoFailedDependenciesConditionTests.swift in Sources */,
 				23A56BAC200F984400509A65 /* XCTestCase+Utils.swift in Sources */,
+				239ECD31218E11AF00F640F2 /* AdvancedOperationErrorTests.swift in Sources */,
 				239BC52720EB7C47009A36D9 /* InjectionTests.swift in Sources */,
 				2368702C206E4BE8004DFC17 /* BlockObserverTests.swift in Sources */,
 				23B1BE03216F9CE2002D0A5B /* BlockConditionTests.swift in Sources */,
@@ -992,6 +999,7 @@
 				235D08CD206A6FCA00F70142 /* NoCancelledDependenciesConditionTests.swift in Sources */,
 				235D08CA206A6FCA00F70142 /* NoFailedDependenciesConditionTests.swift in Sources */,
 				23A56BAD200F984400509A65 /* XCTestCase+Utils.swift in Sources */,
+				239ECD32218E11AF00F640F2 /* AdvancedOperationErrorTests.swift in Sources */,
 				239BC52820EB7C47009A36D9 /* InjectionTests.swift in Sources */,
 				2368702D206E4BE8004DFC17 /* BlockObserverTests.swift in Sources */,
 				23B1BE04216F9CE2002D0A5B /* BlockConditionTests.swift in Sources */,
