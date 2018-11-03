@@ -22,58 +22,23 @@
 // SOFTWARE.
 
 import Foundation
+import os.log
 
 open class GroupOperation: AdvancedOperation {
 
-  // MARK: - Public Properties
+  // MARK: - Properties
 
-  /// ExclusivityManager used by `AdvancedOperationQueue`.
-  public let exclusivityManager: ExclusivityManager
-
-  /// Accesses the group operation queue's quality of service. It defaults to background quality.
-  public final override var qualityOfService: QualityOfService {
-    get {
-      return underlyingOperationQueue.qualityOfService
-    }
-    set(value) {
-      underlyingOperationQueue.qualityOfService = value
-    }
-  }
-
-  // MARK: - Private Properties
-
-  /// Internal `AdvancedOperationQueue`.
-  private let underlyingOperationQueue: AdvancedOperationQueue
-
-  /// Internal starting operation.
-  private lazy var startingOperation = BlockOperation { } //AdvancedBlockOperation { complete in complete([]) }
-
-  /// Internal finishing operation.
-  private lazy var finishingOperation = BlockOperation { } //AdvancedBlockOperation { complete in complete([]) }
-
-  private let lock = NSLock()
-
-  private var _temporaryCancelError: Error?
-
-  /// Holds the cancellation error.
-  private var temporaryCancelError: Error? {
-    get {
-      return lock.synchronized { _temporaryCancelError }
-    }
-    set {
-      lock.synchronized {
-        _temporaryCancelError = newValue
+  public override func useOSLog(_ log: OSLog) {
+    super.useOSLog(log)
+    underlyingOperationQueue.operations.forEach { operation in
+      if let advancedOperation = operation as? AdvancedOperation, advancedOperation.log === OSLog.disabled {
+        advancedOperation.useOSLog(log)
       }
     }
   }
 
-  /// If true, the finishing operation should fire a cancel to complete the cancellation procedure.
-  private var _requiresCancellationBeforeFinishing = false
-
-  private var _aggregatedErrors = [Error]()
-
   /// Stores all of the `AdvancedOperation` errors during the execution.
-  internal var aggregatedErrors: [Error] {
+  internal private(set) var aggregatedErrors: [Error] {
     get {
       return lock.synchronized { _aggregatedErrors }
     }
@@ -84,71 +49,148 @@ open class GroupOperation: AdvancedOperation {
     }
   }
 
-  // MARK: - Initialization
+  private var _aggregatedErrors = [Error]()
 
-  public convenience init(exclusivityManager: ExclusivityManager = .sharedInstance, operations: Operation...) {
-    self.init(exclusivityManager: exclusivityManager, operations: operations)
+  /// Internal `AdvancedOperationQueue`.
+  private let underlyingOperationQueue: AdvancedOperationQueue
+
+  /// Internal starting operation.
+  private lazy var startingOperation = BlockOperation { }
+
+  /// Internal finishing operation.
+  private lazy var finishingOperation = BlockOperation { }
+
+  private let lock = NSLock()
+
+  private var _temporaryCancelErrors = [Error]()
+
+  private var _cancellationTriggered = false
+
+  /// Holds the cancellation error.
+  private var temporaryCancelErrors: [Error] {
+      return lock.synchronized { _temporaryCancelErrors }
   }
 
-  public init(exclusivityManager: ExclusivityManager = .sharedInstance, operations: [Operation]) {
-    self.exclusivityManager = exclusivityManager
-    self.underlyingOperationQueue = AdvancedOperationQueue(exclusivityManager: exclusivityManager)
+  // MARK: - Initialization
+
+  /// Creates a `GroupOperation`instance.
+  ///
+  /// - Parameters:
+  ///   - operations: The operations of which the `GroupOperation` is composed of.
+  ///   - qualityOfService: The default service level to apply to operations executed using the queue.
+  ///   - maxConcurrentOperationCount: The maximum number of queued operations that can execute at the same time.
+  ///   - underlyingQueue: An optional DispatchQueue which defaults to nil, this parameter is set as the underlying queue of the group's own `AdvancedOperationQueue`.
+  /// - Note: If the operation object has an explicit quality of service level set, that value is used instead.
+  public convenience init(operations: Operation...,
+    qualityOfService: QualityOfService = .default,
+    maxConcurrentOperationCount: Int = OperationQueue.defaultMaxConcurrentOperationCount,
+    underlyingQueue: DispatchQueue? = .none) {
+    self.init(operations: operations,
+              qualityOfService: qualityOfService,
+              maxConcurrentOperationCount: maxConcurrentOperationCount,
+              underlyingQueue: underlyingQueue)
+  }
+
+  /// Creates a `GroupOperation`instance.
+  ///
+  /// - Parameters:
+  ///   - operations: The operations of which the `GroupOperation` is composed of.
+  ///   - qualityOfService: The default service level to apply to operations executed using the queue.
+  ///   - maxConcurrentOperationCount: The maximum number of queued operations that can execute at the same time.
+  ///   - underlyingQueue: An optional DispatchQueue which defaults to nil, this parameter is set as the underlying queue of the group's own `AdvancedOperationQueue`.
+  /// - Note: If the operation object has an explicit quality of service level set, that value is used instead.
+  public init(operations: [Operation],
+              qualityOfService: QualityOfService = .default,
+              maxConcurrentOperationCount: Int = OperationQueue.defaultMaxConcurrentOperationCount,
+              underlyingQueue: DispatchQueue? = .none) {
+    let queue = AdvancedOperationQueue()
+    queue.underlyingQueue = underlyingQueue
+    queue.qualityOfService = qualityOfService
+    queue.maxConcurrentOperationCount = maxConcurrentOperationCount
+    queue.isSuspended = true
+    self.underlyingOperationQueue = queue // TODO: EXC_BAD_ACCESS possible fix
 
     super.init()
-    isSuspended = true
-    underlyingOperationQueue.delegate = self
 
-    finishingOperation.name = "Finishing Operation"
-    finishingOperation.addDependency(startingOperation)
-    finishingOperation.completionBlock = { [weak self] in
-      // always executed
-      guard let self = self else { return }
-
-      self.complete()
-    }
-
-    startingOperation.name = "Starting Operation"
-    underlyingOperationQueue.addOperation(startingOperation)
+    self.underlyingOperationQueue.delegate = self
+    self.startingOperation.name = "Start<\(operationName)>"
+    self.underlyingOperationQueue.addOperation(startingOperation)
+    self.finishingOperation.name = "End<\(operationName)>"
+    self.finishingOperation.addDependency(startingOperation)
+    self.underlyingOperationQueue.addOperation(finishingOperation)
 
     for operation in operations {
       addOperation(operation: operation)
     }
   }
 
-  /// The GroupOperation completion command, called by the finishing operation.
-  private func complete() {
-    isSuspended = true
-    if lock.synchronized({ () -> Bool in return _requiresCancellationBeforeFinishing }) {
-      super.cancel(error: temporaryCancelError)
-    }
-    finish(errors: self.aggregatedErrors)
+  deinit {
+    self.underlyingOperationQueue.delegate = nil
   }
 
   /// Advises the `GroupOperation` object that it should stop executing its tasks.
-  public final override func cancel(error: Error?) {
-    guard !isCancelling && !isCancelled && !isFinished else { return }
-
-    lock.synchronized {
-    _requiresCancellationBeforeFinishing = true
-    _temporaryCancelError = error
+  /// Once all the tasks are cancelled, the GroupOperation state will be set as finished.
+  public final override func cancel(errors: [Error]) {
+    let canBeCancelled = lock.synchronized { () -> Bool in
+      if _cancellationTriggered {
+        return false
+      } else {
+        _cancellationTriggered = true
+        _temporaryCancelErrors = errors
+        return true
+      }
     }
 
-    startingOperation.cancel()
-    for operation in underlyingOperationQueue.operations where operation !== finishingOperation && operation !== startingOperation {
-      operation.cancel()
+    guard canBeCancelled else {
+      return
     }
-    // once all the operations will be cancelled, the finishing operation will be called
+
+    guard !isCancelled && !isFinished else {
+      return
+    }
+
+    for operation in underlyingOperationQueue.operations.reversed() where operation !== finishingOperation && operation !== startingOperation && !operation.isFinished && !operation.isCancelled {
+        operation.cancel()
+    }
+
+    if !isExecuting && !isFinished {
+      // if it's ready or pending (waiting for depedencies to be finished)
+      queueLock.synchronized {
+        underlyingOperationQueue.isSuspended = false
+      }
+    }
+
   }
 
   open override func cancel() {
-    cancel(error: nil)
+    cancel(errors: [])
   }
 
   /// Performs the receiver’s non-concurrent task.
-  /// - Note: If overridden, be sure to call the parent `main` as the end of the new implementation.
+  /// - Note: If overridden, be sure to call the parent `main` as the **end** of the new implementation.
   open override func main() {
-    underlyingOperationQueue.addOperation(finishingOperation)
-    underlyingOperationQueue.isSuspended = false
+    // if it's cancelling, the finish command we be called automatically
+    if lock.synchronized({ _cancellationTriggered }) && !isCancelled {
+      return
+    }
+
+    if isCancelled {
+      finish()
+      return
+    }
+
+    queueLock.synchronized {
+      if !_suspended {
+        underlyingOperationQueue.isSuspended = false
+      }
+    }
+  }
+
+  open override func finish(errors: [Error] = []) {
+    queueLock.synchronized {
+      underlyingOperationQueue.isSuspended = true
+    }
+    super.finish(errors: errors)
   }
 
   public func addOperation(operation: Operation) {
@@ -157,26 +199,51 @@ open class GroupOperation: AdvancedOperation {
     finishingOperation.addDependency(operation)
     operation.addDependency(startingOperation)
     underlyingOperationQueue.addOperation(operation)
+
+    if let advancedOperation = operation as? AdvancedOperation, advancedOperation.log === OSLog.disabled {
+      advancedOperation.useOSLog(log)
+    }
   }
 
   /// The maximum number of queued operations that can execute at the same time.
   /// - Note: Reducing the number of concurrent operations does not affect any operations that are currently executing.
   public final var maxConcurrentOperationCount: Int {
     get {
-      return underlyingOperationQueue.maxConcurrentOperationCount
+      return queueLock.synchronized { underlyingOperationQueue.maxConcurrentOperationCount }
     }
     set {
-      underlyingOperationQueue.maxConcurrentOperationCount = newValue
+      queueLock.synchronized {
+        underlyingOperationQueue.maxConcurrentOperationCount = newValue
+      }
     }
   }
+
+  /// Lock to manage the underlyingOperationQueue isSuspended property.
+  private let queueLock = NSLock()
+
+  private var _suspended = false
 
   /// A Boolean value indicating whether the GroupOpeation is actively scheduling operations for execution.
   public final var isSuspended: Bool {
     get {
-      return underlyingOperationQueue.isSuspended
+      return queueLock.synchronized { _suspended }
     }
     set {
-      underlyingOperationQueue.isSuspended = newValue
+      queueLock.synchronized {
+        underlyingOperationQueue.isSuspended = newValue
+        _suspended = newValue
+      }
+    }
+  }
+
+  /// This property specifies the service level applied to operation objects added to the `GroupOperation`. (It defaults to the `default` quality.)
+  /// If the operation object has an explicit service level set, that value is used instead.
+  public final override var qualityOfService: QualityOfService {
+    get {
+      return queueLock.synchronized { underlyingOperationQueue.qualityOfService }
+    }
+    set(value) {
+      queueLock.synchronized { underlyingOperationQueue.qualityOfService = value }
     }
   }
 
@@ -187,16 +254,16 @@ extension GroupOperation: AdvancedOperationQueueDelegate {
   public func operationQueue(operationQueue: AdvancedOperationQueue, willAddOperation operation: Operation) {
     assert(!finishingOperation.isFinished && !finishingOperation.isExecuting, "The GroupOperation is finished and cannot accept more operations.")
 
-    // An operation is added to the group or an operation in this group has produced a new operation to execute.
+    /// An operation is added to the group or an operation in this group has produced a new operation to execute.
 
-    // make the finishing operation dependent on this newly-produced operation.
+    /// make the finishing operation dependent on this newly-produced operation.
     if operation !== finishingOperation && !operation.dependencies.contains(finishingOperation) {
       finishingOperation.addDependency(operation)
     }
 
-    // All operations should be dependent on the "startingOperation". This way, we can guarantee that the conditions for other operations
-    // will not evaluate until just before the operation is about to run. Otherwise, the conditions could be evaluated at any time, even
-    // before the internal operation queue is unsuspended.
+    /// All operations should be dependent on the "startingOperation". This way, we can guarantee that the conditions for other operations
+    /// will not evaluate until just before the operation is about to run. Otherwise, the conditions could be evaluated at any time, even
+    /// before the internal operation queue is unsuspended.
     if operation !== startingOperation && !operation.dependencies.contains(startingOperation) {
       operation.addDependency(startingOperation)
     }
@@ -204,20 +271,41 @@ extension GroupOperation: AdvancedOperationQueueDelegate {
 
   public func operationQueue(operationQueue: AdvancedOperationQueue, didAddOperation operation: Operation) { }
 
-  public func operationQueue(operationQueue: AdvancedOperationQueue, operationWillFinish operation: Operation, withErrors errors: [Error]) {
-    guard operationQueue === underlyingOperationQueue else { return }
+  public func operationQueue(operationQueue: AdvancedOperationQueue, operationWillFinish operation: AdvancedOperation, withErrors errors: [Error]) {
+    guard operationQueue === underlyingOperationQueue else {
+      return
+    }
 
-    guard operation !== finishingOperation && operation !== startingOperation else { return }
+    guard operation !== finishingOperation && operation !== startingOperation else {
+      assertionFailure("There shouldn't be Operations but only AdvancedOperations in this delegate implementation call.")
+      return
+    }
 
-    if !errors.isEmpty {
+    if !errors.isEmpty { // avoid TSAN _swiftEmptyArrayStorage
       aggregatedErrors.append(contentsOf: errors)
     }
   }
 
-  public func operationQueue(operationQueue: AdvancedOperationQueue, operationDidFinish operation: Operation, withErrors errors: [Error]) { }
+  public func operationQueue(operationQueue: AdvancedOperationQueue, operationDidFinish operation: Operation, withErrors errors: [Error]) {
+    guard operationQueue === underlyingOperationQueue else {
+      return
+    }
 
-  public func operationQueue(operationQueue: AdvancedOperationQueue, operationWillCancel operation: Operation, withErrors errors: [Error]) { }
+    /// The finishingOperation finishes when all the other operations have been finished.
+    /// If some operations have been cancelled but not finished, the finishingOperation will not finish.
+    if operation === finishingOperation {
+      let cancellation = lock.synchronized { _cancellationTriggered }
+      if cancellation {
+        super.cancel(errors: temporaryCancelErrors)
+        finish()
+      } else {
+        finish(errors: self.aggregatedErrors)
+      }
+    }
+  }
 
-  public func operationQueue(operationQueue: AdvancedOperationQueue, operationDidCancel operation: Operation, withErrors errors: [Error]) { }
+  public func operationQueue(operationQueue: AdvancedOperationQueue, operationWillCancel operation: AdvancedOperation, withErrors errors: [Error]) { }
+
+  public func operationQueue(operationQueue: AdvancedOperationQueue, operationDidCancel operation: AdvancedOperation, withErrors errors: [Error]) { }
 
 }

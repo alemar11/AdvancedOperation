@@ -69,7 +69,6 @@ final internal class SelfObservigOperation: AdvancedOperation {
 
   override init() {
     super.init()
-    useOSLog(TestsLog)
   }
 
   override func main() {
@@ -110,9 +109,37 @@ final internal class SelfObservigOperation: AdvancedOperation {
 
 }
 
-final internal class RunUntilCancelledOperation: AdvancedOperation {
+final internal class SynchronousOperation: AdvancedOperation {
+  override var isAsynchronous: Bool { return false }
+  let finishingErrors: [Error]
+
+  init(errors: [Error] = []) {
+    self.finishingErrors = errors
+  }
+
   override func main() {
-    DispatchQueue.global().async {
+    if isCancelled {
+      return
+    }
+
+    if !finishingErrors.isEmpty {
+      finish(errors: finishingErrors)
+    }
+
+    // There's no need to call finish if we don't need to register errors upon completion.
+  }
+
+}
+
+final internal class RunUntilCancelledAsyncOperation: AdvancedOperation {
+  let queue: DispatchQueue
+
+  init(queue: DispatchQueue = DispatchQueue.global()) {
+    self.queue = queue
+  }
+
+  override func main() {
+    queue.async {
       while !self.isCancelled {
         sleep(1)
       }
@@ -127,29 +154,34 @@ final internal class SleepyAsyncOperation: AdvancedOperation {
   private let interval2: UInt32
   private let interval3: UInt32
 
-  init(interval1: UInt32 = 1, interval2: UInt32 = 2, interval3: UInt32 = 1) {
+  init(interval1: UInt32 = 1, interval2: UInt32 = 1, interval3: UInt32 = 1) {
     self.interval1 = interval1
     self.interval2 = interval2
     self.interval3 = interval3
     super.init()
-    useOSLog(TestsLog)
   }
 
   override func main() {
     DispatchQueue.global().async { [weak weakSelf = self] in
-      guard let strongSelf = weakSelf else { return self.finish() }
+      guard let strongSelf = weakSelf else {
+        self.finish()
+        return
+      }
+
       if strongSelf.isCancelled {
         strongSelf.finish()
         return
       }
 
       sleep(self.interval1)
+
       if strongSelf.isCancelled {
         strongSelf.finish()
         return
       }
 
       sleep(self.interval2)
+
       if strongSelf.isCancelled {
         strongSelf.finish()
         return
@@ -165,48 +197,131 @@ final internal class SleepyAsyncOperation: AdvancedOperation {
 
 final internal class SleepyOperation: AdvancedOperation {
 
-  override init() {
+  override var isAsynchronous: Bool { return false }
+  private let interval: UInt32
+
+  init(interval: UInt32 = 1) {
+    self.interval = interval
     super.init()
-    useOSLog(TestsLog)
   }
 
   override func main() {
-    sleep(1)
-    self.finish()
+    sleep(interval)
   }
 
 }
 
-final internal class XCTFailOperation: AdvancedOperation {
+final internal class SleepyBlockOperation: AdvancedOperation {
 
-  override init() {
+  override public var isAsynchronous: Bool { return false }
+  let block: () -> Void
+  let interval: UInt32
+
+  init(interval: UInt32, block: @escaping () -> Void) {
+    self.block = block
+    self.interval = interval
     super.init()
-    useOSLog(TestsLog)
   }
 
   override func main() {
-    XCTFail("This operation should't be executed.")
-    self.finish()
+    sleep(self.interval)
+    block()
   }
 
 }
 
+final internal class NotExecutableOperation: AdvancedOperation {
+
+  override public var isAsynchronous: Bool { return false }
+
+  override func main() {
+    if isCancelled {
+      return
+    }
+
+    XCTFail("This operation shouldn't be executed.")
+  }
+
+}
+
+/// An operation that finishes with errors
 final internal class FailingAsyncOperation: AdvancedOperation {
 
   private let defaultErrors: [Error]
 
   init(errors: [MockError] = [MockError.failed, MockError.test]) {
     self.defaultErrors = errors
+  }
+
+  override func main() {
+    DispatchQueue.global().asyncAfter(deadline: .now() + 1.0) { [weak weakSelf = self] in
+      guard let strongSelf = weakSelf else {
+        self.finish()
+        return
+      }
+      strongSelf.finish(errors: strongSelf.defaultErrors)
+    }
+  }
+}
+
+/// An operation that check if its current operation queue is the same passed durinig its initialization.
+final internal class OperationReferencingOperationQueue: AdvancedOperation {
+  weak var queue: AdvancedOperationQueue? = .none
+
+  override public var isAsynchronous: Bool { return false }
+
+  init(queue: AdvancedOperationQueue) {
+    self.queue = queue
+  }
+
+  override func main() {
+    XCTAssertTrue(operationQueue === queue)
+    XCTAssertTrue(operationQueue !== OperationQueue.main)
+    XCTAssertTrue(queue !== OperationQueue.main)
+  }
+}
+
+/// An operation that cancels itself with errors
+final internal class CancellingAsyncOperation: AdvancedOperation {
+
+  private let defaultErrors: [Error]
+
+  init(errors: [MockError] = [MockError.failed, MockError.test]) {
+    self.defaultErrors = errors
     super.init()
-    useOSLog(TestsLog)
   }
 
   override func main() {
     DispatchQueue.global().asyncAfter(deadline: .now() + 2.0) { [weak weakSelf = self] in
-      guard let strongSelf = weakSelf else { return self.finish() }
-      strongSelf.finish(errors: strongSelf.defaultErrors)
+      guard let strongSelf = weakSelf else {
+        self.finish()
+        return
+      }
+
+      strongSelf.cancel(errors: strongSelf.defaultErrors)
+      strongSelf.finish()
     }
   }
+}
+
+/// An operation that produces another operation
+final internal class ProducingOperation: AdvancedOperation {
+  override public var isAsynchronous: Bool { return false }
+  let operation: AdvancedOperation
+
+  init(operation: AdvancedOperation) {
+    self.operation = operation
+    super.init()
+  }
+
+  override func main() {
+    guard !isCancelled else {
+      return
+    }
+
+    produceOperation(operation)
+  }
+
 }
 
 // MARK: - OperationObserving
@@ -220,6 +335,10 @@ final internal class MockObserver: OperationObserving {
   var _didFinishCount = 0
   var _willCancelCount = 0
   var _didCancelCount = 0
+
+  /// This expectation gets fulfilled after the operationDidFinish(operation:errors:) is called.
+  /// - Note: The operation `completionBlock` is called before this expecations is fulfilled.
+  let didFinishExpectation = XCTestExpectation(description: "finishExpectation")
 
   var willExecutetCount: Int {
     get {
@@ -287,32 +406,41 @@ final internal class MockObserver: OperationObserving {
     }
   }
 
-  func operationWillExecute(operation: Operation) {
+  func operationWillExecute(operation: AdvancedOperation) {
     assert(operation.isExecuting)
+    XCTAssertEqual(willExecutetCount, 0)
     willExecutetCount += 1
   }
 
-  func operationDidFinish(operation: Operation, withErrors errors: [Error]) {
-    assert(operation.isFinished)
-    didFinishCount += 1
-  }
-
-  func operationDidCancel(operation: Operation, withErrors errors: [Error]) {
-    assert(operation.isCancelled)
-    didCancelCount += 1
-  }
-
-  func operationWillFinish(operation: Operation, withErrors errors: [Error]) {
+  func operationWillFinish(operation: AdvancedOperation, withErrors errors: [Error]) {
     assert(!operation.isFinished)
+    XCTAssertEqual(willFinishCount, 0)
     willFinishCount += 1
   }
 
-  func operationWillCancel(operation: Operation, withErrors errors: [Error]) {
+  func operationDidFinish(operation: AdvancedOperation, withErrors errors: [Error]) {
+    assert(operation.isFinished)
+    XCTAssertEqual(willFinishCount, 1)
+    XCTAssertEqual(didFinishCount, 0)
+    didFinishCount += 1
+    didFinishExpectation.fulfill()
+  }
+
+  func operationWillCancel(operation: AdvancedOperation, withErrors errors: [Error]) {
     assert(!operation.isFinished)
+    XCTAssertEqual(willCancelCount, 0)
     willCancelCount += 1
   }
 
-  func operation(operation: Operation, didProduce: Operation) {
+  func operationDidCancel(operation: AdvancedOperation, withErrors errors: [Error]) {
+    assert(operation.isCancelled)
+    XCTAssertEqual(willCancelCount, 1)
+    XCTAssertEqual(didCancelCount, 0)
+    didCancelCount += 1
+  }
+
+  func operation(operation: AdvancedOperation, didProduce: Operation) {
+    XCTAssertEqual(willExecutetCount, 0)
     didProduceCount += 1
   }
 
@@ -325,11 +453,11 @@ final internal class MockOperationQueueDelegate: AdvancedOperationQueueDelegate 
   var willAddOperationHandler: ((AdvancedOperationQueue, Operation) -> Void)? = nil
   var didAddOperationHandler: ((AdvancedOperationQueue, Operation) -> Void)? = nil
 
-  var willExecuteOperationHandler: ((AdvancedOperationQueue, Operation) -> Void)? = nil
-  var willFinishOperationHandler: ((AdvancedOperationQueue, Operation, [Error]) -> Void)? = nil
+  var willExecuteOperationHandler: ((AdvancedOperationQueue, AdvancedOperation) -> Void)? = nil
+  var willFinishOperationHandler: ((AdvancedOperationQueue, AdvancedOperation, [Error]) -> Void)? = nil
   var didFinishOperationHandler: ((AdvancedOperationQueue, Operation, [Error]) -> Void)? = nil
-  var willCancelOperationHandler: ((AdvancedOperationQueue, Operation, [Error]) -> Void)? = nil
-  var didCancelOperationHandler: ((AdvancedOperationQueue, Operation, [Error]) -> Void)? = nil
+  var willCancelOperationHandler: ((AdvancedOperationQueue, AdvancedOperation, [Error]) -> Void)? = nil
+  var didCancelOperationHandler: ((AdvancedOperationQueue, AdvancedOperation, [Error]) -> Void)? = nil
 
   func operationQueue(operationQueue: AdvancedOperationQueue, willAddOperation operation: Operation) {
     self.willAddOperationHandler?(operationQueue, operation)
@@ -339,11 +467,11 @@ final internal class MockOperationQueueDelegate: AdvancedOperationQueueDelegate 
     self.didAddOperationHandler?(operationQueue, operation)
   }
 
-  func operationQueue(operationQueue: AdvancedOperationQueue, operationWillExecute operation: Operation) {
+  func operationQueue(operationQueue: AdvancedOperationQueue, operationWillExecute operation: AdvancedOperation) {
     self.willExecuteOperationHandler?(operationQueue, operation)
   }
 
-  func operationQueue(operationQueue: AdvancedOperationQueue, operationWillFinish operation: Operation, withErrors errors: [Error]) {
+  func operationQueue(operationQueue: AdvancedOperationQueue, operationWillFinish operation: AdvancedOperation, withErrors errors: [Error]) {
     self.willFinishOperationHandler?(operationQueue, operation, errors)
   }
 
@@ -351,11 +479,11 @@ final internal class MockOperationQueueDelegate: AdvancedOperationQueueDelegate 
     self.didFinishOperationHandler?(operationQueue, operation, errors)
   }
 
-  func operationQueue(operationQueue: AdvancedOperationQueue, operationWillCancel operation: Operation, withErrors errors: [Error]) {
+  func operationQueue(operationQueue: AdvancedOperationQueue, operationWillCancel operation: AdvancedOperation, withErrors errors: [Error]) {
     self.willCancelOperationHandler?(operationQueue, operation, errors)
   }
 
-  func operationQueue(operationQueue: AdvancedOperationQueue, operationDidCancel operation: Operation, withErrors errors: [Error]) {
+  func operationQueue(operationQueue: AdvancedOperationQueue, operationDidCancel operation: AdvancedOperation, withErrors errors: [Error]) {
     self.didCancelOperationHandler?(operationQueue, operation, errors)
   }
 
@@ -380,7 +508,6 @@ internal class IntToStringOperation: AdvancedOperation & OperationInputHaving & 
 
   override init() {
     super.init()
-    useOSLog(TestsLog)
   }
 
   override func main() {
@@ -405,7 +532,6 @@ internal class StringToIntOperation: FunctionOperation<String, Int> {
 
   override init() {
     super.init()
-    useOSLog(TestsLog)
   }
 
   override func main() {
@@ -441,22 +567,6 @@ internal struct AlwaysFailingCondition: OperationCondition {
 internal struct AlwaysSuccessingCondition: OperationCondition {
 
   public func evaluate(for operation: AdvancedOperation, completion: @escaping (OperationConditionResult) -> Void) {
-    completion(.satisfied)
-  }
-
-}
-
-internal struct DependencyCondition: OperationCondition {
-
-  private var dependency: Operation
-
-  init(dependency: AdvancedOperation) {
-    self.dependency = dependency as Operation
-  }
-
-  func dependency(for operation: AdvancedOperation) -> Operation? { return dependency }
-
-  func evaluate(for operation: AdvancedOperation, completion: @escaping (OperationConditionResult) -> Void) {
     completion(.satisfied)
   }
 

@@ -23,39 +23,42 @@
 
 import Foundation
 
+let observerKey = "Observer"
+
 /// Types which conform to this protocol, can be attached to `AdvancedOperation` subclasses before they are executed or added to a queue.
 public protocol OperationObservingType { }
 
 public protocol OperationWillExecuteObserving: OperationObservingType {
   /// Invoked immediately prior to the `Operation`'s `main()` method (it's started but not yet executed).
-  func operationWillExecute(operation: Operation)
+  func operationWillExecute(operation: AdvancedOperation)
 }
 
 public protocol OperationWillFinishObserving: OperationObservingType {
   /// Invoked as an `Operation` finishes, along with any errors produced during execution.
   /// - Note: An operation can finish without starting (i.e. if cancelled before its execution)
-  func operationWillFinish(operation: Operation, withErrors errors: [Error])
+  func operationWillFinish(operation: AdvancedOperation, withErrors errors: [Error])
 }
 
 public protocol OperationDidFinishObserving: OperationObservingType {
   /// Invoked as an `Operation` finishes, along with any errors produced during execution.
   /// - Note: An operation can finish without starting (i.e. if cancelled before its execution)
-  func operationDidFinish(operation: Operation, withErrors errors: [Error])
+  /// - Warning: This method will be invoked **after** the operation `completionBlock`.
+  func operationDidFinish(operation: AdvancedOperation, withErrors errors: [Error])
 }
 
 public protocol OperationWillCancelObserving: OperationObservingType {
   /// Invoked as an `Operation` is cancelled, along with any errors produced during execution.
-  func operationWillCancel(operation: Operation, withErrors errors: [Error])
+  func operationWillCancel(operation: AdvancedOperation, withErrors errors: [Error])
 }
 
 public protocol OperationDidCancelObserving: OperationObservingType {
   /// Invoked as an `Operation` is cancelled, along with any errors produced during execution.
-  func operationDidCancel(operation: Operation, withErrors errors: [Error])
+  func operationDidCancel(operation: AdvancedOperation, withErrors errors: [Error])
 }
 
 public protocol OperationDidProduceOperationObserving: OperationObservingType {
   /// Invoked as an `Operation` produces another `Operation` during execution.
-  func operation(operation: Operation, didProduce: Operation)
+  func operation(operation: AdvancedOperation, didProduce: Operation)
 }
 
 /// The protocol that types may implement if they wish to be notified of significant operation lifecycle events.

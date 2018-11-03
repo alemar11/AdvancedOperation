@@ -39,13 +39,13 @@ public struct NoFailedDependenciesCondition: OperationCondition {
   }
 
   public func evaluate(for operation: AdvancedOperation, completion: @escaping (OperationConditionResult) -> Void) {
-    var dependencies = operation.dependencies
+    var dependencies = operation.dependencies.filter { !($0 is ConditionEvaluatorOperation) }
 
     if ignoreCancellations {
       dependencies = dependencies.filter { !$0.isCancelled }
     }
 
-    let failures = dependencies.compactMap { $0 as? AdvancedOperation }.filter { $0.failed }
+    let failures = dependencies.compactMap { $0 as? AdvancedOperation }.filter { $0.hasErrors }
 
     if !failures.isEmpty {
       let names = failures.map { $0.name ?? "\(type(of: $0))" }

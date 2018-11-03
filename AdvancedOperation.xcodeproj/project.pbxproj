@@ -32,6 +32,10 @@
 /* End PBXAggregateTarget section */
 
 /* Begin PBXBuildFile section */
+		2306482E21820FB000295516 /* AdvancedOperation+Conditions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2306482D21820FB000295516 /* AdvancedOperation+Conditions.swift */; };
+		2306482F21820FB000295516 /* AdvancedOperation+Conditions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2306482D21820FB000295516 /* AdvancedOperation+Conditions.swift */; };
+		2306483021820FB000295516 /* AdvancedOperation+Conditions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2306482D21820FB000295516 /* AdvancedOperation+Conditions.swift */; };
+		2306483121820FB000295516 /* AdvancedOperation+Conditions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2306482D21820FB000295516 /* AdvancedOperation+Conditions.swift */; };
 		2326CC25206E6199001876A2 /* OperationConditionResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2326CC24206E6199001876A2 /* OperationConditionResult.swift */; };
 		2326CC26206E6199001876A2 /* OperationConditionResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2326CC24206E6199001876A2 /* OperationConditionResult.swift */; };
 		2326CC27206E6199001876A2 /* OperationConditionResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2326CC24206E6199001876A2 /* OperationConditionResult.swift */; };
@@ -46,36 +50,32 @@
 		232F3AAF206041DE00FC45CB /* Globals.swift in Sources */ = {isa = PBXBuildFile; fileRef = 232F3AAD206041DE00FC45CB /* Globals.swift */; };
 		232F3AB0206041DE00FC45CB /* Globals.swift in Sources */ = {isa = PBXBuildFile; fileRef = 232F3AAD206041DE00FC45CB /* Globals.swift */; };
 		232F3AB1206041DE00FC45CB /* Globals.swift in Sources */ = {isa = PBXBuildFile; fileRef = 232F3AAD206041DE00FC45CB /* Globals.swift */; };
+		232F9444217F29AE00A86699 /* AdvancedOperation+OperationState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 232F9443217F29AE00A86699 /* AdvancedOperation+OperationState.swift */; };
+		232F9445217F29AE00A86699 /* AdvancedOperation+OperationState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 232F9443217F29AE00A86699 /* AdvancedOperation+OperationState.swift */; };
+		232F9446217F29AE00A86699 /* AdvancedOperation+OperationState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 232F9443217F29AE00A86699 /* AdvancedOperation+OperationState.swift */; };
+		232F9447217F29AE00A86699 /* AdvancedOperation+OperationState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 232F9443217F29AE00A86699 /* AdvancedOperation+OperationState.swift */; };
+		233078C0217DF83000BE5AB5 /* ConditionEvaluatorOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 233078BF217DF83000BE5AB5 /* ConditionEvaluatorOperation.swift */; };
+		233078C1217DF83000BE5AB5 /* ConditionEvaluatorOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 233078BF217DF83000BE5AB5 /* ConditionEvaluatorOperation.swift */; };
+		233078C2217DF83000BE5AB5 /* ConditionEvaluatorOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 233078BF217DF83000BE5AB5 /* ConditionEvaluatorOperation.swift */; };
+		233078C3217DF83000BE5AB5 /* ConditionEvaluatorOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 233078BF217DF83000BE5AB5 /* ConditionEvaluatorOperation.swift */; };
 		2341308C1F9605F5002BE7FC /* AdvancedOperation.h in Headers */ = {isa = PBXBuildFile; fileRef = 2341308A1F9605F5002BE7FC /* AdvancedOperation.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		234130BC1F96076A002BE7FC /* AdvancedOperation.h in Headers */ = {isa = PBXBuildFile; fileRef = 2341308A1F9605F5002BE7FC /* AdvancedOperation.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		234130BD1F96076D002BE7FC /* AdvancedOperation.h in Headers */ = {isa = PBXBuildFile; fileRef = 2341308A1F9605F5002BE7FC /* AdvancedOperation.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		234130BE1F960770002BE7FC /* AdvancedOperation.h in Headers */ = {isa = PBXBuildFile; fileRef = 2341308A1F9605F5002BE7FC /* AdvancedOperation.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2359AB4E216212CD00AC09D8 /* UIBackgroundObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 232C452D215A898000B73E79 /* UIBackgroundObserver.swift */; };
-		235D08AB206A498400F70142 /* ExclusivityManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 235D08AA206A494E00F70142 /* ExclusivityManager.swift */; };
 		235D08AC206A498400F70142 /* NegatedCondition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 235D08A6206A494D00F70142 /* NegatedCondition.swift */; };
-		235D08AD206A498400F70142 /* SilentCondition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 235D08A9206A494E00F70142 /* SilentCondition.swift */; };
-		235D08AE206A498400F70142 /* MutuallyExclusiveCondition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 235D08A8206A494E00F70142 /* MutuallyExclusiveCondition.swift */; };
 		235D08AF206A498400F70142 /* OperationCondition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 235D08A7206A494E00F70142 /* OperationCondition.swift */; };
 		235D08B0206A498400F70142 /* NoCancelledDependenciesCondition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 235D08A4206A494D00F70142 /* NoCancelledDependenciesCondition.swift */; };
 		235D08B1206A498400F70142 /* NoFailedDependenciesCondition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 235D08A5206A494D00F70142 /* NoFailedDependenciesCondition.swift */; };
-		235D08B2206A498400F70142 /* ExclusivityManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 235D08AA206A494E00F70142 /* ExclusivityManager.swift */; };
 		235D08B3206A498400F70142 /* NegatedCondition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 235D08A6206A494D00F70142 /* NegatedCondition.swift */; };
-		235D08B4206A498400F70142 /* SilentCondition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 235D08A9206A494E00F70142 /* SilentCondition.swift */; };
-		235D08B5206A498400F70142 /* MutuallyExclusiveCondition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 235D08A8206A494E00F70142 /* MutuallyExclusiveCondition.swift */; };
 		235D08B6206A498400F70142 /* OperationCondition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 235D08A7206A494E00F70142 /* OperationCondition.swift */; };
 		235D08B7206A498400F70142 /* NoCancelledDependenciesCondition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 235D08A4206A494D00F70142 /* NoCancelledDependenciesCondition.swift */; };
 		235D08B8206A498400F70142 /* NoFailedDependenciesCondition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 235D08A5206A494D00F70142 /* NoFailedDependenciesCondition.swift */; };
-		235D08B9206A498500F70142 /* ExclusivityManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 235D08AA206A494E00F70142 /* ExclusivityManager.swift */; };
 		235D08BA206A498500F70142 /* NegatedCondition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 235D08A6206A494D00F70142 /* NegatedCondition.swift */; };
-		235D08BB206A498500F70142 /* SilentCondition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 235D08A9206A494E00F70142 /* SilentCondition.swift */; };
-		235D08BC206A498500F70142 /* MutuallyExclusiveCondition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 235D08A8206A494E00F70142 /* MutuallyExclusiveCondition.swift */; };
 		235D08BD206A498500F70142 /* OperationCondition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 235D08A7206A494E00F70142 /* OperationCondition.swift */; };
 		235D08BE206A498500F70142 /* NoCancelledDependenciesCondition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 235D08A4206A494D00F70142 /* NoCancelledDependenciesCondition.swift */; };
 		235D08BF206A498500F70142 /* NoFailedDependenciesCondition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 235D08A5206A494D00F70142 /* NoFailedDependenciesCondition.swift */; };
-		235D08C0206A498500F70142 /* ExclusivityManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 235D08AA206A494E00F70142 /* ExclusivityManager.swift */; };
 		235D08C1206A498500F70142 /* NegatedCondition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 235D08A6206A494D00F70142 /* NegatedCondition.swift */; };
-		235D08C2206A498500F70142 /* SilentCondition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 235D08A9206A494E00F70142 /* SilentCondition.swift */; };
-		235D08C3206A498500F70142 /* MutuallyExclusiveCondition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 235D08A8206A494E00F70142 /* MutuallyExclusiveCondition.swift */; };
 		235D08C4206A498500F70142 /* OperationCondition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 235D08A7206A494E00F70142 /* OperationCondition.swift */; };
 		235D08C5206A498500F70142 /* NoCancelledDependenciesCondition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 235D08A4206A494D00F70142 /* NoCancelledDependenciesCondition.swift */; };
 		235D08C6206A498500F70142 /* NoFailedDependenciesCondition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 235D08A5206A494D00F70142 /* NoFailedDependenciesCondition.swift */; };
@@ -91,15 +91,9 @@
 		235F7B09206B883800218F32 /* NegatedConditionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 235F7B08206B883800218F32 /* NegatedConditionTests.swift */; };
 		235F7B0A206B883800218F32 /* NegatedConditionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 235F7B08206B883800218F32 /* NegatedConditionTests.swift */; };
 		235F7B0B206B883800218F32 /* NegatedConditionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 235F7B08206B883800218F32 /* NegatedConditionTests.swift */; };
-		23687028206E36A3004DFC17 /* OperationConditionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23687027206E36A3004DFC17 /* OperationConditionTests.swift */; };
-		23687029206E36A3004DFC17 /* OperationConditionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23687027206E36A3004DFC17 /* OperationConditionTests.swift */; };
-		2368702A206E36A3004DFC17 /* OperationConditionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23687027206E36A3004DFC17 /* OperationConditionTests.swift */; };
 		2368702C206E4BE8004DFC17 /* BlockObserverTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2368702B206E4BE8004DFC17 /* BlockObserverTests.swift */; };
 		2368702D206E4BE8004DFC17 /* BlockObserverTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2368702B206E4BE8004DFC17 /* BlockObserverTests.swift */; };
 		2368702E206E4BE8004DFC17 /* BlockObserverTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2368702B206E4BE8004DFC17 /* BlockObserverTests.swift */; };
-		23687030206E4FE8004DFC17 /* SilentConditionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2368702F206E4FE8004DFC17 /* SilentConditionTests.swift */; };
-		23687031206E4FE9004DFC17 /* SilentConditionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2368702F206E4FE8004DFC17 /* SilentConditionTests.swift */; };
-		23687032206E4FE9004DFC17 /* SilentConditionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2368702F206E4FE8004DFC17 /* SilentConditionTests.swift */; };
 		236F54B6206CDE070079B033 /* AdvancedOperationError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 236F54B5206CDE070079B033 /* AdvancedOperationError.swift */; };
 		236F54B7206CDE070079B033 /* AdvancedOperationError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 236F54B5206CDE070079B033 /* AdvancedOperationError.swift */; };
 		236F54B8206CDE070079B033 /* AdvancedOperationError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 236F54B5206CDE070079B033 /* AdvancedOperationError.swift */; };
@@ -111,6 +105,10 @@
 		23725080200524860000A442 /* AdvancedOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2372507C200524860000A442 /* AdvancedOperation.swift */; };
 		2372B4331F960DBA00189A32 /* AdvancedOperation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 234130871F9605F5002BE7FC /* AdvancedOperation.framework */; };
 		2372B4421F960DCB00189A32 /* AdvancedOperation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 234130A71F9606B8002BE7FC /* AdvancedOperation.framework */; };
+		23778DF5217747F400224A62 /* SynchronizedArray.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23778DF4217747F300224A62 /* SynchronizedArray.swift */; };
+		23778DF6217747F400224A62 /* SynchronizedArray.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23778DF4217747F300224A62 /* SynchronizedArray.swift */; };
+		23778DF7217747F400224A62 /* SynchronizedArray.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23778DF4217747F300224A62 /* SynchronizedArray.swift */; };
+		23778DF8217747F400224A62 /* SynchronizedArray.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23778DF4217747F300224A62 /* SynchronizedArray.swift */; };
 		23830CA320615E7C00F6EBC9 /* NSLock+Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23830CA220615E7C00F6EBC9 /* NSLock+Utils.swift */; };
 		23830CA420615E7C00F6EBC9 /* NSLock+Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23830CA220615E7C00F6EBC9 /* NSLock+Utils.swift */; };
 		23830CA520615E7C00F6EBC9 /* NSLock+Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23830CA220615E7C00F6EBC9 /* NSLock+Utils.swift */; };
@@ -128,10 +126,6 @@
 		23856179200A873C0061BAA1 /* Mocks.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23856178200A873C0061BAA1 /* Mocks.swift */; };
 		2385617A200A873C0061BAA1 /* Mocks.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23856178200A873C0061BAA1 /* Mocks.swift */; };
 		2385617B200A873C0061BAA1 /* Mocks.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23856178200A873C0061BAA1 /* Mocks.swift */; };
-		2398EE7521664C03002305B6 /* _OperationQueueObserving.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2398EE7321664C03002305B6 /* _OperationQueueObserving.swift */; };
-		2398EE7621664C03002305B6 /* _OperationQueueObserving.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2398EE7321664C03002305B6 /* _OperationQueueObserving.swift */; };
-		2398EE7721664C03002305B6 /* _OperationQueueObserving.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2398EE7321664C03002305B6 /* _OperationQueueObserving.swift */; };
-		2398EE7821664C03002305B6 /* _OperationQueueObserving.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2398EE7321664C03002305B6 /* _OperationQueueObserving.swift */; };
 		239BC52220EB7539009A36D9 /* Operation+Injection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 239BC52120EB7539009A36D9 /* Operation+Injection.swift */; };
 		239BC52320EB7539009A36D9 /* Operation+Injection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 239BC52120EB7539009A36D9 /* Operation+Injection.swift */; };
 		239BC52420EB7539009A36D9 /* Operation+Injection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 239BC52120EB7539009A36D9 /* Operation+Injection.swift */; };
@@ -139,6 +133,9 @@
 		239BC52720EB7C47009A36D9 /* InjectionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 239BC52620EB7C47009A36D9 /* InjectionTests.swift */; };
 		239BC52820EB7C47009A36D9 /* InjectionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 239BC52620EB7C47009A36D9 /* InjectionTests.swift */; };
 		239BC52920EB7C47009A36D9 /* InjectionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 239BC52620EB7C47009A36D9 /* InjectionTests.swift */; };
+		239ECD31218E11AF00F640F2 /* AdvancedOperationErrorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 239ECD30218E11AF00F640F2 /* AdvancedOperationErrorTests.swift */; };
+		239ECD32218E11AF00F640F2 /* AdvancedOperationErrorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 239ECD30218E11AF00F640F2 /* AdvancedOperationErrorTests.swift */; };
+		239ECD33218E11AF00F640F2 /* AdvancedOperationErrorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 239ECD30218E11AF00F640F2 /* AdvancedOperationErrorTests.swift */; };
 		23A56BAC200F984400509A65 /* XCTestCase+Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23A56BAB200F984400509A65 /* XCTestCase+Utils.swift */; };
 		23A56BAD200F984400509A65 /* XCTestCase+Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23A56BAB200F984400509A65 /* XCTestCase+Utils.swift */; };
 		23A56BAE200F984400509A65 /* XCTestCase+Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23A56BAB200F984400509A65 /* XCTestCase+Utils.swift */; };
@@ -152,9 +149,20 @@
 		23AC3ADD2038A050003E1B15 /* OperationUtilsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23AC3ADC2038A050003E1B15 /* OperationUtilsTests.swift */; };
 		23AC3ADE2038A050003E1B15 /* OperationUtilsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23AC3ADC2038A050003E1B15 /* OperationUtilsTests.swift */; };
 		23AC3ADF2038A050003E1B15 /* OperationUtilsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23AC3ADC2038A050003E1B15 /* OperationUtilsTests.swift */; };
-		23CF6E7B205FC4D300808400 /* MutuallyExclusiveConditionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23CF6E7A205FC4D300808400 /* MutuallyExclusiveConditionTests.swift */; };
-		23CF6E7C205FC4D300808400 /* MutuallyExclusiveConditionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23CF6E7A205FC4D300808400 /* MutuallyExclusiveConditionTests.swift */; };
-		23CF6E7D205FC4D300808400 /* MutuallyExclusiveConditionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23CF6E7A205FC4D300808400 /* MutuallyExclusiveConditionTests.swift */; };
+		23B1BDFE216F99BA002D0A5B /* BlockCondition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23B1BDFD216F99BA002D0A5B /* BlockCondition.swift */; };
+		23B1BDFF216F99BA002D0A5B /* BlockCondition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23B1BDFD216F99BA002D0A5B /* BlockCondition.swift */; };
+		23B1BE00216F99BA002D0A5B /* BlockCondition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23B1BDFD216F99BA002D0A5B /* BlockCondition.swift */; };
+		23B1BE01216F99BA002D0A5B /* BlockCondition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23B1BDFD216F99BA002D0A5B /* BlockCondition.swift */; };
+		23B1BE03216F9CE2002D0A5B /* BlockConditionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23B1BE02216F9CE2002D0A5B /* BlockConditionTests.swift */; };
+		23B1BE04216F9CE2002D0A5B /* BlockConditionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23B1BE02216F9CE2002D0A5B /* BlockConditionTests.swift */; };
+		23B1BE05216F9CE2002D0A5B /* BlockConditionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23B1BE02216F9CE2002D0A5B /* BlockConditionTests.swift */; };
+		23B1BE07216F9FA9002D0A5B /* TimeoutObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23B1BE06216F9FA9002D0A5B /* TimeoutObserver.swift */; };
+		23B1BE08216F9FA9002D0A5B /* TimeoutObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23B1BE06216F9FA9002D0A5B /* TimeoutObserver.swift */; };
+		23B1BE09216F9FA9002D0A5B /* TimeoutObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23B1BE06216F9FA9002D0A5B /* TimeoutObserver.swift */; };
+		23B1BE0A216F9FA9002D0A5B /* TimeoutObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23B1BE06216F9FA9002D0A5B /* TimeoutObserver.swift */; };
+		23B1BE0C216FA2AD002D0A5B /* TimeoutObserverTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23B1BE0B216FA2AD002D0A5B /* TimeoutObserverTests.swift */; };
+		23B1BE0D216FA2AD002D0A5B /* TimeoutObserverTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23B1BE0B216FA2AD002D0A5B /* TimeoutObserverTests.swift */; };
+		23B1BE0E216FA2AD002D0A5B /* TimeoutObserverTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23B1BE0B216FA2AD002D0A5B /* TimeoutObserverTests.swift */; };
 		23F24D1E200771FA00B25A03 /* AdvancedOperationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23F24D1D200771FA00B25A03 /* AdvancedOperationTests.swift */; };
 		23F24D1F200771FA00B25A03 /* AdvancedOperationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23F24D1D200771FA00B25A03 /* AdvancedOperationTests.swift */; };
 		23F24D20200771FA00B25A03 /* AdvancedOperationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23F24D1D200771FA00B25A03 /* AdvancedOperationTests.swift */; };
@@ -208,10 +216,13 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		2306482D21820FB000295516 /* AdvancedOperation+Conditions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AdvancedOperation+Conditions.swift"; sourceTree = "<group>"; };
 		2326CC24206E6199001876A2 /* OperationConditionResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OperationConditionResult.swift; sourceTree = "<group>"; };
 		232A53BE215B683A008B76AC /* UIBackgroundObserverTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIBackgroundObserverTests.swift; sourceTree = "<group>"; };
 		232C452D215A898000B73E79 /* UIBackgroundObserver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIBackgroundObserver.swift; sourceTree = "<group>"; };
 		232F3AAD206041DE00FC45CB /* Globals.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Globals.swift; sourceTree = "<group>"; };
+		232F9443217F29AE00A86699 /* AdvancedOperation+OperationState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AdvancedOperation+OperationState.swift"; sourceTree = "<group>"; };
+		233078BF217DF83000BE5AB5 /* ConditionEvaluatorOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConditionEvaluatorOperation.swift; sourceTree = "<group>"; };
 		234130871F9605F5002BE7FC /* AdvancedOperation.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = AdvancedOperation.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		2341308A1F9605F5002BE7FC /* AdvancedOperation.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AdvancedOperation.h; sourceTree = "<group>"; };
 		2341308B1F9605F5002BE7FC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -223,16 +234,11 @@
 		235D08A5206A494D00F70142 /* NoFailedDependenciesCondition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoFailedDependenciesCondition.swift; sourceTree = "<group>"; };
 		235D08A6206A494D00F70142 /* NegatedCondition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NegatedCondition.swift; sourceTree = "<group>"; };
 		235D08A7206A494E00F70142 /* OperationCondition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OperationCondition.swift; sourceTree = "<group>"; };
-		235D08A8206A494E00F70142 /* MutuallyExclusiveCondition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MutuallyExclusiveCondition.swift; sourceTree = "<group>"; };
-		235D08A9206A494E00F70142 /* SilentCondition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SilentCondition.swift; sourceTree = "<group>"; };
-		235D08AA206A494E00F70142 /* ExclusivityManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExclusivityManager.swift; sourceTree = "<group>"; };
 		235D08C7206A6FC800F70142 /* NoFailedDependenciesConditionTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NoFailedDependenciesConditionTests.swift; sourceTree = "<group>"; };
 		235D08C8206A6FC900F70142 /* NoCancelledDependenciesConditionTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NoCancelledDependenciesConditionTests.swift; sourceTree = "<group>"; };
 		235D08D0206A941B00F70142 /* OperationStateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OperationStateTests.swift; sourceTree = "<group>"; };
 		235F7B08206B883800218F32 /* NegatedConditionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NegatedConditionTests.swift; sourceTree = "<group>"; };
-		23687027206E36A3004DFC17 /* OperationConditionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OperationConditionTests.swift; sourceTree = "<group>"; };
 		2368702B206E4BE8004DFC17 /* BlockObserverTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockObserverTests.swift; sourceTree = "<group>"; };
-		2368702F206E4FE8004DFC17 /* SilentConditionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SilentConditionTests.swift; sourceTree = "<group>"; };
 		236F54B5206CDE070079B033 /* AdvancedOperationError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdvancedOperationError.swift; sourceTree = "<group>"; };
 		23725071200522820000A442 /* AdvancedOperation Tests macOS.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "AdvancedOperation Tests macOS.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2372507C200524860000A442 /* AdvancedOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdvancedOperation.swift; sourceTree = "<group>"; };
@@ -240,21 +246,25 @@
 		2372B42E1F960DBA00189A32 /* AdvancedOperation Tests iOS.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "AdvancedOperation Tests iOS.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2372B4321F960DBA00189A32 /* Info-Tests.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Info-Tests.plist"; sourceTree = "<group>"; };
 		2372B43D1F960DCB00189A32 /* AdvancedOperation Tests tvOS.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "AdvancedOperation Tests tvOS.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		23778DF4217747F300224A62 /* SynchronizedArray.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SynchronizedArray.swift; sourceTree = "<group>"; };
 		23830CA220615E7C00F6EBC9 /* NSLock+Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSLock+Utils.swift"; sourceTree = "<group>"; };
 		2385616B200A6BF80061BAA1 /* GroupOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupOperation.swift; sourceTree = "<group>"; };
 		23856170200A6E9A0061BAA1 /* GroupOperationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupOperationTests.swift; sourceTree = "<group>"; };
 		23856174200A87070061BAA1 /* AdvancedOperationQueueTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdvancedOperationQueueTests.swift; sourceTree = "<group>"; };
 		23856178200A873C0061BAA1 /* Mocks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Mocks.swift; sourceTree = "<group>"; };
 		2385617C200A8DC50061BAA1 /* Package.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Package.swift; sourceTree = SOURCE_ROOT; };
-		2398EE7321664C03002305B6 /* _OperationQueueObserving.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = _OperationQueueObserving.swift; sourceTree = "<group>"; };
 		239BC52120EB7539009A36D9 /* Operation+Injection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Operation+Injection.swift"; sourceTree = "<group>"; };
 		239BC52620EB7C47009A36D9 /* InjectionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InjectionTests.swift; sourceTree = "<group>"; };
+		239ECD30218E11AF00F640F2 /* AdvancedOperationErrorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdvancedOperationErrorTests.swift; sourceTree = "<group>"; };
 		23A1A85720F4AD9100EA3350 /* CHANGELOG.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = CHANGELOG.md; sourceTree = SOURCE_ROOT; };
 		23A56BAB200F984400509A65 /* XCTestCase+Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "XCTestCase+Utils.swift"; sourceTree = "<group>"; };
 		23A813B02020CF1E008A98E0 /* AdvancedBlockOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdvancedBlockOperation.swift; sourceTree = "<group>"; };
 		23A813B52020D111008A98E0 /* AdvancedBlockOperationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdvancedBlockOperationTests.swift; sourceTree = "<group>"; };
 		23AC3ADC2038A050003E1B15 /* OperationUtilsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OperationUtilsTests.swift; sourceTree = "<group>"; };
-		23CF6E7A205FC4D300808400 /* MutuallyExclusiveConditionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MutuallyExclusiveConditionTests.swift; sourceTree = "<group>"; };
+		23B1BDFD216F99BA002D0A5B /* BlockCondition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockCondition.swift; sourceTree = "<group>"; };
+		23B1BE02216F9CE2002D0A5B /* BlockConditionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockConditionTests.swift; sourceTree = "<group>"; };
+		23B1BE06216F9FA9002D0A5B /* TimeoutObserver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeoutObserver.swift; sourceTree = "<group>"; };
+		23B1BE0B216FA2AD002D0A5B /* TimeoutObserverTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeoutObserverTests.swift; sourceTree = "<group>"; };
 		23F24D1D200771FA00B25A03 /* AdvancedOperationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdvancedOperationTests.swift; sourceTree = "<group>"; };
 		23F24D21200799B800B25A03 /* Operation+Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Operation+Utils.swift"; sourceTree = "<group>"; };
 		23F24D2620079CDE00B25A03 /* DelayOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DelayOperation.swift; sourceTree = "<group>"; };
@@ -323,21 +333,31 @@
 		230B47FD200EABEE00F46852 /* AdvancedOperationTests */ = {
 			isa = PBXGroup;
 			children = (
-				2368702B206E4BE8004DFC17 /* BlockObserverTests.swift */,
-				232A53BE215B683A008B76AC /* UIBackgroundObserverTests.swift */,
 				23A813B52020D111008A98E0 /* AdvancedBlockOperationTests.swift */,
+				239ECD30218E11AF00F640F2 /* AdvancedOperationErrorTests.swift */,
 				23856174200A87070061BAA1 /* AdvancedOperationQueueTests.swift */,
 				23F24D1D200771FA00B25A03 /* AdvancedOperationTests.swift */,
 				23F24D2B2007A33F00B25A03 /* DelayOperationTests.swift */,
-				23856170200A6E9A0061BAA1 /* GroupOperationTests.swift */,
 				239BC52620EB7C47009A36D9 /* InjectionTests.swift */,
 				23856178200A873C0061BAA1 /* Mocks.swift */,
 				235D08D0206A941B00F70142 /* OperationStateTests.swift */,
 				23AC3ADC2038A050003E1B15 /* OperationUtilsTests.swift */,
 				23A56BAB200F984400509A65 /* XCTestCase+Utils.swift */,
 				235D08CF206A80ED00F70142 /* Conditions */,
+				23555F9621709396009FBE81 /* Observers */,
+				23555FA22170C789009FBE81 /* Operations */,
 			);
 			path = AdvancedOperationTests;
+			sourceTree = "<group>";
+		};
+		232F9442217F299100A86699 /* Core */ = {
+			isa = PBXGroup;
+			children = (
+				2372507C200524860000A442 /* AdvancedOperation.swift */,
+				232F9443217F29AE00A86699 /* AdvancedOperation+OperationState.swift */,
+				2306482D21820FB000295516 /* AdvancedOperation+Conditions.swift */,
+			);
+			path = Core;
 			sourceTree = "<group>";
 		};
 		2341307D1F9605F5002BE7FC = {
@@ -367,21 +387,19 @@
 		234130921F960612002BE7FC /* Sources */ = {
 			isa = PBXGroup;
 			children = (
-				2398EE7321664C03002305B6 /* _OperationQueueObserving.swift */,
+				232F9442217F299100A86699 /* Core */,
 				23A813B02020CF1E008A98E0 /* AdvancedBlockOperation.swift */,
-				2372507C200524860000A442 /* AdvancedOperation.swift */,
 				236F54B5206CDE070079B033 /* AdvancedOperationError.swift */,
 				23F24D342007BC2100B25A03 /* AdvancedOperationQueue.swift */,
-				23F24D392007C03D00B25A03 /* BlockObserver.swift */,
-				235D08A3206A494600F70142 /* Conditions */,
 				232F3AAD206041DE00FC45CB /* Globals.swift */,
 				2385616B200A6BF80061BAA1 /* GroupOperation.swift */,
 				23830CA220615E7C00F6EBC9 /* NSLock+Utils.swift */,
 				239BC52120EB7539009A36D9 /* Operation+Injection.swift */,
 				23F24D21200799B800B25A03 /* Operation+Utils.swift */,
-				23F24D2F2007B0D200B25A03 /* OperationObserving.swift */,
+				23778DF4217747F300224A62 /* SynchronizedArray.swift */,
+				235D08A3206A494600F70142 /* Conditions */,
+				23555F9521709069009FBE81 /* Obervers */,
 				236F54BA206CE5390079B033 /* Operations */,
-				232C452D215A898000B73E79 /* UIBackgroundObserver.swift */,
 			);
 			path = Sources;
 			sourceTree = "<group>";
@@ -408,17 +426,44 @@
 			path = Support;
 			sourceTree = "<group>";
 		};
+		23555F9521709069009FBE81 /* Obervers */ = {
+			isa = PBXGroup;
+			children = (
+				23F24D2F2007B0D200B25A03 /* OperationObserving.swift */,
+				23F24D392007C03D00B25A03 /* BlockObserver.swift */,
+				232C452D215A898000B73E79 /* UIBackgroundObserver.swift */,
+				23B1BE06216F9FA9002D0A5B /* TimeoutObserver.swift */,
+			);
+			path = Obervers;
+			sourceTree = "<group>";
+		};
+		23555F9621709396009FBE81 /* Observers */ = {
+			isa = PBXGroup;
+			children = (
+				2368702B206E4BE8004DFC17 /* BlockObserverTests.swift */,
+				232A53BE215B683A008B76AC /* UIBackgroundObserverTests.swift */,
+				23B1BE0B216FA2AD002D0A5B /* TimeoutObserverTests.swift */,
+			);
+			path = Observers;
+			sourceTree = "<group>";
+		};
+		23555FA22170C789009FBE81 /* Operations */ = {
+			isa = PBXGroup;
+			children = (
+				23856170200A6E9A0061BAA1 /* GroupOperationTests.swift */,
+			);
+			path = Operations;
+			sourceTree = "<group>";
+		};
 		235D08A3206A494600F70142 /* Conditions */ = {
 			isa = PBXGroup;
 			children = (
-				235D08AA206A494E00F70142 /* ExclusivityManager.swift */,
-				235D08A8206A494E00F70142 /* MutuallyExclusiveCondition.swift */,
 				235D08A6206A494D00F70142 /* NegatedCondition.swift */,
 				235D08A4206A494D00F70142 /* NoCancelledDependenciesCondition.swift */,
 				235D08A5206A494D00F70142 /* NoFailedDependenciesCondition.swift */,
 				235D08A7206A494E00F70142 /* OperationCondition.swift */,
 				2326CC24206E6199001876A2 /* OperationConditionResult.swift */,
-				235D08A9206A494E00F70142 /* SilentCondition.swift */,
+				23B1BDFD216F99BA002D0A5B /* BlockCondition.swift */,
 			);
 			path = Conditions;
 			sourceTree = "<group>";
@@ -426,12 +471,10 @@
 		235D08CF206A80ED00F70142 /* Conditions */ = {
 			isa = PBXGroup;
 			children = (
-				23CF6E7A205FC4D300808400 /* MutuallyExclusiveConditionTests.swift */,
 				235D08C8206A6FC900F70142 /* NoCancelledDependenciesConditionTests.swift */,
 				235D08C7206A6FC800F70142 /* NoFailedDependenciesConditionTests.swift */,
 				235F7B08206B883800218F32 /* NegatedConditionTests.swift */,
-				23687027206E36A3004DFC17 /* OperationConditionTests.swift */,
-				2368702F206E4FE8004DFC17 /* SilentConditionTests.swift */,
+				23B1BE02216F9CE2002D0A5B /* BlockConditionTests.swift */,
 			);
 			path = Conditions;
 			sourceTree = "<group>";
@@ -440,6 +483,7 @@
 			isa = PBXGroup;
 			children = (
 				23F24D2620079CDE00B25A03 /* DelayOperation.swift */,
+				233078BF217DF83000BE5AB5 /* ConditionEvaluatorOperation.swift */,
 			);
 			path = Operations;
 			sourceTree = "<group>";
@@ -490,8 +534,6 @@
 				234130831F9605F5002BE7FC /* Frameworks */,
 				234130841F9605F5002BE7FC /* Headers */,
 				234130851F9605F5002BE7FC /* Resources */,
-				23FA7FB8210C7B54004F7AE7 /* Cleanup */,
-				23FA7FB9210C7B64004F7AE7 /* Swift Lint */,
 			);
 			buildRules = (
 			);
@@ -755,7 +797,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "if which swiftlint >/dev/null; then\nswiftlint\nelse\necho \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi";
+			shellScript = "if which swiftlint >/dev/null; then\nswiftlint\nelse\necho \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\n";
 		};
 		23DC2C822014F5E000270CA3 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -770,34 +812,6 @@
 			shellPath = /bin/sh;
 			shellScript = "#!/bin/sh\ndirectories=(Sources Tests)\n\nfor directory in \"${directories[@]}\"\ndo\necho \"Cleaning whitespace in directory: $directory\"\nfind $directory -iregex '.*\\.swift' -exec sed -E -i '' -e 's/[[:blank:]]*$//' {} \\;\ndone";
 		};
-		23FA7FB8210C7B54004F7AE7 /* Cleanup */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = Cleanup;
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "#!/bin/sh\ndirectories=(Sources Tests)\n\nfor directory in \"${directories[@]}\"\ndo\necho \"Cleaning whitespace in directory: $directory\"\nfind $directory -iregex '.*\\.swift' -exec sed -E -i '' -e 's/[[:blank:]]*$//' {} \\;\ndone";
-		};
-		23FA7FB9210C7B64004F7AE7 /* Swift Lint */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "Swift Lint";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "if which swiftlint >/dev/null; then\nswiftlint\nelse\necho \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi";
-		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -807,26 +821,28 @@
 			files = (
 				23F24D2720079CDE00B25A03 /* DelayOperation.swift in Sources */,
 				2372507D200524860000A442 /* AdvancedOperation.swift in Sources */,
+				233078C0217DF83000BE5AB5 /* ConditionEvaluatorOperation.swift in Sources */,
 				23F24D22200799B800B25A03 /* Operation+Utils.swift in Sources */,
-				235D08AB206A498400F70142 /* ExclusivityManager.swift in Sources */,
 				232F3AAE206041DE00FC45CB /* Globals.swift in Sources */,
-				2398EE7521664C03002305B6 /* _OperationQueueObserving.swift in Sources */,
 				235D08AC206A498400F70142 /* NegatedCondition.swift in Sources */,
-				235D08AE206A498400F70142 /* MutuallyExclusiveCondition.swift in Sources */,
+				232F9444217F29AE00A86699 /* AdvancedOperation+OperationState.swift in Sources */,
 				239BC52220EB7539009A36D9 /* Operation+Injection.swift in Sources */,
 				23830CA320615E7C00F6EBC9 /* NSLock+Utils.swift in Sources */,
 				2326CC25206E6199001876A2 /* OperationConditionResult.swift in Sources */,
 				23A813B12020CF1E008A98E0 /* AdvancedBlockOperation.swift in Sources */,
 				235D08B0206A498400F70142 /* NoCancelledDependenciesCondition.swift in Sources */,
 				23F24D302007B0D200B25A03 /* OperationObserving.swift in Sources */,
+				23778DF5217747F400224A62 /* SynchronizedArray.swift in Sources */,
 				236F54B6206CDE070079B033 /* AdvancedOperationError.swift in Sources */,
 				235D08B1206A498400F70142 /* NoFailedDependenciesCondition.swift in Sources */,
 				235D08AF206A498400F70142 /* OperationCondition.swift in Sources */,
 				2385616C200A6BF80061BAA1 /* GroupOperation.swift in Sources */,
 				23F24D352007BC2100B25A03 /* AdvancedOperationQueue.swift in Sources */,
+				2306482E21820FB000295516 /* AdvancedOperation+Conditions.swift in Sources */,
+				23B1BDFE216F99BA002D0A5B /* BlockCondition.swift in Sources */,
 				232C452E215A898000B73E79 /* UIBackgroundObserver.swift in Sources */,
-				235D08AD206A498400F70142 /* SilentCondition.swift in Sources */,
 				23F24D3A2007C03D00B25A03 /* BlockObserver.swift in Sources */,
+				23B1BE07216F9FA9002D0A5B /* TimeoutObserver.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -836,26 +852,28 @@
 			files = (
 				23F24D2820079CDE00B25A03 /* DelayOperation.swift in Sources */,
 				2372507E200524860000A442 /* AdvancedOperation.swift in Sources */,
+				233078C1217DF83000BE5AB5 /* ConditionEvaluatorOperation.swift in Sources */,
 				23F24D23200799B800B25A03 /* Operation+Utils.swift in Sources */,
-				235D08B2206A498400F70142 /* ExclusivityManager.swift in Sources */,
 				232F3AAF206041DE00FC45CB /* Globals.swift in Sources */,
-				2398EE7621664C03002305B6 /* _OperationQueueObserving.swift in Sources */,
 				235D08B3206A498400F70142 /* NegatedCondition.swift in Sources */,
-				235D08B5206A498400F70142 /* MutuallyExclusiveCondition.swift in Sources */,
+				232F9445217F29AE00A86699 /* AdvancedOperation+OperationState.swift in Sources */,
 				239BC52320EB7539009A36D9 /* Operation+Injection.swift in Sources */,
 				23830CA420615E7C00F6EBC9 /* NSLock+Utils.swift in Sources */,
 				2326CC26206E6199001876A2 /* OperationConditionResult.swift in Sources */,
 				23A813B22020CF1E008A98E0 /* AdvancedBlockOperation.swift in Sources */,
 				235D08B7206A498400F70142 /* NoCancelledDependenciesCondition.swift in Sources */,
 				23F24D312007B0D200B25A03 /* OperationObserving.swift in Sources */,
+				23778DF6217747F400224A62 /* SynchronizedArray.swift in Sources */,
 				236F54B7206CDE070079B033 /* AdvancedOperationError.swift in Sources */,
 				235D08B8206A498400F70142 /* NoFailedDependenciesCondition.swift in Sources */,
 				235D08B6206A498400F70142 /* OperationCondition.swift in Sources */,
 				2385616D200A6BF80061BAA1 /* GroupOperation.swift in Sources */,
 				23F24D362007BC2100B25A03 /* AdvancedOperationQueue.swift in Sources */,
+				2306482F21820FB000295516 /* AdvancedOperation+Conditions.swift in Sources */,
+				23B1BDFF216F99BA002D0A5B /* BlockCondition.swift in Sources */,
 				2359AB4E216212CD00AC09D8 /* UIBackgroundObserver.swift in Sources */,
-				235D08B4206A498400F70142 /* SilentCondition.swift in Sources */,
 				23F24D3B2007C03D00B25A03 /* BlockObserver.swift in Sources */,
+				23B1BE08216F9FA9002D0A5B /* TimeoutObserver.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -865,26 +883,28 @@
 			files = (
 				23F24D2920079CDE00B25A03 /* DelayOperation.swift in Sources */,
 				2372507F200524860000A442 /* AdvancedOperation.swift in Sources */,
+				233078C2217DF83000BE5AB5 /* ConditionEvaluatorOperation.swift in Sources */,
 				23F24D24200799B800B25A03 /* Operation+Utils.swift in Sources */,
-				235D08B9206A498500F70142 /* ExclusivityManager.swift in Sources */,
 				232F3AB0206041DE00FC45CB /* Globals.swift in Sources */,
-				2398EE7721664C03002305B6 /* _OperationQueueObserving.swift in Sources */,
 				235D08BA206A498500F70142 /* NegatedCondition.swift in Sources */,
-				235D08BC206A498500F70142 /* MutuallyExclusiveCondition.swift in Sources */,
+				232F9446217F29AE00A86699 /* AdvancedOperation+OperationState.swift in Sources */,
 				239BC52420EB7539009A36D9 /* Operation+Injection.swift in Sources */,
 				23830CA520615E7C00F6EBC9 /* NSLock+Utils.swift in Sources */,
 				2326CC27206E6199001876A2 /* OperationConditionResult.swift in Sources */,
 				23A813B32020CF1E008A98E0 /* AdvancedBlockOperation.swift in Sources */,
 				235D08BE206A498500F70142 /* NoCancelledDependenciesCondition.swift in Sources */,
 				23F24D322007B0D200B25A03 /* OperationObserving.swift in Sources */,
+				23778DF7217747F400224A62 /* SynchronizedArray.swift in Sources */,
 				236F54B8206CDE070079B033 /* AdvancedOperationError.swift in Sources */,
 				235D08BF206A498500F70142 /* NoFailedDependenciesCondition.swift in Sources */,
 				235D08BD206A498500F70142 /* OperationCondition.swift in Sources */,
 				2385616E200A6BF80061BAA1 /* GroupOperation.swift in Sources */,
 				23F24D372007BC2100B25A03 /* AdvancedOperationQueue.swift in Sources */,
+				2306483021820FB000295516 /* AdvancedOperation+Conditions.swift in Sources */,
+				23B1BE00216F99BA002D0A5B /* BlockCondition.swift in Sources */,
 				232C452F215A898000B73E79 /* UIBackgroundObserver.swift in Sources */,
-				235D08BB206A498500F70142 /* SilentCondition.swift in Sources */,
 				23F24D3C2007C03D00B25A03 /* BlockObserver.swift in Sources */,
+				23B1BE09216F9FA9002D0A5B /* TimeoutObserver.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -894,26 +914,28 @@
 			files = (
 				23F24D2A20079CDE00B25A03 /* DelayOperation.swift in Sources */,
 				23725080200524860000A442 /* AdvancedOperation.swift in Sources */,
+				233078C3217DF83000BE5AB5 /* ConditionEvaluatorOperation.swift in Sources */,
 				23F24D25200799B800B25A03 /* Operation+Utils.swift in Sources */,
-				235D08C0206A498500F70142 /* ExclusivityManager.swift in Sources */,
 				232F3AB1206041DE00FC45CB /* Globals.swift in Sources */,
-				2398EE7821664C03002305B6 /* _OperationQueueObserving.swift in Sources */,
 				235D08C1206A498500F70142 /* NegatedCondition.swift in Sources */,
-				235D08C3206A498500F70142 /* MutuallyExclusiveCondition.swift in Sources */,
+				232F9447217F29AE00A86699 /* AdvancedOperation+OperationState.swift in Sources */,
 				239BC52520EB7539009A36D9 /* Operation+Injection.swift in Sources */,
 				23830CA620615E7C00F6EBC9 /* NSLock+Utils.swift in Sources */,
 				2326CC28206E6199001876A2 /* OperationConditionResult.swift in Sources */,
 				23A813B42020CF1E008A98E0 /* AdvancedBlockOperation.swift in Sources */,
 				235D08C5206A498500F70142 /* NoCancelledDependenciesCondition.swift in Sources */,
 				23F24D332007B0D200B25A03 /* OperationObserving.swift in Sources */,
+				23778DF8217747F400224A62 /* SynchronizedArray.swift in Sources */,
 				236F54B9206CDE070079B033 /* AdvancedOperationError.swift in Sources */,
 				235D08C6206A498500F70142 /* NoFailedDependenciesCondition.swift in Sources */,
 				235D08C4206A498500F70142 /* OperationCondition.swift in Sources */,
 				2385616F200A6BF80061BAA1 /* GroupOperation.swift in Sources */,
 				23F24D382007BC2100B25A03 /* AdvancedOperationQueue.swift in Sources */,
+				2306483121820FB000295516 /* AdvancedOperation+Conditions.swift in Sources */,
+				23B1BE01216F99BA002D0A5B /* BlockCondition.swift in Sources */,
 				232C4530215A898000B73E79 /* UIBackgroundObserver.swift in Sources */,
-				235D08C2206A498500F70142 /* SilentCondition.swift in Sources */,
 				23F24D3D2007C03D00B25A03 /* BlockObserver.swift in Sources */,
+				23B1BE0A216F9FA9002D0A5B /* TimeoutObserver.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -922,16 +944,15 @@
 			buildActionMask = 2147483647;
 			files = (
 				23F24D2E2007A33F00B25A03 /* DelayOperationTests.swift in Sources */,
-				23687032206E4FE9004DFC17 /* SilentConditionTests.swift in Sources */,
 				23856177200A87070061BAA1 /* AdvancedOperationQueueTests.swift in Sources */,
 				23A813B82020D111008A98E0 /* AdvancedBlockOperationTests.swift in Sources */,
 				235D08CE206A6FCA00F70142 /* NoCancelledDependenciesConditionTests.swift in Sources */,
 				235D08CB206A6FCA00F70142 /* NoFailedDependenciesConditionTests.swift in Sources */,
-				2368702A206E36A3004DFC17 /* OperationConditionTests.swift in Sources */,
 				23A56BAE200F984400509A65 /* XCTestCase+Utils.swift in Sources */,
-				23CF6E7D205FC4D300808400 /* MutuallyExclusiveConditionTests.swift in Sources */,
+				239ECD33218E11AF00F640F2 /* AdvancedOperationErrorTests.swift in Sources */,
 				239BC52920EB7C47009A36D9 /* InjectionTests.swift in Sources */,
 				2368702E206E4BE8004DFC17 /* BlockObserverTests.swift in Sources */,
+				23B1BE05216F9CE2002D0A5B /* BlockConditionTests.swift in Sources */,
 				232A53C1215B683A008B76AC /* UIBackgroundObserverTests.swift in Sources */,
 				23F24D20200771FA00B25A03 /* AdvancedOperationTests.swift in Sources */,
 				235D08D3206A941B00F70142 /* OperationStateTests.swift in Sources */,
@@ -939,6 +960,7 @@
 				23856173200A6E9A0061BAA1 /* GroupOperationTests.swift in Sources */,
 				235F7B0B206B883800218F32 /* NegatedConditionTests.swift in Sources */,
 				2385617B200A873C0061BAA1 /* Mocks.swift in Sources */,
+				23B1BE0E216FA2AD002D0A5B /* TimeoutObserverTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -947,16 +969,15 @@
 			buildActionMask = 2147483647;
 			files = (
 				23F24D2C2007A33F00B25A03 /* DelayOperationTests.swift in Sources */,
-				23687030206E4FE8004DFC17 /* SilentConditionTests.swift in Sources */,
 				23856175200A87070061BAA1 /* AdvancedOperationQueueTests.swift in Sources */,
 				23A813B62020D111008A98E0 /* AdvancedBlockOperationTests.swift in Sources */,
 				235D08CC206A6FCA00F70142 /* NoCancelledDependenciesConditionTests.swift in Sources */,
 				235D08C9206A6FCA00F70142 /* NoFailedDependenciesConditionTests.swift in Sources */,
-				23687028206E36A3004DFC17 /* OperationConditionTests.swift in Sources */,
 				23A56BAC200F984400509A65 /* XCTestCase+Utils.swift in Sources */,
-				23CF6E7B205FC4D300808400 /* MutuallyExclusiveConditionTests.swift in Sources */,
+				239ECD31218E11AF00F640F2 /* AdvancedOperationErrorTests.swift in Sources */,
 				239BC52720EB7C47009A36D9 /* InjectionTests.swift in Sources */,
 				2368702C206E4BE8004DFC17 /* BlockObserverTests.swift in Sources */,
+				23B1BE03216F9CE2002D0A5B /* BlockConditionTests.swift in Sources */,
 				232A53BF215B683A008B76AC /* UIBackgroundObserverTests.swift in Sources */,
 				23F24D1E200771FA00B25A03 /* AdvancedOperationTests.swift in Sources */,
 				235D08D1206A941B00F70142 /* OperationStateTests.swift in Sources */,
@@ -964,6 +985,7 @@
 				23856171200A6E9A0061BAA1 /* GroupOperationTests.swift in Sources */,
 				235F7B09206B883800218F32 /* NegatedConditionTests.swift in Sources */,
 				23856179200A873C0061BAA1 /* Mocks.swift in Sources */,
+				23B1BE0C216FA2AD002D0A5B /* TimeoutObserverTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -972,16 +994,15 @@
 			buildActionMask = 2147483647;
 			files = (
 				23F24D2D2007A33F00B25A03 /* DelayOperationTests.swift in Sources */,
-				23687031206E4FE9004DFC17 /* SilentConditionTests.swift in Sources */,
 				23856176200A87070061BAA1 /* AdvancedOperationQueueTests.swift in Sources */,
 				23A813B72020D111008A98E0 /* AdvancedBlockOperationTests.swift in Sources */,
 				235D08CD206A6FCA00F70142 /* NoCancelledDependenciesConditionTests.swift in Sources */,
 				235D08CA206A6FCA00F70142 /* NoFailedDependenciesConditionTests.swift in Sources */,
-				23687029206E36A3004DFC17 /* OperationConditionTests.swift in Sources */,
 				23A56BAD200F984400509A65 /* XCTestCase+Utils.swift in Sources */,
-				23CF6E7C205FC4D300808400 /* MutuallyExclusiveConditionTests.swift in Sources */,
+				239ECD32218E11AF00F640F2 /* AdvancedOperationErrorTests.swift in Sources */,
 				239BC52820EB7C47009A36D9 /* InjectionTests.swift in Sources */,
 				2368702D206E4BE8004DFC17 /* BlockObserverTests.swift in Sources */,
+				23B1BE04216F9CE2002D0A5B /* BlockConditionTests.swift in Sources */,
 				232A53C0215B683A008B76AC /* UIBackgroundObserverTests.swift in Sources */,
 				23F24D1F200771FA00B25A03 /* AdvancedOperationTests.swift in Sources */,
 				235D08D2206A941B00F70142 /* OperationStateTests.swift in Sources */,
@@ -989,6 +1010,7 @@
 				23856172200A6E9A0061BAA1 /* GroupOperationTests.swift in Sources */,
 				235F7B0A206B883800218F32 /* NegatedConditionTests.swift in Sources */,
 				2385617A200A873C0061BAA1 /* Mocks.swift in Sources */,
+				23B1BE0D216FA2AD002D0A5B /* TimeoutObserverTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1154,6 +1176,7 @@
 				APPLICATION_EXTENSION_API_ONLY = YES;
 				BITCODE_GENERATION_MODE = marker;
 				CLANG_ENABLE_MODULES = YES;
+				CLANG_STATIC_ANALYZER_MODE = shallow;
 				CODE_SIGN_IDENTITY = "";
 				CODE_SIGN_STYLE = Automatic;
 				DEFINES_MODULE = YES;
@@ -1167,6 +1190,7 @@
 				MACOSX_DEPLOYMENT_TARGET = 10.13;
 				PRODUCT_BUNDLE_IDENTIFIER = org.tinrobots.AdvancedOperation;
 				PRODUCT_NAME = AdvancedOperation;
+				RUN_CLANG_STATIC_ANALYZER = YES;
 				SKIP_INSTALL = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 4.2;
@@ -1182,12 +1206,14 @@
 				APPLICATION_EXTENSION_API_ONLY = YES;
 				BITCODE_GENERATION_MODE = bitcode;
 				CLANG_ENABLE_MODULES = YES;
+				CLANG_STATIC_ANALYZER_MODE = shallow;
 				CODE_SIGN_IDENTITY = "";
 				CODE_SIGN_STYLE = Automatic;
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_TESTABILITY = YES;
 				INFOPLIST_FILE = Support/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
@@ -1195,6 +1221,7 @@
 				MACOSX_DEPLOYMENT_TARGET = 10.13;
 				PRODUCT_BUNDLE_IDENTIFIER = org.tinrobots.AdvancedOperation;
 				PRODUCT_NAME = AdvancedOperation;
+				RUN_CLANG_STATIC_ANALYZER = YES;
 				SKIP_INSTALL = YES;
 				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -1223,6 +1250,7 @@
 				MACOSX_DEPLOYMENT_TARGET = 10.13;
 				PRODUCT_BUNDLE_IDENTIFIER = org.tinrobots.AdvancedOperation;
 				PRODUCT_NAME = AdvancedOperation;
+				RUN_CLANG_STATIC_ANALYZER = YES;
 				SDKROOT = macosx;
 				SKIP_INSTALL = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -1252,6 +1280,7 @@
 				MACOSX_DEPLOYMENT_TARGET = 10.13;
 				PRODUCT_BUNDLE_IDENTIFIER = org.tinrobots.AdvancedOperation;
 				PRODUCT_NAME = AdvancedOperation;
+				RUN_CLANG_STATIC_ANALYZER = YES;
 				SDKROOT = macosx;
 				SKIP_INSTALL = YES;
 				SWIFT_VERSION = 4.2;
@@ -1278,6 +1307,7 @@
 				MACOSX_DEPLOYMENT_TARGET = 10.13;
 				PRODUCT_BUNDLE_IDENTIFIER = org.tinrobots.AdvancedOperation;
 				PRODUCT_NAME = AdvancedOperation;
+				RUN_CLANG_STATIC_ANALYZER = YES;
 				SDKROOT = appletvos;
 				SKIP_INSTALL = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -1299,6 +1329,7 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_TESTABILITY = YES;
 				INFOPLIST_FILE = Support/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
@@ -1306,6 +1337,7 @@
 				MACOSX_DEPLOYMENT_TARGET = 10.13;
 				PRODUCT_BUNDLE_IDENTIFIER = org.tinrobots.AdvancedOperation;
 				PRODUCT_NAME = AdvancedOperation;
+				RUN_CLANG_STATIC_ANALYZER = YES;
 				SDKROOT = appletvos;
 				SKIP_INSTALL = YES;
 				SWIFT_VERSION = 4.2;
@@ -1333,6 +1365,7 @@
 				MACOSX_DEPLOYMENT_TARGET = 10.13;
 				PRODUCT_BUNDLE_IDENTIFIER = org.tinrobots.AdvancedOperation;
 				PRODUCT_NAME = AdvancedOperation;
+				RUN_CLANG_STATIC_ANALYZER = YES;
 				SDKROOT = watchos;
 				SKIP_INSTALL = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -1361,6 +1394,7 @@
 				MACOSX_DEPLOYMENT_TARGET = 10.13;
 				PRODUCT_BUNDLE_IDENTIFIER = org.tinrobots.AdvancedOperation;
 				PRODUCT_NAME = AdvancedOperation;
+				RUN_CLANG_STATIC_ANALYZER = YES;
 				SDKROOT = watchos;
 				SKIP_INSTALL = YES;
 				SWIFT_VERSION = 4.2;
@@ -1375,6 +1409,7 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CLANG_ENABLE_MODULES = YES;
+				CLANG_STATIC_ANALYZER_MODE = deep;
 				CODE_SIGN_IDENTITY = "-";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
@@ -1384,6 +1419,7 @@
 				MACOSX_DEPLOYMENT_TARGET = 10.13;
 				PRODUCT_BUNDLE_IDENTIFIER = "org.tinrobots.AdvancedOperation-Tests-macOS";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				RUN_CLANG_STATIC_ANALYZER = YES;
 				SDKROOT = macosx;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 4.2;
@@ -1397,6 +1433,7 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CLANG_ENABLE_MODULES = YES;
+				CLANG_STATIC_ANALYZER_MODE = deep;
 				CODE_SIGN_IDENTITY = "-";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
@@ -1406,6 +1443,7 @@
 				MACOSX_DEPLOYMENT_TARGET = 10.13;
 				PRODUCT_BUNDLE_IDENTIFIER = "org.tinrobots.AdvancedOperation-Tests-macOS";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				RUN_CLANG_STATIC_ANALYZER = YES;
 				SDKROOT = macosx;
 				SWIFT_VERSION = 4.2;
 				TVOS_DEPLOYMENT_TARGET = 11.0;
@@ -1418,6 +1456,7 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CLANG_ENABLE_MODULES = YES;
+				CLANG_STATIC_ANALYZER_MODE = deep;
 				CODE_SIGN_STYLE = Automatic;
 				INFOPLIST_FILE = "Support/Info-Tests.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
@@ -1425,6 +1464,7 @@
 				MACOSX_DEPLOYMENT_TARGET = 10.13;
 				PRODUCT_BUNDLE_IDENTIFIER = "org.tinrobots.AdvancedOperation-Tests-iOS";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				RUN_CLANG_STATIC_ANALYZER = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -1438,6 +1478,7 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CLANG_ENABLE_MODULES = YES;
+				CLANG_STATIC_ANALYZER_MODE = deep;
 				CODE_SIGN_STYLE = Automatic;
 				INFOPLIST_FILE = "Support/Info-Tests.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
@@ -1445,6 +1486,7 @@
 				MACOSX_DEPLOYMENT_TARGET = 10.13;
 				PRODUCT_BUNDLE_IDENTIFIER = "org.tinrobots.AdvancedOperation-Tests-iOS";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				RUN_CLANG_STATIC_ANALYZER = YES;
 				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TVOS_DEPLOYMENT_TARGET = 11.0;
@@ -1457,6 +1499,7 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CLANG_ENABLE_MODULES = YES;
+				CLANG_STATIC_ANALYZER_MODE = deep;
 				CODE_SIGN_STYLE = Automatic;
 				INFOPLIST_FILE = "Support/Info-Tests.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
@@ -1464,6 +1507,7 @@
 				MACOSX_DEPLOYMENT_TARGET = 10.13;
 				PRODUCT_BUNDLE_IDENTIFIER = "org.tinrobots.AdvancedOperation-Tests-tvOS";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				RUN_CLANG_STATIC_ANALYZER = YES;
 				SDKROOT = appletvos;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 4.2;
@@ -1478,6 +1522,7 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CLANG_ENABLE_MODULES = YES;
+				CLANG_STATIC_ANALYZER_MODE = deep;
 				CODE_SIGN_STYLE = Automatic;
 				INFOPLIST_FILE = "Support/Info-Tests.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
@@ -1485,6 +1530,7 @@
 				MACOSX_DEPLOYMENT_TARGET = 10.13;
 				PRODUCT_BUNDLE_IDENTIFIER = "org.tinrobots.AdvancedOperation-Tests-tvOS";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				RUN_CLANG_STATIC_ANALYZER = YES;
 				SDKROOT = appletvos;
 				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = 3;

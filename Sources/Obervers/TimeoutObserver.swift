@@ -23,17 +23,35 @@
 
 import Foundation
 
-/// A simple condition that causes another condition to not enqueue its dependency.
-public struct SilentCondition<T: OperationCondition>: OperationCondition {
+/// An operation observer which will automatically cancels (with an error) if it doesn't finish before a time interval is expired.
+public struct TimeoutObserver: OperationWillExecuteObserving {
 
-  let condition: T
+  let timeout: TimeInterval
 
-  init(condition: T) {
-    self.condition = condition
+  let queue: DispatchQueue
+
+  /// Creates an instance of the observer with a timeout
+  ///
+  /// - Parameters:
+  ///   - timeout: The expiration interval
+  ///   - queue: The queue where the timer is run.
+  public init(timeout: TimeInterval, queue: DispatchQueue = .global(qos: .default)) {
+    self.timeout = timeout
+    self.queue = queue
   }
 
-  public func evaluate(for operation: AdvancedOperation, completion: @escaping (OperationConditionResult) -> Void) {
-   condition.evaluate(for: operation, completion: completion)
+  public func operationWillExecute(operation: AdvancedOperation) {
+    let delay = timeout
+    let when = DispatchTime.now() + delay
+    
+    queue.asyncAfter(deadline: when) {
+      if !operation.isFinished && !operation.isCancelled {
+        let message = "\(operation.operationName) has been cancelled by the TimeoutObserver with a timeout of \(delay) seconds."
+        let error = AdvancedOperationError.executionCancelled(message: message,
+                                                              userInfo: [observerKey: "TimeoutObserver"])
+        operation.cancel(errors: [error])
+      }
+    }
   }
 
 }

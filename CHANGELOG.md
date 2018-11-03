@@ -1,5 +1,17 @@
 # Changelog
 
+### 2.0.0
+
+- Added `BlockCondition`. 
+- Added `TimeoutObserver`.
+- Added support for `isAsynchronous`  \ `isCondurrent` operation.
+- Fixed KVO for the `iSCancelled` property in `AdvancedOperation`.
+- A `GroupOperation` can be cancelled correctly even if it's not yet started.
+- The propery `failed` in `AdvancedOperation` has been renamed `hasErrors` to better reflect its intent.
+- Removed `ExclusivityManager`.
+- Conditions are evaluated as a dependency operation.
+- Bugfixes.
+
 ### 1.1.0
 
 - Added a `UIBackgroundObserver` to let an `AdvancedOperation` run in background (for a small amount of time) on `iOS` and `tvOS`.

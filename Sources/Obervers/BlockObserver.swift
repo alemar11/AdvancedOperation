@@ -45,37 +45,51 @@ public class BlockObserver: OperationObserving {
     self.didProduceOperationHandler = didProduce
     self.willFinishHandler = willFinish
     self.didFinishHandler = didFinish
-
     self.willCancelHandler = willCancel
     self.didCancelHandler = didCancel
   }
 
   // MARK: - OperationObserving
 
-  // swiftlint:disable force_cast
-  public func operationWillExecute(operation: Operation) {
-    willExecuteHandler?(operation as! AdvancedOperation)
+  public func operationWillExecute(operation: AdvancedOperation) {
+    willExecuteHandler?(operation)
   }
 
-  public func operationWillFinish(operation: Operation, withErrors errors: [Error]) {
-    willFinishHandler?(operation as! AdvancedOperation, errors)
+  public func operationWillFinish(operation: AdvancedOperation, withErrors errors: [Error]) {
+    willFinishHandler?(operation, errors)
   }
 
-  public func operationDidFinish(operation: Operation, withErrors errors: [Error]) {
-    didFinishHandler?(operation as! AdvancedOperation, errors)
+  public func operationDidFinish(operation: AdvancedOperation, withErrors errors: [Error]) {
+    didFinishHandler?(operation, errors)
   }
 
-  public func operationWillCancel(operation: Operation, withErrors errors: [Error]) {
-    willCancelHandler?(operation as! AdvancedOperation, errors)
+  public func operationWillCancel(operation: AdvancedOperation, withErrors errors: [Error]) {
+    willCancelHandler?(operation, errors)
   }
 
-  public func operationDidCancel(operation: Operation, withErrors errors: [Error]) {
-    didCancelHandler?(operation as! AdvancedOperation, errors)
+  public func operationDidCancel(operation: AdvancedOperation, withErrors errors: [Error]) {
+    didCancelHandler?(operation, errors)
   }
 
-  public func operation(operation: Operation, didProduce producedOperation: Operation) {
+  public func operation(operation: AdvancedOperation, didProduce producedOperation: Operation) {
     didProduceOperationHandler?(operation, producedOperation)
-  }
-  // swiftlint:enable force_cast
+}
+}
 
+/// The `BlockObserver` is a way to attach arbitrary blocks to significant events in an `Operation`'s lifecycle.
+internal final class WillCancelObserver: OperationWillCancelObserving {
+
+  // MARK: - Properties
+
+  private let willCancelHandler: ((AdvancedOperation, [Error]) -> Void)?
+
+  public init (willCancel: ((AdvancedOperation, [Error]) -> Void)? = nil) {
+    self.willCancelHandler = willCancel
+  }
+
+  // MARK: - OperationObserving
+
+  public func operationWillCancel(operation: AdvancedOperation, withErrors errors: [Error]) {
+    willCancelHandler?(operation, errors)
+  }
 }

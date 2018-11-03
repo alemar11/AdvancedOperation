@@ -32,16 +32,16 @@ final class AdvancedBlockOperationTests: XCTestCase {
         complete([])
       }
     }
-
-    let expectation1 = expectation(description: "\(#function)\(#line)")
-    operation.addCompletionBlock { expectation1.fulfill() }
+    XCTAssertTrue(operation.isAsynchronous)
+    XCTAssertTrue(operation.isConcurrent)
+    
+    let expectation1 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isFinished), object: operation, expectedValue: true)
     operation.start()
     operation.cancel()
 
-    waitForExpectations(timeout: 4)
+    wait(for: [expectation1], timeout: 4)
 
     XCTAssertTrue(operation.isCancelled)
-    XCTAssertTrue(operation.isFinished)
   }
 
   func testEarlyBailOut() {
@@ -49,14 +49,13 @@ final class AdvancedBlockOperationTests: XCTestCase {
       complete([])
     }
 
-    let expectation1 = expectation(description: "\(#function)\(#line)")
-    operation.addCompletionBlock { expectation1.fulfill() }
+    let expectation1 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isFinished), object: operation, expectedValue: true)
     operation.cancel()
     operation.start()
 
-    waitForExpectations(timeout: 4)
+    wait(for: [expectation1], timeout: 4)
+
     XCTAssertTrue(operation.isCancelled)
-    XCTAssertTrue(operation.isFinished)
   }
 
   func testBlockOperationWithAsyncQueue() {
@@ -67,12 +66,11 @@ final class AdvancedBlockOperationTests: XCTestCase {
       }
     }
 
-    let expectation1 = expectation(description: "\(#function)\(#line)")
-    operation.addCompletionBlock { expectation1.fulfill() }
+    let expectation1 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isFinished), object: operation, expectedValue: true)
     operation.start()
 
-    waitForExpectations(timeout: 4)
-    XCTAssertTrue(operation.isFinished)
+    wait(for: [expectation1], timeout: 4)
+
   }
 
   func testBlockOperationWithAsyncQueueFinishedWithErrors () {
@@ -97,7 +95,7 @@ final class AdvancedBlockOperationTests: XCTestCase {
     XCTAssertSameErrorQuantity(errors: operation.errors, expectedErrors: errors)
 
     // Memory leaks test: once release the operation, the captured object (by reference) should be nil (weakObject)
-    operation = AdvancedBlockOperation(block: {})
+    operation = AdvancedBlockOperation { }
     object = NSObject()
     XCTAssertNil(weakObject)
   }
@@ -127,8 +125,11 @@ final class AdvancedBlockOperationTests: XCTestCase {
     }
     operation1.then(adapterOperation).then(operation2).then(operation3)
     let queue = AdvancedOperationQueue()
+
     queue.addOperations([operation1, operation2, operation3, adapterOperation], waitUntilFinished: false)
+
     waitForExpectations(timeout: 10)
+
     XCTAssertTrue(operation1.isFinished)
     XCTAssertTrue(operation2.isCancelled)
     XCTAssertTrue(operation3.isFinished)
@@ -155,7 +156,7 @@ final class AdvancedBlockOperationTests: XCTestCase {
       waitForExpectations(timeout: 3)
 
       // Memory leaks test: once release the operation, the captured object (by reference) should be nil (weakObject)
-      operation = AdvancedBlockOperation(block: {})
+      operation = AdvancedBlockOperation(block: { })
       object = NSObject()
     }
 

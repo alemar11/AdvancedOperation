@@ -95,7 +95,7 @@ final class UIBackgroundObserverTests: XCTestCase {
 
     // When
     let application = MockUIApplication(state: .active, didBeginTask: didBeginTask, didEndTask: didEndTask)
-    let operation = SleepyAsyncOperation(interval1: 2, interval2: 2, interval3: 2)
+    let operation = SleepyAsyncOperation(interval1: 1, interval2: 0, interval3: 1)
     let observer = operation.continueToRunInBackground(application: application)
     operation.addObserver(observer)
     let expectation = self.expectation(description: "\(#function)\(#line)")
@@ -106,10 +106,10 @@ final class UIBackgroundObserverTests: XCTestCase {
     // Then
     operation.start()
     applicationEntersBackground(application: application)
-    waitForExpectations(timeout: 10, handler: nil)
+    waitForExpectations(timeout: 10)
 
-    XCTAssertFalse(operation.isCancelled)
-    XCTAssertTrue(operation.isFinished)
+    XCTAssertFalse(operation.isCancelled, "The operation shouldn't be cancelled.")
+    XCTAssertTrue(operation.isFinished, "The operation should be finished.")
     XCTAssertEqual(backgroundTaskIdentifier, endedBackgroundTaskIdentifier)
     XCTAssertTrue(observer.backgroundTaskName.starts(with: "\(identifier).UIBackgroundObserver."))
     XCTAssertEqual(observer.taskIdentifier, .invalid)

@@ -26,20 +26,13 @@ import XCTest
 
 final class AdvancedOperationQueueTests: XCTestCase {
 
-  //  func testStress() {
-  //    for i in 1...20 {
-  //      print(i)
-  //      testQueueWithAdvancedOperationsUsingWaitUntilFinished()
-  //    }
-  //  }
-
-  func testQueueWithAdvancedOperationsUsingWaitUntilFinished() {
+  func testQueueDelegateWithAdvancedOperationsUsingWaitUntilFinished() {
     let queue = AdvancedOperationQueue()
     let delegate = MockOperationQueueDelegate()
 
     queue.delegate = delegate
 
-    let operation1 = SleepyAsyncOperation()
+    let operation1 = SleepyAsyncOperation(interval1: 1, interval2: 0, interval3: 1)
     let operation2 = AdvancedBlockOperation { complete in
       complete([])
     }
@@ -239,22 +232,23 @@ final class AdvancedOperationQueueTests: XCTestCase {
     queue.addOperation(operation2)
     queue.addOperation(operation3)
     queue.addOperation(operation4)
+
     queue.isSuspended = false
 
     waitForExpectations(timeout: 10)
   }
 
-  func testQueueWithMixedOperations() {
+  func testQueueWithMixedOperations() {  // TODO: test crashed
     let queue = AdvancedOperationQueue()
     let delegate = MockOperationQueueDelegate()
 
     queue.delegate = delegate
-    queue.isSuspended = true
+    queue.isSuspended = true // https://api.travis-ci.org/v3/job/447679744/log.txt
 
-    let operation1 = SleepyOperation()
+    let operation1 = SleepyOperation(interval: 0)
     let operation2 = BlockOperation { }
-    let operation3 = DelayOperation(interval: 2)
-    let operation4 = DelayOperation(interval: 1)
+    let operation3 = DelayOperation(interval: 0)
+    let operation4 = DelayOperation(interval: 0)
 
     let willAddExpectation1 = expectation(description: "\(#function)\(#line)")
     let willAddExpectation2 = expectation(description: "\(#function)\(#line)")
@@ -289,7 +283,6 @@ final class AdvancedOperationQueueTests: XCTestCase {
     }
 
     let willExecuteExpectation1 = expectation(description: "\(#function)\(#line)")
-    //let willExecuteExpectation2 = expectation(description: "\(#function)\(#line)")
     let willExecuteExpectation3 = expectation(description: "\(#function)\(#line)")
     let willExecuteExpectation4 = expectation(description: "\(#function)\(#line)")
 
@@ -305,7 +298,6 @@ final class AdvancedOperationQueueTests: XCTestCase {
     }
 
     let willFinishExpectation1 = expectation(description: "\(#function)\(#line)")
-    //let willFinishExpectation2 = expectation(description: "\(#function)\(#line)")
     let willFinishExpectation3 = expectation(description: "\(#function)\(#line)")
     let willFinishExpectation4 = expectation(description: "\(#function)\(#line)")
 
@@ -340,13 +332,18 @@ final class AdvancedOperationQueueTests: XCTestCase {
       XCTFail("There should'nt be any cancelled operations.")
     }
 
+    queue.isSuspended = false
     queue.addOperation(operation1)
     queue.addOperation(operation2)
     queue.addOperation(operation3)
     queue.addOperation(operation4)
-    queue.isSuspended = false
 
     waitForExpectations(timeout: 10)
+
+    XCTAssertTrue(operation1.isFinished)
+    XCTAssertTrue(operation2.isFinished)
+    XCTAssertTrue(operation3.isFinished)
+    XCTAssertTrue(operation4.isFinished)
   }
 
   func testQueueWithCancel() {
@@ -557,6 +554,8 @@ final class AdvancedOperationQueueTests: XCTestCase {
 
       queue = nil
       operation1 = nil
+
+      sleep(2)
     }
 
     XCTAssertNil(weakQueue, "The queue should be nilled out.")
@@ -602,4 +601,49 @@ final class AdvancedOperationQueueTests: XCTestCase {
     XCTAssertNil(weakOperation3, "Leak: operation3 should be nilled out. The queue has still \(queue!.operations.count) operations.")
     XCTAssertNil(weakOperation4, "Leak: operation4 should be nilled out. The queue has still \(queue!.operations.count) operations.")
   }
+
+  func testProducedOperation() {
+    let producedOperation = SleepyAsyncOperation()
+    let producingOperation = ProducingOperation(operation: producedOperation)
+    let expectation1 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isFinished), object: producedOperation, expectedValue: true)
+    let expectation2 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isFinished), object: producingOperation, expectedValue: true)
+    let queue = AdvancedOperationQueue()
+    queue.addOperation(producingOperation)
+
+    wait(for: [expectation1, expectation2], timeout: 10)
+
+    XCTAssertFalse(producingOperation.isCancelled)
+    XCTAssertFalse(producedOperation.isCancelled)
+  }
+
+  func testSynchronousOperationFinishedWithoutErrors() {
+    let operation = SynchronousOperation(errors: [])
+    let queue = AdvancedOperationQueue()
+    let expectation1 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isFinished), object: operation, expectedValue: true)
+
+    queue.addOperation(operation)
+    
+    wait(for: [expectation1], timeout: 10)
+  }
+
+  func testSynchronousOperationFinishedWithErrors() {
+    let operation = SynchronousOperation(errors: [MockError.failed, MockError.test])
+    let queue = AdvancedOperationQueue()
+    let expectation1 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isFinished), object: operation, expectedValue: true)
+    queue.addOperation(operation)
+
+    wait(for: [expectation1], timeout: 10)
+
+    XCTAssertTrue(operation.hasErrors)
+  }
+
+  func testAccessingOperationQueueFromOperation() {
+    let queue = AdvancedOperationQueue()
+    let operation = OperationReferencingOperationQueue(queue: queue)
+    let expectation1 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isFinished), object: operation, expectedValue: true)
+    queue.addOperation(operation)
+
+    wait(for: [expectation1], timeout: 10)
+  }
+
 }

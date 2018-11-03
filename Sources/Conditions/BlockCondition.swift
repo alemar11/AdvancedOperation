@@ -23,21 +23,37 @@
 
 import Foundation
 
-/// A generic condition for describing kinds of operations that may not execute concurrently.
-public struct MutuallyExclusiveCondition: OperationCondition {
+/// A Condition which will be satisfied if the block returns ´true´.
+/// - Note: The block may ´throw´ an error, or return ´false´, both of which are considered as a condition failure.
+public struct BlockCondition: OperationCondition {
 
-  public let name: String
+  /// The block type which returns a Bool.
+  public typealias Block = () throws -> Bool
 
-  public let mutuallyExclusivityMode: MutualExclusivityMode
+  static var blockConditionKey: String { return "BlockCondition" }
 
-  /// Creates a new `MutuallyExclusiveCondition` element.
-  public init(name: String, mode: MutualExclusivityMode = .enqueue) {
-    self.name = name
-    self.mutuallyExclusivityMode = mode
+  let block: Block
+
+  public init(block: @escaping Block) {
+    self.block = block
   }
 
   public func evaluate(for operation: AdvancedOperation, completion: @escaping (OperationConditionResult) -> Void) {
-    completion(.satisfied)
+    do {
+      let result = try block()
+      if result {
+        completion(.satisfied)
+      } else {
+        let conditionError = AdvancedOperationError.conditionFailed(message: "The BlockCondition has returned false.",
+                                                           userInfo: [operationConditionKey: name])
+         completion(.failed([conditionError]))
+      }
+    } catch {
+      let conditionError = AdvancedOperationError.conditionFailed(message: "The BlockCondition has thrown an exception.",
+                                                         userInfo: [operationConditionKey: name,
+                                                                    type(of: self).blockConditionKey: error])
+       completion(.failed([conditionError]))
+    }
   }
 
 }

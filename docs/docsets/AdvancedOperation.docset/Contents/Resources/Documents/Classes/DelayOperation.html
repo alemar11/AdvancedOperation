@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>DelayOperation Class Reference</title>
+    <link rel="stylesheet" type="text/css" href="../css/jazzy.css" />
+    <link rel="stylesheet" type="text/css" href="../css/highlight.css" />
+    <meta charset='utf-8'>
+    <script src="../js/jquery.min.js" defer></script>
+    <script src="../js/jazzy.js" defer></script>
+    
+  </head>
+  <body>
+    <a name="//apple_ref/swift/Class/DelayOperation" class="dashAnchor"></a>
+    <a title="DelayOperation Class Reference"></a>
+    <header>
+      <div class="content-wrapper">
+        <p><a href="../index.html">AdvancedOperation Docs</a> (55% documented)</p>
+      </div>
+    </header>
+    <div class="content-wrapper">
+      <p id="breadcrumbs">
+        <a href="../index.html">AdvancedOperation Reference</a>
+        <img id="carat" src="../img/carat.png" />
+        DelayOperation Class Reference
+      </p>
+    </div>
+    <div class="content-wrapper">
+      <nav class="sidebar">
+        <ul class="nav-groups">
+          <li class="nav-group-name">
+            <a href="../Classes.html">Classes</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Classes/AdvancedBlockOperation.html">AdvancedBlockOperation</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/AdvancedOperation.html">AdvancedOperation</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/AdvancedOperationQueue.html">AdvancedOperationQueue</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/BlockObserver.html">BlockObserver</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/DelayOperation.html">DelayOperation</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/GroupOperation.html">GroupOperation</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/UIBackgroundObserver.html">UIBackgroundObserver</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Enums.html">Enumerations</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Enums/OperationConditionResult.html">OperationConditionResult</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Extensions.html">Extensions</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Extensions/Operation.html">Operation</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Extensions/Sequence.html">Sequence</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Protocols.html">Protocols</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Protocols/AdvancedOperationQueueDelegate.html">AdvancedOperationQueueDelegate</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/OperationCondition.html">OperationCondition</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/OperationDidCancelObserving.html">OperationDidCancelObserving</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/OperationDidFinishObserving.html">OperationDidFinishObserving</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/OperationDidProduceOperationObserving.html">OperationDidProduceOperationObserving</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/OperationInputHaving.html">OperationInputHaving</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols.html#/s:17AdvancedOperation0B9ObservingP">OperationObserving</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols.html#/s:17AdvancedOperation0B13ObservingTypeP">OperationObservingType</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/OperationOutputHaving.html">OperationOutputHaving</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/OperationWillCancelObserving.html">OperationWillCancelObserving</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/OperationWillExecuteObserving.html">OperationWillExecuteObserving</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/OperationWillFinishObserving.html">OperationWillFinishObserving</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/UIApplicationBackgroundTask.html">UIApplicationBackgroundTask</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Structs.html">Structures</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Structs/AdvancedOperationError.html">AdvancedOperationError</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/AdvancedOperationError.html#/s:17AdvancedOperation0aB5ErrorV4CodeO">– Code</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/BlockCondition.html">BlockCondition</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/InjectedInputRequirements.html">InjectedInputRequirements</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/NegatedCondition.html">NegatedCondition</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/NoCancelledDependeciesCondition.html">NoCancelledDependeciesCondition</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/NoFailedDependenciesCondition.html">NoFailedDependenciesCondition</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/TimeoutObserver.html">TimeoutObserver</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Typealiases.html">Type Aliases</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Typealiases.html#/s:17AdvancedOperation0B5Blocka">OperationBlock</a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </nav>
+      <article class="main-content">
+        <section>
+          <section class="section">
+            <h1>DelayOperation</h1>
+              <div class="declaration">
+                <div class="language">
+                  <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">final</span> <span class="kd">class</span> <span class="kt">DelayOperation</span> <span class="p">:</span> <span class="kt"><a href="../Classes/AdvancedOperation.html">AdvancedOperation</a></span></code></pre>
+
+                </div>
+              </div>
+            <p>An <code><a href="../Classes/AdvancedOperation.html">AdvancedOperation</a></code> that will simply wait for a given time interval, or until a specific <code>Date</code>.
+If the interval is negative, or the <code>Date</code> is in the past, then this operation immediately finishes.</p>
+<div class="aside aside-note">
+    <p class="aside-title">Note</p>
+    A <code>DelayOperation</code> cannot be cancelled once started running.
+
+</div>
+
+          </section>
+          <section class="section task-group-section">
+            <div class="task-group">
+              <div class="task-name-container">
+                <a name="/Initialization"></a>
+                <a name="//apple_ref/swift/Section/Initialization" class="dashAnchor"></a>
+                <a href="#/Initialization">
+                  <h3 class="section-name">Initialization</h3>
+                </a>
+              </div>
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:17AdvancedOperation05DelayB0C8interval5queueACSd_So012OS_dispatch_E0Ctcfc"></a>
+                    <a name="//apple_ref/swift/Method/init(interval:queue:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:17AdvancedOperation05DelayB0C8interval5queueACSd_So012OS_dispatch_E0Ctcfc">init(interval:queue:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="nf">init</span><span class="p">(</span><span class="nv">interval</span><span class="p">:</span> <span class="kt">TimeInterval</span><span class="p">,</span> <span class="nv">queue</span><span class="p">:</span> <span class="kt">DispatchQueue</span> <span class="o">=</span> <span class="o">.</span><span class="nf">global</span><span class="p">(</span><span class="nv">qos</span><span class="p">:</span> <span class="o">.</span><span class="k">default</span><span class="p">))</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:17AdvancedOperation05DelayB0C5until5queueAC10Foundation4DateV_So012OS_dispatch_E0Ctcfc"></a>
+                    <a name="//apple_ref/swift/Method/init(until:queue:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:17AdvancedOperation05DelayB0C5until5queueAC10Foundation4DateV_So012OS_dispatch_E0Ctcfc">init(until:queue:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="nf">init</span><span class="p">(</span><span class="n">until</span> <span class="nv">date</span><span class="p">:</span> <span class="kt">Date</span><span class="p">,</span> <span class="nv">queue</span><span class="p">:</span> <span class="kt">DispatchQueue</span> <span class="o">=</span> <span class="o">.</span><span class="nf">global</span><span class="p">(</span><span class="nv">qos</span><span class="p">:</span> <span class="o">.</span><span class="k">default</span><span class="p">))</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <div class="task-name-container">
+                <a name="/Methods"></a>
+                <a name="//apple_ref/swift/Section/Methods" class="dashAnchor"></a>
+                <a href="#/Methods">
+                  <h3 class="section-name">Methods</h3>
+                </a>
+              </div>
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:@M@AdvancedOperation@objc(cs)DelayOperation(im)main"></a>
+                    <a name="//apple_ref/swift/Method/main()" class="dashAnchor"></a>
+                    <a class="token" href="#/c:@M@AdvancedOperation@objc(cs)DelayOperation(im)main">main()</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">override</span> <span class="kd">func</span> <span class="nf">main</span><span class="p">()</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </section>
+        </section>
+        <section id="footer">
+          <p>&copy; 2018 <a class="link" href="https://github.com/tinrobots/AdvancedOperation" target="_blank" rel="external">Alessandro Marzoli</a>. All rights reserved. (Last updated: 2018-11-03)</p>
+          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.9.4</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+        </section>
+      </article>
+    </div>
+  </body>
+</div>
+</html>
