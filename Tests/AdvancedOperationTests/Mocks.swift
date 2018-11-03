@@ -264,6 +264,23 @@ final internal class FailingAsyncOperation: AdvancedOperation {
   }
 }
 
+/// An operation that check if its current operation queue is the same passed durinig its initialization.
+final internal class OperationReferencingOperationQueue: AdvancedOperation {
+  weak var queue: AdvancedOperationQueue? = .none
+
+  override public var isAsynchronous: Bool { return false }
+
+  init(queue: AdvancedOperationQueue) {
+    self.queue = queue
+  }
+
+  override func main() {
+    XCTAssertTrue(operationQueue === queue)
+    XCTAssertTrue(operationQueue !== OperationQueue.main)
+    XCTAssertTrue(queue !== OperationQueue.main)
+  }
+}
+
 /// An operation that cancels itself with errors
 final internal class CancellingAsyncOperation: AdvancedOperation {
 

@@ -637,4 +637,13 @@ final class AdvancedOperationQueueTests: XCTestCase {
     XCTAssertTrue(operation.hasErrors)
   }
 
+  func testAccessingOperationQueueFromOperation() {
+    let queue = AdvancedOperationQueue()
+    let operation = OperationReferencingOperationQueue(queue: queue)
+    let expectation1 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isFinished), object: operation, expectedValue: true)
+    queue.addOperation(operation)
+
+    wait(for: [expectation1], timeout: 10)
+  }
+
 }
