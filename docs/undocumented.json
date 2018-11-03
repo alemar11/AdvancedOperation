@@ -226,63 +226,70 @@
     },
     {
       "file": "/Users/a.marzoli/Developer/Frameworks/AdvancedOperation/Sources/Core/AdvancedOperation.swift",
-      "line": 91,
+      "line": 40,
+      "symbol": "AdvancedOperation.isAsynchronous",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/a.marzoli/Developer/Frameworks/AdvancedOperation/Sources/Core/AdvancedOperation.swift",
+      "line": 42,
+      "symbol": "AdvancedOperation.isConcurrent",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/a.marzoli/Developer/Frameworks/AdvancedOperation/Sources/Core/AdvancedOperation.swift",
+      "line": 95,
       "symbol": "AdvancedOperation.keyPathsForValuesAffectingValue(forKey:)",
       "symbol_kind": "source.lang.swift.decl.function.method.class",
       "warning": "undocumented"
     },
     {
       "file": "/Users/a.marzoli/Developer/Frameworks/AdvancedOperation/Sources/Core/AdvancedOperation.swift",
-      "line": 110,
+      "line": 114,
       "symbol": "AdvancedOperation.start()",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/a.marzoli/Developer/Frameworks/AdvancedOperation/Sources/Core/AdvancedOperation.swift",
-      "line": 137,
+      "line": 143,
       "symbol": "AdvancedOperation.main()",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/a.marzoli/Developer/Frameworks/AdvancedOperation/Sources/Core/AdvancedOperation.swift",
-      "line": 141,
+      "line": 147,
       "symbol": "AdvancedOperation.cancel(errors:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/a.marzoli/Developer/Frameworks/AdvancedOperation/Sources/Core/AdvancedOperation.swift",
-      "line": 145,
+      "line": 151,
       "symbol": "AdvancedOperation.cancel()",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/a.marzoli/Developer/Frameworks/AdvancedOperation/Sources/Core/AdvancedOperation.swift",
-      "line": 180,
-      "symbol": "AdvancedOperation.finish(errors:)",
-      "symbol_kind": "source.lang.swift.decl.function.method.instance",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/a.marzoli/Developer/Frameworks/AdvancedOperation/Sources/Core/AdvancedOperation.swift",
-      "line": 222,
+      "line": 231,
       "symbol": "AdvancedOperation.addDependency(_:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/a.marzoli/Developer/Frameworks/AdvancedOperation/Sources/Core/AdvancedOperation.swift",
-      "line": 230,
+      "line": 238,
       "symbol": "AdvancedOperation.conditions",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/a.marzoli/Developer/Frameworks/AdvancedOperation/Sources/Core/AdvancedOperation.swift",
-      "line": 232,
+      "line": 240,
       "symbol": "AdvancedOperation.addCondition(_:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
@@ -305,13 +312,6 @@
       "file": "/Users/a.marzoli/Developer/Frameworks/AdvancedOperation/Sources/GroupOperation.swift",
       "line": 165,
       "symbol": "GroupOperation.cancel()",
-      "symbol_kind": "source.lang.swift.decl.function.method.instance",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/a.marzoli/Developer/Frameworks/AdvancedOperation/Sources/GroupOperation.swift",
-      "line": 189,
-      "symbol": "GroupOperation.finish(errors:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
