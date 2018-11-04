@@ -398,7 +398,7 @@
 				23F24D21200799B800B25A03 /* Operation+Utils.swift */,
 				23778DF4217747F300224A62 /* SynchronizedArray.swift */,
 				235D08A3206A494600F70142 /* Conditions */,
-				23555F9521709069009FBE81 /* Obervers */,
+				23555F9521709069009FBE81 /* Observers */,
 				236F54BA206CE5390079B033 /* Operations */,
 			);
 			path = Sources;
@@ -426,7 +426,7 @@
 			path = Support;
 			sourceTree = "<group>";
 		};
-		23555F9521709069009FBE81 /* Obervers */ = {
+		23555F9521709069009FBE81 /* Observers */ = {
 			isa = PBXGroup;
 			children = (
 				23F24D2F2007B0D200B25A03 /* OperationObserving.swift */,
@@ -434,7 +434,7 @@
 				232C452D215A898000B73E79 /* UIBackgroundObserver.swift */,
 				23B1BE06216F9FA9002D0A5B /* TimeoutObserver.swift */,
 			);
-			path = Obervers;
+			path = Observers;
 			sourceTree = "<group>";
 		};
 		23555F9621709396009FBE81 /* Observers */ = {
