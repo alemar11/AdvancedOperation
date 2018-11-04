@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name    = 'AdvancedOperation'
-  s.version = '1.1.0'
+  s.version = '2.0.0'
   s.license = 'MIT'
   s.documentation_url = 'http://www.tinrobots.org/AdvancedOperation'  
   s.summary   = 'Advanced operations.'
@@ -17,7 +17,6 @@ Pod::Spec.new do |s|
   s.watchos.deployment_target = '4.0'
 
   s.source_files =  'Sources/*.swift',
-                    'Sources/Conditions/*.swift',
-                    'Sources/Operations/*.swift', 
+                    'Sources/*/*.swift',
                     'Support/*.{h,m}'
 end
