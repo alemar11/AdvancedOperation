@@ -50,6 +50,8 @@ open class AdvancedOperation: Operation {
   /// Returns `true` if the `AdvancedOperation` has generated errors during its lifetime.
   public var hasErrors: Bool { return !errors.isEmpty }
 
+  let progress = Progress(totalUnitCount: -1) //https://developer.apple.com/documentation/foundation/nsprogress/1412871-indeterminate?language=objc
+
   /// You can use this method from within the running operation object to get a reference to the operation queue that started it.
   //// Calling this method from outside the context of a running operation typically results in nil being returned.
   public var operationQueue: OperationQueue? { return OperationQueue.current }
@@ -129,6 +131,10 @@ open class AdvancedOperation: Operation {
         finish()
       }
       return
+    }
+
+    if progress.isIndeterminate {
+      progress.totalUnitCount = 1
     }
 
     state = .executing
