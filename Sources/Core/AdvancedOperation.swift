@@ -212,7 +212,7 @@ open class AdvancedOperation: Operation {
         return false
       }
 
-      guard _state == .executing else {
+      guard _state == .executing || _state == .pending else {
         return false
       }
 
