@@ -157,7 +157,7 @@ open class GroupOperation: AdvancedOperation {
     }
 
     for operation in underlyingOperationQueue.operations.reversed() where operation !== finishingOperation && operation !== startingOperation && !operation.isFinished && !operation.isCancelled {
-        operation.cancel()
+      operation.cancel()
     }
 
     if !isExecuting && !isFinished {
