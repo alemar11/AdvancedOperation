@@ -27,8 +27,9 @@ import XCTest
 final class OperationStateTests: XCTestCase {
 
   func testTransition() {
-    // Ready
+    // Pending
     XCTAssertTrue(AdvancedOperation.OperationState.pending.canTransition(to: .executing))
+    XCTAssertTrue(AdvancedOperation.OperationState.pending.canTransition(to: .finished))
     XCTAssertFalse(AdvancedOperation.OperationState.pending.canTransition(to: .pending))
 
     // Executing
