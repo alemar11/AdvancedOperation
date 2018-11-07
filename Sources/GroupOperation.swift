@@ -136,7 +136,7 @@ open class GroupOperation: AdvancedOperation {
   }
 
   /// Advises the `GroupOperation` object that it should stop executing its tasks.
-  /// - Note: Once all the tasks are cancelled, the GroupOperation state will be set as finished even it is not yet started.
+  /// - Note: Once all the tasks are cancelled, the GroupOperation state will be set as finished if it's started.
   public final override func cancel(errors: [Error]) {
     let canBeCancelled = lock.synchronized { () -> Bool in
       if _cancellationTriggered {
@@ -195,6 +195,10 @@ open class GroupOperation: AdvancedOperation {
 
   open override func finish(errors: [Error] = []) {
     queueLock.synchronized {
+      /// Avoiding pending operations after cancellation using waitUntilAllOperationsAreFinished.
+      /// When a GroupOperation is cancelled, the finish method gets called when the finishingOperation is finished,
+      /// but there could be cancelled operations still pending to run to move their state to finished.
+      underlyingOperationQueue.waitUntilAllOperationsAreFinished()
       underlyingOperationQueue.isSuspended = true
     }
     super.finish(errors: errors)

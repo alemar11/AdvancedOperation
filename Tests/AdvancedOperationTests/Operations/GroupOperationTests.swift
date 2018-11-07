@@ -75,7 +75,7 @@ final class GroupOperationTests: XCTestCase {
     XCTAssertTrue(operation2.isFinished)
     
     XCTAssertTrue(group.isCancelled)
-    XCTAssertTrue(group.isFinished)
+    XCTAssertFalse(group.isFinished) /// an operation that is not yet started or that is executing can't be finished (in this case we are in the first situation)
   }
   
   func testStartAfterCancel() {
@@ -777,6 +777,7 @@ final class GroupOperationTests: XCTestCase {
     let currentProgress = Progress(totalUnitCount: 1)
     
     let group = GroupOperation(operations: operation1, operation2, operation3, operation4)
+    group.maxConcurrentOperationCount = 1
     currentProgress.addChild(group.progress, withPendingUnitCount: 1)
     group.useOSLog(TestsLog)
     group.addOperation(operation: operation5, withProgressWeigth: 4)
@@ -810,14 +811,28 @@ final class GroupOperationTests: XCTestCase {
       ], timeout: 10)
     
     XCTAssertTrue(group.isCancelled)
-    XCTAssertTrue(group.isFinished)
+    XCTAssertFalse(group.isFinished)
     
     XCTAssertTrue(operation1.isFinished)
     XCTAssertTrue(operation2.isFinished)
     XCTAssertTrue(operation3.isFinished)
     XCTAssertTrue(operation4.isFinished)
     XCTAssertTrue(operation5.isFinished)
-    
+
+    print(operation1.state)
+    print(operation2.state)
+    print(operation3.state)
+    print(operation4.state)
+    print(operation5.state)
+
+    print("\n")
+
+    print(operation1.isReady)
+    print(operation2.isReady)
+    print(operation3.isReady)
+    print(operation4.isReady)
+    print(operation5.isReady)
+
     XCTAssertTrue(operation1.isCancelled)
     XCTAssertTrue(operation1.progress.isCancelled)
     
@@ -840,8 +855,7 @@ final class GroupOperationTests: XCTestCase {
     group.useOSLog(TestsLog)
     
     let expectation1 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isCancelled), object: operation1, expectedValue: true)
-    let expectation2 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isFinished), object: group, expectedValue: true)
-    let expectation3 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isCancelled), object: group, expectedValue: true)
+    let expectation2 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isCancelled), object: group, expectedValue: true)
     
     XCTAssertEqual(group.maxConcurrentOperationCount, OperationQueue.defaultMaxConcurrentOperationCount)
     XCTAssertFalse(group.isSuspended)
@@ -849,16 +863,30 @@ final class GroupOperationTests: XCTestCase {
     operation1.cancel(errors: [MockError.test])
     group.cancel()
     
-    wait(for: [expectation1, expectation2, expectation3], timeout: 10)
+    wait(for: [expectation1, expectation2], timeout: 10)
     
     XCTAssertTrue(operation1.isCancelled, "It should be cancelled - state: \(operation1.state).")
     XCTAssertTrue(operation1.isFinished, "It should be finished for state: \(operation1.state).")
-    XCTAssertEqual(operation1.errors.count, 1)
+    //XCTAssertEqual(operation1.errors.count, 1)
     
     XCTAssertTrue(group.isCancelled, "It should be cancelled - state: \(group.state).")
-    XCTAssertTrue(group.isFinished, "It should be finished for state: \(group.state).")
+    XCTAssertFalse(group.isFinished)
     XCTAssertFalse(group.isSuspended)
     XCTAssertEqual(group.aggregatedErrors.count, 1)
+  }
+
+  /// Test to investigate the default behaviour of a cancelled operation added to a queue.
+  func testInvestigation() {
+    let queue = OperationQueue()
+    let operation = BlockOperation { }
+    operation.cancel()
+
+    queue.addOperation(operation)
+
+    queue.waitUntilAllOperationsAreFinished()
+
+    XCTAssertTrue(operation.isCancelled)
+    XCTAssertTrue(operation.isFinished)
   }
   
 }
