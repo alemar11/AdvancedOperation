@@ -780,7 +780,6 @@ final class GroupOperationTests: XCTestCase {
     currentProgress.addChild(group.progress, withPendingUnitCount: 1)
     group.useOSLog(TestsLog)
     group.addOperation(operation: operation5, withProgressWeigth: 4)
-
     operation1.name = "Operation1"
     operation2.name = "Operation2"
     operation3.name = "Operation3"
@@ -788,25 +787,26 @@ final class GroupOperationTests: XCTestCase {
     operation5.name = "Operation5"
 
     let expectation0 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isCancelled), object: group, expectedValue: true)
-    let expectation1 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isFinished), object: operation1, expectedValue: true)
-    let expectation2 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isFinished), object: operation1, expectedValue: true)
-    let expectation3 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isFinished), object: operation1, expectedValue: true)
-    let expectation4 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isFinished), object: operation1, expectedValue: true)
-    let expectation5 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isFinished), object: operation1, expectedValue: true)
-    let expectation6 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isCancelled), object: operation1, expectedValue: true)
-    let expectation7 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isCancelled), object: operation2, expectedValue: true)
-    let expectation8 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isCancelled), object: operation3, expectedValue: true)
-    let expectation9 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isCancelled), object: operation4, expectedValue: true)
-    let expectation10 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isCancelled), object: operation5, expectedValue: true)
-    
+    let expectation1 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isCancelled), object: operation1, expectedValue: true)
+    let expectation2 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isCancelled), object: operation2, expectedValue: true)
+    let expectation3 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isCancelled), object: operation3, expectedValue: true)
+    let expectation4 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isCancelled), object: operation4, expectedValue: true)
+    let expectation5 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isCancelled), object: operation5, expectedValue: true)
+
     XCTAssertEqual(group.progress.totalUnitCount, 9)
 
     currentProgress.cancel()
 
-    wait(for: [expectation0, expectation1, expectation2, expectation3, expectation4, expectation5, expectation6, expectation7, expectation8, expectation9, expectation10], timeout: 10)
+    wait(for: [expectation0, expectation1, expectation2, expectation3, expectation4, expectation5], timeout: 10)
 
     XCTAssertTrue(group.isCancelled)
-    XCTAssertFalse(group.isFinished) /// an operation that is not yet started or that is executing can't be finished (in this case we are in the first situation)
+    XCTAssertFalse(group.isFinished) /// an operation that is not yet started can't be finished.
+
+    XCTAssertFalse(operation1.isFinished)
+    XCTAssertFalse(operation2.isFinished)
+    XCTAssertFalse(operation3.isFinished)
+    XCTAssertFalse(operation4.isFinished)
+    XCTAssertFalse(operation5.isFinished)
 
     XCTAssertTrue(operation1.isCancelled)
     XCTAssertTrue(operation1.progress.isCancelled)
