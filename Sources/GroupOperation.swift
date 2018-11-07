@@ -194,10 +194,15 @@ open class GroupOperation: AdvancedOperation {
   }
 
   public func addOperation(operation: Operation) {
+    assert(!isExecuting, "The GroupOperation is executing and cannot accept more operations.")
     assert(!finishingOperation.isCancelled || !finishingOperation.isFinished, "The GroupOperation is finishing and cannot accept more operations.")
 
     finishingOperation.addDependency(operation)
     operation.addDependency(startingOperation)
+    if let advancedOperation = operation as? AdvancedOperation {
+      progress.totalUnitCount += 1
+      progress.addChild(advancedOperation.progress, withPendingUnitCount: 1)
+    }
     underlyingOperationQueue.addOperation(operation)
 
     if let advancedOperation = operation as? AdvancedOperation, advancedOperation.log === OSLog.disabled {

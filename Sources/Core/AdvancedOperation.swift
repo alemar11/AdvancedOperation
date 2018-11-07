@@ -24,6 +24,8 @@
 import Foundation
 import os.log
 
+extension AdvancedOperation: ProgressReporting { }
+
 /// An advanced subclass of `Operation`.
 open class AdvancedOperation: Operation {
 
@@ -50,7 +52,16 @@ open class AdvancedOperation: Operation {
   /// Returns `true` if the `AdvancedOperation` has generated errors during its lifetime.
   public var hasErrors: Bool { return !errors.isEmpty }
 
-  let progress = Progress(totalUnitCount: -1) //https://developer.apple.com/documentation/foundation/nsprogress/1412871-indeterminate?language=objc
+  @objc
+  public lazy var progress: Progress = {
+    let progress = Progress(totalUnitCount: 1)
+    progress.isPausable = false
+    progress.isCancellable = true
+    progress.cancellationHandler = { [weak self] in
+      self?.cancel()
+    }
+    return progress
+  }()
 
   /// You can use this method from within the running operation object to get a reference to the operation queue that started it.
   //// Calling this method from outside the context of a running operation typically results in nil being returned.
@@ -131,10 +142,6 @@ open class AdvancedOperation: Operation {
         finish()
       }
       return
-    }
-
-    if progress.isIndeterminate {
-      progress.totalUnitCount = 1
     }
 
     state = .executing
@@ -219,6 +226,9 @@ open class AdvancedOperation: Operation {
     }
 
     willFinish(errors: _errors)
+    if progress.completedUnitCount != progress.totalUnitCount {
+      progress.completedUnitCount = progress.totalUnitCount
+    }
     state = .finished
     didFinish(errors: _errors)
   }
