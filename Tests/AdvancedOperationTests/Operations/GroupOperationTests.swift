@@ -38,6 +38,7 @@ final class GroupOperationTests: XCTestCase {
 
     XCTAssertEqual(group.maxConcurrentOperationCount, OperationQueue.defaultMaxConcurrentOperationCount)
     XCTAssertFalse(group.isSuspended)
+    XCTAssertEqual(group.progress.totalUnitCount, 2)
 
     group.start()
 
@@ -45,6 +46,7 @@ final class GroupOperationTests: XCTestCase {
 
     XCTAssertFalse(group.isSuspended)
     XCTAssertTrue(group.isFinished)
+    XCTAssertTrue(group.progress.isFinished)
   }
 
   func testCancel() {
@@ -70,7 +72,7 @@ final class GroupOperationTests: XCTestCase {
 
     /// These operations are finished because the queue they are running into is cancelled and suspended
     XCTAssertTrue(operation1.isFinished)
-    XCTAssertTrue(operation2.isFinished) // an operation that is not yet started or executing cannot be finished
+    XCTAssertTrue(operation2.isFinished)
 
     XCTAssertTrue(group.isCancelled)
     XCTAssertFalse(group.isFinished) /// an operation that is not yet started or that is executing can't be finished (in this case we are in the first situation)
@@ -105,6 +107,7 @@ final class GroupOperationTests: XCTestCase {
     XCTAssertFalse(group.isSuspended)
     XCTAssertTrue(group.isCancelled)
     XCTAssertTrue(group.isFinished)
+    XCTAssertTrue(group.progress.isFinished)
   }
 
   func testOperationCancelled() {
@@ -286,9 +289,9 @@ final class GroupOperationTests: XCTestCase {
   }
 
   func testGroupOperationWithWaitUntilFinished() {
-    let operation1 = BlockOperation(block: { sleep(2)} )
-    let operation2 = BlockOperation(block: { sleep(2)} )
-    let operation3 = BlockOperation(block: { sleep(2)} )
+    let operation1 = BlockOperation(block: { sleep(2) } )
+    let operation2 = BlockOperation(block: { sleep(2) } )
+    let operation3 = BlockOperation(block: { sleep(2) } )
     let group = GroupOperation(operations: operation1, operation2, operation3)
 
     group.start()
@@ -710,6 +713,115 @@ final class GroupOperationTests: XCTestCase {
     }
 
     wait(for: [expectation1, expectation2, expectation3, expectation4], timeout: 10, enforceOrder: true)
+  }
+
+  func testExplicitProgress() {
+    let operation1 = ProgressOperation()
+    let operation2 = ProgressAsyncOperation()
+    let operation3 = ProgressAsyncOperation()
+    let operation4 = ProgressOperation()
+    let operation5 = ProgressOperation()
+
+    let expectation0 = self.expectation(description: "\(#function)\(#line)")
+    let currentProgress = Progress(totalUnitCount: 1)
+    let currentToken = currentProgress.observe(\.fractionCompleted, options: [.initial, .old, .new]) { (progress, change) in
+      if progress.completedUnitCount == 1 && progress.fractionCompleted == 1.0 {
+        expectation0.fulfill()
+      }
+    }
+
+    let group = GroupOperation(operations: operation1, operation2, operation3, operation4)
+    currentProgress.addChild(group.progress, withPendingUnitCount: 1)
+    group.useOSLog(TestsLog)
+    group.addOperation(operation: operation5, withProgressWeigth: 4)
+
+    operation1.name = "Operation1"
+    operation2.name = "Operation2"
+    operation3.name = "Operation3"
+    operation4.name = "Operation4"
+    operation5.name = "Operation5"
+    
+    let expectation1 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isFinished), object: group, expectedValue: true)
+    XCTAssertFalse(group.progress.isPausable)
+    XCTAssertEqual(group.progress.totalUnitCount, 9)
+    group.start()
+
+    wait(for: [expectation0, expectation1], timeout: 30)
+
+
+    XCTAssertTrue(operation1.isFinished)
+    XCTAssertTrue(operation1.progress.isFinished)
+
+    XCTAssertTrue(operation2.isFinished)
+    XCTAssertTrue(operation2.progress.isFinished)
+
+    XCTAssertTrue(operation3.isFinished)
+    XCTAssertTrue(operation3.progress.isFinished)
+
+    XCTAssertTrue(operation4.isFinished)
+    XCTAssertTrue(operation4.progress.isFinished)
+
+    XCTAssertTrue(operation5.isFinished)
+    XCTAssertTrue(operation5.progress.isFinished)
+
+    currentToken.invalidate()
+  }
+
+  func testCancelledProgressPropagationToEveryChildProgress() {
+    let operation1 = ProgressOperation()
+    let operation2 = ProgressAsyncOperation()
+    let operation3 = ProgressAsyncOperation()
+    let operation4 = ProgressOperation()
+    let operation5 = ProgressOperation()
+
+    let currentProgress = Progress(totalUnitCount: 1)
+
+    let group = GroupOperation(operations: operation1, operation2, operation3, operation4)
+    currentProgress.addChild(group.progress, withPendingUnitCount: 1)
+    group.useOSLog(TestsLog)
+    group.addOperation(operation: operation5, withProgressWeigth: 4)
+
+    operation1.name = "Operation1"
+    operation2.name = "Operation2"
+    operation3.name = "Operation3"
+    operation4.name = "Operation4"
+    operation5.name = "Operation5"
+
+    let expectation0 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isCancelled), object: group, expectedValue: true)
+    let expectation1 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isFinished), object: operation1, expectedValue: true)
+    let expectation2 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isFinished), object: operation1, expectedValue: true)
+    let expectation3 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isFinished), object: operation1, expectedValue: true)
+    let expectation4 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isFinished), object: operation1, expectedValue: true)
+    let expectation5 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isFinished), object: operation1, expectedValue: true)
+    let expectation6 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isCancelled), object: operation1, expectedValue: true)
+    let expectation7 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isCancelled), object: operation2, expectedValue: true)
+    let expectation8 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isCancelled), object: operation3, expectedValue: true)
+    let expectation9 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isCancelled), object: operation4, expectedValue: true)
+    let expectation10 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isCancelled), object: operation5, expectedValue: true)
+    
+    XCTAssertEqual(group.progress.totalUnitCount, 9)
+
+    currentProgress.cancel()
+
+    wait(for: [expectation0, expectation1, expectation2, expectation3, expectation4, expectation5, expectation6, expectation7, expectation8, expectation9, expectation10], timeout: 10)
+
+    XCTAssertTrue(group.isCancelled)
+    XCTAssertFalse(group.isFinished) /// an operation that is not yet started or that is executing can't be finished (in this case we are in the first situation)
+
+    XCTAssertTrue(operation1.isCancelled)
+    XCTAssertTrue(operation1.progress.isCancelled)
+
+    XCTAssertTrue(operation2.isCancelled)
+    XCTAssertTrue(operation2.progress.isCancelled)
+
+    XCTAssertTrue(operation3.isCancelled)
+    XCTAssertTrue(operation3.progress.isCancelled)
+
+    XCTAssertTrue(operation4.isCancelled)
+    XCTAssertTrue(operation4.progress.isCancelled)
+
+    XCTAssertTrue(operation5.isCancelled)
+    XCTAssertTrue(operation5.progress.isCancelled)
   }
 
 }

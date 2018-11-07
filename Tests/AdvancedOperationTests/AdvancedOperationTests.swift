@@ -467,33 +467,13 @@ final class AdvancedOperationTests: XCTestCase {
     XCTAssertTrue(operation.hasErrors)
   }
   
-  func testProgress() {
-    let operation = ProgressOperation()
-    let token = operation.progress.observe(\.fractionCompleted, options: [.new]) { (progress, change) in
-      print(progress.localizedDescription) //TODO add expectation or assert
-    }
-    operation.start()
-    XCTAssertTrue(operation.progress.isFinished)
-    token.invalidate()
-  }
-
   func testCancelledProgress() {
-    var units = [Int64]()
-    var fractions = [Double]()
     let operation = ProgressOperation()
-    let token = operation.progress.observe(\.fractionCompleted, options: [.new]) { (progress, change) in
-      print(progress.localizedDescription)
-      fractions.append(progress.fractionCompleted)
-      units.append(progress.completedUnitCount)
-    }
     operation.progress.cancel()
     operation.start()
     XCTAssertTrue(operation.isFinished)
     XCTAssertTrue(operation.isCancelled)
     XCTAssertTrue(operation.progress.isFinished)
-    XCTAssertEqual(units, [1])
-    XCTAssertEqual(fractions, [1.0])
-    token.invalidate()
   }
   
   func testImplicitProgress() {
@@ -501,7 +481,7 @@ final class AdvancedOperationTests: XCTestCase {
     var fractions = [Double]()
     let currentProgress = Progress(totalUnitCount: 1)
     currentProgress.becomeCurrent(withPendingUnitCount: 1)
-    let currentToken = currentProgress.observe(\.fractionCompleted, options: [.new]) { (progress, change) in
+    let currentToken = currentProgress.observe(\.fractionCompleted, options: [.initial]) { (progress, change) in
       print(progress.localizedDescription)
       fractions.append(progress.fractionCompleted)
       units.append(progress.completedUnitCount)
@@ -511,8 +491,8 @@ final class AdvancedOperationTests: XCTestCase {
     currentProgress.resignCurrent()
     XCTAssertTrue(operation.progress.isFinished)
     XCTAssertTrue(currentProgress.isFinished)
-    XCTAssertEqual(units, [0, 0, 0, 1])
-     XCTAssertEqual(fractions, [0.3, 0.6, 0.9, 1.0])
+    XCTAssertEqual(units, [0, 0, 0, 0, 1])
+     XCTAssertEqual(fractions, [0.0, 0.3, 0.6, 0.9, 1.0])
     currentToken.invalidate()
   }
   
@@ -523,7 +503,7 @@ final class AdvancedOperationTests: XCTestCase {
     let operation = ProgressAsyncOperation()
     let expectation1 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isFinished), object: operation, expectedValue: true)
     currentProgress.addChild(operation.progress, withPendingUnitCount: 1)
-    let token = currentProgress.observe(\.fractionCompleted, options: [.new]) { (progress, change) in
+    let token = currentProgress.observe(\.fractionCompleted, options: [.initial]) { (progress, change) in
       print(progress.localizedDescription)
       fractions.append(progress.fractionCompleted)
       units.append(progress.completedUnitCount)
@@ -532,8 +512,8 @@ final class AdvancedOperationTests: XCTestCase {
     wait(for: [expectation1], timeout: 10)
     XCTAssertTrue(operation.progress.isFinished)
     XCTAssertTrue(currentProgress.isFinished)
-    XCTAssertEqual(units, [0, 0, 0, 1])
-    XCTAssertEqual(fractions, [0.3, 0.6, 0.9, 1.0])
+    XCTAssertEqual(units, [0, 0, 0, 0, 1])
+    XCTAssertEqual(fractions, [0.0, 0.3, 0.6, 0.9, 1.0])
     token.invalidate()
   }
   
