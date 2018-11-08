@@ -24,11 +24,11 @@
 import Dispatch
 import Foundation
 
-/// A closure type that takes a closure as its parameter.
-public typealias OperationBlock = (@escaping ([Error]) -> Void) -> Void
-
 /// A concurrent sublcass of `AdvancedOperation` to execute a closure.
 public final class AdvancedBlockOperation: AdvancedOperation {
+
+  /// A closure type that takes a closure as its parameter.
+  public typealias OperationBlock = (@escaping ([Error]) -> Void) -> Void
 
   // MARK: - Private Properties
 

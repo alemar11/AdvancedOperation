@@ -24,6 +24,9 @@
 import Foundation
 import os.log
 
+/// An `AdvancedOperation` subclass which enables the grouping of other operations.
+/// Use a `GroupOperation` to associate related operations together, thereby creating higher levels of abstractions.
+/// - Attention: If you add normal `Operations`, the progress report will ignore them, instead consider using only `AdvancedOperations`.
 open class GroupOperation: AdvancedOperation {
 
   // MARK: - Properties
@@ -31,7 +34,7 @@ open class GroupOperation: AdvancedOperation {
   public override func useOSLog(_ log: OSLog) {
     super.useOSLog(log)
     underlyingOperationQueue.operations.forEach { operation in
-      if let advancedOperation = operation as? AdvancedOperation, advancedOperation.log === OSLog.disabled {
+      if let advancedOperation = operation as? AdvancedOperation, advancedOperation !== startingOperation, advancedOperation !== finishingOperation, advancedOperation.log === OSLog.disabled {
         advancedOperation.useOSLog(log)
       }
     }
@@ -55,10 +58,10 @@ open class GroupOperation: AdvancedOperation {
   private let underlyingOperationQueue: AdvancedOperationQueue
 
   /// Internal starting operation.
-  private lazy var startingOperation = BlockOperation { }
+  private lazy var startingOperation = AdvancedBlockOperation { complete in complete([]) }
 
   /// Internal finishing operation.
-  private lazy var finishingOperation = BlockOperation { }
+  private lazy var finishingOperation = AdvancedBlockOperation { complete in complete([]) }
 
   private let lock = NSLock()
 
@@ -112,11 +115,15 @@ open class GroupOperation: AdvancedOperation {
 
     super.init()
 
+    self.progress.totalUnitCount = 0
     self.underlyingOperationQueue.delegate = self
     self.startingOperation.name = "Start<\(operationName)>"
     self.underlyingOperationQueue.addOperation(startingOperation)
-    self.finishingOperation.name = "End<\(operationName)>"
+    self.finishingOperation.name = "Finish<\(operationName)>"
     self.finishingOperation.addDependency(startingOperation)
+    /// the finishingOperation progress is needed in case the GroupOperation queue is concurrent.
+    self.progress.totalUnitCount += 1
+    self.progress.addChild(finishingOperation.progress, withPendingUnitCount: 1)
     self.underlyingOperationQueue.addOperation(finishingOperation)
 
     for operation in operations {
@@ -129,7 +136,7 @@ open class GroupOperation: AdvancedOperation {
   }
 
   /// Advises the `GroupOperation` object that it should stop executing its tasks.
-  /// Once all the tasks are cancelled, the GroupOperation state will be set as finished.
+  /// - Note: Once all the tasks are cancelled, the GroupOperation state will be set as finished if it's started.
   public final override func cancel(errors: [Error]) {
     let canBeCancelled = lock.synchronized { () -> Bool in
       if _cancellationTriggered {
@@ -150,7 +157,7 @@ open class GroupOperation: AdvancedOperation {
     }
 
     for operation in underlyingOperationQueue.operations.reversed() where operation !== finishingOperation && operation !== startingOperation && !operation.isFinished && !operation.isCancelled {
-        operation.cancel()
+      operation.cancel()
     }
 
     if !isExecuting && !isFinished {
@@ -188,21 +195,42 @@ open class GroupOperation: AdvancedOperation {
 
   open override func finish(errors: [Error] = []) {
     queueLock.synchronized {
+      /// Avoiding pending operations after cancellation using waitUntilAllOperationsAreFinished.
+      /// When a GroupOperation is cancelled, the finish method gets called when the finishingOperation is finished,
+      /// but there could be cancelled operations still pending to run to move their state to finished.
+      underlyingOperationQueue.waitUntilAllOperationsAreFinished()
       underlyingOperationQueue.isSuspended = true
     }
     super.finish(errors: errors)
   }
 
-  public func addOperation(operation: Operation) {
+
+  /// Add an operation.
+  ///
+  /// - Parameters:
+  ///   - operation: The operation to add.
+  ///   - weigth: The `AdvancedOperation` weigth for the progress report (it defaults to 1).
+  ///   - Atention: The progress report ignores normal `Operations`, instead consider using only `AdvancedOperations`.
+  public func addOperation(operation: Operation, withProgressWeigth weigth: Int64 = 1) {
+    assert(!isExecuting, "The GroupOperation is executing and cannot accept more operations.")
     assert(!finishingOperation.isCancelled || !finishingOperation.isFinished, "The GroupOperation is finishing and cannot accept more operations.")
 
     finishingOperation.addDependency(operation)
     operation.addDependency(startingOperation)
+
+    if let advancedOperation = operation as? AdvancedOperation {
+      progress.totalUnitCount += weigth
+      progress.addChild(advancedOperation.progress, withPendingUnitCount: weigth)
+
+      if advancedOperation.log === OSLog.disabled {
+        advancedOperation.useOSLog(log)
+      }
+    }
     underlyingOperationQueue.addOperation(operation)
 
-    if let advancedOperation = operation as? AdvancedOperation, advancedOperation.log === OSLog.disabled {
-      advancedOperation.useOSLog(log)
-    }
+//    if let advancedOperation = operation as? AdvancedOperation, advancedOperation.log === OSLog.disabled {
+//      advancedOperation.useOSLog(log)
+//    }
   }
 
   /// The maximum number of queued operations that can execute at the same time.
@@ -277,7 +305,7 @@ extension GroupOperation: AdvancedOperationQueueDelegate {
     }
 
     guard operation !== finishingOperation && operation !== startingOperation else {
-      assertionFailure("There shouldn't be Operations but only AdvancedOperations in this delegate implementation call.")
+      //assertionFailure("There shouldn't be Operations but only AdvancedOperations in this delegate implementation call.")
       return
     }
 

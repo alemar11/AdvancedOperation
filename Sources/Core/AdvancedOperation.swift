@@ -24,6 +24,8 @@
 import Foundation
 import os.log
 
+extension AdvancedOperation: ProgressReporting { }
+
 /// An advanced subclass of `Operation`.
 open class AdvancedOperation: Operation {
 
@@ -49,6 +51,19 @@ open class AdvancedOperation: Operation {
 
   /// Returns `true` if the `AdvancedOperation` has generated errors during its lifetime.
   public var hasErrors: Bool { return !errors.isEmpty }
+
+  /// Returns the oepration progress.
+  @objc
+  public lazy var progress: Progress = {
+    let progress = Progress(totalUnitCount: 1)
+    progress.isPausable = false
+    progress.isCancellable = true
+    progress.cancellationHandler = { [weak self] in
+      let error = AdvancedOperationError.executionCancelled(message: "A Progress has cancelled this operation.")
+      self?.cancel(errors: [error])
+    }
+    return progress
+  }()
 
   /// You can use this method from within the running operation object to get a reference to the operation queue that started it.
   //// Calling this method from outside the context of a running operation typically results in nil being returned.
@@ -213,6 +228,9 @@ open class AdvancedOperation: Operation {
     }
 
     willFinish(errors: _errors)
+    if progress.completedUnitCount != progress.totalUnitCount {
+      progress.completedUnitCount = progress.totalUnitCount
+    }
     state = .finished
     didFinish(errors: _errors)
   }
