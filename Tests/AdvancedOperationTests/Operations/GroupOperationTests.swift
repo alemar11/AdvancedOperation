@@ -876,7 +876,7 @@ final class GroupOperationTests: XCTestCase {
   }
 
   /// Test to investigate the default behaviour of a cancelled operation added to a queue.
-  func testInvestigation() {
+  func testBehaviourOfAnOperationCancelledAddedToAnOperationQueue() {
     let queue = OperationQueue()
     let operation = BlockOperation { }
     operation.cancel()
