@@ -24,6 +24,7 @@
 import Foundation
 
 /// A Condition which will be satisfied if the block returns ´true´.
+/// If the block is not satisfied, the target operation will be cancelled.
 /// - Note: The block may ´throw´ an error, or return ´false´, both of which are considered as a condition failure.
 public struct BlockCondition: OperationCondition {
 
