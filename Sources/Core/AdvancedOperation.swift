@@ -88,7 +88,7 @@ open class AdvancedOperation: Operation {
   // MARK: - State
 
   /// A lock to guard reads and writes to the `_state` property
-  private let stateLock = NSRecursiveLock()
+  private let stateLock = UnfairLock()
 
   /// Private backing stored property for `state`.
   private var _state: OperationState = .pending

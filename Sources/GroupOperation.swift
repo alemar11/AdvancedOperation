@@ -63,7 +63,7 @@ open class GroupOperation: AdvancedOperation {
   /// Internal finishing operation.
   private lazy var finishingOperation = AdvancedBlockOperation { complete in complete([]) }
 
-  private let lock = NSLock()
+  private let lock = UnfairLock()
 
   private var _temporaryCancelErrors = [Error]()
 
@@ -247,7 +247,7 @@ open class GroupOperation: AdvancedOperation {
   }
 
   /// Lock to manage the underlyingOperationQueue isSuspended property.
-  private let queueLock = NSLock()
+  private let queueLock = UnfairLock()
 
   private var _suspended = false
 

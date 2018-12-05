@@ -45,76 +45,93 @@ open class AdvancedOperationQueue: OperationQueue {
 
   public weak var delegate: AdvancedOperationQueueDelegate? = .none
 
-  private let lock = NSRecursiveLock()
+  private let lock = UnfairLock()
 
-  open override func addOperation (_ operation: Operation) {
+  open override func addOperation(_ operation: Operation) {
     lock.synchronized {
-      if let operation = operation as? AdvancedOperation { /// AdvancedOperation
+      _addOperation(operation)
+    }
+  }
 
-        let observer = BlockObserver(
-          willExecute: { [weak self] (operation) in
-            guard let self = self else { return }
-
-            self.delegate?.operationQueue(operationQueue: self, operationWillExecute: operation)
-
-          }, didProduce: { [weak self] in
-            guard let self = self else { return }
-
-            self.addOperation($1)
-
-          }, willCancel: { [weak self] (operation, errors) in
-            guard let self = self else { return }
-
-            self.delegate?.operationQueue(operationQueue: self, operationWillCancel: operation, withErrors: errors)
-
-          }, didCancel: { [weak self] (operation, errors) in
-            guard let self = self else { return }
-
-            self.delegate?.operationQueue(operationQueue: self, operationDidCancel: operation, withErrors: errors)
-
-          }, willFinish: { [weak self] (operation, errors) in
-            guard let self = self else { return }
-
-            self.delegate?.operationQueue(operationQueue: self, operationWillFinish: operation, withErrors: errors)
-
-          }, didFinish: { [weak self] (operation, errors) in
-            guard let self = self else { return }
-
-            self.delegate?.operationQueue(operationQueue: self, operationDidFinish: operation, withErrors: errors)
-          }
-        )
-
-        operation.addObserver(observer)
-
-        if let evaluator = operation.makeConditionsEvaluator() {
-          addOperation(evaluator)
-        }
-
-      } else { /// Operation
-        operation.addCompletionBlock(asEndingBlock: false) { [weak self, weak operation] in
-          guard let self = self, let operation = operation else {
-            return
-          }
-
-          self.delegate?.operationQueue(operationQueue: self, operationDidFinish: operation, withErrors: [])
-        }
-      }
-
-      delegate?.operationQueue(operationQueue: self, willAddOperation: operation)
-      super.addOperation(operation)
-      delegate?.operationQueue(operationQueue: self, didAddOperation: operation)
+  open override func addOperation(_ block: @escaping () -> Void) {
+    lock.synchronized {
+      let operation = BlockOperation(block: block)
+      _addOperation(operation)
     }
   }
 
   open override func addOperations(_ operations: [Operation], waitUntilFinished wait: Bool) {
-    operations.forEach(addOperation)
+    lock.synchronized {
+      operations.forEach(_addOperation)
 
-    if wait {
-      waitUntilAllOperationsAreFinished()
-//      for operation in super.operations {
-//        operation.waitUntilFinished()
-//      }
+      if wait {
+        waitUntilAllOperationsAreFinished()
+//        for operation in super.operations {
+//          operation.waitUntilFinished()
+//        }
+      }
     }
   }
 
+}
+
+extension AdvancedOperationQueue {
+
+  private func _addOperation(_ operation: Operation) {
+    if let operation = operation as? AdvancedOperation { /// AdvancedOperation
+
+      let observer = BlockObserver(
+        willExecute: { [weak self] (operation) in
+          guard let self = self else { return }
+
+          self.delegate?.operationQueue(operationQueue: self, operationWillExecute: operation)
+
+        }, didProduce: { [weak self] in
+          guard let self = self else { return }
+
+          self.addOperation($1)
+
+        }, willCancel: { [weak self] (operation, errors) in
+          guard let self = self else { return }
+
+          self.delegate?.operationQueue(operationQueue: self, operationWillCancel: operation, withErrors: errors)
+
+        }, didCancel: { [weak self] (operation, errors) in
+          guard let self = self else { return }
+
+          self.delegate?.operationQueue(operationQueue: self, operationDidCancel: operation, withErrors: errors)
+
+        }, willFinish: { [weak self] (operation, errors) in
+          guard let self = self else { return }
+
+          self.delegate?.operationQueue(operationQueue: self, operationWillFinish: operation, withErrors: errors)
+
+        }, didFinish: { [weak self] (operation, errors) in
+          guard let self = self else { return }
+
+          self.delegate?.operationQueue(operationQueue: self, operationDidFinish: operation, withErrors: errors)
+        }
+      )
+
+      operation.addObserver(observer)
+
+      if let evaluator = operation.makeConditionsEvaluator() {
+        _addOperation(evaluator)
+      }
+
+    } else { /// Operation
+      operation.addCompletionBlock(asEndingBlock: false) { [weak self, weak operation] in
+        guard let self = self, let operation = operation else {
+          return
+        }
+
+        self.delegate?.operationQueue(operationQueue: self, operationDidFinish: operation, withErrors: [])
+      }
+    }
+
+    delegate?.operationQueue(operationQueue: self, willAddOperation: operation)
+    super.addOperation(operation)
+    delegate?.operationQueue(operationQueue: self, didAddOperation: operation)
+  }
+  
 }

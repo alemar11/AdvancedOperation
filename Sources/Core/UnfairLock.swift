@@ -1,4 +1,4 @@
-//
+// 
 // AdvancedOperation
 //
 // Copyright © 2016-2018 Tinrobots.
@@ -23,22 +23,30 @@
 
 import Foundation
 
-internal extension NSLock {
+internal final class UnfairLock: NSLocking {
 
-  @discardableResult
-  func synchronized<T>(_ block: () -> T) -> T {
-    lock(); defer { unlock() }
-    return block()
+  private var unfairLock: os_unfair_lock_t
+
+  internal init() {
+    unfairLock = .allocate(capacity: 1)
+    unfairLock.initialize(to: os_unfair_lock())
   }
 
-}
+  internal func lock() {
+    os_unfair_lock_lock(unfairLock)
+  }
 
-internal extension NSRecursiveLock {
+  internal func unlock() {
+    os_unfair_lock_unlock(unfairLock)
+  }
 
-  @discardableResult
-  func synchronized<T>(_ block: () -> T) -> T {
-    lock(); defer { unlock() }
-    return block()
+  internal func `try`() -> Bool {
+    return os_unfair_lock_trylock(unfairLock)
+  }
+
+  deinit {
+    unfairLock.deinitialize(count: 1)
+    unfairLock.deallocate()
   }
 
 }
