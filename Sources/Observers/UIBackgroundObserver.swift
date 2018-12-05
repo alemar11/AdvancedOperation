@@ -125,7 +125,7 @@ extension AdvancedOperation {
   /// - Note: The period of time is undefined.
   @discardableResult
   public func continueToRunInBackground(application: UIApplicationBackgroundTask) -> UIBackgroundObserver {
-    let backgroundObserver = observers.first { $0 is UIBackgroundObserver }
+    let backgroundObserver = observers.read { $0.first { $0 is UIBackgroundObserver } }
 
     if let observer = backgroundObserver as? UIBackgroundObserver {
       return observer

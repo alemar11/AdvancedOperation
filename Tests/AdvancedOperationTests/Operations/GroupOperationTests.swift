@@ -819,20 +819,6 @@ final class GroupOperationTests: XCTestCase {
     XCTAssertTrue(operation4.isFinished)
     XCTAssertTrue(operation5.isFinished)
 
-    print(operation1.state)
-    print(operation2.state)
-    print(operation3.state)
-    print(operation4.state)
-    print(operation5.state)
-
-    print("\n")
-
-    print(operation1.isReady)
-    print(operation2.isReady)
-    print(operation3.isReady)
-    print(operation4.isReady)
-    print(operation5.isReady)
-
     XCTAssertTrue(operation1.isCancelled)
     XCTAssertTrue(operation1.progress.isCancelled)
     
@@ -873,6 +859,7 @@ final class GroupOperationTests: XCTestCase {
     XCTAssertFalse(group.isFinished)
     XCTAssertFalse(group.isSuspended)
     XCTAssertEqual(group.aggregatedErrors.count, 1)
+    XCTAssertNil(group.duration)
   }
 
   /// Test to investigate the default behaviour of a cancelled operation added to a queue.
