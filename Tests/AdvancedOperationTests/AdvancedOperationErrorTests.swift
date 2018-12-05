@@ -28,7 +28,7 @@ class AdvancedOperationErrorTests: XCTestCase {
 
   func testConditionFailedError() {
     let message = "test"
-    let info = ["1":1, "a": "a"] as [String : Any]
+    let info = ["1": 1, "a": "a"] as [String : Any]
     let error = AdvancedOperationError.conditionFailed(message: message, userInfo: info)
 
     XCTAssertEqual(error.domain, identifier)
@@ -40,7 +40,7 @@ class AdvancedOperationErrorTests: XCTestCase {
 
   func testExecutionCancelledError() {
     let message = "test"
-    let info = ["1":1, "a": "a"] as [String : Any]
+    let info = ["1": 1, "a": "a"] as [String : Any]
     let error = AdvancedOperationError.executionCancelled(message: message, userInfo: info)
 
     XCTAssertEqual(error.domain, identifier)
@@ -52,7 +52,7 @@ class AdvancedOperationErrorTests: XCTestCase {
 
   func testExecutionFinishedError() {
     let message = "test"
-    let info = ["1":1, "a": "a"] as [String : Any]
+    let info = ["1": 1, "a": "a"] as [String : Any]
     let error = AdvancedOperationError.executionFinished(message: message, userInfo: info)
 
     XCTAssertEqual(error.domain, identifier)
