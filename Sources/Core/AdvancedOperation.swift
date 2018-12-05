@@ -116,8 +116,7 @@ open class AdvancedOperation: Operation {
 
   open override class func keyPathsForValuesAffectingValue(forKey key: String) -> Set<String> {
     switch key {
-    case #keyPath(Operation.isExecuting),
-         #keyPath(Operation.isFinished):
+    case #keyPath(Operation.isExecuting), #keyPath(Operation.isFinished):
       return Set([#keyPath(state)])
     default:
       return super.keyPathsForValuesAffectingValue(forKey: key)
