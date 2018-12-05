@@ -27,37 +27,37 @@ import Foundation
 internal final class Atomic<T> {
   private var _value: T
   private let lock: NSLocking
-  
-  internal init(_ value: T, lock: NSLocking = UnfairLock()) {
+
+  internal init(value: T, lock: NSLocking = UnfairLock()) {
     self.lock = lock
     self._value = value
   }
-  
+
   internal var value: T {
     // Atomic properties with a setter are kind of dangerous in some scenarios
     // https://github.com/ReactiveCocoa/ReactiveSwift/issues/269
     lock.lock()
     defer { lock.unlock() }
-    
+
     return _value
   }
-  
+
   internal func read<U>(_ value: (T) throws -> U) rethrows -> U {
     lock.lock()
     defer { lock.unlock() }
     return try value(_value)
   }
-  
+
   internal func write(_ transform: (inout T) throws -> Void) rethrows {
     lock.lock()
     defer { lock.unlock() }
     try transform(&_value)
   }
-  
+
   internal func safeAccess<U>(_ transform: (inout T) throws -> U) rethrows -> U {
     lock.lock()
     defer { lock.unlock() }
     return try transform(&_value)
   }
-  
+
 }

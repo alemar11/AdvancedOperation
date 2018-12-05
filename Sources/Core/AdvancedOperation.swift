@@ -72,10 +72,10 @@ open class AdvancedOperation: Operation {
   // MARK: - Private Properties
 
   /// Absolute start and times in seconds.
-  private let times = Atomic<(CFAbsoluteTime?,CFAbsoluteTime?)>((nil,nil))
+  private let times = Atomic<(CFAbsoluteTime?,CFAbsoluteTime?)>(value: (nil,nil))
 
   /// A list of OperationObservingType.
-  private(set) var observers = Atomic<[OperationObservingType]>([OperationObservingType]())
+  private(set) var observers = Atomic<[OperationObservingType]>(value: [OperationObservingType]())
 
   /// Errors generated during the execution.
   private var _errors = [Error]()
