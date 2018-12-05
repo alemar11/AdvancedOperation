@@ -29,7 +29,7 @@ extension AdvancedOperation: ProgressReporting { }
 /// An advanced subclass of `Operation`.
 open class AdvancedOperation: Operation {
 
-  // MARK: - Properties
+  // MARK: - Public Properties
 
   public final  override var isReady: Bool { return super.isReady && stateLock.synchronized { return !_cancelling } }
 
@@ -69,7 +69,13 @@ open class AdvancedOperation: Operation {
   //// Calling this method from outside the context of a running operation typically results in nil being returned.
   public var operationQueue: OperationQueue? { return OperationQueue.current }
 
-  internal private(set) var observers = SynchronizedArray<OperationObservingType>()
+  // MARK: - Private Properties
+
+  /// Absolute start and times in seconds.
+  private let times = Atomic<(CFAbsoluteTime?,CFAbsoluteTime?)>((nil,nil))
+
+  /// A list of OperationObservingType.
+  private(set) var observers = Atomic<[OperationObservingType]>([OperationObservingType]())
 
   /// Errors generated during the execution.
   private var _errors = [Error]()
@@ -121,7 +127,7 @@ open class AdvancedOperation: Operation {
 
   deinit {
     removeDependencies()
-    observers.removeAll()
+    observers.write { $0.removeAll() }
   }
 
   // MARK: - Execution
@@ -147,6 +153,7 @@ open class AdvancedOperation: Operation {
     }
 
     state = .executing
+    times.write { $0.0 = CFAbsoluteTimeGetCurrent() }
     willExecute()
     main()
 
@@ -232,6 +239,7 @@ open class AdvancedOperation: Operation {
       progress.completedUnitCount = progress.totalUnitCount
     }
     state = .finished
+    times.write { $0.1 = CFAbsoluteTimeGetCurrent() }
     didFinish(errors: _errors)
   }
 
@@ -310,6 +318,25 @@ open class AdvancedOperation: Operation {
 
 }
 
+// MARK: - Duration
+
+extension AdvancedOperation {
+
+  /// The `AdvancedOperation` duration in seconds.
+  /// - Note: An operation that is cancelled (and not yet finished) or not started doesn't have a duration.
+  public var duration: TimeInterval? {
+    let intervals = times.value
+    switch (intervals.0, intervals.1) {
+    case (let start?, let end?):
+      return end - start
+    default:
+      return nil
+    }
+
+  }
+
+}
+
 // MARK: - Observers
 
 extension AdvancedOperation {
@@ -320,49 +347,49 @@ extension AdvancedOperation {
   public func addObserver(_ observer: OperationObservingType) {
     assert(state == .pending, "Cannot modify observers after execution has begun.")
 
-    observers.append(observer)
+    observers.write { $0.append(observer) }
   }
 
   internal var willExecuteObservers: [OperationWillExecuteObserving] {
-    guard !observers.isEmpty else { // TSAN _swiftEmptyArrayStorage
+    guard !observers.read ({ $0.isEmpty }) else { // TSAN _swiftEmptyArrayStorage
       return []
     }
-    return observers.compactMap { $0 as? OperationWillExecuteObserving }
+    return observers.read { $0.compactMap { $0 as? OperationWillExecuteObserving } }
   }
 
   internal var didProduceOperationObservers: [OperationDidProduceOperationObserving] {
-    guard !observers.isEmpty else { // TSAN _swiftEmptyArrayStorage
+    guard !observers.read ({ $0.isEmpty }) else  { // TSAN _swiftEmptyArrayStorage
       return []
     }
-    return observers.compactMap { $0 as? OperationDidProduceOperationObserving }
+    return observers.read { $0.compactMap { $0 as? OperationDidProduceOperationObserving } }
   }
 
   internal var willCancelObservers: [OperationWillCancelObserving] {
-    guard !observers.isEmpty else { // TSAN _swiftEmptyArrayStorage
+    guard !observers.read ({ $0.isEmpty }) else  { // TSAN _swiftEmptyArrayStorage
       return []
     }
-    return observers.compactMap { $0 as? OperationWillCancelObserving }
+    return observers.read { $0.compactMap { $0 as? OperationWillCancelObserving } }
   }
 
   internal var didCancelObservers: [OperationDidCancelObserving] {
-    guard !observers.isEmpty else { // TSAN _swiftEmptyArrayStorage
+    guard !observers.read ({ $0.isEmpty }) else  { // TSAN _swiftEmptyArrayStorage
       return []
     }
-    return observers.compactMap { $0 as? OperationDidCancelObserving }
+    return observers.read { $0.compactMap { $0 as? OperationDidCancelObserving } }
   }
 
   internal var willFinishObservers: [OperationWillFinishObserving] {
-    guard !observers.isEmpty else { // TSAN _swiftEmptyArrayStorage
+    guard !observers.read ({ $0.isEmpty }) else  { // TSAN _swiftEmptyArrayStorage
       return []
     }
-    return observers.compactMap { $0 as? OperationWillFinishObserving }
+    return observers.read { $0.compactMap { $0 as? OperationWillFinishObserving } }
   }
 
   internal var didFinishObservers: [OperationDidFinishObserving] {
-    guard !observers.isEmpty else { // TSAN _swiftEmptyArrayStorage
+    guard !observers.read ({ $0.isEmpty }) else  { // TSAN _swiftEmptyArrayStorage
       return []
     }
-    return observers.compactMap { $0 as? OperationDidFinishObserving }
+    return observers.read { $0.compactMap { $0 as? OperationDidFinishObserving } }
   }
 
   private func willExecute() {

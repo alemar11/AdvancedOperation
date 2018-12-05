@@ -28,6 +28,7 @@ final class AdvancedOperationTests: XCTestCase {
   
   func testStart() {
     let operation = SleepyAsyncOperation()
+    XCTAssertNil(operation.duration)
     let expectation1 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isFinished), object: operation, expectedValue: true)
     XCTAssertTrue(operation.isReady)
     
@@ -37,6 +38,7 @@ final class AdvancedOperationTests: XCTestCase {
     wait(for: [expectation1], timeout: 10)
     XCTAssertTrue(operation.isFinished)
     XCTAssertTrue(operation.progress.isFinished)
+    XCTAssertNotNil(operation.duration)
   }
   
   func testMultipleStart() {
