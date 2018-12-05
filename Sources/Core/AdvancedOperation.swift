@@ -86,6 +86,7 @@ open class AdvancedOperation: Operation {
   /// Returns `true` if the `AdvancedOperation` is cancelling.
   private var _cancelling = false
 
+   /// Returns `true` if the `AdvancedOperation` is starting.
   private var _starting = false
 
   /// Returns `true` if the `AdvancedOperation` is cancelled.
