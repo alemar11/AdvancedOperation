@@ -49,9 +49,9 @@ internal final class ExclusivityManager {
   ///   - category: The category to identify an `AdvancedOperation`.
   ///   - cancellable: True if the operation should be cancelled instead of enqueue if another operation with the same category exists.
   internal func addOperation(_ operation: AdvancedOperation, category: String, cancellable: Bool = false) {
-    _ = queue.sync(execute: {
+    queue.sync {
       self._addOperation(operation, category: category, cancellable: cancellable)
-    })
+    }
   }
 
   internal func removeOperation(_ operation: AdvancedOperation, category: String) {
@@ -63,8 +63,8 @@ internal final class ExclusivityManager {
   private func _addOperation(_ operation: AdvancedOperation, category: String, cancellable: Bool) {
     guard !operation.isCancelled else { return }
 
-    let didFinishObserver = BlockObserver {  [unowned self] currentOperation, _ in
-      self.removeOperation(currentOperation, category: category)
+    let didFinishObserver = BlockObserver {  [weak self] currentOperation, _ in
+      self?.removeOperation(currentOperation, category: category)
     }
     operation.addObserver(didFinishObserver)
 
@@ -77,7 +77,7 @@ internal final class ExclusivityManager {
         let error = AdvancedOperationError.executionCancelled(message: "The operation has been cancelled by the ExclusivityManager because there is already a running operation for the identifier: \(category).")
 
         operation.cancel(errors: [error])
-
+        print("🚩 cancelled")
         return // early exit because there is no need to add a cancelled operation to the manager
       } else {
         operation.addDependency(previous)
