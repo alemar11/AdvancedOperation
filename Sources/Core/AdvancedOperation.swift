@@ -152,8 +152,8 @@ open class AdvancedOperation: Operation {
       return
     }
 
-    state = .executing
     times.write { $0.0 = CFAbsoluteTimeGetCurrent() }
+    state = .executing
     willExecute()
     main()
 
@@ -180,9 +180,9 @@ open class AdvancedOperation: Operation {
       guard !_finishing || _state != .finished else { return false }
 
       _cancelling = true
-      if !cancelErrors.isEmpty { // TSAN _swiftEmptyArrayStorage
+      //if !cancelErrors.isEmpty { // TSAN _swiftEmptyArrayStorage
         _errors.append(contentsOf: cancelErrors)
-      }
+      //}
       return true
     }
 
@@ -224,9 +224,9 @@ open class AdvancedOperation: Operation {
       }
 
       _finishing = true
-      if !finishErrors.isEmpty { // TSAN _swiftEmptyArrayStorage
+      //if !finishErrors.isEmpty { // TSAN _swiftEmptyArrayStorage
         _errors.append(contentsOf: finishErrors)
-      }
+      //}
       return true
     }
 
@@ -238,8 +238,9 @@ open class AdvancedOperation: Operation {
     if progress.completedUnitCount != progress.totalUnitCount {
       progress.completedUnitCount = progress.totalUnitCount
     }
-    state = .finished
+
     times.write { $0.1 = CFAbsoluteTimeGetCurrent() }
+    state = .finished
     didFinish(errors: _errors)
   }
 
@@ -326,6 +327,7 @@ extension AdvancedOperation {
   /// - Note: An operation that is cancelled (and not yet finished) or not started doesn't have a duration.
   public var duration: TimeInterval? {
     let intervals = times.value
+    print(intervals)
     switch (intervals.0, intervals.1) {
     case (let start?, let end?):
       return end - start
@@ -351,44 +353,44 @@ extension AdvancedOperation {
   }
 
   internal var willExecuteObservers: [OperationWillExecuteObserving] {
-    guard !observers.read ({ $0.isEmpty }) else { // TSAN _swiftEmptyArrayStorage
-      return []
-    }
+//    guard !observers.read ({ $0.isEmpty }) else { // TSAN _swiftEmptyArrayStorage
+//      return []
+//    }
     return observers.read { $0.compactMap { $0 as? OperationWillExecuteObserving } }
   }
 
   internal var didProduceOperationObservers: [OperationDidProduceOperationObserving] {
-    guard !observers.read ({ $0.isEmpty }) else  { // TSAN _swiftEmptyArrayStorage
-      return []
-    }
+//    guard !observers.read ({ $0.isEmpty }) else  { // TSAN _swiftEmptyArrayStorage
+//      return []
+//    }
     return observers.read { $0.compactMap { $0 as? OperationDidProduceOperationObserving } }
   }
 
   internal var willCancelObservers: [OperationWillCancelObserving] {
-    guard !observers.read ({ $0.isEmpty }) else  { // TSAN _swiftEmptyArrayStorage
-      return []
-    }
+//    guard !observers.read ({ $0.isEmpty }) else  { // TSAN _swiftEmptyArrayStorage
+//      return []
+//    }
     return observers.read { $0.compactMap { $0 as? OperationWillCancelObserving } }
   }
 
   internal var didCancelObservers: [OperationDidCancelObserving] {
-    guard !observers.read ({ $0.isEmpty }) else  { // TSAN _swiftEmptyArrayStorage
-      return []
-    }
+//    guard !observers.read ({ $0.isEmpty }) else  { // TSAN _swiftEmptyArrayStorage
+//      return []
+//    }
     return observers.read { $0.compactMap { $0 as? OperationDidCancelObserving } }
   }
 
   internal var willFinishObservers: [OperationWillFinishObserving] {
-    guard !observers.read ({ $0.isEmpty }) else  { // TSAN _swiftEmptyArrayStorage
-      return []
-    }
+//    guard !observers.read ({ $0.isEmpty }) else  { // TSAN _swiftEmptyArrayStorage
+//      return []
+//    }
     return observers.read { $0.compactMap { $0 as? OperationWillFinishObserving } }
   }
 
   internal var didFinishObservers: [OperationDidFinishObserving] {
-    guard !observers.read ({ $0.isEmpty }) else  { // TSAN _swiftEmptyArrayStorage
-      return []
-    }
+//    guard !observers.read ({ $0.isEmpty }) else  { // TSAN _swiftEmptyArrayStorage
+//      return []
+//    }
     return observers.read { $0.compactMap { $0 as? OperationDidFinishObserving } }
   }
 

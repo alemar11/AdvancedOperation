@@ -309,9 +309,9 @@ extension GroupOperation: AdvancedOperationQueueDelegate {
       return
     }
 
-    if !errors.isEmpty { // avoid TSAN _swiftEmptyArrayStorage
+    //if !errors.isEmpty { // avoid TSAN _swiftEmptyArrayStorage
       aggregatedErrors.append(contentsOf: errors)
-    }
+    //}
   }
 
   public func operationQueue(operationQueue: AdvancedOperationQueue, operationDidFinish operation: Operation, withErrors errors: [Error]) {

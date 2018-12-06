@@ -87,7 +87,7 @@ final class AdvancedOperationTests: XCTestCase {
     XCTAssertTrue(operation.isFinished)
     XCTAssertTrue(operation.progress.isFinished)
   }
-  
+
   func testMultipleAsyncStartAndCancel() {
     let queue1 = DispatchQueue(label: "test1")
     let queue2 = DispatchQueue(label: "test2")
@@ -105,10 +105,13 @@ final class AdvancedOperationTests: XCTestCase {
     queue1.async {
       operation.start()
     }
+
     operation.start()
+
     queue2.async {
       operation.cancel()
     }
+    
     queue1.async {
       operation.start()
     }
@@ -117,6 +120,7 @@ final class AdvancedOperationTests: XCTestCase {
     
     XCTAssertTrue(operation.isCancelled)
     XCTAssertTrue(operation.isCancelled)
+    XCTAssertTrue(operation.isFinished)
     XCTAssertNotNil(operation.duration)
   }
   
