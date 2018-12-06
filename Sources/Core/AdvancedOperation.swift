@@ -234,14 +234,14 @@ open class AdvancedOperation: Operation {
       return
     }
     
-    willFinish(errors: _errors)
+    willFinish(errors: errors)
     if progress.completedUnitCount != progress.totalUnitCount {
       progress.completedUnitCount = progress.totalUnitCount
     }
     
     times.write { $0.1 = CFAbsoluteTimeGetCurrent() }
     state = .finished
-    didFinish(errors: _errors)
+    didFinish(errors: errors)
   }
   
   // MARK: - Produced Operations
@@ -327,7 +327,7 @@ extension AdvancedOperation {
   /// - Note: An operation that is cancelled (and not yet finished) or not started doesn't have a duration.
   public var duration: TimeInterval? {
     let intervals = times.value
-    print(intervals)
+
     switch (intervals.0, intervals.1) {
     case (let start?, let end?):
       return end - start

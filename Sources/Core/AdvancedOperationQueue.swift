@@ -45,6 +45,28 @@ open class AdvancedOperationQueue: OperationQueue {
 
   public weak var delegate: AdvancedOperationQueueDelegate? = .none
 
+  /// Keeps track of every mutual exclusivity conditions defined in the operations running on this queue.
+  internal lazy var exclusivityManager: ExclusivityManager = {
+    let qos: DispatchQoS
+
+    switch self.qualityOfService {
+    case .userInteractive:
+      qos = .userInteractive
+    case .userInitiated:
+      qos = .userInitiated
+    case .utility:
+      qos = .utility
+    case .background:
+      qos = .background
+    case .`default`:
+      qos = .default
+    }
+  
+    let manager = ExclusivityManager(qos: qos)
+
+    return manager
+  }()
+
   private let lock = UnfairLock()
 
   open override func addOperation(_ operation: Operation) {
@@ -66,9 +88,9 @@ open class AdvancedOperationQueue: OperationQueue {
 
       if wait {
         waitUntilAllOperationsAreFinished()
-//        for operation in super.operations {
-//          operation.waitUntilFinished()
-//        }
+        //        for operation in super.operations {
+        //          operation.waitUntilFinished()
+        //        }
       }
     }
   }
@@ -115,8 +137,17 @@ extension AdvancedOperationQueue {
 
       operation.addObserver(observer)
 
-      if let evaluator = operation.makeConditionsEvaluator() {
+      if let evaluator = operation.makeConditionsEvaluator(queue: self) {
         _addOperation(evaluator)
+      }
+
+      for mutualExclusivityCondition in operation.conditions.compactMap ({ $0 as? MutualExclusivityCondition }) {
+        switch mutualExclusivityCondition.mode {
+        case .cancel(identifier: let identifier):
+          self.exclusivityManager.addOperation(operation, category: identifier, cancellable: true)
+        case .enqueue(identifier: let identifier):
+          self.exclusivityManager.addOperation(operation, category: identifier, cancellable: false)
+        }
       }
 
     } else { /// Operation
