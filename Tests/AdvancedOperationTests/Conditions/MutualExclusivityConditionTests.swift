@@ -308,14 +308,14 @@ class MutualExclusivityConditionTests: XCTestCase {
 
     let operation2 = SleepyAsyncOperation(interval1: 2, interval2: 2, interval3: 2)
     operation2.completionBlock = {
-      print("1")
+      print("operation2 completion")
       expectation2.fulfill()
     }
     operation2.addCondition(condition)
 
     // operation1 will be cancelled only if operation2 is still running.
     queue.addOperations([operation2, operation1], waitUntilFinished: true)
-    print("2")
+    print("operation1 completion")
     waitForExpectations(timeout: 1)
 
     XCTAssertTrue(operation1.isFinished)
