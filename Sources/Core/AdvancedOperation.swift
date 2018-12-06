@@ -234,14 +234,14 @@ open class AdvancedOperation: Operation {
       return
     }
     
-    willFinish(errors: _errors)
+    willFinish(errors: errors)
     if progress.completedUnitCount != progress.totalUnitCount {
       progress.completedUnitCount = progress.totalUnitCount
     }
     
     times.write { $0.1 = CFAbsoluteTimeGetCurrent() }
     state = .finished
-    didFinish(errors: _errors)
+    didFinish(errors: errors)
   }
   
   // MARK: - Produced Operations
