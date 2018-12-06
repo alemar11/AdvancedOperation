@@ -282,13 +282,7 @@ class MutualExclusivityConditionTests: XCTestCase {
   }
   
   // MARK: - Cancel Mode
-  func testStress() {
-    (1...10).forEach { (index) in
-      print("------------------------\(index)")
-      testMutuallyExclusiveConditionWithCancelMode()
-    }
-  }
-  
+
   func testMutuallyExclusiveConditionWithCancelMode() {
     let queue = AdvancedOperationQueue()
     queue.maxConcurrentOperationCount = 10
@@ -298,7 +292,6 @@ class MutualExclusivityConditionTests: XCTestCase {
 
     let operation1 = SleepyAsyncOperation(interval1: 1, interval2: 1, interval3: 1)
     operation1.completionBlock = {
-      print("operation1 completion")
       expectation1.fulfill()
     }
 
@@ -309,14 +302,12 @@ class MutualExclusivityConditionTests: XCTestCase {
 
     let operation2 = SleepyAsyncOperation(interval1: 2, interval2: 2, interval3: 2)
     operation2.completionBlock = {
-      print("operation2 completion")
       expectation2.fulfill()
     }
     operation2.addCondition(condition)
 
     // operation1 will be cancelled only if operation2 is still running.
     queue.addOperations([operation2, operation1], waitUntilFinished: true)
-    print("both finished")
     waitForExpectations(timeout: 1)
 
     XCTAssertTrue(operation1.isFinished)
@@ -324,9 +315,6 @@ class MutualExclusivityConditionTests: XCTestCase {
 
     XCTAssertTrue(operation1.isCancelled)
     XCTAssertFalse(operation2.isCancelled)
-
-    print("operation1 is finished: \(operation1.isFinished), is cancelled: \(operation1.isCancelled)")
-    print("operation2 is finished: \(operation2.isFinished), is cancelled: \(operation2.isCancelled)")
   }
   
   func testExclusivityManagerWithCancelMode() {
