@@ -24,7 +24,7 @@
 import Foundation
 import os.log
 
-/// An `AdvancedOperation` subclass which enables the grouping of other operations.
+/// An `AdvancedOperation` subclass which enables a finite grouping of other operations.
 /// Use a `GroupOperation` to associate related operations together, thereby creating higher levels of abstractions.
 /// - Attention: If you add normal `Operations`, the progress report will ignore them, instead consider using only `AdvancedOperations`.
 open class GroupOperation: AdvancedOperation {
@@ -209,9 +209,9 @@ open class GroupOperation: AdvancedOperation {
   ///
   /// - Parameters:
   ///   - operation: The operation to add.
-  ///   - weigth: The `AdvancedOperation` weigth for the progress report (it defaults to 1).
+  ///   - weight: The `AdvancedOperation` weight for the progress report (it defaults to 1).
   ///   - Atention: The progress report ignores normal `Operations`, instead consider using only `AdvancedOperations`.
-  public func addOperation(operation: Operation, withProgressWeigth weigth: Int64 = 1) {
+  public func addOperation(operation: Operation, withProgressWeight weight: Int64 = 1) {
     assert(!isExecuting, "The GroupOperation is executing and cannot accept more operations.")
     assert(!finishingOperation.isCancelled || !finishingOperation.isFinished, "The GroupOperation is finishing and cannot accept more operations.")
     
@@ -219,8 +219,8 @@ open class GroupOperation: AdvancedOperation {
     operation.addDependency(startingOperation)
     
     if let advancedOperation = operation as? AdvancedOperation {
-      progress.totalUnitCount += weigth
-      progress.addChild(advancedOperation.progress, withPendingUnitCount: weigth)
+      progress.totalUnitCount += weight
+      progress.addChild(advancedOperation.progress, withPendingUnitCount: weight)
       
       if advancedOperation.log === OSLog.disabled {
         advancedOperation.useOSLog(log)

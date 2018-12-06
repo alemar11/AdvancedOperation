@@ -733,7 +733,7 @@ final class GroupOperationTests: XCTestCase {
     let group = GroupOperation(operations: operation1, operation2, operation3, operation4)
     currentProgress.addChild(group.progress, withPendingUnitCount: 1)
     group.useOSLog(TestsLog)
-    group.addOperation(operation: operation5, withProgressWeigth: 4)
+    group.addOperation(operation: operation5, withProgressWeight: 4)
     
     operation1.name = "Operation1"
     operation2.name = "Operation2"
@@ -780,7 +780,7 @@ final class GroupOperationTests: XCTestCase {
     group.maxConcurrentOperationCount = 1
     currentProgress.addChild(group.progress, withPendingUnitCount: 1)
     group.useOSLog(TestsLog)
-    group.addOperation(operation: operation5, withProgressWeigth: 4)
+    group.addOperation(operation: operation5, withProgressWeight: 4)
     operation1.name = "Operation1"
     operation2.name = "Operation2"
     operation3.name = "Operation3"
