@@ -875,5 +875,27 @@ final class GroupOperationTests: XCTestCase {
     XCTAssertTrue(operation.isCancelled)
     XCTAssertTrue(operation.isFinished)
   }
+
+  func testDuration() {
+    let operation1 = SleepyAsyncOperation() // 3 sec
+    let expectation1 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isFinished), object: operation1, expectedValue: true)
+
+    let operation2 = BlockOperation(block: { sleep(1)} ) // 1
+    let expectation2 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isFinished), object: operation2, expectedValue: true)
+
+    let group = GroupOperation(operations: operation1, operation2)
+    let expectation3 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isFinished), object: group, expectedValue: true)
+
+    group.maxConcurrentOperationCount = 1 // serial group: 3 + 1 + ∂
+
+    group.start()
+
+    wait(for: [expectation1, expectation2, expectation3], timeout: 10)
+
+    XCTAssertFalse(group.isSuspended)
+    XCTAssertTrue(group.isFinished)
+    XCTAssertNotNil(group.duration)
+    XCTAssertTrue(group.duration! >= 4.0 && group.duration! <= 5.5) // ∂ of 1.5 seconds (just in case)
+  }
   
 }
