@@ -45,6 +45,7 @@ class MutualExclusivityConditionTests: XCTestCase {
   func testMutuallyExclusiveCondition() {
     let queue = AdvancedOperationQueue()
     queue.maxConcurrentOperationCount = 10
+    queue.qualityOfService = .userInitiated
     
     let expectation1 = expectation(description: "\(#function)\(#line)")
     let expectation2 = expectation(description: "\(#function)\(#line)")

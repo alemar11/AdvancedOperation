@@ -26,18 +26,21 @@ import Foundation
 internal final class ExclusivityManager {
 
   /// Creates a new `ExclusivityManager` instance.
-  internal init() { }
-
-  /// The private queue used for thread safe operations.
-  private lazy var queue = DispatchQueue(label: "\(identifier).\(type(of: self)).\(UUID().uuidString)")
-
-  /// Holds all the running operations.
-  private var _operations: [String: [Operation]] = [:]
+  internal init(qos: DispatchQoS = .default) {
+    let label = "\(identifier).\(type(of: self)).\(UUID().uuidString)"
+    self.queue = DispatchQueue(label: label, qos: qos)
+  }
 
   /// Running operations
   internal var operations: [String: [Operation]] {
     return queue.sync { return _operations }
   }
+
+  /// The private queue used for thread safe operations.
+  private let queue: DispatchQueue
+
+  /// Holds all the running operations.
+  private var _operations: [String: [Operation]] = [:]
 
   /// Adds an `AdvancedOperation` the the `ExclusivityManager` instance.
   ///
@@ -71,7 +74,7 @@ internal final class ExclusivityManager {
     if let previous = previous {
       if cancellable {
         // swiftlint:disable:next line_length
-        let error = AdvancedOperationError.executionCancelled(message: "The operation has been cancelled by the ExclusivityManager because there is already an operation for the category: \(category) running.")
+        let error = AdvancedOperationError.executionCancelled(message: "The operation has been cancelled by the ExclusivityManager because there is already a running operation for the identifier: \(category).")
 
         operation.cancel(errors: [error])
 

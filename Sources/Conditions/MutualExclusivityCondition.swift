@@ -23,10 +23,13 @@
 
 import Foundation
 
+/// A condition that defines how an operation should be added to an `AdvancedOperationQueue`.
 public struct MutualExclusivityCondition: OperationCondition {
 
   public enum Mode {
+    /// If there is already an operation with the same identifier, the new one will be cancelled.
     case cancel(identifier: String)
+    /// If there is already an operation with the same identifier, the new one will be added as a dependency of the oldest one.
     case enqueue(identifier: String)
   }
 
@@ -35,8 +38,6 @@ public struct MutualExclusivityCondition: OperationCondition {
   public init(mode: Mode) {
     self.mode = mode
   }
-
-  static var noMutualExclusivityConditionKey: String { return "MutualExclusivityCondition" }
 
   public func evaluate(for operation: AdvancedOperation, completion: @escaping (OperationConditionResult) -> Void) {
     completion(.satisfied)

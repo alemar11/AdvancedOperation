@@ -45,7 +45,27 @@ open class AdvancedOperationQueue: OperationQueue {
 
   public weak var delegate: AdvancedOperationQueueDelegate? = .none
 
-  internal let exclusivityManager = ExclusivityManager()
+  /// Keeps track of every mutual exclusivity conditions defined in the operations running on this queue.
+  internal lazy var exclusivityManager: ExclusivityManager = {
+    let qos: DispatchQoS
+
+    switch self.qualityOfService {
+    case .userInteractive:
+      qos = .userInteractive
+    case .userInitiated:
+      qos = .userInitiated
+    case .utility:
+      qos = .utility
+    case .background:
+      qos = .background
+    case .`default`:
+      qos = .default
+    }
+  
+    let manager = ExclusivityManager(qos: qos)
+
+    return manager
+  }()
 
   private let lock = UnfairLock()
 
@@ -68,9 +88,9 @@ open class AdvancedOperationQueue: OperationQueue {
 
       if wait {
         waitUntilAllOperationsAreFinished()
-//        for operation in super.operations {
-//          operation.waitUntilFinished()
-//        }
+        //        for operation in super.operations {
+        //          operation.waitUntilFinished()
+        //        }
       }
     }
   }
