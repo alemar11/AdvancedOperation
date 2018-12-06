@@ -1,4 +1,4 @@
-//
+// 
 // AdvancedOperation
 //
 // Copyright © 2016-2018 Tinrobots.
@@ -23,45 +23,36 @@
 
 import Foundation
 
-// MARK: - Condition Evaluation
+public struct MutualExclusivityCondition: OperationCondition {
 
-internal extension AdvancedOperation {
+  public enum Mode {
+    case cancel(identifier: String)
+    case enqueue(identifier: String)
+  }
 
-  func makeConditionsEvaluator(queue: AdvancedOperationQueue) -> AdvancedOperation? {
-    guard !conditions.isEmpty else {
-      return nil
-    }
+  public let mode: Mode
 
-    guard !(self is ConditionEvaluatorOperation) else {
-      return nil
-    }
+  public init(mode: Mode) {
+    self.mode = mode
+  }
 
-    let evaluator = ConditionEvaluatorOperation(operation: self, conditions: conditions)
+  static var noMutualExclusivityConditionKey: String { return "MutualExclusivityCondition" }
 
-    // observe if self is beeing cancelled
-    let willCancelObserver = WillCancelObserver { [weak evaluator] _, errors in
-      guard let evaluator = evaluator else {
-        return
-      }
-
-      evaluator.cancel(errors: errors)
-    }
-
-    addObserver(willCancelObserver)
-    evaluator.useOSLog(log)
-    dependencies.forEach(evaluator.addDependency)
-    addDependency(evaluator)
-
-    return evaluator
+  public func evaluate(for operation: AdvancedOperation, completion: @escaping (OperationConditionResult) -> Void) {
+    completion(.satisfied)
   }
 
 }
 
-//internal extension AdvancedOperation {
-//  func hasMutualExclusivityCondition(_ condition: MutualExclusivityCondition) -> Bool {
-//    //return conditions.compactMap { $0 as? MutualExclusivityCondition }.contains { $0 == condition }
-//    return !conditions.compactMap { $0 as? MutualExclusivityCondition }.allSatisfy { $0 != condition }
-//    //return false
-//  }
-//}
+extension MutualExclusivityCondition: Equatable {
+  public static func == (lhs: MutualExclusivityCondition, rhs: MutualExclusivityCondition) -> Bool {
+    switch (lhs.mode, rhs.mode) {
+    case (.cancel(let lhsId), .cancel(let rhsId)) where lhsId == rhsId:
+      return true
+    case (.enqueue(let lhsId), .enqueue(let rhsId)) where
+      lhsId == rhsId: return true
+    default: return false
+    }
+  }
 
+}

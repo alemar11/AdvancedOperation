@@ -45,6 +45,8 @@ open class AdvancedOperationQueue: OperationQueue {
 
   public weak var delegate: AdvancedOperationQueueDelegate? = .none
 
+  internal let exclusivityManager = ExclusivityManager()
+
   private let lock = UnfairLock()
 
   open override func addOperation(_ operation: Operation) {
@@ -115,8 +117,17 @@ extension AdvancedOperationQueue {
 
       operation.addObserver(observer)
 
-      if let evaluator = operation.makeConditionsEvaluator() {
+      if let evaluator = operation.makeConditionsEvaluator(queue: self) {
         _addOperation(evaluator)
+      }
+
+      for mutualExclusivityCondition in operation.conditions.compactMap ({ $0 as? MutualExclusivityCondition }) {
+        switch mutualExclusivityCondition.mode {
+        case .cancel(identifier: let identifier):
+          self.exclusivityManager.addOperation(operation, category: identifier, cancellable: true)
+        case .enqueue(identifier: let identifier):
+          self.exclusivityManager.addOperation(operation, category: identifier, cancellable: false)
+        }
       }
 
     } else { /// Operation

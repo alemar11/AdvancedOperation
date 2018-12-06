@@ -327,7 +327,7 @@ extension AdvancedOperation {
   /// - Note: An operation that is cancelled (and not yet finished) or not started doesn't have a duration.
   public var duration: TimeInterval? {
     let intervals = times.value
-    print(intervals)
+
     switch (intervals.0, intervals.1) {
     case (let start?, let end?):
       return end - start
