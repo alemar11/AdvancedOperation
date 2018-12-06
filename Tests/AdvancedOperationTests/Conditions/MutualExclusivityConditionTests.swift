@@ -66,7 +66,7 @@ class MutualExclusivityConditionTests: XCTestCase {
     operation2.addCondition(condition)
     
     queue.addOperations([operation2, operation1], waitUntilFinished: true)
-    waitForExpectations(timeout: 0)
+    waitForExpectations(timeout: 1)
   }
   
   func testMutuallyExclusiveConditionWithBlockOperations() {
