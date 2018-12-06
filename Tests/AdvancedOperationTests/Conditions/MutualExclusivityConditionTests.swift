@@ -324,8 +324,8 @@ class MutualExclusivityConditionTests: XCTestCase {
     XCTAssertTrue(operation1.isCancelled)
     XCTAssertFalse(operation2.isCancelled)
 
-    print(operation1.isFinished)
-    print(operation2.isFinished)
+    print("operation1 is finished: \(operation1.isFinished), is cancelled: \(operation1.isCancelled)")
+    print("operation2 is finished: \(operation2.isFinished), is cancelled: \(operation2.isCancelled)")
   }
   
   func testExclusivityManagerWithCancelMode() {
