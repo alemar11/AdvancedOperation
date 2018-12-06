@@ -296,7 +296,7 @@ class MutualExclusivityConditionTests: XCTestCase {
     let expectation1 = expectation(description: "\(#function)\(#line)")
     let expectation2 = expectation(description: "\(#function)\(#line)")
 
-    let operation1 = SleepyAsyncOperation(interval1: 0, interval2: 0, interval3: 0)
+    let operation1 = SleepyAsyncOperation(interval1: 1, interval2: 1, interval3: 1)
     operation1.completionBlock = {
       expectation1.fulfill()
     }
