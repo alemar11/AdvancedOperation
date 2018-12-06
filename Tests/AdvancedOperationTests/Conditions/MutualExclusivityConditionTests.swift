@@ -299,17 +299,19 @@ class MutualExclusivityConditionTests: XCTestCase {
     let conditionCancel = MutualExclusivityCondition(mode: .cancel(identifier: "condition1"))
     
     operation1.addCondition(conditionCancel)
-    
-    
-    let operation2 = SleepyAsyncOperation(interval1: 1, interval2: 1, interval3: 1)
+
+    let operation2 = SleepyAsyncOperation(interval1: 2, interval2: 2, interval3: 2)
     operation2.completionBlock = {
       expectation2.fulfill()
     }
     operation2.addCondition(condition)
-    
+
+    // operation1 will be cancelled only if operation2 is still running.
     queue.addOperations([operation2, operation1], waitUntilFinished: true)
+
     waitForExpectations(timeout: 0)
     XCTAssertTrue(operation1.isCancelled)
+    XCTAssertTrue(operation1.isFinished)
   }
   
   func testExclusivityManagerWithCancelMode() {
