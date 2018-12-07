@@ -309,7 +309,7 @@ final class GroupOperationTests: XCTestCase {
     }
   }
   
-  func testNestedGroupOperations() { // TODO: test crashed https://api.travis-ci.org/v3/job/447502216/log.txt
+  func testNestedGroupOperations() {
     let operation1 = BlockOperation(block: { } )
     let operation2 = BlockOperation(block: { sleep(2) } )
     let group1 = GroupOperation(operations: [operation1, operation2])
@@ -331,7 +331,7 @@ final class GroupOperationTests: XCTestCase {
     XCTAssertTrue(group.isFinished)
   }
   
-  func testMultipleNestedGroupOperations() { // TODO: test crashed
+  func testMultipleNestedGroupOperations() {
     let operation1 = BlockOperation { }
     let operation2 = BlockOperation(block: { sleep(2) } )
     let group1 = GroupOperation(operations: [operation1, operation2])

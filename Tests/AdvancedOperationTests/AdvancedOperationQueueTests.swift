@@ -263,7 +263,7 @@ final class AdvancedOperationQueueTests: XCTestCase {
     waitForExpectations(timeout: 10)
   }
   
-  func testQueueWithMixedOperations() {  // TODO: test crashed
+  func testQueueWithMixedOperations() {
     let queue = AdvancedOperationQueue()
     let delegate = MockOperationQueueDelegate()
     
