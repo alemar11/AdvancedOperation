@@ -68,7 +68,7 @@ internal final class ConditionEvaluatorOperation: AdvancedOperation {
   private static func evaluate(_ conditions: [OperationCondition], for operation: AdvancedOperation, completion: @escaping ([Error]) -> Void) {
     let conditionGroup = DispatchGroup()
     var results = [OperationConditionResult?](repeating: nil, count: conditions.count)
-    let lock = NSLock()
+    let lock = UnfairLock()
 
     for (index, condition) in conditions.enumerated() {
       conditionGroup.enter()

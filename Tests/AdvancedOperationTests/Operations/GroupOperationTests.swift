@@ -733,7 +733,7 @@ final class GroupOperationTests: XCTestCase {
     let group = GroupOperation(operations: operation1, operation2, operation3, operation4)
     currentProgress.addChild(group.progress, withPendingUnitCount: 1)
     group.useOSLog(TestsLog)
-    group.addOperation(operation: operation5, withProgressWeigth: 4)
+    group.addOperation(operation: operation5, withProgressWeight: 4)
     
     operation1.name = "Operation1"
     operation2.name = "Operation2"
@@ -780,7 +780,7 @@ final class GroupOperationTests: XCTestCase {
     group.maxConcurrentOperationCount = 1
     currentProgress.addChild(group.progress, withPendingUnitCount: 1)
     group.useOSLog(TestsLog)
-    group.addOperation(operation: operation5, withProgressWeigth: 4)
+    group.addOperation(operation: operation5, withProgressWeight: 4)
     operation1.name = "Operation1"
     operation2.name = "Operation2"
     operation3.name = "Operation3"
@@ -818,20 +818,6 @@ final class GroupOperationTests: XCTestCase {
     XCTAssertTrue(operation3.isFinished)
     XCTAssertTrue(operation4.isFinished)
     XCTAssertTrue(operation5.isFinished)
-
-    print(operation1.state)
-    print(operation2.state)
-    print(operation3.state)
-    print(operation4.state)
-    print(operation5.state)
-
-    print("\n")
-
-    print(operation1.isReady)
-    print(operation2.isReady)
-    print(operation3.isReady)
-    print(operation4.isReady)
-    print(operation5.isReady)
 
     XCTAssertTrue(operation1.isCancelled)
     XCTAssertTrue(operation1.progress.isCancelled)
@@ -873,6 +859,7 @@ final class GroupOperationTests: XCTestCase {
     XCTAssertFalse(group.isFinished)
     XCTAssertFalse(group.isSuspended)
     XCTAssertEqual(group.aggregatedErrors.count, 1)
+    XCTAssertNil(group.duration)
   }
 
   /// Test to investigate the default behaviour of a cancelled operation added to a queue.
@@ -887,6 +874,28 @@ final class GroupOperationTests: XCTestCase {
 
     XCTAssertTrue(operation.isCancelled)
     XCTAssertTrue(operation.isFinished)
+  }
+
+  func testDuration() {
+    let operation1 = SleepyAsyncOperation() // 3 sec
+    let expectation1 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isFinished), object: operation1, expectedValue: true)
+
+    let operation2 = BlockOperation(block: { sleep(1)} ) // 1
+    let expectation2 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isFinished), object: operation2, expectedValue: true)
+
+    let group = GroupOperation(operations: operation1, operation2)
+    let expectation3 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isFinished), object: group, expectedValue: true)
+
+    group.maxConcurrentOperationCount = 1 // serial group: 3 + 1 + ∂
+
+    group.start()
+
+    wait(for: [expectation1, expectation2, expectation3], timeout: 10)
+
+    XCTAssertFalse(group.isSuspended)
+    XCTAssertTrue(group.isFinished)
+    XCTAssertNotNil(group.duration)
+    XCTAssertTrue(group.duration! >= 4.0 && group.duration! <= 5.5) // ∂ of 1.5 seconds (just in case)
   }
   
 }

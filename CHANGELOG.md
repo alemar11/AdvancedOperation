@@ -1,5 +1,11 @@
 # Changelog
 
+### 2.2.0
+
+- Added `duration` (in seconds) to `AdvancedOperation`.
+- Added `MutualExclusivityCondition`. 
+- Bugfixes.
+
 ### 2.1.0
 - `AdvancedBlockOperation` supports `ProgressReporting`.
 - Bugfixes.

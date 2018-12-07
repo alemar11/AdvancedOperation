@@ -1,4 +1,4 @@
-//
+// 
 // AdvancedOperation
 //
 // Copyright © 2016-2018 Tinrobots.
@@ -23,45 +23,31 @@
 
 import Foundation
 
-// MARK: - Condition Evaluation
+/// An object that coordinates the operation of multiple threads of execution within the same application.
+internal final class UnfairLock: NSLocking {
 
-internal extension AdvancedOperation {
+  private var unfairLock: os_unfair_lock_t
 
-  func makeConditionsEvaluator(queue: AdvancedOperationQueue) -> AdvancedOperation? {
-    guard !conditions.isEmpty else {
-      return nil
-    }
+  internal init() {
+    unfairLock = .allocate(capacity: 1)
+    unfairLock.initialize(to: os_unfair_lock())
+  }
 
-    guard !(self is ConditionEvaluatorOperation) else {
-      return nil
-    }
+  internal func lock() {
+    os_unfair_lock_lock(unfairLock)
+  }
 
-    let evaluator = ConditionEvaluatorOperation(operation: self, conditions: conditions)
+  internal func unlock() {
+    os_unfair_lock_unlock(unfairLock)
+  }
 
-    // observe if self is beeing cancelled
-    let willCancelObserver = WillCancelObserver { [weak evaluator] _, errors in
-      guard let evaluator = evaluator else {
-        return
-      }
+  internal func `try`() -> Bool {
+    return os_unfair_lock_trylock(unfairLock)
+  }
 
-      evaluator.cancel(errors: errors)
-    }
-
-    addObserver(willCancelObserver)
-    evaluator.useOSLog(log)
-    dependencies.forEach(evaluator.addDependency)
-    addDependency(evaluator)
-
-    return evaluator
+  deinit {
+    unfairLock.deinitialize(count: 1)
+    unfairLock.deallocate()
   }
 
 }
-
-//internal extension AdvancedOperation {
-//  func hasMutualExclusivityCondition(_ condition: MutualExclusivityCondition) -> Bool {
-//    //return conditions.compactMap { $0 as? MutualExclusivityCondition }.contains { $0 == condition }
-//    return !conditions.compactMap { $0 as? MutualExclusivityCondition }.allSatisfy { $0 != condition }
-//    //return false
-//  }
-//}
-

@@ -1,4 +1,4 @@
-//
+// 
 // AdvancedOperation
 //
 // Copyright © 2016-2018 Tinrobots.
@@ -23,45 +23,41 @@
 
 import Foundation
 
-// MARK: - Condition Evaluation
+/// Thread-safe access using a locking mechanism conforming to `NSLocking` protocol.
+internal final class Atomic<T> {
+  private var _value: T
+  private let lock: NSLocking
 
-internal extension AdvancedOperation {
+  internal init(value: T, lock: NSLocking = UnfairLock()) {
+    self.lock = lock
+    self._value = value
+  }
 
-  func makeConditionsEvaluator(queue: AdvancedOperationQueue) -> AdvancedOperation? {
-    guard !conditions.isEmpty else {
-      return nil
-    }
+  internal var value: T {
+    // Atomic properties with a setter are kind of dangerous in some scenarios
+    // https://github.com/ReactiveCocoa/ReactiveSwift/issues/269
+    lock.lock()
+    defer { lock.unlock() }
 
-    guard !(self is ConditionEvaluatorOperation) else {
-      return nil
-    }
+    return _value
+  }
 
-    let evaluator = ConditionEvaluatorOperation(operation: self, conditions: conditions)
+  internal func read<U>(_ value: (T) throws -> U) rethrows -> U {
+    lock.lock()
+    defer { lock.unlock() }
+    return try value(_value)
+  }
 
-    // observe if self is beeing cancelled
-    let willCancelObserver = WillCancelObserver { [weak evaluator] _, errors in
-      guard let evaluator = evaluator else {
-        return
-      }
+  internal func write(_ transform: (inout T) throws -> Void) rethrows {
+    lock.lock()
+    defer { lock.unlock() }
+    try transform(&_value)
+  }
 
-      evaluator.cancel(errors: errors)
-    }
-
-    addObserver(willCancelObserver)
-    evaluator.useOSLog(log)
-    dependencies.forEach(evaluator.addDependency)
-    addDependency(evaluator)
-
-    return evaluator
+  internal func safeAccess<U>(_ transform: (inout T) throws -> U) rethrows -> U {
+    lock.lock()
+    defer { lock.unlock() }
+    return try transform(&_value)
   }
 
 }
-
-//internal extension AdvancedOperation {
-//  func hasMutualExclusivityCondition(_ condition: MutualExclusivityCondition) -> Bool {
-//    //return conditions.compactMap { $0 as? MutualExclusivityCondition }.contains { $0 == condition }
-//    return !conditions.compactMap { $0 as? MutualExclusivityCondition }.allSatisfy { $0 != condition }
-//    //return false
-//  }
-//}
-

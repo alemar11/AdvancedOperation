@@ -23,45 +23,14 @@
 
 import Foundation
 
-// MARK: - Condition Evaluation
+internal extension NSLocking {
 
-internal extension AdvancedOperation {
+  @discardableResult
+  func synchronized<T>(_ block: () -> T) -> T {
+    lock()
+    defer { unlock() }
 
-  func makeConditionsEvaluator(queue: AdvancedOperationQueue) -> AdvancedOperation? {
-    guard !conditions.isEmpty else {
-      return nil
-    }
-
-    guard !(self is ConditionEvaluatorOperation) else {
-      return nil
-    }
-
-    let evaluator = ConditionEvaluatorOperation(operation: self, conditions: conditions)
-
-    // observe if self is beeing cancelled
-    let willCancelObserver = WillCancelObserver { [weak evaluator] _, errors in
-      guard let evaluator = evaluator else {
-        return
-      }
-
-      evaluator.cancel(errors: errors)
-    }
-
-    addObserver(willCancelObserver)
-    evaluator.useOSLog(log)
-    dependencies.forEach(evaluator.addDependency)
-    addDependency(evaluator)
-
-    return evaluator
+    return block()
   }
 
 }
-
-//internal extension AdvancedOperation {
-//  func hasMutualExclusivityCondition(_ condition: MutualExclusivityCondition) -> Bool {
-//    //return conditions.compactMap { $0 as? MutualExclusivityCondition }.contains { $0 == condition }
-//    return !conditions.compactMap { $0 as? MutualExclusivityCondition }.allSatisfy { $0 != condition }
-//    //return false
-//  }
-//}
-
