@@ -191,6 +191,21 @@ final class AdvancedOperationTests: XCTestCase {
     XCTAssertTrue(operation.progress.isFinished)
   }
 
+  func testMultipleStartsAfterACancel() {
+    let operation = InfiniteAsyncOperation()
+    operation.cancel()
+    XCTAssertTrue(operation.isCancelled)
+    XCTAssertFalse(operation.isFinished)
+    operation.start()
+    XCTAssertFalse(operation.isExecuting)
+    XCTAssertTrue(operation.isCancelled)
+    XCTAssertTrue(operation.isFinished)
+    operation.start()
+    XCTAssertFalse(operation.isExecuting)
+    XCTAssertTrue(operation.isCancelled)
+    XCTAssertTrue(operation.isFinished)
+  }
+
   func testMultipleCancelWithManyObservers() {
     let operation = SleepyAsyncOperation()
     let expectation1 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isFinished), object: operation, expectedValue: true)

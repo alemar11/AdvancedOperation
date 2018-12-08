@@ -56,6 +56,18 @@ internal enum MockError: Swift.Error, Equatable {
 
 }
 
+// MARK: - Operation
+
+class SimpleOperation: Operation {
+
+  override func main() {
+    if isCancelled {
+      return
+    }
+    sleep(2)
+  }
+}
+
 // MARK: - AdvancedOperation
 
 final internal class SelfObservigOperation: AdvancedOperation {
@@ -129,6 +141,22 @@ final internal class SynchronousOperation: AdvancedOperation {
     // There's no need to call finish if we don't need to register errors upon completion.
   }
 
+}
+
+final internal class InfiniteAsyncOperation: AdvancedOperation {
+  let queue: DispatchQueue
+
+  init(queue: DispatchQueue = DispatchQueue.global()) {
+    self.queue = queue
+  }
+
+  override func main() {
+    queue.async {
+      while true {
+        // infinite
+      }
+    }
+  }
 }
 
 final internal class RunUntilCancelledAsyncOperation: AdvancedOperation {

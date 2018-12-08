@@ -36,6 +36,8 @@ internal extension AdvancedOperation {
       switch (self, state) {
       case (.pending, .executing):
         return true
+      case (.pending, .finished):
+        return true
       case (.executing, .finished):
         return true
       default:

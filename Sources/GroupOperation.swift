@@ -138,6 +138,9 @@ open class GroupOperation: AdvancedOperation {
   /// Advises the `GroupOperation` object that it should stop executing its tasks.
   /// - Note: Once all the tasks are cancelled, the GroupOperation state will be set as finished if it's started.
   public final override func cancel(errors: [Error]) {
+    superlock.lock()
+    defer { superlock.unlock() }
+
     let canBeCancelled = lock.synchronized { () -> Bool in
       if _cancellationTriggered {
         return false
@@ -160,14 +163,13 @@ open class GroupOperation: AdvancedOperation {
       operation.cancel()
     }
 
-    if !isExecuting && !isFinished {
-      // if it's ready or pending (waiting for depedencies to be finished)
       queueLock.synchronized {
         underlyingOperationQueue.isSuspended = false
       }
-    }
 
   }
+
+  let superlock = UnfairLock()
 
   open override func cancel() {
     cancel(errors: [])
@@ -176,6 +178,8 @@ open class GroupOperation: AdvancedOperation {
   /// Performs the receiver’s non-concurrent task.
   /// - Note: If overridden, be sure to call the parent `main` as the **end** of the new implementation.
   open override func main() {
+    superlock.lock()
+    defer { superlock.unlock() }
     // if it's cancelling, the finish command we be called automatically
     if lock.synchronized({ _cancellationTriggered }) && !isCancelled {
       return
