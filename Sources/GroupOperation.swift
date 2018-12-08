@@ -24,7 +24,7 @@
 import Foundation
 import os.log
 
-/// An `AdvancedOperation` subclass which enables the grouping of other operations.
+/// An `AdvancedOperation` subclass which enables a finite grouping of other operations.
 /// Use a `GroupOperation` to associate related operations together, thereby creating higher levels of abstractions.
 /// - Attention: If you add normal `Operations`, the progress report will ignore them, instead consider using only `AdvancedOperations`.
 open class GroupOperation: AdvancedOperation {
@@ -63,7 +63,7 @@ open class GroupOperation: AdvancedOperation {
   /// Internal finishing operation.
   private lazy var finishingOperation = AdvancedBlockOperation { complete in complete([]) }
 
-  private let lock = NSLock()
+  private let lock = UnfairLock()
 
   private var _temporaryCancelErrors = [Error]()
 
@@ -71,7 +71,7 @@ open class GroupOperation: AdvancedOperation {
 
   /// Holds the cancellation error.
   private var temporaryCancelErrors: [Error] {
-      return lock.synchronized { _temporaryCancelErrors }
+    return lock.synchronized { _temporaryCancelErrors }
   }
 
   // MARK: - Initialization
@@ -85,9 +85,9 @@ open class GroupOperation: AdvancedOperation {
   ///   - underlyingQueue: An optional DispatchQueue which defaults to nil, this parameter is set as the underlying queue of the group's own `AdvancedOperationQueue`.
   /// - Note: If the operation object has an explicit quality of service level set, that value is used instead.
   public convenience init(operations: Operation...,
-    qualityOfService: QualityOfService = .default,
-    maxConcurrentOperationCount: Int = OperationQueue.defaultMaxConcurrentOperationCount,
-    underlyingQueue: DispatchQueue? = .none) {
+                          qualityOfService: QualityOfService = .default,
+                          maxConcurrentOperationCount: Int = OperationQueue.defaultMaxConcurrentOperationCount,
+                          underlyingQueue: DispatchQueue? = .none) {
     self.init(operations: operations,
               qualityOfService: qualityOfService,
               maxConcurrentOperationCount: maxConcurrentOperationCount,
@@ -204,14 +204,13 @@ open class GroupOperation: AdvancedOperation {
     super.finish(errors: errors)
   }
 
-
   /// Add an operation.
   ///
   /// - Parameters:
   ///   - operation: The operation to add.
-  ///   - weigth: The `AdvancedOperation` weigth for the progress report (it defaults to 1).
+  ///   - weight: The `AdvancedOperation` weight for the progress report (it defaults to 1).
   ///   - Atention: The progress report ignores normal `Operations`, instead consider using only `AdvancedOperations`.
-  public func addOperation(operation: Operation, withProgressWeigth weigth: Int64 = 1) {
+  public func addOperation(operation: Operation, withProgressWeight weight: Int64 = 1) {
     assert(!isExecuting, "The GroupOperation is executing and cannot accept more operations.")
     assert(!finishingOperation.isCancelled || !finishingOperation.isFinished, "The GroupOperation is finishing and cannot accept more operations.")
 
@@ -219,8 +218,8 @@ open class GroupOperation: AdvancedOperation {
     operation.addDependency(startingOperation)
 
     if let advancedOperation = operation as? AdvancedOperation {
-      progress.totalUnitCount += weigth
-      progress.addChild(advancedOperation.progress, withPendingUnitCount: weigth)
+      progress.totalUnitCount += weight
+      progress.addChild(advancedOperation.progress, withPendingUnitCount: weight)
 
       if advancedOperation.log === OSLog.disabled {
         advancedOperation.useOSLog(log)
@@ -247,7 +246,7 @@ open class GroupOperation: AdvancedOperation {
   }
 
   /// Lock to manage the underlyingOperationQueue isSuspended property.
-  private let queueLock = NSLock()
+  private let queueLock = UnfairLock()
 
   private var _suspended = false
 
@@ -305,7 +304,7 @@ extension GroupOperation: AdvancedOperationQueueDelegate {
     }
 
     guard operation !== finishingOperation && operation !== startingOperation else {
-      //assertionFailure("There shouldn't be Operations but only AdvancedOperations in this delegate implementation call.")
+      // assertionFailure("There shouldn't be Operations but only AdvancedOperations in this delegate implementation call.")
       return
     }
 

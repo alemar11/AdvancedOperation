@@ -26,6 +26,31 @@ import XCTest
 
 final class AdvancedOperationQueueTests: XCTestCase {
 
+  func testAddBlockAsOperation() {
+    let queue = AdvancedOperationQueue()
+    let delegate = MockOperationQueueDelegate()
+
+    let willAddExpectation = expectation(description: "\(#function)\(#line)")
+    let willExecuteExpectation = expectation(description: "\(#function)\(#line)")
+    let didAddExpectation = expectation(description: "\(#function)\(#line)")
+    let didFinishExpectation = expectation(description: "\(#function)\(#line)")
+    willExecuteExpectation.isInverted = true
+
+    queue.delegate = delegate
+
+    delegate.willAddOperationHandler = { _,_ in willAddExpectation.fulfill() }
+    delegate.willExecuteOperationHandler = { _,_ in willExecuteExpectation.fulfill() }
+    delegate.didAddOperationHandler = { _,_ in didAddExpectation.fulfill() }
+    delegate.didFinishOperationHandler = { _,_, errors in
+      XCTAssertTrue(errors.isEmpty)
+      didFinishExpectation.fulfill()
+    }
+
+    queue.addOperation { }
+
+    waitForExpectations(timeout: 2, handler: nil)
+  }
+
   func testQueueDelegateWithAdvancedOperationsUsingWaitUntilFinished() {
     let queue = AdvancedOperationQueue()
     let delegate = MockOperationQueueDelegate()
@@ -238,7 +263,7 @@ final class AdvancedOperationQueueTests: XCTestCase {
     waitForExpectations(timeout: 10)
   }
 
-  func testQueueWithMixedOperations() {  // TODO: test crashed
+  func testQueueWithMixedOperations() {
     let queue = AdvancedOperationQueue()
     let delegate = MockOperationQueueDelegate()
 
@@ -622,7 +647,7 @@ final class AdvancedOperationQueueTests: XCTestCase {
     let expectation1 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isFinished), object: operation, expectedValue: true)
 
     queue.addOperation(operation)
-    
+
     wait(for: [expectation1], timeout: 10)
   }
 

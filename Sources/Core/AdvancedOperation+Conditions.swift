@@ -27,7 +27,7 @@ import Foundation
 
 internal extension AdvancedOperation {
 
-  func makeConditionsEvaluator() -> AdvancedOperation? {
+  func makeConditionsEvaluator(queue: AdvancedOperationQueue) -> AdvancedOperation? {
     guard !conditions.isEmpty else {
       return nil
     }
@@ -38,6 +38,7 @@ internal extension AdvancedOperation {
 
     let evaluator = ConditionEvaluatorOperation(operation: self, conditions: conditions)
 
+    // observe if self is beeing cancelled
     let willCancelObserver = WillCancelObserver { [weak evaluator] _, errors in
       guard let evaluator = evaluator else {
         return
