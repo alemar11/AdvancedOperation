@@ -20,6 +20,8 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
+//
+// https://developer.apple.com/library/archive/documentation/General/Conceptual/ConcurrencyProgrammingGuide/OperationObjects/OperationObjects.html#//apple_ref/doc/uid/TP40008091-CH101-SW8
 
 import Foundation
 import os.log
@@ -84,7 +86,7 @@ open class AdvancedOperation: Operation {
   private var _finishing = false
 
   /// Returns `true` if the `AdvancedOperation` is cancelling.
-  private var _cancelling = false
+  @objc private var _cancelling = false
 
   /// Returns `true` if the `AdvancedOperation` is starting.
   private var _starting = false
@@ -118,6 +120,8 @@ open class AdvancedOperation: Operation {
     switch key {
     case #keyPath(Operation.isExecuting), #keyPath(Operation.isFinished):
       return Set([#keyPath(state)])
+    case #keyPath(Operation.isReady):
+      return Set([#keyPath(_cancelling)])
     default:
       return super.keyPathsForValuesAffectingValue(forKey: key)
     }
@@ -145,11 +149,12 @@ open class AdvancedOperation: Operation {
     }
 
     guard canBeStarted else {
-      if isCancelled {
-        // if the the cancellation event has been processed, mark the operation as finished.
-        // the finish will be triggered only if the operation is already executing.
-        finish()
-      }
+      return
+    }
+
+    if isCancelled {
+      // if the the cancellation event has been processed, mark the operation as finished.
+      finish()
       return
     }
 
@@ -220,7 +225,10 @@ open class AdvancedOperation: Operation {
         return false
       }
 
-      guard _state == .executing else {
+      // an operation can be finished if:
+      // 1. the operation is executing
+      // 2. the operation has been started after a cancel
+      guard _state == .executing || (_state == .pending && _starting && _cancelled) else { //TODO: important check 2nd condition
         return false
       }
 

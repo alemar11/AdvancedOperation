@@ -424,7 +424,7 @@ final class GroupOperationTests: XCTestCase {
     let group = GroupOperation(operations: group1, group2, operation6)
     let exepectation1 = expectation(description: "\(#function)\(#line)")
     group.addCompletionBlock { exepectation1.fulfill() }
-
+    group.useOSLog(TestsLog)
     group.cancel(errors: [MockError.test])
     group.start()
     waitForExpectations(timeout: 10)
@@ -692,7 +692,8 @@ final class GroupOperationTests: XCTestCase {
     XCTAssertEqual(observer.didCancelCount, 0)
   }
 
-  func testGroupOperationInsideAnotherQueue() { //TODO: Failed due to expectation fulfilled in incorrect order
+  func testCancelledGroupOperationInsideAnotherQueue() {
+    // cancel a group right after it has been added to the queue
     let queue = AdvancedOperationQueue()
     let operation = SleepyAsyncOperation(interval1: 6, interval2: 0, interval3: 0)
     let group = GroupOperation(operations: [operation])
@@ -709,7 +710,7 @@ final class GroupOperationTests: XCTestCase {
     let expectation4 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isFinished), object: group, expectedValue: true)
     queue.addOperation(group)
 
-    DispatchQueue.global().asyncAfter(deadline: .now() + 2) {
+    DispatchQueue.global().asyncAfter(deadline: .now()) {
       group.cancel()
     }
 
@@ -724,7 +725,36 @@ final class GroupOperationTests: XCTestCase {
     XCTAssertTrue(group.isCancelled)
     XCTAssertTrue(group.isFinished)
     XCTAssertTrue(queue.operations.isEmpty)
-    //waitForExpectations(timeout: 10)
+  }
+
+  func testCancelledGroupOperationInsideAnotherQueueWithDelay() {
+    // cancel a group after a delay once it has been added to the queue
+    let queue = AdvancedOperationQueue()
+    let operation = SleepyAsyncOperation(interval1: 6, interval2: 0, interval3: 0)
+    let group = GroupOperation(operations: [operation])
+    let delay = 2.0
+
+    operation.name = "operation"
+    group.name = "group"
+
+    operation.useOSLog(TestsLog)
+    group.useOSLog(TestsLog)
+
+    let expectation1 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isCancelled), object: operation, expectedValue: true)
+    let expectation2 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isFinished), object: operation, expectedValue: true)
+    let expectation3 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isCancelled), object: group, expectedValue: true)
+    let expectation4 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isFinished), object: group, expectedValue: true)
+    queue.addOperation(group)
+
+    DispatchQueue.global().asyncAfter(deadline: .now() + delay) {
+      group.cancel()
+    }
+
+    wait(for: [expectation1, expectation2, expectation3, expectation4], timeout: 12, enforceOrder: true)
+    XCTAssertTrue(operation.isCancelled)
+    XCTAssertTrue(group.isCancelled)
+    XCTAssertTrue(group.isFinished)
+    XCTAssertTrue(queue.operations.isEmpty)
   }
 
   func testExplicitProgress() {

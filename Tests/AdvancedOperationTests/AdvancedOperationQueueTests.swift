@@ -671,4 +671,21 @@ final class AdvancedOperationQueueTests: XCTestCase {
     wait(for: [expectation1], timeout: 10)
   }
 
+  // this test check if a subclass of Operation gets executed even if it is cancelled
+  func testInvesticationStandardOperationInsideAnAdvacedOperationQueue() {
+    let queue = AdvancedOperationQueue()
+
+    let operation = SimpleOperation()
+    let expectation1 = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: operation, expectedValue: true)
+    let expectation2 = XCTKVOExpectation(keyPath: #keyPath(Operation.isCancelled), object: operation, expectedValue: true)
+    let expectation3 = XCTKVOExpectation(keyPath: #keyPath(Operation.isExecuting), object: operation, expectedValue: true)
+    expectation3.isInverted = true
+    queue.isSuspended = true
+    queue.addOperation(operation)
+    operation.cancel()
+    XCTAssertFalse(operation.isFinished)
+    queue.isSuspended = false
+    self.wait(for: [expectation1, expectation2], timeout: 3)
+  }
+
 }
