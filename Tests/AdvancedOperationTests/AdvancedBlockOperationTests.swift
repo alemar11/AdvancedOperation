@@ -34,7 +34,7 @@ final class AdvancedBlockOperationTests: XCTestCase {
     }
     XCTAssertTrue(operation.isAsynchronous)
     XCTAssertTrue(operation.isConcurrent)
-    
+
     let expectation1 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isFinished), object: operation, expectedValue: true)
     operation.start()
     operation.cancel()

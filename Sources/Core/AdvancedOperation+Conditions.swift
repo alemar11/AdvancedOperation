@@ -56,12 +56,3 @@ internal extension AdvancedOperation {
   }
 
 }
-
-//internal extension AdvancedOperation {
-//  func hasMutualExclusivityCondition(_ condition: MutualExclusivityCondition) -> Bool {
-//    //return conditions.compactMap { $0 as? MutualExclusivityCondition }.contains { $0 == condition }
-//    return !conditions.compactMap { $0 as? MutualExclusivityCondition }.allSatisfy { $0 != condition }
-//    //return false
-//  }
-//}
-

@@ -61,7 +61,7 @@ open class AdvancedOperationQueue: OperationQueue {
     case .`default`:
       qos = .default
     }
-  
+
     let manager = ExclusivityManager(qos: qos)
 
     return manager
@@ -98,7 +98,7 @@ open class AdvancedOperationQueue: OperationQueue {
 }
 
 extension AdvancedOperationQueue {
-
+  // swiftlint:disable:next cyclomatic_complexity
   private func _addOperation(_ operation: Operation) {
     if let operation = operation as? AdvancedOperation { /// AdvancedOperation
 
@@ -164,5 +164,5 @@ extension AdvancedOperationQueue {
     super.addOperation(operation)
     delegate?.operationQueue(operationQueue: self, didAddOperation: operation)
   }
-  
+
 }
