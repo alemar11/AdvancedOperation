@@ -1,5 +1,8 @@
 # Changelog
 
+### 2.2.1
+- Bugfixes.
+
 ### 2.2.0
 
 - Added `duration` (in seconds) to `AdvancedOperation`.
