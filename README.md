@@ -4,7 +4,6 @@
 |Branch|TravisCI Build Status (all os)|Code Coverage
 |----|----|----|
 |Master|[![TravisCI](https://travis-ci.org/tinrobots/AdvancedOperation.svg?branch=master)](https://travis-ci.org/tinrobots/AdvancedOperation)|[![codecov](https://codecov.io/gh/tinrobots/AdvancedOperation/branch/master/graph/badge.svg)](https://codecov.io/gh/tinrobots/AdvancedOperation)
-|Develop|![TravisCI](https://travis-ci.org/tinrobots/AdvancedOperation.svg?branch=develop)|[![codecov](https://codecov.io/gh/tinrobots/AdvancedOperation/branch/develop/graph/badge.svg)](https://codecov.io/gh/tinrobots/AdvancedOperation)
 
 [![codebeat badge](https://codebeat.co/badges/c529e9e6-2ace-45ac-b5d1-3253dcd36ac4)](https://codebeat.co/projects/github-com-tinrobots-advancedoperation-master)
 
