@@ -408,10 +408,8 @@
 		234130921F960612002BE7FC /* Sources */ = {
 			isa = PBXGroup;
 			children = (
-				23A813B02020CF1E008A98E0 /* AdvancedBlockOperation.swift */,
 				236F54B5206CDE070079B033 /* AdvancedOperationError.swift */,
 				232F3AAD206041DE00FC45CB /* Globals.swift */,
-				2385616B200A6BF80061BAA1 /* GroupOperation.swift */,
 				239BC52120EB7539009A36D9 /* Operation+Injection.swift */,
 				23F24D21200799B800B25A03 /* Operation+Utils.swift */,
 				235D08A3206A494600F70142 /* Conditions */,
@@ -503,6 +501,8 @@
 		236F54BA206CE5390079B033 /* Operations */ = {
 			isa = PBXGroup;
 			children = (
+				23A813B02020CF1E008A98E0 /* AdvancedBlockOperation.swift */,
+				2385616B200A6BF80061BAA1 /* GroupOperation.swift */,
 				23F24D2620079CDE00B25A03 /* DelayOperation.swift */,
 				233078BF217DF83000BE5AB5 /* ConditionEvaluatorOperation.swift */,
 			);

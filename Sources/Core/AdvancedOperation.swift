@@ -120,8 +120,8 @@ open class AdvancedOperation: Operation {
     switch key {
     case #keyPath(Operation.isExecuting), #keyPath(Operation.isFinished):
       return Set([#keyPath(state)])
-    case #keyPath(Operation.isReady):
-      return Set([#keyPath(_cancelling)])
+//    case #keyPath(Operation.isReady):
+//      return Set([#keyPath(_cancelling)])
     default:
       return super.keyPathsForValuesAffectingValue(forKey: key)
     }
