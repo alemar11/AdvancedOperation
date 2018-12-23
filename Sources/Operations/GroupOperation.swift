@@ -320,7 +320,7 @@ extension GroupOperation: AdvancedOperationQueueDelegate {
       let cancellation = lock.synchronized { _cancellationTriggered }
       if cancellation {
         super.cancel(errors: temporaryCancelErrors)
-        if isExecuting {
+        if isExecuting { // sanity check to avoid some rare inconsistencies
           finish()
         }
       } else {
