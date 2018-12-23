@@ -78,6 +78,13 @@ final class GroupOperationTests: XCTestCase {
     XCTAssertFalse(group.isFinished) /// an operation that is not yet started or that is executing can't be finished (in this case we are in the first situation)
   }
 
+  func testStress() {
+    (1...1_000_000).forEach { (index) in
+      print(index)
+      testStartAfterCancel()
+    }
+  }
+
   func testStartAfterCancel() {
     let operation1 = SleepyAsyncOperation()
     let operation2 = AdvancedBlockOperation { complete in
