@@ -255,7 +255,7 @@ open class AdvancedOperation: Operation {
 
   // MARK: - Produced Operations
 
-  /// Produce another operation on the same `AdvancedOperationQueue` that this instance is on.
+  /// Produce another operation on the same `AdvancedOperationQueue` that this operation is on.
   ///
   /// - Parameter operation: an `Operation` instance.
   final func produceOperation(_ operation: Operation) {

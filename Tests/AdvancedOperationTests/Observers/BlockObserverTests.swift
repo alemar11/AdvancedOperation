@@ -27,7 +27,6 @@ import XCTest
 class BlockObserverTests: XCTestCase {
 
   func testOperationProduced() {
-
     let expectation1 = expectation(description: "\(#function)\(#line)")
     let expectation2 = expectation(description: "\(#function)\(#line)")
     let expectation3 = expectation(description: "\(#function)\(#line)")
@@ -59,6 +58,7 @@ class BlockObserverTests: XCTestCase {
     }) { (operation, errors) in
       expectation6.fulfill()
     }
+
     let operation = SleepyAsyncOperation()
     operation.addObserver(observer)
 
