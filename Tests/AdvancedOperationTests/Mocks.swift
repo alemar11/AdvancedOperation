@@ -336,9 +336,13 @@ final internal class CancellingAsyncOperation: AdvancedOperation {
 final internal class ProducingOperation: AdvancedOperation {
   override public var isAsynchronous: Bool { return false }
   let operation: AdvancedOperation
+  let indipendent: Bool
+  let time: UInt32
 
-  init(operation: AdvancedOperation) {
+  init(operation: AdvancedOperation, indipendent: Bool = true, waitingTimeOnceOperationProduced time: UInt32 = 0) {
     self.operation = operation
+    self.indipendent = indipendent
+    self.time = time
     super.init()
   }
 
@@ -347,7 +351,8 @@ final internal class ProducingOperation: AdvancedOperation {
       return
     }
 
-    produceOperation(operation)
+    produceOperation(operation, asIndipendentOperation: indipendent)
+    sleep(time)
   }
 
 }
@@ -547,7 +552,7 @@ final internal class MockObserver: OperationObserving {
     didCancelCount += 1
   }
 
-  func operation(operation: AdvancedOperation, didProduce: Operation) {
+  func operation(operation: AdvancedOperation, didProduce: Operation, asIndipendentOperation indipendent: Bool) {
     XCTAssertEqual(willExecutetCount, 0)
     didProduceCount += 1
   }

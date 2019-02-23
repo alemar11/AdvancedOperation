@@ -1,5 +1,9 @@
 # Changelog
 
+### 2.3.0
+
+- Produced operations from another operation can now be dependent or not from that operation.
+
 ### 2.2.2
 
 - GroupOperation Bugfixes.

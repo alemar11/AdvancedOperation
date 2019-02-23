@@ -171,11 +171,6 @@
 <td><a href="https://travis-ci.org/tinrobots/AdvancedOperation"><img src="https://travis-ci.org/tinrobots/AdvancedOperation.svg?branch=master" alt="TravisCI"></a></td>
 <td><a href="https://codecov.io/gh/tinrobots/AdvancedOperation"><img src="https://codecov.io/gh/tinrobots/AdvancedOperation/branch/master/graph/badge.svg" alt="codecov"></a></td>
 </tr>
-<tr>
-<td>Develop</td>
-<td><img src="https://travis-ci.org/tinrobots/AdvancedOperation.svg?branch=develop" alt="TravisCI"></td>
-<td><a href="https://codecov.io/gh/tinrobots/AdvancedOperation"><img src="https://codecov.io/gh/tinrobots/AdvancedOperation/branch/develop/graph/badge.svg" alt="codecov"></a></td>
-</tr>
 </tbody></table>
 
 <p><a href="https://codebeat.co/projects/github-com-tinrobots-advancedoperation-master"><img src="https://codebeat.co/badges/c529e9e6-2ace-45ac-b5d1-3253dcd36ac4" alt="codebeat badge"></a></p>
@@ -210,7 +205,7 @@
 <h3 id='cocoapods' class='heading'>CocoaPods</h3>
 
 <p><a href="http://cocoapods.org">CocoaPods</a> is a dependency manager for Cocoa projects. You can install it with the following command:</p>
-<pre class="highlight shell"><code><span class="nv">$ </span>gem <span class="nb">install </span>cocoapods
+<pre class="highlight shell"><code><span class="gp">$ </span>gem install cocoapods
 </code></pre>
 
 <blockquote>
@@ -223,24 +218,24 @@
 <span class="n">use_frameworks!</span>
 
 <span class="n">target</span> <span class="s1">'&lt;Your Target Name&gt;'</span> <span class="k">do</span>
-    <span class="n">pod</span> <span class="s1">'AdvancedOperation'</span><span class="p">,</span> <span class="s1">'~&gt; 2.2.0'</span>
+    <span class="n">pod</span> <span class="s1">'AdvancedOperation'</span><span class="p">,</span> <span class="s1">'~&gt; 2.2.1'</span>
 <span class="k">end</span>
 </code></pre>
 
 <p>Then, run the following command:</p>
-<pre class="highlight shell"><code><span class="nv">$ </span>pod <span class="nb">install</span>
+<pre class="highlight shell"><code><span class="gp">$ </span>pod install
 </code></pre>
 <h3 id='carthage' class='heading'>Carthage</h3>
 
 <p><a href="https://github.com/Carthage/Carthage">Carthage</a> is a decentralized dependency manager that builds your dependencies and provides you with binary frameworks.</p>
 
 <p>You can install Carthage with <a href="http://brew.sh/">Homebrew</a> using the following command:</p>
-<pre class="highlight shell"><code><span class="nv">$ </span>brew update
-<span class="nv">$ </span>brew <span class="nb">install </span>carthage
+<pre class="highlight shell"><code><span class="gp">$ </span>brew update
+<span class="gp">$ </span>brew install carthage
 </code></pre>
 
 <p>To integrate AdvancedOperation into your Xcode project using Carthage, specify it in your <code>Cartfile</code>:</p>
-<pre class="highlight plaintext"><code>github "tinrobots/AdvancedOperation" ~&gt; 2.2.0
+<pre class="highlight plaintext"><code>github "tinrobots/AdvancedOperation" ~&gt; 2.2.1
 </code></pre>
 
 <p>Run <code>carthage update</code> to build the framework and drag the built <code>AdvancedOperation.framework</code> into your Xcode project.</p>
@@ -249,7 +244,7 @@
 <p>The <a href="https://swift.org/package-manager/">Swift Package Manager</a> is a tool for automating the distribution of Swift code and is integrated into the <code>swift</code> compiler. 
 Once you have your Swift package set up, adding AdvancedOperation as a dependency is as easy as adding it to the <code>dependencies</code> value of your <code>Package.swift</code>.</p>
 <pre class="highlight swift"><code><span class="nv">dependencies</span><span class="p">:</span> <span class="p">[</span>
-    <span class="o">.</span><span class="nf">package</span><span class="p">(</span><span class="nv">url</span><span class="p">:</span> <span class="s">"https://github.com/tinrobots/AdvancedOperation.git"</span><span class="p">,</span> <span class="nv">from</span><span class="p">:</span> <span class="s">"2.2.0"</span><span class="p">)</span>
+    <span class="o">.</span><span class="nf">package</span><span class="p">(</span><span class="nv">url</span><span class="p">:</span> <span class="s">"https://github.com/tinrobots/AdvancedOperation.git"</span><span class="p">,</span> <span class="nv">from</span><span class="p">:</span> <span class="s">"2.2.1"</span><span class="p">)</span>
 <span class="p">]</span>
 </code></pre>
 <h3 id='manually' class='heading'>Manually</h3>
@@ -260,13 +255,13 @@ Once you have your Swift package set up, adding AdvancedOperation as a dependenc
 <ul>
 <li>Open up Terminal, <code>cd</code> into your top-level project directory, and run the following command <q>if</q> your project is not initialized as a git repository:</li>
 </ul>
-<pre class="highlight shell"><code><span class="nv">$ </span>git init
+<pre class="highlight shell"><code><span class="gp">$ </span>git init
 </code></pre>
 
 <ul>
 <li>Add AdvancedOperation as a git <a href="http://git-scm.com/docs/git-submodule">submodule</a> by running the following command:</li>
 </ul>
-<pre class="highlight shell"><code><span class="nv">$ </span>git submodule add https://github.com/tinrobots/AdvancedOperation.git
+<pre class="highlight shell"><code><span class="gp">$ </span>git submodule add https://github.com/tinrobots/AdvancedOperation.git
 </code></pre>
 
 <ul>
@@ -303,8 +298,8 @@ Once you have your Swift package set up, adding AdvancedOperation as a dependenc
           </section>
         </section>
         <section id="footer">
-          <p>&copy; 2018 <a class="link" href="https://github.com/tinrobots/AdvancedOperation" target="_blank" rel="external">Alessandro Marzoli</a>. All rights reserved. (Last updated: 2018-12-08)</p>
-          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.9.4</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+          <p>&copy; 2019 <a class="link" href="https://github.com/tinrobots/AdvancedOperation" target="_blank" rel="external">Alessandro Marzoli</a>. All rights reserved. (Last updated: 2019-02-22)</p>
+          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.9.5</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
         </section>
       </article>
     </div>

@@ -26,8 +26,7 @@ import XCTest
 
 class BlockObserverTests: XCTestCase {
 
-  func testOperationProduced() {
-
+  func testProducedOperationFlow() {
     let expectation1 = expectation(description: "\(#function)\(#line)")
     let expectation2 = expectation(description: "\(#function)\(#line)")
     let expectation3 = expectation(description: "\(#function)\(#line)")
@@ -42,7 +41,8 @@ class BlockObserverTests: XCTestCase {
 
     let observer = BlockObserver(willExecute: { (operation) in
       expectation1.fulfill()
-    }, didProduce: { (operation, producedOperation) in
+    }, didProduce: { (operation, producedOperation, indipendent) in
+      XCTAssertTrue(indipendent)
       count += 1
       if count == 2 {
         expectation2.fulfill()
@@ -59,6 +59,7 @@ class BlockObserverTests: XCTestCase {
     }) { (operation, errors) in
       expectation6.fulfill()
     }
+
     let operation = SleepyAsyncOperation()
     operation.addObserver(observer)
 
@@ -68,6 +69,73 @@ class BlockObserverTests: XCTestCase {
     operation.start()
 
     waitForExpectations(timeout: 10)
+  }
+
+  func testProducedOperationDependingFromTheProducingOperationOnConcurrentQueue() {
+    let queue = AdvancedOperationQueue()
+    queue.maxConcurrentOperationCount = 10
+    let expectation1 = expectation(description: "\(#function)\(#line)")
+    let expectation2 = expectation(description: "\(#function)\(#line)")
+
+    let producedOperation = AdvancedBlockOperation { do { } }
+    producedOperation.useOSLog(TestsLog)
+    producedOperation.addCompletionBlock { expectation2.fulfill() }
+
+    let operation = ProducingOperation(operation: producedOperation, indipendent: false)
+    operation.addCompletionBlock { expectation1.fulfill() }
+    operation.useOSLog(TestsLog)
+    queue.addOperation(operation)
+
+    // producedOperation will be executed only after the operation is done
+    wait(for: [expectation1, expectation2], timeout: 15, enforceOrder: true)
+    XCTAssertTrue(operation.isFinished)
+    XCTAssertTrue(producedOperation.isFinished)
+  }
+
+  func testProducedOperationOnConcurrentQueue() {
+    let queue = AdvancedOperationQueue()
+    queue.maxConcurrentOperationCount = 10
+    let expectation1 = expectation(description: "\(#function)\(#line)")
+    let expectation2 = expectation(description: "\(#function)\(#line)")
+
+    let producedOperation = AdvancedBlockOperation { do { } }
+    producedOperation.useOSLog(TestsLog)
+    producedOperation.addCompletionBlock { expectation2.fulfill() }
+
+    let operation = ProducingOperation(operation: producedOperation, indipendent: true, waitingTimeOnceOperationProduced: 5)
+    operation.addCompletionBlock { expectation1.fulfill() }
+    operation.useOSLog(TestsLog)
+    queue.addOperation(operation)
+
+    // producedOperation will be executed right after it gets produced
+    wait(for: [expectation2, expectation1], timeout: 15, enforceOrder: true)
+    XCTAssertTrue(operation.isFinished)
+    XCTAssertTrue(producedOperation.isFinished)
+  }
+
+  func testProducedOperationWithFailingConditionsOnConcurrentQueue() {
+    let queue = AdvancedOperationQueue()
+    queue.maxConcurrentOperationCount = 10
+    let expectation1 = expectation(description: "\(#function)\(#line)")
+    let expectation2 = expectation(description: "\(#function)\(#line)")
+
+    let producedOperation = AdvancedBlockOperation { do { } }
+    producedOperation.useOSLog(TestsLog)
+    producedOperation.addCompletionBlock { expectation2.fulfill() }
+    producedOperation.addCondition(BlockCondition { false })
+
+    let operation = ProducingOperation(operation: producedOperation, indipendent: true, waitingTimeOnceOperationProduced: 5)
+    operation.addCompletionBlock { expectation1.fulfill() }
+    operation.useOSLog(TestsLog)
+    queue.addOperation(operation)
+
+    // producedOperation will be executed right after it gets produced but it will have errors because of the condition
+    wait(for: [expectation2, expectation1], timeout: 15, enforceOrder: true)
+
+    XCTAssertTrue(producedOperation.hasErrors)
+    XCTAssertFalse(operation.hasErrors)
+    XCTAssertTrue(operation.isFinished)
+    XCTAssertTrue(producedOperation.isFinished)
   }
 
 }
