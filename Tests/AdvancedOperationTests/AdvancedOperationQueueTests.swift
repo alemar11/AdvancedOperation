@@ -629,7 +629,8 @@ final class AdvancedOperationQueueTests: XCTestCase {
 
   func testProducedOperation() {
     let producedOperation = SleepyAsyncOperation()
-    let producingOperation = ProducingOperation(operation: producedOperation)
+    let producer = ProducingOperationsOperation.OperationProducer(producedOperation, true, 0)
+    let producingOperation = ProducingOperationsOperation(operationProducers: [producer])
     let expectation1 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isFinished), object: producedOperation, expectedValue: true)
     let expectation2 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isFinished), object: producingOperation, expectedValue: true)
     let queue = AdvancedOperationQueue()

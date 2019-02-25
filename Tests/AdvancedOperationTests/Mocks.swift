@@ -332,17 +332,16 @@ final internal class CancellingAsyncOperation: AdvancedOperation {
   }
 }
 
-/// An operation that produces another operation during its execution.
-final internal class ProducingOperation: AdvancedOperation {
-  override public var isAsynchronous: Bool { return false }
-  let operation: AdvancedOperation
-  let indipendent: Bool
-  let time: UInt32
+/// An operation that produces operations during its execution.
+final internal class ProducingOperationsOperation: AdvancedOperation {
+  typealias OperationProducer = (operation: Operation, indipendent: Bool, waitingTimeOnceOperationProduced: UInt32)
 
-  init(operation: AdvancedOperation, indipendent: Bool = true, waitingTimeOnceOperationProduced time: UInt32 = 0) {
-    self.operation = operation
-    self.indipendent = indipendent
-    self.time = time
+  override public var isAsynchronous: Bool { return false }
+
+  let operationProducers: [OperationProducer]
+
+  init(operationProducers: [OperationProducer]) {
+    self.operationProducers = operationProducers
     super.init()
   }
 
@@ -351,15 +350,17 @@ final internal class ProducingOperation: AdvancedOperation {
       return
     }
 
-    if !indipendent {
-      operation.addDependency(self)
+    for producer in operationProducers {
+      if !producer.indipendent {
+        producer.operation.addDependency(self)
+      }
+      produceOperation(producer.operation)
+      sleep(producer.waitingTimeOnceOperationProduced)
     }
-    
-    produceOperation(operation)
-    sleep(time)
   }
 
 }
+
 
 final internal class ProgressOperation: AdvancedOperation {
 
@@ -557,7 +558,7 @@ final internal class MockObserver: OperationObserving {
   }
 
   func operation(operation: AdvancedOperation, didProduce: Operation) {
-    XCTAssertEqual(willExecutetCount, 0)
+    XCTAssertEqual(willExecutetCount, 1)
     didProduceCount += 1
   }
 

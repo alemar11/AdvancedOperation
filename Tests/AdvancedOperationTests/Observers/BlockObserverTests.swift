@@ -27,6 +27,9 @@ import XCTest
 class BlockObserverTests: XCTestCase {
 
   func testProducedOperationFlow() {
+    let queue = AdvancedOperationQueue()
+    queue.maxConcurrentOperationCount = 10
+    
     let expectation1 = expectation(description: "\(#function)\(#line)")
     let expectation2 = expectation(description: "\(#function)\(#line)")
     let expectation3 = expectation(description: "\(#function)\(#line)")
@@ -35,17 +38,18 @@ class BlockObserverTests: XCTestCase {
     let expectation6 = expectation(description: "\(#function)\(#line)")
     let expectation7 = expectation(description: "\(#function)\(#line)")
 
+    let producedOperation = BlockOperation { }
+    let producer = ProducingOperationsOperation.OperationProducer(producedOperation, true, 0)
+    let operation = ProducingOperationsOperation(operationProducers: [producer])
+    operation.addCompletionBlock { expectation7.fulfill() }
+
     expectation3.isInverted = true
     expectation4.isInverted = true
-    var count = 0
 
     let observer = BlockObserver(willExecute: { (operation) in
       expectation1.fulfill()
     }, didProduce: { (operation, producedOperation) in
-      count += 1
-      if count == 2 {
         expectation2.fulfill()
-      }
     }, willCancel: { (operation, errors) in
       expectation3.fulfill()
 
@@ -55,17 +59,18 @@ class BlockObserverTests: XCTestCase {
     }, willFinish: { (operation, errors) in
       expectation5.fulfill()
 
-    }) { (operation, errors) in
+    }, didFinish: { (operation, errors) in
       expectation6.fulfill()
-    }
+    })
 
-    let operation = SleepyAsyncOperation()
-    operation.addObserver(observer)
 
-    operation.completionBlock = { expectation7.fulfill() }
-    operation.produceOperation(BlockOperation { })
-    operation.produceOperation(BlockOperation { })
-    operation.start()
+      operation.addObserver(observer)
+      queue.addOperation(operation)
+//    queue.addOperation(producingOperation)
+//    producingOperation.completionBlock = { expectation7.fulfill() }
+//    producingOperation.produceOperation(BlockOperation { })
+//    producingOperation.produceOperation(BlockOperation { })
+
 
     waitForExpectations(timeout: 10)
   }
@@ -80,7 +85,8 @@ class BlockObserverTests: XCTestCase {
     producedOperation.useOSLog(TestsLog)
     producedOperation.addCompletionBlock { expectation2.fulfill() }
 
-    let operation = ProducingOperation(operation: producedOperation, indipendent: false)
+    let producer = ProducingOperationsOperation.OperationProducer(producedOperation, false, 0)
+    let operation = ProducingOperationsOperation(operationProducers: [producer])
     operation.addCompletionBlock { expectation1.fulfill() }
     operation.useOSLog(TestsLog)
     queue.addOperation(operation)
@@ -101,7 +107,8 @@ class BlockObserverTests: XCTestCase {
     producedOperation.useOSLog(TestsLog)
     producedOperation.addCompletionBlock { expectation2.fulfill() }
 
-    let operation = ProducingOperation(operation: producedOperation, indipendent: true, waitingTimeOnceOperationProduced: 5)
+    let producer = ProducingOperationsOperation.OperationProducer(producedOperation, true, 5)
+    let operation = ProducingOperationsOperation(operationProducers: [producer])
     operation.addCompletionBlock { expectation1.fulfill() }
     operation.useOSLog(TestsLog)
     queue.addOperation(operation)
@@ -125,7 +132,8 @@ class BlockObserverTests: XCTestCase {
       producedOperation.addCompletionBlock { expectation2.fulfill() }
       producedOperation.addCondition(BlockCondition { false })
 
-      let operation = ProducingOperation(operation: producedOperation, indipendent: true, waitingTimeOnceOperationProduced: 5)
+      let producer = ProducingOperationsOperation.OperationProducer(producedOperation, true, 5)
+      let operation = ProducingOperationsOperation(operationProducers: [producer])
       operation.addCompletionBlock { expectation1.fulfill() }
       operation.useOSLog(TestsLog)
       queue.addOperation(operation)
