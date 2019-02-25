@@ -41,8 +41,7 @@ class BlockObserverTests: XCTestCase {
 
     let observer = BlockObserver(willExecute: { (operation) in
       expectation1.fulfill()
-    }, didProduce: { (operation, producedOperation, indipendent) in
-      XCTAssertTrue(indipendent)
+    }, didProduce: { (operation, producedOperation) in
       count += 1
       if count == 2 {
         expectation2.fulfill()

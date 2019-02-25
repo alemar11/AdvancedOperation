@@ -258,11 +258,10 @@ open class AdvancedOperation: Operation {
   /// Produce another operation on the same `AdvancedOperationQueue` that this operation is on.
   ///
   /// - Parameter operation: an `Operation` instance.
-  /// - Parameter indipendent: wheter or not the produced operation should run indipendently from the producing operation (if the queue is not serial).
-  /// - Warning: The current operation must be enqueued on an OperationQueue to support this feature.
-  final func produceOperation(_ operation: Operation, asIndipendentOperation indipendent: Bool = true) {
+  /// - Note: It's up to the developer to decide wheter or not the produced operation should run indipendently from the producing operation (if the queue is not serial).
+  final func produceOperation(_ operation: Operation) {
     assert(operationQueue != nil, "An operation cannot produce any other operation if it's not enqueued on an OperationQueue.")
-    didProduceOperation(operation, asIndipendentOperation: indipendent)
+    didProduceOperation(operation)
   }
 
   // MARK: - Dependencies
@@ -414,11 +413,11 @@ extension AdvancedOperation {
     }
   }
 
-  private func didProduceOperation(_ operation: Operation, asIndipendentOperation indipendent: Bool) {
+  private func didProduceOperation(_ operation: Operation) {
     operationDidProduceOperation(operation)
 
     for observer in didProduceOperationObservers {
-      observer.operation(operation: self, didProduce: operation, asIndipendentOperation: indipendent)
+      observer.operation(operation: self, didProduce: operation)
     }
   }
 

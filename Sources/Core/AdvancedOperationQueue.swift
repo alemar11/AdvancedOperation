@@ -108,12 +108,9 @@ extension AdvancedOperationQueue {
 
           self.delegate?.operationQueue(operationQueue: self, operationWillExecute: operation)
 
-        }, didProduce: { [weak self] (operation, producedOperation, indipendent) in
+        }, didProduce: { [weak self] (operation, producedOperation) in
           guard let self = self else { return }
-          
-          if !indipendent {
-            producedOperation.addDependency(operation)
-          }
+
           self.addOperation(producedOperation)
 
         }, willCancel: { [weak self] (operation, errors) in
