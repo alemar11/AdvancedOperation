@@ -29,6 +29,8 @@
 
 import UIKit
 
+// MARK: - UIApplicationBackgroundTask
+
 public protocol UIApplicationBackgroundTask {
   var applicationState: UIApplication.State { get }
   func beginBackgroundTask(withName taskName: String?, expirationHandler handler: (() -> Void)?) -> UIBackgroundTaskIdentifier
@@ -41,6 +43,8 @@ private extension Selector {
   static let didBecomeActive = #selector(UIBackgroundObserver.didBecomeActive(notification:))
   static let didEnterBackground = #selector(UIBackgroundObserver.didEnterBackground(notification:))
 }
+
+// MARK: - UIBackgroundObserver
 
 /// An `UIBackgroundObserver` instance lets an `AdvancedOperation` run for a period of time after the app transitions to the background.
 public final class UIBackgroundObserver: NSObject {
@@ -115,6 +119,8 @@ extension UIBackgroundObserver: OperationWillExecuteObserving & OperationDidFini
   }
 
 }
+
+// MARK: - AdvancedOperation
 
 extension AdvancedOperation {
 
