@@ -113,28 +113,31 @@ class BlockObserverTests: XCTestCase {
   }
 
   func testProducedOperationWithFailingConditionsOnConcurrentQueue() {
-    let queue = AdvancedOperationQueue()
-    queue.maxConcurrentOperationCount = 10
-    let expectation1 = expectation(description: "\(#function)\(#line)")
-    let expectation2 = expectation(description: "\(#function)\(#line)")
+    let queue = DispatchQueue(label: "\(#function)")
+    queue.sync {
+      let queue = AdvancedOperationQueue()
+      queue.maxConcurrentOperationCount = 10
+      let expectation1 = expectation(description: "\(#function)\(#line)")
+      let expectation2 = expectation(description: "\(#function)\(#line)")
 
-    let producedOperation = AdvancedBlockOperation { do { } }
-    producedOperation.useOSLog(TestsLog)
-    producedOperation.addCompletionBlock { expectation2.fulfill() }
-    producedOperation.addCondition(BlockCondition { false })
+      let producedOperation = AdvancedBlockOperation { do { } }
+      producedOperation.useOSLog(TestsLog)
+      producedOperation.addCompletionBlock { expectation2.fulfill() }
+      producedOperation.addCondition(BlockCondition { false })
 
-    let operation = ProducingOperation(operation: producedOperation, indipendent: true, waitingTimeOnceOperationProduced: 5)
-    operation.addCompletionBlock { expectation1.fulfill() }
-    operation.useOSLog(TestsLog)
-    queue.addOperation(operation)
+      let operation = ProducingOperation(operation: producedOperation, indipendent: true, waitingTimeOnceOperationProduced: 5)
+      operation.addCompletionBlock { expectation1.fulfill() }
+      operation.useOSLog(TestsLog)
+      queue.addOperation(operation)
 
-    // producedOperation will be executed right after it gets produced but it will have errors because of the condition
-    wait(for: [expectation2, expectation1], timeout: 15, enforceOrder: true)
+      // producedOperation will be executed right after it gets produced but it will have errors because of the condition
+      wait(for: [expectation2, expectation1], timeout: 15, enforceOrder: true)
 
-    XCTAssertTrue(producedOperation.hasErrors)
-    XCTAssertFalse(operation.hasErrors)
-    XCTAssertTrue(operation.isFinished)
-    XCTAssertTrue(producedOperation.isFinished)
+      XCTAssertTrue(producedOperation.hasErrors)
+      XCTAssertFalse(operation.hasErrors)
+      XCTAssertTrue(operation.isFinished)
+      XCTAssertTrue(producedOperation.isFinished)
+    }
   }
 
 }
