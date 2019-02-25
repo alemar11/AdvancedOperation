@@ -92,8 +92,29 @@ public final class UIBackgroundObserver: NSObject {
 
   private func startBackgroundTask() {
     if taskIdentifier == .invalid {
-      taskIdentifier = application.beginBackgroundTask(withName: backgroundTaskName) {
-        self.endBackgroundTask()
+      taskIdentifier = application.beginBackgroundTask(withName: backgroundTaskName) { [weak self] in
+        // TODO: what if the operation is still running?
+        // Probably the operation should be cancelled with an error
+
+        /*
+         an individual background task is limited to 10 minutes of operation (to be confirmed)
+         */
+
+        /*
+         A handler to be called shortly before the app’s remaining background time reaches 0.
+         You should use this handler to clean up and mark the end of the background task.
+         Failure to end the task explicitly will result in the termination of the app.
+         The handler is called synchronously on the main thread, blocking the app’s suspension momentarily while the app is notified.
+         */
+
+        /*
+         To extend the execution time of an app extension, use the performExpiringActivity(withReason:using:) method of ProcessInfo instead.
+         */
+
+        /*
+         https://forums.developer.apple.com/thread/105855
+         */
+        self?.endBackgroundTask()
       }
     }
   }
