@@ -57,8 +57,8 @@ public protocol OperationDidCancelObserving: OperationObservingType {
 }
 
 public protocol OperationDidProduceOperationObserving: OperationObservingType {
-  /// Invoked as an `Operation` produces another `Operation` during execution. The produced operation can be dependent or not from the producing operation.
-  func operation(operation: AdvancedOperation, didProduce: Operation, asIndipendentOperation: Bool)
+  /// Invoked as an `Operation` produces another `Operation` during execution.
+  func operation(operation: AdvancedOperation, didProduce: Operation)
 }
 
 /// The protocol that types may implement if they wish to be notified of significant operation lifecycle events.
