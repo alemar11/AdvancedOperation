@@ -42,11 +42,11 @@ final class MockUIApplication: UIApplicationBackgroundTask {
   }
 
   var applicationState: UIApplication.State {
-    return testableApplicationState //?? application.applicationState
+    return testableApplicationState // TODO: ?? application.applicationState
   }
 
   func beginBackgroundTask(withName taskName: String?, expirationHandler handler: (() -> Void)?) -> UIBackgroundTaskIdentifier {
-    let identifier = UIBackgroundTaskIdentifier.init(rawValue: 100)
+    let identifier = UIBackgroundTaskIdentifier(rawValue: 100)
     didBeginBackgroundTask?(taskName, identifier)
     return identifier
   }
@@ -75,6 +75,7 @@ final class UIBackgroundObserverTests: XCTestCase {
     let observer1 = operation.continueToRunInBackground(application: application)
     let observer2 = operation.continueToRunInBackground(application: application)
     let observer3 = operation.continueToRunInBackground(application: application)
+
     XCTAssertTrue(observer1 === observer2)
     XCTAssertTrue(observer1 === observer3)
     XCTAssertTrue(observer2 === observer3)
@@ -98,6 +99,7 @@ final class UIBackgroundObserverTests: XCTestCase {
     let operation = SleepyAsyncOperation(interval1: 1, interval2: 0, interval3: 1)
     let observer = operation.continueToRunInBackground(application: application)
     operation.addObserver(observer)
+
     let expectation = self.expectation(description: "\(#function)\(#line)")
     operation.addCompletionBlock {
       expectation.fulfill()
@@ -135,6 +137,7 @@ final class UIBackgroundObserverTests: XCTestCase {
     let observer = UIBackgroundObserver(application: application)
     let operation = SleepyAsyncOperation(interval1: 2, interval2: 2, interval3: 2)
     operation.addObserver(observer)
+    
     let expectation = self.expectation(description: "\(#function)\(#line)")
     operation.addCompletionBlock {
       expectation.fulfill()
