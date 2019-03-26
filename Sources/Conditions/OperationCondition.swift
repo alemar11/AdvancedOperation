@@ -40,7 +40,7 @@ public protocol OperationCondition {
 
 public extension OperationCondition {
 
-  public var name: String {
+  var name: String {
     return String(describing: type(of: self))
   }
 

@@ -90,7 +90,7 @@ internal final class ExclusivityManager {
   private func _removeOperation(_ operation: AdvancedOperation, category: String) {
     if
       let operationsWithThisCategory = _operations[category],
-      let index = operationsWithThisCategory.index(of: operation)
+      let index = operationsWithThisCategory.firstIndex(of: operation)
     {
       var mutableOperationsWithThisCategory = operationsWithThisCategory
       mutableOperationsWithThisCategory.remove(at: index)

@@ -60,6 +60,8 @@ open class AdvancedOperationQueue: OperationQueue {
       qos = .background
     case .`default`:
       qos = .default
+    @unknown default:
+      qos = .default
     }
 
     let manager = ExclusivityManager(qos: qos)
