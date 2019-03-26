@@ -33,7 +33,7 @@ open class AdvancedOperation: Operation {
   
   // MARK: - Public Properties
   
-  public final  override var isReady: Bool { return super.isReady && stateLock.synchronized { return !_cancelling } }
+  public final override var isReady: Bool { return super.isReady && stateLock.synchronized { return !_cancelling } }
   
   public final override var isExecuting: Bool { return state == .executing }
   
@@ -44,12 +44,12 @@ open class AdvancedOperation: Operation {
   open override var isAsynchronous: Bool { return true }
   
   public final override var isConcurrent: Bool { return isAsynchronous }
-  
+
   /// Errors generated during the execution.
   public var errors: [Error] { return stateLock.synchronized { _errors } }
   
   /// An instance of `OSLog` (by default is disabled).
-  public private(set) var log = OSLog.disabled
+  public var log = OSLog.disabled
   
   /// Returns `true` if the `AdvancedOperation` has generated errors during its lifetime.
   public var hasErrors: Bool { return !errors.isEmpty }
@@ -318,17 +318,7 @@ open class AdvancedOperation: Operation {
   open func operationDidFinish(errors: [Error]) {
     os_log("%{public}s has finished with %{public}d errors.", log: log, type: .info, operationName, errors.count)
   }
-  
-  // MARK: - OSLog
-  
-  /// Logs all the states of an `AdvancedOperation`.
-  ///
-  /// - Parameters:
-  ///   - log: an `OSLog` instance.
-  public func useOSLog(_ log: OSLog) {
-    self.log = log
-  }
-  
+
 }
 
 // MARK: - Duration

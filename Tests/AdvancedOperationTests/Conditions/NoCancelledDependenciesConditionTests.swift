@@ -39,10 +39,10 @@ final class NoCancelledDependenciesConditionTests: XCTestCase {
     operation3.name = "operation3"
     operation4.name = "operation4"
 
-    operation1.useOSLog(TestsLog)
-    operation2.useOSLog(TestsLog)
-    operation3.useOSLog(TestsLog)
-    operation4.useOSLog(TestsLog)
+    operation1.log = TestsLog
+    operation2.log = TestsLog
+    operation3.log = TestsLog
+    operation4.log = TestsLog
 
     operation1.addDependencies([operation2, operation3])
     operation1.addCondition(NoCancelledDependeciesCondition())
@@ -79,10 +79,10 @@ final class NoCancelledDependenciesConditionTests: XCTestCase {
     let operation4 = DelayOperation(interval: 1)
     operation4.name = "operation4"
 
-    operation1.useOSLog(TestsLog)
-    operation2.useOSLog(TestsLog)
-    operation3.useOSLog(TestsLog)
-    operation4.useOSLog(TestsLog)
+    operation1.log = TestsLog
+    operation2.log = TestsLog
+    operation3.log = TestsLog
+    operation4.log = TestsLog
 
     operation1.addCompletionBlock { expectation1.fulfill() }
     operation2.addCompletionBlock { expectation2.fulfill() }
@@ -127,7 +127,7 @@ final class NoCancelledDependenciesConditionTests: XCTestCase {
     operation3.name = "op3"
     operation4.name = "op4"
 
-    operation1.useOSLog(TestsLog)
+    operation1.log = TestsLog
 
     operation1.addDependencies([operation2, operation3])
     operation1.addCondition(NoCancelledDependeciesCondition())

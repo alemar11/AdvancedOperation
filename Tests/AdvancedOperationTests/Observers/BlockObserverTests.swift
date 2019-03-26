@@ -82,13 +82,13 @@ class BlockObserverTests: XCTestCase {
     let expectation2 = expectation(description: "\(#function)\(#line)")
 
     let producedOperation = AdvancedBlockOperation { do { } }
-    producedOperation.useOSLog(TestsLog)
+    producedOperation.log = TestsLog
     producedOperation.addCompletionBlock { expectation2.fulfill() }
 
     let producer = ProducingOperationsOperation.OperationProducer(producedOperation, false, 0)
     let operation = ProducingOperationsOperation(operationProducers: [producer])
     operation.addCompletionBlock { expectation1.fulfill() }
-    operation.useOSLog(TestsLog)
+    operation.log = TestsLog
     queue.addOperation(operation)
 
     // producedOperation will be executed only after the operation is done
@@ -104,13 +104,13 @@ class BlockObserverTests: XCTestCase {
     let expectation2 = expectation(description: "\(#function)\(#line)")
 
     let producedOperation = AdvancedBlockOperation { do { } }
-    producedOperation.useOSLog(TestsLog)
+    producedOperation.log = TestsLog
     producedOperation.addCompletionBlock { expectation2.fulfill() }
 
     let producer = ProducingOperationsOperation.OperationProducer(producedOperation, true, 5)
     let operation = ProducingOperationsOperation(operationProducers: [producer])
     operation.addCompletionBlock { expectation1.fulfill() }
-    operation.useOSLog(TestsLog)
+    operation.log = TestsLog
     queue.addOperation(operation)
 
     // producedOperation will be executed right after it gets produced
@@ -128,14 +128,14 @@ class BlockObserverTests: XCTestCase {
       let expectation2 = expectation(description: "\(#function)\(#line)")
 
       let producedOperation = AdvancedBlockOperation { do { } }
-      producedOperation.useOSLog(TestsLog)
+      producedOperation.log = TestsLog
       producedOperation.addCompletionBlock { expectation2.fulfill() }
       producedOperation.addCondition(BlockCondition { false })
 
       let producer = ProducingOperationsOperation.OperationProducer(producedOperation, true, 5)
       let operation = ProducingOperationsOperation(operationProducers: [producer])
       operation.addCompletionBlock { expectation1.fulfill() }
-      operation.useOSLog(TestsLog)
+      operation.log = TestsLog
       queue.addOperation(operation)
 
       // producedOperation will be executed right after it gets produced but it will have errors because of the condition

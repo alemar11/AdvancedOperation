@@ -30,12 +30,13 @@ import os.log
 open class GroupOperation: AdvancedOperation {
   
   // MARK: - Properties
-  
-  public override func useOSLog(_ log: OSLog) {
-    super.useOSLog(log)
-    underlyingOperationQueue.operations.forEach { operation in
-      if let advancedOperation = operation as? AdvancedOperation, advancedOperation !== startingOperation, advancedOperation !== finishingOperation, advancedOperation.log === OSLog.disabled {
-        advancedOperation.useOSLog(log)
+
+  public override var log: OSLog {
+    didSet {
+      underlyingOperationQueue.operations.forEach { operation in
+        if let advancedOperation = operation as? AdvancedOperation, advancedOperation !== startingOperation, advancedOperation !== finishingOperation, advancedOperation.log === OSLog.disabled {
+          advancedOperation.log = log
+        }
       }
     }
   }
@@ -219,13 +220,13 @@ open class GroupOperation: AdvancedOperation {
       progress.addChild(advancedOperation.progress, withPendingUnitCount: weight)
       
       if advancedOperation.log === OSLog.disabled {
-        advancedOperation.useOSLog(log)
+        advancedOperation.log = log
       }
     }
     underlyingOperationQueue.addOperation(operation)
     
     //    if let advancedOperation = operation as? AdvancedOperation, advancedOperation.log === OSLog.disabled {
-    //      advancedOperation.useOSLog(log)
+    //      advancedOperation.log = log)
     //    }
   }
   

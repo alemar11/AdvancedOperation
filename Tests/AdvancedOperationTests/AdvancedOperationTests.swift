@@ -259,7 +259,7 @@ final class AdvancedOperationTests: XCTestCase {
     let operation = RunUntilCancelledAsyncOperation(queue: .main)
     let expectation1 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isFinished), object: operation, expectedValue: true)
     
-    operation.useOSLog(TestsLog)
+    operation.log = TestsLog
     XCTAssertTrue(operation.isReady)
     
     operation.start()
