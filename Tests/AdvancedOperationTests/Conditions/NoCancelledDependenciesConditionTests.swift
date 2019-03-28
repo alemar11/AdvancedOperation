@@ -152,5 +152,4 @@ final class NoCancelledDependenciesConditionTests: XCTestCase {
     XCTAssertTrue(operation1.hasErrors)
     XCTAssertTrue(operation1.isCancelled)
   }
-
 }

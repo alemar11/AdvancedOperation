@@ -26,7 +26,6 @@ import Foundation
 let operationConditionKey = "OperationCondition"
 
 public protocol OperationCondition {
-
   /// The name of the condition.
   var name: String { get }
 
@@ -39,9 +38,7 @@ public protocol OperationCondition {
 }
 
 public extension OperationCondition {
-
   var name: String {
     return String(describing: type(of: self))
   }
-
 }

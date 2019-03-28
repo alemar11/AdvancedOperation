@@ -75,5 +75,4 @@ class BlockConditionTests: XCTestCase {
     XCTAssertFalse(operation.hasErrors)
     XCTAssertTrue(operation.isFinished)
   }
-
 }

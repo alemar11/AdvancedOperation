@@ -24,10 +24,8 @@
 import Foundation
 
 internal extension AdvancedOperation {
-
   @objc
   enum OperationState: Int, CustomDebugStringConvertible {
-
     case pending
     case executing
     case finished
@@ -55,7 +53,5 @@ internal extension AdvancedOperation {
         return "finished"
       }
     }
-
   }
-
 }

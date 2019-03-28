@@ -53,7 +53,6 @@ internal enum MockError: Swift.Error, Equatable {
       return false
     }
   }
-
 }
 
 // MARK: - Operation
@@ -118,7 +117,6 @@ final internal class SelfObservigOperation: AdvancedOperation {
   override func operationDidFinish(errors: [Error]) {
     didFinishHandler?(errors)
   }
-
 }
 
 final internal class SynchronousOperation: AdvancedOperation {
@@ -140,7 +138,6 @@ final internal class SynchronousOperation: AdvancedOperation {
 
     // There's no need to call finish if we don't need to register errors upon completion.
   }
-
 }
 
 final internal class InfiniteAsyncOperation: AdvancedOperation {
@@ -220,7 +217,6 @@ final internal class SleepyAsyncOperation: AdvancedOperation {
     }
 
   }
-
 }
 
 final internal class SleepyOperation: AdvancedOperation {
@@ -236,7 +232,6 @@ final internal class SleepyOperation: AdvancedOperation {
   override func main() {
     sleep(interval)
   }
-
 }
 
 final internal class SleepyBlockOperation: AdvancedOperation {
@@ -255,7 +250,6 @@ final internal class SleepyBlockOperation: AdvancedOperation {
     sleep(self.interval)
     block()
   }
-
 }
 
 final internal class NotExecutableOperation: AdvancedOperation {
@@ -269,7 +263,6 @@ final internal class NotExecutableOperation: AdvancedOperation {
 
     XCTFail("This operation shouldn't be executed.")
   }
-
 }
 
 /// An operation that finishes with errors
@@ -358,7 +351,6 @@ final internal class ProducingOperationsOperation: AdvancedOperation {
       sleep(producer.waitingTimeOnceOperationProduced)
     }
   }
-
 }
 
 
@@ -561,7 +553,6 @@ final internal class MockObserver: OperationObserving {
     XCTAssertEqual(willExecutetCount, 1)
     didProduceCount += 1
   }
-
 }
 
 // MARK: - AdvancedOperationQueueDelegate
@@ -604,7 +595,6 @@ final internal class MockOperationQueueDelegate: AdvancedOperationQueueDelegate 
   func operationQueue(operationQueue: AdvancedOperationQueue, operationDidCancel operation: AdvancedOperation, withErrors errors: [Error]) {
     self.didCancelOperationHandler?(operationQueue, operation, errors)
   }
-
 }
 
 // MARK: - Composable Operations
@@ -671,7 +661,6 @@ internal struct SlowCondition: OperationCondition {
       completion(.satisfied)
     }
   }
-
 }
 
 internal struct AlwaysFailingCondition: OperationCondition {
@@ -679,7 +668,6 @@ internal struct AlwaysFailingCondition: OperationCondition {
   public func evaluate(for operation: AdvancedOperation, completion: @escaping (OperationConditionResult) -> Void) {
     completion(.failed([MockError.failed]))
   }
-
 }
 
 internal struct AlwaysSuccessingCondition: OperationCondition {
@@ -687,5 +675,4 @@ internal struct AlwaysSuccessingCondition: OperationCondition {
   public func evaluate(for operation: AdvancedOperation, completion: @escaping (OperationConditionResult) -> Void) {
     completion(.satisfied)
   }
-
 }

@@ -43,5 +43,4 @@ final class OperationStateTests: XCTestCase {
     XCTAssertEqual(AdvancedOperation.OperationState.executing.debugDescription.lowercased(), "executing")
     XCTAssertEqual(AdvancedOperation.OperationState.finished.debugDescription.lowercased(), "finished")
   }
-
 }

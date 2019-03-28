@@ -24,7 +24,6 @@
 import Foundation
 
 public struct AdvancedOperationError {
-
   public enum Code {
     static let conditionFailed = 100
     static let executionCancelled = 200

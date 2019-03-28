@@ -55,5 +55,4 @@ class TimeoutObserverTests: XCTestCase {
     XCTAssertTrue(operation.isFinished)
     XCTAssertFalse(operation.hasErrors)
   }
-
 }

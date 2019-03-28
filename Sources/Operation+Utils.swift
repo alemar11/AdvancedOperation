@@ -24,7 +24,6 @@
 import Foundation
 
 extension Operation {
-
   /// Returns the `AdvancedOperation` name or its type if the name is nil.
   public var operationName: String {
     return name ?? "\(type(of: self))"
@@ -51,7 +50,6 @@ extension Operation {
         existingBlock()
       }
     }
-
   }
 
   /// Adds multiple dependencies to the operation.
@@ -69,11 +67,9 @@ extension Operation {
       removeDependency(dependency)
     }
   }
-
 }
 
 extension Operation {
-
   /// Adds `self` as a dependency of a given operation.
   ///
   /// - Parameter operation: the Operation instance to add to the receiver as a dependency.
@@ -97,11 +93,9 @@ extension Operation {
     }
     return operations
   }
-
 }
 
 extension Sequence where Element: Operation {
-
   /// Adds `self` as dependencies of a given operation.
   ///
   /// - Parameter operation: the Operation instance to add the receiver as a dependency.
@@ -128,5 +122,4 @@ extension Sequence where Element: Operation {
     }
     return operations
   }
-
 }

@@ -147,5 +147,4 @@ class BlockObserverTests: XCTestCase {
       XCTAssertTrue(producedOperation.isFinished)
     }
   }
-
 }

@@ -688,5 +688,4 @@ final class AdvancedOperationQueueTests: XCTestCase {
     queue.isSuspended = false
     self.wait(for: [expectation1, expectation2], timeout: 3)
   }
-
 }

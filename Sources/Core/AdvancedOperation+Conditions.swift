@@ -26,7 +26,6 @@ import Foundation
 // MARK: - Condition Evaluation
 
 internal extension AdvancedOperation {
-
   func makeConditionsEvaluator(queue: AdvancedOperationQueue) -> AdvancedOperation? {
     guard !conditions.isEmpty else {
       return nil
@@ -54,5 +53,4 @@ internal extension AdvancedOperation {
 
     return evaluator
   }
-
 }
