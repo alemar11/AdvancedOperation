@@ -1,4 +1,4 @@
-// swift-tools-version:4.2
+// swift-tools-version:5.0
 // The swift-tools-version declares the minimum version of Swift required to build this package.
 
 import PackageDescription
@@ -12,5 +12,5 @@ let package = Package(
     .target(name: "AdvancedOperation", path: "Sources"),
     .testTarget(name: "AdvancedOperationTests", dependencies: ["AdvancedOperation"])
   ],
-  swiftLanguageVersions: [.v4_2]
+  swiftLanguageVersions: [.v5]
 )
