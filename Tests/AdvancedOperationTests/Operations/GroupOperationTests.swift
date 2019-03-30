@@ -192,7 +192,6 @@ final class GroupOperationTests: XCTestCase {
     XCTAssertTrue(operation1.isFinished)
     XCTAssertTrue(group.isFinished)
     XCTAssertEqual(group.aggregatedErrors.count, 0)
-
   }
 
   func testGroupOperationCancelled() {
