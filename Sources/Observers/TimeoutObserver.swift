@@ -25,9 +25,7 @@ import Foundation
 
 /// An operation observer which will automatically cancels (with an error) if it doesn't finish before a time interval is expired.
 public struct TimeoutObserver: OperationWillExecuteObserving {
-
   let timeout: TimeInterval
-
   let queue: DispatchQueue
 
   /// Creates an instance of the observer with a timeout
@@ -53,5 +51,4 @@ public struct TimeoutObserver: OperationWillExecuteObserving {
       }
     }
   }
-
 }

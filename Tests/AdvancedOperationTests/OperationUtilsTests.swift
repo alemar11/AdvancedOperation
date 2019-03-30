@@ -190,5 +190,4 @@ final class OperationUtilsTests: XCTestCase {
     operation4.removeDependencies()
     XCTAssertEqual(operation4.dependencies.count, 0)
   }
-
 }

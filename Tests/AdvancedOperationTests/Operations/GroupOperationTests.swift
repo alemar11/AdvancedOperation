@@ -938,5 +938,4 @@ final class GroupOperationTests: XCTestCase {
     XCTAssertNotNil(group.duration)
     XCTAssertTrue(group.duration! >= 4.0 && group.duration! <= 5.5) // ∂ of 1.5 seconds (just in case)
   }
-
 }

@@ -354,5 +354,4 @@ class MutualExclusivityConditionTests: XCTestCase {
     XCTAssertEqual(queue.exclusivityManager.operations.keys.count, 1)
     XCTAssertEqual((queue.exclusivityManager.operations[key] ?? []).count, 0)
   }
-
 }

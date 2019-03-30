@@ -27,7 +27,6 @@ import os.log
 /// Evalutes all the `OperationCondition`.
 /// The evaluation fails if this operation, once finished, contains errors.
 internal final class ConditionEvaluatorOperation: AdvancedOperation {
-
   private let evaluatedOperationName: String
   private let evaluatedConditions: [OperationCondition]
   private weak var evaluatedOperation: AdvancedOperation?
@@ -62,7 +61,6 @@ internal final class ConditionEvaluatorOperation: AdvancedOperation {
       }
       self?.finish(errors: errors)
     }
-
   }
 
   private static func evaluate(_ conditions: [OperationCondition], for operation: AdvancedOperation, completion: @escaping ([Error]) -> Void) {
@@ -110,5 +108,4 @@ internal final class ConditionEvaluatorOperation: AdvancedOperation {
   override func operationDidFinish(errors: [Error]) {
     os_log("%{public}s conditions have been evaluated with %{public}d errors.", log: log, type: .info, evaluatedOperationName, errors.count)
   }
-
 }

@@ -25,7 +25,6 @@ import Foundation
 
 /// A condition that defines how an operation should be added to an `AdvancedOperationQueue`.
 public struct MutualExclusivityCondition: OperationCondition {
-
   public enum Mode {
     /// If there is already an operation with the same identifier, the new one will be cancelled.
     case cancel(identifier: String)
@@ -42,7 +41,6 @@ public struct MutualExclusivityCondition: OperationCondition {
   public func evaluate(for operation: AdvancedOperation, completion: @escaping (OperationConditionResult) -> Void) {
     completion(.satisfied)
   }
-
 }
 
 extension MutualExclusivityCondition: Equatable {
@@ -55,5 +53,4 @@ extension MutualExclusivityCondition: Equatable {
     default: return false
     }
   }
-
 }

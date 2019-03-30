@@ -49,7 +49,6 @@ public struct InjectedInputRequirements: OptionSet {
 }
 
 extension OperationOutputHaving where Self: AdvancedOperation {
-
   /// Creates a new operation that passes the output of `self` into the given `AdvancedOperation`
   ///
   /// - Parameters:
@@ -78,7 +77,6 @@ extension OperationOutputHaving where Self: AdvancedOperation {
 // MARK: - Adapter
 
 extension AdvancedOperation {
-
   /// Creates an *adapter* operation which passes the output from the `outputOperation` into the input of the `inputOpertion`.
   ///
   /// - Parameters:

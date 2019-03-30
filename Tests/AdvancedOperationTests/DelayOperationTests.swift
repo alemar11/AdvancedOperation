@@ -97,5 +97,4 @@ final class DelayOperationTests: XCTestCase {
     XCTAssertTrue(operation.isCancelled)
     XCTAssertTrue(operation.isFinished)
   }
-
 }

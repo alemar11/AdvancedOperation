@@ -48,7 +48,6 @@ private extension Selector {
 
 /// An `UIBackgroundObserver` instance lets an `AdvancedOperation` run for a period of time after the app transitions to the background.
 public final class UIBackgroundObserver: NSObject {
-
   /// The task name.
   public let backgroundTaskName = "\(identifier).UIBackgroundObserver.\(UUID().uuidString)"
 
@@ -125,11 +124,9 @@ public final class UIBackgroundObserver: NSObject {
       taskIdentifier = .invalid
     }
   }
-
 }
 
 extension UIBackgroundObserver: OperationWillExecuteObserving & OperationDidFinishObserving {
-
   public func operationWillExecute(operation: AdvancedOperation) {
     isExecuting = true
   }
@@ -138,13 +135,11 @@ extension UIBackgroundObserver: OperationWillExecuteObserving & OperationDidFini
     isExecuting = false
     endBackgroundTask()
   }
-
 }
 
 // MARK: - AdvancedOperation
 
 extension AdvancedOperation {
-
   ///  The operation continues to run, *for a period of time*, after the app transitions to the background.
   ///  This option must be enabled before the operation has started running.
   ///
@@ -165,7 +160,6 @@ extension AdvancedOperation {
       return observer
     }
   }
-
 }
 
 #endif

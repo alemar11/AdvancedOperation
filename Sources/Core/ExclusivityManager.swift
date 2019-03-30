@@ -24,7 +24,6 @@
 import Foundation
 
 internal final class ExclusivityManager {
-
   /// Creates a new `ExclusivityManager` instance.
   internal init(qos: DispatchQoS = .default) {
     let label = "\(identifier).\(type(of: self)).\(UUID().uuidString)"
