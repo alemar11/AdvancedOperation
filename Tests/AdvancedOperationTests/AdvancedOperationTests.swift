@@ -355,7 +355,6 @@ final class AdvancedOperationTests: XCTestCase {
     let queue = AdvancedOperationQueue()
     let producer1 = ProducingOperationsOperation.OperationProducer(BlockOperation { }, true, 0)
     let producer2 = ProducingOperationsOperation.OperationProducer(BlockOperation { }, true, 0)
-    
     let operation = ProducingOperationsOperation(operationProducers: [producer1, producer2])
     let expectation1 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isFinished), object: operation, expectedValue: true)
     let observer = MockObserver()
@@ -363,7 +362,6 @@ final class AdvancedOperationTests: XCTestCase {
     
     operation.addObserver(observer)
     queue.addOperation(operation)
-    
     wait(for: [expectation1, expectation2], timeout: 10)
     
     XCTAssertEqual(observer.willExecutetCount, 1)
@@ -434,14 +432,13 @@ final class AdvancedOperationTests: XCTestCase {
     let expectation3 = expectation(description: "\(#function)\(#line)")
     let expectation4 = expectation(description: "\(#function)\(#line)")
     let expectation5 = expectation(description: "\(#function)\(#line)")
-    
     let operation1 = SelfObservigOperation()
     let error = MockError.test
     
     operation1.willExecuteHandler = {
       expectation1.fulfill()
     }
-    
+
     operation1.willCancelHandler = { errors in
       XCTAssertNotNil(errors)
       XCTAssertEqual(errors.count, 1)

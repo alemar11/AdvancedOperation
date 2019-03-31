@@ -2,7 +2,8 @@
 
 ### 2.3.0
 
-- Produced operations from another operation can now be dependent or not from that operation.
+- Improved produced operations.
+- Bugfixes.
 
 ### 2.2.2
 
