@@ -28,7 +28,6 @@ import Foundation
 /// If the interval is negative, or the `Date` is in the past, then this operation immediately finishes.
 /// - Note: A `DelayOperation` cannot be cancelled once started running.
 public final class DelayOperation: AdvancedOperation {
-
   // MARK: - Properties
 
   private let delay: Delay
@@ -93,7 +92,5 @@ public final class DelayOperation: AdvancedOperation {
 
       self.finish()
     }
-
   }
-
 }

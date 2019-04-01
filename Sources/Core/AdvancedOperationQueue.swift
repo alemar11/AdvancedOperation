@@ -42,7 +42,6 @@ public extension AdvancedOperationQueueDelegate {
 
 /// `AdvancedOperationQueue` is an `OperationQueue` subclass that implements a large number of "extra features" related to the `Operation` class.
 open class AdvancedOperationQueue: OperationQueue {
-
   public weak var delegate: AdvancedOperationQueueDelegate? = .none
 
   /// Keeps track of every mutual exclusivity conditions defined in the operations running on this queue.
@@ -59,6 +58,8 @@ open class AdvancedOperationQueue: OperationQueue {
     case .background:
       qos = .background
     case .`default`:
+      qos = .default
+    @unknown default:
       qos = .default
     }
 
@@ -94,7 +95,6 @@ open class AdvancedOperationQueue: OperationQueue {
       }
     }
   }
-
 }
 
 extension AdvancedOperationQueue {
@@ -107,27 +107,22 @@ extension AdvancedOperationQueue {
           guard let self = self else { return }
 
           self.delegate?.operationQueue(operationQueue: self, operationWillExecute: operation)
-
         }, didProduce: { [weak self] (operation, producedOperation) in
           guard let self = self else { return }
 
           self.addOperation(producedOperation)
-
         }, willCancel: { [weak self] (operation, errors) in
           guard let self = self else { return }
 
           self.delegate?.operationQueue(operationQueue: self, operationWillCancel: operation, withErrors: errors)
-
         }, didCancel: { [weak self] (operation, errors) in
           guard let self = self else { return }
 
           self.delegate?.operationQueue(operationQueue: self, operationDidCancel: operation, withErrors: errors)
-
         }, willFinish: { [weak self] (operation, errors) in
           guard let self = self else { return }
 
           self.delegate?.operationQueue(operationQueue: self, operationWillFinish: operation, withErrors: errors)
-
         }, didFinish: { [weak self] (operation, errors) in
           guard let self = self else { return }
 
@@ -149,7 +144,6 @@ extension AdvancedOperationQueue {
           self.exclusivityManager.addOperation(operation, category: identifier, cancellable: false)
         }
       }
-
     } else { /// Operation
       operation.addCompletionBlock(asEndingBlock: false) { [weak self, weak operation] in
         guard let self = self, let operation = operation else {
@@ -164,5 +158,4 @@ extension AdvancedOperationQueue {
     super.addOperation(operation)
     delegate?.operationQueue(operationQueue: self, didAddOperation: operation)
   }
-
 }

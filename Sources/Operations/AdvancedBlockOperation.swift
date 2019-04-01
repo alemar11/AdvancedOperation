@@ -26,7 +26,6 @@ import Foundation
 
 /// A concurrent sublcass of `AdvancedOperation` to execute a closure.
 public final class AdvancedBlockOperation: AdvancedOperation {
-
   /// A closure type that takes a closure as its parameter.
   public typealias OperationBlock = (@escaping ([Error]) -> Void) -> Void
 
@@ -70,7 +69,5 @@ public final class AdvancedBlockOperation: AdvancedOperation {
     block { [weak self] errors in
       self?.finish(errors: errors)
     }
-
   }
-
 }

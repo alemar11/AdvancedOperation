@@ -170,5 +170,4 @@ class InjectionTests: XCTestCase {
     XCTAssertNil(operation2.output)
     XCTAssertTrue(operation2.isCancelled)
   }
-
 }

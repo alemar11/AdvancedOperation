@@ -25,7 +25,6 @@ import Foundation
 
 /// The `BlockObserver` is a way to attach arbitrary blocks to significant events in an `Operation`'s lifecycle.
 public class BlockObserver: OperationObserving {
-
   // MARK: - Properties
 
   private let willExecuteHandler: ((AdvancedOperation) -> Void)?
@@ -78,7 +77,6 @@ public class BlockObserver: OperationObserving {
 
 /// The `BlockObserver` is a way to attach arbitrary blocks to significant events in an `Operation`'s lifecycle.
 internal final class WillCancelObserver: OperationWillCancelObserving {
-
   // MARK: - Properties
 
   private let willCancelHandler: ((AdvancedOperation, [Error]) -> Void)?
@@ -92,5 +90,4 @@ internal final class WillCancelObserver: OperationWillCancelObserving {
   public func operationWillCancel(operation: AdvancedOperation, withErrors errors: [Error]) {
     willCancelHandler?(operation, errors)
   }
-
 }

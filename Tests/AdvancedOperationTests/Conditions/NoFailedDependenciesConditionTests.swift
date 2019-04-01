@@ -214,5 +214,4 @@ final class NoFailedDependenciesConditionTests: XCTestCase {
 
     XCTAssertFalse(operation1.hasErrors)
   }
-
 }

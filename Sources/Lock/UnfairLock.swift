@@ -25,7 +25,6 @@ import Foundation
 
 /// An object that coordinates the operation of multiple threads of execution within the same application.
 internal final class UnfairLock: NSLocking {
-
   private var unfairLock: os_unfair_lock_t
 
   internal init() {
@@ -49,5 +48,4 @@ internal final class UnfairLock: NSLocking {
     unfairLock.deinitialize(count: 1)
     unfairLock.deallocate()
   }
-
 }

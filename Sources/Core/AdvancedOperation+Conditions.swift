@@ -26,7 +26,6 @@ import Foundation
 // MARK: - Condition Evaluation
 
 internal extension AdvancedOperation {
-
   func makeConditionsEvaluator(queue: AdvancedOperationQueue) -> AdvancedOperation? {
     guard !conditions.isEmpty else {
       return nil
@@ -48,11 +47,10 @@ internal extension AdvancedOperation {
     }
 
     addObserver(willCancelObserver)
-    evaluator.useOSLog(log)
+    evaluator.log = log
     dependencies.forEach(evaluator.addDependency)
     addDependency(evaluator)
 
     return evaluator
   }
-
 }

@@ -24,7 +24,6 @@
 import Foundation
 
 internal extension NSLocking {
-
   @discardableResult
   func synchronized<T>(_ block: () -> T) -> T {
     lock()
@@ -32,5 +31,4 @@ internal extension NSLocking {
 
     return block()
   }
-
 }

@@ -26,7 +26,6 @@ import Foundation
 /// A condition that specifies that every dependency must not fail.
 /// If any dependency fails (finishes or cancels with errors), the target operation will be cancelled.
 public struct NoFailedDependenciesCondition: OperationCondition {
-
   public let ignoreCancellations: Bool
 
   static var noFailedDependenciesConditionKey: String { return "NoFailedDependenciesCondition" }
@@ -57,7 +56,5 @@ public struct NoFailedDependenciesCondition: OperationCondition {
     } else {
       completion(.satisfied)
     }
-
   }
-
 }

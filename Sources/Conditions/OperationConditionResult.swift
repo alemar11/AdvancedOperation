@@ -31,5 +31,4 @@ public enum OperationConditionResult {
     }
     return nil
   }
-
 }

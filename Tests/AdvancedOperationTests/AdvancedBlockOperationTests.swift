@@ -162,5 +162,4 @@ final class AdvancedBlockOperationTests: XCTestCase {
 
     XCTAssertNil(weakObject)
   }
-
 }

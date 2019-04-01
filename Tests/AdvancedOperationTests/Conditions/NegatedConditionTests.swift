@@ -93,5 +93,4 @@ class NegatedConditionTests: XCTestCase {
 
     XCTAssertFalse(operation1.hasErrors)
   }
-
 }

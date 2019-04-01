@@ -61,5 +61,4 @@ class AdvancedOperationErrorTests: XCTestCase {
     XCTAssertEqual(error.userInfo["1"] as! Int, 1)
     XCTAssertEqual(error.userInfo["a"] as! String, "a")
   }
-
 }

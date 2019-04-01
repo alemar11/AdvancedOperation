@@ -59,5 +59,4 @@ internal final class Atomic<T> {
     defer { lock.unlock() }
     return try transform(&_value)
   }
-
 }

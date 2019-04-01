@@ -361,11 +361,11 @@ final class GroupOperationTests: XCTestCase {
     group3.name = "group3"
     group4.name = "group4"
 
-    group0.useOSLog(TestsLog)
-    group1.useOSLog(TestsLog)
-    group2.useOSLog(TestsLog)
-    group3.useOSLog(TestsLog)
-    group4.useOSLog(TestsLog)
+    group0.log = TestsLog
+    group1.log = TestsLog
+    group2.log = TestsLog
+    group3.log = TestsLog
+    group4.log = TestsLog
 
     group0.start()
 
@@ -423,7 +423,7 @@ final class GroupOperationTests: XCTestCase {
     let group = GroupOperation(operations: group1, group2, operation6)
     let exepectation1 = expectation(description: "\(#function)\(#line)")
     group.addCompletionBlock { exepectation1.fulfill() }
-    group.useOSLog(TestsLog)
+    group.log = TestsLog
     group.cancel(errors: [MockError.test])
     group.start()
     waitForExpectations(timeout: 10)
@@ -548,13 +548,13 @@ final class GroupOperationTests: XCTestCase {
     let exepectation1 = expectation(description: "\(#function)\(#line)")
     group.addCompletionBlock { exepectation1.fulfill() }
 
-    group1.useOSLog(TestsLog)
+    group1.log = TestsLog
     group1.name = "GroupOperation1"
 
-    group2.useOSLog(TestsLog)
+    group2.log = TestsLog
     group2.name = "GroupOperation2"
 
-    group.useOSLog(TestsLog)
+    group.log = TestsLog
     group.name = "GroupOperation"
 
     group.start()
@@ -700,8 +700,8 @@ final class GroupOperationTests: XCTestCase {
     operation.name = "operation"
     group.name = "group"
 
-    operation.useOSLog(TestsLog)
-    group.useOSLog(TestsLog)
+    operation.log = TestsLog
+    group.log = TestsLog
 
     let expectation1 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isCancelled), object: operation, expectedValue: true)
     let expectation2 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isFinished), object: operation, expectedValue: true)
@@ -736,8 +736,8 @@ final class GroupOperationTests: XCTestCase {
     operation.name = "operation"
     group.name = "group"
 
-    operation.useOSLog(TestsLog)
-    group.useOSLog(TestsLog)
+    operation.log = TestsLog
+    group.log = TestsLog
 
     let expectation1 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isCancelled), object: operation, expectedValue: true)
     let expectation2 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isFinished), object: operation, expectedValue: true)
@@ -773,7 +773,7 @@ final class GroupOperationTests: XCTestCase {
 
     let group = GroupOperation(operations: operation1, operation2, operation3, operation4)
     currentProgress.addChild(group.progress, withPendingUnitCount: 1)
-    group.useOSLog(TestsLog)
+    group.log = TestsLog
     group.addOperation(operation: operation5, withProgressWeight: 4)
 
     operation1.name = "Operation1"
@@ -820,7 +820,7 @@ final class GroupOperationTests: XCTestCase {
     let group = GroupOperation(operations: operation1, operation2, operation3, operation4)
     group.maxConcurrentOperationCount = 1
     currentProgress.addChild(group.progress, withPendingUnitCount: 1)
-    group.useOSLog(TestsLog)
+    group.log = TestsLog
     group.addOperation(operation: operation5, withProgressWeight: 4)
     operation1.name = "Operation1"
     operation2.name = "Operation2"
@@ -879,7 +879,7 @@ final class GroupOperationTests: XCTestCase {
   func testOperationCancelledBeforeGroupCancellation() {
     let operation1 = RunUntilCancelledAsyncOperation()
     let group = GroupOperation(operations: operation1)
-    group.useOSLog(TestsLog)
+    group.log = TestsLog
 
     let expectation1 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isCancelled), object: operation1, expectedValue: true)
     let expectation2 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isCancelled), object: group, expectedValue: true)
@@ -938,5 +938,4 @@ final class GroupOperationTests: XCTestCase {
     XCTAssertNotNil(group.duration)
     XCTAssertTrue(group.duration! >= 4.0 && group.duration! <= 5.5) // ∂ of 1.5 seconds (just in case)
   }
-
 }
