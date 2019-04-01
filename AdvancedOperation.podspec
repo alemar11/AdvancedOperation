@@ -9,7 +9,6 @@ Pod::Spec.new do |s|
   s.source    = { :git => 'https://github.com/tinrobots/AdvancedOperation.git', :tag => s.version }
   s.requires_arc = true
   s.pod_target_xcconfig = { 'SWIFT_VERSION' => '5.0'}
-  
   s.swift_version = "5.0"
   s.ios.deployment_target     = '11.0'
   s.osx.deployment_target     = '10.13'

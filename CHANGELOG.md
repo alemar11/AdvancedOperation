@@ -1,5 +1,10 @@
 # Changelog
 
+### 3.0.0 ⭐
+
+- AdvancedOperation is now completely migrated to **Swift 5.0**.
+- Bugfixes.
+
 ### 2.3.0
 
 - Improved produced operations.
@@ -24,7 +29,7 @@
 - `AdvancedBlockOperation` supports `ProgressReporting`.
 - Bugfixes.
 
-### 2.0.0
+### 2.0.0 ⭐
 
 - Added `BlockCondition`. 
 - Added `TimeoutObserver`.
