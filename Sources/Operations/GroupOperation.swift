@@ -197,8 +197,10 @@ open class GroupOperation: AdvancedOperation {
       /// Avoiding pending operations after cancellation using waitUntilAllOperationsAreFinished.
       /// When a GroupOperation is cancelled, the finish method gets called when the finishingOperation is finished,
       /// but there could be cancelled operations still pending to run to move their state to finished.
-      underlyingOperationQueue.waitUntilAllOperationsAreFinished()
-      underlyingOperationQueue.isSuspended = true
+      if !underlyingOperationQueue.isSuspended {
+        underlyingOperationQueue.waitUntilAllOperationsAreFinished()
+        underlyingOperationQueue.isSuspended = true
+      }
     }
     super.finish(errors: errors)
   }
@@ -225,10 +227,6 @@ open class GroupOperation: AdvancedOperation {
       }
     }
     underlyingOperationQueue.addOperation(operation)
-
-    //    if let advancedOperation = operation as? AdvancedOperation, advancedOperation.log === OSLog.disabled {
-    //      advancedOperation.log = log)
-    //    }
   }
 
   /// The maximum number of queued operations that can execute at the same time.
