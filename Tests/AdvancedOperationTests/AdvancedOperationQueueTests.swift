@@ -672,20 +672,51 @@ final class AdvancedOperationQueueTests: XCTestCase {
     wait(for: [expectation1], timeout: 10)
   }
 
-  // this test check if a subclass of Operation gets executed even if it is cancelled
-  func testInvesticationStandardOperationInsideAnAdvacedOperationQueue() {
-    let queue = AdvancedOperationQueue()
+  // MARK: - Investigation
+  /**
+   https://developer.apple.com/documentation/foundation/operation
 
+   Upon completion or cancellation of its task, your concurrent operation object must generate KVO notifications for both the isExecuting and isFinished key paths to mark the final change of state for your operation.
+   (In the case of cancellation, it is still important to update the isFinished key path, even if the operation did not completely finish its task. Queued operations must report that they are finished before they can be removed from a queue.) In addition to generating KVO notifications, your overrides of the isExecuting and isFinished properties should also continue to report accurate values based on the state of your operation.
+   **/
+
+  // this test checks if a subclass of an Operation gets executed even if it is cancelled
+  func testInvestigationStandardOperationInsideAnAdvacedOperationQueue() {
+    let queue = AdvancedOperationQueue()
     let operation = SimpleOperation()
     let expectation1 = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: operation, expectedValue: true)
     let expectation2 = XCTKVOExpectation(keyPath: #keyPath(Operation.isCancelled), object: operation, expectedValue: true)
     let expectation3 = XCTKVOExpectation(keyPath: #keyPath(Operation.isExecuting), object: operation, expectedValue: true)
     expectation3.isInverted = true
+
     queue.isSuspended = true
     queue.addOperation(operation)
     operation.cancel()
     XCTAssertFalse(operation.isFinished)
     queue.isSuspended = false
-    self.wait(for: [expectation1, expectation2], timeout: 3)
+    self.wait(for: [expectation2, expectation1], timeout: 3, enforceOrder: true)
+    /// a cancelled Operation doesn't get executed (as expected).
+  }
+
+  // this test checks if an Operation is executed once its dependecies gets cancelled.
+  func testInvestigationStandardOperationDependenciesInsideAnAdvacedOperationQueue() {
+    let queue = AdvancedOperationQueue()
+    let operation0 = SimpleOperation()
+    let operation = SimpleOperation()
+    let expectation1 = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: operation, expectedValue: true)
+    let expectation2 = XCTKVOExpectation(keyPath: #keyPath(Operation.isExecuting), object: operation, expectedValue: true)
+
+    queue.isSuspended = true
+    operation.addDependency(operation0)
+    queue.addOperation(operation0)
+    queue.addOperation(operation)
+    operation0.cancel()
+    XCTAssertFalse(operation0.isFinished)
+    XCTAssertFalse(operation.isFinished)
+    queue.isSuspended = false
+    self.wait(for: [expectation2, expectation1], timeout: 3, enforceOrder: true)
+    XCTAssertTrue(operation0.isCancelled)
+    XCTAssertTrue(operation0.isFinished)
+    /// a cancelled Operation moves to its finished state
   }
 }
