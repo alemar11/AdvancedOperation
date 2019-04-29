@@ -691,10 +691,18 @@ final class GroupOperationTests: XCTestCase {
     XCTAssertEqual(observer.didCancelCount, 0)
   }
 
+  func testStress() {
+    (1...1000).forEach { x in
+      print("-----")
+      testCancelledGroupOperationInsideAnotherQueue()
+      print("-----\n")
+    }
+  }
+
   func testCancelledGroupOperationInsideAnotherQueue() {
     // cancel a group right after it has been added to the queue
     let queue = AdvancedOperationQueue()
-    let operation = SleepyAsyncOperation(interval1: 6, interval2: 0, interval3: 0)
+    let operation = SleepyAsyncOperation(interval1: 1, interval2: 0, interval3: 0)
     let group = GroupOperation(operations: [operation])
 
     operation.name = "operation"
@@ -712,13 +720,38 @@ final class GroupOperationTests: XCTestCase {
     DispatchQueue.global().asyncAfter(deadline: .now()) {
       group.cancel()
     }
-
+    // TODO
     /**
      Failed due to expectation fulfilled in incorrect order: requires 'Expect value of 'finished' of <AdvancedOperationTests.SleepyAsyncOperation: 0x7f849764a010>{name = 'operation'} to be '1'', actually fulfilled 'Expect value of 'cancelled' of <AdvancedOperation.GroupOperation: 0x7f849764be90>{name = 'group'} to be '1''.
+
+     Failed due to expectation fulfilled in incorrect order: requires 'Expect value of 'finished' of <AdvancedOperationTests.SleepyAsyncOperation: 0x7fc99b4328c0>{name = 'operation'} to be '1'', actually fulfilled 'Expect value of 'cancelled' of <AdvancedOperation.GroupOperation: 0x7fc99b668160>{name = 'group'} to be '1''.
      **/
     /**
-     - group operation is cancelled before operation is finished
+     group operation is cancelled before operation is finished
+
+     2019-04-29 09:44:23.063036+0200 xctest[3580:44102] [Tests] group has started.
+     2019-04-29 09:44:23.063362+0200 xctest[3580:44107] [Tests] operation is cancelling.
+     2019-04-29 09:44:23.063688+0200 xctest[3580:44107] [Tests] operation has been cancelled with 0 errors.
+     2019-04-29 09:44:23.065022+0200 xctest[3580:44102] [Tests] operation is finishing.
+                                                                // MISSING PACKET HERE
+     2019-04-29 09:44:23.066576+0200 xctest[3580:44107] [Tests] group is cancelling.
+     2019-04-29 09:44:23.067426+0200 xctest[3580:44107] [Tests] group has been cancelled with 0 errors.
+     2019-04-29 09:44:23.068758+0200 xctest[3580:44107] [Tests] group is finishing.
+     2019-04-29 09:44:23.070964+0200 xctest[3580:44107] [Tests] group has finished with 0 errors.
+     2019-04-29 09:44:23.071044+0200 xctest[3580:44102] [Tests] operation has finished with 0 errors.
+     <unknown>:0: error: -[AdvancedOperation_Tests_iOS.GroupOperationTests testStress] : Failed due to expectation fulfilled in incorrect order: requires 'Expect value of 'finished' of <AdvancedOperation_Tests_iOS.SleepyAsyncOperation: 0x7b1c0002b1f0>{name = 'operation'} to be '1'', actually fulfilled 'Expect value of 'cancelled' of <AdvancedOperation.GroupOperation: 0x7b2c000282d0>{name = 'group'} to be '1''.
+
+     2019-04-29 09:44:23.175116+0200 xctest[3580:44097] [Tests] group has started.
+     2019-04-29 09:44:23.176278+0200 xctest[3580:44102] [Tests] operation is cancelling.
+     2019-04-29 09:44:23.177245+0200 xctest[3580:44102] [Tests] operation has been cancelled with 0 errors.
+     2019-04-29 09:44:23.178657+0200 xctest[3580:44095] [Tests] operation is finishing.
+     2019-04-29 09:44:23.180143+0200 xctest[3580:44095] [Tests] operation has finished with 0 errors.
+     2019-04-29 09:44:23.180909+0200 xctest[3580:44097] [Tests] group is cancelling.
+     2019-04-29 09:44:23.181275+0200 xctest[3580:44097] [Tests] group has been cancelled with 0 errors.
+     2019-04-29 09:44:23.183256+0200 xctest[3580:44097] [Tests] group is finishing.
+     2019-04-29 09:44:23.184478+0200 xctest[3580:44097] [Tests] group has finished with 0 errors.
      **/
+
     wait(for: [expectation1, expectation2, expectation3, expectation4], timeout: 12, enforceOrder: true)
     XCTAssertTrue(operation.isCancelled)
     XCTAssertTrue(group.isCancelled)
