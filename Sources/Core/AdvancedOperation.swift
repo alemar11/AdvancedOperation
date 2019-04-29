@@ -109,7 +109,7 @@ open class AdvancedOperation: Operation {
     }
     set {
       stateLock.synchronized {
-        assert(_state.canTransition(to: newValue), "Performing an invalid state transition for: \(_state) to: \(newValue).")
+        assert(_state.canTransition(to: newValue), "Performing an invalid state transition from: \(_state) to: \(newValue).")
         _state = newValue
       }
     }
