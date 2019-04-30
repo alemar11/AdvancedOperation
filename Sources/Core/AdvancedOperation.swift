@@ -224,7 +224,7 @@ open class AdvancedOperation: Operation {
         return false
       }
 
-      // an operation can be finished if:
+      // An operation can be finished if:
       // 1. the operation is executing
       // 2. the operation has been started after a cancel
       guard _state == .executing || (_state == .pending && _starting && _cancelled) else {
