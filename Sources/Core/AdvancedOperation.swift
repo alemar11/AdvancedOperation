@@ -207,7 +207,7 @@ open class AdvancedOperation: Operation {
       _cancelling = false
     }
 
-    super.cancel() // fires isReady KVO
+    super.cancel() // it does nothing except firing isReady KVO
   }
 
   /// Finishes the operations with errors (if any).
