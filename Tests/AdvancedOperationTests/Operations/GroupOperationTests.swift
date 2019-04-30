@@ -691,21 +691,20 @@ final class GroupOperationTests: XCTestCase {
     XCTAssertEqual(observer.didCancelCount, 0)
   }
 
-//  func testStress() {
-//    (1...1000).forEach { x in
-//      print("-----")
-//      testCancelledGroupOperationInsideAnotherQueue()
-//      print("-----\n")
-//    }
-//  }
+  func testStress() {
+    (1...1000).forEach { x in
+      print("-----")
+      testCancelledGroupOperationInsideAnotherQueue()
+      print("-----\n")
+    }
+  }
 
   func testCancelledGroupOperationInsideAnotherQueue() {
     // cancel a group right after it has been added to the queue
     let queue = AdvancedOperationQueue()
     let operation = SleepyAsyncOperation(interval1: 1, interval2: 0, interval3: 0)
-    let group = GroupOperation(operations: [operation])
-
     operation.name = "operation"
+    let group = GroupOperation(operations: [operation])
     group.name = "group"
 
     operation.log = TestsLog
