@@ -212,7 +212,7 @@ open class AdvancedOperation: Operation {
 
   /// Finishes the operations with errors (if any).
   ///
-  /// Use this method to complete an **isAsynchronous**/**isConcurret** operation or to complete a synchronous operation with errors.
+  /// Use this method to complete an **isAsynchronous**/**isConcurrent** operation or to complete a synchronous operation with errors.
   /// - Note: For synchronous operations it's not needed to call this method unless there are errors to register upon completion.
   open func finish(errors: [Error] = []) {
     _finish(errors: errors)
