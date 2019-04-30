@@ -32,16 +32,11 @@ extension AdvancedOperation: ProgressReporting { }
 open class AdvancedOperation: Operation {
   // MARK: - Public Properties
 
-  public final override var isReady: Bool { return super.isReady && stateLock.synchronized { return !_cancelling } }
-
-  public final override var isExecuting: Bool { return state == .executing }
-
-  public final override var isFinished: Bool { return state == .finished }
-
-  public final override var isCancelled: Bool { return stateLock.synchronized { return _cancelled } }
-
   open override var isAsynchronous: Bool { return true }
-
+  public final override var isReady: Bool { return super.isReady && stateLock.synchronized { return !_cancelling } }
+  public final override var isExecuting: Bool { return state == .executing }
+  public final override var isFinished: Bool { return state == .finished }
+  public final override var isCancelled: Bool { return stateLock.synchronized { return _cancelled } }
   public final override var isConcurrent: Bool { return isAsynchronous }
 
   /// Errors generated during the execution.
@@ -81,14 +76,14 @@ open class AdvancedOperation: Operation {
   /// Errors generated during the execution.
   private var _errors = [Error]()
 
+  /// Returns `true` if the `AdvancedOperation` is starting.
+  private var _starting = false
+
   /// Returns `true` if the finish command has been fired and the operation is processing it.
   private var _finishing = false
 
   /// Returns `true` if the `AdvancedOperation` is cancelling.
   @objc private var _cancelling = false
-
-  /// Returns `true` if the `AdvancedOperation` is starting.
-  private var _starting = false
 
   /// Returns `true` if the `AdvancedOperation` is cancelled.
   private var _cancelled = false
