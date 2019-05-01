@@ -43,7 +43,7 @@ open class AdvancedOperation: Operation {
   public var errors: [Error] { return _errors.value }
 
   /// Errors generated during the execution.
-  private var _errors = Atomic([Error]())
+  private let _errors = Atomic([Error]())
 
   /// An instance of `OSLog` (by default is disabled).
   public var log = OSLog.disabled
@@ -74,7 +74,7 @@ open class AdvancedOperation: Operation {
   private let times = Atomic<(CFAbsoluteTime?, CFAbsoluteTime?)>((nil, nil))
 
   /// A list of OperationObservingType.
-  private(set) var observers = Atomic([OperationObservingType]())
+  let observers = Atomic([OperationObservingType]())
 
   /// Returns `true` if the finish command has been fired and the operation is processing it.
   private var _finishing = false
@@ -88,7 +88,7 @@ open class AdvancedOperation: Operation {
   /// Serial queue for making state changes atomic under the constraint of having to send KVO willChange/didChange notifications.
   private let stateChangeQueue = DispatchQueue(label: "\(identifier).stateChange")
 
-  private var _cancelled = Atomic(false)
+  private let _cancelled = Atomic(false)
 
   /// Returns `true` if the `AdvancedOperation` is cancelled.
   internal var hasBeenCancelled: Bool {
@@ -105,7 +105,7 @@ open class AdvancedOperation: Operation {
   }
 
   /// Private backing store for `state`
-  private var _state = Atomic(State.pending)
+  private let _state = Atomic(State.pending)
 
   /// The state of the operation
   internal var state: State {

@@ -159,7 +159,7 @@ final class GroupOperationTests: XCTestCase {
     
     XCTAssertFalse(group.isCancelled, "It should be cancelled - state: \(group.state).")
     XCTAssertTrue(group.isFinished, "It should be finished for state: \(group.state).")
-    XCTAssertEqual(group.aggregatedErrors.count, 1)
+    XCTAssertEqual(group.aggregatedErrors.value.count, 1)
   }
   
   func testOperationCancelledAsynchronously() {
@@ -187,7 +187,7 @@ final class GroupOperationTests: XCTestCase {
     
     XCTAssertFalse(group.isCancelled)
     XCTAssertTrue(group.isFinished)
-    XCTAssertEqual(group.aggregatedErrors.count, 2)
+    XCTAssertEqual(group.aggregatedErrors.value.count, 2)
   }
   
   func testBlockOperationCancelled() {
@@ -213,7 +213,7 @@ final class GroupOperationTests: XCTestCase {
     
     XCTAssertTrue(operation1.isFinished)
     XCTAssertTrue(group.isFinished)
-    XCTAssertEqual(group.aggregatedErrors.count, 0)
+    XCTAssertEqual(group.aggregatedErrors.value.count, 0)
   }
   
   func testGroupOperationCancelled() {
@@ -297,7 +297,7 @@ final class GroupOperationTests: XCTestCase {
       XCTAssertTrue(group.isCancelled)
       XCTAssertTrue(group.isFinished)
       XCTAssertEqual(group.errors.count, 1)
-      XCTAssertEqual(group.aggregatedErrors.count, 0)
+      XCTAssertEqual(group.aggregatedErrors.value.count, 0)
       expectation4.fulfill()
     }
     
@@ -325,7 +325,7 @@ final class GroupOperationTests: XCTestCase {
       if let advancedOperation = operation as? AdvancedOperation {
         XCTAssertEqual(advancedOperation.errors.count, 0)
       } else if let groupOperation = operation as? GroupOperation {
-        XCTAssertEqual(groupOperation.aggregatedErrors.count, 0)
+        XCTAssertEqual(groupOperation.aggregatedErrors.value.count, 0)
       }
     }
   }
@@ -720,15 +720,7 @@ final class GroupOperationTests: XCTestCase {
     XCTAssertEqual(observer.didFinishCount, 1)
     XCTAssertEqual(observer.didCancelCount, 0)
   }
-  
-  func testStress() {
-    (1...3000).forEach { x in
-      print("-----\(x)")
-      testCancelledGroupOperationInsideAnotherQueue()
-      print("-----\n")
-    }
-  }
-  
+
   func testCancelledGroupOperationInsideAnotherQueue() {
     // cancel a group right after it has been added to the queue
     let queue = AdvancedOperationQueue()
@@ -928,7 +920,7 @@ final class GroupOperationTests: XCTestCase {
     //XCTAssertEqual(operation1.errors.count, 1)
     
     XCTAssertTrue(group.isCancelled, "It should be cancelled - state: \(group.state).")
-    XCTAssertEqual(group.aggregatedErrors.count, 1)
+    XCTAssertEqual(group.aggregatedErrors.value.count, 1)
     XCTAssertNil(group.duration)
   }
   

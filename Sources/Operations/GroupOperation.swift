@@ -39,20 +39,9 @@ open class GroupOperation: AdvancedOperation {
       }
     }
   }
-  
+
   /// Stores all of the `AdvancedOperation` errors during the execution.
-  internal private(set) var aggregatedErrors: [Error] {
-    get {
-      return lock.synchronized { _aggregatedErrors }
-    }
-    set {
-      lock.synchronized {
-        _aggregatedErrors = newValue
-      }
-    }
-  }
-  
-  private var _aggregatedErrors = [Error]()
+  internal let aggregatedErrors = Atomic([Error]())
   
   /// Internal `AdvancedOperationQueue`.
   private let underlyingOperationQueue: AdvancedOperationQueue
@@ -66,18 +55,11 @@ open class GroupOperation: AdvancedOperation {
   /// Tracks all the pending/executing operations.
   /// Due to the fact the operations are removed from an OperationQueue when cancelled/finished,
   /// the OperationQueue internal count cannot be reliably used in the AdvancedOperationQueue delegates
-  private var operationCount = Atomic(0)
+  private let operationCount = Atomic(0)
   
-  private let lock = UnfairLock()
+  private let temporaryCancelErrors = Atomic([Error]())
   
-  private var _temporaryCancelErrors = [Error]()
-  
-  private var _cancellationRequested = false
-  
-  /// Holds the cancellation error.
-  private var temporaryCancelErrors: [Error] {
-    return lock.synchronized { _temporaryCancelErrors }
-  }
+  private let cancellationRequested = Atomic(false)
   
   // MARK: - Initialization
   
@@ -146,19 +128,19 @@ open class GroupOperation: AdvancedOperation {
   /// Advises the `GroupOperation` object that it should stop executing its tasks.
   /// - Note: Once all the tasks are cancelled, the GroupOperation state will be set as finished if it's started.
   public final override func cancel(errors: [Error]) {
-    let canBeCancelled = lock.synchronized { () -> Bool in
-      if _cancellationRequested {
+   let cancellationAlreadyRequested = cancellationRequested.safeAccess { value -> Bool in
+      if value {
         return false
       } else {
-        _cancellationRequested = true
-        _temporaryCancelErrors = errors
-        return true
+        value = true
+        return  false
       }
     }
     
-    guard canBeCancelled else {
-      return
-    }
+    guard !cancellationAlreadyRequested else { return }
+    
+    
+    temporaryCancelErrors.mutate { $0 = errors }
     
     guard !isCancelled && !isFinished else {
       return
@@ -179,7 +161,7 @@ open class GroupOperation: AdvancedOperation {
   /// - Note: If overridden, be sure to call the parent `main` as the **end** of the new implementation.
   open override func execute() {
     // if it's cancelling, the finish command will be called automatically
-    if lock.synchronized({ _cancellationRequested }) && !isCancelled {
+    if cancellationRequested.value && !isCancelled {
       return
     }
     
@@ -241,7 +223,7 @@ open class GroupOperation: AdvancedOperation {
 extension GroupOperation: AdvancedOperationQueueDelegate {
   public func operationQueue(operationQueue: AdvancedOperationQueue, willAddOperation operation: Operation) {
     assert(!finishingOperation.isFinished && !finishingOperation.isExecuting, "The GroupOperation is finished and cannot accept more operations.")
-   
+    
     /// An operation is added to the group or an operation in this group has produced a new operation to execute.
     operationCount.mutate{ $0 += 1 }
     
@@ -271,7 +253,7 @@ extension GroupOperation: AdvancedOperationQueueDelegate {
     }
     
     if !errors.isEmpty { // avoid TSAN _swiftEmptyArrayStorage
-      aggregatedErrors.append(contentsOf: errors)
+      aggregatedErrors.mutate { $0.append(contentsOf: errors) }
     }
   }
   
@@ -289,9 +271,8 @@ extension GroupOperation: AdvancedOperationQueueDelegate {
     /// the others operation are already being passed through this delegate (that's why a counter is needed).
     
     if operationCount.value == 0 {
-      let cancellation = lock.synchronized { _cancellationRequested }
-      if cancellation {
-        super.cancel(errors: temporaryCancelErrors)
+      if cancellationRequested.value {
+        super.cancel(errors: temporaryCancelErrors.value)
         
         /// An operation that is not yet started cannot be finished
         if isExecuting {
@@ -305,7 +286,7 @@ extension GroupOperation: AdvancedOperationQueueDelegate {
         }
       } else {
         underlyingOperationQueue.isSuspended = true
-        finish(errors: self.aggregatedErrors)
+        finish(errors: self.aggregatedErrors.value)
       }
     }
   }
