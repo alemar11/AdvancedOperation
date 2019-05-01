@@ -174,7 +174,7 @@ open class GroupOperation: AdvancedOperation {
 
   /// Performs the receiver’s non-concurrent task.
   /// - Note: If overridden, be sure to call the parent `main` as the **end** of the new implementation.
-  open override func main() {
+  open override func execute() {
     // if it's cancelling, the finish command will be called automatically
     if lock.synchronized({ _cancellationTriggered }) && !isCancelled {
       return

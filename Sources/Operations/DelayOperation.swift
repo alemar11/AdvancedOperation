@@ -74,7 +74,7 @@ public final class DelayOperation: AdvancedOperation {
 
   // MARK: - Methods
 
-  public override func main() {
+  public override func execute() {
     guard !isCancelled else {
       finish()
       return

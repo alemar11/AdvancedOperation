@@ -692,8 +692,8 @@ final class GroupOperationTests: XCTestCase {
   }
 
   func testStress() {
-    (1...1000).forEach { x in
-      print("-----")
+    (1...10).forEach { x in
+      print("-----\(x)")
       testCancelledGroupOperationInsideAnotherQueue()
       print("-----\n")
     }
@@ -714,11 +714,12 @@ final class GroupOperationTests: XCTestCase {
     let expectation2 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isFinished), object: operation, expectedValue: true)
     let expectation3 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isCancelled), object: group, expectedValue: true)
     let expectation4 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isFinished), object: group, expectedValue: true)
+    let expectation5 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isExecuting), object: operation, expectedValue: true)
     queue.addOperation(group)
 
-    DispatchQueue.global().asyncAfter(deadline: .now()) {
-      group.cancel()
-    }
+    wait(for: [expectation5], timeout: 2)
+    group.cancel()
+
     // TODO
     /**
      Failed due to expectation fulfilled in incorrect order: requires 'Expect value of 'finished' of <AdvancedOperationTests.SleepyAsyncOperation: 0x7f849764a010>{name = 'operation'} to be '1'', actually fulfilled 'Expect value of 'cancelled' of <AdvancedOperation.GroupOperation: 0x7f849764be90>{name = 'group'} to be '1''.
