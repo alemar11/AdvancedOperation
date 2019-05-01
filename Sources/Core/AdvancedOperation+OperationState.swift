@@ -42,6 +42,14 @@ internal extension AdvancedOperation {
         return false
       }
     }
+    
+    var objcKeyPath: String? {
+      switch self {
+      case .pending: return nil
+      case .executing: return #keyPath(isExecuting)
+      case .finished: return #keyPath(isFinished)
+      }
+    }
 
     var debugDescription: String {
       switch self {
