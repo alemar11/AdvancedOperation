@@ -105,10 +105,10 @@ open class AdvancedOperation: Operation {
   }
 
   /// Private backing store for `state`
-  private var _state = Atomic(OperationState.pending)
+  private var _state = Atomic(State.pending)
 
   /// The state of the operation
-  internal var state: OperationState {
+  internal var state: State {
     get {
       return _state.value
     }

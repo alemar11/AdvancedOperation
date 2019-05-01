@@ -24,13 +24,14 @@
 import Foundation
 
 internal extension AdvancedOperation {
-  @objc
-  enum OperationState: Int, CustomDebugStringConvertible {
+  /// The possible internal states an AdvancedOperation can be in.
+  enum State: Int, CustomDebugStringConvertible {
     case pending
     case executing
     case finished
 
-    func canTransition(to state: OperationState) -> Bool {
+    /// Determines wheter or not a transition between the current state and another one is possible.
+    func canTransition(to state: State) -> Bool {
       switch (self, state) {
       case (.pending, .executing):
         return true
