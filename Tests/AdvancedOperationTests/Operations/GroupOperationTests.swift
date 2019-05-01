@@ -75,6 +75,38 @@ final class GroupOperationTests: XCTestCase {
     XCTAssertFalse(group.isFinished) /// an operation that is not yet started or that is not executing can't be finished (in this case we are in the first situation)
   }
   
+  func testMultipleCancel() {
+    let operation1 = SleepyAsyncOperation()
+    let operation2 = AdvancedBlockOperation { complete in
+      sleep(1)
+      complete([])
+    }
+    
+    let group = GroupOperation(operations: operation1, operation2)
+    let expectation1 = XCTKVOExpectation(keyPath: #keyPath(GroupOperation.isCancelled), object: group, expectedValue: true)
+    
+    operation1.name = "operation1"
+    operation2.name = "operation2"
+    group.name = "group"
+    
+    XCTAssertEqual(group.maxConcurrentOperationCount, OperationQueue.defaultMaxConcurrentOperationCount)
+    
+    group.cancel()
+    DispatchQueue.main.async {
+      group.cancel()
+    }
+    
+    
+    wait(for: [expectation1], timeout: 10)
+    
+    /// These operations are finished because the queue they are running into is cancelled and suspended
+    XCTAssertTrue(operation1.isFinished)
+    XCTAssertTrue(operation2.isFinished)
+    
+    XCTAssertTrue(group.isCancelled)
+    XCTAssertFalse(group.isFinished) /// an operation that is not yet started or that is not executing can't be finished (in this case we are in the first situation)
+  }
+  
   func testStartAfterCancel() {
     let operation1 = SleepyAsyncOperation()
     let operation2 = AdvancedBlockOperation { complete in
@@ -718,43 +750,6 @@ final class GroupOperationTests: XCTestCase {
     DispatchQueue.main.async {
       group.cancel()
     }
-    
-//    wait(for: [expectation5], timeout: 2)
-//    group.cancel()
-    
-    // TODO
-    /**
-     Failed due to expectation fulfilled in incorrect order: requires 'Expect value of 'finished' of <AdvancedOperationTests.SleepyAsyncOperation: 0x7f849764a010>{name = 'operation'} to be '1'', actually fulfilled 'Expect value of 'cancelled' of <AdvancedOperation.GroupOperation: 0x7f849764be90>{name = 'group'} to be '1''.
-     
-     Failed due to expectation fulfilled in incorrect order: requires 'Expect value of 'finished' of <AdvancedOperationTests.SleepyAsyncOperation: 0x7fc99b4328c0>{name = 'operation'} to be '1'', actually fulfilled 'Expect value of 'cancelled' of <AdvancedOperation.GroupOperation: 0x7fc99b668160>{name = 'group'} to be '1''.
-     
-     Failed due to expectation fulfilled in incorrect order: requires 'Expect value of 'finished' of <AdvancedOperation_Tests_iOS.SleepyAsyncOperation: 0x7b1c0002b1f0>{name = 'operation'} to be '1'', actually fulfilled 'Expect value of 'cancelled' of <AdvancedOperation.GroupOperation: 0x7b2c000282d0>{name = 'group'} to be '1''.
-     **/
-    /**
-     group operation is cancelled before operation is finished
-     
-     group has started.
-     operation is cancelling.
-     operation has been cancelled with 0 errors.
-     operation is finishing.
-     // MISSING PACKET HERE
-     group is cancelling.
-     group has been cancelled with 0 errors.
-     group is finishing.
-     group has finished with 0 errors.
-     operation has finished with 0 errors.
-     
-     
-     group has started.
-     operation is cancelling.
-     operation has been cancelled with 0 errors.
-     operation is finishing.
-     operation has finished with 0 errors.
-     group is cancelling.
-     group has been cancelled with 0 errors.
-     group is finishing.
-     group has finished with 0 errors.
-     **/
     
     wait(for: [expectation1, expectation2, expectation3, expectation4], timeout: 12, enforceOrder: true)
     XCTAssertTrue(operation.isCancelled)
