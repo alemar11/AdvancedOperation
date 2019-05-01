@@ -40,7 +40,7 @@ open class AdvancedOperation: Operation {
   public final override var isConcurrent: Bool { return isAsynchronous }
 
   /// Errors generated during the execution.
-  public var errors: [Error] { return stateLock.synchronized { _errors } }
+  public var errors: [Error] { return stateLock.synchronized { _errors } } // TODO Atomic
 
   /// An instance of `OSLog` (by default is disabled).
   public var log = OSLog.disabled
@@ -71,7 +71,7 @@ open class AdvancedOperation: Operation {
   private let times = Atomic<(CFAbsoluteTime?, CFAbsoluteTime?)>((nil, nil))
 
   /// A list of OperationObservingType.
-  private(set) var observers = Atomic<[OperationObservingType]>([OperationObservingType]())
+  private(set) var observers = Atomic([OperationObservingType]())
 
   /// Errors generated during the execution.
   private var _errors = [Error]()
@@ -84,9 +84,6 @@ open class AdvancedOperation: Operation {
 
   /// Returns `true` if the cancel command has been fired and the operation is processing it.
   private var _cancelling = false
-
-
-  //private var _cancelled = false
 
   // MARK: - State
 
