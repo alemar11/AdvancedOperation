@@ -40,7 +40,9 @@ open class AdvancedOperation: Operation {
   public final override var isConcurrent: Bool { return isAsynchronous }
 
   /// Errors generated during the execution.
-  public var errors: [Error] { return stateLock.synchronized { _errors } } // TODO Atomic
+  public var errors: [Error] { return _errors.value} // TODO Atomic
+  /// Errors generated during the execution.
+  private var _errors = Atomic([Error]())
 
   /// An instance of `OSLog` (by default is disabled).
   public var log = OSLog.disabled
@@ -72,9 +74,6 @@ open class AdvancedOperation: Operation {
 
   /// A list of OperationObservingType.
   private(set) var observers = Atomic([OperationObservingType]())
-
-  /// Errors generated during the execution.
-  private var _errors = [Error]()
 
   /// Returns `true` if the start command has been fired and the operation is processing it.
   private var _starting = false
@@ -203,7 +202,7 @@ open class AdvancedOperation: Operation {
 
       _cancelling = true
       if !cancelErrors.isEmpty { // TSAN _swiftEmptyArrayStorage
-        _errors.append(contentsOf: cancelErrors)
+        _errors.mutate { $0.append(contentsOf: cancelErrors) }
       }
       return true
     }
@@ -246,7 +245,7 @@ open class AdvancedOperation: Operation {
 
       _finishing = true
       if !finishErrors.isEmpty { // TSAN _swiftEmptyArrayStorage
-        _errors.append(contentsOf: finishErrors)
+        _errors.mutate { $0.append(contentsOf: finishErrors) }
       }
       return true
     }
