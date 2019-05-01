@@ -63,6 +63,11 @@ open class GroupOperation: AdvancedOperation {
   /// Internal finishing operation.
   private lazy var finishingOperation = AdvancedBlockOperation { complete in complete([]) }
   
+  /// Tracks all the pending/executing operations.
+  /// Due to the fact the operations are removed from an OperationQueue when cancelled/finished,
+  /// the OperationQueue internal count cannot be reliably used in the AdvancedOperationQueue delegates
+  private var operationCount = Atomic(0)
+  
   private let lock = UnfairLock()
   
   private var _temporaryCancelErrors = [Error]()
@@ -186,20 +191,6 @@ open class GroupOperation: AdvancedOperation {
     underlyingOperationQueue.isSuspended = false
   }
   
-  open override func finish(errors: [Error] = []) {
-    //TODO: do not override finish if possible
-    
-    /// Avoiding pending operations after cancellation using waitUntilAllOperationsAreFinished.
-    /// When a GroupOperation is cancelled, the finish method gets called when the finishingOperation is finished,
-    /// but there could be cancelled operations still pending to run to move their state to finished.
-    if !underlyingOperationQueue.isSuspended {
-      underlyingOperationQueue.waitUntilAllOperationsAreFinished()
-      underlyingOperationQueue.isSuspended = true
-    }
-    
-    super.finish(errors: errors)
-  }
-  
   /// Add an operation.
   ///
   /// - Parameters:
@@ -250,8 +241,9 @@ open class GroupOperation: AdvancedOperation {
 extension GroupOperation: AdvancedOperationQueueDelegate {
   public func operationQueue(operationQueue: AdvancedOperationQueue, willAddOperation operation: Operation) {
     assert(!finishingOperation.isFinished && !finishingOperation.isExecuting, "The GroupOperation is finished and cannot accept more operations.")
-    
+   
     /// An operation is added to the group or an operation in this group has produced a new operation to execute.
+    operationCount.mutate{ $0 += 1 }
     
     /// make the finishing operation dependent on this newly-produced operation.
     if operation !== finishingOperation && !operation.dependencies.contains(finishingOperation) {
@@ -288,16 +280,26 @@ extension GroupOperation: AdvancedOperationQueueDelegate {
       return
     }
     
+    assert(operationCount.value > 0, "The operation count should be greater than 0.")
+    operationCount.mutate{ $0 -= 1 }
+    
     /// The finishingOperation finishes when all the other operations have been finished.
     /// If some operations have been cancelled but not finished, the finishingOperation will not finish.
-    if operation === finishingOperation {
+    
+    if operationCount.value == 0 {
       let cancellation = lock.synchronized { _cancellationTriggered }
       if cancellation {
         super.cancel(errors: temporaryCancelErrors)
-        if isExecuting { // sanity check to avoid some rare inconsistencies
+        
+        while !isCancelled { }
+        
+        /// An operation that is not yet started cannot be finished
+        if isExecuting {
+          underlyingOperationQueue.isSuspended = true
           finish()
         }
       } else {
+        underlyingOperationQueue.isSuspended = true
         finish(errors: self.aggregatedErrors)
       }
     }

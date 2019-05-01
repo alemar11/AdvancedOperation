@@ -72,7 +72,7 @@ final class GroupOperationTests: XCTestCase {
     XCTAssertTrue(operation2.isFinished)
     
     XCTAssertTrue(group.isCancelled)
-    XCTAssertFalse(group.isFinished) /// an operation that is not yet started or that is executing can't be finished (in this case we are in the first situation)
+    XCTAssertFalse(group.isFinished) /// an operation that is not yet started or that is not executing can't be finished (in this case we are in the first situation)
   }
   
   func testStartAfterCancel() {
@@ -690,7 +690,7 @@ final class GroupOperationTests: XCTestCase {
   }
   
   func testStress() {
-    (1...10).forEach { x in
+    (1...2000).forEach { x in
       print("-----\(x)")
       testCancelledGroupOperationInsideAnotherQueue()
       print("-----\n")
@@ -712,11 +712,15 @@ final class GroupOperationTests: XCTestCase {
     let expectation2 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isFinished), object: operation, expectedValue: true)
     let expectation3 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isCancelled), object: group, expectedValue: true)
     let expectation4 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isFinished), object: group, expectedValue: true)
-    let expectation5 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isExecuting), object: operation, expectedValue: true)
+    //let expectation5 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isExecuting), object: operation, expectedValue: true)
     queue.addOperation(group)
     
-    wait(for: [expectation5], timeout: 2)
-    group.cancel()
+    DispatchQueue.main.async {
+      group.cancel()
+    }
+    
+//    wait(for: [expectation5], timeout: 2)
+//    group.cancel()
     
     // TODO
     /**
