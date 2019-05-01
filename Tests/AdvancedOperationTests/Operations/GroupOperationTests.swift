@@ -690,7 +690,7 @@ final class GroupOperationTests: XCTestCase {
   }
   
   func testStress() {
-    (1...2000).forEach { x in
+    (1...3000).forEach { x in
       print("-----\(x)")
       testCancelledGroupOperationInsideAnotherQueue()
       print("-----\n")

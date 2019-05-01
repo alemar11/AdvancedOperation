@@ -72,7 +72,7 @@ open class GroupOperation: AdvancedOperation {
   
   private var _temporaryCancelErrors = [Error]()
   
-  private var _cancellationTriggered = false
+  private var _cancellationRequested = false
   
   /// Holds the cancellation error.
   private var temporaryCancelErrors: [Error] {
@@ -147,10 +147,10 @@ open class GroupOperation: AdvancedOperation {
   /// - Note: Once all the tasks are cancelled, the GroupOperation state will be set as finished if it's started.
   public final override func cancel(errors: [Error]) {
     let canBeCancelled = lock.synchronized { () -> Bool in
-      if _cancellationTriggered {
+      if _cancellationRequested {
         return false
       } else {
-        _cancellationTriggered = true
+        _cancellationRequested = true
         _temporaryCancelErrors = errors
         return true
       }
@@ -179,7 +179,7 @@ open class GroupOperation: AdvancedOperation {
   /// - Note: If overridden, be sure to call the parent `main` as the **end** of the new implementation.
   open override func execute() {
     // if it's cancelling, the finish command will be called automatically
-    if lock.synchronized({ _cancellationTriggered }) && !isCancelled {
+    if lock.synchronized({ _cancellationRequested }) && !isCancelled {
       return
     }
     
@@ -285,16 +285,21 @@ extension GroupOperation: AdvancedOperationQueueDelegate {
     
     /// The finishingOperation finishes when all the other operations have been finished.
     /// If some operations have been cancelled but not finished, the finishingOperation will not finish.
+    /// So, when operation === finishingOperation, we know that all the other operations are finished but it doesn't mean that all
+    /// the others operation are already being passed through this delegate (that's why a counter is needed).
     
     if operationCount.value == 0 {
-      let cancellation = lock.synchronized { _cancellationTriggered }
+      let cancellation = lock.synchronized { _cancellationRequested }
       if cancellation {
         super.cancel(errors: temporaryCancelErrors)
         
-        while !isCancelled { }
-        
         /// An operation that is not yet started cannot be finished
         if isExecuting {
+          /// Waiting for the cancellation process to complete
+          /// It's a refinement to avoid some cases where a cancelled GroupOperation moves
+          /// to its finished state before having its cancelled state fulfilled.
+          while !isCancelled { }
+          
           underlyingOperationQueue.isSuspended = true
           finish()
         }

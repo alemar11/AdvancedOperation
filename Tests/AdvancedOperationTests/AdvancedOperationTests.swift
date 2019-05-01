@@ -313,7 +313,6 @@ final class AdvancedOperationTests: XCTestCase {
     let expectation1 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isFinished), object: operation, expectedValue: true)
 
     operation.start()
-    //operation.start() // TODO: managed
 
     wait(for: [expectation1, expectation2], timeout: 10)
 
