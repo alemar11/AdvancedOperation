@@ -33,14 +33,17 @@ open class AdvancedOperation: Operation {
   // MARK: - Public Properties
 
   open override var isAsynchronous: Bool { return true }
-  public final override var isReady: Bool { return super.isReady && stateLock.synchronized { return !_cancelling } }
+  public final override var isReady: Bool { return super.isReady }
   public final override var isExecuting: Bool { return state == .executing }
   public final override var isFinished: Bool { return state == .finished }
-  public final override var isCancelled: Bool { return stateLock.synchronized { return _cancelled } }
+  public final override var isCancelled: Bool { return hasBeenCancelled }
   public final override var isConcurrent: Bool { return isAsynchronous }
 
   /// Errors generated during the execution.
-  public var errors: [Error] { return stateLock.synchronized { _errors } }
+  public var errors: [Error] { return _errors.value }
+
+  /// Errors generated during the execution.
+  private let _errors = Atomic([Error]())
 
   /// An instance of `OSLog` (by default is disabled).
   public var log = OSLog.disabled
@@ -68,56 +71,70 @@ open class AdvancedOperation: Operation {
   // MARK: - Private Properties
 
   /// Absolute start and times in seconds.
-  private let times = Atomic<(CFAbsoluteTime?, CFAbsoluteTime?)>(value: (nil, nil))
+  private let times = Atomic<(CFAbsoluteTime?, CFAbsoluteTime?)>((nil, nil))
 
   /// A list of OperationObservingType.
-  private(set) var observers = Atomic<[OperationObservingType]>(value: [OperationObservingType]())
-
-  /// Errors generated during the execution.
-  private var _errors = [Error]()
-
-  /// Returns `true` if the `AdvancedOperation` is starting.
-  private var _starting = false
+  let observers = Atomic([OperationObservingType]())
 
   /// Returns `true` if the finish command has been fired and the operation is processing it.
   private var _finishing = false
 
-  /// Returns `true` if the `AdvancedOperation` is cancelling.
-  @objc private var _cancelling = false
+  /// Returns `true` if the cancel command has been fired and the operation is processing it.
+  private var _cancelling = false
+
+  /// A lock to synchronize the access to finish() and cancel() commands.
+  private let commandsLock = UnfairLock()
+
+  /// Serial queue for making state changes atomic under the constraint of having to send KVO willChange/didChange notifications.
+  private let stateChangeQueue = DispatchQueue(label: "\(identifier).stateChange")
+
+  private let _cancelled = Atomic(false)
 
   /// Returns `true` if the `AdvancedOperation` is cancelled.
-  private var _cancelled = false
-
-  // MARK: - State
-
-  /// A lock to guard reads and writes to the `_state` property
-  private let stateLock = UnfairLock()
-
-  /// Private backing stored property for `state`.
-  private var _state: OperationState = .pending
-
-  /// The state of the operation.
-  @objc dynamic
-  internal var state: OperationState {
+  internal var hasBeenCancelled: Bool {
     get {
-      return stateLock.synchronized { _state }
+      return _cancelled.value
     }
     set {
-      stateLock.synchronized {
-        assert(_state.canTransition(to: newValue), "Performing an invalid state transition from: \(_state) to: \(newValue).")
-        _state = newValue
+      stateChangeQueue.sync {
+        willChangeValue(forKey: #keyPath(AdvancedOperation.isCancelled))
+        _cancelled.mutate { $0 = newValue }
+        didChangeValue(forKey: #keyPath(AdvancedOperation.isCancelled))
       }
     }
   }
 
-  open override class func keyPathsForValuesAffectingValue(forKey key: String) -> Set<String> {
-    switch key {
-    case #keyPath(Operation.isExecuting), #keyPath(Operation.isFinished):
-      return Set([#keyPath(state)])
-      //    case #keyPath(Operation.isReady):
-    //      return Set([#keyPath(_cancelling)])
-    default:
-      return super.keyPathsForValuesAffectingValue(forKey: key)
+  /// Private backing store for `state`
+  private let _state = Atomic(State.pending)
+
+  /// The state of the operation
+  internal var state: State {
+    get {
+      return _state.value
+    }
+    set {
+      // A state mutation should be a single atomic transaction. We can't simply perform
+      // everything on the isolation queue for `_state` because the KVO willChange/didChange
+      // notifications have to be sent from outside the isolation queue. Otherwise we would
+      // deadlock because KVO observers will in turn try to read `state` (by calling
+      // `isReady`, `isExecuting`, `isFinished`. Use a second queue to wrap the entire
+      // transaction.
+      stateChangeQueue.sync {
+        // Retrieve the existing value first. Necessary for sending fine-grained KVO
+        // willChange/didChange notifications only for the key paths that actually change.
+        let oldValue = _state.value
+        guard newValue != oldValue else {
+          return
+        }
+        if let keyPath = oldValue.objcKeyPath { willChangeValue(forKey: keyPath) }
+        if let keyPath = newValue.objcKeyPath { willChangeValue(forKey: keyPath) }
+        _state.mutate {
+          assert($0.canTransition(to: newValue), "Performing an invalid state transition from: \(_state) to: \(newValue).")
+          $0 = newValue
+        }
+        if let keyPath = oldValue.objcKeyPath { didChangeValue(forKey: keyPath) }
+        if let keyPath = newValue.objcKeyPath { didChangeValue(forKey: keyPath) }
+      }
     }
   }
 
@@ -125,45 +142,38 @@ open class AdvancedOperation: Operation {
 
   deinit {
     removeDependencies()
-    observers.write { $0.removeAll() }
+    observers.mutate { $0.removeAll() }
   }
 
   // MARK: - Execution
 
   public final override func start() {
-    let canBeStarted = stateLock.synchronized { () -> Bool in
-      guard !_starting else { return false }
-
-      guard !_finishing else { return false }
-
-      guard _state == .pending else { return false }
-
-      _starting = true
-      return true
-    }
-
-    guard canBeStarted else {
-      return
-    }
+    /// The default implementation of this method updates the execution state of the operation and calls the receiver’s main() method.
+    /// This method also performs several checks to ensure that the operation can actually run.
+    /// For example, if the receiver was cancelled or is already finished, this method simply returns without calling main().
+    /// If the operation is currently executing or is not ready to execute, this method throws an NSInvalidArgumentException exception.
+    super.start()
 
     if isCancelled {
       // if the the cancellation event has been processed, mark the operation as finished.
       finish()
       return
     }
+  }
 
-    times.write { $0.0 = CFAbsoluteTimeGetCurrent() }
+  public final override func main() {
+    times.mutate { $0.0 = CFAbsoluteTimeGetCurrent() }
     state = .executing
     willExecute()
-    main()
+    execute()
 
     if !isAsynchronous {
       finish()
     }
   }
 
-  open override func main() {
-    fatalError("\(type(of: self)) must override `main()`.")
+  open func execute() {
+    fatalError("\(type(of: self)) must override `execute()`.")
   }
 
   open func cancel(errors: [Error] = []) {
@@ -175,13 +185,13 @@ open class AdvancedOperation: Operation {
   }
 
   private final func _cancel(errors cancelErrors: [Error] = []) {
-    let canBeCancelled = stateLock.synchronized { () -> Bool in
-      guard !_cancelling && !_cancelled else { return false }
-      guard !_finishing || _state != .finished else { return false }
+    let canBeCancelled = commandsLock.synchronized { () -> Bool in
+      guard !_cancelling && !hasBeenCancelled else { return false }
+      guard !_finishing || state != .finished else { return false }
 
       _cancelling = true
       if !cancelErrors.isEmpty { // TSAN _swiftEmptyArrayStorage
-        _errors.append(contentsOf: cancelErrors)
+        _errors.mutate { $0.append(contentsOf: cancelErrors) }
       }
       return true
     }
@@ -190,19 +200,15 @@ open class AdvancedOperation: Operation {
       return
     }
 
-    willChangeValue(forKey: #keyPath(AdvancedOperation.isCancelled))
     willCancel(errors: cancelErrors)
-    stateLock.synchronized {
-      _cancelled = true
-    }
+    hasBeenCancelled = true
     didCancel(errors: errors)
-    didChangeValue(forKey: #keyPath(AdvancedOperation.isCancelled))
 
-    stateLock.synchronized {
+    super.cancel() // it does nothing except firing (super) isReady KVO
+
+    commandsLock.synchronized {
       _cancelling = false
     }
-
-    super.cancel() // it does nothing except firing isReady KVO
   }
 
   /// Finishes the operations with errors (if any).
@@ -214,7 +220,7 @@ open class AdvancedOperation: Operation {
   }
 
   private final func _finish(errors finishErrors: [Error] = []) {
-    let canBeFinished = stateLock.synchronized { () -> Bool in
+    let canBeFinished = commandsLock.synchronized { () -> Bool in
       guard !_finishing else {
         return false
       }
@@ -222,13 +228,13 @@ open class AdvancedOperation: Operation {
       // An operation can be finished if:
       // 1. the operation is executing
       // 2. the operation has been started after a cancel
-      guard _state == .executing || (_state == .pending && _starting && _cancelled) else {
+      guard state == .executing || (state == .pending && hasBeenCancelled) else {
         return false
       }
 
       _finishing = true
       if !finishErrors.isEmpty { // TSAN _swiftEmptyArrayStorage
-        _errors.append(contentsOf: finishErrors)
+        _errors.mutate { $0.append(contentsOf: finishErrors) }
       }
       return true
     }
@@ -242,9 +248,13 @@ open class AdvancedOperation: Operation {
       progress.completedUnitCount = progress.totalUnitCount
     }
 
-    times.write { $0.1 = CFAbsoluteTimeGetCurrent() }
+    times.mutate { $0.1 = CFAbsoluteTimeGetCurrent() }
     state = .finished
     didFinish(errors: errors)
+
+    commandsLock.synchronized {
+      _finishing = false
+    }
   }
 
   // MARK: - Produced Operations
@@ -341,7 +351,7 @@ extension AdvancedOperation {
   public func addObserver(_ observer: OperationObservingType) {
     assert(state == .pending, "Cannot modify observers after execution has begun.")
 
-    observers.write { $0.append(observer) }
+    observers.mutate { $0.append(observer) }
   }
 
   internal var willExecuteObservers: [OperationWillExecuteObserving] {

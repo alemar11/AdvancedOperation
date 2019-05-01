@@ -42,88 +42,6 @@ final class AdvancedOperationTests: XCTestCase {
     XCTAssertTrue(operation.duration! >= 3.0)
   }
   
-  func testMultipleStart() {
-    let operation = SleepyAsyncOperation()
-    let expectation1 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isFinished), object: operation, expectedValue: true)
-    
-    XCTAssertTrue(operation.isReady)
-    XCTAssertFalse(operation.isExecuting)
-    XCTAssertFalse(operation.isCancelled)
-    XCTAssertFalse(operation.isFinished)
-    
-    operation.start()
-    operation.start()
-    operation.start()
-    
-    XCTAssertTrue(operation.isExecuting)
-    
-    wait(for: [expectation1], timeout: 10)
-    XCTAssertTrue(operation.isFinished)
-    XCTAssertTrue(operation.progress.isFinished)
-  }
-  
-  func testMultipleAsyncStart() {
-    let queue = DispatchQueue(label: "test")
-    let operation = SleepyAsyncOperation(interval1: 0, interval2: 1, interval3: 0)
-    
-    let expectation1 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isExecuting), object: operation, expectedValue: true)
-    let expectation2 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isExecuting), object: operation, expectedValue: false)
-    let expectation3 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isFinished), object: operation, expectedValue: true)
-    
-    XCTAssertTrue(operation.isReady)
-    XCTAssertFalse(operation.isExecuting)
-    XCTAssertFalse(operation.isCancelled)
-    XCTAssertFalse(operation.isFinished)
-    
-    queue.async {
-      operation.start()
-    }
-    operation.start()
-    queue.async {
-      operation.start()
-    }
-    
-    wait(for: [expectation1, expectation2, expectation3], timeout: 10)
-    XCTAssertTrue(operation.isFinished)
-    XCTAssertTrue(operation.progress.isFinished)
-  }
-  
-  func testMultipleAsyncStartAndCancel() {
-    let queue1 = DispatchQueue(label: "test1")
-    let queue2 = DispatchQueue(label: "test2")
-    let operation = SleepyAsyncOperation(interval1: 0, interval2: 1, interval3: 0)
-    
-    let expectation1 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isExecuting), object: operation, expectedValue: true)
-    let expectation2 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isExecuting), object: operation, expectedValue: false)
-    let expectation3 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isFinished), object: operation, expectedValue: true)
-    
-    XCTAssertTrue(operation.isReady)
-    XCTAssertFalse(operation.isExecuting)
-    XCTAssertFalse(operation.isCancelled)
-    XCTAssertFalse(operation.isFinished)
-    
-    queue1.async {
-      operation.start()
-    }
-    
-    operation.start()
-    
-    queue2.async {
-      operation.cancel()
-    }
-    
-    queue1.async {
-      operation.start()
-    }
-    
-    wait(for: [expectation1, expectation2, expectation3], timeout: 10)
-    
-    XCTAssertTrue(operation.isCancelled)
-    XCTAssertTrue(operation.isCancelled)
-    XCTAssertTrue(operation.isFinished)
-    XCTAssertNotNil(operation.duration)
-  }
-  
   func testCancel() {
     let operation = SleepyAsyncOperation()
     let expectation1 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isFinished), object: operation, expectedValue: true)
@@ -191,21 +109,6 @@ final class AdvancedOperationTests: XCTestCase {
     XCTAssertTrue(operation.progress.isFinished)
   }
   
-  func testMultipleStartsAfterACancel() {
-    let operation = InfiniteAsyncOperation()
-    operation.cancel()
-    XCTAssertTrue(operation.isCancelled)
-    XCTAssertFalse(operation.isFinished)
-    operation.start()
-    XCTAssertFalse(operation.isExecuting)
-    XCTAssertTrue(operation.isCancelled)
-    XCTAssertTrue(operation.isFinished)
-    operation.start()
-    XCTAssertFalse(operation.isExecuting)
-    XCTAssertTrue(operation.isCancelled)
-    XCTAssertTrue(operation.isFinished)
-  }
-  
   func testMultipleCancelWithManyObservers() {
     let operation = SleepyAsyncOperation()
     let expectation1 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isFinished), object: operation, expectedValue: true)
@@ -233,48 +136,6 @@ final class AdvancedOperationTests: XCTestCase {
     
     XCTAssertTrue(operation.isCancelled)
     XCTAssertTrue(operation.isFinished)
-  }
-  
-  func testMultipleStartsAndCancels() {
-    let operation = RunUntilCancelledAsyncOperation()
-    let expectation1 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isFinished), object: operation, expectedValue: true)
-    
-    XCTAssertTrue(operation.isReady)
-    
-    operation.start()
-    operation.cancel()
-    operation.start()
-    operation.cancel(errors: [MockError.test])
-    operation.cancel(errors: [MockError.failed])
-    
-    wait(for: [expectation1], timeout: 10)
-    
-    XCTAssertFalse(operation.isExecuting)
-    XCTAssertFalse(operation.hasErrors)
-    XCTAssertTrue(operation.isCancelled)
-    XCTAssertTrue(operation.isFinished)
-  }
-  
-  func testMultipleStartAndCancelWithErrors() {
-    let operation = RunUntilCancelledAsyncOperation(queue: .main)
-    let expectation1 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isFinished), object: operation, expectedValue: true)
-    
-    operation.log = TestsLog
-    XCTAssertTrue(operation.isReady)
-    
-    operation.start()
-    XCTAssertTrue(operation.isExecuting)
-    
-    operation.cancel(errors: [MockError.test])
-    operation.start()
-    operation.cancel()
-    operation.cancel(errors: [MockError.failed])
-    
-    wait(for: [expectation1], timeout: 10)
-    
-    XCTAssertTrue(operation.isCancelled)
-    XCTAssertTrue(operation.isFinished)
-    XCTAssertSameErrorQuantity(errors: operation.errors, expectedErrors: [MockError.test])
   }
   
   func testMultipleCancelWithError() {
@@ -307,7 +168,6 @@ final class AdvancedOperationTests: XCTestCase {
     
     let expectation1 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isFinished), object: operation, expectedValue: true)
     
-    operation.start()
     operation.start()
     
     wait(for: [expectation1, expectation2], timeout: 10)
@@ -534,4 +394,148 @@ final class AdvancedOperationTests: XCTestCase {
     token.invalidate()
   }
   
+}
+
+/// TODO: remove these tests, the new AdvancedOperation implementation throws the default (objc) exception if we attempt to start the same operation
+/// multiple times
+extension AdvancedOperationTests {
+//  func testMultipleStart() {
+//    let operation = SleepyAsyncOperation()
+//    let expectation1 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isFinished), object: operation, expectedValue: true)
+//
+//    XCTAssertTrue(operation.isReady)
+//    XCTAssertFalse(operation.isExecuting)
+//    XCTAssertFalse(operation.isCancelled)
+//    XCTAssertFalse(operation.isFinished)
+//
+//    operation.start()
+//    operation.start()
+//    operation.start()
+//
+//    XCTAssertTrue(operation.isExecuting)
+//
+//    wait(for: [expectation1], timeout: 10)
+//    XCTAssertTrue(operation.isFinished)
+//    XCTAssertTrue(operation.progress.isFinished)
+//  }
+//
+//
+//  func testMultipleAsyncStart() {
+//    let queue = DispatchQueue(label: "test")
+//    let operation = SleepyAsyncOperation(interval1: 0, interval2: 1, interval3: 0)
+//
+//    let expectation1 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isExecuting), object: operation, expectedValue: true)
+//    let expectation2 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isExecuting), object: operation, expectedValue: false)
+//    let expectation3 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isFinished), object: operation, expectedValue: true)
+//
+//    XCTAssertTrue(operation.isReady)
+//    XCTAssertFalse(operation.isExecuting)
+//    XCTAssertFalse(operation.isCancelled)
+//    XCTAssertFalse(operation.isFinished)
+//
+//    queue.async {
+//      operation.start()
+//    }
+//    operation.start()
+//    queue.async {
+//      operation.start()
+//    }
+//
+//    wait(for: [expectation1, expectation2, expectation3], timeout: 10)
+//    XCTAssertTrue(operation.isFinished)
+//    XCTAssertTrue(operation.progress.isFinished)
+//  }
+//
+//  func testMultipleAsyncStartAndCancel() {
+//    let queue1 = DispatchQueue(label: "test1")
+//    let queue2 = DispatchQueue(label: "test2")
+//    let operation = SleepyAsyncOperation(interval1: 0, interval2: 1, interval3: 0)
+//
+//    let expectation1 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isExecuting), object: operation, expectedValue: true)
+//    let expectation2 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isExecuting), object: operation, expectedValue: false)
+//    let expectation3 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isFinished), object: operation, expectedValue: true)
+//
+//    XCTAssertTrue(operation.isReady)
+//    XCTAssertFalse(operation.isExecuting)
+//    XCTAssertFalse(operation.isCancelled)
+//    XCTAssertFalse(operation.isFinished)
+//
+//    queue1.async {
+//      operation.start()
+//    }
+//
+//    operation.start()
+//
+//    queue2.async {
+//      operation.cancel()
+//    }
+//
+//    queue1.async {
+//      operation.start()
+//    }
+//
+//    wait(for: [expectation1, expectation2, expectation3], timeout: 10)
+//
+//    XCTAssertTrue(operation.isCancelled)
+//    XCTAssertTrue(operation.isCancelled)
+//    XCTAssertTrue(operation.isFinished)
+//    XCTAssertNotNil(operation.duration)
+//  }
+//
+//  func testMultipleStartsAfterACancel() {
+//    let operation = InfiniteAsyncOperation()
+//    operation.cancel()
+//    XCTAssertTrue(operation.isCancelled)
+//    XCTAssertFalse(operation.isFinished)
+//    operation.start()
+//    XCTAssertFalse(operation.isExecuting)
+//    XCTAssertTrue(operation.isCancelled)
+//    XCTAssertTrue(operation.isFinished)
+//    operation.start()
+//    XCTAssertFalse(operation.isExecuting)
+//    XCTAssertTrue(operation.isCancelled)
+//    XCTAssertTrue(operation.isFinished)
+//  }
+//
+//  func testMultipleStartsAndCancels() {
+//    let operation = RunUntilCancelledAsyncOperation()
+//    let expectation1 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isFinished), object: operation, expectedValue: true)
+//
+//    XCTAssertTrue(operation.isReady)
+//
+//    operation.start()
+//    operation.cancel()
+//    operation.start()
+//    operation.cancel(errors: [MockError.test])
+//    operation.cancel(errors: [MockError.failed])
+//
+//    wait(for: [expectation1], timeout: 10)
+//
+//    XCTAssertFalse(operation.isExecuting)
+//    XCTAssertFalse(operation.hasErrors)
+//    XCTAssertTrue(operation.isCancelled)
+//    XCTAssertTrue(operation.isFinished)
+//  }
+//
+//  func testMultipleStartAndCancelWithErrors() {
+//    let operation = RunUntilCancelledAsyncOperation(queue: .main)
+//    let expectation1 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isFinished), object: operation, expectedValue: true)
+//
+//    operation.log = TestsLog
+//    XCTAssertTrue(operation.isReady)
+//
+//    operation.start()
+//    XCTAssertTrue(operation.isExecuting)
+//
+//    operation.cancel(errors: [MockError.test])
+//    operation.start()
+//    operation.cancel()
+//    operation.cancel(errors: [MockError.failed])
+//
+//    wait(for: [expectation1], timeout: 10)
+//
+//    XCTAssertTrue(operation.isCancelled)
+//    XCTAssertTrue(operation.isFinished)
+//    XCTAssertSameErrorQuantity(errors: operation.errors, expectedErrors: [MockError.test])
+//  }
 }
