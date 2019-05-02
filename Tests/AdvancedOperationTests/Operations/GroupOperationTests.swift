@@ -455,6 +455,33 @@ final class GroupOperationTests: XCTestCase {
     XCTAssertSameErrorQuantity(errors: group.errors, expectedErrors: [MockError.test])
   }
   
+  func testCancelledGroupOperationContainingNonCancellableOperations() {
+    // operation1 and operation2 will continue executing their block even if they are cancelled.
+    let operation1 = BlockOperation { sleep(3) }
+    operation1.name = "BlockOperation"
+    let operation2 = AdvancedBlockOperation { sleep(3) }
+    operation2.name = "AdvancedBlockOperation"
+    let operation3 = RunUntilCancelledAsyncOperation()
+    operation3.name = "RunUntilCancelledAsyncOperation"
+    let group = GroupOperation(operations: operation1, operation2, operation3)
+    group.name = "Group"
+    group.maxConcurrentOperationCount = 1
+    let expectation1 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isCancelled), object: group, expectedValue: true)
+    let expectation2 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isFinished), object: group, expectedValue: true)
+    group.log = TestsLog
+    group.start()
+    DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+      group.cancel()
+    }
+  
+    self.wait(for: [expectation1, expectation2], timeout: 10, enforceOrder: true)
+    XCTAssertTrue(operation1.isFinished)
+    XCTAssertTrue(operation2.isFinished)
+    print(operation2.isCancelled)
+    XCTAssertTrue(operation3.isFinished)
+    XCTAssertTrue(operation3.isCancelled)
+  }
+  
   func testCancelledGroupOperationsWithOnlyBlockOperations() {
     let operation1 = BlockOperation {  }
     let operation2 = BlockOperation(block: { sleep(2) } )
