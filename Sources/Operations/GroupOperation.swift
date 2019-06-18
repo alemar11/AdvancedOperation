@@ -33,7 +33,9 @@ open class GroupOperation: AdvancedOperation {
   public override var log: OSLog {
     didSet {
       underlyingOperationQueue.operations.forEach { operation in
-        if let advancedOperation = operation as? AdvancedOperation, advancedOperation !== startingOperation, advancedOperation !== finishingOperation, advancedOperation.log === OSLog.disabled {
+        if let advancedOperation = operation as? AdvancedOperation,
+          //advancedOperation !== startingOperation, advancedOperation !== finishingOperation,
+          advancedOperation.log === OSLog.disabled {
           advancedOperation.log = log
         }
       }
@@ -47,10 +49,10 @@ open class GroupOperation: AdvancedOperation {
   private let underlyingOperationQueue: AdvancedOperationQueue
   
   /// Internal starting operation.
-  private lazy var startingOperation = AdvancedBlockOperation { complete in complete([]) }
+  //private lazy var startingOperation = AdvancedBlockOperation { complete in complete([]) }
   
   /// Internal finishing operation.
-  private lazy var finishingOperation = AdvancedBlockOperation { complete in complete([]) }
+  //private lazy var finishingOperation = AdvancedBlockOperation { complete in complete([]) }
   
   /// Tracks all the pending/executing operations.
   /// Due to the fact the operations are removed from an OperationQueue when cancelled/finished,
@@ -107,15 +109,15 @@ open class GroupOperation: AdvancedOperation {
     
     self.progress.totalUnitCount = 0
     self.underlyingOperationQueue.delegate = self
-    self.startingOperation.name = "Start<\(operationName)>"
-    self.underlyingOperationQueue.addOperation(startingOperation)
-    self.finishingOperation.name = "Finish<\(operationName)>"
-    self.finishingOperation.addDependency(startingOperation)
+//    self.startingOperation.name = "Start<\(operationName)>"
+//    self.underlyingOperationQueue.addOperation(startingOperation)
+//    self.finishingOperation.name = "Finish<\(operationName)>"
+//    self.finishingOperation.addDependency(startingOperation)
     /// the finishingOperation progress is needed in case the GroupOperation queue is concurrent.
-    self.progress.totalUnitCount += 1
-    self.progress.addChild(finishingOperation.progress, withPendingUnitCount: 1)
-    self.underlyingOperationQueue.addOperation(finishingOperation)
-    
+    self.progress.totalUnitCount += 1 // TODO: fix this unit count
+//    self.progress.addChild(finishingOperation.progress, withPendingUnitCount: 1)
+//    self.underlyingOperationQueue.addOperation(finishingOperation)
+
     for operation in operations {
       addOperation(operation: operation)
     }
@@ -145,10 +147,7 @@ open class GroupOperation: AdvancedOperation {
       return
     }
 
-    for operation in underlyingOperationQueue.operations.reversed() where operation !== finishingOperation && operation !== startingOperation && !operation.isFinished && !operation.isCancelled {
-      operation.cancel()
-    }
-    
+    underlyingOperationQueue.cancelAllOperations()
     underlyingOperationQueue.isSuspended = false
   }
   
@@ -168,6 +167,11 @@ open class GroupOperation: AdvancedOperation {
       finish()
       return
     }
+
+    if operationCount.value == 0 {
+      finish()
+      return
+    }
     
     underlyingOperationQueue.isSuspended = false
   }
@@ -180,11 +184,8 @@ open class GroupOperation: AdvancedOperation {
   ///   - Atention: The progress report ignores normal `Operations`, instead consider using only `AdvancedOperations`.
   public func addOperation(operation: Operation, withProgressWeight weight: Int64 = 1) {
     assert(!isExecuting, "The GroupOperation is executing and cannot accept more operations.")
-    assert(!finishingOperation.isCancelled || !finishingOperation.isFinished, "The GroupOperation is finishing and cannot accept more operations.")
-    
-    finishingOperation.addDependency(operation)
-    operation.addDependency(startingOperation)
-    
+    assert(!isCancelled || !isFinished, "The GroupOperation is finishing and cannot accept more operations.")
+
     if let advancedOperation = operation as? AdvancedOperation {
       progress.totalUnitCount += weight
       progress.addChild(advancedOperation.progress, withPendingUnitCount: weight)
@@ -221,22 +222,7 @@ open class GroupOperation: AdvancedOperation {
 
 extension GroupOperation: AdvancedOperationQueueDelegate {
   public func operationQueue(operationQueue: AdvancedOperationQueue, willAddOperation operation: Operation) {
-    assert(!finishingOperation.isFinished && !finishingOperation.isExecuting, "The GroupOperation is finished and cannot accept more operations.")
-    
-    /// An operation is added to the group or an operation in this group has produced a new operation to execute.
     operationCount.mutate{ $0 += 1 }
-    
-    /// make the finishing operation dependent on this newly-produced operation.
-    if operation !== finishingOperation && !operation.dependencies.contains(finishingOperation) {
-      finishingOperation.addDependency(operation)
-    }
-    
-    /// All operations should be dependent on the "startingOperation". This way, we can guarantee that the conditions for other operations
-    /// will not evaluate until just before the operation is about to run. Otherwise, the conditions could be evaluated at any time, even
-    /// before the internal operation queue is unsuspended.
-    if operation !== startingOperation && !operation.dependencies.contains(startingOperation) {
-      operation.addDependency(startingOperation)
-    }
   }
   
   public func operationQueue(operationQueue: AdvancedOperationQueue, didAddOperation operation: Operation) { }
@@ -245,12 +231,7 @@ extension GroupOperation: AdvancedOperationQueueDelegate {
     guard operationQueue === underlyingOperationQueue else {
       return
     }
-    
-    guard operation !== finishingOperation && operation !== startingOperation else {
-      // assertionFailure("There shouldn't be Operations but only AdvancedOperations in this delegate implementation call.")
-      return
-    }
-    
+
     if !errors.isEmpty { // avoid TSAN _swiftEmptyArrayStorage
       aggregatedErrors.mutate { $0.append(contentsOf: errors) }
     }
@@ -263,12 +244,7 @@ extension GroupOperation: AdvancedOperationQueueDelegate {
     
     assert(operationCount.value > 0, "The operation count should be greater than 0.")
     operationCount.mutate{ $0 -= 1 }
-    
-    /// The finishingOperation finishes when all the other operations have been finished.
-    /// If some operations have been cancelled but not finished, the finishingOperation will not finish.
-    /// So, when operation === finishingOperation, we know that all the other operations are finished but it doesn't mean that all
-    /// the others operation are already being passed through this delegate (that's why a counter is needed).
-    
+
     if operationCount.value == 0 {
       if cancellationRequested.value {
         super.cancel(errors: temporaryCancelErrors.value)

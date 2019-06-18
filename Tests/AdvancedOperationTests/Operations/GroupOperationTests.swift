@@ -376,7 +376,15 @@ final class GroupOperationTests: XCTestCase {
     let operation7 = SleepyAsyncOperation(interval1: 0, interval2: 0, interval3: 1)
     let group0 = GroupOperation(operations: group1, group2, operation7, group4)
     let expectation0 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isFinished), object: group0, expectedValue: true)
-    
+
+    operation1.name = "operation1"
+    operation2.name = "operation2"
+    operation3.name = "operation3"
+    operation4.name = "operation4"
+    operation5.name = "operation5"
+    operation6.name = "operation6"
+    operation7.name = "operation7"
+
     group0.name = "group0"
     group1.name = "group1"
     group2.name = "group2"
