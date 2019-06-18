@@ -776,6 +776,13 @@ final class GroupOperationTests: XCTestCase {
     XCTAssertTrue(group.isFinished)
     XCTAssertTrue(queue.operations.isEmpty)
   }
+
+  func testStress() {
+    DispatchQueue.concurrentPerform(iterations: 1) { (count) in
+      print(count)
+      testCancelledGroupOperationInsideAnotherQueueWithDelay()
+    }
+  }
   
   func testCancelledGroupOperationInsideAnotherQueueWithDelay() {
     // cancel a group after a delay once it has been added to the queue
@@ -789,11 +796,16 @@ final class GroupOperationTests: XCTestCase {
     
     operation.log = TestsLog
     group.log = TestsLog
-    
+
+    //Users/travis/build/tinrobots/AdvancedOperation/Tests/AdvancedOperationTests/Operations/GroupOperationTests.swift:803: error: -[AdvancedOperationTests.GroupOperationTests testCancelledGroupOperationInsideAnotherQueueWithDelay] : Asynchronous wait failed: Exceeded timeout of 12 seconds, with unfulfilled expectations:
+    // "Expect value of 'finished' of <AdvancedOperationTests.SleepyAsyncOperation: 0x7f9e1fd426a0>{name = 'operation'} to be '1'",
+    // "Expect value of 'cancelled' of <AdvancedOperation.GroupOperation: 0x7f9e1fd46ec0>{name = 'group'} to be '1'",
+    // "Expect value of 'finished' of <AdvancedOperation.GroupOperation: 0x7f9e1fd46ec0>{name = 'group'} to be '1'".
+
     let expectation1 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isCancelled), object: operation, expectedValue: true)
-    let expectation2 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isFinished), object: operation, expectedValue: true)
-    let expectation3 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isCancelled), object: group, expectedValue: true)
-    let expectation4 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isFinished), object: group, expectedValue: true)
+    let expectation2 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isFinished), object: operation, expectedValue: true) // not fulfilled
+    let expectation3 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isCancelled), object: group, expectedValue: true) // not fulfilled
+    let expectation4 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isFinished), object: group, expectedValue: true) // not fulfilled
     queue.addOperation(group)
     
     DispatchQueue.global().asyncAfter(deadline: .now() + delay) {

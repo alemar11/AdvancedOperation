@@ -138,14 +138,13 @@ open class GroupOperation: AdvancedOperation {
     }
     
     guard !cancellationAlreadyRequested else { return }
-    
-    
+
     temporaryCancelErrors.mutate { $0 = errors }
     
     guard !isCancelled && !isFinished else {
       return
     }
-    
+
     for operation in underlyingOperationQueue.operations.reversed() where operation !== finishingOperation && operation !== startingOperation && !operation.isFinished && !operation.isCancelled {
       operation.cancel()
     }
