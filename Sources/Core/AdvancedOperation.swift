@@ -245,7 +245,10 @@ open class AdvancedOperation: Operation {
 
     willFinish(errors: errors)
     if progress.completedUnitCount != progress.totalUnitCount {
+      print("🏁", progress.completedUnitCount, progress.totalUnitCount)
       progress.completedUnitCount = progress.totalUnitCount
+    } else {
+      print("🏁🏁🏁", progress.completedUnitCount, progress.totalUnitCount)
     }
 
     times.mutate { $0.1 = CFAbsoluteTimeGetCurrent() }

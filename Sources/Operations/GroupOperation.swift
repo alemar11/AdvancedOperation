@@ -114,7 +114,7 @@ open class GroupOperation: AdvancedOperation {
 //    self.finishingOperation.name = "Finish<\(operationName)>"
 //    self.finishingOperation.addDependency(startingOperation)
     /// the finishingOperation progress is needed in case the GroupOperation queue is concurrent.
-    self.progress.totalUnitCount += 1 // TODO: fix this unit count
+    //self.progress.totalUnitCount += 1 // TODO: fix this unit count
 //    self.progress.addChild(finishingOperation.progress, withPendingUnitCount: 1)
 //    self.underlyingOperationQueue.addOperation(finishingOperation)
 
@@ -187,9 +187,11 @@ open class GroupOperation: AdvancedOperation {
     assert(!isCancelled || !isFinished, "The GroupOperation is finishing and cannot accept more operations.")
 
     if let advancedOperation = operation as? AdvancedOperation {
-      progress.totalUnitCount += weight
+      print(">>\( progress.totalUnitCount)")
+      progress.totalUnitCount += 1 // completedUnitCount equals totalUnitCount
+      print(">>>\( progress.totalUnitCount)")
       progress.addChild(advancedOperation.progress, withPendingUnitCount: weight)
-      
+        print(">>>\( progress.totalUnitCount)")
       if advancedOperation.log === OSLog.disabled {
         advancedOperation.log = log
       }
@@ -241,6 +243,8 @@ extension GroupOperation: AdvancedOperationQueueDelegate {
     guard operationQueue === underlyingOperationQueue else {
       return
     }
+
+    print("\t-------> \(progress.completedUnitCount)", progress.totalUnitCount)
     
     assert(operationCount.value > 0, "The operation count should be greater than 0.")
     operationCount.mutate{ $0 -= 1 }
