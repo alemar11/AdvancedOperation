@@ -25,7 +25,6 @@ import XCTest
 @testable import AdvancedOperation
 
 class InjectionTests: XCTestCase {
-
   func testInputAndOutput() {
     let operation1 = IntToStringOperation()
     operation1.input = 10
@@ -120,7 +119,7 @@ class InjectionTests: XCTestCase {
     operation2.completionBlock = {
       expectation1.fulfill()
     }
-    operation1.input = 2000 // values greater than 1000 will produce a nil output 😎
+    operation1.input = 2000 // values greater than 1000 will produce a nil output when executing 😎
     let adapterOperation = operation1.inject(into: operation2)
     let queue = AdvancedOperationQueue()
     queue.addOperations([operation1, operation2, adapterOperation], waitUntilFinished: false)
@@ -131,7 +130,7 @@ class InjectionTests: XCTestCase {
     XCTAssertTrue(operation2.isCancelled)
   }
 
-  func testInjectionInputSuccessFulRequirement() {
+  func testInjectionInputUsingSuccessFulRequirement() {
     let expectation1 = self.expectation(description: "\(#function)\(#line)")
     let operation1 = IntToStringOperation() // no input -> fails
     let operation2 = StringToIntOperation()
@@ -149,25 +148,21 @@ class InjectionTests: XCTestCase {
     XCTAssertTrue(operation2.isCancelled)
   }
 
-  func testInjectionInputNotCancelledRequirement() {
-
+  func testInjectionInputUsingNoCancellationRequirement() {
     let operation1 = IntToStringOperation() // no input -> fails
     let operation2 = StringToIntOperation()
     let expectation1 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isFinished), object: operation2, expectedValue: true)
+    let expectation2 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isCancelled), object: operation2, expectedValue: true)
 
-    operation1.input = 100 // special value to cancel the operation 😎
-    operation1.cancel()
-    XCTAssertTrue(operation1.isCancelled)
+    operation1.input = 100 // special value to cancel the operation when executing 😎
 
     let adapterOperation = operation1.inject(into: operation2, requirements: [.noCancellation])
     let queue = AdvancedOperationQueue()
 
     queue.addOperations([operation1, operation2, adapterOperation], waitUntilFinished: false)
 
-    wait(for: [expectation1], timeout: 10)
-
+    wait(for: [expectation1, expectation2], timeout: 10)
     XCTAssertNil(operation2.input)
     XCTAssertNil(operation2.output)
-    XCTAssertTrue(operation2.isCancelled)
   }
 }

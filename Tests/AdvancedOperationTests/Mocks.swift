@@ -625,6 +625,7 @@ internal class IntToStringOperation: AdvancedOperation & InputRequiring & Output
       if input == 100 {
         output = "\(input)"
         cancel()
+        assert(self.isCancelled)
         finish()
       } else if input == 404 {
         output = nil
