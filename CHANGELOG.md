@@ -1,5 +1,10 @@
 # Changelog
 
+### 3.1.0 (WIP)
+
+- Lighter `GroupOperation`.
+-  Bugfixes.
+
 ### 3.0.0 ⭐
 
 - AdvancedOperation is now completely migrated to **Swift 5.0**.
