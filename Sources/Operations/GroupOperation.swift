@@ -250,7 +250,9 @@ extension GroupOperation: AdvancedOperationQueueDelegate {
           /// Waiting for the cancellation process to complete
           /// It's a refinement to avoid some cases where a cancelled GroupOperation moves
           /// to its finished state before having its cancelled state fulfilled.
-          while !isCancelled { }
+          while !isCancelled {
+             os_log("%{public}s is waiting the cancellation process to complete before moving to the finished state.", log: log, type: .info, operationName)
+          }
           
           underlyingOperationQueue.isSuspended = true
           finish()
