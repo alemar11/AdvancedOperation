@@ -602,7 +602,7 @@ final internal class MockOperationQueueDelegate: AdvancedOperationQueueDelegate 
 // MARK: - Composable Operations
 
 /// An `AdvancedOperation` with input and output values.
-internal class FunctionOperation<I, O> : AdvancedOperation, OperationInputHaving & OperationOutputHaving {
+internal class FunctionOperation<I, O> : AdvancedOperation, InputRequiring & OutputProducing {
   /// A generic input.
   public var input: I?
 
@@ -612,7 +612,7 @@ internal class FunctionOperation<I, O> : AdvancedOperation, OperationInputHaving
 
 /// This operation output is nil if the input is greater than **1000**
 /// This operation cancels itself if the input is **100**
-internal class IntToStringOperation: AdvancedOperation & OperationInputHaving & OperationOutputHaving {
+internal class IntToStringOperation: AdvancedOperation & InputRequiring & OutputProducing {
   var input: Int?
   var output: String?
 
@@ -639,7 +639,6 @@ internal class IntToStringOperation: AdvancedOperation & OperationInputHaving & 
 }
 
 internal class StringToIntOperation: FunctionOperation<String, Int> {
-
   override init() {
     super.init()
   }
@@ -657,7 +656,6 @@ internal class StringToIntOperation: FunctionOperation<String, Int> {
 // MARK: - Conditions
 
 internal struct SlowCondition: OperationCondition {
-
   public func evaluate(for operation: AdvancedOperation, completion: @escaping (OperationConditionResult) -> Void) {
     DispatchQueue(label: "SlowCondition").asyncAfter(deadline: .now() + 10) {
       completion(.satisfied)
@@ -666,14 +664,12 @@ internal struct SlowCondition: OperationCondition {
 }
 
 internal struct AlwaysFailingCondition: OperationCondition {
-
   public func evaluate(for operation: AdvancedOperation, completion: @escaping (OperationConditionResult) -> Void) {
     completion(.failed([MockError.failed]))
   }
 }
 
 internal struct AlwaysSuccessingCondition: OperationCondition {
-
   public func evaluate(for operation: AdvancedOperation, completion: @escaping (OperationConditionResult) -> Void) {
     completion(.satisfied)
   }

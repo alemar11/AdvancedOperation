@@ -264,6 +264,7 @@
 		2372B42E1F960DBA00189A32 /* AdvancedOperation Tests iOS.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "AdvancedOperation Tests iOS.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2372B4321F960DBA00189A32 /* Info-Tests.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Info-Tests.plist"; sourceTree = "<group>"; };
 		2372B43D1F960DCB00189A32 /* AdvancedOperation Tests tvOS.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "AdvancedOperation Tests tvOS.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		2382D97D22BE4A3C0082FFDD /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = SOURCE_ROOT; };
 		23830CA220615E7C00F6EBC9 /* NSLocking+Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSLocking+Utils.swift"; sourceTree = "<group>"; };
 		2385616B200A6BF80061BAA1 /* GroupOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupOperation.swift; sourceTree = "<group>"; };
 		23856170200A6E9A0061BAA1 /* GroupOperationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupOperationTests.swift; sourceTree = "<group>"; };
@@ -432,6 +433,7 @@
 		234130941F96061E002BE7FC /* Support */ = {
 			isa = PBXGroup;
 			children = (
+				2382D97D22BE4A3C0082FFDD /* README.md */,
 				23A1A85720F4AD9100EA3350 /* CHANGELOG.md */,
 				2385617C200A8DC50061BAA1 /* Package.swift */,
 				237250812005258D0000A442 /* IDETemplateMacros.plist */,
