@@ -47,7 +47,7 @@ public struct InjectedInputRequirements: OptionSet {
   public init(rawValue: Int) {
     self.rawValue = rawValue
   }
-
+  
   /// The injected input is required.
   public static let notOptional = InjectedInputRequirements(rawValue: 1)
   /// The injected input is a result of a successul operation
@@ -67,7 +67,7 @@ extension OutputProducing where Self: AdvancedOperation {
                                         requirements: InjectedInputRequirements = [.notOptional, .successful]) -> AdvancedBlockOperation where Output == E.Input {
     return AdvancedOperation.injectOperation(self, into: operation, requirements: requirements)
   }
-
+  
   /// Creates a new operation that passes, once transformed, the output of `self` into the given `AdvancedOperation`.
   ///
   /// - Parameters:
@@ -101,26 +101,26 @@ extension AdvancedOperation {
     precondition(!outputProducingOperation.isCancelled, "The output producing Operation is being cancelled.")
     precondition(!inputRequiringOperation.isFinished, "The input requiring Operation is already finished.")
     precondition(!inputRequiringOperation.isCancelled, "The input requiring Operation is being cancelled.")
-
+    
     let adapterOperation = AdvancedBlockOperation { [unowned outputProducingOperation = outputProducingOperation, unowned inputRequiringOperation = inputRequiringOperation] complete in
-
-      let error = AdvancedOperation.evaluateoutputProducingOperation(outputProducingOperation, forRequirements: requirements)
-
+      
+      let error = AdvancedOperation.evaluateOutputProducingOperation(outputProducingOperation, forRequirements: requirements)
+      
       if let error = error {
         inputRequiringOperation.cancel(errors: [error])
       } else {
         inputRequiringOperation.input = outputProducingOperation.output
       }
-
+      
       complete([])
     }
-
+    
     adapterOperation.addDependency(outputProducingOperation)
     inputRequiringOperation.addDependency(adapterOperation)
-
+    
     return adapterOperation
   }
-
+  
   /// Creates an *adapter* operation which passes, once transformed, the output from the `outputProducingOperation` into the input of the `inputRequiringOperation`.
   ///
   /// The injection takes places only if both operations aren't cancelled or finished.
@@ -141,38 +141,38 @@ extension AdvancedOperation {
     precondition(!outputProducingOperation.isCancelled, "The output producing Operation is being cancelled.")
     precondition(!inputRequiringOperation.isFinished, "The input requiring Operation is already finished.")
     precondition(!inputRequiringOperation.isCancelled, "The input requiring Operation is being cancelled.")
-
+    
     let adapterOperation = AdvancedBlockOperation { [unowned outputProducingOperation = outputProducingOperation, unowned inputRequiringOperation = inputRequiringOperation] complete in
-      let error = AdvancedOperation.evaluateoutputProducingOperation(outputProducingOperation, forRequirements: requirements)
-
+      let error = AdvancedOperation.evaluateOutputProducingOperation(outputProducingOperation, forRequirements: requirements)
+      
       if let error = error {
         inputRequiringOperation.cancel(errors: [error])
       } else {
         inputRequiringOperation.input = transform(outputProducingOperation.output)
       }
-
+      
       complete([])
     }
-
+    
     adapterOperation.addDependency(outputProducingOperation)
     inputRequiringOperation.addDependency(adapterOperation)
-
+    
     return adapterOperation
   }
-
-  private class func evaluateoutputProducingOperation<F: OutputProducing>(_ outputProducingOperation: F, forRequirements requirements: InjectedInputRequirements) -> NSError? {
+  
+  private class func evaluateOutputProducingOperation<F: OutputProducing>(_ outputProducingOperation: F, forRequirements requirements: InjectedInputRequirements) -> NSError? {
     if requirements.contains(.notOptional) && outputProducingOperation.output == nil {
       return AdvancedOperationError.executionCancelled(message: "The injectable input is nil and it doesn't satisfy the requirements (\(requirements).")
     }
-
+    
     if requirements.contains(.successful), !outputProducingOperation.errors.isEmpty {
       return AdvancedOperationError.executionCancelled(message: "The injectable operation contains errors and it doesn't satisfy the requirements (\(requirements).")
     }
-
+    
     if requirements.contains(.noCancellation), outputProducingOperation.isCancelled {
       return AdvancedOperationError.executionCancelled(message: "The injectable operation is cancelled and it doesn't satisfy the requirements (\(requirements).")
     }
-
+    
     return nil
   }
 }
