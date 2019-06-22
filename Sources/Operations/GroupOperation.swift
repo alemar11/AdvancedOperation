@@ -36,7 +36,6 @@ open class GroupOperation: AdvancedOperation {
     didSet {
       underlyingOperationQueue.operations.forEach { operation in
         if let advancedOperation = operation as? AdvancedOperation,
-          //advancedOperation !== startingOperation, advancedOperation !== finishingOperation,
           advancedOperation.log === OSLog.disabled {
           advancedOperation.log = log
         }
@@ -51,7 +50,7 @@ open class GroupOperation: AdvancedOperation {
   private let underlyingOperationQueue: AdvancedOperationQueue
 
   /// Tracks all the pending/executing operations.
-  /// Due to the fact the operations are removed from an OperationQueue when cancelled/finished,
+  /// Since operations are removed from an OperationQueue when cancelled/finished,
   /// the OperationQueue internal count cannot be reliably used in the AdvancedOperationQueue delegates
   private let operationCount = Atomic(0)
   
@@ -182,11 +181,11 @@ open class GroupOperation: AdvancedOperation {
     assert(!isCancelled || !isFinished, "The GroupOperation is finishing and cannot accept more operations.")
 
     if let advancedOperation = operation as? AdvancedOperation {
-
       // "The value for pending unit count is the amount of the parent’s totalUnitCount consumed by the child."
-      //
+      // but for concurrent GroupOperation the value is increased by 1 (read comments above)
       progress.totalUnitCount += weight
       progress.addChild(advancedOperation.progress, withPendingUnitCount: weight)
+      
       if advancedOperation.log === OSLog.disabled {
         advancedOperation.log = log
       }

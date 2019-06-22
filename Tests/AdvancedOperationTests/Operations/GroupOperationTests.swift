@@ -25,7 +25,6 @@ import XCTest
 @testable import AdvancedOperation
 
 final class GroupOperationTests: XCTestCase {
-  
   func testStart() {
     let operation1 = SleepyAsyncOperation()
     let expectation1 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isFinished), object: operation1, expectedValue: true)
