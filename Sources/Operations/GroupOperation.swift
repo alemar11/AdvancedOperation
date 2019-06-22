@@ -26,6 +26,8 @@ import os.log
 
 /// An `AdvancedOperation` subclass which enables a finite grouping of other operations.
 /// Use a `GroupOperation` to associate related operations together, thereby creating higher levels of abstractions.
+/// - Note: The progress report is designed to work with a *serial* GroupOperation: if the operations are run concurrently the progress
+/// report may be less accurate (i.e. KVO could report the same percentage multipe times, except for the final value).
 /// - Attention: If you add normal `Operations`, the progress report will ignore them, instead consider using only `AdvancedOperations`.
 open class GroupOperation: AdvancedOperation {
   // MARK: - Properties
@@ -47,13 +49,7 @@ open class GroupOperation: AdvancedOperation {
   
   /// Internal `AdvancedOperationQueue`.
   private let underlyingOperationQueue: AdvancedOperationQueue
-  
-  /// Internal starting operation.
-  //private lazy var startingOperation = AdvancedBlockOperation { complete in complete([]) }
-  
-  /// Internal finishing operation.
-  //private lazy var finishingOperation = AdvancedBlockOperation { complete in complete([]) }
-  
+
   /// Tracks all the pending/executing operations.
   /// Due to the fact the operations are removed from an OperationQueue when cancelled/finished,
   /// the OperationQueue internal count cannot be reliably used in the AdvancedOperationQueue delegates
@@ -106,18 +102,17 @@ open class GroupOperation: AdvancedOperation {
     self.underlyingOperationQueue = queue // TODO: EXC_BAD_ACCESS possible fix
     
     super.init()
-    
-    self.progress.totalUnitCount = 0
-    self.underlyingOperationQueue.delegate = self
-//    self.startingOperation.name = "Start<\(operationName)>"
-//    self.underlyingOperationQueue.addOperation(startingOperation)
-//    self.finishingOperation.name = "Finish<\(operationName)>"
-//    self.finishingOperation.addDependency(startingOperation)
-    /// the finishingOperation progress is needed in case the GroupOperation queue is concurrent.
-    self.progress.totalUnitCount += 1 // TODO: fix this unit count
-//    self.progress.addChild(finishingOperation.progress, withPendingUnitCount: 1)
-//    self.underlyingOperationQueue.addOperation(finishingOperation)
 
+    // in a GroupOperation the totalUnitCount is equal to 1 + children's pendingUnitCount
+    // that's because if the underlyingQueue is concurrent the progress completion will be determined by the "1".
+    // If the underlyingQueue is serial the progress totalUnitCount is equal to the children's pendingUnitCount.
+    // If the underlyingQueue is concurrent the progress totalUnitCount is equal to 1 + children's pendingUnitCount.
+    // The + 1 is a way to ensure that the progress results completed only when all the conccurrent operations are finished.
+    if maxConcurrentOperationCount == 1  {
+      self.progress.totalUnitCount = 0
+    }
+    self.underlyingOperationQueue.delegate = self
+    
     for operation in operations {
       addOperation(operation: operation)
     }
@@ -187,9 +182,11 @@ open class GroupOperation: AdvancedOperation {
     assert(!isCancelled || !isFinished, "The GroupOperation is finishing and cannot accept more operations.")
 
     if let advancedOperation = operation as? AdvancedOperation {
+
+      // "The value for pending unit count is the amount of the parent’s totalUnitCount consumed by the child."
+      //
       progress.totalUnitCount += weight
       progress.addChild(advancedOperation.progress, withPendingUnitCount: weight)
-      
       if advancedOperation.log === OSLog.disabled {
         advancedOperation.log = log
       }
@@ -241,7 +238,7 @@ extension GroupOperation: AdvancedOperationQueueDelegate {
     guard operationQueue === underlyingOperationQueue else {
       return
     }
-    
+
     assert(operationCount.value > 0, "The operation count should be greater than 0.")
     operationCount.mutate{ $0 -= 1 }
 
