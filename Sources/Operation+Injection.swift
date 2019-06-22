@@ -85,77 +85,77 @@ extension OutputProducing where Self: AdvancedOperation {
 // MARK: - Adapter
 
 extension AdvancedOperation {
-  /// Creates an *adapter* operation which passes the output from the `outputProducingOperation` into the input of the `inputOpertion`.
+  /// Creates an *adapter* operation which passes the output from the `outputProducingOperation` into the input of the `inputRequiringOperation`.
   ///
   /// - Parameters:
   ///   - outputProducingOperation: The operation whose output is needed by the `inputRequiringOperation`.
-  ///   - inputOpertion: The operation who needs needs, as input, the output of the `inputRequiringOperation`.
+  ///   - inputRequiringOperation: The operation who needs needs, as input, the output of the `inputRequiringOperation`.
   ///   - requirements: A set of `InjectedInputRequirements`.
-  /// - Returns: Returns an *adapter* operation which passes the output from the `outputProducingOperation` into the input of the `inputOpertion`,
-  /// and builds dependencies so the outputProducingOperation runs first, then the adapter, then inputOpertion.
+  /// - Returns: Returns an *adapter* operation which passes the output from the `outputProducingOperation` into the input of the `inputRequiringOperation`,
+  /// and builds dependencies so the outputProducingOperation runs first, then the adapter, then inputRequiringOperation.
   /// - Note: The client is still responsible for adding all three blocks to a queue.
   class func injectOperation<F: OutputProducing, G: InputRequiring>(_ outputProducingOperation: F,
-                                                                    into inputOpertion: G,
+                                                                    into inputRequiringOperation: G,
                                                                     requirements: InjectedInputRequirements = []) -> AdvancedBlockOperation where F.Output == G.Input {
     precondition(!outputProducingOperation.isFinished, "The output producing Operation is already finished.")
     precondition(!outputProducingOperation.isCancelled, "The output producing Operation is being cancelled.")
-    precondition(!inputOpertion.isFinished, "The input requiring Operation is already finished.")
-    precondition(!inputOpertion.isCancelled, "The input requiring Operation is being cancelled.")
+    precondition(!inputRequiringOperation.isFinished, "The input requiring Operation is already finished.")
+    precondition(!inputRequiringOperation.isCancelled, "The input requiring Operation is being cancelled.")
 
-    let adapterOperation = AdvancedBlockOperation { [unowned outputProducingOperation = outputProducingOperation, unowned inputOpertion = inputOpertion] complete in
+    let adapterOperation = AdvancedBlockOperation { [unowned outputProducingOperation = outputProducingOperation, unowned inputRequiringOperation = inputRequiringOperation] complete in
 
       let error = AdvancedOperation.evaluateoutputProducingOperation(outputProducingOperation, forRequirements: requirements)
 
       if let error = error {
-        inputOpertion.cancel(errors: [error])
+        inputRequiringOperation.cancel(errors: [error])
       } else {
-        inputOpertion.input = outputProducingOperation.output
+        inputRequiringOperation.input = outputProducingOperation.output
       }
 
       complete([])
     }
 
     adapterOperation.addDependency(outputProducingOperation)
-    inputOpertion.addDependency(adapterOperation)
+    inputRequiringOperation.addDependency(adapterOperation)
 
     return adapterOperation
   }
 
-  /// Creates an *adapter* operation which passes, once transformed, the output from the `outputProducingOperation` into the input of the `inputOpertion`.
+  /// Creates an *adapter* operation which passes, once transformed, the output from the `outputProducingOperation` into the input of the `inputRequiringOperation`.
   ///
   /// The injection takes places only if both operations aren't cancelled or finished.
   ///
   /// - Parameters:
   ///   - outputProducingOperation: The operation whose output is needed by the `inputRequiringOperation`.
-  ///   - inputOpertion: The operation who needs needs, as input, the output of the `inputRequiringOperation`.
+  ///   - inputRequiringOperation: The operation who needs needs, as input, the output of the `inputRequiringOperation`.
   ///   - requirements: A set of `InjectedInputRequirements`.
   ///   - transform: Closure to transform the output of `self` into a valid `input` for the next operation.
-  /// - Returns: Returns an *adapter* operation which passes the transformed output from the `outputProducingOperation` into the input of the `inputOpertion`,
-  /// and builds dependencies so the outputProducingOperation runs first, then the adapter, then inputOpertion.
+  /// - Returns: Returns an *adapter* operation which passes the transformed output from the `outputProducingOperation` into the input of the `inputRequiringOperation`,
+  /// and builds dependencies so the outputProducingOperation runs first, then the adapter, then inputRequiringOperation.
   /// - Note: The client is still responsible for adding all three blocks to a queue.
   class func injectOperation<F: OutputProducing, G: InputRequiring>(_ outputProducingOperation: F,
-                                                                    into inputOpertion: G,
+                                                                    into inputRequiringOperation: G,
                                                                     requirements: InjectedInputRequirements = [],
                                                                     transform: @escaping (F.Output?) -> G.Input?) -> AdvancedBlockOperation {
     precondition(!outputProducingOperation.isFinished, "The output producing Operation is already finished.")
     precondition(!outputProducingOperation.isCancelled, "The output producing Operation is being cancelled.")
-    precondition(!inputOpertion.isFinished, "The input requiring Operation is already finished.")
-    precondition(!inputOpertion.isCancelled, "The input requiring Operation is being cancelled.")
+    precondition(!inputRequiringOperation.isFinished, "The input requiring Operation is already finished.")
+    precondition(!inputRequiringOperation.isCancelled, "The input requiring Operation is being cancelled.")
 
-    let adapterOperation = AdvancedBlockOperation { [unowned outputProducingOperation = outputProducingOperation, unowned inputOpertion = inputOpertion] complete in
+    let adapterOperation = AdvancedBlockOperation { [unowned outputProducingOperation = outputProducingOperation, unowned inputRequiringOperation = inputRequiringOperation] complete in
       let error = AdvancedOperation.evaluateoutputProducingOperation(outputProducingOperation, forRequirements: requirements)
 
       if let error = error {
-        inputOpertion.cancel(errors: [error])
+        inputRequiringOperation.cancel(errors: [error])
       } else {
-        inputOpertion.input = transform(outputProducingOperation.output)
+        inputRequiringOperation.input = transform(outputProducingOperation.output)
       }
 
       complete([])
     }
 
     adapterOperation.addDependency(outputProducingOperation)
-    inputOpertion.addDependency(adapterOperation)
+    inputRequiringOperation.addDependency(adapterOperation)
 
     return adapterOperation
   }
