@@ -177,8 +177,8 @@ open class GroupOperation: AdvancedOperation {
   ///   - weight: The `AdvancedOperation` weight for the progress report (it defaults to 1).
   ///   - Atention: The progress report ignores normal `Operations`, instead consider using only `AdvancedOperations`.
   public func addOperation(operation: Operation, withProgressWeight weight: Int64 = 1) {
-    assert(!isExecuting, "The GroupOperation is executing and cannot accept more operations.")
-    assert(!isCancelled || !isFinished, "The GroupOperation is finishing and cannot accept more operations.")
+    precondition(!isExecuting, "The GroupOperation is executing and cannot accept more operations.")
+    precondition(!isCancelled || !isFinished, "The GroupOperation is finishing and cannot accept more operations.")
 
     if let advancedOperation = operation as? AdvancedOperation {
       // "The value for pending unit count is the amount of the parent’s totalUnitCount consumed by the child."

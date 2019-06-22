@@ -265,7 +265,7 @@ open class AdvancedOperation: Operation {
   /// - Parameter operation: the produced `Operation` instance.
   /// - Note: It's up to the developer to decide wheter or not the produced operation should run indipendently from the producing operation (if the queue is not serial).
   final func produceOperation(_ operation: Operation) {
-    assert(operationQueue is AdvancedOperationQueue, "An operation cannot produce any other operation if it's not enqueued on an AdvancedOperationQueue.")
+    precondition(operationQueue is AdvancedOperationQueue, "An operation cannot produce any other operation if it's not enqueued on an AdvancedOperationQueue.")
 
     didProduceOperation(operation)
   }
@@ -273,7 +273,8 @@ open class AdvancedOperation: Operation {
   // MARK: - Dependencies
 
   open override func addDependency(_ operation: Operation) {
-    assert(state == .pending, "Dependencies cannot be modified after execution has begun.")
+    precondition(state == .pending, "Dependencies cannot be modified after execution has begun.")
+    
     super.addDependency(operation)
   }
 
@@ -282,7 +283,8 @@ open class AdvancedOperation: Operation {
   public private(set) var conditions = [OperationCondition]()
 
   public func addCondition(_ condition: OperationCondition) {
-    assert(state == .pending, "Cannot add conditions if the operation is \(state).")
+    precondition(state == .pending, "Cannot add conditions if the operation is \(state).")
+
     conditions.append(condition)
   }
 
@@ -350,7 +352,7 @@ extension AdvancedOperation {
   /// - Parameter observer: the observer to add.
   /// - Requires: `self must not have started.
   public func addObserver(_ observer: OperationObservingType) {
-    assert(state == .pending, "Cannot modify observers after execution has begun.")
+    precondition(state == .pending, "Cannot modify observers after execution has begun.")
 
     observers.mutate { $0.append(observer) }
   }

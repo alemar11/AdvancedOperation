@@ -54,7 +54,7 @@ extension Operation {
 
   /// Adds multiple dependencies to the operation.
   public func addDependencies(_ dependencies: [Operation]) {
-    assert(!isExecuting, "Dependencies cannot be modified after execution has begun.")
+    precondition(!isExecuting, "Dependencies cannot be modified after execution has begun.")
 
     for dependency in dependencies {
       addDependency(dependency)
@@ -76,7 +76,8 @@ extension Operation {
   /// - Returns: The given operation.
   @discardableResult
   public func then(_ operation: Operation) -> Operation {
-    assert(!isFinished, "Cannot add a finished operation as a dependency.")
+    precondition(!isFinished, "Cannot add a finished operation as a dependency.")
+
     operation.addDependency(self)
     return operation
   }
@@ -87,7 +88,8 @@ extension Operation {
   /// - Returns: The given list of operations.
   @discardableResult
   public func then(_ operations: Operation...) -> [Operation] {
-    assert(!isFinished, "Cannot add a finished operation as a dependency.")
+    precondition(!isFinished, "Cannot add a finished operation as a dependency.")
+    
     for operation in operations {
       operation.addDependency(self)
     }
