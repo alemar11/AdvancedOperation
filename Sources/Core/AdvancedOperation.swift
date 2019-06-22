@@ -244,6 +244,7 @@ open class AdvancedOperation: Operation {
     }
 
     willFinish(errors: errors)
+    // the operation is finished, the progress should always reflect that
     if progress.completedUnitCount != progress.totalUnitCount {
       progress.completedUnitCount = progress.totalUnitCount
     }

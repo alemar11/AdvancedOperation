@@ -384,6 +384,7 @@ final internal class ProgressOperation: AdvancedOperation {
     }
     sleep(1)
     progress.completedUnitCount = 9
+    progress.completedUnitCount = 10
   }
 }
 
@@ -429,6 +430,7 @@ final internal class ProgressAsyncOperation: AdvancedOperation {
 
       sleep(1)
       self.progress.completedUnitCount = 9
+      self.progress.completedUnitCount = 10
       self.finish()
     }
   }
