@@ -132,7 +132,6 @@ extension AdvancedOperation {
                                                                     into inputOpertion: G,
                                                                     requirements: InjectedInputRequirements = [],
                                                                     transform: @escaping (F.Output?) -> G.Input?) -> AdvancedBlockOperation {
-
     assert(!outputProducingOperation.isFinished, "The output producing Operation is already finished.")
     assert(!outputProducingOperation.isCancelled, "The output producing Operation is being cancelled.")
     assert(!inputOpertion.isFinished, "The input requring Operation is already finished.")
