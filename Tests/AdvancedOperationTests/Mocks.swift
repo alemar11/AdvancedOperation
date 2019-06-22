@@ -82,7 +82,7 @@ final internal class SelfObservigOperation: AdvancedOperation {
     super.init()
   }
 
-  override func main() {
+  override func execute() {
     DispatchQueue.global().asyncAfter(deadline: .now() + 3) { [weak self] in
       guard let self = self else { return }
       if `self`.isCancelled {
@@ -127,7 +127,7 @@ final internal class SynchronousOperation: AdvancedOperation {
     self.finishingErrors = errors
   }
 
-  override func main() {
+  override func execute() {
     if isCancelled {
       return
     }
@@ -147,7 +147,7 @@ final internal class InfiniteAsyncOperation: AdvancedOperation {
     self.queue = queue
   }
 
-  override func main() {
+  override func execute() {
     queue.async {
       while true {
         // infinite
@@ -163,7 +163,7 @@ final internal class RunUntilCancelledAsyncOperation: AdvancedOperation {
     self.queue = queue
   }
 
-  override func main() {
+  override func execute() {
     queue.async {
       while !self.isCancelled {
         sleep(1)
@@ -186,7 +186,7 @@ final internal class SleepyAsyncOperation: AdvancedOperation {
     super.init()
   }
 
-  override func main() {
+  override func execute() {
     DispatchQueue.global().async { [weak weakSelf = self] in
       guard let strongSelf = weakSelf else {
         self.finish()
@@ -229,7 +229,7 @@ final internal class SleepyOperation: AdvancedOperation {
     super.init()
   }
 
-  override func main() {
+  override func execute() {
     sleep(interval)
   }
 }
@@ -246,7 +246,7 @@ final internal class SleepyBlockOperation: AdvancedOperation {
     super.init()
   }
 
-  override func main() {
+  override func execute() {
     sleep(self.interval)
     block()
   }
@@ -256,7 +256,7 @@ final internal class NotExecutableOperation: AdvancedOperation {
 
   override public var isAsynchronous: Bool { return false }
 
-  override func main() {
+  override func execute() {
     if isCancelled {
       return
     }
@@ -274,7 +274,7 @@ final internal class FailingAsyncOperation: AdvancedOperation {
     self.defaultErrors = errors
   }
 
-  override func main() {
+  override func execute() {
     DispatchQueue.global().asyncAfter(deadline: .now() + 1.0) { [weak weakSelf = self] in
       guard let strongSelf = weakSelf else {
         self.finish()
@@ -295,7 +295,7 @@ final internal class OperationReferencingOperationQueue: AdvancedOperation {
     self.queue = queue
   }
 
-  override func main() {
+  override func execute() {
     XCTAssertTrue(operationQueue === queue)
     XCTAssertTrue(operationQueue !== OperationQueue.main)
     XCTAssertTrue(queue !== OperationQueue.main)
@@ -312,7 +312,7 @@ final internal class CancellingAsyncOperation: AdvancedOperation {
     super.init()
   }
 
-  override func main() {
+  override func execute() {
     DispatchQueue.global().asyncAfter(deadline: .now() + 2.0) { [weak weakSelf = self] in
       guard let strongSelf = weakSelf else {
         self.finish()
@@ -338,7 +338,7 @@ final internal class ProducingOperationsOperation: AdvancedOperation {
     super.init()
   }
 
-  override func main() {
+  override func execute() {
     guard !isCancelled else {
       return
     }
@@ -358,7 +358,7 @@ final internal class ProgressOperation: AdvancedOperation {
 
   override public var isAsynchronous: Bool { return false }
 
-  override func main() {
+  override func execute() {
     guard !isCancelled else {
       return
     }
@@ -389,7 +389,7 @@ final internal class ProgressOperation: AdvancedOperation {
 
 final internal class ProgressAsyncOperation: AdvancedOperation {
 
-  override func main() {
+  override func execute() {
     guard !isCancelled else {
       finish()
       return
@@ -618,7 +618,7 @@ internal class IntToStringOperation: AdvancedOperation & OperationInputHaving & 
     super.init()
   }
 
-  override func main() {
+  override func execute() {
     if let input = self.input {
       if input == 100 {
         output = "\(input)"
@@ -642,7 +642,7 @@ internal class StringToIntOperation: FunctionOperation<String, Int> {
     super.init()
   }
 
-  override func main() {
+  override func execute() {
     if let input = self.input, let value = Int(input) {
       output = value
       finish()

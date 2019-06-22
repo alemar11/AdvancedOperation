@@ -41,7 +41,7 @@ internal final class ConditionEvaluatorOperation: AdvancedOperation {
     name = "ConditionEvaluatorOperation<\(operation.operationName)>"
   }
 
-  override func main() {
+  override func execute() {
     if isCancelled {
       finish()
       return

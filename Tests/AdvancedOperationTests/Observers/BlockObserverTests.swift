@@ -29,7 +29,7 @@ class BlockObserverTests: XCTestCase {
   func testProducedOperationFlow() {
     let queue = AdvancedOperationQueue()
     queue.maxConcurrentOperationCount = 10
-    
+
     let expectation1 = expectation(description: "\(#function)\(#line)")
     let expectation2 = expectation(description: "\(#function)\(#line)")
     let expectation3 = expectation(description: "\(#function)\(#line)")

@@ -28,7 +28,7 @@ internal final class Atomic<T> {
   private var _value: T
   private let lock: NSLocking
 
-  internal init(value: T, lock: NSLocking = UnfairLock()) {
+  internal init(_ value: T, lock: NSLocking = UnfairLock()) {
     self.lock = lock
     self._value = value
   }
@@ -48,7 +48,7 @@ internal final class Atomic<T> {
     return try value(_value)
   }
 
-  internal func write(_ transform: (inout T) throws -> Void) rethrows {
+  internal func mutate(_ transform: (inout T) throws -> Void) rethrows {
     lock.lock()
     defer { lock.unlock() }
     try transform(&_value)

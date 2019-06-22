@@ -29,7 +29,7 @@ let observerKey = "Observer"
 public protocol OperationObservingType { }
 
 public protocol OperationWillExecuteObserving: OperationObservingType {
-  /// Invoked immediately prior to the `Operation`'s `main()` method (it's started but not yet executed).
+  /// Invoked immediately prior to the `Operation`'s `execute()` method (it's started but not yet executed).
   func operationWillExecute(operation: AdvancedOperation)
 }
 

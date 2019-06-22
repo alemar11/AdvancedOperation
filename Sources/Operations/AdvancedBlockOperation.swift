@@ -60,7 +60,7 @@ public final class AdvancedBlockOperation: AdvancedOperation {
 
   // MARK: - Overrides
 
-  public override func main() {
+  public override func execute() {
     guard !isCancelled else {
       finish()
       return
