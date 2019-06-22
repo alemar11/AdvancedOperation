@@ -97,6 +97,11 @@ extension AdvancedOperation {
   class func injectOperation<F: OutputProducing, G: InputRequiring>(_ outputProducingOperation: F,
                                                                     into inputOpertion: G,
                                                                     requirements: InjectedInputRequirements = []) -> AdvancedBlockOperation where F.Output == G.Input {
+    precondition(!outputProducingOperation.isFinished, "The output producing Operation is already finished.")
+    precondition(!outputProducingOperation.isCancelled, "The output producing Operation is being cancelled.")
+    precondition(!inputOpertion.isFinished, "The input requiring Operation is already finished.")
+    precondition(!inputOpertion.isCancelled, "The input requiring Operation is being cancelled.")
+
     let adapterOperation = AdvancedBlockOperation { [unowned outputProducingOperation = outputProducingOperation, unowned inputOpertion = inputOpertion] complete in
 
       let error = AdvancedOperation.evaluateoutputProducingOperation(outputProducingOperation, forRequirements: requirements)
@@ -132,10 +137,10 @@ extension AdvancedOperation {
                                                                     into inputOpertion: G,
                                                                     requirements: InjectedInputRequirements = [],
                                                                     transform: @escaping (F.Output?) -> G.Input?) -> AdvancedBlockOperation {
-    assert(!outputProducingOperation.isFinished, "The output producing Operation is already finished.")
-    assert(!outputProducingOperation.isCancelled, "The output producing Operation is being cancelled.")
-    assert(!inputOpertion.isFinished, "The input requring Operation is already finished.")
-    assert(!inputOpertion.isCancelled, "The input requring Operation is being cancelled.")
+    precondition(!outputProducingOperation.isFinished, "The output producing Operation is already finished.")
+    precondition(!outputProducingOperation.isCancelled, "The output producing Operation is being cancelled.")
+    precondition(!inputOpertion.isFinished, "The input requiring Operation is already finished.")
+    precondition(!inputOpertion.isCancelled, "The input requiring Operation is being cancelled.")
 
     let adapterOperation = AdvancedBlockOperation { [unowned outputProducingOperation = outputProducingOperation, unowned inputOpertion = inputOpertion] complete in
       let error = AdvancedOperation.evaluateoutputProducingOperation(outputProducingOperation, forRequirements: requirements)
