@@ -621,6 +621,10 @@ internal class IntToStringOperation: AdvancedOperation & InputRequiring & Output
   }
 
   override func execute() {
+    if isCancelled {
+      finish()
+      return
+    }
     if let input = self.input {
       if input == 100 {
         output = "\(input)"
@@ -645,6 +649,10 @@ internal class StringToIntOperation: FunctionOperation<String, Int> {
   }
 
   override func execute() {
+    if isCancelled {
+      finish()
+      return
+    }
     if let input = self.input, let value = Int(input) {
       output = value
       finish()

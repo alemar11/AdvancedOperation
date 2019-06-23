@@ -61,6 +61,7 @@ public final class AdvancedBlockOperation: AdvancedOperation {
   // MARK: - Overrides
 
   public override func execute() {
+    print("executing", operationName)
     guard !isCancelled else {
       finish()
       return
@@ -69,5 +70,64 @@ public final class AdvancedBlockOperation: AdvancedOperation {
     block { [weak self] errors in
       self?.finish(errors: errors)
     }
+  }
+}
+
+let b = BlockOperation {
+  
+}
+
+/// A concurrent sublcass of `AdvancedOperation` to execute a closure.
+public final class AdvancedBlockOperation2: AdvancedOperation {
+  /// A closure type that takes a closure as its parameter.
+  public typealias OperationBlock = (@escaping ([Error]) -> Void) -> Void
+
+  // MARK: - Private Properties
+
+  private var block: OperationBlock
+  private let blockOperation = BlockOperation()
+
+  // MARK: - Initializers
+
+  /// The designated initializer.
+  ///
+  /// - Parameters:
+  ///   - block: The closure to run when the operation executes; the parameter passed to the block **MUST** be invoked by your code, or else the `AdvancedBlockOperation` will never finish executing.
+  public init(block: @escaping OperationBlock) {
+    self.block = block
+    super.init()
+  }
+
+  /// A convenience initializer.
+  ///
+  /// - Parameters:
+  ///   - queue: The `DispatchQueue` where the operation will run its `block`.
+  ///   - block: The closure to run when the operation executes.
+//  public convenience init(queue: DispatchQueue = .main, block: @escaping () -> Void) {
+//    self.init(block: { complete in
+//      queue.async {
+//        block()
+//        complete([])
+//      }
+//    })
+//  }
+
+  // MARK: - Overrides
+
+  public override func execute() {
+    print("executing", operationName)
+    guard !isCancelled else {
+      finish()
+      return
+    }
+
+    blockOperation.addExecutionBlock { [weak self] in
+      self?.block { [weak self] errors in
+        //self?.finish(errors: errors)
+      }
+    }
+    blockOperation.start()
+    finish()
+    print("finished", operationName, isFinished)
   }
 }

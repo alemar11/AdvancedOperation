@@ -153,6 +153,6 @@ extension AdvancedOperationQueue {
 
     delegate?.operationQueue(operationQueue: self, willAddOperation: operation)
     super.addOperation(operation)
-    delegate?.operationQueue(operationQueue: self, didAddOperation: operation)
+    delegate?.operationQueue(operationQueue: self, didAddOperation: operation) // TODO: useless?
   }
 }
