@@ -560,10 +560,7 @@ final internal class MockObserver: OperationObserving {
 // MARK: - AdvancedOperationQueueDelegate
 
 final internal class MockOperationQueueDelegate: AdvancedOperationQueueDelegate {
-
   var willAddOperationHandler: ((AdvancedOperationQueue, Operation) -> Void)? = nil
-  var didAddOperationHandler: ((AdvancedOperationQueue, Operation) -> Void)? = nil
-
   var willExecuteOperationHandler: ((AdvancedOperationQueue, AdvancedOperation) -> Void)? = nil
   var willFinishOperationHandler: ((AdvancedOperationQueue, AdvancedOperation, [Error]) -> Void)? = nil
   var didFinishOperationHandler: ((AdvancedOperationQueue, Operation, [Error]) -> Void)? = nil
@@ -572,10 +569,6 @@ final internal class MockOperationQueueDelegate: AdvancedOperationQueueDelegate 
 
   func operationQueue(operationQueue: AdvancedOperationQueue, willAddOperation operation: Operation) {
     self.willAddOperationHandler?(operationQueue, operation)
-  }
-
-  func operationQueue(operationQueue: AdvancedOperationQueue, didAddOperation operation: Operation) {
-    self.didAddOperationHandler?(operationQueue, operation)
   }
 
   func operationQueue(operationQueue: AdvancedOperationQueue, operationWillExecute operation: AdvancedOperation) {
@@ -599,6 +592,39 @@ final internal class MockOperationQueueDelegate: AdvancedOperationQueueDelegate 
   }
 }
 
+final internal class LogOperationQueueDelegate: AdvancedOperationQueueDelegate {
+  private let log: OSLog
+
+  init(log: OSLog) {
+    self.log = log
+  }
+
+  func operationQueue(operationQueue: AdvancedOperationQueue, willAddOperation operation: Operation) {
+     os_log("%{public}s will add.", log: log, type: .info, operation.operationName)
+  }
+
+  func operationQueue(operationQueue: AdvancedOperationQueue, operationWillExecute operation: AdvancedOperation) {
+     os_log("%{public}s will execute.", log: log, type: .info, operation.operationName)
+  }
+
+  func operationQueue(operationQueue: AdvancedOperationQueue, operationWillFinish operation: AdvancedOperation, withErrors errors: [Error]) {
+     os_log("%{public}s will finish.", log: log, type: .info, operation.operationName)
+  }
+
+  func operationQueue(operationQueue: AdvancedOperationQueue, operationDidFinish operation: Operation, withErrors errors: [Error]) {
+     os_log("%{public}s did finish.", log: log, type: .info, operation.operationName)
+  }
+
+  func operationQueue(operationQueue: AdvancedOperationQueue, operationWillCancel operation: AdvancedOperation, withErrors errors: [Error]) {
+     os_log("%{public}s will cancel.", log: log, type: .info, operation.operationName)
+  }
+
+  func operationQueue(operationQueue: AdvancedOperationQueue, operationDidCancel operation: AdvancedOperation, withErrors errors: [Error]) {
+     os_log("%{public}s did cancel.", log: log, type: .info, operation.operationName)
+  }
+}
+
+
 // MARK: - Composable Operations
 
 /// An `AdvancedOperation` with input and output values.
@@ -621,6 +647,10 @@ internal class IntToStringOperation: AdvancedOperation & InputRequiring & Output
   }
 
   override func execute() {
+    if isCancelled {
+      finish()
+      return
+    }
     if let input = self.input {
       if input == 100 {
         output = "\(input)"
@@ -645,6 +675,10 @@ internal class StringToIntOperation: FunctionOperation<String, Int> {
   }
 
   override func execute() {
+    if isCancelled {
+      finish()
+      return
+    }
     if let input = self.input, let value = Int(input) {
       output = value
       finish()

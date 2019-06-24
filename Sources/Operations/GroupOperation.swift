@@ -124,7 +124,7 @@ open class GroupOperation: AdvancedOperation {
   /// Advises the `GroupOperation` object that it should stop executing its tasks.
   /// - Note: Once all the tasks are cancelled, the GroupOperation state will be set as finished if it's started.
   public final override func cancel(errors: [Error]) {
-   let cancellationAlreadyRequested = cancellationRequested.safeAccess { value -> Bool in
+    let cancellationAlreadyRequested = cancellationRequested.safeAccess { value -> Bool in
       if value {
         return false
       } else {
@@ -204,7 +204,7 @@ open class GroupOperation: AdvancedOperation {
     }
   }
 
-  /// This property specifies the service level applied to operation objects added to the `GroupOperation`. (It defaults to the `default` quality.)
+  /// This property specifies the service level applied to operation objects added to the `GroupOperation`. (Defaults to `default` quality.)
   /// If the operation object has an explicit service level set, that value is used instead.
   public final override var qualityOfService: QualityOfService {
     get {
@@ -218,10 +218,12 @@ open class GroupOperation: AdvancedOperation {
 
 extension GroupOperation: AdvancedOperationQueueDelegate {
   public func operationQueue(operationQueue: AdvancedOperationQueue, willAddOperation operation: Operation) {
+    if let advancedOperation = operation as? AdvancedOperation, advancedOperation.log === OSLog.disabled {
+      advancedOperation.log = log
+    }
+
     operationCount.mutate { $0 += 1 }
   }
-
-  public func operationQueue(operationQueue: AdvancedOperationQueue, didAddOperation operation: Operation) { }
 
   public func operationQueue(operationQueue: AdvancedOperationQueue, operationWillFinish operation: AdvancedOperation, withErrors errors: [Error]) {
     guard operationQueue === underlyingOperationQueue else {
@@ -238,7 +240,7 @@ extension GroupOperation: AdvancedOperationQueueDelegate {
       return
     }
 
-    assert(operationCount.value > 0, "The operation count should be greater than 0.")
+    assert(operationCount.value > 0, "The operation count should be greater than 0, but. Current operation count: \(operationCount.value)")
     operationCount.mutate { $0 -= 1 }
 
     if operationCount.value == 0 {
@@ -251,7 +253,7 @@ extension GroupOperation: AdvancedOperationQueueDelegate {
           /// It's a refinement to avoid some cases where a cancelled GroupOperation moves
           /// to its finished state before having its cancelled state fulfilled.
           while !isCancelled {
-             os_log("%{public}s is waiting the cancellation process to complete before moving to the finished state.", log: log, type: .info, operationName)
+            os_log("%{public}s is waiting the cancellation process to complete before moving to the finished state.", log: log, type: .info, operationName)
           }
 
           underlyingOperationQueue.isSuspended = true

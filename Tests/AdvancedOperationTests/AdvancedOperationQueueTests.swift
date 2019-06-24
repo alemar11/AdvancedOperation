@@ -32,7 +32,6 @@ final class AdvancedOperationQueueTests: XCTestCase {
 
     let willAddExpectation = expectation(description: "\(#function)\(#line)")
     let willExecuteExpectation = expectation(description: "\(#function)\(#line)")
-    let didAddExpectation = expectation(description: "\(#function)\(#line)")
     let didFinishExpectation = expectation(description: "\(#function)\(#line)")
     willExecuteExpectation.isInverted = true
 
@@ -40,7 +39,6 @@ final class AdvancedOperationQueueTests: XCTestCase {
 
     delegate.willAddOperationHandler = { _,_ in willAddExpectation.fulfill() }
     delegate.willExecuteOperationHandler = { _,_ in willExecuteExpectation.fulfill() }
-    delegate.didAddOperationHandler = { _,_ in didAddExpectation.fulfill() }
     delegate.didFinishOperationHandler = { _,_, errors in
       XCTAssertTrue(errors.isEmpty)
       didFinishExpectation.fulfill()
@@ -76,22 +74,6 @@ final class AdvancedOperationQueueTests: XCTestCase {
       case operation2: willAddExpectation2.fulfill()
       case operation3: willAddExpectation3.fulfill()
       case operation4: willAddExpectation4.fulfill()
-      default: XCTFail("Added too many operations.")
-      }
-    }
-
-    let didAddExpectation1 = expectation(description: "\(#function)\(#line)")
-    let didAddExpectation2 = expectation(description: "\(#function)\(#line)")
-    let didAddExpectation3 = expectation(description: "\(#function)\(#line)")
-    let didAddExpectation4 = expectation(description: "\(#function)\(#line)")
-
-    delegate.didAddOperationHandler = { (queue, operation) in
-      XCTAssertTrue(queue == queue)
-      switch (operation) {
-      case operation1: didAddExpectation1.fulfill()
-      case operation2: didAddExpectation2.fulfill()
-      case operation3: didAddExpectation3.fulfill()
-      case operation4: didAddExpectation4.fulfill()
       default: XCTFail("Added too many operations.")
       }
     }
@@ -181,22 +163,6 @@ final class AdvancedOperationQueueTests: XCTestCase {
       case operation2: willAddExpectation2.fulfill()
       case operation3: willAddExpectation3.fulfill()
       case operation4: willAddExpectation4.fulfill()
-      default: XCTFail("Added too many operations.")
-      }
-    }
-
-    let didAddExpectation1 = expectation(description: "\(#function)\(#line)")
-    let didAddExpectation2 = expectation(description: "\(#function)\(#line)")
-    let didAddExpectation3 = expectation(description: "\(#function)\(#line)")
-    let didAddExpectation4 = expectation(description: "\(#function)\(#line)")
-
-    delegate.didAddOperationHandler = { (queue, operation) in
-      XCTAssertTrue(queue == queue)
-      switch (operation) {
-      case operation1: didAddExpectation1.fulfill()
-      case operation2: didAddExpectation2.fulfill()
-      case operation3: didAddExpectation3.fulfill()
-      case operation4: didAddExpectation4.fulfill()
       default: XCTFail("Added too many operations.")
       }
     }
@@ -291,22 +257,6 @@ final class AdvancedOperationQueueTests: XCTestCase {
       }
     }
 
-    let didAddExpectation1 = expectation(description: "\(#function)\(#line)")
-    let didAddExpectation2 = expectation(description: "\(#function)\(#line)")
-    let didAddExpectation3 = expectation(description: "\(#function)\(#line)")
-    let didAddExpectation4 = expectation(description: "\(#function)\(#line)")
-
-    delegate.didAddOperationHandler = { (queue, operation) in
-      XCTAssertTrue(queue == queue)
-      switch (operation) {
-      case operation1: didAddExpectation1.fulfill()
-      case operation2: didAddExpectation2.fulfill()
-      case operation3: didAddExpectation3.fulfill()
-      case operation4: didAddExpectation4.fulfill()
-      default: XCTFail("Added too many operations.")
-      }
-    }
-
     let willExecuteExpectation1 = expectation(description: "\(#function)\(#line)")
     let willExecuteExpectation3 = expectation(description: "\(#function)\(#line)")
     let willExecuteExpectation4 = expectation(description: "\(#function)\(#line)")
@@ -395,22 +345,6 @@ final class AdvancedOperationQueueTests: XCTestCase {
       case operation2: willAddExpectation2.fulfill()
       case operation3: willAddExpectation3.fulfill()
       case operation4: willAddExpectation4.fulfill()
-      default: XCTFail("Added too many operations.")
-      }
-    }
-
-    let didAddExpectation1 = expectation(description: "\(#function)\(#line)")
-    let didAddExpectation2 = expectation(description: "\(#function)\(#line)")
-    let didAddExpectation3 = expectation(description: "\(#function)\(#line)")
-    let didAddExpectation4 = expectation(description: "\(#function)\(#line)")
-
-    delegate.didAddOperationHandler = { (queue, operation) in
-      XCTAssertTrue(queue == queue)
-      switch (operation) {
-      case operation1: didAddExpectation1.fulfill()
-      case operation2: didAddExpectation2.fulfill()
-      case operation3: didAddExpectation3.fulfill()
-      case operation4: didAddExpectation4.fulfill()
       default: XCTFail("Added too many operations.")
       }
     }

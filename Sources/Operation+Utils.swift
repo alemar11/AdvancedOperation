@@ -89,7 +89,7 @@ extension Operation {
   @discardableResult
   public func then(_ operations: Operation...) -> [Operation] {
     precondition(!isFinished, "Cannot add a finished operation as a dependency.")
-    
+
     for operation in operations {
       operation.addDependency(self)
     }

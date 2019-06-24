@@ -37,7 +37,6 @@ final class GroupOperationTests: XCTestCase {
 
     XCTAssertEqual(group.maxConcurrentOperationCount, OperationQueue.defaultMaxConcurrentOperationCount)
     XCTAssertEqual(group.progress.totalUnitCount, 2)
-
     group.start()
 
     wait(for: [expectation1, expectation2, expectation3], timeout: 10)
