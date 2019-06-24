@@ -80,8 +80,9 @@ extension AdvancedOperation {
     precondition(!outputProducingOperation.isFinished, "The output producing Operation is already finished.")
     precondition(!inputRequiringOperation.isFinished, "The input requiring Operation is already finished.")
 
-    let adapterOperation = AdvancedBlockOperation { [unowned outputProducingOperation = outputProducingOperation, unowned inputRequiringOperation = inputRequiringOperation] in
+    let adapterOperation = AdvancedBlockOperation { [unowned outputProducingOperation = outputProducingOperation, unowned inputRequiringOperation = inputRequiringOperation] complete in
       inputRequiringOperation.input = outputProducingOperation.output
+      complete([])
     }
 
     adapterOperation.addDependency(outputProducingOperation)
@@ -108,13 +109,13 @@ extension AdvancedOperation {
     precondition(!outputProducingOperation.isFinished, "The output producing Operation is already finished.")
     precondition(!inputRequiringOperation.isFinished, "The input requiring Operation is already finished.")
 
-    let adapterOperation = AdvancedBlockOperation { [unowned outputProducingOperation = outputProducingOperation, unowned inputRequiringOperation = inputRequiringOperation] in
+    let adapterOperation = AdvancedBlockOperation { [unowned outputProducingOperation = outputProducingOperation, unowned inputRequiringOperation = inputRequiringOperation] complete in
       inputRequiringOperation.input = transform(outputProducingOperation.output)
+      complete([])
     }
 
     adapterOperation.addDependency(outputProducingOperation)
     inputRequiringOperation.addDependency(adapterOperation)
-    inputRequiringOperation.addDependency(outputProducingOperation)
 
     return adapterOperation
   }

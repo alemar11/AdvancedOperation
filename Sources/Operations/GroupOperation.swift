@@ -204,7 +204,7 @@ open class GroupOperation: AdvancedOperation {
     }
   }
 
-  /// This property specifies the service level applied to operation objects added to the `GroupOperation`. (It defaults to the `default` quality.)
+  /// This property specifies the service level applied to operation objects added to the `GroupOperation`. (Defaults to `default` quality.)
   /// If the operation object has an explicit service level set, that value is used instead.
   public final override var qualityOfService: QualityOfService {
     get {
@@ -218,6 +218,10 @@ open class GroupOperation: AdvancedOperation {
 
 extension GroupOperation: AdvancedOperationQueueDelegate {
   public func operationQueue(operationQueue: AdvancedOperationQueue, willAddOperation operation: Operation) {
+    if let advancedOperation = operation as? AdvancedOperation, advancedOperation.log === OSLog.disabled {
+      advancedOperation.log = log
+    }
+
     operationCount.mutate { $0 += 1 }
   }
 

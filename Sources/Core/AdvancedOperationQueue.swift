@@ -101,8 +101,12 @@ open class AdvancedOperationQueue: OperationQueue {
           delegate.operationQueue(operationQueue: self, willAddOperation: $0)
         }
       }
-      super.addOperations(preparedOperations, waitUntilFinished: wait)
+     _addOperations(preparedOperations, waitUntilFinished: wait)
     }
+  }
+
+  private func _addOperations(_ operations: [Operation], waitUntilFinished wait: Bool) {
+     super.addOperations(operations, waitUntilFinished: wait)
   }
 }
 
