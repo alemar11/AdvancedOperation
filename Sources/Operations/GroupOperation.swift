@@ -124,7 +124,7 @@ open class GroupOperation: AdvancedOperation {
   /// Advises the `GroupOperation` object that it should stop executing its tasks.
   /// - Note: Once all the tasks are cancelled, the GroupOperation state will be set as finished if it's started.
   public final override func cancel(errors: [Error]) {
-    let cancellationAlreadyRequested = cancellationRequested.safeAccess { value return Bool ->
+    let cancellationAlreadyRequested = cancellationRequested.safeAccess { value -> Bool in
       if value {
         return false
       } else {
