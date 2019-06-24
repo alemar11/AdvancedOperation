@@ -114,7 +114,6 @@ extension AdvancedOperation {
   }
 }
 
-
 //extension AdvancedOperationQueue {
 //  
 //  func addOperation<F: OutputProducing, G: InputRequiring>(_ outputProducingOperation: F, andInjectOutputInto inputRequiringOperation: G) where F.Output == G.Input {
