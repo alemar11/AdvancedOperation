@@ -274,7 +274,7 @@ open class AdvancedOperation: Operation {
 
   open override func addDependency(_ operation: Operation) {
     precondition(state == .pending, "Dependencies cannot be modified after execution has begun.")
-    
+
     super.addDependency(operation)
   }
 

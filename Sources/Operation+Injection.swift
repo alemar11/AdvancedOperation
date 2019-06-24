@@ -41,44 +41,25 @@ public typealias OperationInputHaving = InputRequiring
 @available(*, deprecated, message: "Use OutputProducing instead.")
 public typealias OperationOutputHaving = OutputProducing
 
-/// An `OptionSet` containing a list of option that an injected input should have.
-public struct InjectedInputRequirements: OptionSet {
-  public let rawValue: Int
-  public init(rawValue: Int) {
-    self.rawValue = rawValue
-  }
-
-  /// The injected input is required.
-  public static let notOptional = InjectedInputRequirements(rawValue: 1)
-  /// The injected input is a result of a successul operation
-  public static let successful = InjectedInputRequirements(rawValue: 2)
-  /// The injected input is a result of a not cancelled operation
-  public static let noCancellation = InjectedInputRequirements(rawValue: 4)
-}
-
 extension OutputProducing where Self: AdvancedOperation {
   /// Creates a new operation that passes the output of `self` into the given `AdvancedOperation`
   ///
   /// - Parameters:
   ///   - operation: The operation that needs the output of `self` to generate an output.
-  ///   - requirements: A list of options that the injected input must satisfy.
   /// - Returns: Returns an *adapter* operation which passes the output of `self` into the given `AdvancedOperation`.
-  public func inject<E: InputRequiring>(into operation: E,
-                                        requirements: InjectedInputRequirements = [.notOptional, .successful]) -> AdvancedOperation where Output == E.Input {
-    return AdvancedOperation.injectOperation(self, into: operation, requirements: requirements)
+  public func inject<E: InputRequiring>(into operation: E) -> AdvancedOperation where Output == E.Input {
+    return AdvancedOperation.injectOperation(self, into: operation)
   }
 
   /// Creates a new operation that passes, once transformed, the output of `self` into the given `AdvancedOperation`.
   ///
   /// - Parameters:
   ///   - operation: The operation that needs the transformed output of `self` to generate an output.
-  ///   - requirements: A list of options that the injected input must satisfy.
   ///   - transform: Closure to transform the output of `self` into a valid `input` for the next operation.
   /// - Returns: Returns an *adapter* operation which passes the transformed output of `self` into the given `AdvancedOperation`.
   public func inject<E: InputRequiring>(into operation: E,
-                                        requirements: InjectedInputRequirements = [.notOptional, .successful],
                                         transform: @escaping (Output?) -> E.Input?) -> AdvancedOperation {
-    return AdvancedOperation.injectOperation(self, into: operation, requirements: requirements, transform: { transform($0) })
+    return AdvancedOperation.injectOperation(self, into: operation, transform: { transform($0) })
   }
 }
 
@@ -89,43 +70,18 @@ extension AdvancedOperation {
   ///
   /// - Parameters:
   ///   - outputProducingOperation: The operation whose output is needed by the `inputRequiringOperation`.
-  ///   - inputRequiringOperation: The operation who needs needs, as input, the output of the `inputRequiringOperation`.
   ///   - requirements: A set of `InjectedInputRequirements`.
   /// - Returns: Returns an *adapter* operation which passes the output from the `outputProducingOperation` into the input of the `inputRequiringOperation`,
   /// and builds dependencies so the outputProducingOperation runs first, then the adapter, then inputRequiringOperation.
   /// - Note: The client is still responsible for adding all three blocks to a queue.
+  /// - Warning: When adding the three operations to a queue, instead of adding every operation separately with Operation.addOperation(_:), prefer using `addOperations(_:waitUntilFinished:)`.
   class func injectOperation<F: OutputProducing, G: InputRequiring>(_ outputProducingOperation: F,
-                                                                    into inputRequiringOperation: G,
-                                                                    requirements: InjectedInputRequirements = []) -> AdvancedOperation where F.Output == G.Input {
+                                                                    into inputRequiringOperation: G) -> AdvancedOperation where F.Output == G.Input {
     precondition(!outputProducingOperation.isFinished, "The output producing Operation is already finished.")
-    precondition(!outputProducingOperation.isCancelled, "The output producing Operation is being cancelled.")
     precondition(!inputRequiringOperation.isFinished, "The input requiring Operation is already finished.")
-    precondition(!inputRequiringOperation.isCancelled, "The input requiring Operation is being cancelled.")
 
-//    let adapterOperation = InjectionOperation { [unowned outputProducingOperation = outputProducingOperation, unowned inputRequiringOperation = inputRequiringOperation] in
-//      let error = AdvancedOperation.evaluateOutputProducingOperation(outputProducingOperation, forRequirements: requirements)
-//
-//      if let error = error {
-//        inputRequiringOperation.cancel(errors: [error])
-//      } else {
-//        inputRequiringOperation.input = outputProducingOperation.output
-//      }
-//    }
-
-    // TODO the queue is wrong! it's always the main....
-    // using an experimental v2
-
-    // TODO: requirements are useless, in fact we have to check the input everythime before running the input receiving operation
-    let adapterOperation = AdvancedBlockOperation2 { [unowned outputProducingOperation = outputProducingOperation, unowned inputRequiringOperation = inputRequiringOperation] complete in
-      let error = AdvancedOperation.evaluateOutputProducingOperation(outputProducingOperation, forRequirements: requirements)
-
-      if let error = error {
-        inputRequiringOperation.cancel(errors: [error])
-      } else {
-        inputRequiringOperation.input = outputProducingOperation.output
-      }
-
-      complete([])
+    let adapterOperation = AdvancedBlockOperation { [unowned outputProducingOperation = outputProducingOperation, unowned inputRequiringOperation = inputRequiringOperation] in
+      inputRequiringOperation.input = outputProducingOperation.output
     }
 
     adapterOperation.addDependency(outputProducingOperation)
@@ -141,64 +97,25 @@ extension AdvancedOperation {
   /// - Parameters:
   ///   - outputProducingOperation: The operation whose output is needed by the `inputRequiringOperation`.
   ///   - inputRequiringOperation: The operation who needs needs, as input, the output of the `inputRequiringOperation`.
-  ///   - requirements: A set of `InjectedInputRequirements`.
   ///   - transform: Closure to transform the output of `self` into a valid `input` for the next operation.
   /// - Returns: Returns an *adapter* operation which passes the transformed output from the `outputProducingOperation` into the input of the `inputRequiringOperation`,
   /// and builds dependencies so the outputProducingOperation runs first, then the adapter, then inputRequiringOperation.
   /// - Note: The client is still responsible for adding all three blocks to a queue.
+  /// - Warning: When adding the three operations to a queue, instead of adding every operation separately with Operation.addOperation(_:), prefer using `addOperations(_:waitUntilFinished:)`.
   class func injectOperation<F: OutputProducing, G: InputRequiring>(_ outputProducingOperation: F,
                                                                     into inputRequiringOperation: G,
-                                                                    requirements: InjectedInputRequirements = [],
                                                                     transform: @escaping (F.Output?) -> G.Input?) -> AdvancedOperation {
     precondition(!outputProducingOperation.isFinished, "The output producing Operation is already finished.")
-    precondition(!outputProducingOperation.isCancelled, "The output producing Operation is being cancelled.")
     precondition(!inputRequiringOperation.isFinished, "The input requiring Operation is already finished.")
-    precondition(!inputRequiringOperation.isCancelled, "The input requiring Operation is being cancelled.")
 
-    let adapterOperation = AdvancedBlockOperation { [unowned outputProducingOperation = outputProducingOperation, unowned inputRequiringOperation = inputRequiringOperation] complete in
-      let error = AdvancedOperation.evaluateOutputProducingOperation(outputProducingOperation, forRequirements: requirements)
-
-      if let error = error {
-        inputRequiringOperation.cancel(errors: [error])
-      } else {
-        inputRequiringOperation.input = transform(outputProducingOperation.output)
-      }
-
-      complete([])
+    let adapterOperation = AdvancedBlockOperation { [unowned outputProducingOperation = outputProducingOperation, unowned inputRequiringOperation = inputRequiringOperation] in
+      inputRequiringOperation.input = transform(outputProducingOperation.output)
     }
 
     adapterOperation.addDependency(outputProducingOperation)
     inputRequiringOperation.addDependency(adapterOperation)
+    inputRequiringOperation.addDependency(outputProducingOperation)
 
     return adapterOperation
-  }
-
-  private class func evaluateOutputProducingOperation<F: OutputProducing>(_ outputProducingOperation: F, forRequirements requirements: InjectedInputRequirements) -> NSError? {
-    if requirements.contains(.notOptional) && outputProducingOperation.output == nil {
-      return AdvancedOperationError.executionCancelled(message: "The injectable input is nil and it doesn't satisfy the requirements (\(requirements).")
-    }
-
-    if requirements.contains(.successful), !outputProducingOperation.errors.isEmpty {
-      return AdvancedOperationError.executionCancelled(message: "The injectable operation contains errors and it doesn't satisfy the requirements (\(requirements).")
-    }
-
-    if requirements.contains(.noCancellation), outputProducingOperation.isCancelled {
-      return AdvancedOperationError.executionCancelled(message: "The injectable operation is cancelled and it doesn't satisfy the requirements (\(requirements).")
-    }
-
-    return nil
-  }
-}
-
-
-class InjectionOperation: AdvancedOperation {
-  let block: () -> Void
-  init(block: @escaping () -> Void) {
-    self.block = block
-  }
-
-  override func execute() {
-    block()
-    finish()
   }
 }
