@@ -393,4 +393,3 @@ final class AdvancedOperationTests: XCTestCase {
     token.invalidate()
   }
 }
-}
