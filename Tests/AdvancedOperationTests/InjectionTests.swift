@@ -52,7 +52,7 @@ class InjectionTests: XCTestCase {
     let operation1 = IntToStringOperation()
     let operation2 = StringToIntOperation()
     operation1.input = 10
-    let adapterOperation = operation1.inject(into: operation2)
+    let adapterOperation = operation1.injectOutput(into: operation2)
     let queue = AdvancedOperationQueue()
     queue.addOperations([operation1, operation2, adapterOperation], waitUntilFinished: true)
     XCTAssertEqual(operation2.output, 10)
@@ -62,7 +62,7 @@ class InjectionTests: XCTestCase {
     let operation1 = IntToStringOperation()
     let operation2 = IntToStringOperation()
     operation1.input = 10
-    let adapterOperation = operation1.inject(into: operation2) { value -> Int? in
+    let adapterOperation = operation1.injectOutput(into: operation2) { value -> Int? in
       if let value = value {
         return Int(value)
       } else {
@@ -79,7 +79,7 @@ class InjectionTests: XCTestCase {
     let operation1 = IntToStringOperation()
     let operation2 = IntToStringOperation()
     operation1.input = 404
-    let adapterOperation = operation1.inject(into: operation2) { value -> Int? in
+    let adapterOperation = operation1.injectOutput(into: operation2) { value -> Int? in
       if let value = value {
         return Int(value)
       } else {
@@ -119,7 +119,7 @@ class InjectionTests: XCTestCase {
       expectation1.fulfill()
     }
     operation1.input = 2000 // values greater than 1000 will produce a nil output when executing 😎
-    let adapterOperation = operation1.inject(into: operation2)
+    let adapterOperation = operation1.injectOutput(into: operation2)
     let queue = AdvancedOperationQueue()
     queue.addOperations([operation1, operation2, adapterOperation], waitUntilFinished: false)
 
@@ -132,7 +132,7 @@ class InjectionTests: XCTestCase {
     let operation1 = IntToStringOperation() // no input -> fails
     let operation2 = StringToIntOperation()
     let expectation1 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isFinished), object: operation2, expectedValue: true)
-    let adapterOperation = operation1.inject(into: operation2)
+    let adapterOperation = operation1.injectOutput(into: operation2)
     let queue = AdvancedOperationQueue()
 
     operation1.cancel()

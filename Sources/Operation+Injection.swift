@@ -35,19 +35,13 @@ public protocol OutputProducing: AdvancedOperation {
   var output: Output? { get set }
 }
 
-@available(*, deprecated, message: "Use InputRequiring instead.")
-public typealias OperationInputHaving = InputRequiring
-
-@available(*, deprecated, message: "Use OutputProducing instead.")
-public typealias OperationOutputHaving = OutputProducing
-
-extension OutputProducing where Self: AdvancedOperation {
+extension OutputProducing {
   /// Creates a new operation that passes the output of `self` into the given `AdvancedOperation`
   ///
   /// - Parameters:
   ///   - operation: The operation that needs the output of `self` to generate an output.
   /// - Returns: Returns an *adapter* operation which passes the output of `self` into the given `AdvancedOperation`.
-  public func inject<E: InputRequiring>(into operation: E) -> AdvancedOperation where Output == E.Input {
+  public func injectOutput<E: InputRequiring>(into operation: E) -> AdvancedOperation where Output == E.Input {
     return AdvancedOperation.injectOperation(self, into: operation)
   }
 
@@ -57,8 +51,7 @@ extension OutputProducing where Self: AdvancedOperation {
   ///   - operation: The operation that needs the transformed output of `self` to generate an output.
   ///   - transform: Closure to transform the output of `self` into a valid `input` for the next operation.
   /// - Returns: Returns an *adapter* operation which passes the transformed output of `self` into the given `AdvancedOperation`.
-  public func inject<E: InputRequiring>(into operation: E,
-                                        transform: @escaping (Output?) -> E.Input?) -> AdvancedOperation {
+  public func injectOutput<E: InputRequiring>(into operation: E, transform: @escaping (Output?) -> E.Input?) -> AdvancedOperation {
     return AdvancedOperation.injectOperation(self, into: operation, transform: { transform($0) })
   }
 }
@@ -118,5 +111,40 @@ extension AdvancedOperation {
     inputRequiringOperation.addDependency(adapterOperation)
 
     return adapterOperation
+  }
+}
+
+
+//extension AdvancedOperationQueue {
+//  
+//  func addOperation<F: OutputProducing, G: InputRequiring>(_ outputProducingOperation: F, andInjectOutputInto inputRequiringOperation: G) where F.Output == G.Input {
+//    let adapterOperation = outputProducingOperation.injectOutput(into: inputRequiringOperation)
+//    addOperations([outputProducingOperation, adapterOperation, inputRequiringOperation], waitUntilFinished: false)
+//  }
+//
+//  func addOperation<F: OutputProducing, G: InputRequiring>(_ outputProducingOperation: F, andInjectOutputInto inputRequiringOperation: G, transform: @escaping (F.Output?) -> G.Input?) {
+//    let adapterOperation = outputProducingOperation.injectOutput(into: inputRequiringOperation, transform: transform)
+//    addOperations([outputProducingOperation, adapterOperation, inputRequiringOperation], waitUntilFinished: false)
+//  }
+//}
+
+// Deprecations
+
+@available(*, deprecated, message: "Use InputRequiring instead.")
+public typealias OperationInputHaving = InputRequiring
+
+@available(*, deprecated, message: "Use OutputProducing instead.")
+public typealias OperationOutputHaving = OutputProducing
+
+// Deprecations
+extension OutputProducing where Self: AdvancedOperation {
+  @available(*, deprecated, message: "Use injectOutput(into:) instead.")
+  public func inject<E: InputRequiring>(into operation: E) -> AdvancedOperation where Output == E.Input {
+    return injectOutput(into: operation)
+  }
+
+  @available(*, deprecated, message: "Use injectOutput(into:transform:) instead.")
+  public func inject<E: InputRequiring>(into operation: E, transform: @escaping (Output?) -> E.Input?) -> AdvancedOperation {
+    return injectOutput(into: operation, transform: transform)
   }
 }
