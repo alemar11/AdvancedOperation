@@ -23,18 +23,29 @@
 
 import Foundation
 
+// MARK: - AdvancedOperationQueueDelegate
+
+/// Classes conforming to this protocol received updates about the life-cycle of an `AdvancedOperationQueueDelegate`.
 public protocol AdvancedOperationQueueDelegate: class {
+  // An operation is being added to the queue.
   func operationQueue(operationQueue: AdvancedOperationQueue, willAddOperation operation: Operation)
+  // An operation is going to be executed.
   func operationQueue(operationQueue: AdvancedOperationQueue, operationWillExecute operation: AdvancedOperation)
+  // An operation is finishing.
   func operationQueue(operationQueue: AdvancedOperationQueue, operationWillFinish operation: AdvancedOperation, withErrors errors: [Error])
+  // An operation has finished.
   func operationQueue(operationQueue: AdvancedOperationQueue, operationDidFinish operation: Operation, withErrors errors: [Error])
+  // An operation is cancelling.
   func operationQueue(operationQueue: AdvancedOperationQueue, operationWillCancel operation: AdvancedOperation, withErrors errors: [Error])
+  // An operation has been cancelled.
   func operationQueue(operationQueue: AdvancedOperationQueue, operationDidCancel operation: AdvancedOperation, withErrors errors: [Error])
 }
 
 public extension AdvancedOperationQueueDelegate {
   func operationQueue(operationQueue: AdvancedOperationQueue, operationWillExecute operation: AdvancedOperation) { }
 }
+
+// MARK: - AdvancedOperationQueue
 
 /// `AdvancedOperationQueue` is an `OperationQueue` subclass that implements a large number of "extra features" related to the `Operation` class.
 open class AdvancedOperationQueue: OperationQueue {
