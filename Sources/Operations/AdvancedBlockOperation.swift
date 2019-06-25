@@ -48,7 +48,8 @@ public final class AdvancedBlockOperation: AdvancedOperation {
   ///
   /// - Parameters:
   ///   - queue: The `DispatchQueue` where the operation will run its `block`.
-  ///   - block: The closure to run when the operation executes
+  ///   - block: The closure to run when the operation executes.
+  /// - Note: The block is run concurrently on the given `queue`.
   public convenience init(queue: DispatchQueue = .main, block: @escaping () -> Void) {
     self.init(block: { complete in
       queue.async {

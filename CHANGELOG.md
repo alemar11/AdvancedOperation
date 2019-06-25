@@ -1,6 +1,6 @@
 # Changelog
 
-### 3.1.0 (WIP)
+### 3.1.0
 
 - Improved `GroupOperation` mplementation.
 - `OperationInputHaving` deprecated, use `InputRequiring` instead.
