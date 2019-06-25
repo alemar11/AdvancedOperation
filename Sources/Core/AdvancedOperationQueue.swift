@@ -122,7 +122,7 @@ open class AdvancedOperationQueue: OperationQueue {
 }
 
 extension AdvancedOperationQueue {
-  /// Adds AdvancedOperationQueueDelegate, Condition Evaluations and ExclusivityManager features support.
+  /// Adds AdvancedOperationQueueDelegate, Conditions and ExclusivityManager features support.
   /// Returns the passed operation with a list of related operations to support all the available features.
   private func prepareOperation(_ operation: Operation) -> [Operation] {
     var operations = [Operation]()
