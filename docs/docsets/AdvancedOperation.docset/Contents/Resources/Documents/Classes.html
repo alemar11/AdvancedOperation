@@ -79,6 +79,9 @@
                 <a href="Protocols/AdvancedOperationQueueDelegate.html">AdvancedOperationQueueDelegate</a>
               </li>
               <li class="nav-group-task">
+                <a href="Protocols/InputRequiring.html">InputRequiring</a>
+              </li>
+              <li class="nav-group-task">
                 <a href="Protocols/OperationCondition.html">OperationCondition</a>
               </li>
               <li class="nav-group-task">
@@ -91,16 +94,10 @@
                 <a href="Protocols/OperationDidProduceOperationObserving.html">OperationDidProduceOperationObserving</a>
               </li>
               <li class="nav-group-task">
-                <a href="Protocols/OperationInputHaving.html">OperationInputHaving</a>
-              </li>
-              <li class="nav-group-task">
                 <a href="Protocols.html#/s:17AdvancedOperation0B9ObservingP">OperationObserving</a>
               </li>
               <li class="nav-group-task">
                 <a href="Protocols.html#/s:17AdvancedOperation0B13ObservingTypeP">OperationObservingType</a>
-              </li>
-              <li class="nav-group-task">
-                <a href="Protocols/OperationOutputHaving.html">OperationOutputHaving</a>
               </li>
               <li class="nav-group-task">
                 <a href="Protocols/OperationWillCancelObserving.html">OperationWillCancelObserving</a>
@@ -110,6 +107,9 @@
               </li>
               <li class="nav-group-task">
                 <a href="Protocols/OperationWillFinishObserving.html">OperationWillFinishObserving</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Protocols/OutputProducing.html">OutputProducing</a>
               </li>
               <li class="nav-group-task">
                 <a href="Protocols/UIApplicationBackgroundTask.html">UIApplicationBackgroundTask</a>
@@ -129,9 +129,6 @@
                 <a href="Structs/BlockCondition.html">BlockCondition</a>
               </li>
               <li class="nav-group-task">
-                <a href="Structs/InjectedInputRequirements.html">InjectedInputRequirements</a>
-              </li>
-              <li class="nav-group-task">
                 <a href="Structs/MutualExclusivityCondition.html">MutualExclusivityCondition</a>
               </li>
               <li class="nav-group-task">
@@ -148,6 +145,17 @@
               </li>
               <li class="nav-group-task">
                 <a href="Structs/TimeoutObserver.html">TimeoutObserver</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="Typealiases.html">Type Aliases</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="Typealiases.html#/s:17AdvancedOperation0B11InputHavinga">OperationInputHaving</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Typealiases.html#/s:17AdvancedOperation0B12OutputHavinga">OperationOutputHaving</a>
               </li>
             </ul>
           </li>
@@ -194,6 +202,13 @@
               </ul>
             </div>
             <div class="task-group">
+              <div class="task-name-container">
+                <a name="/AdvancedOperationQueue"></a>
+                <a name="//apple_ref/swift/Section/AdvancedOperationQueue" class="dashAnchor"></a>
+                <a href="#/AdvancedOperationQueue">
+                  <h3 class="section-name">AdvancedOperationQueue</h3>
+                </a>
+              </div>
               <ul>
                 <li class="item">
                   <div>
@@ -383,6 +398,12 @@ If the interval is negative, or the <code>Date</code> is in the past, then this 
                       <div class="abstract">
                         <p>An <code><a href="Classes/AdvancedOperation.html">AdvancedOperation</a></code> subclass which enables a finite grouping of other operations.
 Use a <code>GroupOperation</code> to associate related operations together, thereby creating higher levels of abstractions.</p>
+<div class="aside aside-note">
+    <p class="aside-title">Note</p>
+    The progress report is designed to work with a <em>serial</em> GroupOperation: if the operations are run concurrently the progress
+report may be less accurate (i.e. KVO could report the same percentage multipe times, except for the final value).
+
+</div>
 <div class="aside aside-attention">
     <p class="aside-title">Attention</p>
     If you add normal <code>Operations</code>, the progress report will ignore them, instead consider using only <code>AdvancedOperations</code>.
@@ -407,8 +428,8 @@ Use a <code>GroupOperation</code> to associate related operations together, ther
           </section>
         </section>
         <section id="footer">
-          <p>&copy; 2019 <a class="link" href="https://github.com/tinrobots/AdvancedOperation" target="_blank" rel="external">Alessandro Marzoli</a>. All rights reserved. (Last updated: 2019-04-01)</p>
-          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.9.5</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+          <p>&copy; 2019 <a class="link" href="https://github.com/tinrobots/AdvancedOperation" target="_blank" rel="external">Alessandro Marzoli</a>. All rights reserved. (Last updated: 2019-06-25)</p>
+          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.9.6</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
         </section>
       </article>
     </div>

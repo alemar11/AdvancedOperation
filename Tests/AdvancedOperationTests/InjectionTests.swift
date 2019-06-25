@@ -25,7 +25,6 @@ import XCTest
 @testable import AdvancedOperation
 
 class InjectionTests: XCTestCase {
-
   func testInputAndOutput() {
     let operation1 = IntToStringOperation()
     operation1.input = 10
@@ -49,14 +48,27 @@ class InjectionTests: XCTestCase {
     XCTAssertEqual(operation2.output, 10)
   }
 
+  func testInjectionMixedWithOtherOperation() {
+    let operation1 = IntToStringOperation()
+    let operation2 = StringToIntOperation()
+    let operation3 = BlockOperation()
+    operation3.addDependency(operation2)
+    operation1.input = 10
+    let adapterOperation = AdvancedOperation.injectOperation(operation1, into: operation2)
+    let queue = AdvancedOperationQueue()
+    queue.addOperations([operation1, operation2, adapterOperation], waitUntilFinished: true)
+    queue.addOperations([operation3], waitUntilFinished: false)
+
+    XCTAssertEqual(operation2.output, 10)
+  }
+
   func testInjectionUsingInstanceMethodAndWaitUntilFinished() {
     let operation1 = IntToStringOperation()
     let operation2 = StringToIntOperation()
     operation1.input = 10
-    let adapterOperation = operation1.inject(into: operation2)
+    let adapterOperation = operation1.injectOutput(into: operation2)
     let queue = AdvancedOperationQueue()
     queue.addOperations([operation1, operation2, adapterOperation], waitUntilFinished: true)
-
     XCTAssertEqual(operation2.output, 10)
   }
 
@@ -64,7 +76,7 @@ class InjectionTests: XCTestCase {
     let operation1 = IntToStringOperation()
     let operation2 = IntToStringOperation()
     operation1.input = 10
-    let adapterOperation = operation1.inject(into: operation2) { value -> Int? in
+    let adapterOperation = operation1.injectOutput(into: operation2) { value -> Int? in
       if let value = value {
         return Int(value)
       } else {
@@ -81,7 +93,7 @@ class InjectionTests: XCTestCase {
     let operation1 = IntToStringOperation()
     let operation2 = IntToStringOperation()
     operation1.input = 404
-    let adapterOperation = operation1.inject(into: operation2) { value -> Int? in
+    let adapterOperation = operation1.injectOutput(into: operation2) { value -> Int? in
       if let value = value {
         return Int(value)
       } else {
@@ -120,54 +132,51 @@ class InjectionTests: XCTestCase {
     operation2.completionBlock = {
       expectation1.fulfill()
     }
-    operation1.input = 2000 // values greater than 1000 will produce a nil output 😎
-    let adapterOperation = operation1.inject(into: operation2)
+    operation1.input = 2000 // values greater than 1000 will produce a nil output when executing 😎
+    let adapterOperation = operation1.injectOutput(into: operation2)
     let queue = AdvancedOperationQueue()
     queue.addOperations([operation1, operation2, adapterOperation], waitUntilFinished: false)
 
     waitForExpectations(timeout: 3)
     XCTAssertNil(operation2.input)
     XCTAssertNil(operation2.output)
-    XCTAssertTrue(operation2.isCancelled)
   }
 
-  func testInjectionInputSuccessFulRequirement() {
-    let expectation1 = self.expectation(description: "\(#function)\(#line)")
-    let operation1 = IntToStringOperation() // no input -> fails
-    let operation2 = StringToIntOperation()
-    operation2.completionBlock = {
-      expectation1.fulfill()
-    }
-
-    let adapterOperation = operation1.inject(into: operation2, requirements: [.successful])
-    let queue = AdvancedOperationQueue()
-    queue.addOperations([operation1, operation2, adapterOperation], waitUntilFinished: false)
-
-    waitForExpectations(timeout: 3)
-    XCTAssertNil(operation2.input)
-    XCTAssertNil(operation2.output)
-    XCTAssertTrue(operation2.isCancelled)
-  }
-
-  func testInjectionInputNotCancelledRequirement() {
-
+  func testInputInjectionWithAnAlreadyCancelledOutputProducingOperation() {
     let operation1 = IntToStringOperation() // no input -> fails
     let operation2 = StringToIntOperation()
     let expectation1 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isFinished), object: operation2, expectedValue: true)
-
-    operation1.input = 100 // special value to cancel the operation 😎
-    operation1.cancel()
-    XCTAssertTrue(operation1.isCancelled)
-
-    let adapterOperation = operation1.inject(into: operation2, requirements: [.noCancellation])
+    let adapterOperation = operation1.injectOutput(into: operation2)
     let queue = AdvancedOperationQueue()
 
+    operation1.cancel()
     queue.addOperations([operation1, operation2, adapterOperation], waitUntilFinished: false)
 
     wait(for: [expectation1], timeout: 10)
-
-    XCTAssertNil(operation2.input)
-    XCTAssertNil(operation2.output)
-    XCTAssertTrue(operation2.isCancelled)
   }
+
+//  func testInvestigationWithStandardDependency() {
+//    let operation1 = BlockOperation {}
+//    let operation3 = BlockOperation {}
+//    let operation2 = BlockOperation { [unowned operation1, unowned operation3] in }
+//    let expectation1 = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: operation3, expectedValue: true)
+//
+//    operation3.addDependency(operation2)
+//    operation2.addDependency(operation1)
+//    operation1.cancel()
+//
+//    let queue = OperationQueue()
+//
+//    /// ✅works
+//    queue.addOperations([operation1, operation3, operation2], waitUntilFinished: false)
+//
+//    // ⚠️ sporadic failures (i.e. 5 failures on 10_000 executions.)
+//    // when referencing operation1 and operation3 inside operation2 (with weak or unowned)
+//
+//    // queue.addOperation(operation1)
+//    // queue.addOperation(operation3)
+//    // queue.addOperation(operation2)
+//
+//    wait(for: [expectation1], timeout: 20)
+//  }
 }

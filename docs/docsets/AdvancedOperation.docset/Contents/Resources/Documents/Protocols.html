@@ -79,6 +79,9 @@
                 <a href="Protocols/AdvancedOperationQueueDelegate.html">AdvancedOperationQueueDelegate</a>
               </li>
               <li class="nav-group-task">
+                <a href="Protocols/InputRequiring.html">InputRequiring</a>
+              </li>
+              <li class="nav-group-task">
                 <a href="Protocols/OperationCondition.html">OperationCondition</a>
               </li>
               <li class="nav-group-task">
@@ -91,16 +94,10 @@
                 <a href="Protocols/OperationDidProduceOperationObserving.html">OperationDidProduceOperationObserving</a>
               </li>
               <li class="nav-group-task">
-                <a href="Protocols/OperationInputHaving.html">OperationInputHaving</a>
-              </li>
-              <li class="nav-group-task">
                 <a href="Protocols.html#/s:17AdvancedOperation0B9ObservingP">OperationObserving</a>
               </li>
               <li class="nav-group-task">
                 <a href="Protocols.html#/s:17AdvancedOperation0B13ObservingTypeP">OperationObservingType</a>
-              </li>
-              <li class="nav-group-task">
-                <a href="Protocols/OperationOutputHaving.html">OperationOutputHaving</a>
               </li>
               <li class="nav-group-task">
                 <a href="Protocols/OperationWillCancelObserving.html">OperationWillCancelObserving</a>
@@ -110,6 +107,9 @@
               </li>
               <li class="nav-group-task">
                 <a href="Protocols/OperationWillFinishObserving.html">OperationWillFinishObserving</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Protocols/OutputProducing.html">OutputProducing</a>
               </li>
               <li class="nav-group-task">
                 <a href="Protocols/UIApplicationBackgroundTask.html">UIApplicationBackgroundTask</a>
@@ -129,9 +129,6 @@
                 <a href="Structs/BlockCondition.html">BlockCondition</a>
               </li>
               <li class="nav-group-task">
-                <a href="Structs/InjectedInputRequirements.html">InjectedInputRequirements</a>
-              </li>
-              <li class="nav-group-task">
                 <a href="Structs/MutualExclusivityCondition.html">MutualExclusivityCondition</a>
               </li>
               <li class="nav-group-task">
@@ -148,6 +145,17 @@
               </li>
               <li class="nav-group-task">
                 <a href="Structs/TimeoutObserver.html">TimeoutObserver</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="Typealiases.html">Type Aliases</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="Typealiases.html#/s:17AdvancedOperation0B11InputHavinga">OperationInputHaving</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Typealiases.html#/s:17AdvancedOperation0B12OutputHavinga">OperationOutputHaving</a>
               </li>
             </ul>
           </li>
@@ -194,6 +202,13 @@
               </ul>
             </div>
             <div class="task-group">
+              <div class="task-name-container">
+                <a name="/AdvancedOperationQueueDelegate"></a>
+                <a name="//apple_ref/swift/Section/AdvancedOperationQueueDelegate" class="dashAnchor"></a>
+                <a href="#/AdvancedOperationQueueDelegate">
+                  <h3 class="section-name">AdvancedOperationQueueDelegate</h3>
+                </a>
+              </div>
               <ul>
                 <li class="item">
                   <div>
@@ -208,7 +223,7 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>Classes conforming to this protocol received updates about the life-cycle of an <code>AdvancedOperationQueueDelegate</code>.</p>
 
                         <a href="Protocols/AdvancedOperationQueueDelegate.html" class="slightly-smaller">See more</a>
                       </div>
@@ -495,9 +510,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:17AdvancedOperation0B11InputHavingP"></a>
-                    <a name="//apple_ref/swift/Protocol/OperationInputHaving" class="dashAnchor"></a>
-                    <a class="token" href="#/s:17AdvancedOperation0B11InputHavingP">OperationInputHaving</a>
+                    <a name="/s:17AdvancedOperation14InputRequiringP"></a>
+                    <a name="//apple_ref/swift/Protocol/InputRequiring" class="dashAnchor"></a>
+                    <a class="token" href="#/s:17AdvancedOperation14InputRequiringP">InputRequiring</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -507,13 +522,13 @@
                       <div class="abstract">
                         <p>Undocumented</p>
 
-                        <a href="Protocols/OperationInputHaving.html" class="slightly-smaller">See more</a>
+                        <a href="Protocols/InputRequiring.html" class="slightly-smaller">See more</a>
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">protocol</span> <span class="kt">OperationInputHaving</span> <span class="p">:</span> <span class="kt">AnyObject</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">protocol</span> <span class="kt">InputRequiring</span> <span class="p">:</span> <span class="kt"><a href="Classes/AdvancedOperation.html">AdvancedOperation</a></span></code></pre>
 
                         </div>
                       </div>
@@ -523,9 +538,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:17AdvancedOperation0B12OutputHavingP"></a>
-                    <a name="//apple_ref/swift/Protocol/OperationOutputHaving" class="dashAnchor"></a>
-                    <a class="token" href="#/s:17AdvancedOperation0B12OutputHavingP">OperationOutputHaving</a>
+                    <a name="/s:17AdvancedOperation15OutputProducingP"></a>
+                    <a name="//apple_ref/swift/Protocol/OutputProducing" class="dashAnchor"></a>
+                    <a class="token" href="#/s:17AdvancedOperation15OutputProducingP">OutputProducing</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -535,13 +550,13 @@
                       <div class="abstract">
                         <p>Undocumented</p>
 
-                        <a href="Protocols/OperationOutputHaving.html" class="slightly-smaller">See more</a>
+                        <a href="Protocols/OutputProducing.html" class="slightly-smaller">See more</a>
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">protocol</span> <span class="kt">OperationOutputHaving</span> <span class="p">:</span> <span class="kt">AnyObject</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">protocol</span> <span class="kt">OutputProducing</span> <span class="p">:</span> <span class="kt"><a href="Classes/AdvancedOperation.html">AdvancedOperation</a></span></code></pre>
 
                         </div>
                       </div>
@@ -553,8 +568,8 @@
           </section>
         </section>
         <section id="footer">
-          <p>&copy; 2019 <a class="link" href="https://github.com/tinrobots/AdvancedOperation" target="_blank" rel="external">Alessandro Marzoli</a>. All rights reserved. (Last updated: 2019-04-01)</p>
-          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.9.5</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+          <p>&copy; 2019 <a class="link" href="https://github.com/tinrobots/AdvancedOperation" target="_blank" rel="external">Alessandro Marzoli</a>. All rights reserved. (Last updated: 2019-06-25)</p>
+          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.9.6</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
         </section>
       </article>
     </div>

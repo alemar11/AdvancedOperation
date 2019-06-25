@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>UIBackgroundObserver Class Reference</title>
+    <title>InputRequiring Protocol Reference</title>
     <link rel="stylesheet" type="text/css" href="../css/jazzy.css" />
     <link rel="stylesheet" type="text/css" href="../css/highlight.css" />
     <meta charset='utf-8'>
@@ -10,8 +10,8 @@
     
   </head>
   <body>
-    <a name="//apple_ref/swift/Class/UIBackgroundObserver" class="dashAnchor"></a>
-    <a title="UIBackgroundObserver Class Reference"></a>
+    <a name="//apple_ref/swift/Protocol/InputRequiring" class="dashAnchor"></a>
+    <a title="InputRequiring Protocol Reference"></a>
     <header>
       <div class="content-wrapper">
         <p><a href="../index.html">AdvancedOperation Docs</a> (56% documented)</p>
@@ -21,7 +21,7 @@
       <p id="breadcrumbs">
         <a href="../index.html">AdvancedOperation Reference</a>
         <img id="carat" src="../img/carat.png" />
-        UIBackgroundObserver Class Reference
+        InputRequiring Protocol Reference
       </p>
     </div>
     <div class="content-wrapper">
@@ -164,14 +164,14 @@
       <article class="main-content">
         <section>
           <section class="section">
-            <h1>UIBackgroundObserver</h1>
+            <h1>InputRequiring</h1>
               <div class="declaration">
                 <div class="language">
-                  <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">final</span> <span class="kd">class</span> <span class="kt">UIBackgroundObserver</span> <span class="p">:</span> <span class="kt">NSObject</span></code></pre>
+                  <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">protocol</span> <span class="kt">InputRequiring</span> <span class="p">:</span> <span class="kt"><a href="../Classes/AdvancedOperation.html">AdvancedOperation</a></span></code></pre>
 
                 </div>
               </div>
-            <p>An <code>UIBackgroundObserver</code> instance lets an <code><a href="../Classes/AdvancedOperation.html">AdvancedOperation</a></code> run for a period of time after the app transitions to the background.</p>
+            <p>Undocumented</p>
 
           </section>
           <section class="section task-group-section">
@@ -180,9 +180,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:17AdvancedOperation20UIBackgroundObserverC18backgroundTaskNameSSvp"></a>
-                    <a name="//apple_ref/swift/Property/backgroundTaskName" class="dashAnchor"></a>
-                    <a class="token" href="#/s:17AdvancedOperation20UIBackgroundObserverC18backgroundTaskNameSSvp">backgroundTaskName</a>
+                    <a name="/s:17AdvancedOperation14InputRequiringP0C0Qa"></a>
+                    <a name="//apple_ref/swift/Alias/Input" class="dashAnchor"></a>
+                    <a class="token" href="#/s:17AdvancedOperation14InputRequiringP0C0Qa">Input</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -190,14 +190,14 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>The task name.</p>
+                        <p>Undocumented</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">backgroundTaskName</span><span class="p">:</span> <span class="kt">String</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">associatedtype</span> <span class="kt">Input</span></code></pre>
 
                         </div>
                       </div>
@@ -207,9 +207,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:17AdvancedOperation20UIBackgroundObserverC14taskIdentifierSo0c4TaskF0avp"></a>
-                    <a name="//apple_ref/swift/Property/taskIdentifier" class="dashAnchor"></a>
-                    <a class="token" href="#/s:17AdvancedOperation20UIBackgroundObserverC14taskIdentifierSo0c4TaskF0avp">taskIdentifier</a>
+                    <a name="/s:17AdvancedOperation14InputRequiringP5input0C0QzSgvp"></a>
+                    <a name="//apple_ref/swift/Property/input" class="dashAnchor"></a>
+                    <a class="token" href="#/s:17AdvancedOperation14InputRequiringP5input0C0QzSgvp">input</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -217,104 +217,14 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>A unique token that identifies a request to run in the background.</p>
+                        <p>Undocumented</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">private(set)</span> <span class="k">var</span> <span class="nv">taskIdentifier</span><span class="p">:</span> <span class="kt">UIBackgroundTaskIdentifier</span></code></pre>
-
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:17AdvancedOperation20UIBackgroundObserverC11applicationAcA27UIApplicationBackgroundTask_p_tcfc"></a>
-                    <a name="//apple_ref/swift/Method/init(application:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:17AdvancedOperation20UIBackgroundObserverC11applicationAcA27UIApplicationBackgroundTask_p_tcfc">init(application:)</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>Initializes a new <code>UIBackgroundObserver</code> instance.</p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="nf">init</span><span class="p">(</span><span class="nv">application</span><span class="p">:</span> <span class="kt"><a href="../Protocols/UIApplicationBackgroundTask.html">UIApplicationBackgroundTask</a></span><span class="p">)</span></code></pre>
-
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-              </ul>
-            </div>
-            <div class="task-group">
-              <div class="task-name-container">
-                <a name="/UIBackgroundObserver"></a>
-                <a name="//apple_ref/swift/Section/UIBackgroundObserver" class="dashAnchor"></a>
-                <a href="#/UIBackgroundObserver">
-                  <h3 class="section-name">UIBackgroundObserver</h3>
-                </a>
-              </div>
-              <ul>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:17AdvancedOperation0B20WillExecuteObservingP09operationcD00F0yA2AC_tF"></a>
-                    <a name="//apple_ref/swift/Method/operationWillExecute(operation:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:17AdvancedOperation0B20WillExecuteObservingP09operationcD00F0yA2AC_tF">operationWillExecute(operation:)</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">operationWillExecute</span><span class="p">(</span><span class="nv">operation</span><span class="p">:</span> <span class="kt"><a href="../Classes/AdvancedOperation.html">AdvancedOperation</a></span><span class="p">)</span></code></pre>
-
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:17AdvancedOperation0B18DidFinishObservingP09operationcD00F010withErrorsyA2AC_Says5Error_pGtF"></a>
-                    <a name="//apple_ref/swift/Method/operationDidFinish(operation:withErrors:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:17AdvancedOperation0B18DidFinishObservingP09operationcD00F010withErrorsyA2AC_Says5Error_pGtF">operationDidFinish(operation:withErrors:)</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">operationDidFinish</span><span class="p">(</span><span class="nv">operation</span><span class="p">:</span> <span class="kt"><a href="../Classes/AdvancedOperation.html">AdvancedOperation</a></span><span class="p">,</span> <span class="n">withErrors</span> <span class="nv">errors</span><span class="p">:</span> <span class="p">[</span><span class="kt">Error</span><span class="p">])</span></code></pre>
+                          <pre class="highlight swift"><code><span class="k">var</span> <span class="nv">input</span><span class="p">:</span> <span class="kt"><a href="../Protocols/InputRequiring.html#/s:17AdvancedOperation14InputRequiringP0C0Qa">Input</a></span><span class="p">?</span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
 
                         </div>
                       </div>

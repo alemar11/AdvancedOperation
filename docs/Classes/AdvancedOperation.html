@@ -79,6 +79,9 @@
                 <a href="../Protocols/AdvancedOperationQueueDelegate.html">AdvancedOperationQueueDelegate</a>
               </li>
               <li class="nav-group-task">
+                <a href="../Protocols/InputRequiring.html">InputRequiring</a>
+              </li>
+              <li class="nav-group-task">
                 <a href="../Protocols/OperationCondition.html">OperationCondition</a>
               </li>
               <li class="nav-group-task">
@@ -91,16 +94,10 @@
                 <a href="../Protocols/OperationDidProduceOperationObserving.html">OperationDidProduceOperationObserving</a>
               </li>
               <li class="nav-group-task">
-                <a href="../Protocols/OperationInputHaving.html">OperationInputHaving</a>
-              </li>
-              <li class="nav-group-task">
                 <a href="../Protocols.html#/s:17AdvancedOperation0B9ObservingP">OperationObserving</a>
               </li>
               <li class="nav-group-task">
                 <a href="../Protocols.html#/s:17AdvancedOperation0B13ObservingTypeP">OperationObservingType</a>
-              </li>
-              <li class="nav-group-task">
-                <a href="../Protocols/OperationOutputHaving.html">OperationOutputHaving</a>
               </li>
               <li class="nav-group-task">
                 <a href="../Protocols/OperationWillCancelObserving.html">OperationWillCancelObserving</a>
@@ -110,6 +107,9 @@
               </li>
               <li class="nav-group-task">
                 <a href="../Protocols/OperationWillFinishObserving.html">OperationWillFinishObserving</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/OutputProducing.html">OutputProducing</a>
               </li>
               <li class="nav-group-task">
                 <a href="../Protocols/UIApplicationBackgroundTask.html">UIApplicationBackgroundTask</a>
@@ -129,9 +129,6 @@
                 <a href="../Structs/BlockCondition.html">BlockCondition</a>
               </li>
               <li class="nav-group-task">
-                <a href="../Structs/InjectedInputRequirements.html">InjectedInputRequirements</a>
-              </li>
-              <li class="nav-group-task">
                 <a href="../Structs/MutualExclusivityCondition.html">MutualExclusivityCondition</a>
               </li>
               <li class="nav-group-task">
@@ -148,6 +145,17 @@
               </li>
               <li class="nav-group-task">
                 <a href="../Structs/TimeoutObserver.html">TimeoutObserver</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Typealiases.html">Type Aliases</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Typealiases.html#/s:17AdvancedOperation0B11InputHavinga">OperationInputHaving</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Typealiases.html#/s:17AdvancedOperation0B12OutputHavinga">OperationOutputHaving</a>
               </li>
             </ul>
           </li>
@@ -176,6 +184,33 @@
                 </a>
               </div>
               <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:@M@AdvancedOperation@objc(cs)AdvancedOperation(py)asynchronous"></a>
+                    <a name="//apple_ref/swift/Property/isAsynchronous" class="dashAnchor"></a>
+                    <a class="token" href="#/c:@M@AdvancedOperation@objc(cs)AdvancedOperation(py)asynchronous">isAsynchronous</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">open</span> <span class="k">override</span> <span class="k">var</span> <span class="nv">isAsynchronous</span><span class="p">:</span> <span class="kt">Bool</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
                 <li class="item">
                   <div>
                     <code>
@@ -278,33 +313,6 @@
                         <div class="language">
                           <p class="aside-title">Swift</p>
                           <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">final</span> <span class="k">override</span> <span class="k">var</span> <span class="nv">isCancelled</span><span class="p">:</span> <span class="kt">Bool</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
-
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/c:@M@AdvancedOperation@objc(cs)AdvancedOperation(py)asynchronous"></a>
-                    <a name="//apple_ref/swift/Property/isAsynchronous" class="dashAnchor"></a>
-                    <a class="token" href="#/c:@M@AdvancedOperation@objc(cs)AdvancedOperation(py)asynchronous">isAsynchronous</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>Undocumented</p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">open</span> <span class="k">override</span> <span class="k">var</span> <span class="nv">isAsynchronous</span><span class="p">:</span> <span class="kt">Bool</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
 
                         </div>
                       </div>
@@ -479,82 +487,6 @@
             </div>
             <div class="task-group">
               <div class="task-name-container">
-                <a name="/State"></a>
-                <a name="//apple_ref/swift/Section/State" class="dashAnchor"></a>
-                <a href="#/State">
-                  <h3 class="section-name">State</h3>
-                </a>
-              </div>
-              <ul>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/c:@M@AdvancedOperation@objc(cs)AdvancedOperation(cm)keyPathsForValuesAffectingValueForKey:"></a>
-                    <a name="//apple_ref/swift/Method/keyPathsForValuesAffectingValue(forKey:)" class="dashAnchor"></a>
-                    <a class="token" href="#/c:@M@AdvancedOperation@objc(cs)AdvancedOperation(cm)keyPathsForValuesAffectingValueForKey:">keyPathsForValuesAffectingValue(forKey:)</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>Undocumented</p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">open</span> <span class="k">override</span> <span class="kd">class</span> <span class="kd">func</span> <span class="nf">keyPathsForValuesAffectingValue</span><span class="p">(</span><span class="n">forKey</span> <span class="nv">key</span><span class="p">:</span> <span class="kt">String</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Set</span><span class="o">&lt;</span><span class="kt">String</span><span class="o">&gt;</span></code></pre>
-
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-              </ul>
-            </div>
-            <div class="task-group">
-              <div class="task-name-container">
-                <a name="/Life%20Cycle"></a>
-                <a name="//apple_ref/swift/Section/Life Cycle" class="dashAnchor"></a>
-                <a href="#/Life%20Cycle">
-                  <h3 class="section-name">Life Cycle</h3>
-                </a>
-              </div>
-              <ul>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/c:@M@AdvancedOperation@objc(cs)AdvancedOperation(im)dealloc"></a>
-                    <a name="//apple_ref/swift/Method/deinit" class="dashAnchor"></a>
-                    <a class="token" href="#/c:@M@AdvancedOperation@objc(cs)AdvancedOperation(im)dealloc">deinit</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>Undocumented</p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">deinit</span></code></pre>
-
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-              </ul>
-            </div>
-            <div class="task-group">
-              <div class="task-name-container">
                 <a name="/Execution"></a>
                 <a name="//apple_ref/swift/Section/Execution" class="dashAnchor"></a>
                 <a href="#/Execution">
@@ -609,7 +541,34 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">open</span> <span class="k">override</span> <span class="kd">func</span> <span class="nf">main</span><span class="p">()</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">final</span> <span class="k">override</span> <span class="kd">func</span> <span class="nf">main</span><span class="p">()</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:17AdvancedOperationAAC7executeyyF"></a>
+                    <a name="//apple_ref/swift/Method/execute()" class="dashAnchor"></a>
+                    <a class="token" href="#/s:17AdvancedOperationAAC7executeyyF">execute()</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">open</span> <span class="kd">func</span> <span class="nf">execute</span><span class="p">()</span></code></pre>
 
                         </div>
                       </div>
@@ -685,7 +644,7 @@
                       <div class="abstract">
                         <p>Finishes the operations with errors (if any).</p>
 
-<p>Use this method to complete an <strong>isAsynchronous</strong>/<strong>isConcurret</strong> operation or to complete a synchronous operation with errors.</p>
+<p>Use this method to complete an <strong>isAsynchronous</strong>/<strong>isConcurrent</strong> operation or to complete a synchronous operation with errors.</p>
 <div class="aside aside-note">
     <p class="aside-title">Note</p>
     For synchronous operations it&rsquo;s not needed to call this method unless there are errors to register upon completion.
@@ -773,9 +732,7 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">private(set)</span> <span class="k">var</span> <span class="nv">conditions</span><span class="p">:</span> <span class="p">[</span><span class="kt"><a href="../Protocols/OperationCondition.html">OperationCondition</a></span><span class="p">]</span> <span class="p">{</span>
-  <span class="k">get</span>
-  <span class="p">}</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">private(set)</span> <span class="k">var</span> <span class="nv">conditions</span><span class="p">:</span> <span class="p">[</span><span class="kt"><a href="../Protocols/OperationCondition.html">OperationCondition</a></span><span class="p">]</span></code></pre>
 
                         </div>
                       </div>
@@ -1190,8 +1147,8 @@
           </section>
         </section>
         <section id="footer">
-          <p>&copy; 2019 <a class="link" href="https://github.com/tinrobots/AdvancedOperation" target="_blank" rel="external">Alessandro Marzoli</a>. All rights reserved. (Last updated: 2019-04-01)</p>
-          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.9.5</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+          <p>&copy; 2019 <a class="link" href="https://github.com/tinrobots/AdvancedOperation" target="_blank" rel="external">Alessandro Marzoli</a>. All rights reserved. (Last updated: 2019-06-25)</p>
+          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.9.6</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
         </section>
       </article>
     </div>

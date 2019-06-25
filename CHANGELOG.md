@@ -1,5 +1,12 @@
 # Changelog
 
+### 3.1.0
+
+- Improved `GroupOperation` mplementation.
+- `OperationInputHaving` deprecated, use `InputRequiring` instead.
+- `OperationOutputHaving` deprecated, use `OutputProducing` instead.
+-  Bugfixes.
+
 ### 3.0.0 ⭐
 
 - AdvancedOperation is now completely migrated to **Swift 5.0**.

@@ -53,6 +53,11 @@ internal final class ExclusivityManager {
     }
   }
 
+  /// Removes an `AdvancedOperation` from the `ExclusivityManager` instance for a given `category`.
+  ///
+  /// - Parameters:
+  ///   - operation: The `AdvancedOperation` to remove.
+  ///   - category: The category to identify an `AdvancedOperation`.
   internal func removeOperation(_ operation: AdvancedOperation, category: String) {
     queue.async {
       self._removeOperation(operation, category: category)
@@ -74,7 +79,6 @@ internal final class ExclusivityManager {
       if cancellable {
         // swiftlint:disable:next line_length
         let error = AdvancedOperationError.executionCancelled(message: "The operation has been cancelled by the ExclusivityManager because there is already a running operation for the identifier: \(category).")
-
         operation.cancel(errors: [error])
         return // early exit because there is no need to add a cancelled operation to the manager
       } else {
