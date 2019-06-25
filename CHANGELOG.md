@@ -2,7 +2,7 @@
 
 ### 3.1.0
 
-- Improved `GroupOperation` mplementation.
+- Improved `GroupOperation`.
 - `OperationInputHaving` deprecated, use `InputRequiring` instead.
 - `OperationOutputHaving` deprecated, use `OutputProducing` instead.
 -  Bugfixes.
