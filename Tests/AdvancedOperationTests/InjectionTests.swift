@@ -48,6 +48,20 @@ class InjectionTests: XCTestCase {
     XCTAssertEqual(operation2.output, 10)
   }
 
+  func testInjectionMixedWithOtherOperation() {
+    let operation1 = IntToStringOperation()
+    let operation2 = StringToIntOperation()
+    let operation3 = BlockOperation()
+    operation3.addDependency(operation2)
+    operation1.input = 10
+    let adapterOperation = AdvancedOperation.injectOperation(operation1, into: operation2)
+    let queue = AdvancedOperationQueue()
+    queue.addOperations([operation1, operation2, adapterOperation], waitUntilFinished: true)
+    queue.addOperations([operation3], waitUntilFinished: false)
+
+    XCTAssertEqual(operation2.output, 10)
+  }
+
   func testInjectionUsingInstanceMethodAndWaitUntilFinished() {
     let operation1 = IntToStringOperation()
     let operation2 = StringToIntOperation()
