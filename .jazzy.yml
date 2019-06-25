@@ -5,4 +5,3 @@ github_url: https://github.com/tinrobots/advancedoperation
 copyright: "© 2016-2017 [Tin Robots](http://www.tinrobots.org)"
 clean: true
 podspec: AdvancedOperation.podspec
-theme: fullwidth
