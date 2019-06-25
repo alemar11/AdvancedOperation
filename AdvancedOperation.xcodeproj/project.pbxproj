@@ -353,11 +353,9 @@
 		230B47FD200EABEE00F46852 /* AdvancedOperationTests */ = {
 			isa = PBXGroup;
 			children = (
-				23A813B52020D111008A98E0 /* AdvancedBlockOperationTests.swift */,
 				239ECD30218E11AF00F640F2 /* AdvancedOperationErrorTests.swift */,
 				23856174200A87070061BAA1 /* AdvancedOperationQueueTests.swift */,
 				23F24D1D200771FA00B25A03 /* AdvancedOperationTests.swift */,
-				23F24D2B2007A33F00B25A03 /* DelayOperationTests.swift */,
 				239BC52620EB7C47009A36D9 /* InjectionTests.swift */,
 				23856178200A873C0061BAA1 /* Mocks.swift */,
 				235D08D0206A941B00F70142 /* OperationStateTests.swift */,
@@ -469,6 +467,8 @@
 		23555FA22170C789009FBE81 /* Operations */ = {
 			isa = PBXGroup;
 			children = (
+				23F24D2B2007A33F00B25A03 /* DelayOperationTests.swift */,
+				23A813B52020D111008A98E0 /* AdvancedBlockOperationTests.swift */,
 				23856170200A6E9A0061BAA1 /* GroupOperationTests.swift */,
 			);
 			path = Operations;
