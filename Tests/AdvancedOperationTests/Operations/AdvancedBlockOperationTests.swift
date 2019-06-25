@@ -155,7 +155,7 @@ final class AdvancedBlockOperationTests: XCTestCase {
 
       waitForExpectations(timeout: 3)
 
-      // Memory leaks test: once release the operation, the captured object (by reference) should be nil (weakObject)
+      // Memory leaks test: once the operation is released, the captured object (by reference) should be nil (weakObject)
       operation = AdvancedBlockOperation(block: { })
       object = NSObject()
     }
