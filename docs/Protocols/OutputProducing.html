@@ -129,9 +129,6 @@
                 <a href="../Structs/BlockCondition.html">BlockCondition</a>
               </li>
               <li class="nav-group-task">
-                <a href="../Structs/InjectedInputRequirements.html">InjectedInputRequirements</a>
-              </li>
-              <li class="nav-group-task">
                 <a href="../Structs/MutualExclusivityCondition.html">MutualExclusivityCondition</a>
               </li>
               <li class="nav-group-task">
@@ -241,9 +238,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:17AdvancedOperation15OutputProducingPAAE6inject4into12requirementsAA0a5BlockB0Cqd___AA25InjectedInputRequirementsVtAA0J9RequiringRd__0J0Qyd__0C0RtzlF"></a>
-                    <a name="//apple_ref/swift/Method/inject(into:requirements:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:17AdvancedOperation15OutputProducingPAAE6inject4into12requirementsAA0a5BlockB0Cqd___AA25InjectedInputRequirementsVtAA0J9RequiringRd__0J0Qyd__0C0RtzlF">inject(into:requirements:)</a>
+                    <a name="/s:17AdvancedOperation15OutputProducingPAAE06injectC04intoA2ACqd___tAA14InputRequiringRd__0G0Qyd__0C0RtzlF"></a>
+                    <a name="//apple_ref/swift/Method/injectOutput(into:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:17AdvancedOperation15OutputProducingPAAE06injectC04intoA2ACqd___tAA14InputRequiringRd__0G0Qyd__0C0RtzlF">injectOutput(into:)</a>
                     </code>
                       <span class="declaration-note">
                         Extension method
@@ -261,8 +258,7 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="n">inject</span><span class="o">&lt;</span><span class="kt">E</span><span class="p">:</span> <span class="kt"><a href="../Protocols/InputRequiring.html">InputRequiring</a></span><span class="o">&gt;</span><span class="p">(</span><span class="n">into</span> <span class="nv">operation</span><span class="p">:</span> <span class="kt">E</span><span class="p">,</span>
-                                      <span class="nv">requirements</span><span class="p">:</span> <span class="kt"><a href="../Structs/InjectedInputRequirements.html">InjectedInputRequirements</a></span> <span class="o">=</span> <span class="p">[</span><span class="o">.</span><span class="n">notOptional</span><span class="p">,</span> <span class="o">.</span><span class="n">successful</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Classes/AdvancedBlockOperation.html">AdvancedBlockOperation</a></span> <span class="k">where</span> <span class="kt"><a href="../Protocols/OutputProducing.html#/s:17AdvancedOperation15OutputProducingP0C0Qa">Output</a></span> <span class="o">==</span> <span class="kt">E</span><span class="o">.</span><span class="kt">Input</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="n">injectOutput</span><span class="o">&lt;</span><span class="kt">E</span><span class="o">&gt;</span><span class="p">(</span><span class="n">into</span> <span class="nv">operation</span><span class="p">:</span> <span class="kt">E</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Classes/AdvancedOperation.html">AdvancedOperation</a></span> <span class="k">where</span> <span class="kt">E</span> <span class="p">:</span> <span class="kt"><a href="../Protocols/InputRequiring.html">InputRequiring</a></span><span class="p">,</span> <span class="k">Self</span><span class="o">.</span><span class="kt"><a href="../Protocols/OutputProducing.html#/s:17AdvancedOperation15OutputProducingP0C0Qa">Output</a></span> <span class="o">==</span> <span class="kt">E</span><span class="o">.</span><span class="kt">Input</span></code></pre>
 
                         </div>
                       </div>
@@ -282,18 +278,6 @@
                                 </div>
                               </td>
                             </tr>
-                            <tr>
-                              <td>
-                                <code>
-                                <em>requirements</em>
-                                </code>
-                              </td>
-                              <td>
-                                <div>
-                                  <p>A list of options that the injected input must satisfy.</p>
-                                </div>
-                              </td>
-                            </tr>
                           </tbody>
                         </table>
                       </div>
@@ -307,9 +291,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:17AdvancedOperation15OutputProducingPAAE6inject4into12requirements9transformAA0a5BlockB0Cqd___AA25InjectedInputRequirementsV0K0Qyd__Sg0C0QzSgctAA0K9RequiringRd__lF"></a>
-                    <a name="//apple_ref/swift/Method/inject(into:requirements:transform:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:17AdvancedOperation15OutputProducingPAAE6inject4into12requirements9transformAA0a5BlockB0Cqd___AA25InjectedInputRequirementsV0K0Qyd__Sg0C0QzSgctAA0K9RequiringRd__lF">inject(into:requirements:transform:)</a>
+                    <a name="/s:17AdvancedOperation15OutputProducingPAAE06injectC04into9transformA2ACqd___5InputQyd__Sg0C0QzSgctAA0H9RequiringRd__lF"></a>
+                    <a name="//apple_ref/swift/Method/injectOutput(into:transform:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:17AdvancedOperation15OutputProducingPAAE06injectC04into9transformA2ACqd___5InputQyd__Sg0C0QzSgctAA0H9RequiringRd__lF">injectOutput(into:transform:)</a>
                     </code>
                       <span class="declaration-note">
                         Extension method
@@ -327,9 +311,7 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="n">inject</span><span class="o">&lt;</span><span class="kt">E</span><span class="p">:</span> <span class="kt"><a href="../Protocols/InputRequiring.html">InputRequiring</a></span><span class="o">&gt;</span><span class="p">(</span><span class="n">into</span> <span class="nv">operation</span><span class="p">:</span> <span class="kt">E</span><span class="p">,</span>
-                                      <span class="nv">requirements</span><span class="p">:</span> <span class="kt"><a href="../Structs/InjectedInputRequirements.html">InjectedInputRequirements</a></span> <span class="o">=</span> <span class="p">[</span><span class="o">.</span><span class="n">notOptional</span><span class="p">,</span> <span class="o">.</span><span class="n">successful</span><span class="p">],</span>
-                                      <span class="nv">transform</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="p">(</span><span class="kt"><a href="../Protocols/OutputProducing.html#/s:17AdvancedOperation15OutputProducingP0C0Qa">Output</a></span><span class="p">?)</span> <span class="o">-&gt;</span> <span class="kt">E</span><span class="o">.</span><span class="kt">Input</span><span class="p">?)</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Classes/AdvancedBlockOperation.html">AdvancedBlockOperation</a></span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="n">injectOutput</span><span class="o">&lt;</span><span class="kt">E</span><span class="p">:</span> <span class="kt"><a href="../Protocols/InputRequiring.html">InputRequiring</a></span><span class="o">&gt;</span><span class="p">(</span><span class="n">into</span> <span class="nv">operation</span><span class="p">:</span> <span class="kt">E</span><span class="p">,</span> <span class="nv">transform</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="p">(</span><span class="kt"><a href="../Protocols/OutputProducing.html#/s:17AdvancedOperation15OutputProducingP0C0Qa">Output</a></span><span class="p">?)</span> <span class="o">-&gt;</span> <span class="kt">E</span><span class="o">.</span><span class="kt">Input</span><span class="p">?)</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Classes/AdvancedOperation.html">AdvancedOperation</a></span></code></pre>
 
                         </div>
                       </div>
@@ -346,18 +328,6 @@
                               <td>
                                 <div>
                                   <p>The operation that needs the transformed output of <code>self</code> to generate an output.</p>
-                                </div>
-                              </td>
-                            </tr>
-                            <tr>
-                              <td>
-                                <code>
-                                <em>requirements</em>
-                                </code>
-                              </td>
-                              <td>
-                                <div>
-                                  <p>A list of options that the injected input must satisfy.</p>
                                 </div>
                               </td>
                             </tr>
@@ -385,10 +355,81 @@
                 </li>
               </ul>
             </div>
+            <div class="task-group">
+              <div class="task-name-container">
+                <a name="/Adapter"></a>
+                <a name="//apple_ref/swift/Section/Adapter" class="dashAnchor"></a>
+                <a href="#/Adapter">
+                  <h3 class="section-name">Adapter</h3>
+                </a>
+              </div>
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:17AdvancedOperation15OutputProducingPAAE6inject4intoA2ACqd___tAA14InputRequiringRd__0G0Qyd__0C0RtzlF"></a>
+                    <a name="//apple_ref/swift/Method/inject(into:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:17AdvancedOperation15OutputProducingPAAE6inject4intoA2ACqd___tAA14InputRequiringRd__0G0Qyd__0C0RtzlF">inject(into:)</a>
+                    </code>
+                      <span class="declaration-note">
+                        Extension method
+                      </span>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="n">inject</span><span class="o">&lt;</span><span class="kt">E</span><span class="o">&gt;</span><span class="p">(</span><span class="n">into</span> <span class="nv">operation</span><span class="p">:</span> <span class="kt">E</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Classes/AdvancedOperation.html">AdvancedOperation</a></span> <span class="k">where</span> <span class="kt">E</span> <span class="p">:</span> <span class="kt"><a href="../Protocols/InputRequiring.html">InputRequiring</a></span><span class="p">,</span> <span class="k">Self</span><span class="o">.</span><span class="kt"><a href="../Protocols/OutputProducing.html#/s:17AdvancedOperation15OutputProducingP0C0Qa">Output</a></span> <span class="o">==</span> <span class="kt">E</span><span class="o">.</span><span class="kt">Input</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:17AdvancedOperation15OutputProducingPAAE6inject4into9transformA2ACqd___5InputQyd__Sg0C0QzSgctAA0H9RequiringRd__lF"></a>
+                    <a name="//apple_ref/swift/Method/inject(into:transform:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:17AdvancedOperation15OutputProducingPAAE6inject4into9transformA2ACqd___5InputQyd__Sg0C0QzSgctAA0H9RequiringRd__lF">inject(into:transform:)</a>
+                    </code>
+                      <span class="declaration-note">
+                        Extension method
+                      </span>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="n">inject</span><span class="o">&lt;</span><span class="kt">E</span><span class="p">:</span> <span class="kt"><a href="../Protocols/InputRequiring.html">InputRequiring</a></span><span class="o">&gt;</span><span class="p">(</span><span class="n">into</span> <span class="nv">operation</span><span class="p">:</span> <span class="kt">E</span><span class="p">,</span> <span class="nv">transform</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="p">(</span><span class="kt"><a href="../Protocols/OutputProducing.html#/s:17AdvancedOperation15OutputProducingP0C0Qa">Output</a></span><span class="p">?)</span> <span class="o">-&gt;</span> <span class="kt">E</span><span class="o">.</span><span class="kt">Input</span><span class="p">?)</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Classes/AdvancedOperation.html">AdvancedOperation</a></span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
           </section>
         </section>
         <section id="footer">
-          <p>&copy; 2019 <a class="link" href="https://github.com/tinrobots/AdvancedOperation" target="_blank" rel="external">Alessandro Marzoli</a>. All rights reserved. (Last updated: 2019-06-22)</p>
+          <p>&copy; 2019 <a class="link" href="https://github.com/tinrobots/AdvancedOperation" target="_blank" rel="external">Alessandro Marzoli</a>. All rights reserved. (Last updated: 2019-06-25)</p>
           <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.9.6</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
         </section>
       </article>
