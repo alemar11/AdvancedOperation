@@ -114,19 +114,6 @@ extension AdvancedOperation {
   }
 }
 
-//extension AdvancedOperationQueue {
-//  
-//  func addOperation<F: OutputProducing, G: InputRequiring>(_ outputProducingOperation: F, andInjectOutputInto inputRequiringOperation: G) where F.Output == G.Input {
-//    let adapterOperation = outputProducingOperation.injectOutput(into: inputRequiringOperation)
-//    addOperations([outputProducingOperation, adapterOperation, inputRequiringOperation], waitUntilFinished: false)
-//  }
-//
-//  func addOperation<F: OutputProducing, G: InputRequiring>(_ outputProducingOperation: F, andInjectOutputInto inputRequiringOperation: G, transform: @escaping (F.Output?) -> G.Input?) {
-//    let adapterOperation = outputProducingOperation.injectOutput(into: inputRequiringOperation, transform: transform)
-//    addOperations([outputProducingOperation, adapterOperation, inputRequiringOperation], waitUntilFinished: false)
-//  }
-//}
-
 // Deprecations
 
 @available(*, deprecated, message: "Use InputRequiring instead.")
