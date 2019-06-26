@@ -1099,4 +1099,21 @@ final class GroupOperationTests: XCTestCase {
     XCTAssertNotNil(group.duration)
     XCTAssertTrue(group.duration! >= 4.0 && group.duration! <= 5.5) // ∂ of 1.5 seconds (just in case)
   }
+
+  func testAddingAnotherOperationLazilyBeforeTheGroupOperationStartsExecuting() {
+    let operation = SleepyOperation()
+    let groupOperation = LazyGroupOperation(operations: operation)
+    let expectation1 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isFinished), object: operation, expectedValue: true)
+    let expectation2 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isFinished), object: groupOperation, expectedValue: true)
+    let expectation3 = self.expectation(description: "\(#function)\(#line)")
+
+    groupOperation.onLazyOperationFinished = {
+      expectation3.fulfill()
+    }
+
+    let queue = AdvancedOperationQueue()
+    queue.addOperation(groupOperation)
+
+    wait(for: [expectation1, expectation2, expectation3], timeout: 10)
+  }
 }
