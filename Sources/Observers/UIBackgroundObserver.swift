@@ -126,8 +126,8 @@ public final class UIBackgroundObserver: NSObject {
   }
 }
 
-extension UIBackgroundObserver: OperationWillExecuteObserving & OperationDidFinishObserving {
-  public func operationWillExecute(operation: AdvancedOperation) {
+extension UIBackgroundObserver: OperationDidExecuteObserving & OperationDidFinishObserving {
+  public func operationDidExecute(operation: AdvancedOperation) {
     isExecuting = true
   }
 

@@ -439,9 +439,9 @@ final internal class ProgressAsyncOperation: AdvancedOperation {
 // MARK: - OperationObserving
 
 final internal class MockObserver: OperationObserving {
-
   let lock = NSLock()
   var _willExecutetCount = 0
+  var _didExecutetCount = 0
   var _didProduceCount = 0
   var _willFinishCount = 0
   var _didFinishCount = 0
@@ -460,6 +460,17 @@ final internal class MockObserver: OperationObserving {
       lock.lock()
       defer { lock.unlock() }
       _willExecutetCount = newValue
+    }
+  }
+
+  var didExecutetCount: Int {
+    get {
+      return lock.synchronized { return _didExecutetCount }
+    }
+    set {
+      lock.lock()
+      defer { lock.unlock() }
+      _didExecutetCount = newValue
     }
   }
 
@@ -519,9 +530,15 @@ final internal class MockObserver: OperationObserving {
   }
 
   func operationWillExecute(operation: AdvancedOperation) {
-    assert(operation.isExecuting)
+    assert(!operation.isExecuting)
     XCTAssertEqual(willExecutetCount, 0)
     willExecutetCount += 1
+  }
+
+  func operationDidExecute(operation: AdvancedOperation) {
+    assert(operation.isExecuting)
+    XCTAssertEqual(didExecutetCount, 0)
+    didExecutetCount += 1
   }
 
   func operationWillFinish(operation: AdvancedOperation, withErrors errors: [Error]) {

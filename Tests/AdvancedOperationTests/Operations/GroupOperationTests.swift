@@ -749,6 +749,7 @@ final class GroupOperationTests: XCTestCase {
     wait(for: [exepectation1, expectation2], timeout: 10)
 
     XCTAssertEqual(observer.willExecutetCount, 1)
+    XCTAssertEqual(observer.didExecutetCount, 1)
     XCTAssertEqual(observer.didFinishCount, 1)
     XCTAssertEqual(observer.didCancelCount, 0)
   }

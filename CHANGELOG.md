@@ -1,5 +1,9 @@
 # Changelog
 
+### 3.2.0
+
+- Added  `OperationDidExecuteObserving` protocol.
+
 ### 3.1.0
 
 - Improved `GroupOperation`.
