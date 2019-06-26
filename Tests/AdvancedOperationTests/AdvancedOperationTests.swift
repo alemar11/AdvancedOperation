@@ -172,6 +172,7 @@ final class AdvancedOperationTests: XCTestCase {
     wait(for: [expectation1, expectation2], timeout: 10)
 
     XCTAssertEqual(observer.willExecutetCount, 1)
+    XCTAssertEqual(observer.didExecutetCount, 1)
     XCTAssertEqual(observer.willFinishCount, 1)
     XCTAssertEqual(observer.didFinishCount, 1)
     XCTAssertEqual(observer.willCancelCount, 0)
@@ -200,6 +201,7 @@ final class AdvancedOperationTests: XCTestCase {
     wait(for: [expectation1, expectation2], timeout: 10)
 
     XCTAssertEqual(observer.willExecutetCount, 1, "willExecutetCount should be called 1 time instead of \(observer.willExecutetCount)")
+    XCTAssertEqual(observer.didExecutetCount, 1, "didExecutetCount should be called 1 time instead of \(observer.didExecutetCount)")
 
     XCTAssertEqual(observer.willCancelCount, 1, "willCancelCount should be called 1 time instead of \(observer.willCancelCount)")
     XCTAssertEqual(observer.didCancelCount, 1, "didCancelCount should be called 1 time instead of \(observer.didCancelCount)")
@@ -226,6 +228,7 @@ final class AdvancedOperationTests: XCTestCase {
     wait(for: [expectation1, expectation2], timeout: 10)
 
     XCTAssertEqual(observer.willExecutetCount, 1)
+    XCTAssertEqual(observer.didExecutetCount, 1)
     XCTAssertEqual(observer.didProduceCount, 2)
     XCTAssertEqual(observer.willFinishCount, 1)
     XCTAssertEqual(observer.didFinishCount, 1)

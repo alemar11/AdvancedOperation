@@ -749,6 +749,7 @@ final class GroupOperationTests: XCTestCase {
     wait(for: [exepectation1, expectation2], timeout: 10)
 
     XCTAssertEqual(observer.willExecutetCount, 1)
+    XCTAssertEqual(observer.didExecutetCount, 1)
     XCTAssertEqual(observer.didFinishCount, 1)
     XCTAssertEqual(observer.didCancelCount, 0)
   }
@@ -1097,5 +1098,22 @@ final class GroupOperationTests: XCTestCase {
     XCTAssertTrue(group.isFinished)
     XCTAssertNotNil(group.duration)
     XCTAssertTrue(group.duration! >= 4.0 && group.duration! <= 5.5) // ∂ of 1.5 seconds (just in case)
+  }
+
+  func testAddingAnotherOperationLazilyBeforeTheGroupOperationStartsExecuting() {
+    let operation = SleepyOperation()
+    let groupOperation = LazyGroupOperation(operations: operation)
+    let expectation1 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isFinished), object: operation, expectedValue: true)
+    let expectation2 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isFinished), object: groupOperation, expectedValue: true)
+    let expectation3 = self.expectation(description: "\(#function)\(#line)")
+
+    groupOperation.onLazyOperationFinished = {
+      expectation3.fulfill()
+    }
+
+    let queue = AdvancedOperationQueue()
+    queue.addOperation(groupOperation)
+
+    wait(for: [expectation1, expectation2, expectation3], timeout: 10)
   }
 }

@@ -29,7 +29,7 @@ import Foundation
 public protocol AdvancedOperationQueueDelegate: class {
   // An operation is being added to the queue.
   func operationQueue(operationQueue: AdvancedOperationQueue, willAddOperation operation: Operation)
-  // An operation is going to be executed.
+  // An operation is going to be executed (but it's not yet executing).
   func operationQueue(operationQueue: AdvancedOperationQueue, operationWillExecute operation: AdvancedOperation)
   // An operation is finishing.
   func operationQueue(operationQueue: AdvancedOperationQueue, operationWillFinish operation: AdvancedOperation, withErrors errors: [Error])

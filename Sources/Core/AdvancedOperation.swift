@@ -163,8 +163,9 @@ open class AdvancedOperation: Operation {
 
   public final override func main() {
     times.mutate { $0.0 = CFAbsoluteTimeGetCurrent() }
-    state = .executing
     willExecute()
+    state = .executing
+    didExecute()
     execute()
 
     if !isAsynchronous {
@@ -364,6 +365,13 @@ extension AdvancedOperation {
     return observers.read { $0.compactMap { $0 as? OperationWillExecuteObserving } }
   }
 
+  internal var didExecuteObservers: [OperationDidExecuteObserving] {
+    guard !observers.read ({ $0.isEmpty }) else { // TSAN _swiftEmptyArrayStorage
+      return []
+    }
+    return observers.read { $0.compactMap { $0 as? OperationDidExecuteObserving } }
+  }
+
   internal var didProduceOperationObservers: [OperationDidProduceOperationObserving] {
     guard !observers.read ({ $0.isEmpty }) else { // TSAN _swiftEmptyArrayStorage
       return []
@@ -404,6 +412,12 @@ extension AdvancedOperation {
 
     for observer in willExecuteObservers {
       observer.operationWillExecute(operation: self)
+    }
+  }
+
+  private func didExecute() {
+    for observer in didExecuteObservers {
+      observer.operationDidExecute(operation: self)
     }
   }
 

@@ -29,9 +29,16 @@ let observerKey = "Observer"
 public protocol OperationObservingType { }
 
 public protocol OperationWillExecuteObserving: OperationObservingType {
-  /// Invoked immediately prior to the `Operation`'s `execute()` method (it's started but not yet executed).
+  /// Invoked immediately prior to the `Operation`'s execution. At this point the operation is not yet executing.
+  /// This is the last chance to do some lazy configuration.
   func operationWillExecute(operation: AdvancedOperation)
 }
+
+public protocol OperationDidExecuteObserving: OperationObservingType {
+  /// Invoked immediately after the `Operation` has passed to the executing state. At this point the operation is starting its execution.
+  func operationDidExecute(operation: AdvancedOperation)
+}
+
 
 public protocol OperationWillFinishObserving: OperationObservingType {
   /// Invoked as an `Operation` finishes, along with any errors produced during execution.
@@ -63,4 +70,4 @@ public protocol OperationDidProduceOperationObserving: OperationObservingType {
 
 /// The protocol that types may implement if they wish to be notified of significant operation lifecycle events.
 // swiftlint:disable:next line_length
-public protocol OperationObserving: OperationWillExecuteObserving, OperationWillFinishObserving, OperationDidFinishObserving, OperationWillCancelObserving, OperationDidCancelObserving, OperationDidProduceOperationObserving { }
+public protocol OperationObserving: OperationWillExecuteObserving, OperationDidExecuteObserving, OperationWillFinishObserving, OperationDidFinishObserving, OperationWillCancelObserving, OperationDidCancelObserving, OperationDidProduceOperationObserving { }
