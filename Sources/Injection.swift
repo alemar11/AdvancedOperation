@@ -32,8 +32,6 @@ extension OutputProducing {
 
   @discardableResult
   public func _injectOutput<E: InputRequiring>(into operation: E, transform: @escaping (Output?) -> E.Input?) -> Self {
-    // precondition is self is not started and operation is not started
-
     precondition(operation !== self, "Cannot inject output of self into self.")
     precondition(state == .pending, "Injection cannot be done after the OutputProducing operation execution has begun.")
     precondition(operation.state == .pending, "Injection cannot be done after the InputRequiring oepration execution has begun.")
