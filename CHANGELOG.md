@@ -2,6 +2,7 @@
 
 ### 4.0.0
 - An `AdvancedOperation` can now be cancelled or finished with only one single `Error`.
+- Injection doen't require an *adapter* operation anymore.
 
 ### 3.2.0
 
