@@ -50,10 +50,9 @@ public struct NoFailedDependenciesCondition: OperationCondition {
       let names = failures.map { $0.name ?? "\(type(of: $0))" }
       let error = AdvancedOperationError.conditionFailed(message: "Some dependencies have failures.",
                                                          userInfo: [operationConditionKey: self.name,
-                                                                    type(of: self).noFailedDependenciesConditionKey: names])
-      let errors = [error] + failures.compactMap { $0.error } // this list will never be empty
-      let aggregatedError = AdvancedOperationError.aggregateErrors(errors: errors)
-      completion(.failed(aggregatedError))
+                                                                    type(of: self).noFailedDependenciesConditionKey: names,
+                                                                    AdvancedOperationError.errorsKey: failures.compactMap { $0.error } ])
+      completion(.failed(error))
     } else {
       completion(.satisfied)
     }

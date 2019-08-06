@@ -23,15 +23,65 @@
 
 import Foundation
 
-public enum AdvancedOperationError {
+public enum AdvancedOperationError { // TODO: this can be an NSError extension
   public enum Code {
     static let conditionFailed = 100
     static let executionCancelled = 200
     static let executionFinished = 300
-    static let aggregateErrors = 400
   }
 
   static var domain = identifier
+  static let errorsKey = "\(identifier).UnderlyingErrorsKey"
+
+  // MARK: - Execution
+
+  /// Creates an error usable when an operation has been cancelled due to an error.
+  public static func executionCancelled(message: String, userInfo: [String: Any]? = nil) -> NSError {
+    var info: [String: Any] =  [
+      NSLocalizedFailureReasonErrorKey: "The operation execution has been cancelled.",
+      NSLocalizedDescriptionKey: message
+    ]
+
+    userInfo?.forEach { (key, value) in
+      info[key] = value
+    }
+
+    /// Creates an error usable when an operation finishes with errors.
+    return NSError(domain: domain, code: Code.executionCancelled, userInfo: info)
+  }
+
+  /// Creates an error usable when an operation has been finished with an error.
+  public static func executionFinished(message: String, userInfo: [String: Any]? = .none) -> NSError {
+    var info: [String: Any] =  [
+      NSLocalizedFailureReasonErrorKey: "The operation has finished.",
+      NSLocalizedDescriptionKey: message
+    ]
+
+    userInfo?.forEach { (key, value) in
+      info[key] = value
+    }
+
+    return NSError(domain: domain, code: Code.executionFinished, userInfo: info)
+  }
+
+  // MARK: - GroupOperation
+
+  /// Group operation finished with errors.
+  public static func groupFinished(message: String, userInfo: [String: Any]? = .none, errors: [Error]) -> NSError {
+    var info: [String: Any] =  [
+      NSLocalizedFailureReasonErrorKey: "The group operation has finished with errors.",
+      NSLocalizedDescriptionKey: message,
+      "\(errorsKey)": errors
+    ]
+
+    userInfo?.forEach { (key, value) in
+      info[key] = value
+    }
+
+    return NSError(domain: domain, code: Code.executionFinished, userInfo: info)
+  }
+
+  // MARK: - Conditions
 
   /// Creates an error usable when a condition has failed.
   public static func conditionFailed(message: String, userInfo: [String: Any]? = .none) -> NSError {
@@ -47,40 +97,18 @@ public enum AdvancedOperationError {
     return NSError(domain: domain, code: Code.conditionFailed, userInfo: info)
   }
 
-  /// Creates an error usable when an operation has been cancelled.
-  public static func executionCancelled(message: String, userInfo: [String: Any]? = nil) -> NSError {
+  /// Conditions evaluation has genereated some errors.
+  public static func conditionsEvaluationFinished(message: String, userInfo: [String: Any]? = .none, errors: [Error]) -> NSError {
     var info: [String: Any] =  [
-      NSLocalizedFailureReasonErrorKey: "The operation execution has been cancelled.",
-      NSLocalizedDescriptionKey: message
+      NSLocalizedFailureReasonErrorKey: "The operation has condition errors.",
+      NSLocalizedDescriptionKey: message,
+      "\(errorsKey)": errors
     ]
 
     userInfo?.forEach { (key, value) in
       info[key] = value
     }
 
-    /// Creates an error usable when an operation finishes with errors.
-    return NSError(domain: domain, code: Code.executionCancelled, userInfo: info)
-  }
-
-  public static func executionFinished(message: String, userInfo: [String: Any]? = .none) -> NSError {
-    var info: [String: Any] =  [
-      NSLocalizedFailureReasonErrorKey: "The operation has finished.",
-      NSLocalizedDescriptionKey: message
-    ]
-
-    userInfo?.forEach { (key, value) in
-      info[key] = value
-    }
-
-    return NSError(domain: domain, code: Code.executionFinished, userInfo: info)
-  }
-
-  public static func aggregateErrors(errors: [Error]) -> NSError { // TODO: refine this error
-    let info: [String: Any] =  [
-      NSLocalizedFailureReasonErrorKey: "The operation has generated some errors.",
-      NSLocalizedDescriptionKey: "The operation has generated some errors.",
-      "\(identifier).UnderlyingErrorsKey": errors
-    ]
-    return NSError(domain: domain, code: Code.aggregateErrors, userInfo: info)
+    return NSError(domain: domain, code: Code.conditionFailed, userInfo: info)
   }
 }

@@ -266,7 +266,7 @@ extension GroupOperation: AdvancedOperationQueueDelegate {
         if errors.isEmpty {
           finish(error: nil)
         } else {
-          let aggregateError = AdvancedOperationError.aggregateErrors(errors: errors)
+          let aggregateError = AdvancedOperationError.groupFinished(message: "\(operationName) finished with some underlying errors.", errors: errors)
           finish(error: aggregateError)
         }
       }

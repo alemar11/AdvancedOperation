@@ -75,29 +75,19 @@ internal final class ConditionEvaluatorOperation: AdvancedOperation {
         lock.synchronized {
           results[index] = result
         }
-        
         conditionGroup.leave()
       }
     }
     
     conditionGroup.notify(queue: DispatchQueue.global()) {
       // Aggregate all the occurred errors.
-      let errors = results.compactMap { result -> Error? in
-        return result?.error // TODO: I've reduced the code
-//        if case .failed(let error)? = result {
-//          return error
-//        }
-//        return nil
-      }
-      
-      //let flattenedErrors = errors.flatMap { $0 }
+      let errors = results.compactMap { $0?.error }
       if errors.isEmpty {
         completion(nil)
       } else {
-        let aggregateError = AdvancedOperationError.aggregateErrors(errors: errors)
+        let aggregateError = AdvancedOperationError.conditionsEvaluationFinished(message: "\(operation.operationName) didn't pass the conditions evaluation.", errors: errors)
         completion(aggregateError)
       }
-      
     }
   }
   
@@ -123,6 +113,5 @@ internal final class ConditionEvaluatorOperation: AdvancedOperation {
     } else {
       os_log("%{public}s conditions have been evaluated.", log: log, type: .info, evaluatedOperationName)
     }
-    
   }
 }
