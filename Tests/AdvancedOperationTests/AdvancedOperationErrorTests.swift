@@ -24,8 +24,7 @@
 import XCTest
 @testable import AdvancedOperation
 
-class AdvancedOperationErrorTests: XCTestCase {
-
+final class AdvancedOperationErrorTests: XCTestCase {
   func testConditionFailedError() {
     let message = "test"
     let info = ["1": 1, "a": "a"] as [String : Any]

@@ -25,7 +25,6 @@ import XCTest
 @testable import AdvancedOperation
 
 final class AdvancedOperationQueueTests: XCTestCase {
-
   func testAddBlockAsOperation() {
     let queue = AdvancedOperationQueue()
     let delegate = MockOperationQueueDelegate()

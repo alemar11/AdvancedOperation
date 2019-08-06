@@ -25,7 +25,6 @@ import XCTest
 @testable import AdvancedOperation
 
 final class OperationUtilsTests: XCTestCase {
-
   func testAddCompletionBlock() {
     let operation = SleepyOperation()
     let expectation1 = expectation(description: "\(#function)\(#line)")

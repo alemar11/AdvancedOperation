@@ -25,7 +25,6 @@ import XCTest
 @testable import AdvancedOperation
 
 final class OperationStateTests: XCTestCase {
-
   func testTransition() {
     // Pending
     XCTAssertTrue(AdvancedOperation.State.pending.canTransition(to: .executing))
