@@ -38,12 +38,12 @@ internal extension AdvancedOperation {
     let evaluator = ConditionEvaluatorOperation(operation: self, conditions: conditions)
 
     // observe if self is beeing cancelled
-    let willCancelObserver = WillCancelObserver { [weak evaluator] _, errors in
+    let willCancelObserver = WillCancelObserver { [weak evaluator] _, error in
       guard let evaluator = evaluator else {
         return
       }
 
-      evaluator.cancel(errors: errors)
+      evaluator.cancel(error: error)
     }
 
     addObserver(willCancelObserver)

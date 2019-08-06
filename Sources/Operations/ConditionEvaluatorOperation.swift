@@ -30,82 +30,99 @@ internal final class ConditionEvaluatorOperation: AdvancedOperation {
   private let evaluatedOperationName: String
   private let evaluatedConditions: [OperationCondition]
   private weak var evaluatedOperation: AdvancedOperation?
-
+  
   init(operation: AdvancedOperation, conditions: [OperationCondition]) {
     evaluatedOperationName = operation.operationName
     evaluatedConditions = conditions
     evaluatedOperation = operation
-
+    
     super.init()
-
+    
     name = "ConditionEvaluatorOperation<\(operation.operationName)>"
   }
-
+  
   override func execute() {
     if isCancelled {
       finish()
       return
     }
-
+    
     guard let operation = evaluatedOperation else {
       let message = "The operation to evaluate \(evaluatedOperationName) doesn't exist anymore."
       let error = AdvancedOperationError.executionFinished(message: message,
                                                            userInfo: ["AdvancedOperation": operationName])
-      finish(errors: [error])
+      finish(error: error)
       return
     }
-
-    ConditionEvaluatorOperation.evaluate(evaluatedConditions, for: operation) { [weak self] errors in
-      if !errors.isEmpty {
-        operation.cancel(errors: errors)
+    
+    ConditionEvaluatorOperation.evaluate(evaluatedConditions, for: operation) { [weak self] error in
+      if let error = error {
+        operation.cancel(error: error)
       }
-      self?.finish(errors: errors)
+      self?.finish()
+      //self?.finish(error: error) // TODO: check this finish here
     }
   }
-
-  private static func evaluate(_ conditions: [OperationCondition], for operation: AdvancedOperation, completion: @escaping ([Error]) -> Void) {
+  
+  private static func evaluate(_ conditions: [OperationCondition], for operation: AdvancedOperation, completion: @escaping (Error?) -> Void) {
     let conditionGroup = DispatchGroup()
     var results = [OperationConditionResult?](repeating: nil, count: conditions.count)
     let lock = UnfairLock()
-
+    
     for (index, condition) in conditions.enumerated() {
       conditionGroup.enter()
       condition.evaluate(for: operation) { result in
         lock.synchronized {
           results[index] = result
         }
-
+        
         conditionGroup.leave()
       }
     }
-
+    
     conditionGroup.notify(queue: DispatchQueue.global()) {
       // Aggregate all the occurred errors.
-      let errors = results.compactMap { result -> [Error]? in
-        if case .failed(let errors)? = result {
-          return errors
-        }
-        return nil
+      let errors = results.compactMap { result -> Error? in
+        return result?.error // TODO: I've reduced the code
+//        if case .failed(let error)? = result {
+//          return error
+//        }
+//        return nil
       }
-
-      let flattenedErrors = errors.flatMap { $0 }
-      completion(flattenedErrors)
+      
+      //let flattenedErrors = errors.flatMap { $0 }
+      if errors.isEmpty {
+        completion(nil)
+      } else {
+        let aggregateError = AdvancedOperationError.aggregateErrors(errors: errors)
+        completion(aggregateError)
+      }
+      
     }
   }
-
+  
   override func operationWillExecute() {
     os_log("%{public}s conditions are being evaluated.", log: log, type: .info, evaluatedOperationName)
   }
-
-  override func operationWillCancel(errors: [Error]) { }
-
-  override func operationDidCancel(errors: [Error]) {
-    os_log("%{public}s conditions have been cancelled with %{public}d errors.", log: log, type: .info, evaluatedOperationName, errors.count)
+  
+  override func operationWillCancel(error: Error?) { }
+  
+  override func operationDidCancel(error: Error?) {
+    if error != nil {
+      os_log("%{public}s conditions have been cancelled with an error.", log: log, type: .info, evaluatedOperationName)
+    } else {
+      os_log("%{public}s conditions have been cancelled.", log: log, type: .info, evaluatedOperationName)
+    }
   }
-
-  override func operationWillFinish(errors: [Error]) { }
-
-  override func operationDidFinish(errors: [Error]) {
-    os_log("%{public}s conditions have been evaluated with %{public}d errors.", log: log, type: .info, evaluatedOperationName, errors.count)
+  
+  override func operationWillFinish(error: Error?) { }
+  
+  override func operationDidFinish(error: Error?) {
+    if error != nil {
+      os_log("%{public}s conditions have been evaluated with an error.", log: log, type: .info, evaluatedOperationName)
+    } else {
+      os_log("%{public}s conditions have been evaluated.", log: log, type: .info, evaluatedOperationName)
+    }
+    
   }
 }

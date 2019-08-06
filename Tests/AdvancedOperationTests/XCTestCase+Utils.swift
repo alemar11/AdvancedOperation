@@ -25,48 +25,48 @@ import Foundation
 import XCTest
 @testable import AdvancedOperation
 
-extension XCTestCase {
-
-  func XCTAssertSameErrorQuantity(errors: [Error], expectedErrors: [Error], file: String = #file, line: Int = #line) {
-    guard checkSameErrorQuantity(generatedErrors: errors, expectedErrors: expectedErrors) else {
-      return recordFailure(withDescription: "Operation has \(errors.count) errors, expected: \(expectedErrors.count)", inFile: file, atLine: line, expected: true)
-    }
-  }
-
-  /// Returns `true` if the generated operation's error are the same (as quantity) of the expected ones.
-  private func checkSameErrorQuantity(generatedErrors: [Error], expectedErrors: [Error]) -> Bool {
-    guard generatedErrors.count == expectedErrors.count else { return false }
-    var generatedErrorsDictionary = [String: Int]()
-    generatedErrors.forEach { error in
-      let description = error.localizedDescription
-      if let count = generatedErrorsDictionary[description] {
-        generatedErrorsDictionary[description] = count + 1
-      } else {
-        generatedErrorsDictionary[description] = 1
-      }
-    }
-
-    var expectedErrorsDictionary = [String: Int]()
-    expectedErrors.forEach { error in
-      let description = error.localizedDescription
-      if let count = expectedErrorsDictionary[description] {
-        expectedErrorsDictionary[description] = count + 1
-      } else {
-        expectedErrorsDictionary[description] = 1
-      }
-    }
-
-    guard expectedErrorsDictionary.keys.count == generatedErrorsDictionary.keys.count else { return false }
-
-    for key in expectedErrorsDictionary.keys {
-      guard
-        let expectedCount = expectedErrorsDictionary[key],
-        let generatedCount = generatedErrorsDictionary[key]
-        else { return false }
-
-      guard expectedCount == generatedCount else { return false }
-    }
-
-    return true
-  }
-}
+//extension XCTestCase {
+//
+//  func XCTAssertSameErrorQuantity(errors: [Error], expectedErrors: [Error], file: String = #file, line: Int = #line) {
+//    guard checkSameErrorQuantity(generatedErrors: errors, expectedErrors: expectedErrors) else {
+//      return recordFailure(withDescription: "Operation has \(errors.count) errors, expected: \(expectedErrors.count)", inFile: file, atLine: line, expected: true)
+//    }
+//  }
+//
+//  /// Returns `true` if the generated operation's error are the same (as quantity) of the expected ones.
+//  private func checkSameErrorQuantity(generatedErrors: [Error], expectedErrors: [Error]) -> Bool {
+//    guard generatedErrors.count == expectedErrors.count else { return false }
+//    var generatedErrorsDictionary = [String: Int]()
+//    generatedErrors.forEach { error in
+//      let description = error.localizedDescription
+//      if let count = generatedErrorsDictionary[description] {
+//        generatedErrorsDictionary[description] = count + 1
+//      } else {
+//        generatedErrorsDictionary[description] = 1
+//      }
+//    }
+//
+//    var expectedErrorsDictionary = [String: Int]()
+//    expectedErrors.forEach { error in
+//      let description = error.localizedDescription
+//      if let count = expectedErrorsDictionary[description] {
+//        expectedErrorsDictionary[description] = count + 1
+//      } else {
+//        expectedErrorsDictionary[description] = 1
+//      }
+//    }
+//
+//    guard expectedErrorsDictionary.keys.count == generatedErrorsDictionary.keys.count else { return false }
+//
+//    for key in expectedErrorsDictionary.keys {
+//      guard
+//        let expectedCount = expectedErrorsDictionary[key],
+//        let generatedCount = generatedErrorsDictionary[key]
+//        else { return false }
+//
+//      guard expectedCount == generatedCount else { return false }
+//    }
+//
+//    return true
+//  }
+//}

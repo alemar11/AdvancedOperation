@@ -44,15 +44,16 @@ public struct NoFailedDependenciesCondition: OperationCondition {
       dependencies = dependencies.filter { !$0.isCancelled }
     }
 
-    let failures = dependencies.compactMap { $0 as? AdvancedOperation }.filter { $0.hasErrors }
+    let failures = dependencies.compactMap { $0 as? AdvancedOperation }.filter { $0.hasError }
 
     if !failures.isEmpty {
       let names = failures.map { $0.name ?? "\(type(of: $0))" }
       let error = AdvancedOperationError.conditionFailed(message: "Some dependencies have failures.",
                                                          userInfo: [operationConditionKey: self.name,
                                                                     type(of: self).noFailedDependenciesConditionKey: names])
-      let errors = [error] + failures.flatMap { $0.errors }
-      completion(.failed(errors))
+      let errors = [error] + failures.compactMap { $0.error } // this list will never be empty
+      let aggregatedError = AdvancedOperationError.aggregateErrors(errors: errors)
+      completion(.failed(aggregatedError))
     } else {
       completion(.satisfied)
     }

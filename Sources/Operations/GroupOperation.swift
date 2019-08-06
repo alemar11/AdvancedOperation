@@ -54,7 +54,7 @@ open class GroupOperation: AdvancedOperation {
   /// the OperationQueue internal count cannot be reliably used in the AdvancedOperationQueue delegates
   private let operationCount = Atomic(0)
 
-  private let temporaryCancelErrors = Atomic([Error]())
+  private let temporaryCancelError = Atomic<Error?>(nil)
 
   private let cancellationRequested = Atomic(false)
 
@@ -123,7 +123,7 @@ open class GroupOperation: AdvancedOperation {
 
   /// Advises the `GroupOperation` object that it should stop executing its tasks.
   /// - Note: Once all the tasks are cancelled, the GroupOperation state will be set as finished if it's started.
-  public final override func cancel(errors: [Error]) {
+  public final override func cancel(error: Error? = nil) {
     let cancellationAlreadyRequested = cancellationRequested.safeAccess { value -> Bool in
       if value {
         return false
@@ -135,7 +135,7 @@ open class GroupOperation: AdvancedOperation {
 
     guard !cancellationAlreadyRequested else { return }
 
-    temporaryCancelErrors.mutate { $0 = errors }
+    temporaryCancelError.mutate { $0 = error }
 
     guard !isCancelled && !isFinished else {
       return
@@ -146,7 +146,7 @@ open class GroupOperation: AdvancedOperation {
   }
 
   open override func cancel() {
-    cancel(errors: [])
+    cancel(error: nil)
   }
 
   /// Performs the receiver’s non-concurrent task.
@@ -225,17 +225,17 @@ extension GroupOperation: AdvancedOperationQueueDelegate {
     operationCount.mutate { $0 += 1 }
   }
 
-  public func operationQueue(operationQueue: AdvancedOperationQueue, operationWillFinish operation: AdvancedOperation, withErrors errors: [Error]) {
+  public func operationQueue(operationQueue: AdvancedOperationQueue, operationWillFinish operation: AdvancedOperation, withError error: Error?) {
     guard operationQueue === underlyingOperationQueue else {
       return
     }
 
-    if !errors.isEmpty { // avoid TSAN _swiftEmptyArrayStorage
-      aggregatedErrors.mutate { $0.append(contentsOf: errors) }
+    if let error = error {
+      aggregatedErrors.mutate { $0.append(error) }
     }
   }
 
-  public func operationQueue(operationQueue: AdvancedOperationQueue, operationDidFinish operation: Operation, withErrors errors: [Error]) {
+  public func operationQueue(operationQueue: AdvancedOperationQueue, operationDidFinish operation: Operation, withError error: Error?) {
     guard operationQueue === underlyingOperationQueue else {
       return
     }
@@ -245,7 +245,7 @@ extension GroupOperation: AdvancedOperationQueueDelegate {
 
     if operationCount.value == 0 {
       if cancellationRequested.value {
-        super.cancel(errors: temporaryCancelErrors.value)
+        super.cancel(error: temporaryCancelError.value)
 
         /// An operation that is not yet started cannot be finished
         if isExecuting {
@@ -261,12 +261,19 @@ extension GroupOperation: AdvancedOperationQueueDelegate {
         }
       } else {
         underlyingOperationQueue.isSuspended = true
-        finish(errors: self.aggregatedErrors.value)
+
+        let errors = self.aggregatedErrors.value
+        if errors.isEmpty {
+          finish(error: nil)
+        } else {
+          let aggregateError = AdvancedOperationError.aggregateErrors(errors: errors)
+          finish(error: aggregateError)
+        }
       }
     }
   }
 
-  public func operationQueue(operationQueue: AdvancedOperationQueue, operationWillCancel operation: AdvancedOperation, withErrors errors: [Error]) { }
+  public func operationQueue(operationQueue: AdvancedOperationQueue, operationWillCancel operation: AdvancedOperation, withError error: Error?) { }
 
-  public func operationQueue(operationQueue: AdvancedOperationQueue, operationDidCancel operation: AdvancedOperation, withErrors errors: [Error]) { }
+  public func operationQueue(operationQueue: AdvancedOperationQueue, operationDidCancel operation: AdvancedOperation, withError error: Error?) { }
 }

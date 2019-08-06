@@ -29,19 +29,19 @@ public class BlockObserver: OperationObserving {
 
   private let willExecuteHandler: ((AdvancedOperation) -> Void)?
   private let didExecuteHandler: ((AdvancedOperation) -> Void)?
-  private let willFinishHandler: ((AdvancedOperation, [Error]) -> Void)?
-  private let didFinishHandler: ((AdvancedOperation, [Error]) -> Void)?
-  private let willCancelHandler: ((AdvancedOperation, [Error]) -> Void)?
-  private let didCancelHandler: ((AdvancedOperation, [Error]) -> Void)?
+  private let willFinishHandler: ((AdvancedOperation, Error?) -> Void)?
+  private let didFinishHandler: ((AdvancedOperation, Error?) -> Void)?
+  private let willCancelHandler: ((AdvancedOperation, Error?) -> Void)?
+  private let didCancelHandler: ((AdvancedOperation, Error?) -> Void)?
   private let didProduceOperationHandler: ((Operation, Operation) -> Void)?
 
   public init (willExecute: ((AdvancedOperation) -> Void)? = nil,
                didExecute: ((AdvancedOperation) -> Void)? = nil,
                didProduce: ((Operation, Operation) -> Void)? = nil,
-               willCancel: ((AdvancedOperation, [Error]) -> Void)? = nil,
-               didCancel: ((AdvancedOperation, [Error]) -> Void)? = nil,
-               willFinish: ((AdvancedOperation, [Error]) -> Void)? = nil,
-               didFinish: ((AdvancedOperation, [Error]) -> Void)? = nil) {
+               willCancel: ((AdvancedOperation, Error?) -> Void)? = nil,
+               didCancel: ((AdvancedOperation, Error?) -> Void)? = nil,
+               willFinish: ((AdvancedOperation, Error?) -> Void)? = nil,
+               didFinish: ((AdvancedOperation, Error?) -> Void)? = nil) {
     self.willExecuteHandler = willExecute
     self.didExecuteHandler = didExecute
     self.didProduceOperationHandler = didProduce
@@ -61,21 +61,20 @@ public class BlockObserver: OperationObserving {
     didExecuteHandler?(operation)
   }
 
-
-  public func operationWillFinish(operation: AdvancedOperation, withErrors errors: [Error]) {
-    willFinishHandler?(operation, errors)
+  public func operationWillFinish(operation: AdvancedOperation, withError error: Error?) {
+    willFinishHandler?(operation, error)
   }
 
-  public func operationDidFinish(operation: AdvancedOperation, withErrors errors: [Error]) {
-    didFinishHandler?(operation, errors)
+  public func operationDidFinish(operation: AdvancedOperation, withError error: Error?) {
+    didFinishHandler?(operation, error)
   }
 
-  public func operationWillCancel(operation: AdvancedOperation, withErrors errors: [Error]) {
-    willCancelHandler?(operation, errors)
+  public func operationWillCancel(operation: AdvancedOperation, withError error: Error?) {
+    willCancelHandler?(operation, error)
   }
 
-  public func operationDidCancel(operation: AdvancedOperation, withErrors errors: [Error]) {
-    didCancelHandler?(operation, errors)
+  public func operationDidCancel(operation: AdvancedOperation, withError error: Error?) {
+    didCancelHandler?(operation, error)
   }
 
   public func operation(operation: AdvancedOperation, didProduce producedOperation: Operation) {
@@ -87,15 +86,15 @@ public class BlockObserver: OperationObserving {
 internal final class WillCancelObserver: OperationWillCancelObserving {
   // MARK: - Properties
 
-  private let willCancelHandler: ((AdvancedOperation, [Error]) -> Void)?
+  private let willCancelHandler: ((AdvancedOperation, Error?) -> Void)?
 
-  public init (willCancel: ((AdvancedOperation, [Error]) -> Void)? = nil) {
+  public init (willCancel: ((AdvancedOperation, Error?) -> Void)? = nil) {
     self.willCancelHandler = willCancel
   }
 
   // MARK: - OperationObserving
 
-  public func operationWillCancel(operation: AdvancedOperation, withErrors errors: [Error]) {
-    willCancelHandler?(operation, errors)
+  public func operationWillCancel(operation: AdvancedOperation, withError error: Error?) {
+    willCancelHandler?(operation, error)
   }
 }

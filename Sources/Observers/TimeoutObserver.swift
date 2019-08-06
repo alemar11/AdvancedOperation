@@ -47,7 +47,7 @@ public struct TimeoutObserver: OperationWillExecuteObserving {
         let message = "\(operation.operationName) has been cancelled by the TimeoutObserver with a timeout of \(delay) seconds."
         let error = AdvancedOperationError.executionCancelled(message: message,
                                                               userInfo: [observerKey: "TimeoutObserver"])
-        operation.cancel(errors: [error])
+        operation.cancel(error: error)
       }
     }
   }

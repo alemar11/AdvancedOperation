@@ -27,7 +27,7 @@ import Foundation
 /// A concurrent sublcass of `AdvancedOperation` to execute a closure.
 public final class AdvancedBlockOperation: AdvancedOperation {
   /// A closure type that takes a closure as its parameter.
-  public typealias OperationBlock = (@escaping ([Error]) -> Void) -> Void
+  public typealias OperationBlock = (@escaping (Error?) -> Void) -> Void
 
   // MARK: - Private Properties
 
@@ -54,7 +54,7 @@ public final class AdvancedBlockOperation: AdvancedOperation {
     self.init(block: { complete in
       queue.async {
         block()
-        complete([])
+        complete(nil)
       }
     })
   }
@@ -67,8 +67,8 @@ public final class AdvancedBlockOperation: AdvancedOperation {
       return
     }
 
-    block { [weak self] errors in
-      self?.finish(errors: errors)
+    block { [weak self] error in
+      self?.finish(error: error)
     }
   }
 }

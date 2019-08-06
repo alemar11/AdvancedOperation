@@ -79,7 +79,7 @@ internal final class ExclusivityManager {
       if cancellable {
         // swiftlint:disable:next line_length
         let error = AdvancedOperationError.executionCancelled(message: "The operation has been cancelled by the ExclusivityManager because there is already a running operation for the identifier: \(category).")
-        operation.cancel(errors: [error])
+        operation.cancel(error: error)
         return // early exit because there is no need to add a cancelled operation to the manager
       } else {
         operation.addDependency(previous)

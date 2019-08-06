@@ -40,7 +40,7 @@ class BlockConditionTests: XCTestCase {
     queue.addOperations([operation], waitUntilFinished: true)
 
     XCTAssertTrue(operation.isCancelled)
-    XCTAssertTrue(operation.hasErrors)
+    XCTAssertTrue(operation.hasError)
     XCTAssertTrue(operation.isFinished)
   }
 
@@ -58,7 +58,7 @@ class BlockConditionTests: XCTestCase {
 
     queue.addOperations([operation], waitUntilFinished: true)
     XCTAssertTrue(operation.isCancelled)
-    XCTAssertTrue(operation.hasErrors)
+    XCTAssertTrue(operation.hasError)
     XCTAssertTrue(operation.isFinished)
   }
 
@@ -72,7 +72,7 @@ class BlockConditionTests: XCTestCase {
     operation.addCondition(condition)
     queue.addOperations([operation], waitUntilFinished: true)
     XCTAssertFalse(operation.isCancelled)
-    XCTAssertFalse(operation.hasErrors)
+    XCTAssertFalse(operation.hasError)
     XCTAssertTrue(operation.isFinished)
   }
 }

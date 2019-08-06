@@ -23,11 +23,11 @@
 
 public enum OperationConditionResult {
   case satisfied
-  case failed([Error])
+  case failed(Error)
 
-  public var errors: [Error]? {
-    if case .failed(let errors) = self {
-      return errors
+  public var error: Error? {
+    if case .failed(let error) = self {
+      return error
     }
     return nil
   }

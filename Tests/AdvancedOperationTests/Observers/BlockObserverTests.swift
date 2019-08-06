@@ -141,8 +141,8 @@ class BlockObserverTests: XCTestCase {
       // producedOperation will be executed right after it gets produced but it will have errors because of the condition
       wait(for: [expectation2, expectation1], timeout: 15, enforceOrder: true)
 
-      XCTAssertTrue(producedOperation.hasErrors)
-      XCTAssertFalse(operation.hasErrors)
+      XCTAssertTrue(producedOperation.hasError)
+      XCTAssertFalse(operation.hasError)
       XCTAssertTrue(operation.isFinished)
       XCTAssertTrue(producedOperation.isFinished)
     }

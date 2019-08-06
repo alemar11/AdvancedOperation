@@ -29,7 +29,7 @@ final class AdvancedBlockOperationTests: XCTestCase {
   func testCancel() {
     let operation = AdvancedBlockOperation { complete in
       DispatchQueue(label: "\(identifier).\(#function)", attributes: .concurrent).asyncAfter(deadline: .now() + 2) {
-        complete([])
+        complete(nil)
       }
     }
     XCTAssertTrue(operation.isAsynchronous)
@@ -46,7 +46,7 @@ final class AdvancedBlockOperationTests: XCTestCase {
 
   func testEarlyBailOut() {
     let operation = AdvancedBlockOperation { complete in
-      complete([])
+      complete(nil)
     }
 
     let expectation1 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isFinished), object: operation, expectedValue: true)
@@ -62,7 +62,7 @@ final class AdvancedBlockOperationTests: XCTestCase {
     let operation = AdvancedBlockOperation { complete in
       XCTAssertTrue(Thread.isMainThread)
       DispatchQueue(label: "\(identifier).\(#function)", attributes: .concurrent).asyncAfter(deadline: .now() + 3) {
-        complete([])
+        complete(nil)
       }
     }
 
@@ -74,7 +74,7 @@ final class AdvancedBlockOperationTests: XCTestCase {
   }
 
   func testBlockOperationWithAsyncQueueFinishedWithErrors() {
-    let errors = [MockError.generic(date: Date()), MockError.failed]
+    let error = MockError.generic(date: Date())
 
     var object = NSObject()
     weak var weakObject = object
@@ -82,7 +82,7 @@ final class AdvancedBlockOperationTests: XCTestCase {
     var operation = AdvancedBlockOperation { [object] complete in
       DispatchQueue(label: "\(identifier).\(#function)", attributes: .concurrent).asyncAfter(deadline: .now() + 2) {
         _ = object
-        complete(errors)
+        complete(error)
       }
     }
 
@@ -92,7 +92,12 @@ final class AdvancedBlockOperationTests: XCTestCase {
 
     waitForExpectations(timeout: 5)
     XCTAssertTrue(operation.isFinished)
-    XCTAssertSameErrorQuantity(errors: operation.errors, expectedErrors: errors)
+
+    if let opError = operation.error as? MockError {
+      XCTAssertEqual(opError, error)
+    } else {
+      XCTFail("Wrong error type.")
+    }
 
     // Memory leaks test: once release the operation, the captured object (by reference) should be nil (weakObject)
     operation = AdvancedBlockOperation { }
@@ -109,7 +114,7 @@ final class AdvancedBlockOperationTests: XCTestCase {
       DispatchQueue.global().async {
         sleep(3)
         expectation1.fulfill()
-        complete([])
+        complete(nil)
       }
     }
     operation.addCompletionBlock {
@@ -164,7 +169,7 @@ final class AdvancedBlockOperationTests: XCTestCase {
       var operation = AdvancedBlockOperation { [unowned object] complete in
         DispatchQueue(label: "\(identifier).\(#function)", attributes: .concurrent).async {
           _ = object
-          complete([])
+          complete(nil)
         }
       }
 

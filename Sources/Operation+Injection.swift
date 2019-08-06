@@ -75,7 +75,7 @@ extension AdvancedOperation {
 
     let adapterOperation = AdvancedBlockOperation { [unowned outputProducingOperation = outputProducingOperation, unowned inputRequiringOperation = inputRequiringOperation] complete in
       inputRequiringOperation.input = outputProducingOperation.output
-      complete([])
+      complete(nil)
     }
 
     adapterOperation.addDependency(outputProducingOperation)
@@ -104,7 +104,7 @@ extension AdvancedOperation {
 
     let adapterOperation = AdvancedBlockOperation { [unowned outputProducingOperation = outputProducingOperation, unowned inputRequiringOperation = inputRequiringOperation] complete in
       inputRequiringOperation.input = transform(outputProducingOperation.output)
-      complete([])
+      complete(nil)
     }
 
     adapterOperation.addDependency(outputProducingOperation)

@@ -131,7 +131,7 @@ extension UIBackgroundObserver: OperationDidExecuteObserving & OperationDidFinis
     isExecuting = true
   }
 
-  public func operationDidFinish(operation: AdvancedOperation, withErrors errors: [Error]) {
+  public func operationDidFinish(operation: AdvancedOperation, withError error: Error?) {
     isExecuting = false
     endBackgroundTask()
   }

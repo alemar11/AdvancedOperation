@@ -38,7 +38,7 @@ class NegatedConditionTests: XCTestCase {
     negatedFailingCondition.evaluate(for: dummyOperation) { (result) in
       switch result {
       case .satisfied:
-        XCTAssertNil(result.errors)
+        XCTAssertNil(result.error)
         expectation1.fulfill()
       default: return
       }
@@ -53,8 +53,7 @@ class NegatedConditionTests: XCTestCase {
     negatedFailingCondition.evaluate(for: dummyOperation) { (result) in
       switch result {
       case .failed(_):
-        XCTAssertNotNil(result.errors)
-        XCTAssertEqual(result.errors?.count, 1)
+        XCTAssertNotNil(result.error)
         expectation1.fulfill()
       default: return
       }
@@ -68,10 +67,10 @@ class NegatedConditionTests: XCTestCase {
     let operation1 = AdvancedBlockOperation { }
     operation1.name = "operation1"
 
-    let operation2 = FailingAsyncOperation(errors: [.failed])
+    let operation2 = FailingAsyncOperation(error: .failed)
     operation2.name = "operation2"
 
-    let operation3 = FailingAsyncOperation(errors: [.failed])
+    let operation3 = FailingAsyncOperation(error: .failed)
     operation3.name = "operation3"
 
     let operation4 = DelayOperation(interval: 1)
@@ -91,6 +90,6 @@ class NegatedConditionTests: XCTestCase {
 
     wait(for: [expectation1, expectation2, expectation3, expectation4], timeout: 10)
 
-    XCTAssertFalse(operation1.hasErrors)
+    XCTAssertFalse(operation1.hasError)
   }
 }

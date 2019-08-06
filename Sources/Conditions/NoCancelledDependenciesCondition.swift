@@ -40,7 +40,7 @@ public struct NoCancelledDependeciesCondition: OperationCondition {
       let error = AdvancedOperationError.conditionFailed(message: "Some dependencies have been cancelled.",
                                                          userInfo: [operationConditionKey: self.name,
                                                                     type(of: self).noCancelledDependeciesConditionKey: names])
-      completion(.failed([error]))
+      completion(.failed(error))
     } else {
       completion(.satisfied)
     }

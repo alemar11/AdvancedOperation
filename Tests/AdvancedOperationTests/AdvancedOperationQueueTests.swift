@@ -39,8 +39,8 @@ final class AdvancedOperationQueueTests: XCTestCase {
 
     delegate.willAddOperationHandler = { _,_ in willAddExpectation.fulfill() }
     delegate.willExecuteOperationHandler = { _,_ in willExecuteExpectation.fulfill() }
-    delegate.didFinishOperationHandler = { _,_, errors in
-      XCTAssertTrue(errors.isEmpty)
+    delegate.didFinishOperationHandler = { _,_, error in
+      XCTAssertNil(error)
       didFinishExpectation.fulfill()
     }
 
@@ -57,7 +57,7 @@ final class AdvancedOperationQueueTests: XCTestCase {
 
     let operation1 = SleepyAsyncOperation(interval1: 1, interval2: 0, interval3: 1)
     let operation2 = AdvancedBlockOperation { complete in
-      complete([])
+      complete(nil)
     }
     let operation3 = SleepyOperation()
     let operation4 = DelayOperation(interval: 1)
@@ -577,7 +577,7 @@ final class AdvancedOperationQueueTests: XCTestCase {
   }
 
   func testSynchronousOperationFinishedWithoutErrors() {
-    let operation = SynchronousOperation(errors: [])
+    let operation = SynchronousOperation(error: nil)
     let queue = AdvancedOperationQueue()
     let expectation1 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isFinished), object: operation, expectedValue: true)
 
@@ -587,14 +587,14 @@ final class AdvancedOperationQueueTests: XCTestCase {
   }
 
   func testSynchronousOperationFinishedWithErrors() {
-    let operation = SynchronousOperation(errors: [MockError.failed, MockError.test])
+    let operation = SynchronousOperation(error: MockError.failed)
     let queue = AdvancedOperationQueue()
     let expectation1 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isFinished), object: operation, expectedValue: true)
     queue.addOperation(operation)
 
     wait(for: [expectation1], timeout: 10)
 
-    XCTAssertTrue(operation.hasErrors)
+    XCTAssertTrue(operation.hasError)
   }
 
   func testAccessingOperationQueueFromOperation() {

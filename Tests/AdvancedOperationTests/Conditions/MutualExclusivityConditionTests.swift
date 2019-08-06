@@ -52,7 +52,6 @@ class MutualExclusivityConditionTests: XCTestCase {
     let condition = MutualExclusivityCondition(mode: .enqueue(identifier: "condition1"))
     operation1.addCondition(condition)
 
-
     let operation2 = SleepyAsyncOperation(interval1: 0, interval2: 1, interval3: 1)
     operation2.addCondition(condition)
 
@@ -78,7 +77,7 @@ class MutualExclusivityConditionTests: XCTestCase {
 
     let operation1 = AdvancedBlockOperation { complete in
       text += "A "
-      complete([])
+      complete(nil)
     }
     operation1.addCondition(condition)
     operation1.completionBlock = {
@@ -87,7 +86,7 @@ class MutualExclusivityConditionTests: XCTestCase {
 
     let operation2 = AdvancedBlockOperation { complete in
       text += "B "
-      complete([])
+      complete(nil)
     }
     operation2.addCondition(condition)
     operation2.completionBlock = {

@@ -43,24 +43,24 @@ public protocol OperationDidExecuteObserving: OperationObservingType {
 public protocol OperationWillFinishObserving: OperationObservingType {
   /// Invoked as an `Operation` finishes, along with any errors produced during execution.
   /// - Note: An operation can finish without starting (i.e. if cancelled before its execution)
-  func operationWillFinish(operation: AdvancedOperation, withErrors errors: [Error])
+  func operationWillFinish(operation: AdvancedOperation, withError error: Error?)
 }
 
 public protocol OperationDidFinishObserving: OperationObservingType {
   /// Invoked as an `Operation` finishes, along with any errors produced during execution.
   /// - Note: An operation can finish without starting (i.e. if cancelled before its execution)
   /// - Warning: This method will be invoked **after** the operation `completionBlock`.
-  func operationDidFinish(operation: AdvancedOperation, withErrors errors: [Error])
+  func operationDidFinish(operation: AdvancedOperation, withError error: Error?)
 }
 
 public protocol OperationWillCancelObserving: OperationObservingType {
   /// Invoked as an `Operation` is cancelled, along with any errors produced during execution.
-  func operationWillCancel(operation: AdvancedOperation, withErrors errors: [Error])
+  func operationWillCancel(operation: AdvancedOperation, withError error: Error?)
 }
 
 public protocol OperationDidCancelObserving: OperationObservingType {
   /// Invoked as an `Operation` is cancelled, along with any errors produced during execution.
-  func operationDidCancel(operation: AdvancedOperation, withErrors errors: [Error])
+  func operationDidCancel(operation: AdvancedOperation, withError error: Error?)
 }
 
 public protocol OperationDidProduceOperationObserving: OperationObservingType {

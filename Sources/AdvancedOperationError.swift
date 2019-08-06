@@ -23,11 +23,12 @@
 
 import Foundation
 
-public struct AdvancedOperationError {
+public enum AdvancedOperationError {
   public enum Code {
     static let conditionFailed = 100
     static let executionCancelled = 200
     static let executionFinished = 300
+    static let aggregateErrors = 400
   }
 
   static var domain = identifier
@@ -57,7 +58,7 @@ public struct AdvancedOperationError {
       info[key] = value
     }
 
-  /// Creates an error usable when an operation finishes with errors.
+    /// Creates an error usable when an operation finishes with errors.
     return NSError(domain: domain, code: Code.executionCancelled, userInfo: info)
   }
 
@@ -72,5 +73,14 @@ public struct AdvancedOperationError {
     }
 
     return NSError(domain: domain, code: Code.executionFinished, userInfo: info)
+  }
+
+  public static func aggregateErrors(errors: [Error]) -> NSError { // TODO: refine this error
+    let info: [String: Any] =  [
+      NSLocalizedFailureReasonErrorKey: "The operation has generated some errors.",
+      NSLocalizedDescriptionKey: "The operation has generated some errors.",
+      "\(identifier).UnderlyingErrorsKey": errors
+    ]
+    return NSError(domain: domain, code: Code.aggregateErrors, userInfo: info)
   }
 }

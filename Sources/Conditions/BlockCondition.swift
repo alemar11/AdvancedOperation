@@ -29,15 +29,15 @@ import Foundation
 public struct BlockCondition: OperationCondition {
   /// The block type which returns a Bool.
   public typealias Block = () throws -> Bool
-
+  
   static var blockConditionKey: String { return "BlockCondition" }
-
+  
   let block: Block
-
+  
   public init(block: @escaping Block) {
     self.block = block
   }
-
+  
   public func evaluate(for operation: AdvancedOperation, completion: @escaping (OperationConditionResult) -> Void) {
     do {
       let result = try block()
@@ -45,14 +45,14 @@ public struct BlockCondition: OperationCondition {
         completion(.satisfied)
       } else {
         let conditionError = AdvancedOperationError.conditionFailed(message: "The BlockCondition has returned false.",
-                                                           userInfo: [operationConditionKey: name])
-         completion(.failed([conditionError]))
+                                                                    userInfo: [operationConditionKey: name])
+        completion(.failed(conditionError))
       }
     } catch {
       let conditionError = AdvancedOperationError.conditionFailed(message: "The BlockCondition has thrown an exception.",
-                                                         userInfo: [operationConditionKey: name,
-                                                                    type(of: self).blockConditionKey: error])
-       completion(.failed([conditionError]))
+                                                                  userInfo: [operationConditionKey: name,
+                                                                             type(of: self).blockConditionKey: error])
+      completion(.failed(conditionError))
     }
   }
 }

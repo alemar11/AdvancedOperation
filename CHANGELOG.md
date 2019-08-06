@@ -1,5 +1,8 @@
 # Changelog
 
+### 4.0.0
+- An `AdvancedOperation` can now be cancelled or finished with only one `Error`.
+
 ### 3.2.0
 
 - Added  `OperationDidExecuteObserving` protocol.

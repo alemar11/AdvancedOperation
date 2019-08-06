@@ -45,7 +45,7 @@ public struct NegatedCondition<T: OperationCondition>: OperationCondition {
         let error = AdvancedOperationError.conditionFailed(message: "The condition has been negated.",
                                                            userInfo: [operationConditionKey: conditionName,
                                                                       conditionKey: operation.operationName])
-        return completion(.failed([error]))
+        return completion(.failed(error))
       case .failed:
         return completion(.satisfied)
       }

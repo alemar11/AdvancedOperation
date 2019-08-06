@@ -39,17 +39,17 @@ open class AdvancedOperation: Operation {
   public final override var isCancelled: Bool { return hasBeenCancelled }
   public final override var isConcurrent: Bool { return isAsynchronous }
 
-  /// Errors generated during the execution.
-  public var errors: [Error] { return _errors.value }
+  /// Error generated during the execution.
+  public var error: Error? { return _error.value }
 
-  /// Errors generated during the execution.
-  private let _errors = Atomic([Error]())
+  /// Error generated during the execution.
+  private let _error = Atomic<Error?>(nil)
 
   /// An instance of `OSLog` (by default is disabled).
   public var log = OSLog.disabled
 
-  /// Returns `true` if the `AdvancedOperation` has generated errors during its lifetime.
-  public var hasErrors: Bool { return !errors.isEmpty }
+  /// Returns `true` if the `AdvancedOperation` has generated an error during its lifetime.
+  public var hasError: Bool { return error != nil }
 
   /// Returns the oepration progress.
   @objc
@@ -59,7 +59,7 @@ open class AdvancedOperation: Operation {
     progress.isCancellable = true
     progress.cancellationHandler = { [weak self] in
       let error = AdvancedOperationError.executionCancelled(message: "A Progress has cancelled this operation.")
-      self?.cancel(errors: [error])
+      self?.cancel(error: error)
     }
     return progress
   }()
@@ -177,22 +177,23 @@ open class AdvancedOperation: Operation {
     fatalError("\(type(of: self)) must override `execute()`.")
   }
 
-  open func cancel(errors: [Error] = []) {
-    _cancel(errors: errors)
+  open func cancel(error: Error? = nil) {
+    _cancel(error: error)
   }
 
   open override func cancel() {
     _cancel()
   }
 
-  private final func _cancel(errors cancelErrors: [Error] = []) {
+  private final func _cancel(error cancelError: Error? = nil) {
     let canBeCancelled = commandsLock.synchronized { () -> Bool in
       guard !_cancelling && !hasBeenCancelled else { return false }
       guard !_finishing || state != .finished else { return false }
 
       _cancelling = true
-      if !cancelErrors.isEmpty { // TSAN _swiftEmptyArrayStorage
-        _errors.mutate { $0.append(contentsOf: cancelErrors) }
+      
+      if let cancelError = cancelError {
+        _error.mutate { $0 = cancelError }
       }
       return true
     }
@@ -201,9 +202,9 @@ open class AdvancedOperation: Operation {
       return
     }
 
-    willCancel(errors: cancelErrors)
+    willCancel(error: cancelError)
     hasBeenCancelled = true
-    didCancel(errors: errors)
+    didCancel(error: cancelError)
 
     super.cancel() // it does nothing except firing (super) isReady KVO
 
@@ -212,15 +213,15 @@ open class AdvancedOperation: Operation {
     }
   }
 
-  /// Finishes the operations with errors (if any).
+  /// Finishes the operation.
   ///
-  /// Use this method to complete an **isAsynchronous**/**isConcurrent** operation or to complete a synchronous operation with errors.
-  /// - Note: For synchronous operations it's not needed to call this method unless there are errors to register upon completion.
-  open func finish(errors: [Error] = []) {
-    _finish(errors: errors)
+  /// Use this method to complete an **isAsynchronous**/**isConcurrent** operation or to complete a synchronous operation with an error.
+  /// - Note: For synchronous operations it's not needed to call this method unless there is an error to register upon completion.
+  open func finish(error: Error? = nil) {
+    _finish(error: error)
   }
 
-  private final func _finish(errors finishErrors: [Error] = []) {
+  private final func _finish(error finishError: Error?) {
     let canBeFinished = commandsLock.synchronized { () -> Bool in
       guard !_finishing else {
         return false
@@ -234,9 +235,15 @@ open class AdvancedOperation: Operation {
       }
 
       _finishing = true
-      if !finishErrors.isEmpty { // TSAN _swiftEmptyArrayStorage
-        _errors.mutate { $0.append(contentsOf: finishErrors) }
+
+      if let finishError = finishError {
+        _error.mutate { error in // if the operation has been cancelled due to an error, keep that error
+          if error == nil {
+            error = finishError
+          }
+        }
       }
+
       return true
     }
 
@@ -244,7 +251,7 @@ open class AdvancedOperation: Operation {
       return
     }
 
-    willFinish(errors: errors)
+    willFinish(error: error)
     // the operation is finished, the progress should always reflect that
     if progress.completedUnitCount != progress.totalUnitCount {
       progress.completedUnitCount = progress.totalUnitCount
@@ -252,7 +259,7 @@ open class AdvancedOperation: Operation {
 
     times.mutate { $0.1 = CFAbsoluteTimeGetCurrent() }
     state = .finished
-    didFinish(errors: errors)
+    didFinish(error: error)
 
     commandsLock.synchronized {
       _finishing = false
@@ -305,26 +312,38 @@ open class AdvancedOperation: Operation {
 
   /// Subclass this method to know when the operation will be cancelled.
   /// - Note: Calling the `super` implementation will keep the logging messages.
-  open func operationWillCancel(errors: [Error]) {
+  open func operationWillCancel(error: Error?) {
     os_log("%{public}s is cancelling.", log: log, type: .info, operationName)
   }
 
   /// Subclass this method to know when the operation has been cancelled.
   /// - Note: Calling the `super` implementation will keep the logging messages.
-  open func operationDidCancel(errors: [Error]) {
-    os_log("%{public}s has been cancelled with %{public}d errors.", log: log, type: .info, operationName, errors.count)
+  open func operationDidCancel(error: Error?) {
+    if error != nil {
+      os_log("%{public}s has been cancelled.", log: log, type: .info, operationName)
+    } else {
+      os_log("%{public}s has been cancelled with an error.", log: log, type: .info, operationName)
+    }
   }
 
   /// Subclass this method to know when the operation will finish its execution.
   /// - Note: Calling the `super` implementation will keep the logging messages.
-  open func operationWillFinish(errors: [Error]) {
-    os_log("%{public}s is finishing.", log: log, type: .info, operationName)
+  open func operationWillFinish(error: Error?) {
+    if error != nil {
+      os_log("%{public}s is finishing.", log: log, type: .info, operationName)
+    } else {
+      os_log("%{public}s is finishing with an error.", log: log, type: .info, operationName)
+    }
   }
 
   /// Subclass this method to know when the operation has finished executing.
   /// - Note: Calling the `super` implementation will keep the logging messages.
-  open func operationDidFinish(errors: [Error]) {
-    os_log("%{public}s has finished with %{public}d errors.", log: log, type: .info, operationName, errors.count)
+  open func operationDidFinish(error: Error?) {
+    if error != nil {
+      os_log("%{public}s has finished.", log: log, type: .info, operationName)
+    } else {
+      os_log("%{public}s has finished with an error.", log: log, type: .info, operationName)
+    }
   }
 }
 
@@ -429,35 +448,35 @@ extension AdvancedOperation {
     }
   }
 
-  private func willFinish(errors: [Error]) {
-    operationWillFinish(errors: errors)
+  private func willFinish(error: Error?) {
+    operationWillFinish(error: error)
 
     for observer in willFinishObservers {
-      observer.operationWillFinish(operation: self, withErrors: errors)
+      observer.operationWillFinish(operation: self, withError: error)
     }
   }
 
-  private func didFinish(errors: [Error]) {
-    operationDidFinish(errors: errors)
+  private func didFinish(error: Error?) {
+    operationDidFinish(error: error)
 
     for observer in didFinishObservers {
-      observer.operationDidFinish(operation: self, withErrors: errors)
+      observer.operationDidFinish(operation: self, withError: error)
     }
   }
 
-  private func willCancel(errors: [Error]) {
-    operationWillCancel(errors: errors)
+  private func willCancel(error: Error?) {
+    operationWillCancel(error: error)
 
     for observer in willCancelObservers {
-      observer.operationWillCancel(operation: self, withErrors: errors)
+      observer.operationWillCancel(operation: self, withError: error)
     }
   }
 
-  private func didCancel(errors: [Error]) {
-    operationDidCancel(errors: errors)
+  private func didCancel(error: Error?) {
+    operationDidCancel(error: error)
 
     for observer in didCancelObservers {
-      observer.operationDidCancel(operation: self, withErrors: errors)
+      observer.operationDidCancel(operation: self, withError: error)
     }
   }
 }

@@ -98,8 +98,8 @@ final class AdvancedOperationTests: XCTestCase {
     XCTAssertTrue(operation.isExecuting)
 
     operation.cancel()
-    operation.cancel(errors: [MockError.test])
-    operation.cancel(errors: [MockError.failed])
+    operation.cancel(error: MockError.test)
+    operation.cancel(error: MockError.failed)
     XCTAssertTrue(operation.isCancelled)
 
     wait(for: [expectation1], timeout: 10)
@@ -126,9 +126,9 @@ final class AdvancedOperationTests: XCTestCase {
     operation.cancel()
 
     queue.async {
-      operation.cancel(errors: [MockError.test])
+      operation.cancel(error: MockError.test)
     }
-    operation.cancel(errors: [MockError.failed])
+    operation.cancel(error: MockError.failed)
     XCTAssertTrue(operation.isCancelled)
 
     wait(for: [expectation1], timeout: 10)
@@ -147,16 +147,21 @@ final class AdvancedOperationTests: XCTestCase {
     XCTAssertTrue(operation.isExecuting)
 
     let error = MockError.cancelled(date: Date())
-    operation.cancel(errors: [error])
-    operation.cancel(errors: [MockError.test])
-    operation.cancel(errors: [MockError.failed])
+    operation.cancel(error: error)
+    operation.cancel(error: MockError.test)
+    operation.cancel(error: MockError.failed)
     XCTAssertTrue(operation.isCancelled)
 
     wait(for: [expectation1], timeout: 10)
 
     XCTAssertTrue(operation.isCancelled)
     XCTAssertTrue(operation.isFinished)
-    XCTAssertSameErrorQuantity(errors: operation.errors, expectedErrors: [error])
+
+    if let opError = operation.error as? MockError {
+      XCTAssertEqual(opError, error)
+    } else {
+      XCTFail("Wrong error type.")
+    }
   }
 
   func testObservers() {
@@ -177,7 +182,7 @@ final class AdvancedOperationTests: XCTestCase {
     XCTAssertEqual(observer.didFinishCount, 1)
     XCTAssertEqual(observer.willCancelCount, 0)
     XCTAssertEqual(observer.didCancelCount, 0)
-    XCTAssertEqual(operation.errors.count, 0)
+    XCTAssertNil(operation.error)
   }
 
   func testObserversWithMultipleCancelCommands() {
@@ -196,7 +201,7 @@ final class AdvancedOperationTests: XCTestCase {
 
     operation.start()
     operation.cancel()
-    operation.cancel(errors: [MockError.cancelled(date: Date())])
+    operation.cancel(error: MockError.cancelled(date: Date()))
 
     wait(for: [expectation1, expectation2], timeout: 10)
 
@@ -209,7 +214,7 @@ final class AdvancedOperationTests: XCTestCase {
     XCTAssertEqual(observer.willFinishCount, 1, "willFinishCount should be called 1 time instead of \(observer.willFinishCount)")
     XCTAssertEqual(observer.didFinishCount, 1, "didFinishCount should be called 1 time instead of \(observer.didFinishCount)")
 
-    XCTAssertEqual(operation.errors.count, 0)
+    XCTAssertNil(operation.error)
   }
 
   func testObserversWithOperationProduction() {
@@ -234,7 +239,7 @@ final class AdvancedOperationTests: XCTestCase {
     XCTAssertEqual(observer.didFinishCount, 1)
     XCTAssertEqual(observer.willCancelCount, 0)
     XCTAssertEqual(observer.didCancelCount, 0)
-    XCTAssertEqual(operation.errors.count, 0)
+    XCTAssertNil(operation.error)
   }
 
   func testCancelWithErrors() {
@@ -246,13 +251,18 @@ final class AdvancedOperationTests: XCTestCase {
 
     XCTAssertTrue(operation.isExecuting)
 
-    operation.cancel(errors: [MockError.test])
+    operation.cancel(error: MockError.test)
     XCTAssertTrue(operation.isCancelled)
 
     waitForExpectations(timeout: 10)
     XCTAssertTrue(operation.isCancelled)
     XCTAssertTrue(operation.isFinished)
-    XCTAssertSameErrorQuantity(errors: operation.errors, expectedErrors: [MockError.test])
+
+    if let opError = operation.error as? MockError {
+      XCTAssertEqual(opError, .test)
+    } else {
+      XCTFail("Wrong error type.")
+    }
   }
 
   func testFinishWithErrors() {
@@ -262,7 +272,7 @@ final class AdvancedOperationTests: XCTestCase {
     operation.start()
 
     wait(for: [expectation1], timeout: 10)
-    XCTAssertEqual(operation.errors.count, 2)
+    XCTAssertNotNil(operation.error)
   }
 
   // The readiness of operations is determined by their dependencies on other operations and potentially by custom conditions that you define.
@@ -304,46 +314,42 @@ final class AdvancedOperationTests: XCTestCase {
       expectation1.fulfill()
     }
 
-    operation1.willCancelHandler = { errors in
-      XCTAssertNotNil(errors)
-      XCTAssertEqual(errors.count, 1)
+    operation1.willCancelHandler = { error in
+      XCTAssertNotNil(error)
       expectation2.fulfill()
     }
 
-    operation1.didCancelHandler = { errors in
-      XCTAssertNotNil(errors)
-      XCTAssertEqual(errors.count, 1)
+    operation1.didCancelHandler = { error in
+      XCTAssertNotNil(error)
       expectation3.fulfill()
     }
 
-    operation1.willFinishHandler = { errors in
-      XCTAssertNotNil(errors)
-      XCTAssertEqual(errors.count, 1)
+    operation1.willFinishHandler = { error in
+      XCTAssertNotNil(error)
       expectation4.fulfill()
     }
 
-    operation1.didFinishHandler = { errors in
-      XCTAssertNotNil(errors)
-      XCTAssertEqual(errors.count, 1)
+    operation1.didFinishHandler = { error in
+      XCTAssertNotNil(error)
       expectation5.fulfill()
     }
 
     operation1.start()
-    operation1.cancel(errors: [error])
+    operation1.cancel(error: error)
     waitForExpectations(timeout: 10)
   }
 
   func testSynchronousOperationFinishedWithoutErrors() {
-    let operation = SynchronousOperation(errors: [])
+    let operation = SynchronousOperation(error: nil)
     operation.start()
     XCTAssertTrue(operation.isFinished)
   }
 
   func testSynchronousOperationFinishedWithErrors() {
-    let operation = SynchronousOperation(errors: [MockError.failed])
+    let operation = SynchronousOperation(error: MockError.failed)
     operation.start()
     XCTAssertTrue(operation.isFinished)
-    XCTAssertTrue(operation.hasErrors)
+    XCTAssertTrue(operation.hasError)
   }
 
   func testCancelledProgress() {
