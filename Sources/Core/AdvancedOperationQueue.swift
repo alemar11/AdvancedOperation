@@ -23,34 +23,8 @@
 
 import Foundation
 
-// MARK: - AdvancedOperationQueueDelegate
-
-/// Classes conforming to this protocol received updates about the life-cycle of an `AdvancedOperationQueueDelegate`.
-public protocol AdvancedOperationQueueDelegate: class {
-  // An operation is being added to the queue.
-  func operationQueue(operationQueue: AdvancedOperationQueue, willAddOperation operation: Operation)
-  // An operation is going to be executed (but it's not yet executing).
-  func operationQueue(operationQueue: AdvancedOperationQueue, operationWillExecute operation: AdvancedOperation)
-  // An operation is finishing.
-  func operationQueue(operationQueue: AdvancedOperationQueue, operationWillFinish operation: AdvancedOperation, withError error: Error?)
-  // An operation has finished.
-  func operationQueue(operationQueue: AdvancedOperationQueue, operationDidFinish operation: Operation, withError error: Error?)
-  // An operation is cancelling.
-  func operationQueue(operationQueue: AdvancedOperationQueue, operationWillCancel operation: AdvancedOperation, withError error: Error?)
-  // An operation has been cancelled.
-  func operationQueue(operationQueue: AdvancedOperationQueue, operationDidCancel operation: AdvancedOperation, withError error: Error?)
-}
-
-public extension AdvancedOperationQueueDelegate {
-  func operationQueue(operationQueue: AdvancedOperationQueue, operationWillExecute operation: AdvancedOperation) { }
-}
-
-// MARK: - AdvancedOperationQueue
-
 /// `AdvancedOperationQueue` is an `OperationQueue` subclass that implements a large number of "extra features" related to the `Operation` class.
 open class AdvancedOperationQueue: OperationQueue {
-  public weak var delegate: AdvancedOperationQueueDelegate? = .none
-
   /// Keeps track of every mutual exclusivity conditions defined in the operations running on this queue.
   internal lazy var exclusivityManager: ExclusivityManager = {
     let qos: DispatchQoS
@@ -82,7 +56,6 @@ open class AdvancedOperationQueue: OperationQueue {
       let preparedOperations = prepareOperation(operation)
 
       preparedOperations.forEach {
-        delegate?.operationQueue(operationQueue: self, willAddOperation: $0)
         super.addOperation($0)
       }
     }
@@ -94,7 +67,6 @@ open class AdvancedOperationQueue: OperationQueue {
       let preparedOperations = self.prepareOperation(blockOperation)
 
       preparedOperations.forEach {
-        delegate?.operationQueue(operationQueue: self, willAddOperation: $0)
         super.addOperation($0)
       }
     }
@@ -107,11 +79,6 @@ open class AdvancedOperationQueue: OperationQueue {
         preparedOperations.append(contentsOf: prepareOperation($0))
       }
 
-      if let delegate = delegate {
-        preparedOperations.forEach {
-          delegate.operationQueue(operationQueue: self, willAddOperation: $0)
-        }
-      }
      _addOperations(preparedOperations, waitUntilFinished: wait)
     }
   }
@@ -130,35 +97,35 @@ extension AdvancedOperationQueue {
     // swiftlint:disable:next cyclomatic_complexity
     func decorateOperation(_ operation: Operation) {
       if let operation = operation as? AdvancedOperation { /// AdvancedOperation
-        let observer = BlockObserver(
-          willExecute: { [weak self] (operation) in
-            guard let self = self else { return }
-
-            self.delegate?.operationQueue(operationQueue: self, operationWillExecute: operation)
-          }, didProduce: { [weak self] (operation, producedOperation) in
-            guard let self = self else { return }
-
-            self.addOperation(producedOperation)
-          }, willCancel: { [weak self] (operation, error) in
-            guard let self = self else { return }
-
-            self.delegate?.operationQueue(operationQueue: self, operationWillCancel: operation, withError: error)
-          }, didCancel: { [weak self] (operation, error) in
-            guard let self = self else { return }
-
-            self.delegate?.operationQueue(operationQueue: self, operationDidCancel: operation, withError: error)
-          }, willFinish: { [weak self] (operation, error) in
-            guard let self = self else { return }
-
-            self.delegate?.operationQueue(operationQueue: self, operationWillFinish: operation, withError: error)
-          }, didFinish: { [weak self] (operation, error) in
-            guard let self = self else { return }
-
-            self.delegate?.operationQueue(operationQueue: self, operationDidFinish: operation, withError: error)
-          }
-        )
-
-        operation.addObserver(observer)
+//        let observer = BlockObserver(
+//          willExecute: { [weak self] (operation) in
+//            guard let self = self else { return }
+//
+//            self.delegate?.operationQueue(operationQueue: self, operationWillExecute: operation)
+//          }, didProduce: { [weak self] (operation, producedOperation) in
+//            guard let self = self else { return }
+//
+//            self.addOperation(producedOperation)
+//          }, willCancel: { [weak self] (operation, error) in
+//            guard let self = self else { return }
+//
+//            self.delegate?.operationQueue(operationQueue: self, operationWillCancel: operation, withError: error)
+//          }, didCancel: { [weak self] (operation, error) in
+//            guard let self = self else { return }
+//
+//            self.delegate?.operationQueue(operationQueue: self, operationDidCancel: operation, withError: error)
+//          }, willFinish: { [weak self] (operation, error) in
+//            guard let self = self else { return }
+//
+//            self.delegate?.operationQueue(operationQueue: self, operationWillFinish: operation, withError: error)
+//          }, didFinish: { [weak self] (operation, error) in
+//            guard let self = self else { return }
+//
+//            self.delegate?.operationQueue(operationQueue: self, operationDidFinish: operation, withError: error)
+//          }
+//        )
+//
+//        operation.addObserver(observer)
 
         if let evaluator = operation.makeConditionsEvaluator(queue: self) {
           decorateOperation(evaluator)
@@ -173,13 +140,13 @@ extension AdvancedOperationQueue {
           }
         }
       } else { /// Operation
-        operation.addCompletionBlock(asEndingBlock: false) { [weak self, weak operation] in
-          guard let self = self, let operation = operation else {
-            return
-          }
-
-          self.delegate?.operationQueue(operationQueue: self, operationDidFinish: operation, withError: nil)
-        }
+//        operation.addCompletionBlock(asEndingBlock: false) { [weak self, weak operation] in
+//          guard let self = self, let operation = operation else {
+//            return
+//          }
+//
+//          self.delegate?.operationQueue(operationQueue: self, operationDidFinish: operation, withError: nil)
+//        }
       }
       operations.append(operation)
     }

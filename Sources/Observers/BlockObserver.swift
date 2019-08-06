@@ -129,3 +129,19 @@ internal final class WillFinishObserver: OperationWillFinishObserving {
     willFinishHandler?(operation, error)
   }
 }
+
+internal final class DidFinishObserver: OperationDidFinishObserving {
+  // MARK: - Properties
+
+  private let didFinishHandler: ((AdvancedOperation, Error?) -> Void)?
+
+  public init (didFinishHandler: ((AdvancedOperation, Error?) -> Void)? = nil) {
+    self.didFinishHandler = didFinishHandler
+  }
+
+  // MARK: - OperationObserving
+
+  func operationDidFinish(operation: AdvancedOperation, withError error: Error?) {
+    didFinishHandler?(operation, error)
+  }
+}

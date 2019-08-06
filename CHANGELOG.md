@@ -4,6 +4,7 @@
 - An `AdvancedOperation` can now be cancelled or finished with only one single `Error`.
 - Injection doen't require an *adapter* operation anymore.
 - `OperationConditionResult` has beed replaced by the Swift `Result` type.
+- Removed `AdvancedOperationQueueDelegate`.
 
 ### 3.2.0
 

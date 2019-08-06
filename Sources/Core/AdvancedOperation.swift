@@ -273,9 +273,14 @@ open class AdvancedOperation: Operation {
   /// - Parameter operation: the produced `Operation` instance.
   /// - Note: It's up to the developer to decide wheter or not the produced operation should run indipendently from the producing operation (if the queue is not serial).
   final func produceOperation(_ operation: Operation) {
-    precondition(operationQueue is AdvancedOperationQueue, "An operation cannot produce any other operation if it's not enqueued on an AdvancedOperationQueue.")
+    guard let queue = operationQueue as? AdvancedOperationQueue else {
+      fatalError("An operation cannot produce any other operation if it's not enqueued on an AdvancedOperationQueue.") // TODO is this correct as fatal error?
+      return
+    }
+    //precondition(operationQueue is AdvancedOperationQueue, "An operation cannot produce any other operation if it's not enqueued on an AdvancedOperationQueue.")
 
     didProduceOperation(operation)
+    queue.addOperation(operation)
   }
 
   // MARK: - Dependencies

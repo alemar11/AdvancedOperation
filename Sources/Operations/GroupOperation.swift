@@ -110,7 +110,6 @@ open class GroupOperation: AdvancedOperation {
     if maxConcurrentOperationCount == 1 {
       self.progress.totalUnitCount = 0
     }
-    self.underlyingOperationQueue.delegate = self
 
     for operation in operations {
       addOperation(operation: operation)
@@ -118,7 +117,7 @@ open class GroupOperation: AdvancedOperation {
   }
 
   deinit {
-    self.underlyingOperationQueue.delegate = nil
+    // TODO
   }
 
   /// Advises the `GroupOperation` object that it should stop executing its tasks.
@@ -189,7 +188,26 @@ open class GroupOperation: AdvancedOperation {
       if advancedOperation.log === OSLog.disabled {
         advancedOperation.log = log
       }
+
+      let willFinishObserver = WillFinishObserver { [weak self] _, error in
+        if let error = error {
+          self?.aggregatedErrors.mutate { $0.append(error) }
+        }
+      }
+
+      let didFinishObserver = DidFinishObserver { [weak self] _, _ in
+        self?.completeIfNeeded()
+      }
+
+      advancedOperation.addObserver(willFinishObserver)
+      advancedOperation.addObserver(didFinishObserver)
+    } else {
+      operation.addCompletionBlock { [weak self] in
+        self?.completeIfNeeded()
+      }
     }
+
+    operationCount.mutate { $0 += 1 }
     underlyingOperationQueue.addOperation(operation)
   }
 
@@ -214,32 +232,8 @@ open class GroupOperation: AdvancedOperation {
       underlyingOperationQueue.qualityOfService = newValue
     }
   }
-}
 
-extension GroupOperation: AdvancedOperationQueueDelegate {
-  public func operationQueue(operationQueue: AdvancedOperationQueue, willAddOperation operation: Operation) {
-    if let advancedOperation = operation as? AdvancedOperation, advancedOperation.log === OSLog.disabled {
-      advancedOperation.log = log
-    }
-
-    operationCount.mutate { $0 += 1 }
-  }
-
-  public func operationQueue(operationQueue: AdvancedOperationQueue, operationWillFinish operation: AdvancedOperation, withError error: Error?) {
-    guard operationQueue === underlyingOperationQueue else {
-      return
-    }
-
-    if let error = error {
-      aggregatedErrors.mutate { $0.append(error) }
-    }
-  }
-
-  public func operationQueue(operationQueue: AdvancedOperationQueue, operationDidFinish operation: Operation, withError error: Error?) {
-    guard operationQueue === underlyingOperationQueue else {
-      return
-    }
-
+  private func completeIfNeeded() {
     assert(operationCount.value > 0, "The operation count should be greater than 0, but. Current operation count: \(operationCount.value)")
     operationCount.mutate { $0 -= 1 }
 
@@ -272,8 +266,58 @@ extension GroupOperation: AdvancedOperationQueueDelegate {
       }
     }
   }
-
-  public func operationQueue(operationQueue: AdvancedOperationQueue, operationWillCancel operation: AdvancedOperation, withError error: Error?) { }
-
-  public func operationQueue(operationQueue: AdvancedOperationQueue, operationDidCancel operation: AdvancedOperation, withError error: Error?) { }
 }
+
+//extension GroupOperation: AdvancedOperationQueueDelegate {
+//  //  public func operationQueue(operationQueue: AdvancedOperationQueue, operationWillFinish operation: AdvancedOperation, withError error: Error?) {
+//  //    guard operationQueue === underlyingOperationQueue else {
+//  //      return
+//  //    }
+//  //
+//  //    if let error = error {
+//  //      aggregatedErrors.mutate { $0.append(error) }
+//  //    }
+//  //  }
+//
+//  public func operationQueue(operationQueue: AdvancedOperationQueue, operationDidFinish operation: Operation, withError error: Error?) {
+//    guard operationQueue === underlyingOperationQueue else {
+//      return
+//    }
+//
+//    assert(operationCount.value > 0, "The operation count should be greater than 0, but. Current operation count: \(operationCount.value)")
+//    operationCount.mutate { $0 -= 1 }
+//
+//    if operationCount.value == 0 {
+//      if cancellationRequested.value {
+//        super.cancel(error: temporaryCancelError.value)
+//
+//        /// An operation that is not yet started cannot be finished
+//        if isExecuting {
+//          /// Waiting for the cancellation process to complete
+//          /// It's a refinement to avoid some cases where a cancelled GroupOperation moves
+//          /// to its finished state before having its cancelled state fulfilled.
+//          while !isCancelled {
+//            os_log("%{public}s is waiting the cancellation process to complete before moving to the finished state.", log: log, type: .info, operationName)
+//          }
+//
+//          underlyingOperationQueue.isSuspended = true
+//          finish()
+//        }
+//      } else {
+//        underlyingOperationQueue.isSuspended = true
+//
+//        let errors = self.aggregatedErrors.value
+//        if errors.isEmpty {
+//          finish(error: nil)
+//        } else {
+//          let aggregateError = AdvancedOperationError.groupFinished(message: "\(operationName) finished with some underlying errors.", errors: errors)
+//          finish(error: aggregateError)
+//        }
+//      }
+//    }
+//  }
+//
+//  public func operationQueue(operationQueue: AdvancedOperationQueue, operationWillCancel operation: AdvancedOperation, withError error: Error?) { }
+//
+//  public func operationQueue(operationQueue: AdvancedOperationQueue, operationDidCancel operation: AdvancedOperation, withError error: Error?) { }
+//}
