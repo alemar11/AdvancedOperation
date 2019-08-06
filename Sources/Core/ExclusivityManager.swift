@@ -67,7 +67,7 @@ internal final class ExclusivityManager {
   private func _addOperation(_ operation: AdvancedOperation, category: String, cancellable: Bool) {
     guard !operation.isCancelled else { return }
 
-    let didFinishObserver = BlockObserver {  [weak self] currentOperation, _ in
+    let didFinishObserver = BlockObserver { [weak self] currentOperation, _ in
       self?.removeOperation(currentOperation, category: category)
     }
     operation.addObserver(didFinishObserver)
