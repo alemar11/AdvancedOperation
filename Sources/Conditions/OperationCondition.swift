@@ -33,7 +33,7 @@ public protocol OperationCondition {
   ///
   /// - Parameters:
   ///   - operation: the `AdvancedOperation` which this condition is attached to.
-  ///   - completion: a closure which receives an `OperationConditionResult`.
+  ///   - completion: a closure which receives a `Result`.
   func evaluate(for operation: AdvancedOperation, completion: @escaping (Result<Void,Error>) -> Void)
 }
 
