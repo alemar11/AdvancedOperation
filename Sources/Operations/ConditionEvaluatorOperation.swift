@@ -66,7 +66,7 @@ internal final class ConditionEvaluatorOperation: AdvancedOperation {
   
   private static func evaluate(_ conditions: [OperationCondition], for operation: AdvancedOperation, completion: @escaping (Error?) -> Void) {
     let conditionGroup = DispatchGroup()
-    var results = [OperationConditionResult?](repeating: nil, count: conditions.count)
+    var results = [Result<Void,Error>?](repeating: nil, count: conditions.count)
     let lock = UnfairLock()
     
     for (index, condition) in conditions.enumerated() {
@@ -81,7 +81,7 @@ internal final class ConditionEvaluatorOperation: AdvancedOperation {
     
     conditionGroup.notify(queue: DispatchQueue.global()) {
       // Aggregate all the occurred errors.
-      let errors = results.compactMap { $0?.error }
+      let errors = results.compactMap { $0?.failure }
       if errors.isEmpty {
         completion(nil)
       } else {

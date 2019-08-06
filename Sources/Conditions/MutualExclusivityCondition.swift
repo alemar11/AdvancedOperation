@@ -38,8 +38,8 @@ public struct MutualExclusivityCondition: OperationCondition {
     self.mode = mode
   }
 
-  public func evaluate(for operation: AdvancedOperation, completion: @escaping (OperationConditionResult) -> Void) {
-    completion(.satisfied)
+  public func evaluate(for operation: AdvancedOperation, completion: @escaping (Result<Void,Error>) -> Void) {
+    completion(.success(()))
   }
 }
 

@@ -21,14 +21,13 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-public enum OperationConditionResult {
-  case satisfied
-  case failed(Error)
-
-  public var error: Error? {
-    if case .failed(let error) = self {
+extension Result {
+  var failure: Failure? {
+    switch self {
+    case .success:
+      return nil
+    case .failure(let error):
       return error
     }
-    return nil
   }
 }

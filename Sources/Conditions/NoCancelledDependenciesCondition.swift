@@ -31,7 +31,7 @@ public struct NoCancelledDependeciesCondition: OperationCondition {
   /// Create a new `NoCancelledDependeciesCondition` element.
   public init() { }
 
-  public func evaluate(for operation: AdvancedOperation, completion: @escaping (OperationConditionResult) -> Void) {
+  public func evaluate(for operation: AdvancedOperation, completion: @escaping (Result<Void,Error>) -> Void) {
     let dependencies = operation.dependencies.filter { !($0 is ConditionEvaluatorOperation) }
     let cancellations = dependencies.filter { $0.isCancelled }
 
@@ -40,9 +40,9 @@ public struct NoCancelledDependeciesCondition: OperationCondition {
       let error = AdvancedOperationError.conditionFailed(message: "Some dependencies have been cancelled.",
                                                          userInfo: [operationConditionKey: self.name,
                                                                     type(of: self).noCancelledDependeciesConditionKey: names])
-      completion(.failed(error))
+      completion(.failure(error))
     } else {
-      completion(.satisfied)
+      completion(.success(()))
     }
   }
 }

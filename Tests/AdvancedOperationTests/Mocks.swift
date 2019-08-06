@@ -719,21 +719,21 @@ internal class StringToIntOperation: FunctionOperation<String, Int> {
 // MARK: - Conditions
 
 internal struct SlowCondition: OperationCondition {
-  public func evaluate(for operation: AdvancedOperation, completion: @escaping (OperationConditionResult) -> Void) {
+  public func evaluate(for operation: AdvancedOperation, completion: @escaping (Result<Void,Error>) -> Void) {
     DispatchQueue(label: "SlowCondition").asyncAfter(deadline: .now() + 10) {
-      completion(.satisfied)
+      completion(.success(()))
     }
   }
 }
 
 internal struct AlwaysFailingCondition: OperationCondition {
-  public func evaluate(for operation: AdvancedOperation, completion: @escaping (OperationConditionResult) -> Void) {
-    completion(.failed(MockError.failed))
+  public func evaluate(for operation: AdvancedOperation, completion: @escaping (Result<Void,Error>) -> Void) {
+    completion(.failure(MockError.failed))
   }
 }
 
 internal struct AlwaysSuccessingCondition: OperationCondition {
-  public func evaluate(for operation: AdvancedOperation, completion: @escaping (OperationConditionResult) -> Void) {
-    completion(.satisfied)
+  public func evaluate(for operation: AdvancedOperation, completion: @escaping (Result<Void,Error>) -> Void) {
+    completion(.success(()))
   }
 }
