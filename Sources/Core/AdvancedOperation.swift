@@ -120,12 +120,10 @@ open class AdvancedOperation: Operation {
       // `isReady`, `isExecuting`, `isFinished`. Use a second queue to wrap the entire
       // transaction.
       stateChangeQueue.sync {
-        // Retrieve the existing value first. Necessary for sending fine-grained KVO
+        // Retrieve the existing value first: necessary for sending fine-grained KVO.
         // willChange/didChange notifications only for the key paths that actually change.
         let oldValue = _state.value
-        guard newValue != oldValue else {
-          return
-        }
+        guard newValue != oldValue else { return }
         if let keyPath = oldValue.objcKeyPath { willChangeValue(forKey: keyPath) }
         if let keyPath = newValue.objcKeyPath { willChangeValue(forKey: keyPath) }
         _state.mutate {
