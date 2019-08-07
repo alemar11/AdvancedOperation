@@ -127,7 +127,7 @@ extension AdvancedOperationQueue {
 //
 //        operation.addObserver(observer)
 
-        if let evaluator = operation.makeConditionsEvaluator(queue: self) {
+        if let evaluator = operation.makeConditionsEvaluator() {
           decorateOperation(evaluator)
         }
 
