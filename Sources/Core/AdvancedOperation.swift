@@ -301,6 +301,47 @@ open class AdvancedOperation: Operation {
     conditions.append(condition)
   }
 
+  func evaluateConditions() {
+    AdvancedOperation._evaluate(conditions, for: self) { (error) in
+      // TODO weak or unonwed
+      if let conditionError = error {
+        self.cancel(error: conditionError)
+      }
+
+      //self._error.mutate { $0 = error }
+    }
+  }
+
+  // TODO: evaluation can be done without using operations
+  internal static func _evaluate(_ conditions: [OperationCondition], for operation: AdvancedOperation, completion: @escaping (Error?) -> Void) {
+    let dispatchGroup = DispatchGroup()
+    var results = [Result<Void,Error>?](repeating: nil, count: conditions.count)
+    let lock = UnfairLock()
+
+    for (index, condition) in conditions.enumerated() {
+      dispatchGroup.enter()
+      condition.evaluate(for: operation) { result in
+        lock.synchronized {
+          results[index] = result
+        }
+        dispatchGroup.leave()
+      }
+    }
+
+    dispatchGroup.notify(queue: DispatchQueue.global()) {
+      // Aggregate all the occurred errors.
+      let errors = results.compactMap { $0?.failure }
+      if errors.isEmpty {
+        completion(nil)
+      } else {
+        let aggregateError = AdvancedOperationError.conditionsEvaluationFinished(message: "\(operation.operationName) didn't pass the conditions evaluation.", errors: errors)
+        completion(aggregateError)
+      }
+    }
+  }
+
+
+
   // MARK: - Subclass
 
   /// Subclass this method to know when the operation will start executing.
