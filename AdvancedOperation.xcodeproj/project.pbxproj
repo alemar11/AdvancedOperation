@@ -32,10 +32,10 @@
 /* End PBXAggregateTarget section */
 
 /* Begin PBXBuildFile section */
-		2306482E21820FB000295516 /* AdvancedOperation+Conditions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2306482D21820FB000295516 /* AdvancedOperation+Conditions.swift */; };
-		2306482F21820FB000295516 /* AdvancedOperation+Conditions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2306482D21820FB000295516 /* AdvancedOperation+Conditions.swift */; };
-		2306483021820FB000295516 /* AdvancedOperation+Conditions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2306482D21820FB000295516 /* AdvancedOperation+Conditions.swift */; };
-		2306483121820FB000295516 /* AdvancedOperation+Conditions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2306482D21820FB000295516 /* AdvancedOperation+Conditions.swift */; };
+		2306482E21820FB000295516 /* __AdvancedOperation+Conditions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2306482D21820FB000295516 /* __AdvancedOperation+Conditions.swift */; };
+		2306482F21820FB000295516 /* __AdvancedOperation+Conditions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2306482D21820FB000295516 /* __AdvancedOperation+Conditions.swift */; };
+		2306483021820FB000295516 /* __AdvancedOperation+Conditions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2306482D21820FB000295516 /* __AdvancedOperation+Conditions.swift */; };
+		2306483121820FB000295516 /* __AdvancedOperation+Conditions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2306482D21820FB000295516 /* __AdvancedOperation+Conditions.swift */; };
 		2326CC25206E6199001876A2 /* Result+Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2326CC24206E6199001876A2 /* Result+Utils.swift */; };
 		2326CC26206E6199001876A2 /* Result+Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2326CC24206E6199001876A2 /* Result+Utils.swift */; };
 		2326CC27206E6199001876A2 /* Result+Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2326CC24206E6199001876A2 /* Result+Utils.swift */; };
@@ -231,7 +231,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		2306482D21820FB000295516 /* AdvancedOperation+Conditions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AdvancedOperation+Conditions.swift"; sourceTree = "<group>"; };
+		2306482D21820FB000295516 /* __AdvancedOperation+Conditions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "__AdvancedOperation+Conditions.swift"; sourceTree = "<group>"; };
 		2326CC24206E6199001876A2 /* Result+Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Result+Utils.swift"; sourceTree = "<group>"; };
 		2328AEF521B93C1E00FDB241 /* MutualExclusivityCondition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MutualExclusivityCondition.swift; sourceTree = "<group>"; };
 		2328AEFA21B9414000FDB241 /* MutualExclusivityConditionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MutualExclusivityConditionTests.swift; sourceTree = "<group>"; };
@@ -375,7 +375,7 @@
 				23F24D342007BC2100B25A03 /* AdvancedOperationQueue.swift */,
 				2372507C200524860000A442 /* AdvancedOperation.swift */,
 				232F9443217F29AE00A86699 /* AdvancedOperation+State.swift */,
-				2306482D21820FB000295516 /* AdvancedOperation+Conditions.swift */,
+				2306482D21820FB000295516 /* __AdvancedOperation+Conditions.swift */,
 			);
 			path = Core;
 			sourceTree = "<group>";
@@ -875,7 +875,7 @@
 				2385616C200A6BF80061BAA1 /* GroupOperation.swift in Sources */,
 				23F24D352007BC2100B25A03 /* AdvancedOperationQueue.swift in Sources */,
 				2328AEFF21B956EF00FDB241 /* ExclusivityManager.swift in Sources */,
-				2306482E21820FB000295516 /* AdvancedOperation+Conditions.swift in Sources */,
+				2306482E21820FB000295516 /* __AdvancedOperation+Conditions.swift in Sources */,
 				23B1BDFE216F99BA002D0A5B /* BlockCondition.swift in Sources */,
 				232C452E215A898000B73E79 /* UIBackgroundObserver.swift in Sources */,
 				23F24D3A2007C03D00B25A03 /* BlockObserver.swift in Sources */,
@@ -909,7 +909,7 @@
 				2385616D200A6BF80061BAA1 /* GroupOperation.swift in Sources */,
 				23F24D362007BC2100B25A03 /* AdvancedOperationQueue.swift in Sources */,
 				2328AF0021B956EF00FDB241 /* ExclusivityManager.swift in Sources */,
-				2306482F21820FB000295516 /* AdvancedOperation+Conditions.swift in Sources */,
+				2306482F21820FB000295516 /* __AdvancedOperation+Conditions.swift in Sources */,
 				23B1BDFF216F99BA002D0A5B /* BlockCondition.swift in Sources */,
 				2359AB4E216212CD00AC09D8 /* UIBackgroundObserver.swift in Sources */,
 				23F24D3B2007C03D00B25A03 /* BlockObserver.swift in Sources */,
@@ -943,7 +943,7 @@
 				2385616E200A6BF80061BAA1 /* GroupOperation.swift in Sources */,
 				23F24D372007BC2100B25A03 /* AdvancedOperationQueue.swift in Sources */,
 				2328AF0121B956EF00FDB241 /* ExclusivityManager.swift in Sources */,
-				2306483021820FB000295516 /* AdvancedOperation+Conditions.swift in Sources */,
+				2306483021820FB000295516 /* __AdvancedOperation+Conditions.swift in Sources */,
 				23B1BE00216F99BA002D0A5B /* BlockCondition.swift in Sources */,
 				232C452F215A898000B73E79 /* UIBackgroundObserver.swift in Sources */,
 				23F24D3C2007C03D00B25A03 /* BlockObserver.swift in Sources */,
@@ -977,7 +977,7 @@
 				2385616F200A6BF80061BAA1 /* GroupOperation.swift in Sources */,
 				23F24D382007BC2100B25A03 /* AdvancedOperationQueue.swift in Sources */,
 				2328AF0221B956EF00FDB241 /* ExclusivityManager.swift in Sources */,
-				2306483121820FB000295516 /* AdvancedOperation+Conditions.swift in Sources */,
+				2306483121820FB000295516 /* __AdvancedOperation+Conditions.swift in Sources */,
 				23B1BE01216F99BA002D0A5B /* BlockCondition.swift in Sources */,
 				232C4530215A898000B73E79 /* UIBackgroundObserver.swift in Sources */,
 				23F24D3D2007C03D00B25A03 /* BlockObserver.swift in Sources */,

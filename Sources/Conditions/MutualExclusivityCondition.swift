@@ -33,9 +33,11 @@ public struct MutualExclusivityCondition: OperationCondition {
   }
 
   public let mode: Mode
+  public let exclusivityManager: ExclusivityManager2
 
-  public init(mode: Mode) {
+  public init(mode: Mode, exclusivityManager: ExclusivityManager2 = .shared) {
     self.mode = mode
+    self.exclusivityManager = exclusivityManager
   }
 
   public func evaluate(for operation: AdvancedOperation, completion: @escaping (Result<Void,Error>) -> Void) {

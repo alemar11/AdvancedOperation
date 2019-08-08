@@ -81,18 +81,18 @@ extension AdvancedOperationQueue {
     // swiftlint:disable:next cyclomatic_complexity
     func decorateOperation(_ operation: Operation) {
       if let operation = operation as? AdvancedOperation { /// AdvancedOperation
-        if let evaluator = operation.makeConditionsEvaluator() {
-          decorateOperation(evaluator)
-        }
-        
-        for mutualExclusivityCondition in operation.conditions.compactMap ({ $0 as? MutualExclusivityCondition }) {
-          switch mutualExclusivityCondition.mode {
-          case .cancel(identifier: let identifier):
-            self.exclusivityManager.addOperation(operation, category: identifier, cancellable: true)
-          case .enqueue(identifier: let identifier):
-            self.exclusivityManager.addOperation(operation, category: identifier, cancellable: false)
-          }
-        }
+//        if let evaluator = operation.makeConditionsEvaluator() {
+//          decorateOperation(evaluator)
+//        }
+//        
+//        for mutualExclusivityCondition in operation.conditions.compactMap ({ $0 as? MutualExclusivityCondition }) {
+//          switch mutualExclusivityCondition.mode {
+//          case .cancel(identifier: let identifier):
+//            self.exclusivityManager.addOperation(operation, category: identifier, cancellable: true)
+//          case .enqueue(identifier: let identifier):
+//            self.exclusivityManager.addOperation(operation, category: identifier, cancellable: false)
+//          }
+//        }
       }
       operations.append(operation)
     }

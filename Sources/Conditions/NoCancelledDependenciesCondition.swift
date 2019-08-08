@@ -32,8 +32,7 @@ public struct NoCancelledDependeciesCondition: OperationCondition {
   public init() { }
 
   public func evaluate(for operation: AdvancedOperation, completion: @escaping (Result<Void,Error>) -> Void) {
-    let dependencies = operation.dependencies.filter { !($0 is ConditionEvaluatorOperation) }
-    let cancellations = dependencies.filter { $0.isCancelled }
+    let cancellations = operation.dependencies.filter { $0.isCancelled }
 
     if !cancellations.isEmpty {
       let names = cancellations.map { $0.name ?? "\(type(of: $0))" }

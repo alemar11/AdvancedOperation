@@ -25,32 +25,32 @@ import Foundation
 
 // MARK: - Condition Evaluation
 
-internal extension AdvancedOperation {
-  func makeConditionsEvaluator() -> AdvancedOperation? {
-    guard !conditions.isEmpty else {
-      return nil
-    }
-
-    guard !(self is ConditionEvaluatorOperation) else {
-      return nil
-    }
-
-    let evaluator = ConditionEvaluatorOperation(operation: self, conditions: conditions)
-
-    // observe if self is beeing cancelled
-    let willCancelObserver = WillCancelObserver { [weak evaluator] _, error in
-      guard let evaluator = evaluator else {
-        return
-      }
-
-      evaluator.cancel(error: error)
-    }
-
-    addObserver(willCancelObserver)
-    evaluator.log = log
-    dependencies.forEach(evaluator.addDependency)
-    addDependency(evaluator)
-
-    return evaluator
-  }
-}
+//internal extension AdvancedOperation {
+//  func makeConditionsEvaluator() -> AdvancedOperation? {
+//    guard !conditions.isEmpty else {
+//      return nil
+//    }
+//
+//    guard !(self is ConditionEvaluatorOperation) else {
+//      return nil
+//    }
+//
+//    let evaluator = ConditionEvaluatorOperation(operation: self, conditions: conditions)
+//
+//    // observe if self is beeing cancelled
+//    let willCancelObserver = WillCancelObserver { [weak evaluator] _, error in
+//      guard let evaluator = evaluator else {
+//        return
+//      }
+//
+//      evaluator.cancel(error: error)
+//    }
+//
+//    addObserver(willCancelObserver)
+//    evaluator.log = log
+//    dependencies.forEach(evaluator.addDependency)
+//    addDependency(evaluator)
+//
+//    return evaluator
+//  }
+//}

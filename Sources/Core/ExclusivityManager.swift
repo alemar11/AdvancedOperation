@@ -23,13 +23,13 @@
 
 import Foundation
 
-internal final class ExclusivityManager2 {
-  static let sharedInstance = ExclusivityManager2()
+public final class ExclusivityManager2 {
+  public static let shared = ExclusivityManager2()
 
   /// The private queue used for thread safe operations.
   private let queue: DispatchQueue
   private let locksQueue: DispatchQueue
-  private var categories: [String: [DispatchGroup]] = [:]
+  private var _categories: [String: [DispatchGroup]] = [:]
 
   /// Creates a new `ExclusivityManager` instance.
   internal init(qos: DispatchQoS = .default) {
@@ -81,10 +81,11 @@ internal final class ExclusivityManager2 {
   }
 
   private func _lock(forCategory category: String, withGroup group: DispatchGroup) -> RequestLockResult {
-    var queuesByCategory = categories[category] ?? []
+    var queuesByCategory = _categories[category] ?? []
+    let isFrontOfTheQueueForThisCategory = _categories.isEmpty
     queuesByCategory.append(group)
-    categories[category] = queuesByCategory
-    return (queuesByCategory.isEmpty) ? .available : .waitingForLock
+    _categories[category] = queuesByCategory
+    return (isFrontOfTheQueueForThisCategory) ? .available : .waitingForLock
   }
 
 
@@ -97,7 +98,7 @@ internal final class ExclusivityManager2 {
   }
 
   internal func _unlock(category: String) {
-    guard var queuesByCategory = categories[category] else { return }
+    guard var queuesByCategory = _categories[category] else { return }
     // Remove the first item in the queue for this category
     // (which should be the operation that currently has the lock).
     assert(!queuesByCategory.isEmpty) // TODO
@@ -111,9 +112,9 @@ internal final class ExclusivityManager2 {
     }
 
     if !queuesByCategory.isEmpty {
-      categories[category] = queuesByCategory
+      _categories[category] = queuesByCategory
     } else {
-      categories.removeValue(forKey: category)
+      _categories.removeValue(forKey: category)
     }
   }
 
