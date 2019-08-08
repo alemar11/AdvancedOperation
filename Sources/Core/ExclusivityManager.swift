@@ -23,6 +23,102 @@
 
 import Foundation
 
+internal final class ExclusivityManager2 {
+  static let sharedInstance = ExclusivityManager2()
+
+  /// The private queue used for thread safe operations.
+  private let queue: DispatchQueue
+  private let locksQueue: DispatchQueue
+  private var categories: [String: [DispatchGroup]] = [:]
+
+  /// Creates a new `ExclusivityManager` instance.
+  internal init(qos: DispatchQoS = .default) {
+    let label = "\(identifier).\(type(of: self)).\(UUID().uuidString)"
+    self.queue = DispatchQueue(label: label, qos: qos)
+    self.locksQueue = DispatchQueue(label: label + ".Locks", qos: qos, attributes: [.concurrent])
+  }
+
+  internal func lock(for categories: Set<String>, completion: @escaping () -> Void) {
+    guard !categories.isEmpty else {
+      fatalError("A request for Mutual Exclusivity locks was made with no categories specified. This request is unnecessary.") // TODO
+    }
+
+    queue.async {
+      self._lock(for: categories, completion: completion)
+    }
+  }
+
+  private func _lock(for categories: Set<String>, completion: @escaping () -> Void) {
+
+    let dipatchGroup = DispatchGroup()
+    var notAvailableCategories = 0
+
+    categories.forEach {
+      let status = _lock(forCategory: $0, withGroup: dipatchGroup)
+      switch status {
+      case .available:
+        break
+      case .waitingForLock:
+        notAvailableCategories += 1
+      }
+    }
+
+    if notAvailableCategories == 0 {
+      completion()
+    } else {
+      (0..<notAvailableCategories).forEach { _ in dipatchGroup.enter() }
+
+      dipatchGroup.notify(queue: locksQueue) {
+        completion()
+      }
+    }
+
+  }
+
+  private enum RequestLockResult {
+    case available
+    case waitingForLock
+  }
+
+  private func _lock(forCategory category: String, withGroup group: DispatchGroup) -> RequestLockResult {
+    var queuesByCategory = categories[category] ?? []
+    queuesByCategory.append(group)
+    categories[category] = queuesByCategory
+    return (queuesByCategory.isEmpty) ? .available : .waitingForLock
+  }
+
+
+  internal func unlock(categories: Set<String>) {
+    queue.async { self._unlock(categories: categories) }
+  }
+
+  private func _unlock(categories: Set<String>) {
+    categories.forEach { _unlock(category: $0) }
+  }
+
+  internal func _unlock(category: String) {
+    guard var queuesByCategory = categories[category] else { return }
+    // Remove the first item in the queue for this category
+    // (which should be the operation that currently has the lock).
+    assert(!queuesByCategory.isEmpty) // TODO
+
+    _ = queuesByCategory.removeFirst()
+
+    // If another operation is waiting on this particular lock
+    if let nextOperationForLock = queuesByCategory.first {
+      // Leave its DispatchGroup (i.e. it "acquires" the lock for this category)
+      nextOperationForLock.leave()
+    }
+
+    if !queuesByCategory.isEmpty {
+      categories[category] = queuesByCategory
+    } else {
+      categories.removeValue(forKey: category)
+    }
+  }
+
+}
+
 internal final class ExclusivityManager {
   /// Creates a new `ExclusivityManager` instance.
   internal init(qos: DispatchQoS = .default) {
