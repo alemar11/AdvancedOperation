@@ -47,7 +47,7 @@ open class GroupOperation: AdvancedOperation {
   internal let aggregatedErrors = Atomic([Error]())
 
   /// Internal `AdvancedOperationQueue`.
-  private let underlyingOperationQueue: AdvancedOperationQueue
+  private let underlyingOperationQueue: OperationQueue
 
   /// Tracks all the pending/executing operations.
   /// Since operations are removed from an OperationQueue when cancelled/finished,

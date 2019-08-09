@@ -162,7 +162,7 @@ open class AdvancedOperation: Operation {
       }
 
 
-       let exclusivity = conditions.compactMap { $0 as? MutualExclusivityCondition }
+      let exclusivity = conditions.compactMap { $0 as? MutualExclusivityCondition }
       if !isCancelled && !exclusivity.isEmpty {
         group.enter()
         // TODO assuming only one exclusivity manager
