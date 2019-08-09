@@ -32,7 +32,9 @@ public final class ExclusivityManager2 {
   private var _categories: [String: [DispatchGroup]] = [:]
 
   /// Creates a new `ExclusivityManager` instance.
-  internal init(qos: DispatchQoS = .default) {
+  internal init(qos: DispatchQoS = .userInitiated) {
+    // TODO qos probably shouldn't be changable, we need an high priority qos to avoid starvation
+    // https://www.fivestars.blog/code/semaphores.html
     let label = "\(identifier).\(type(of: self)).\(UUID().uuidString)"
     self.queue = DispatchQueue(label: label, qos: qos)
     self.locksQueue = DispatchQueue(label: label + ".Locks", qos: qos, attributes: [.concurrent])

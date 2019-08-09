@@ -154,14 +154,16 @@ open class AdvancedOperation: Operation {
       AdvancedOperation.evaluate2(conditions, for: self) { [weak self] (error) in
         if let e = error {
           self!.cancel(error: error)
-          while !self!.isCancelled {
-
-          }
+//          while !self!.isCancelled {
+//
+//          }
         }
         group.leave()
       }
 
 
+      // the operation is started (we don't care about the queue status (isSuspended)
+      // (executing operations continue to execute.)
       let exclusivity = conditions.compactMap { $0 as? MutualExclusivityCondition }
       if !isCancelled && !exclusivity.isEmpty {
         group.enter()
@@ -179,6 +181,7 @@ open class AdvancedOperation: Operation {
           }
 
           ExclusivityManager2.shared.lock(for: categories) {
+            // it should return an error in case of cancellation mode so that we can cancel the operation
             group.leave()
           }
 
@@ -191,8 +194,13 @@ open class AdvancedOperation: Operation {
     /// This method also performs several checks to ensure that the operation can actually run.
     /// For example, if the receiver was cancelled or is already finished, this method simply returns without calling main().
     /// If the operation is currently executing or is not ready to execute, this method throws an NSInvalidArgumentException exception.
+    print("❗️", operationName, "start")
     super.start()
+     print("❗️", operationName, "after start")
 
+    // TODO: this is called once the operation is finished or cancelled
+    // but if it is cancelled we need to finish it.
+    // TODO: investigate it a little more for the 4.0 release
     if isCancelled {
       // if the the cancellation event has been processed, mark the operation as finished.
       finish()
@@ -228,6 +236,7 @@ open class AdvancedOperation: Operation {
   }
 
   public final override func main() {
+    print("❗️", operationName, "main")
     times.mutate { $0.0 = CFAbsoluteTimeGetCurrent() }
     willExecute()
     state = .executing
@@ -288,6 +297,7 @@ open class AdvancedOperation: Operation {
   }
 
   private final func _finish(error finishError: Error?) {
+     print("❗️", operationName, "_finish")
     let canBeFinished = commandsLock.synchronized { () -> Bool in
       guard !_finishing else {
         return false
