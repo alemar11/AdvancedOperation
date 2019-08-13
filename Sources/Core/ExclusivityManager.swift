@@ -89,10 +89,8 @@ public final class ExclusivityManager {
       let status = _lock(forCategory: $0.category, withGroup: dipatchGroup)
       switch status {
       case .available:
-        print("💥", status, $0)
         break
       case .waiting:
-        print("💥", status, $0)
         notAvailableCategories += 1
       }
     }
@@ -120,7 +118,7 @@ public final class ExclusivityManager {
      return isFrontOfTheQueueForThisCategory ? LockRequest.available : .waiting
   }
 
-  internal func unlock(categories:Set<ExclusivityMode>) {
+  internal func unlock(categories: Set<ExclusivityMode>) {
     queue.async { self._unlock(categories: categories) }
   }
 
@@ -128,7 +126,7 @@ public final class ExclusivityManager {
     categories.forEach { _unlock(category: $0.category) }
   }
 
-  internal func _unlock(category: String) {
+  private func _unlock(category: String) {
     guard var queuesByCategory = _categories[category] else { return }
     // Remove the first item in the queue for this category
     // (which should be the operation that currently has the lock).

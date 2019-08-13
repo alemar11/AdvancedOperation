@@ -37,7 +37,7 @@ public struct NoFailedDependenciesCondition: OperationCondition {
     self.ignoreCancellations = ignoreCancellations
   }
 
-  public func evaluate(for operation: AdvancedOperation, completion: @escaping (Result<Void,Error>) -> Void) {
+  public func evaluate(for operation: AdvancedOperation, completion: @escaping (Result<Void, Error>) -> Void) {
     var dependencies = operation.dependencies
 
     if ignoreCancellations {

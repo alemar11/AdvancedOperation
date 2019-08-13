@@ -35,7 +35,7 @@ public struct NegatedCondition<T: OperationCondition>: OperationCondition {
     self.condition = condition
   }
 
-  public func evaluate(for operation: AdvancedOperation, completion: @escaping (Result<Void,Error>) -> Void) {
+  public func evaluate(for operation: AdvancedOperation, completion: @escaping (Result<Void, Error>) -> Void) {
     let conditionName = self.name
     let conditionKey = type(of: self).negatedConditionKey
 

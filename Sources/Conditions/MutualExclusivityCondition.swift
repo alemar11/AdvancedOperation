@@ -41,8 +41,6 @@ public enum ExclusivityMode: Hashable { // TODO rename ExclusivityCategory
 
 /// A condition that defines how an operation should be added to an `AdvancedOperationQueue`.
 public struct MutualExclusivityCondition: OperationCondition {
-  //public let mode: ExclusivityMode
-
   private var _mutuallyExclusiveCategories = Set<ExclusivityMode>()
 
   public var mutuallyExclusiveCategories: Set<ExclusivityMode> {
@@ -51,22 +49,9 @@ public struct MutualExclusivityCondition: OperationCondition {
 
   public init(mode: ExclusivityMode) {
     _mutuallyExclusiveCategories.insert(mode)
-    //self.mode = mode
   }
 
-  public func evaluate(for operation: AdvancedOperation, completion: @escaping (Result<Void,Error>) -> Void) {
+  public func evaluate(for operation: AdvancedOperation, completion: @escaping (Result<Void, Error>) -> Void) {
     completion(.success(()))
   }
 }
-
-//extension MutualExclusivityCondition: Equatable {
-//  public static func == (lhs: MutualExclusivityCondition, rhs: MutualExclusivityCondition) -> Bool {
-//    switch (lhs.mode, rhs.mode) {
-//    case (.cancel(let lhsId), .cancel(let rhsId)) where lhsId == rhsId:
-//      return true
-//    case (.enqueue(let lhsId), .enqueue(let rhsId)) where
-//      lhsId == rhsId: return true
-//    default: return false
-//    }
-//  }
-//}

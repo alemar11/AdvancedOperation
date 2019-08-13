@@ -39,7 +39,6 @@ public protocol OperationDidExecuteObserving: OperationObservingType {
   func operationDidExecute(operation: AdvancedOperation)
 }
 
-
 public protocol OperationWillFinishObserving: OperationObservingType {
   /// Invoked as an `Operation` finishes, along with any errors produced during execution.
   /// - Note: An operation can finish without starting (i.e. if cancelled before its execution)
