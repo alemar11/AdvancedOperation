@@ -40,7 +40,7 @@ public final class ExclusivityManager2 {
     self.locksQueue = DispatchQueue(label: label + ".Locks", qos: qos, attributes: [.concurrent])
   }
 
-  internal func lock(for categories: Set<String>, completion: @escaping () -> Void) {
+  internal func lock(for categories: Set<ExclusivityMode>, completion: @escaping () -> Void) {
     guard !categories.isEmpty else {
       fatalError("A request for Mutual Exclusivity locks was made with no categories specified. This request is unnecessary.") // TODO
     }
@@ -50,13 +50,13 @@ public final class ExclusivityManager2 {
     }
   }
 
-  private func _lock(for categories: Set<String>, completion: @escaping () -> Void) {
+  private func _lock(for categories: Set<ExclusivityMode>, completion: @escaping () -> Void) {
 
     let dipatchGroup = DispatchGroup()
     var notAvailableCategories = 0
 
     categories.forEach {
-      let status = _lock(forCategory: $0, withGroup: dipatchGroup)
+      let status = _lock(forCategory: $0.category, withGroup: dipatchGroup)
       switch status {
       case .available:
         break
@@ -91,12 +91,12 @@ public final class ExclusivityManager2 {
   }
 
 
-  internal func unlock(categories: Set<String>) {
+  internal func unlock(categories:Set<ExclusivityMode>) {
     queue.async { self._unlock(categories: categories) }
   }
 
-  private func _unlock(categories: Set<String>) {
-    categories.forEach { _unlock(category: $0) }
+  private func _unlock(categories: Set<ExclusivityMode>) {
+    categories.forEach { _unlock(category: $0.category) }
   }
 
   internal func _unlock(category: String) {

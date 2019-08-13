@@ -23,21 +23,35 @@
 
 import Foundation
 
+public enum ExclusivityMode: Hashable { // TODO rename ExclusivityCategory
+  /// If there is already an operation with the same identifier, the new one will be cancelled.
+  case cancel(identifier: String)
+  /// If there is already an operation with the same identifier, the new one will be added as a dependency of the oldest one.
+  case enqueue(identifier: String)
+
+  var category: String {
+    switch self {
+    case .cancel(identifier: let category):
+      return category
+    case .enqueue(identifier: let category):
+      return category
+    }
+  }
+}
+
 /// A condition that defines how an operation should be added to an `AdvancedOperationQueue`.
 public struct MutualExclusivityCondition: OperationCondition {
-  public enum Mode {
-    /// If there is already an operation with the same identifier, the new one will be cancelled.
-    case cancel(identifier: String)
-    /// If there is already an operation with the same identifier, the new one will be added as a dependency of the oldest one.
-    case enqueue(identifier: String)
+  //public let mode: ExclusivityMode
+
+  private var _mutuallyExclusiveCategories = Set<ExclusivityMode>()
+
+  public var mutuallyExclusiveCategories: Set<ExclusivityMode> {
+    return _mutuallyExclusiveCategories
   }
 
-  public let mode: Mode
-  public let exclusivityManager: ExclusivityManager2
-
-  public init(mode: Mode, exclusivityManager: ExclusivityManager2 = .shared) {
-    self.mode = mode
-    self.exclusivityManager = exclusivityManager
+  public init(mode: ExclusivityMode) {
+    _mutuallyExclusiveCategories.insert(mode)
+    //self.mode = mode
   }
 
   public func evaluate(for operation: AdvancedOperation, completion: @escaping (Result<Void,Error>) -> Void) {
@@ -45,14 +59,14 @@ public struct MutualExclusivityCondition: OperationCondition {
   }
 }
 
-extension MutualExclusivityCondition: Equatable {
-  public static func == (lhs: MutualExclusivityCondition, rhs: MutualExclusivityCondition) -> Bool {
-    switch (lhs.mode, rhs.mode) {
-    case (.cancel(let lhsId), .cancel(let rhsId)) where lhsId == rhsId:
-      return true
-    case (.enqueue(let lhsId), .enqueue(let rhsId)) where
-      lhsId == rhsId: return true
-    default: return false
-    }
-  }
-}
+//extension MutualExclusivityCondition: Equatable {
+//  public static func == (lhs: MutualExclusivityCondition, rhs: MutualExclusivityCondition) -> Bool {
+//    switch (lhs.mode, rhs.mode) {
+//    case (.cancel(let lhsId), .cancel(let rhsId)) where lhsId == rhsId:
+//      return true
+//    case (.enqueue(let lhsId), .enqueue(let rhsId)) where
+//      lhsId == rhsId: return true
+//    default: return false
+//    }
+//  }
+//}

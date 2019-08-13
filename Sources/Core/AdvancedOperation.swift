@@ -147,48 +147,35 @@ open class AdvancedOperation: Operation {
 
   public final override func start() {
 
-    // evaluate conditions
-    if !conditions.isEmpty {
-      let group = DispatchGroup()
-      group.enter()
-      AdvancedOperation.evaluate2(conditions, for: self) { [weak self] (error) in
-        if let e = error {
-          self!.cancel(error: error)
-//          while !self!.isCancelled {
+//    // evaluate conditions
+//    if !conditions.isEmpty {
+//      let group = DispatchGroup()
+//      group.enter()
+//      AdvancedOperation.evaluateConditions(conditions, for: self) { [weak self] (error) in
+//        if let e = error {
+//          self!.cancel(error: error)
+//        }
+//        group.leave()
+//      }
 //
-//          }
-        }
-        group.leave()
-      }
-
-
-      // the operation is started (we don't care about the queue status (isSuspended)
-      // (executing operations continue to execute.)
-      let exclusivity = conditions.compactMap { $0 as? MutualExclusivityCondition }
-      if !isCancelled && !exclusivity.isEmpty {
-        group.enter()
-        // TODO assuming only one exclusivity manager
-
-        // assuming the same exclusivity manager for every condition
-
-        var categories = Set<String>()
-        exclusivity.forEach {
-          switch $0.mode {
-          case .cancel(let category):
-            categories.insert(category)
-          case .enqueue(let category):
-            categories.insert(category)
-          }
-
-          ExclusivityManager2.shared.lock(for: categories) {
-            // it should return an error in case of cancellation mode so that we can cancel the operation
-            group.leave()
-          }
-
-        }
-      }
-      group.wait()
-    }
+//      group.wait()
+//
+//      let categoriesInConditions = conditions.map { $0.mutuallyExclusiveCategories }
+//      let categories = categoriesInConditions.reduce(Set<ExclusivityMode>()) { (result: Set<ExclusivityMode>, set: Set<ExclusivityMode>) -> Set<ExclusivityMode> in
+//        var partialResult = result
+//        partialResult.formUnion(set)
+//        return partialResult
+//      }
+//
+//      if !categories.isEmpty {
+//        group.enter()
+//        ExclusivityManager2.shared.lock(for: categories) {
+//          // it should return an error in case of cancellation mode so that we can cancel the operation
+//          group.leave()
+//        }
+//        group.wait()
+//      }
+//    }
 
     /// The default implementation of this method updates the execution state of the operation and calls the receiver’s main() method.
     /// This method also performs several checks to ensure that the operation can actually run.
@@ -196,7 +183,7 @@ open class AdvancedOperation: Operation {
     /// If the operation is currently executing or is not ready to execute, this method throws an NSInvalidArgumentException exception.
     print("❗️", operationName, "start")
     super.start()
-     print("❗️", operationName, "after start")
+    print("❗️", operationName, "after start")
 
     // TODO: this is called once the operation is finished or cancelled
     // but if it is cancelled we need to finish it.
@@ -208,36 +195,15 @@ open class AdvancedOperation: Operation {
     }
   }
 
-  private static func evaluate2(_ conditions: [OperationCondition], for operation: AdvancedOperation, completion: @escaping (Error?) -> Void) {
-    let conditionGroup = DispatchGroup()
-    var results = [Result<Void,Error>?](repeating: nil, count: conditions.count)
-    let lock = UnfairLock()
-
-    for (index, condition) in conditions.enumerated() {
-      conditionGroup.enter()
-      condition.evaluate(for: operation) { result in
-        lock.synchronized {
-          results[index] = result
-        }
-        conditionGroup.leave()
-      }
-    }
-
-    conditionGroup.notify(queue: DispatchQueue.global()) {
-      // Aggregate all the occurred errors.
-      let errors = results.compactMap { $0?.failure }
-      if errors.isEmpty {
-        completion(nil)
-      } else {
-        let aggregateError = AdvancedOperationError.conditionsEvaluationFinished(message: "\(operation.operationName) didn't pass the conditions evaluation.", errors: errors)
-        completion(aggregateError)
-      }
-    }
-  }
-
   public final override func main() {
     print("❗️", operationName, "main")
     times.mutate { $0.0 = CFAbsoluteTimeGetCurrent() }
+
+    evaluateConditions()
+    guard !isCancelled else { return }
+
+    evaluateMutuallyExclusiveness()
+
     willExecute()
     state = .executing
     didExecute()
@@ -297,7 +263,7 @@ open class AdvancedOperation: Operation {
   }
 
   private final func _finish(error finishError: Error?) {
-     print("❗️", operationName, "_finish")
+    print("❗️", operationName, "_finish")
     let canBeFinished = commandsLock.synchronized { () -> Bool in
       guard !_finishing else {
         return false
@@ -338,22 +304,9 @@ open class AdvancedOperation: Operation {
     didFinish(error: error)
 
 
-    let exclusivity = conditions.compactMap { $0 as? MutualExclusivityCondition }
-           // assuming the same exclusivity manager for every condition
-
-           var categories = Set<String>()
-           exclusivity.forEach {
-             switch $0.mode {
-             case .cancel(let category):
-               categories.insert(category)
-             case .enqueue(let category):
-               categories.insert(category)
-             }
+    if !mutuallyExclusiveCategories.isEmpty {
+      ExclusivityManager2.shared.unlock(categories: mutuallyExclusiveCategories)
     }
-
-    ExclusivityManager2.shared.unlock(categories: categories)
-
-
 
     commandsLock.synchronized {
       _finishing = false
@@ -389,40 +342,67 @@ open class AdvancedOperation: Operation {
 
   public private(set) var conditions = [OperationCondition]()
 
+  lazy var mutuallyExclusiveCategories: Set<ExclusivityMode> = {
+    let categoriesInConditions = conditions.map { $0.mutuallyExclusiveCategories }
+    let categories = categoriesInConditions.reduce(Set<ExclusivityMode>()) { (result: Set<ExclusivityMode>, set: Set<ExclusivityMode>) -> Set<ExclusivityMode> in
+      var partialResult = result
+      partialResult.formUnion(set)
+      return partialResult
+    }
+    return categories
+  }()
+
   public func addCondition(_ condition: OperationCondition) {
     precondition(state == .pending, "Cannot add conditions if the operation is \(state).")
 
     conditions.append(condition)
   }
 
-  func evaluateConditions() {
-    AdvancedOperation._evaluate(conditions, for: self) { (error) in
-      // TODO weak or unonwed
-      if let conditionError = error {
-        self.cancel(error: conditionError)
+  private func evaluateConditions() {
+    // evaluate conditions
+    if !conditions.isEmpty {
+      let group = DispatchGroup()
+      group.enter()
+      AdvancedOperation.evaluateConditions(conditions, for: self) { [weak self] (error) in
+        if let e = error {
+          self!.cancel(error: error)
+        }
+        group.leave()
       }
 
-      //self._error.mutate { $0 = error }
+      group.wait()
     }
   }
 
-  // TODO: evaluation can be done without using operations
-  internal static func _evaluate(_ conditions: [OperationCondition], for operation: AdvancedOperation, completion: @escaping (Error?) -> Void) {
-    let dispatchGroup = DispatchGroup()
+  private func evaluateMutuallyExclusiveness() {
+
+    if !mutuallyExclusiveCategories.isEmpty {
+      let group = DispatchGroup()
+      group.enter()
+      ExclusivityManager2.shared.lock(for: mutuallyExclusiveCategories) {
+        // it should return an error in case of cancellation mode so that we can cancel the operation
+        group.leave()
+      }
+      group.wait()
+    }
+  }
+
+  private static func evaluateConditions(_ conditions: [OperationCondition], for operation: AdvancedOperation, completion: @escaping (Error?) -> Void) {
+    let conditionGroup = DispatchGroup()
     var results = [Result<Void,Error>?](repeating: nil, count: conditions.count)
     let lock = UnfairLock()
 
     for (index, condition) in conditions.enumerated() {
-      dispatchGroup.enter()
+      conditionGroup.enter()
       condition.evaluate(for: operation) { result in
         lock.synchronized {
           results[index] = result
         }
-        dispatchGroup.leave()
+        conditionGroup.leave()
       }
     }
 
-    dispatchGroup.notify(queue: DispatchQueue.global()) {
+    conditionGroup.notify(queue: DispatchQueue.global()) {
       // Aggregate all the occurred errors.
       let errors = results.compactMap { $0?.failure }
       if errors.isEmpty {
@@ -433,8 +413,6 @@ open class AdvancedOperation: Operation {
       }
     }
   }
-
-
 
   // MARK: - Subclass
 

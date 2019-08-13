@@ -28,6 +28,8 @@ let operationConditionKey = "OperationCondition"
 public protocol OperationCondition {
   /// The name of the condition.
   var name: String { get }
+  /// Mutually exclusive categories to apply to the AdvancedOperation.
+  var mutuallyExclusiveCategories: Set<ExclusivityMode> { get }
 
   /// Evaluate the condition, to see if it has been satisfied or not.
   ///
@@ -40,5 +42,9 @@ public protocol OperationCondition {
 public extension OperationCondition {
   var name: String {
     return String(describing: type(of: self))
+  }
+
+  var mutuallyExclusiveCategories: Set<ExclusivityMode> {
+    return Set()
   }
 }

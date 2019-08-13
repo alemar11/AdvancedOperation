@@ -60,7 +60,7 @@ class NegatedConditionTests: XCTestCase {
   }
 
   func testMutitpleNegatedConditions() {
-    let queue = AdvancedOperationQueue()
+    let queue = OperationQueue()
 
     let operation1 = AdvancedBlockOperation { }
     operation1.name = "operation1"
