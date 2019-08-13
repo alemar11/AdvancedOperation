@@ -149,7 +149,7 @@ final class AdvancedBlockOperationTests: XCTestCase {
       operation2.cancel()
     }
     operation1.then(adapterOperation).then(operation2).then(operation3)
-    let queue = AdvancedOperationQueue()
+    let queue = OperationQueue()
 
     queue.addOperations([operation1, operation2, operation3, adapterOperation], waitUntilFinished: false)
 

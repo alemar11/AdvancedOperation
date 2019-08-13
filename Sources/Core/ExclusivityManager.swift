@@ -23,8 +23,8 @@
 
 import Foundation
 
-public final class ExclusivityManager2 {
-  public static let shared = ExclusivityManager2()
+public final class ExclusivityManager {
+  public static let shared = ExclusivityManager()
 
   /// The private queue used for thread safe operations.
   private let queue: DispatchQueue
@@ -40,7 +40,7 @@ public final class ExclusivityManager2 {
     self.locksQueue = DispatchQueue(label: label + ".Locks", qos: qos, attributes: [.concurrent])
   }
 
-  internal func lock(for categories: Set<ExclusivityMode>, completion: @escaping () -> Void) {
+  internal func lock(for categories: Set<ExclusivityMode>, completion: @escaping (Ticket?) -> Void) {
     guard !categories.isEmpty else {
       fatalError("A request for Mutual Exclusivity locks was made with no categories specified. This request is unnecessary.") // TODO
     }
@@ -50,31 +50,57 @@ public final class ExclusivityManager2 {
     }
   }
 
-  private func _lock(for categories: Set<ExclusivityMode>, completion: @escaping () -> Void) {
 
+  internal struct Ticket {
+    let categories: Set<ExclusivityMode>
+  }
+
+  private func _lock(for categories: Set<ExclusivityMode>, completion: @escaping (Ticket?) -> Void) {
+    // check the status for cancellables categories
+    let cancellations = categories.filter {
+      if case .cancel = $0 {
+        return true
+      }
+      return false
+    }
+
+    if !cancellations.isEmpty {
+    let shouldBeCancelled = cancellations.map { $0.category }.reduce(true) { result, category in
+      let status = _status(forCategory: category)
+      return result && (status == .waitingForLock)
+    }
+
+    if shouldBeCancelled {
+      completion(nil)
+      return
+    }
+    }
+
+    // start the mutual exclusivity lock
     let dipatchGroup = DispatchGroup()
+    let ticket = Ticket(categories: categories)
     var notAvailableCategories = 0
 
     categories.forEach {
       let status = _lock(forCategory: $0.category, withGroup: dipatchGroup)
       switch status {
       case .available:
+        print("💥", status, $0)
         break
       case .waitingForLock:
+        print("💥", status, $0)
         notAvailableCategories += 1
       }
     }
 
     if notAvailableCategories == 0 {
-      completion()
+      completion(ticket)
     } else {
       (0..<notAvailableCategories).forEach { _ in dipatchGroup.enter() }
-
       dipatchGroup.notify(queue: locksQueue) {
-        completion()
+        completion(ticket)
       }
     }
-
   }
 
   private enum RequestLockResult {
@@ -82,12 +108,17 @@ public final class ExclusivityManager2 {
     case waitingForLock
   }
 
+  private func _status(forCategory category: String) -> RequestLockResult {
+    let queuesByCategory = _categories[category] ?? []
+    return queuesByCategory.isEmpty ? RequestLockResult.available : .waitingForLock
+  }
+
   private func _lock(forCategory category: String, withGroup group: DispatchGroup) -> RequestLockResult {
     var queuesByCategory = _categories[category] ?? []
-    let isFrontOfTheQueueForThisCategory = _categories.isEmpty
+    let isFrontOfTheQueueForThisCategory = queuesByCategory.isEmpty
     queuesByCategory.append(group)
     _categories[category] = queuesByCategory
-    return (isFrontOfTheQueueForThisCategory) ? .available : .waitingForLock
+     return isFrontOfTheQueueForThisCategory ? RequestLockResult.available : .waitingForLock
   }
 
 
@@ -122,81 +153,81 @@ public final class ExclusivityManager2 {
 
 }
 
-internal final class ExclusivityManager {
-  /// Creates a new `ExclusivityManager` instance.
-  internal init(qos: DispatchQoS = .default) {
-    let label = "\(identifier).\(type(of: self)).\(UUID().uuidString)"
-    self.queue = DispatchQueue(label: label, qos: qos)
-  }
-
-  /// Running operations
-  internal var operations: [String: [Operation]] {
-    return queue.sync { return _operations }
-  }
-
-  /// The private queue used for thread safe operations.
-  private let queue: DispatchQueue
-
-  /// Holds all the running operations.
-  private var _operations: [String: [Operation]] = [:]
-
-  /// Adds an `AdvancedOperation` the the `ExclusivityManager` instance.
-  ///
-  /// - Parameters:
-  ///   - operation: The `AdvancedOperation` to add.
-  ///   - category: The category to identify an `AdvancedOperation`.
-  ///   - cancellable: True if the operation should be cancelled instead of enqueue if another operation with the same category exists.
-  internal func addOperation(_ operation: AdvancedOperation, category: String, cancellable: Bool = false) {
-    queue.sync {
-      self._addOperation(operation, category: category, cancellable: cancellable)
-    }
-  }
-
-  /// Removes an `AdvancedOperation` from the `ExclusivityManager` instance for a given `category`.
-  ///
-  /// - Parameters:
-  ///   - operation: The `AdvancedOperation` to remove.
-  ///   - category: The category to identify an `AdvancedOperation`.
-  internal func removeOperation(_ operation: AdvancedOperation, category: String) {
-    queue.async {
-      self._removeOperation(operation, category: category)
-    }
-  }
-
-  private func _addOperation(_ operation: AdvancedOperation, category: String, cancellable: Bool) {
-    guard !operation.isCancelled else { return }
-
-    let didFinishObserver = BlockObserver { [weak self] currentOperation, _ in
-      self?.removeOperation(currentOperation, category: category)
-    }
-    operation.addObserver(didFinishObserver)
-
-    var operationsWithThisCategory = _operations[category] ?? []
-    let previous = operationsWithThisCategory.last
-
-    if let previous = previous {
-      if cancellable {
-        // swiftlint:disable:next line_length
-        let error = AdvancedOperationError.executionCancelled(message: "The operation has been cancelled by the ExclusivityManager because there is already a running operation for the identifier: \(category).")
-        operation.cancel(error: error)
-        return // early exit because there is no need to add a cancelled operation to the manager
-      } else {
-        operation.addDependency(previous)
-      }
-    }
-
-    operationsWithThisCategory.append(operation)
-    _operations[category] = operationsWithThisCategory
-  }
-
-  private func _removeOperation(_ operation: AdvancedOperation, category: String) {
-    if
-      let operationsWithThisCategory = _operations[category],
-      let index = operationsWithThisCategory.firstIndex(of: operation)
-    {
-      var mutableOperationsWithThisCategory = operationsWithThisCategory
-      mutableOperationsWithThisCategory.remove(at: index)
-      _operations[category] = mutableOperationsWithThisCategory
-    }
-  }
-}
+//internal final class ExclusivityManager {
+//  /// Creates a new `ExclusivityManager` instance.
+//  internal init(qos: DispatchQoS = .default) {
+//    let label = "\(identifier).\(type(of: self)).\(UUID().uuidString)"
+//    self.queue = DispatchQueue(label: label, qos: qos)
+//  }
+//
+//  /// Running operations
+//  internal var operations: [String: [Operation]] {
+//    return queue.sync { return _operations }
+//  }
+//
+//  /// The private queue used for thread safe operations.
+//  private let queue: DispatchQueue
+//
+//  /// Holds all the running operations.
+//  private var _operations: [String: [Operation]] = [:]
+//
+//  /// Adds an `AdvancedOperation` the the `ExclusivityManager` instance.
+//  ///
+//  /// - Parameters:
+//  ///   - operation: The `AdvancedOperation` to add.
+//  ///   - category: The category to identify an `AdvancedOperation`.
+//  ///   - cancellable: True if the operation should be cancelled instead of enqueue if another operation with the same category exists.
+//  internal func addOperation(_ operation: AdvancedOperation, category: String, cancellable: Bool = false) {
+//    queue.sync {
+//      self._addOperation(operation, category: category, cancellable: cancellable)
+//    }
+//  }
+//
+//  /// Removes an `AdvancedOperation` from the `ExclusivityManager` instance for a given `category`.
+//  ///
+//  /// - Parameters:
+//  ///   - operation: The `AdvancedOperation` to remove.
+//  ///   - category: The category to identify an `AdvancedOperation`.
+//  internal func removeOperation(_ operation: AdvancedOperation, category: String) {
+//    queue.async {
+//      self._removeOperation(operation, category: category)
+//    }
+//  }
+//
+//  private func _addOperation(_ operation: AdvancedOperation, category: String, cancellable: Bool) {
+//    guard !operation.isCancelled else { return }
+//
+//    let didFinishObserver = BlockObserver { [weak self] currentOperation, _ in
+//      self?.removeOperation(currentOperation, category: category)
+//    }
+//    operation.addObserver(didFinishObserver)
+//
+//    var operationsWithThisCategory = _operations[category] ?? []
+//    let previous = operationsWithThisCategory.last
+//
+//    if let previous = previous {
+//      if cancellable {
+//        // swiftlint:disable:next line_length
+//        let error = AdvancedOperationError.executionCancelled(message: "The operation has been cancelled by the ExclusivityManager because there is already a running operation for the identifier: \(category).")
+//        operation.cancel(error: error)
+//        return // early exit because there is no need to add a cancelled operation to the manager
+//      } else {
+//        operation.addDependency(previous)
+//      }
+//    }
+//
+//    operationsWithThisCategory.append(operation)
+//    _operations[category] = operationsWithThisCategory
+//  }
+//
+//  private func _removeOperation(_ operation: AdvancedOperation, category: String) {
+//    if
+//      let operationsWithThisCategory = _operations[category],
+//      let index = operationsWithThisCategory.firstIndex(of: operation)
+//    {
+//      var mutableOperationsWithThisCategory = operationsWithThisCategory
+//      mutableOperationsWithThisCategory.remove(at: index)
+//      _operations[category] = mutableOperationsWithThisCategory
+//    }
+//  }
+//}

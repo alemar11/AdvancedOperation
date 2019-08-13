@@ -27,7 +27,7 @@ import XCTest
 final class NoCancelledDependenciesConditionTests: XCTestCase {
 
   func testTwoLevelCondition() {
-    let queue = AdvancedOperationQueue()
+    let queue = OperationQueue()
 
     let operation1 = SleepyAsyncOperation(interval1: 1, interval2: 1, interval3: 1)
     let operation2 = SleepyAsyncOperation(interval1: 1, interval2: 1, interval3: 1)
@@ -63,7 +63,7 @@ final class NoCancelledDependenciesConditionTests: XCTestCase {
   }
 
   func testAllOperationCancelled() {
-    let queue = AdvancedOperationQueue()
+    let queue = OperationQueue()
 
     let expectation1 = expectation(description: "\(#function)\(#line)")
     let expectation2 = expectation(description: "\(#function)\(#line)")
@@ -115,7 +115,7 @@ final class NoCancelledDependenciesConditionTests: XCTestCase {
   }
 
   func testWithNoFailedDependeciesCondition() {
-    let queue = AdvancedOperationQueue()
+    let queue = OperationQueue()
 
     let operation1 = NotExecutableOperation()
     let operation2 = SleepyAsyncOperation()

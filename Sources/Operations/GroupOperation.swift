@@ -92,7 +92,7 @@ open class GroupOperation: AdvancedOperation {
               qualityOfService: QualityOfService = .default,
               maxConcurrentOperationCount: Int = OperationQueue.defaultMaxConcurrentOperationCount,
               underlyingQueue: DispatchQueue? = .none) {
-    let queue = AdvancedOperationQueue()
+    let queue = OperationQueue()
     queue.underlyingQueue = underlyingQueue
     queue.qualityOfService = qualityOfService
     queue.maxConcurrentOperationCount = maxConcurrentOperationCount

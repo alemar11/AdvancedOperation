@@ -26,7 +26,7 @@ import XCTest
 
 final class AdvancedOperationQueueTests: XCTestCase {
 //  func testAddBlockAsOperation() {
-//    let queue = AdvancedOperationQueue()
+//    let queue = OperationQueue()
 //    let delegate = MockOperationQueueDelegate()
 //
 //    let willAddExpectation = expectation(description: "\(#function)\(#line)")
@@ -49,7 +49,7 @@ final class AdvancedOperationQueueTests: XCTestCase {
 //  }
 
 //  func testQueueDelegateWithAdvancedOperationsUsingWaitUntilFinished() {
-//    let queue = AdvancedOperationQueue()
+//    let queue = OperationQueue()
 //    let delegate = MockOperationQueueDelegate()
 //
 //    queue.delegate = delegate
@@ -139,7 +139,7 @@ final class AdvancedOperationQueueTests: XCTestCase {
 //  }
 
 //  func testQueueWithAdvancedOperationsWithoutUsingWaitUntilFinished() {
-//    let queue = AdvancedOperationQueue()
+//    let queue = OperationQueue()
 //    queue.isSuspended = true
 //
 //    let operation1 = SleepyAsyncOperation()
@@ -158,7 +158,7 @@ final class AdvancedOperationQueueTests: XCTestCase {
 //  }
 //
 //  func testQueueWithMixedOperations() {
-//    let queue = AdvancedOperationQueue()
+//    let queue = OperationQueue()
 //
 //    queue.delegate = delegate
 //    queue.isSuspended = true // https://api.travis-ci.org/v3/job/447679744/log.txt
@@ -183,7 +183,7 @@ final class AdvancedOperationQueueTests: XCTestCase {
 //  }
 //
 //  func testQueueWithCancel() {
-//    let queue = AdvancedOperationQueue()
+//    let queue = OperationQueue()
 //    queue.isSuspended = true
 //
 //    let operation1 = SleepyOperation()
@@ -201,7 +201,7 @@ final class AdvancedOperationQueueTests: XCTestCase {
 //  }
 
   func testFailIfAtLeastOnDependencyHasBeenCancelled() {
-    let queue = AdvancedOperationQueue()
+    let queue = OperationQueue()
     let expectation1 = expectation(description: "\(#function)\(#line)")
     let operation1 = SleepyOperation()
     let operation2 = SleepyAsyncOperation()
@@ -236,7 +236,7 @@ final class AdvancedOperationQueueTests: XCTestCase {
   }
 
   func testMemoryLeakFailIfAtLeastOnDependencyHasBeenCancelled() {
-    var queue: AdvancedOperationQueue? = AdvancedOperationQueue()
+    var queue: OperationQueue? = OperationQueue()
     weak var weakQueue = queue
 
     let expectation1 = expectation(description: "\(#function)\(#line)")
@@ -284,7 +284,7 @@ final class AdvancedOperationQueueTests: XCTestCase {
   }
 
   func testMemoryLeakFailOnceOperationsHaveBeenCompleted() {
-    let queue: AdvancedOperationQueue? = AdvancedOperationQueue()
+    let queue: OperationQueue? = OperationQueue()
 
     var operation1: AdvancedOperation? = SleepyAsyncOperation()
     operation1!.name = "operation1"
@@ -329,7 +329,7 @@ final class AdvancedOperationQueueTests: XCTestCase {
     let producingOperation = ProducingOperationsOperation(operationProducers: [producer])
     let expectation1 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isFinished), object: producedOperation, expectedValue: true)
     let expectation2 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isFinished), object: producingOperation, expectedValue: true)
-    let queue = AdvancedOperationQueue()
+    let queue = OperationQueue()
     queue.addOperation(producingOperation)
 
     wait(for: [expectation1, expectation2], timeout: 10)
@@ -340,7 +340,7 @@ final class AdvancedOperationQueueTests: XCTestCase {
 
   func testSynchronousOperationFinishedWithoutErrors() {
     let operation = SynchronousOperation(error: nil)
-    let queue = AdvancedOperationQueue()
+    let queue = OperationQueue()
     let expectation1 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isFinished), object: operation, expectedValue: true)
 
     queue.addOperation(operation)
@@ -350,7 +350,7 @@ final class AdvancedOperationQueueTests: XCTestCase {
 
   func testSynchronousOperationFinishedWithErrors() {
     let operation = SynchronousOperation(error: MockError.failed)
-    let queue = AdvancedOperationQueue()
+    let queue = OperationQueue()
     let expectation1 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isFinished), object: operation, expectedValue: true)
     queue.addOperation(operation)
 
@@ -360,7 +360,7 @@ final class AdvancedOperationQueueTests: XCTestCase {
   }
 
   func testAccessingOperationQueueFromOperation() {
-    let queue = AdvancedOperationQueue()
+    let queue = OperationQueue()
     let operation = OperationReferencingOperationQueue(queue: queue)
     let expectation1 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isFinished), object: operation, expectedValue: true)
     queue.addOperation(operation)
@@ -378,7 +378,7 @@ final class AdvancedOperationQueueTests: XCTestCase {
 
   // this test checks if a subclass of an Operation gets executed even if it is cancelled
   func testInvestigationStandardOperationInsideAnAdvacedOperationQueue() {
-    let queue = AdvancedOperationQueue()
+    let queue = OperationQueue()
     let operation = SimpleOperation()
     let expectation1 = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: operation, expectedValue: true)
     let expectation2 = XCTKVOExpectation(keyPath: #keyPath(Operation.isCancelled), object: operation, expectedValue: true)
@@ -396,7 +396,7 @@ final class AdvancedOperationQueueTests: XCTestCase {
 
   // this test checks if an Operation is executed once its dependecies gets cancelled.
   func testInvestigationStandardOperationDependenciesInsideAnAdvacedOperationQueue() {
-    let queue = AdvancedOperationQueue()
+    let queue = OperationQueue()
     let operation0 = SimpleOperation()
     let operation = SimpleOperation()
     let expectation1 = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: operation, expectedValue: true)

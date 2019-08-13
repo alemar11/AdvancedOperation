@@ -27,7 +27,7 @@ import XCTest
 final class NoFailedDependenciesConditionTests: XCTestCase {
 
   func testFinishedAndFailedOperation() {
-    let queue = AdvancedOperationQueue()
+    let queue = OperationQueue()
 
     let operation1 = NotExecutableOperation()
     operation1.name = "operation1"
@@ -62,7 +62,7 @@ final class NoFailedDependenciesConditionTests: XCTestCase {
   }
 
   func testCancelledAndFailedOperation() {
-    let queue = AdvancedOperationQueue()
+    let queue = OperationQueue()
 
     let operation1 = AdvancedBlockOperation { complete in complete(nil) }
     operation1.name = "operation1"
@@ -95,7 +95,7 @@ final class NoFailedDependenciesConditionTests: XCTestCase {
   }
 
   func testCancelledAndFailedOperationWaitUntilFinished() {
-    let queue = AdvancedOperationQueue()
+    let queue = OperationQueue()
 
     let operation1 = NotExecutableOperation()
     operation1.name = "operation1"
@@ -120,7 +120,7 @@ final class NoFailedDependenciesConditionTests: XCTestCase {
   }
 
   func testIgnoredCancelledAndFailedOperation() {
-    let queue = AdvancedOperationQueue()
+    let queue = OperationQueue()
 
     let operation1 = AdvancedBlockOperation { }
     operation1.name = "operation1"
@@ -151,7 +151,7 @@ final class NoFailedDependenciesConditionTests: XCTestCase {
   }
 
   func testIgnoredCancelledAndFailedOperations() {
-    let queue = AdvancedOperationQueue()
+    let queue = OperationQueue()
 
     let operation1 = NotExecutableOperation()
     operation1.name = "operation1"
@@ -183,7 +183,7 @@ final class NoFailedDependenciesConditionTests: XCTestCase {
   }
 
   func testFinishedAndFailedOperationNegated() {
-    let queue = AdvancedOperationQueue()
+    let queue = OperationQueue()
 
     let operation1 = AdvancedBlockOperation { }
     operation1.name = "operation1"

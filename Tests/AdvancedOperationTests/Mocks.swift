@@ -286,11 +286,11 @@ final internal class FailingAsyncOperation: AdvancedOperation {
 
 /// An operation that check if its current operation queue is the same passed durinig its initialization.
 final internal class OperationReferencingOperationQueue: AdvancedOperation {
-  weak var queue: AdvancedOperationQueue? = .none
+  weak var queue: OperationQueue? = .none
 
   override public var isAsynchronous: Bool { return false }
 
-  init(queue: AdvancedOperationQueue) {
+  init(queue: OperationQueue) {
     self.queue = queue
   }
 

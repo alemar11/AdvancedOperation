@@ -770,7 +770,7 @@ final class GroupOperationTests: XCTestCase {
   
   func testCancelledGroupOperationInsideAnotherQueue() {
     // cancel a group right after it has been added to the queue
-    let queue = AdvancedOperationQueue()
+    let queue = OperationQueue()
     let operation = SleepyAsyncOperation(interval1: 1, interval2: 0, interval3: 0)
     operation.name = "operation"
     let group = GroupOperation(operations: [operation])
@@ -799,7 +799,7 @@ final class GroupOperationTests: XCTestCase {
   
   func testCancelledGroupOperationInsideAnotherQueueWithDelay() {
     // cancel a group after a delay once it has been added to the queue
-    let queue = AdvancedOperationQueue()
+    let queue = OperationQueue()
     let operation = SleepyAsyncOperation(interval1: 6, interval2: 0, interval3: 0)
     let group = GroupOperation(operations: [operation])
     let delay = 2.0
@@ -1125,7 +1125,7 @@ final class GroupOperationTests: XCTestCase {
       expectation3.fulfill()
     }
     
-    let queue = AdvancedOperationQueue()
+    let queue = OperationQueue()
     queue.addOperation(groupOperation)
     
     wait(for: [expectation1, expectation2, expectation3], timeout: 10)

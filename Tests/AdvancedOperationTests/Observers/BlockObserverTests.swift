@@ -27,7 +27,7 @@ import XCTest
 class BlockObserverTests: XCTestCase {
 
   func testProducedOperationFlow() {
-    let queue = AdvancedOperationQueue()
+    let queue = OperationQueue()
     queue.maxConcurrentOperationCount = 10
 
     let expectation1 = expectation(description: "\(#function)\(#line)")
@@ -76,7 +76,7 @@ class BlockObserverTests: XCTestCase {
   }
 
   func testProducedOperationDependingFromTheProducingOperationOnConcurrentQueue() {
-    let queue = AdvancedOperationQueue()
+    let queue = OperationQueue()
     queue.maxConcurrentOperationCount = 10
     let expectation1 = expectation(description: "\(#function)\(#line)")
     let expectation2 = expectation(description: "\(#function)\(#line)")
@@ -98,7 +98,7 @@ class BlockObserverTests: XCTestCase {
   }
 
   func testProducedOperationOnConcurrentQueue() {
-    let queue = AdvancedOperationQueue()
+    let queue = OperationQueue()
     queue.maxConcurrentOperationCount = 10
     let expectation1 = expectation(description: "\(#function)\(#line)")
     let expectation2 = expectation(description: "\(#function)\(#line)")
@@ -122,7 +122,7 @@ class BlockObserverTests: XCTestCase {
   func testProducedOperationWithFailingConditionsOnConcurrentQueue() {
     let queue = DispatchQueue(label: "\(#function)")
     queue.sync {
-      let queue = AdvancedOperationQueue()
+      let queue = OperationQueue()
       queue.maxConcurrentOperationCount = 10
       let expectation1 = expectation(description: "\(#function)\(#line)")
       let expectation2 = expectation(description: "\(#function)\(#line)")

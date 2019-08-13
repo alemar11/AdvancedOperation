@@ -42,7 +42,7 @@ import XCTest
 //    let operation2 = StringToIntOperation()
 //    operation1.input = 10
 //    let adapterOperation = AdvancedOperation.injectOperation(operation1, into: operation2)
-//    let queue = AdvancedOperationQueue()
+//    let queue = OperationQueue()
 //    queue.addOperations([operation1, operation2, adapterOperation], waitUntilFinished: true)
 //
 //    XCTAssertEqual(operation2.output, 10)
@@ -55,7 +55,7 @@ import XCTest
 //    operation3.addDependency(operation2)
 //    operation1.input = 10
 //    let adapterOperation = AdvancedOperation.injectOperation(operation1, into: operation2)
-//    let queue = AdvancedOperationQueue()
+//    let queue = OperationQueue()
 //    queue.addOperations([operation1, operation2, adapterOperation], waitUntilFinished: true)
 //    queue.addOperations([operation3], waitUntilFinished: false)
 //
@@ -67,7 +67,7 @@ import XCTest
 //    let operation2 = StringToIntOperation()
 //    operation1.input = 10
 //    let adapterOperation = operation1.injectOutput(into: operation2)
-//    let queue = AdvancedOperationQueue()
+//    let queue = OperationQueue()
 //    queue.addOperations([operation1, operation2, adapterOperation], waitUntilFinished: true)
 //    XCTAssertEqual(operation2.output, 10)
 //  }
@@ -83,7 +83,7 @@ import XCTest
 //        return nil
 //      }
 //    }
-//    let queue = AdvancedOperationQueue()
+//    let queue = OperationQueue()
 //    queue.addOperations([operation1, operation2, adapterOperation], waitUntilFinished: true)
 //
 //    XCTAssertEqual(operation2.output, "10")
@@ -100,7 +100,7 @@ import XCTest
 //        return nil
 //      }
 //    }
-//    let queue = AdvancedOperationQueue()
+//    let queue = OperationQueue()
 //    queue.addOperations([operation1, operation2, adapterOperation], waitUntilFinished: true)
 //
 //    XCTAssertNil(operation2.output)
@@ -117,7 +117,7 @@ import XCTest
 //
 //    operation1.input = 10
 //    let adapterOperation = AdvancedOperation.injectOperation(operation1, into: operation2)
-//    let queue = AdvancedOperationQueue()
+//    let queue = OperationQueue()
 //    queue.addOperations([operation1, operation2, adapterOperation, operation3], waitUntilFinished: false)
 //
 //    waitForExpectations(timeout: 3)
@@ -134,7 +134,7 @@ import XCTest
 //    }
 //    operation1.input = 2000 // values greater than 1000 will produce a nil output when executing 😎
 //    let adapterOperation = operation1.injectOutput(into: operation2)
-//    let queue = AdvancedOperationQueue()
+//    let queue = OperationQueue()
 //    queue.addOperations([operation1, operation2, adapterOperation], waitUntilFinished: false)
 //
 //    waitForExpectations(timeout: 3)
@@ -147,7 +147,7 @@ import XCTest
 //    let operation2 = StringToIntOperation()
 //    let expectation1 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isFinished), object: operation2, expectedValue: true)
 //    let adapterOperation = operation1.injectOutput(into: operation2)
-//    let queue = AdvancedOperationQueue()
+//    let queue = OperationQueue()
 //
 //    operation1.cancel()
 //    queue.addOperations([operation1, operation2, adapterOperation], waitUntilFinished: false)
