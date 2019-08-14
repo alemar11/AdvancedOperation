@@ -43,6 +43,24 @@ final class AdvancedBlockOperationTests: XCTestCase {
     XCTAssertTrue(operation.isCancelled)
   }
 
+  func testCancelBeforeStarting() {
+    let operation = AdvancedBlockOperation { complete in
+      DispatchQueue(label: "\(identifier).\(#function)", attributes: .concurrent).asyncAfter(deadline: .now() + 2) {
+        complete(nil)
+      }
+    }
+    XCTAssertTrue(operation.isAsynchronous)
+    XCTAssertTrue(operation.isConcurrent)
+
+    let expectation1 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isFinished), object: operation, expectedValue: true)
+    operation.cancel()
+    operation.start()
+
+    wait(for: [expectation1], timeout: 4)
+
+    XCTAssertTrue(operation.isCancelled)
+  }
+
   func testEarlyBailOut() {
     let operation = AdvancedBlockOperation { complete in
       complete(nil)
