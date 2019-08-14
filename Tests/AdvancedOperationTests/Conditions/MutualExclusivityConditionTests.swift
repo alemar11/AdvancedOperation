@@ -274,16 +274,20 @@ class MutualExclusivityConditionTests: XCTestCase {
 
     let operation1 = SleepyAsyncOperation(interval1: 1, interval2: 0, interval3: 0)
     operation1.addCondition(condition)
+    operation1.name = "operation1"
+    operation1.log = TestsLog
 
     let operation2 = SleepyAsyncOperation(interval1: 0, interval2: 1, interval3: 1)
     operation2.addCondition(condition)
+    operation2.name = "operation2"
+    operation2.log = TestsLog
 
     queue.addOperations([operation2, operation1], waitUntilFinished: true)
 
     XCTAssertTrue(operation1.isFinished)
     XCTAssertTrue(operation2.isFinished)
 
-    XCTAssertFalse(operation1.isCancelled)
+    XCTAssertFalse(operation1.isCancelled) // TODO failed
     XCTAssertFalse(operation2.isCancelled)
   }
 

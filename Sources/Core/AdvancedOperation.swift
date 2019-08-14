@@ -256,23 +256,25 @@ open class AdvancedOperation: Operation {
       return true
     }
 
-    guard canBeFinished else {
-      return
-    }
+    guard canBeFinished else { return }
 
     willFinish(error: error)
+
     // the operation is finished, the progress should always reflect that
     if progress.completedUnitCount != progress.totalUnitCount {
       progress.completedUnitCount = progress.totalUnitCount
     }
 
     times.mutate { $0.1 = CFAbsoluteTimeGetCurrent() }
-    state = .finished
-    didFinish(error: error)
 
     if let ticket = mutuallyExclusiveTicket {
+      // if the lock is released after the state is changed into finished, some operations (i.e. in a serial queue)
+      // may start evaluating their exclusivity conditions before this lock is released.
       ExclusivityManager.shared.unlock(categories: ticket.categories)
     }
+
+    state = .finished
+    didFinish(error: error)
 
     commandsLock.synchronized {
       _finishing = false
@@ -287,10 +289,8 @@ open class AdvancedOperation: Operation {
   /// - Note: It's up to the developer to decide wheter or not the produced operation should run indipendently from the producing operation (if the queue is not serial).
   final func produceOperation(_ operation: Operation) {
     guard let queue = operationQueue else {
-      fatalError("An operation cannot produce any other operation if it's not enqueued on an AdvancedOperationQueue.") // TODO is this correct as fatal error?
-      return
+      fatalError("An operation cannot produce any other operation if it's not enqueued on an OperationQueue.") // TODO is this correct as fatal error?
     }
-    //precondition(operationQueue is AdvancedOperationQueue, "An operation cannot produce any other operation if it's not enqueued on an AdvancedOperationQueue.")
 
     didProduceOperation(operation)
     queue.addOperation(operation)
