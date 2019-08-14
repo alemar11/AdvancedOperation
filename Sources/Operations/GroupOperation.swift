@@ -116,10 +116,6 @@ open class GroupOperation: AdvancedOperation {
     }
   }
 
-  deinit {
-    // TODO
-  }
-
   /// Advises the `GroupOperation` object that it should stop executing its tasks.
   /// - Note: Once all the tasks are cancelled, the GroupOperation state will be set as finished if it's started.
   public final override func cancel(error: Error? = nil) {
