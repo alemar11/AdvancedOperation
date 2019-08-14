@@ -61,67 +61,19 @@ extension Operation {
     }
   }
 
+  /// Adds multiple dependencies to the operation.
+  public func addDependencies(_ dependencies: Operation...) {
+    precondition(!isExecuting, "Dependencies cannot be modified after execution has begun.")
+
+    for dependency in dependencies {
+      addDependency(dependency)
+    }
+  }
+
   /// Removes all the dependencies.
   public func removeDependencies() {
     for dependency in dependencies {
       removeDependency(dependency)
     }
-  }
-}
-
-extension Operation {
-  /// Adds `self` as a dependency of a given operation.
-  ///
-  /// - Parameter operation: the Operation instance to add to the receiver as a dependency.
-  /// - Returns: The given operation.
-  @discardableResult
-  public func then(_ operation: Operation) -> Operation {
-    precondition(!isFinished, "Cannot add a finished operation as a dependency.")
-
-    operation.addDependency(self)
-    return operation
-  }
-
-  /// Adds `self` as a dependency of a given list of operations.
-  ///
-  /// - Parameter operation: the Operation instance to add the receiver as a dependency.
-  /// - Returns: The given list of operations.
-  @discardableResult
-  public func then(_ operations: Operation...) -> [Operation] {
-    precondition(!isFinished, "Cannot add a finished operation as a dependency.")
-
-    for operation in operations {
-      operation.addDependency(self)
-    }
-    return operations
-  }
-}
-
-extension Sequence where Element: Operation {
-  /// Adds `self` as dependencies of a given operation.
-  ///
-  /// - Parameter operation: the Operation instance to add the receiver as a dependency.
-  /// - Returns: The given operation.
-  @discardableResult
-  public func then(_ operation: Operation) -> Operation {
-    for selfOperation in self {
-      operation.addDependency(selfOperation)
-    }
-
-    return operation
-  }
-
-  /// Adds `self` as dependencies of a given list of operation.
-  ///
-  /// - Parameter operations: the Operation instances to add the to receiver as a dependencies.
-  /// - Returns: The given list of operations.
-  @discardableResult
-  public func then(_ operations: Operation...) -> [Operation] {
-    for operation in operations {
-      for selfOperation in self {
-        operation.addDependency(selfOperation)
-      }
-    }
-    return operations
   }
 }

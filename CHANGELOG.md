@@ -7,6 +7,8 @@
 - `OperationConditionResult` has beed replaced by the Swift `Result` type.
 - Removed `AdvancedOperationQueue`.
 - New `ExclusivityManager` implementation.
+- Removed `then` operator.
+- Added `Operation.addDependencies(_:)` method
 
 ### 3.2.0
 
