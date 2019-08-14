@@ -60,7 +60,7 @@ open class AdvancedOperation: Operation {
     progress.isPausable = false
     progress.isCancellable = true
     progress.cancellationHandler = { [weak self] in
-      let error = AdvancedOperationError.executionCancelled(message: "A Progress has cancelled this operation.")
+      let error = NSError.executionCancelled(message: "A Progress has cancelled this operation.")
       self?.cancel(error: error)
     }
     return progress
@@ -91,6 +91,9 @@ open class AdvancedOperation: Operation {
   
   /// Serial queue for making state changes atomic under the constraint of having to send KVO willChange/didChange notifications.
   private let stateChangeQueue = DispatchQueue(label: "\(identifier).stateChange")
+
+  /// A ticket generated after a mutual exclusivity evaluation.
+  private var mutuallyExclusiveTicket: ExclusivityManager.Ticket?
   
   private let _cancelled = Atomic(false)
   
@@ -335,9 +338,7 @@ open class AdvancedOperation: Operation {
       os_log("%{public}s conditions have been evaluated.", log: log, type: .info, operationName)
     }
   }
-  
-  private var mutuallyExclusiveTicket: ExclusivityManager.Ticket?
-  
+
   private func evaluateMutuallyExclusiveness() {
     guard !mutuallyExclusiveCategories.isEmpty else { return }
     
@@ -350,12 +351,12 @@ open class AdvancedOperation: Operation {
     group.enter()
     exclusivityManager.lock(for: mutuallyExclusiveCategories) { [weak self] ticket in
       guard let self = self else { return }
-      
-      os_log("%{public}s's turn has come.'", log: self.log, type: .info, self.operationName)
-      
+
       if let ticket = ticket {
+        os_log("%{public}s's exclusivity execution has been evaluated and the operation is ready to start.'", log: self.log, type: .info, self.operationName)
         self.mutuallyExclusiveTicket = ticket
       } else {
+        os_log("%{public}s's exclusivity execution has been evaluated and the operation will be cancelled.'", log: self.log, type: .info, self.operationName)
         self.cancel()
       }
       group.leave()
@@ -386,7 +387,7 @@ open class AdvancedOperation: Operation {
     if errors.isEmpty {
       return nil
     } else {
-      let aggregateError = AdvancedOperationError.conditionsEvaluationFinished(message: "\(operation.operationName) didn't pass the conditions evaluation.", errors: errors)
+      let aggregateError = NSError.conditionsEvaluationFinished(message: "\(operation.operationName) didn't pass the conditions evaluation.", errors: errors)
       return aggregateError
     }
   }

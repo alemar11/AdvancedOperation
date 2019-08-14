@@ -45,7 +45,7 @@ public struct TimeoutObserver: OperationWillExecuteObserving {
     queue.asyncAfter(deadline: when) {
       if !operation.isFinished && !operation.isCancelled {
         let message = "\(operation.operationName) has been cancelled by the TimeoutObserver with a timeout of \(delay) seconds."
-        let error = AdvancedOperationError.executionCancelled(message: message,
+        let error = NSError.executionCancelled(message: message,
                                                               userInfo: [observerKey: "TimeoutObserver"])
         operation.cancel(error: error)
       }

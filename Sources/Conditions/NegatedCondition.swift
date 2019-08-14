@@ -26,25 +26,25 @@ import Foundation
 /// A condition that negates the evaluation of another condition.
 public struct NegatedCondition<T: OperationCondition>: OperationCondition {
   public var name: String { return "Not<\(condition.name)>" }
-
+  
   static var negatedConditionKey: String { return "NegatedCondition" }
-
+  
   let condition: T
-
+  
   public init(condition: T) {
     self.condition = condition
   }
-
+  
   public func evaluate(for operation: AdvancedOperation, completion: @escaping (Result<Void, Error>) -> Void) {
     let conditionName = self.name
     let conditionKey = type(of: self).negatedConditionKey
-
+    
     condition.evaluate(for: operation) { (result) in
       switch result {
       case .success:
-        let error = AdvancedOperationError.conditionFailed(message: "The condition has been negated.",
-                                                           userInfo: [operationConditionKey: conditionName,
-                                                                      conditionKey: operation.operationName])
+        let error = NSError.conditionFailed(message: "The condition has been negated.",
+                                            userInfo: [operationConditionKey: conditionName,
+                                                       conditionKey: operation.operationName])
         return completion(.failure(error))
       case .failure:
         return completion(.success(()))

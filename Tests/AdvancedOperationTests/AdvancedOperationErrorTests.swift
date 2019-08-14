@@ -24,11 +24,11 @@
 import XCTest
 @testable import AdvancedOperation
 
-final class AdvancedOperationErrorTests: XCTestCase {
+final class NSErrorTests: XCTestCase {
   func testConditionFailedError() {
     let message = "test"
     let info = ["1": 1, "a": "a"] as [String : Any]
-    let error = AdvancedOperationError.conditionFailed(message: message, userInfo: info)
+    let error = NSError.conditionFailed(message: message, userInfo: info)
     
     XCTAssertEqual(error.domain, identifier)
     XCTAssertEqual(error.code, 100)
@@ -40,7 +40,7 @@ final class AdvancedOperationErrorTests: XCTestCase {
   func testExecutionCancelledError() {
     let message = "test"
     let info = ["1": 1, "a": "a"] as [String : Any]
-    let error = AdvancedOperationError.executionCancelled(message: message, userInfo: info)
+    let error = NSError.executionCancelled(message: message, userInfo: info)
     
     XCTAssertEqual(error.domain, identifier)
     XCTAssertEqual(error.code, 200)
@@ -52,7 +52,7 @@ final class AdvancedOperationErrorTests: XCTestCase {
   func testExecutionFinishedError() {
     let message = "test"
     let info = ["1": 1, "a": "a"] as [String : Any]
-    let error = AdvancedOperationError.executionFinished(message: message, userInfo: info)
+    let error = NSError.executionFinished(message: message, userInfo: info)
     
     XCTAssertEqual(error.domain, identifier)
     XCTAssertEqual(error.code, 300)
@@ -64,7 +64,7 @@ final class AdvancedOperationErrorTests: XCTestCase {
   func testConditionsEvaluationFinishedError() {
     let message = "test"
     let info = ["1": 1, "a": "a"] as [String : Any]
-    let error = AdvancedOperationError.conditionsEvaluationFinished(message: message, userInfo: info, errors: [])
+    let error = NSError.conditionsEvaluationFinished(message: message, userInfo: info, errors: [])
     XCTAssertEqual(error.domain, identifier)
     XCTAssertEqual(error.code, 100)
     XCTAssertEqual(error.userInfo[NSLocalizedDescriptionKey] as! String, message)
@@ -75,7 +75,7 @@ final class AdvancedOperationErrorTests: XCTestCase {
   func testGroupFinishedError() {
     let message = "test"
     let info = ["1": 1, "a": "a"] as [String : Any]
-    let error = AdvancedOperationError.groupFinished(message: message, userInfo: info, errors: [])
+    let error = NSError.groupFinished(message: message, userInfo: info, errors: [])
     XCTAssertEqual(error.domain, identifier)
     XCTAssertEqual(error.code, 300)
     XCTAssertEqual(error.userInfo[NSLocalizedDescriptionKey] as! String, message)

@@ -256,7 +256,7 @@ open class GroupOperation: AdvancedOperation {
         if errors.isEmpty {
           finish(error: nil)
         } else {
-          let aggregateError = AdvancedOperationError.groupFinished(message: "\(operationName) finished with some underlying errors.", errors: errors)
+          let aggregateError = NSError.groupFinished(message: "\(operationName) finished with some underlying errors.", errors: errors)
           finish(error: aggregateError)
         }
       }

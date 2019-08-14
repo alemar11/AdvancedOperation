@@ -8,7 +8,7 @@
 - Removed `AdvancedOperationQueue`.
 - New `ExclusivityManager` implementation.
 - Removed `then` operator.
-- Added `Operation.addDependencies(_:)` method
+- Added `Operation.addDependencies(_:)` method.
 
 ### 3.2.0
 
