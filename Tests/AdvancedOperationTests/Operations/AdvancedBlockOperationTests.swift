@@ -25,7 +25,6 @@ import XCTest
 @testable import AdvancedOperation
 
 final class AdvancedBlockOperationTests: XCTestCase {
-
   func testCancel() {
     let operation = AdvancedBlockOperation { complete in
       DispatchQueue(label: "\(identifier).\(#function)", attributes: .concurrent).asyncAfter(deadline: .now() + 2) {

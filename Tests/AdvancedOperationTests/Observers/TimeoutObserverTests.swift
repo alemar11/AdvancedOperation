@@ -24,8 +24,7 @@
 import XCTest
 @testable import AdvancedOperation
 
-class TimeoutObserverTests: XCTestCase {
-
+final class TimeoutObserverTests: XCTestCase {
     func testOperationCancelledByTheTimeoutObserver() {
       let expectation = self.expectation(description: "\(#function)\(#line)")
       let operation = SleepyAsyncOperation(interval1: 5, interval2: 1, interval3: 1)
