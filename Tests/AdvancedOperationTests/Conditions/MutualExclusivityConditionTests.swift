@@ -36,12 +36,14 @@ final class MutualExclusivityConditionTests: XCTestCase {
     queue.qualityOfService = .userInitiated
     
     let operation1 = SleepyAsyncOperation(interval1: 1, interval2: 0, interval3: 0)
+    operation1.exclusivityManager = .shared
     
     let condition = MutualExclusivityCondition(mode: .enqueue(identifier: "condition1"))
     operation1.addCondition(condition)
     
     let operation2 = SleepyAsyncOperation(interval1: 0, interval2: 1, interval3: 1)
     operation2.addCondition(condition)
+    operation2.exclusivityManager = .shared
     
     queue.addOperations([operation2, operation1], waitUntilFinished: true)
     
@@ -61,9 +63,11 @@ final class MutualExclusivityConditionTests: XCTestCase {
     
     let operation1 = SleepyAsyncOperation(interval1: 1, interval2: 0, interval3: 0)
     operation1.addCondition(condition)
+    operation1.exclusivityManager = .shared
     
     let operation2 = SleepyAsyncOperation(interval1: 0, interval2: 1, interval3: 1)
     operation2.addCondition(condition)
+    operation2.exclusivityManager = .shared
     
     queue.addOperations([operation2, operation1], waitUntilFinished: true)
     
@@ -91,6 +95,7 @@ final class MutualExclusivityConditionTests: XCTestCase {
       complete(nil)
     }
     operation1.addCondition(condition)
+    operation1.exclusivityManager = .shared
     operation1.completionBlock = {
       expectation1.fulfill()
     }
@@ -100,6 +105,7 @@ final class MutualExclusivityConditionTests: XCTestCase {
       complete(nil)
     }
     operation2.addCondition(condition)
+    operation2.exclusivityManager = .shared
     operation2.completionBlock = {
       expectation2.fulfill()
     }
@@ -108,6 +114,7 @@ final class MutualExclusivityConditionTests: XCTestCase {
       text += "A"
     }
     operation3.addCondition(condition)
+    operation3.exclusivityManager = .shared
     operation3.completionBlock = {
       expectation3.fulfill()
     }
@@ -139,20 +146,24 @@ final class MutualExclusivityConditionTests: XCTestCase {
     }
     operation1.completionBlock = { expectation1.fulfill() }
     operation1.addCondition(condition1)
+    operation1.exclusivityManager = .shared
     
     let operation2 = AdvancedBlockOperation { text += "A" }
     operation2.completionBlock = { expectation2.fulfill() }
     operation2.addCondition(condition1)
+    operation2.exclusivityManager = .shared
     
     let operation3 = AdvancedBlockOperation { text += "A" }
     operation3.completionBlock = { expectation3.fulfill() }
     operation3.addCondition(condition1)
     operation3.addCondition(condition2)
+    operation3.exclusivityManager = .shared
     
     let operation4 = AdvancedBlockOperation { text += "A" }
     operation4.completionBlock = { expectation4.fulfill() }
     operation4.addCondition(condition1)
     operation4.addCondition(condition2)
+    operation4.exclusivityManager = .shared
     
     let operation5 = SleepyAsyncOperation(interval1: 2, interval2: 1, interval3: 2)
     operation5.completionBlock = {
@@ -160,6 +171,7 @@ final class MutualExclusivityConditionTests: XCTestCase {
     }
     operation5.addCondition(condition1)
     operation5.addCondition(condition2)
+    operation5.exclusivityManager = .shared
     
     queue.addOperations([operation1, operation2, operation3, operation4, operation5], waitUntilFinished: false)
     waitForExpectations(timeout: 10)
@@ -189,9 +201,11 @@ final class MutualExclusivityConditionTests: XCTestCase {
     operation2.name = "operation2"
     operation2.log = TestsLog
     
-    // operations inside a Group shouldn't have mutually exclusive conditions that
+    // operations inside a GroupOperation shouldn't have mutually exclusive conditions that might cause a dead lock waiting for
+    // exclusivity conditions outside the GroupOPeration
     let group1 = GroupOperation(operations: operation1, operation2)
     group1.addCondition(condition1)
+    group1.exclusivityManager = .shared
     group1.name = "group1"
     group1.log = TestsLog
     
@@ -200,6 +214,7 @@ final class MutualExclusivityConditionTests: XCTestCase {
     operation3.completionBlock = { expectation3.fulfill() }
     operation3.addCondition(condition1)
     operation3.addCondition(condition2)
+    operation3.exclusivityManager = .shared
     operation3.name = "operation3"
     operation3.log = TestsLog
     
@@ -207,6 +222,7 @@ final class MutualExclusivityConditionTests: XCTestCase {
     operation4.completionBlock = { expectation4.fulfill() }
     operation4.addCondition(condition1)
     operation4.addCondition(condition2)
+    operation4.exclusivityManager = .shared
     operation4.name = "operation4"
     operation4.log = TestsLog
     
@@ -230,12 +246,14 @@ final class MutualExclusivityConditionTests: XCTestCase {
     let operation1 = AdvancedBlockOperation { text += "A" }
     operation1.completionBlock = { expectation1.fulfill() }
     operation1.addCondition(condition1)
+    operation1.exclusivityManager = .shared
     operation1.name = "operation1"
     operation1.log = TestsLog
     
     let operation2 = AdvancedBlockOperation { text += "A" }
     operation2.completionBlock = { expectation2.fulfill() }
     operation2.addCondition(condition1)
+    operation2.exclusivityManager = .shared
     operation2.name = "operation2"
     operation2.log = TestsLog
     
@@ -243,6 +261,7 @@ final class MutualExclusivityConditionTests: XCTestCase {
     operation3.completionBlock = { expectation3.fulfill() }
     operation3.addCondition(condition1)
     operation3.addCondition(condition2)
+    operation3.exclusivityManager = .shared
     operation3.name = "operation3"
     operation3.log = TestsLog
     
@@ -250,6 +269,7 @@ final class MutualExclusivityConditionTests: XCTestCase {
     operation4.completionBlock = { expectation4.fulfill() }
     operation4.addCondition(condition1)
     operation4.addCondition(condition2)
+    operation4.exclusivityManager = .shared
     operation4.name = "operation4"
     operation4.log = TestsLog
     
@@ -274,11 +294,13 @@ final class MutualExclusivityConditionTests: XCTestCase {
     
     let operation1 = SleepyAsyncOperation(interval1: 1, interval2: 0, interval3: 0)
     operation1.addCondition(condition)
+    operation1.exclusivityManager = .shared
     operation1.name = "operation1"
     operation1.log = TestsLog
     
     let operation2 = SleepyAsyncOperation(interval1: 0, interval2: 1, interval3: 1)
     operation2.addCondition(condition)
+    operation2.exclusivityManager = .shared
     operation2.name = "operation2"
     operation2.log = TestsLog
     
@@ -299,8 +321,11 @@ final class MutualExclusivityConditionTests: XCTestCase {
     
     let operation1 = IntToStringOperation()
     operation1.addCondition(condition)
+    operation1.exclusivityManager = .shared
+    
     let operation2 = IntToStringOperation()
     operation2.addCondition(condition)
+    operation2.exclusivityManager = .shared
     operation1.input = 10
     operation1.injectOutput(into: operation2) { value -> Int? in
       if let value = value {
@@ -325,6 +350,7 @@ final class MutualExclusivityConditionTests: XCTestCase {
     let operations = (0..<5).map { index -> AdvancedOperation in
       let operation = SleepyAsyncOperation(interval1: 2, interval2: 2, interval3: 2)
       operation.addCondition(condition)
+      operation.exclusivityManager = .shared
       operation.name = "Operation-\(index)"
       operation.log = TestsLog
       return operation
@@ -348,6 +374,7 @@ final class MutualExclusivityConditionTests: XCTestCase {
     let operationsQueue1 = (0..<5).map { index -> AdvancedOperation in
       let operation = SleepyAsyncOperation(interval1: 2, interval2: 2, interval3: 2)
       operation.addCondition(condition)
+      operation.exclusivityManager = .shared
       operation.name = "OperationQueue1-\(index)"
       operation.log = TestsLog
       return operation
@@ -356,6 +383,7 @@ final class MutualExclusivityConditionTests: XCTestCase {
     let operationsQueue2 = (0..<5).map { index -> AdvancedOperation in
       let operation = SleepyAsyncOperation(interval1: 2, interval2: 2, interval3: 2)
       operation.addCondition(condition)
+      operation.exclusivityManager = .shared
       operation.name = "OperationQueue2-\(index)"
       operation.log = TestsLog
       return operation
