@@ -218,7 +218,7 @@ final class AdvancedOperationTests: XCTestCase {
   }
 
   func testObserversWithOperationProduction() {
-    let queue = AdvancedOperationQueue()
+    let queue = OperationQueue()
     let producer1 = ProducingOperationsOperation.OperationProducer(BlockOperation { }, true, 0)
     let producer2 = ProducingOperationsOperation.OperationProducer(BlockOperation { }, true, 0)
 

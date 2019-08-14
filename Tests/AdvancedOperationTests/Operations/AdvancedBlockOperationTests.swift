@@ -25,7 +25,6 @@ import XCTest
 @testable import AdvancedOperation
 
 final class AdvancedBlockOperationTests: XCTestCase {
-
   func testCancel() {
     let operation = AdvancedBlockOperation { complete in
       DispatchQueue(label: "\(identifier).\(#function)", attributes: .concurrent).asyncAfter(deadline: .now() + 2) {
@@ -38,6 +37,24 @@ final class AdvancedBlockOperationTests: XCTestCase {
     let expectation1 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isFinished), object: operation, expectedValue: true)
     operation.start()
     operation.cancel()
+
+    wait(for: [expectation1], timeout: 4)
+
+    XCTAssertTrue(operation.isCancelled)
+  }
+
+  func testCancelBeforeStarting() {
+    let operation = AdvancedBlockOperation { complete in
+      DispatchQueue(label: "\(identifier).\(#function)", attributes: .concurrent).asyncAfter(deadline: .now() + 2) {
+        complete(nil)
+      }
+    }
+    XCTAssertTrue(operation.isAsynchronous)
+    XCTAssertTrue(operation.isConcurrent)
+
+    let expectation1 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isFinished), object: operation, expectedValue: true)
+    operation.cancel()
+    operation.start()
 
     wait(for: [expectation1], timeout: 4)
 
@@ -148,8 +165,10 @@ final class AdvancedBlockOperationTests: XCTestCase {
     let adapterOperation = AdvancedBlockOperation { [unowned operation2] in
       operation2.cancel()
     }
-    operation1.then(adapterOperation).then(operation2).then(operation3)
-    let queue = AdvancedOperationQueue()
+    adapterOperation.addDependency(operation1)
+    operation2.addDependency(adapterOperation)
+    operation3.addDependency(operation2)
+    let queue = OperationQueue()
 
     queue.addOperations([operation1, operation2, operation3, adapterOperation], waitUntilFinished: false)
 

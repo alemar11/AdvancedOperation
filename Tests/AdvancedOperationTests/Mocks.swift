@@ -286,11 +286,11 @@ final internal class FailingAsyncOperation: AdvancedOperation {
 
 /// An operation that check if its current operation queue is the same passed durinig its initialization.
 final internal class OperationReferencingOperationQueue: AdvancedOperation {
-  weak var queue: AdvancedOperationQueue? = .none
+  weak var queue: OperationQueue? = .none
 
   override public var isAsynchronous: Bool { return false }
 
-  init(queue: AdvancedOperationQueue) {
+  init(queue: OperationQueue) {
     self.queue = queue
   }
 
@@ -584,74 +584,6 @@ final internal class MockObserver: OperationObserving {
     didProduceCount += 1
   }
 }
-
-// MARK: - AdvancedOperationQueueDelegate
-
-final internal class MockOperationQueueDelegate: AdvancedOperationQueueDelegate {
-  var willAddOperationHandler: ((AdvancedOperationQueue, Operation) -> Void)? = nil
-  var willExecuteOperationHandler: ((AdvancedOperationQueue, AdvancedOperation) -> Void)? = nil
-  var willFinishOperationHandler: ((AdvancedOperationQueue, AdvancedOperation, Error?) -> Void)? = nil
-  var didFinishOperationHandler: ((AdvancedOperationQueue, Operation, Error?) -> Void)? = nil
-  var willCancelOperationHandler: ((AdvancedOperationQueue, AdvancedOperation,Error?) -> Void)? = nil
-  var didCancelOperationHandler: ((AdvancedOperationQueue, AdvancedOperation, Error?) -> Void)? = nil
-
-  func operationQueue(operationQueue: AdvancedOperationQueue, willAddOperation operation: Operation) {
-    self.willAddOperationHandler?(operationQueue, operation)
-  }
-
-  func operationQueue(operationQueue: AdvancedOperationQueue, operationWillExecute operation: AdvancedOperation) {
-    self.willExecuteOperationHandler?(operationQueue, operation)
-  }
-
-  func operationQueue(operationQueue: AdvancedOperationQueue, operationWillFinish operation: AdvancedOperation, withError error: Error?) {
-    self.willFinishOperationHandler?(operationQueue, operation, error)
-  }
-
-  func operationQueue(operationQueue: AdvancedOperationQueue, operationDidFinish operation: Operation, withError error: Error?) {
-    self.didFinishOperationHandler?(operationQueue, operation, error)
-  }
-
-  func operationQueue(operationQueue: AdvancedOperationQueue, operationWillCancel operation: AdvancedOperation, withError error: Error?) {
-    self.willCancelOperationHandler?(operationQueue, operation, error)
-  }
-
-  func operationQueue(operationQueue: AdvancedOperationQueue, operationDidCancel operation: AdvancedOperation, withError error: Error?) {
-    self.didCancelOperationHandler?(operationQueue, operation, error)
-  }
-}
-
-final internal class LogOperationQueueDelegate: AdvancedOperationQueueDelegate {
-  private let log: OSLog
-
-  init(log: OSLog) {
-    self.log = log
-  }
-
-  func operationQueue(operationQueue: AdvancedOperationQueue, willAddOperation operation: Operation) {
-     os_log("%{public}s will add.", log: log, type: .info, operation.operationName)
-  }
-
-  func operationQueue(operationQueue: AdvancedOperationQueue, operationWillExecute operation: AdvancedOperation) {
-     os_log("%{public}s will execute.", log: log, type: .info, operation.operationName)
-  }
-
-  func operationQueue(operationQueue: AdvancedOperationQueue, operationWillFinish operation: AdvancedOperation, withError error: Error?) {
-     os_log("%{public}s will finish.", log: log, type: .info, operation.operationName)
-  }
-
-  func operationQueue(operationQueue: AdvancedOperationQueue, operationDidFinish operation: Operation, withError error: Error?) {
-     os_log("%{public}s did finish.", log: log, type: .info, operation.operationName)
-  }
-
-  func operationQueue(operationQueue: AdvancedOperationQueue, operationWillCancel operation: AdvancedOperation, withError error: Error?) {
-     os_log("%{public}s will cancel.", log: log, type: .info, operation.operationName)
-  }
-
-  func operationQueue(operationQueue: AdvancedOperationQueue, operationDidCancel operation: AdvancedOperation, withError error: Error?) {
-     os_log("%{public}s did cancel.", log: log, type: .info, operation.operationName)
-  }
-}
-
 
 // MARK: - Composable Operations
 

@@ -27,19 +27,18 @@ import Foundation
 /// If any dependency was cancelled, the target operation will be cancelled as well.
 public struct NoCancelledDependeciesCondition: OperationCondition {
   static var noCancelledDependeciesConditionKey: String { return "NoCancelledDependeciesCondition" }
-
+  
   /// Create a new `NoCancelledDependeciesCondition` element.
   public init() { }
-
-  public func evaluate(for operation: AdvancedOperation, completion: @escaping (Result<Void,Error>) -> Void) {
-    let dependencies = operation.dependencies.filter { !($0 is ConditionEvaluatorOperation) }
-    let cancellations = dependencies.filter { $0.isCancelled }
-
+  
+  public func evaluate(for operation: AdvancedOperation, completion: @escaping (Result<Void, Error>) -> Void) {
+    let cancellations = operation.dependencies.filter { $0.isCancelled }
+    
     if !cancellations.isEmpty {
       let names = cancellations.map { $0.name ?? "\(type(of: $0))" }
-      let error = AdvancedOperationError.conditionFailed(message: "Some dependencies have been cancelled.",
-                                                         userInfo: [operationConditionKey: self.name,
-                                                                    type(of: self).noCancelledDependeciesConditionKey: names])
+      let error = NSError.conditionFailed(message: "Some dependencies have been cancelled.",
+                                          userInfo: [operationConditionKey: self.name,
+                                                     type(of: self).noCancelledDependeciesConditionKey: names])
       completion(.failure(error))
     } else {
       completion(.success(()))

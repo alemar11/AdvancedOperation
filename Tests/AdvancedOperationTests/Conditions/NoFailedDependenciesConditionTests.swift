@@ -25,189 +25,205 @@ import XCTest
 @testable import AdvancedOperation
 
 final class NoFailedDependenciesConditionTests: XCTestCase {
+  func testEmptyMutuallyExclusiveCategories() {
+    let condition = NoFailedDependenciesCondition()
+    XCTAssertTrue(condition.mutuallyExclusiveCategories.isEmpty)
+  }
 
+  func testFulFilledConditionWithoutOperationQueue() {
+    // edge case: operation with dependencies must run on a queue
+    let operation = SleepyOperation()
+    operation.addCondition(NoFailedDependenciesCondition())
+
+    operation.start()
+    XCTAssertFalse(operation.isCancelled)
+    XCTAssertFalse(operation.hasError)
+    XCTAssertTrue(operation.isFinished)
+  }
+  
   func testFinishedAndFailedOperation() {
-    let queue = AdvancedOperationQueue()
-
+    let queue = OperationQueue()
+    
     let operation1 = NotExecutableOperation()
     operation1.name = "operation1"
-
+    
     let operation2 = FailingAsyncOperation(error: .failed)
     operation2.name = "operation2"
-
+    
     let operation3 = SleepyAsyncOperation()
     operation3.name = "operation3"
-
+    
     let operation4 = DelayOperation(interval: 1)
     operation4.name = "operation4"
-
+    
     let expectation1 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isFinished), object: operation1, expectedValue: true)
     let expectation2 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isFinished), object: operation2, expectedValue: true)
     let expectation3 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isFinished), object: operation3, expectedValue: true)
     let expectation4 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isFinished), object: operation4, expectedValue: true)
-
+    
     operation1.addCondition(NoFailedDependenciesCondition())
-    [operation4, operation3, operation2].then(operation1)
-
+    operation1.addDependencies(operation4, operation3, operation2)
+    
     XCTAssertFalse(operation1.isExecuting)
     XCTAssertFalse(operation2.isExecuting)
     XCTAssertFalse(operation3.isExecuting)
     XCTAssertFalse(operation4.isExecuting)
-
+    
     queue.addOperations([operation1, operation2, operation3, operation4], waitUntilFinished: false)
-
+    
     wait(for: [expectation1, expectation2, expectation3, expectation4], timeout: 10)
-
+    
     XCTAssertTrue(operation1.hasError)
   }
-
+  
   func testCancelledAndFailedOperation() {
-    let queue = AdvancedOperationQueue()
-
+    let queue = OperationQueue()
+    
     let operation1 = AdvancedBlockOperation { complete in complete(nil) }
     operation1.name = "operation1"
-
+    
     let operation2 = AdvancedBlockOperation { complete in complete(nil) }
     operation2.name = "operation2"
-
+    
     let operation3 = AdvancedBlockOperation { complete in complete(nil) }
     operation3.name = "operation3"
-
+    
     let operation4 = AdvancedBlockOperation { complete in complete(nil) }
     operation4.name = "operation4"
-
+    
     let expectation1 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isFinished), object: operation1, expectedValue: true)
     let expectation2 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isFinished), object: operation2, expectedValue: true)
     let expectation3 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isFinished), object: operation3, expectedValue: true)
     let expectation4 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isFinished), object: operation4, expectedValue: true)
-
+    
     operation2.cancel(error: MockError.failed)
-
+    
     operation1.addCondition(NoFailedDependenciesCondition())
-    [operation4, operation3, operation2].then(operation1)
-
+    operation1.addDependencies(operation4, operation3, operation2)
+    
     queue.addOperations([operation1, operation2, operation3, operation4], waitUntilFinished: false)
-
+    
     wait(for: [expectation1, expectation2, expectation3, expectation4], timeout: 10)
-
+    
     XCTAssertTrue(operation1.hasError)
     XCTAssertTrue(operation2.isCancelled)
   }
-
+  
   func testCancelledAndFailedOperationWaitUntilFinished() {
-    let queue = AdvancedOperationQueue()
-
+    let queue = OperationQueue()
+    
     let operation1 = NotExecutableOperation()
     operation1.name = "operation1"
-
+    
     let operation2 = SleepyAsyncOperation(interval1: 0, interval2: 1, interval3: 0)
     operation2.name = "operation2"
-
+    
     let operation3 = SleepyAsyncOperation(interval1: 0, interval2: 1, interval3: 0)
     operation3.name = "operation3"
-
+    
     let operation4 = DelayOperation(interval: 1)
     operation4.name = "operation4"
-
+    
     operation2.cancel(error: MockError.failed)
-
+    
     operation1.addCondition(NoFailedDependenciesCondition())
-    [operation4, operation3, operation2].then(operation1)
-
+    operation1.addDependencies(operation4, operation3, operation2)
+    
     queue.addOperations([operation1, operation2, operation3, operation4], waitUntilFinished: true)
-
+    
     XCTAssertTrue(operation1.hasError)
   }
-
+  
   func testIgnoredCancelledAndFailedOperation() {
-    let queue = AdvancedOperationQueue()
-
+    let queue = OperationQueue()
+    
     let operation1 = AdvancedBlockOperation { }
     operation1.name = "operation1"
-
+    
     let operation2 = AdvancedBlockOperation { }
     operation2.name = "operation2"
-
+    
     let operation3 = AdvancedBlockOperation { }
     operation3.name = "operation3"
-
+    
     let operation4 = AdvancedBlockOperation { }
     operation4.name = "operation4"
-
+    
     operation2.cancel(error: MockError.failed)
-
+    
     let expectation1 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isFinished), object: operation1, expectedValue: true)
     let expectation2 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isFinished), object: operation2, expectedValue: true)
     let expectation3 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isFinished), object: operation3, expectedValue: true)
     let expectation4 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isFinished), object: operation4, expectedValue: true)
-
+    
     operation1.addCondition(NoFailedDependenciesCondition(ignoreCancellations: true))
-    [operation4, operation3, operation2].then(operation1)
-
+    operation1.addDependencies(operation4, operation3, operation2)
+    
     queue.addOperations([operation1, operation2, operation3, operation4], waitUntilFinished: false)
-
+    
     wait(for: [expectation1, expectation2, expectation3, expectation4], timeout: 10)
     XCTAssertFalse(operation1.hasError)
   }
-
+  
   func testIgnoredCancelledAndFailedOperations() {
-    let queue = AdvancedOperationQueue()
-
+    let queue = OperationQueue()
+    
     let operation1 = NotExecutableOperation()
     operation1.name = "operation1"
-
+    
     let operation2 = AdvancedBlockOperation { }
     operation2.name = "operation2"
-
+    
     let operation3 = AdvancedBlockOperation { }
     operation3.name = "operation3"
-
+    
     let operation4 = FailingAsyncOperation(error: .failed)
     operation4.name = "operation4"
-
+    
     operation2.cancel(error: MockError.failed)
-
+    
     let expectation1 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isFinished), object: operation1, expectedValue: true)
     let expectation2 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isFinished), object: operation2, expectedValue: true)
     let expectation3 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isFinished), object: operation3, expectedValue: true)
     let expectation4 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isFinished), object: operation4, expectedValue: true)
-
+    
     operation1.addCondition(NoFailedDependenciesCondition(ignoreCancellations: true))
-    [operation4, operation3, operation2].then(operation1)
-
+    operation1.addDependencies(operation4, operation3, operation2)
+    
     queue.addOperations([operation1, operation2, operation3, operation4], waitUntilFinished: false)
-
+    
     wait(for: [expectation1, expectation2, expectation3, expectation4], timeout: 10)
-
+    
     XCTAssertTrue(operation1.hasError)
   }
-
+  
   func testFinishedAndFailedOperationNegated() {
-    let queue = AdvancedOperationQueue()
-
+    let queue = OperationQueue()
+    
     let operation1 = AdvancedBlockOperation { }
     operation1.name = "operation1"
-
+    
     let operation2 = FailingAsyncOperation(error: .failed)
     operation2.name = "operation2"
-
+    
     let operation3 = AdvancedBlockOperation { }
     operation3.name = "operation3"
-
+    
     let operation4 = AdvancedBlockOperation { }
     operation4.name = "operation4"
-
+    
     let expectation1 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isFinished), object: operation1, expectedValue: true)
     let expectation2 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isFinished), object: operation2, expectedValue: true)
     let expectation3 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isFinished), object: operation3, expectedValue: true)
     let expectation4 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isFinished), object: operation4, expectedValue: true)
-
+    
     operation1.addCondition(NegatedCondition(condition: NoFailedDependenciesCondition()))
-    [operation4, operation3, operation2].then(operation1)
+    operation1.addDependencies(operation4, operation3, operation2)
+
     queue.addOperations([operation1, operation2, operation3, operation4], waitUntilFinished: false)
-
+    
     wait(for: [expectation1, expectation2, expectation3, expectation4], timeout: 10)
-
+    
     XCTAssertFalse(operation1.hasError)
   }
 }

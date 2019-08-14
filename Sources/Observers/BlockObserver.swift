@@ -23,6 +23,8 @@
 
 import Foundation
 
+// MARK: - Public Observers
+
 /// The `BlockObserver` is a way to attach arbitrary blocks to significant events in an `Operation`'s lifecycle.
 public class BlockObserver: OperationObserving {
   // MARK: - Properties
@@ -82,32 +84,14 @@ public class BlockObserver: OperationObserving {
   }
 }
 
-internal final class WillCancelObserver: OperationWillCancelObserving {
-  // MARK: - Properties
-
-  private let willCancelHandler: ((AdvancedOperation, Error?) -> Void)?
-
-  public init (willCancel: ((AdvancedOperation, Error?) -> Void)? = nil) {
-    self.willCancelHandler = willCancel
-  }
-
-  // MARK: - OperationObserving
-
-  public func operationWillCancel(operation: AdvancedOperation, withError error: Error?) {
-    willCancelHandler?(operation, error)
-  }
-}
+// MARK: - Internal Observers
 
 internal final class DidCancelObserver: OperationDidCancelObserving {
-  // MARK: - Properties
-
   private let didCancelHandler: ((AdvancedOperation, Error?) -> Void)?
 
   public init (didCancelHandler: ((AdvancedOperation, Error?) -> Void)? = nil) {
     self.didCancelHandler = didCancelHandler
   }
-
-  // MARK: - OperationObserving
 
   public func operationDidCancel(operation: AdvancedOperation, withError error: Error?) {
     didCancelHandler?(operation, error)
@@ -115,17 +99,25 @@ internal final class DidCancelObserver: OperationDidCancelObserving {
 }
 
 internal final class WillFinishObserver: OperationWillFinishObserving {
-  // MARK: - Properties
-
   private let willFinishHandler: ((AdvancedOperation, Error?) -> Void)?
 
   public init (willFinishHandler: ((AdvancedOperation, Error?) -> Void)? = nil) {
     self.willFinishHandler = willFinishHandler
   }
 
-  // MARK: - OperationObserving
-
   func operationWillFinish(operation: AdvancedOperation, withError error: Error?) {
     willFinishHandler?(operation, error)
+  }
+}
+
+internal final class DidFinishObserver: OperationDidFinishObserving {
+  private let didFinishHandler: ((AdvancedOperation, Error?) -> Void)?
+
+  public init (didFinishHandler: ((AdvancedOperation, Error?) -> Void)? = nil) {
+    self.didFinishHandler = didFinishHandler
+  }
+
+  func operationDidFinish(operation: AdvancedOperation, withError error: Error?) {
+    didFinishHandler?(operation, error)
   }
 }

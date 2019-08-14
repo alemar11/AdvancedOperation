@@ -25,7 +25,6 @@ import XCTest
 @testable import AdvancedOperation
 
 final class DelayOperationTests: XCTestCase {
-
   func testInterval() {
     let start = Date()
     let operation = DelayOperation(interval: 2)

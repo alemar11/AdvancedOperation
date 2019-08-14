@@ -1,4 +1,4 @@
-// 
+//
 // AdvancedOperation
 //
 // Copyright © 2016-2019 Tinrobots.
@@ -24,7 +24,7 @@
 import XCTest
 @testable import AdvancedOperation
 
-final class InjectionTests2: XCTestCase {
+final class InjectionTests: XCTestCase {
   func testInputAndOutput() {
     let operation1 = IntToStringOperation()
     operation1.input = 10
@@ -37,37 +37,26 @@ final class InjectionTests2: XCTestCase {
     XCTAssertEqual(operation2.output, 10)
   }
 
-//  func testInjectionUsingClassMethodAndWaitUntilFinished() {
-//    let operation1 = IntToStringOperation()
-//    let operation2 = StringToIntOperation()
-//    operation1.input = 10
-//    let adapterOperation = AdvancedOperation.injectOperation(operation1, into: operation2)
-//    let queue = AdvancedOperationQueue()
-//    queue.addOperations([operation1, operation2, adapterOperation], waitUntilFinished: true)
-//
-//    XCTAssertEqual(operation2.output, 10)
-//  }
-//
-//  func testInjectionMixedWithOtherOperation() {
-//    let operation1 = IntToStringOperation()
-//    let operation2 = StringToIntOperation()
-//    let operation3 = BlockOperation()
-//    operation3.addDependency(operation2)
-//    operation1.input = 10
-//    let adapterOperation = AdvancedOperation.injectOperation(operation1, into: operation2)
-//    let queue = AdvancedOperationQueue()
-//    queue.addOperations([operation1, operation2, adapterOperation], waitUntilFinished: true)
-//    queue.addOperations([operation3], waitUntilFinished: false)
-//
-//    XCTAssertEqual(operation2.output, 10)
-//  }
+  func testInjectionMixedWithOtherOperation() {
+    let operation1 = IntToStringOperation()
+    let operation2 = StringToIntOperation()
+    let operation3 = BlockOperation()
+    operation3.addDependency(operation2)
+    operation1.input = 10
+    operation1.injectOutput(into: operation2)
+    let queue = OperationQueue()
+    queue.addOperations([operation1, operation2], waitUntilFinished: true)
+    queue.addOperations([operation3], waitUntilFinished: false)
+
+    XCTAssertEqual(operation2.output, 10)
+  }
 
   func testInjectionUsingInstanceMethodAndWaitUntilFinished() {
     let operation1 = IntToStringOperation()
     let operation2 = StringToIntOperation()
     operation1.input = 10
     operation1.injectOutput(into: operation2)
-    let queue = AdvancedOperationQueue()
+    let queue = OperationQueue()
     queue.addOperations([operation1, operation2], waitUntilFinished: true)
     XCTAssertEqual(operation2.output, 10)
   }
@@ -83,7 +72,7 @@ final class InjectionTests2: XCTestCase {
         return nil
       }
     }
-    let queue = AdvancedOperationQueue()
+    let queue = OperationQueue()
     queue.addOperations([operation1, operation2], waitUntilFinished: true)
 
     XCTAssertEqual(operation2.output, "10")
@@ -100,7 +89,7 @@ final class InjectionTests2: XCTestCase {
         return nil
       }
     }
-    let queue = AdvancedOperationQueue()
+    let queue = OperationQueue()
     queue.addOperations([operation1, operation2], waitUntilFinished: true)
 
     XCTAssertNil(operation2.output)
@@ -117,7 +106,7 @@ final class InjectionTests2: XCTestCase {
 
     operation1.input = 10
     operation1.injectOutput(into: operation2)
-    let queue = AdvancedOperationQueue()
+    let queue = OperationQueue()
     queue.addOperations([operation1, operation2, operation3], waitUntilFinished: false)
 
     waitForExpectations(timeout: 3)
@@ -134,7 +123,7 @@ final class InjectionTests2: XCTestCase {
     }
     operation1.input = 2000 // values greater than 1000 will produce a nil output when executing 😎
     operation1.injectOutput(into: operation2)
-    let queue = AdvancedOperationQueue()
+    let queue = OperationQueue()
     queue.addOperations([operation1, operation2], waitUntilFinished: false)
 
     waitForExpectations(timeout: 3)
@@ -147,7 +136,7 @@ final class InjectionTests2: XCTestCase {
     let operation2 = StringToIntOperation()
     let expectation1 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isFinished), object: operation2, expectedValue: true)
     operation1.injectOutput(into: operation2)
-    let queue = AdvancedOperationQueue()
+    let queue = OperationQueue()
 
     operation1.cancel()
     queue.addOperations([operation1, operation2], waitUntilFinished: false)

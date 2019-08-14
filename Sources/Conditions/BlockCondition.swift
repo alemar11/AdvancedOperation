@@ -38,20 +38,20 @@ public struct BlockCondition: OperationCondition {
     self.block = block
   }
   
-  public func evaluate(for operation: AdvancedOperation, completion: @escaping (Result<Void,Error>) -> Void) {
+  public func evaluate(for operation: AdvancedOperation, completion: @escaping (Result<Void, Error>) -> Void) {
     do {
       let result = try block()
       if result {
         completion(.success(()))
       } else {
-        let conditionError = AdvancedOperationError.conditionFailed(message: "The BlockCondition has returned false.",
-                                                                    userInfo: [operationConditionKey: name])
+        let conditionError = NSError.conditionFailed(message: "The BlockCondition has returned false.",
+                                                     userInfo: [operationConditionKey: name])
         completion(.failure(conditionError))
       }
     } catch {
-      let conditionError = AdvancedOperationError.conditionFailed(message: "The BlockCondition has thrown an exception.",
-                                                                  userInfo: [operationConditionKey: name,
-                                                                             type(of: self).blockConditionKey: error])
+      let conditionError = NSError.conditionFailed(message: "The BlockCondition has thrown an exception.",
+                                                   userInfo: [operationConditionKey: name,
+                                                              type(of: self).blockConditionKey: error])
       completion(.failure(conditionError))
     }
   }

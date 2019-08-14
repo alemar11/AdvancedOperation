@@ -28,17 +28,23 @@ let operationConditionKey = "OperationCondition"
 public protocol OperationCondition {
   /// The name of the condition.
   var name: String { get }
+  /// Mutually exclusive categories to apply to the AdvancedOperation.
+  var mutuallyExclusiveCategories: Set<ExclusivityCategory> { get }
 
   /// Evaluate the condition, to see if it has been satisfied or not.
   ///
   /// - Parameters:
   ///   - operation: the `AdvancedOperation` which this condition is attached to.
   ///   - completion: a closure which receives a `Result`.
-  func evaluate(for operation: AdvancedOperation, completion: @escaping (Result<Void,Error>) -> Void)
+  func evaluate(for operation: AdvancedOperation, completion: @escaping (Result<Void, Error>) -> Void)
 }
 
 public extension OperationCondition {
   var name: String {
     return String(describing: type(of: self))
+  }
+
+  var mutuallyExclusiveCategories: Set<ExclusivityCategory> {
+    return Set()
   }
 }

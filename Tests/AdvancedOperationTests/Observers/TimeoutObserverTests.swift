@@ -24,23 +24,22 @@
 import XCTest
 @testable import AdvancedOperation
 
-class TimeoutObserverTests: XCTestCase {
-
-    func testOperationCancelledByTheTimeoutObserver() {
-      let expectation = self.expectation(description: "\(#function)\(#line)")
-      let operation = SleepyAsyncOperation(interval1: 5, interval2: 1, interval3: 1)
-      operation.name = "operation"
-      operation.addCompletionBlock {
-        expectation.fulfill()
-      }
-      operation.addObserver(TimeoutObserver(timeout: 3))
-      operation.start()
-      waitForExpectations(timeout: 7) // The SleepyAsyncOperation will check the cancelled state after each interval (so 0, 5, 1, 1)
-      XCTAssertTrue(operation.isCancelled)
-      XCTAssertTrue(operation.isFinished)
-      XCTAssertTrue(operation.hasError)
+final class TimeoutObserverTests: XCTestCase {
+  func testOperationCancelledByTheTimeoutObserver() {
+    let expectation = self.expectation(description: "\(#function)\(#line)")
+    let operation = SleepyAsyncOperation(interval1: 5, interval2: 1, interval3: 1)
+    operation.name = "operation"
+    operation.addCompletionBlock {
+      expectation.fulfill()
     }
-
+    operation.addObserver(TimeoutObserver(timeout: 3))
+    operation.start()
+    waitForExpectations(timeout: 7) // The SleepyAsyncOperation will check the cancelled state after each interval (so 0, 5, 1, 1)
+    XCTAssertTrue(operation.isCancelled)
+    XCTAssertTrue(operation.isFinished)
+    XCTAssertTrue(operation.hasError)
+  }
+  
   func testSuccessfulOperation() {
     let expectation = self.expectation(description: "\(#function)\(#line)")
     let operation = SleepyAsyncOperation(interval1: 1, interval2: 1, interval3: 1)
