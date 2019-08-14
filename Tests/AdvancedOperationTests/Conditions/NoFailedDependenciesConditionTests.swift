@@ -29,6 +29,17 @@ final class NoFailedDependenciesConditionTests: XCTestCase {
     let condition = NoFailedDependenciesCondition()
     XCTAssertTrue(condition.mutuallyExclusiveCategories.isEmpty)
   }
+
+  func testFulFilledConditionWithoutOperationQueue() {
+    // edge case: operation with dependencies must run on a queue
+    let operation = SleepyOperation()
+    operation.addCondition(NoFailedDependenciesCondition())
+
+    operation.start()
+    XCTAssertFalse(operation.isCancelled)
+    XCTAssertFalse(operation.hasError)
+    XCTAssertTrue(operation.isFinished)
+  }
   
   func testFinishedAndFailedOperation() {
     let queue = OperationQueue()

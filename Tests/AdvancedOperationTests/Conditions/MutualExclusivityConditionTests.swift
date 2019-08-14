@@ -26,9 +26,33 @@ import XCTest
 
 final class MutualExclusivityConditionTests: XCTestCase {
   
-  // TODO: add ExclusivityManager tests
-  
   // MARK: - Enqueue Mode
+
+  func testFulFilledConditionWithoutOperationQueue() {
+    let condition = MutualExclusivityCondition(mode: .enqueue(identifier: "condition1"))
+
+    let operation1 = SleepyAsyncOperation(interval1: 1, interval2: 1, interval3: 1)
+    let expectation1 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isFinished), object: operation1, expectedValue: true)
+    operation1.addCondition(condition)
+     operation1.name = "operation1"
+    operation1.log = TestsLog
+    operation1.exclusivityManager = .shared
+
+    let operation2 = SleepyAsyncOperation(interval1: 1, interval2: 1, interval3: 1)
+    let expectation2 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isFinished), object: operation2, expectedValue: true)
+    operation2.addCondition(condition)
+    operation2.name = "operation2"
+    operation2.log = TestsLog
+    operation2.exclusivityManager = .shared
+    
+    operation1.start()
+    operation2.start()
+
+    wait(for: [expectation1, expectation2], timeout: 10)
+
+    XCTAssertFalse(operation1.isCancelled)
+    XCTAssertFalse(operation2.isCancelled)
+  }
   
   func testMutuallyExclusiveCondition() {
     let queue = OperationQueue()
@@ -282,6 +306,32 @@ final class MutualExclusivityConditionTests: XCTestCase {
   }
   
   // MARK: - Cancel Mode
+
+  func testFulFilledConditionWithoutOperationQueueInCancelMode() {
+    let condition = MutualExclusivityCondition(mode: .cancel(identifier: "condition1"))
+
+    let operation1 = SleepyAsyncOperation(interval1: 1, interval2: 1, interval3: 1)
+    let expectation1 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isFinished), object: operation1, expectedValue: true)
+    operation1.addCondition(condition)
+     operation1.name = "operation1"
+    operation1.log = TestsLog
+    operation1.exclusivityManager = .shared
+
+    let operation2 = SleepyAsyncOperation(interval1: 1, interval2: 1, interval3: 1)
+    let expectation2 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isFinished), object: operation2, expectedValue: true)
+    operation2.addCondition(condition)
+    operation2.name = "operation2"
+    operation2.log = TestsLog
+    operation2.exclusivityManager = .shared
+
+    operation1.start()
+    operation2.start()
+
+    wait(for: [expectation1, expectation2], timeout: 10)
+
+    XCTAssertFalse(operation1.isCancelled)
+    XCTAssertTrue(operation2.isCancelled)
+  }
   
   func testMutuallyExclusiveConditionInCancelModeUsingSerialQueue() {
     let queue = OperationQueue()

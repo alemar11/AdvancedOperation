@@ -355,26 +355,29 @@ final class GroupOperationTests: XCTestCase {
   }
 
   func testMultipleNestedGroupOperations() {
+    // group 1
     let operation1 = BlockOperation { }
     let operation2 = BlockOperation(block: { sleep(2) } )
     let group1 = GroupOperation(operations: [operation1, operation2])
-
     let expectation1 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isFinished), object: group1, expectedValue: true)
 
-    let operation3 = SleepyOperation()
-    let operation4 = SleepyAsyncOperation(interval1: 1, interval2: 1, interval3: 1)
-    let operation5 = BlockOperation(block: { sleep(1) } )
-
+    // group 3
     let operation6 = SleepyAsyncOperation(interval1: 1, interval2: 1, interval3: 1)
     let group3 = GroupOperation(operations: operation6)
     let expectation3 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isFinished), object: group3, expectedValue: true)
 
+    // group 2
+    let operation3 = SleepyOperation()
+    let operation4 = SleepyAsyncOperation(interval1: 1, interval2: 1, interval3: 1)
+    let operation5 = BlockOperation(block: { sleep(1) } )
     let group2 = GroupOperation(operations: operation3, operation4, operation5, group3)
     let expectation2 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isFinished), object: group2, expectedValue: true)
 
+    // group 4
     let group4 = GroupOperation(operations: [])
     let expectation4 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isFinished), object: group4, expectedValue: true)
 
+    // group 0
     let operation7 = SleepyAsyncOperation(interval1: 0, interval2: 0, interval3: 1)
     let group0 = GroupOperation(operations: group1, group2, operation7, group4)
     let expectation0 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isFinished), object: group0, expectedValue: true)

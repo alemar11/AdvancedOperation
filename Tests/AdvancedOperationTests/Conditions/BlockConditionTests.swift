@@ -30,6 +30,28 @@ final class BlockConditionTests: XCTestCase {
     XCTAssertTrue(condition.mutuallyExclusiveCategories.isEmpty)
   }
   
+  func testNotFulFilledConditionWithoutOperationQueue() {
+    let condition = BlockCondition { false }
+    let operation = SleepyOperation()
+    operation.addCondition(condition)
+    
+    operation.start()
+    XCTAssertTrue(operation.isCancelled)
+    XCTAssertTrue(operation.hasError)
+    XCTAssertTrue(operation.isFinished)
+  }
+  
+  func testFulFilledConditionWithoutOperationQueue() {
+    let condition = BlockCondition { true }
+    let operation = SleepyOperation()
+    operation.addCondition(condition)
+    
+    operation.start()
+    XCTAssertFalse(operation.isCancelled)
+    XCTAssertFalse(operation.hasError)
+    XCTAssertTrue(operation.isFinished)
+  }
+  
   func testFailedCondition() {
     let queue = OperationQueue()
     let condition = BlockCondition { false }

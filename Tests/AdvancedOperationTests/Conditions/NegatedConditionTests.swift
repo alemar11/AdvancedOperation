@@ -35,6 +35,30 @@ final class NegatedConditionTests: XCTestCase {
     XCTAssertEqual(NegatedCondition(condition: NoFailedDependenciesCondition()).name, "Not<\(conditionName)>")
   }
   
+  func testNotFulFilledConditionWithoutOperationQueue() {
+    let condition = BlockCondition { true }
+    let negatedCondition = NegatedCondition(condition: condition)
+    let operation = SleepyOperation()
+    operation.addCondition(negatedCondition)
+    
+    operation.start()
+    XCTAssertTrue(operation.isCancelled)
+    XCTAssertTrue(operation.hasError)
+    XCTAssertTrue(operation.isFinished)
+  }
+  
+  func testFulFilledConditionWithoutOperationQueue() {
+    let condition = BlockCondition { false }
+    let negatedCondition = NegatedCondition(condition: condition)
+    let operation = SleepyOperation()
+    operation.addCondition(negatedCondition)
+    
+    operation.start()
+    XCTAssertFalse(operation.isCancelled)
+    XCTAssertFalse(operation.hasError)
+    XCTAssertTrue(operation.isFinished)
+  }
+  
   func testNegationWithFailingCondition() {
     let negatedFailingCondition = NegatedCondition(condition: AlwaysFailingCondition())
     let dummyOperation = AdvancedBlockOperation { }
