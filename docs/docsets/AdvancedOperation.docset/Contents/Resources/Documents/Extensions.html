@@ -14,7 +14,7 @@
     <a title="Extensions  Reference"></a>
     <header>
       <div class="content-wrapper">
-        <p><a href="index.html">AdvancedOperation Docs</a> (56% documented)</p>
+        <p><a href="index.html">AdvancedOperation Docs</a> (64% documented)</p>
       </div>
     </header>
     <div class="content-wrapper">
@@ -37,13 +37,13 @@
                 <a href="Classes/AdvancedOperation.html">AdvancedOperation</a>
               </li>
               <li class="nav-group-task">
-                <a href="Classes/AdvancedOperationQueue.html">AdvancedOperationQueue</a>
-              </li>
-              <li class="nav-group-task">
                 <a href="Classes/BlockObserver.html">BlockObserver</a>
               </li>
               <li class="nav-group-task">
                 <a href="Classes/DelayOperation.html">DelayOperation</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Classes/ExclusivityManager.html">ExclusivityManager</a>
               </li>
               <li class="nav-group-task">
                 <a href="Classes/GroupOperation.html">GroupOperation</a>
@@ -57,7 +57,7 @@
             <a href="Enums.html">Enumerations</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
-                <a href="Enums/OperationConditionResult.html">OperationConditionResult</a>
+                <a href="Enums/ExclusivityCategory.html">ExclusivityCategory</a>
               </li>
             </ul>
           </li>
@@ -65,19 +65,19 @@
             <a href="Extensions.html">Extensions</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
-                <a href="Extensions/Operation.html">Operation</a>
+                <a href="Extensions/NSError.html">NSError</a>
               </li>
               <li class="nav-group-task">
-                <a href="Extensions/Sequence.html">Sequence</a>
+                <a href="Extensions/NSError.html#/s:So7NSErrorC17AdvancedOperationE4CodeO">– Code</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Extensions/Operation.html">Operation</a>
               </li>
             </ul>
           </li>
           <li class="nav-group-name">
             <a href="Protocols.html">Protocols</a>
             <ul class="nav-group-tasks">
-              <li class="nav-group-task">
-                <a href="Protocols/AdvancedOperationQueueDelegate.html">AdvancedOperationQueueDelegate</a>
-              </li>
               <li class="nav-group-task">
                 <a href="Protocols/InputRequiring.html">InputRequiring</a>
               </li>
@@ -86,6 +86,9 @@
               </li>
               <li class="nav-group-task">
                 <a href="Protocols/OperationDidCancelObserving.html">OperationDidCancelObserving</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Protocols/OperationDidExecuteObserving.html">OperationDidExecuteObserving</a>
               </li>
               <li class="nav-group-task">
                 <a href="Protocols/OperationDidFinishObserving.html">OperationDidFinishObserving</a>
@@ -120,19 +123,10 @@
             <a href="Structs.html">Structures</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
-                <a href="Structs/AdvancedOperationError.html">AdvancedOperationError</a>
-              </li>
-              <li class="nav-group-task">
-                <a href="Structs/AdvancedOperationError.html#/s:17AdvancedOperation0aB5ErrorV4CodeO">– Code</a>
-              </li>
-              <li class="nav-group-task">
                 <a href="Structs/BlockCondition.html">BlockCondition</a>
               </li>
               <li class="nav-group-task">
                 <a href="Structs/MutualExclusivityCondition.html">MutualExclusivityCondition</a>
-              </li>
-              <li class="nav-group-task">
-                <a href="Structs/MutualExclusivityCondition/Mode.html">– Mode</a>
               </li>
               <li class="nav-group-task">
                 <a href="Structs/NegatedCondition.html">NegatedCondition</a>
@@ -148,17 +142,6 @@
               </li>
             </ul>
           </li>
-          <li class="nav-group-name">
-            <a href="Typealiases.html">Type Aliases</a>
-            <ul class="nav-group-tasks">
-              <li class="nav-group-task">
-                <a href="Typealiases.html#/s:17AdvancedOperation0B11InputHavinga">OperationInputHaving</a>
-              </li>
-              <li class="nav-group-task">
-                <a href="Typealiases.html#/s:17AdvancedOperation0B12OutputHavinga">OperationOutputHaving</a>
-              </li>
-            </ul>
-          </li>
         </ul>
       </nav>
       <article class="main-content">
@@ -169,6 +152,37 @@
 
           </section>
           <section class="section task-group-section">
+            <div class="task-group">
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)NSError"></a>
+                    <a name="//apple_ref/swift/Extension/NSError" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)NSError">NSError</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        
+                        <a href="Extensions/NSError.html" class="slightly-smaller">See more</a>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">class</span> <span class="kt">NSError</span> <span class="p">:</span> <span class="kt">NSObject</span><span class="p">,</span> <span class="kt">NSCopying</span><span class="p">,</span> <span class="kt">NSSecureCoding</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
             <div class="task-group">
               <ul>
                 <li class="item">
@@ -198,39 +212,12 @@
                     </section>
                   </div>
                 </li>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:ST"></a>
-                    <a name="//apple_ref/swift/Extension/Sequence" class="dashAnchor"></a>
-                    <a class="token" href="#/s:ST">Sequence</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        
-                        <a href="Extensions/Sequence.html" class="slightly-smaller">See more</a>
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">protocol</span> <span class="kt">Sequence</span></code></pre>
-
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
               </ul>
             </div>
           </section>
         </section>
         <section id="footer">
-          <p>&copy; 2019 <a class="link" href="https://github.com/tinrobots/AdvancedOperation" target="_blank" rel="external">Alessandro Marzoli</a>. All rights reserved. (Last updated: 2019-06-25)</p>
+          <p>&copy; 2019 <a class="link" href="https://github.com/tinrobots/AdvancedOperation" target="_blank" rel="external">Alessandro Marzoli</a>. All rights reserved. (Last updated: 2019-08-14)</p>
           <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.9.6</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
         </section>
       </article>

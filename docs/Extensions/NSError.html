@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>UIBackgroundObserver Class Reference</title>
+    <title>NSError Extension Reference</title>
     <link rel="stylesheet" type="text/css" href="../css/jazzy.css" />
     <link rel="stylesheet" type="text/css" href="../css/highlight.css" />
     <meta charset='utf-8'>
@@ -10,8 +10,8 @@
     
   </head>
   <body>
-    <a name="//apple_ref/swift/Class/UIBackgroundObserver" class="dashAnchor"></a>
-    <a title="UIBackgroundObserver Class Reference"></a>
+    <a name="//apple_ref/swift/Extension/NSError" class="dashAnchor"></a>
+    <a title="NSError Extension Reference"></a>
     <header>
       <div class="content-wrapper">
         <p><a href="../index.html">AdvancedOperation Docs</a> (64% documented)</p>
@@ -21,7 +21,7 @@
       <p id="breadcrumbs">
         <a href="../index.html">AdvancedOperation Reference</a>
         <img id="carat" src="../img/carat.png" />
-        UIBackgroundObserver Class Reference
+        NSError Extension Reference
       </p>
     </div>
     <div class="content-wrapper">
@@ -147,15 +147,14 @@
       <article class="main-content">
         <section>
           <section class="section">
-            <h1>UIBackgroundObserver</h1>
+            <h1>NSError</h1>
               <div class="declaration">
                 <div class="language">
-                  <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">final</span> <span class="kd">class</span> <span class="kt">UIBackgroundObserver</span> <span class="p">:</span> <span class="kt">NSObject</span></code></pre>
+                  <pre class="highlight swift"><code><span class="kd">class</span> <span class="kt">NSError</span> <span class="p">:</span> <span class="kt">NSObject</span><span class="p">,</span> <span class="kt">NSCopying</span><span class="p">,</span> <span class="kt">NSSecureCoding</span></code></pre>
 
                 </div>
               </div>
-            <p>An <code>UIBackgroundObserver</code> instance lets an <code><a href="../Classes/AdvancedOperation.html">AdvancedOperation</a></code> run for a period of time after the app transitions to the background.</p>
-
+            
           </section>
           <section class="section task-group-section">
             <div class="task-group">
@@ -163,9 +162,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:17AdvancedOperation20UIBackgroundObserverC18backgroundTaskNameSSvp"></a>
-                    <a name="//apple_ref/swift/Property/backgroundTaskName" class="dashAnchor"></a>
-                    <a class="token" href="#/s:17AdvancedOperation20UIBackgroundObserverC18backgroundTaskNameSSvp">backgroundTaskName</a>
+                    <a name="/s:So7NSErrorC17AdvancedOperationE4CodeO"></a>
+                    <a name="//apple_ref/swift/Enum/Code" class="dashAnchor"></a>
+                    <a class="token" href="#/s:So7NSErrorC17AdvancedOperationE4CodeO">Code</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -173,14 +172,14 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>The task name.</p>
+                        <p>Undocumented</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">backgroundTaskName</span><span class="p">:</span> <span class="kt">String</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">enum</span> <span class="kt">Code</span></code></pre>
 
                         </div>
                       </div>
@@ -190,9 +189,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:17AdvancedOperation20UIBackgroundObserverC14taskIdentifierSo0c4TaskF0avp"></a>
-                    <a name="//apple_ref/swift/Property/taskIdentifier" class="dashAnchor"></a>
-                    <a class="token" href="#/s:17AdvancedOperation20UIBackgroundObserverC14taskIdentifierSo0c4TaskF0avp">taskIdentifier</a>
+                    <a name="/s:So7NSErrorC17AdvancedOperationE9errorsKeySSvpZ"></a>
+                    <a name="//apple_ref/swift/Variable/errorsKey" class="dashAnchor"></a>
+                    <a class="token" href="#/s:So7NSErrorC17AdvancedOperationE9errorsKeySSvpZ">errorsKey</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -200,14 +199,14 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>A unique token that identifies a request to run in the background.</p>
+                        <p>Undocumented</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">private(set)</span> <span class="k">var</span> <span class="nv">taskIdentifier</span><span class="p">:</span> <span class="kt">UIBackgroundTaskIdentifier</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">static</span> <span class="k">let</span> <span class="nv">errorsKey</span><span class="p">:</span> <span class="kt">String</span></code></pre>
 
                         </div>
                       </div>
@@ -217,9 +216,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:17AdvancedOperation20UIBackgroundObserverC11applicationAcA27UIApplicationBackgroundTask_p_tcfc"></a>
-                    <a name="//apple_ref/swift/Method/init(application:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:17AdvancedOperation20UIBackgroundObserverC11applicationAcA27UIApplicationBackgroundTask_p_tcfc">init(application:)</a>
+                    <a name="/s:So7NSErrorC17AdvancedOperationE18executionCancelled7message8userInfoABSS_SDySSypGSgtFZ"></a>
+                    <a name="//apple_ref/swift/Method/executionCancelled(message:userInfo:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:So7NSErrorC17AdvancedOperationE18executionCancelled7message8userInfoABSS_SDySSypGSgtFZ">executionCancelled(message:userInfo:)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -227,14 +226,41 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Initializes a new <code>UIBackgroundObserver</code> instance.</p>
+                        <p>Creates an error usable when an operation has been cancelled due to an error.</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="nf">init</span><span class="p">(</span><span class="nv">application</span><span class="p">:</span> <span class="kt"><a href="../Protocols/UIApplicationBackgroundTask.html">UIApplicationBackgroundTask</a></span><span class="p">)</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">static</span> <span class="kd">func</span> <span class="nf">executionCancelled</span><span class="p">(</span><span class="nv">message</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">userInfo</span><span class="p">:</span> <span class="p">[</span><span class="kt">String</span> <span class="p">:</span> <span class="kt">Any</span><span class="p">]?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">NSError</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:So7NSErrorC17AdvancedOperationE17executionFinished7message8userInfoABSS_SDySSypGSgtFZ"></a>
+                    <a name="//apple_ref/swift/Method/executionFinished(message:userInfo:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:So7NSErrorC17AdvancedOperationE17executionFinished7message8userInfoABSS_SDySSypGSgtFZ">executionFinished(message:userInfo:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Creates an error usable when an operation has been finished with an error.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">static</span> <span class="kd">func</span> <span class="nf">executionFinished</span><span class="p">(</span><span class="nv">message</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">userInfo</span><span class="p">:</span> <span class="p">[</span><span class="kt">String</span> <span class="p">:</span> <span class="kt">Any</span><span class="p">]?</span> <span class="o">=</span> <span class="o">.</span><span class="k">none</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">NSError</span></code></pre>
 
                         </div>
                       </div>
@@ -245,19 +271,19 @@
             </div>
             <div class="task-group">
               <div class="task-name-container">
-                <a name="/UIBackgroundObserver"></a>
-                <a name="//apple_ref/swift/Section/UIBackgroundObserver" class="dashAnchor"></a>
-                <a href="#/UIBackgroundObserver">
-                  <h3 class="section-name">UIBackgroundObserver</h3>
+                <a name="/GroupOperation"></a>
+                <a name="//apple_ref/swift/Section/GroupOperation" class="dashAnchor"></a>
+                <a href="#/GroupOperation">
+                  <h3 class="section-name">GroupOperation</h3>
                 </a>
               </div>
               <ul>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:17AdvancedOperation0B19DidExecuteObservingP09operationcD00F0yA2AC_tF"></a>
-                    <a name="//apple_ref/swift/Method/operationDidExecute(operation:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:17AdvancedOperation0B19DidExecuteObservingP09operationcD00F0yA2AC_tF">operationDidExecute(operation:)</a>
+                    <a name="/s:So7NSErrorC17AdvancedOperationE13groupFinished7message8userInfo6errorsABSS_SDySSypGSgSays5Error_pGtFZ"></a>
+                    <a name="//apple_ref/swift/Method/groupFinished(message:userInfo:errors:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:So7NSErrorC17AdvancedOperationE13groupFinished7message8userInfo6errorsABSS_SDySSypGSgSays5Error_pGtFZ">groupFinished(message:userInfo:errors:)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -265,13 +291,52 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        
+                        <p>Group operation finished with errors.</p>
+
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">operationDidExecute</span><span class="p">(</span><span class="nv">operation</span><span class="p">:</span> <span class="kt"><a href="../Classes/AdvancedOperation.html">AdvancedOperation</a></span><span class="p">)</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">static</span> <span class="kd">func</span> <span class="nf">groupFinished</span><span class="p">(</span><span class="nv">message</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">userInfo</span><span class="p">:</span> <span class="p">[</span><span class="kt">String</span> <span class="p">:</span> <span class="kt">Any</span><span class="p">]?</span> <span class="o">=</span> <span class="o">.</span><span class="k">none</span><span class="p">,</span> <span class="nv">errors</span><span class="p">:</span> <span class="p">[</span><span class="kt">Error</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kt">NSError</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <div class="task-name-container">
+                <a name="/Conditions"></a>
+                <a name="//apple_ref/swift/Section/Conditions" class="dashAnchor"></a>
+                <a href="#/Conditions">
+                  <h3 class="section-name">Conditions</h3>
+                </a>
+              </div>
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:So7NSErrorC17AdvancedOperationE15conditionFailed7message8userInfoABSS_SDySSypGSgtFZ"></a>
+                    <a name="//apple_ref/swift/Method/conditionFailed(message:userInfo:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:So7NSErrorC17AdvancedOperationE15conditionFailed7message8userInfoABSS_SDySSypGSgtFZ">conditionFailed(message:userInfo:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Creates an error usable when a condition has failed.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">static</span> <span class="kd">func</span> <span class="nf">conditionFailed</span><span class="p">(</span><span class="nv">message</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">userInfo</span><span class="p">:</span> <span class="p">[</span><span class="kt">String</span> <span class="p">:</span> <span class="kt">Any</span><span class="p">]?</span> <span class="o">=</span> <span class="o">.</span><span class="k">none</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">NSError</span></code></pre>
 
                         </div>
                       </div>
@@ -281,9 +346,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:17AdvancedOperation0B18DidFinishObservingP09operationcD00F09withErroryA2AC_s0H0_pSgtF"></a>
-                    <a name="//apple_ref/swift/Method/operationDidFinish(operation:withError:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:17AdvancedOperation0B18DidFinishObservingP09operationcD00F09withErroryA2AC_s0H0_pSgtF">operationDidFinish(operation:withError:)</a>
+                    <a name="/s:So7NSErrorC17AdvancedOperationE28conditionsEvaluationFinished7message8userInfo6errorsABSS_SDySSypGSgSays5Error_pGtFZ"></a>
+                    <a name="//apple_ref/swift/Method/conditionsEvaluationFinished(message:userInfo:errors:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:So7NSErrorC17AdvancedOperationE28conditionsEvaluationFinished7message8userInfo6errorsABSS_SDySSypGSgSays5Error_pGtFZ">conditionsEvaluationFinished(message:userInfo:errors:)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -291,13 +356,14 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        
+                        <p>Conditions evaluation has genereated some errors.</p>
+
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">operationDidFinish</span><span class="p">(</span><span class="nv">operation</span><span class="p">:</span> <span class="kt"><a href="../Classes/AdvancedOperation.html">AdvancedOperation</a></span><span class="p">,</span> <span class="n">withError</span> <span class="nv">error</span><span class="p">:</span> <span class="kt">Error</span><span class="p">?)</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">static</span> <span class="kd">func</span> <span class="nf">conditionsEvaluationFinished</span><span class="p">(</span><span class="nv">message</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">userInfo</span><span class="p">:</span> <span class="p">[</span><span class="kt">String</span> <span class="p">:</span> <span class="kt">Any</span><span class="p">]?</span> <span class="o">=</span> <span class="o">.</span><span class="k">none</span><span class="p">,</span> <span class="nv">errors</span><span class="p">:</span> <span class="p">[</span><span class="kt">Error</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kt">NSError</span></code></pre>
 
                         </div>
                       </div>
