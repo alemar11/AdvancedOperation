@@ -11,7 +11,6 @@ env:
     - TVOS_SDK=appletvsimulator12.2
     - WATCHOS_SDK=watchsimulator5.2
     - XCODE_RUN_TESTS="NO"
-    - XCODE_CONFIGURATION="DEBUG"
 
 matrix:
   include:
@@ -31,75 +30,47 @@ matrix:
         - swift test -Xswiftc -target -Xswiftc x86_64-apple-macosx10.13
         - pod lib lint    
 
-    # iOS 11.4 Debug
+    # iOS 11.4
     - os: osx
       osx_image: xcode10.2
       language: objective-c
       env: 
-        - DESTINATION="OS=11.4,name=iPhone X" SCHEME="$IOS_FRAMEWORK_SCHEME" SDK="$IOS_SDK" XCODE_RUN_TESTS="YES" CODECOV_FLAG="ios11" XCODE_CONFIGURATION="DEBUG"
+        - DESTINATION="OS=11.4,name=iPhone X" SCHEME="$IOS_FRAMEWORK_SCHEME" SDK="$IOS_SDK" XCODE_RUN_TESTS="YES" CODECOV_FLAG="ios11"
 
-    # iOS 12.2 Debug
+    # iOS 12.2
     - os: osx
       osx_image: xcode10.2
       language: objective-c
       env: 
-        - DESTINATION="OS=12.2,name=iPhone X" SCHEME="$IOS_FRAMEWORK_SCHEME" SDK="$IOS_SDK" XCODE_RUN_TESTS="YES" CODECOV_FLAG="ios" XCODE_CONFIGURATION="DEBUG"
+        - DESTINATION="OS=12.2,name=iPhone X" SCHEME="$IOS_FRAMEWORK_SCHEME" SDK="$IOS_SDK" XCODE_RUN_TESTS="YES" CODECOV_FLAG="ios"
 
-    # iOS 12.2 Release
+    #watchOS 5.1
     - os: osx
       osx_image: xcode10.2
       language: objective-c
       env: 
-        - DESTINATION="OS=12.2,name=iPhone X" SCHEME="$IOS_FRAMEWORK_SCHEME" SDK="$IOS_SDK" XCODE_RUN_TESTS="YES" CODECOV_FLAG="ios" XCODE_CONFIGURATION="RELEASE"
+        - DESTINATION="OS=5.1,name=Apple Watch Series 4 - 44mm" SCHEME="$WATCHOS_FRAMEWORK_SCHEME" SDK="$WATCHOS_SDK" XCODE_RUN_TESTS="NO" CODECOV_FLAG="watchos"
 
-    #watchOS 4.2 Debug
+    # tvOS 11.4
     - os: osx
       osx_image: xcode10.2
       language: objective-c
       env: 
-        - DESTINATION="OS=4.2,name=Apple Watch Series 2 - 38mm" SCHEME="$WATCHOS_FRAMEWORK_SCHEME" SDK="$WATCHOS_SDK" XCODE_RUN_TESTS="NO" CODECOV_FLAG="watchos5" XCODE_CONFIGURATION="DEBUG"
-
-    #watchOS 5.1 Debug
-    - os: osx
-      osx_image: xcode10.2
-      language: objective-c
-      env: 
-        - DESTINATION="OS=5.1,name=Apple Watch Series 4 - 44mm" SCHEME="$WATCHOS_FRAMEWORK_SCHEME" SDK="$WATCHOS_SDK" XCODE_RUN_TESTS="NO" CODECOV_FLAG="watchos" XCODE_CONFIGURATION="DEBUG"
-
-    # tvOS 11.4 Debug
-    - os: osx
-      osx_image: xcode10.2
-      language: objective-c
-      env: 
-        - DESTINATION="OS=11.4,name=Apple TV 4K (at 1080p)" SCHEME="$TVOS_FRAMEWORK_SCHEME" SDK="$TVOS_SDK" XCODE_RUN_TESTS="YES" CODECOV_FLAG="tvos11" XCODE_CONFIGURATION="DEBUG"
-
-    # tvOS 12.2 Debug
-    - os: osx
-      osx_image: xcode10.2
-      language: objective-c
-      env: 
-        - DESTINATION="OS=12.2,name=Apple TV 4K (at 1080p)" SCHEME="$TVOS_FRAMEWORK_SCHEME" SDK="$TVOS_SDK" XCODE_RUN_TESTS="YES" CODECOV_FLAG="tvos" XCODE_CONFIGURATION="DEBUG"     
+        - DESTINATION="OS=11.4,name=Apple TV 4K (at 1080p)" SCHEME="$TVOS_FRAMEWORK_SCHEME" SDK="$TVOS_SDK" XCODE_RUN_TESTS="YES" CODECOV_FLAG="tvos11"  
     
-    # tvOS 12.2 Release
+    # tvOS 12.2
     - os: osx
       osx_image: xcode10.2
       language: objective-c
       env: 
-        - DESTINATION="OS=12.2,name=Apple TV 4K (at 1080p)" SCHEME="$TVOS_FRAMEWORK_SCHEME" SDK="$TVOS_SDK" XCODE_RUN_TESTS="YES" CODECOV_FLAG="tvos" XCODE_CONFIGURATION="RELEASE"     
-
-    # macOS Debug
-    - os: osx
-      osx_image: xcode10.2
-      language: objective-c
-      env: 
-       - DESTINATION="arch=x86_64" SCHEME="$MACOS_FRAMEWORK_SCHEME" SDK="$MACOS_SDK" XCODE_RUN_TESTS="YES" CODECOV_FLAG="macos" XCODE_CONFIGURATION="DEBUG"     
+        - DESTINATION="OS=12.2,name=Apple TV 4K (at 1080p)" SCHEME="$TVOS_FRAMEWORK_SCHEME" SDK="$TVOS_SDK" XCODE_RUN_TESTS="YES" CODECOV_FLAG="tvos"     
     
-    # macOS Release
+    # macOS
     - os: osx
       osx_image: xcode10.2
       language: objective-c
       env: 
-       - DESTINATION="arch=x86_64" SCHEME="$MACOS_FRAMEWORK_SCHEME" SDK="$MACOS_SDK" XCODE_RUN_TESTS="YES" CODECOV_FLAG="macos" XCODE_CONFIGURATION="RELEASE"         
+       - DESTINATION="arch=x86_64" SCHEME="$MACOS_FRAMEWORK_SCHEME" SDK="$MACOS_SDK" XCODE_RUN_TESTS="YES" CODECOV_FLAG="macos"        
 
 bundler_args: --without release_phase
 
@@ -111,16 +82,9 @@ script:
       xcodebuild -version;
       xcodebuild -showsdks;
 
-      if [[ "$XCODE_RUN_TESTS" == "YES" ]] && [[ "$XCODE_CONFIGURATION" == "DEBUG" ]]; then
-        xcodebuild -scheme "$SCHEME" -sdk "$SDK" -destination "$DESTINATION" -configuration Debug ONLY_ACTIVE_ARCH=YES ENABLE_TESTABILITY=YES build-for-testing test-without-building | xcpretty;
-        bash <(curl -s https://codecov.io/bash) -J 'AdvancedOperation' -cF "$CODECOV_FLAG";
-      elif [[ "$XCODE_RUN_TESTS" == "NO" ]] && [[ "$XCODE_CONFIGURATION" == "DEBUG" ]]; then
-        xcodebuild -scheme "$SCHEME" -sdk "$SDK" -destination "$DESTINATION" -configuration Debug ONLY_ACTIVE_ARCH=NO build | xcpretty;
-      fi
-
-      if [[ "$XCODE_RUN_TESTS" == "YES" ]] && [[ "$XCODE_CONFIGURATION" == "RELEASE" ]]; then
+      if [ "$XCODE_RUN_TESTS" == "YES" ]; then
         xcodebuild -scheme "$SCHEME" -sdk "$SDK" -destination "$DESTINATION" -configuration Release ONLY_ACTIVE_ARCH=YES ENABLE_TESTABILITY=YES build-for-testing test-without-building | xcpretty;
-      elif [[ "$XCODE_RUN_TESTS" == "NO" ]] && [[ "$XCODE_CONFIGURATION" == "RELEASE" ]]; then
+      else
         xcodebuild -scheme "$SCHEME" -sdk "$SDK" -destination "$DESTINATION" -configuration Release ONLY_ACTIVE_ARCH=NO build | xcpretty;
       fi
     fi
