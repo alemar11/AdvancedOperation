@@ -292,7 +292,7 @@ open class AdvancedOperation: Operation {
   /// - Note: It's up to the developer to decide wheter or not the produced operation should run indipendently from the producing operation (if the queue is not serial).
   final func produceOperation(_ operation: Operation) {
     guard let queue = operationQueue else {
-      fatalError("An operation cannot produce any other operation if it's not enqueued on an OperationQueue.") // TODO is this correct as fatal error?
+      fatalError("An operation cannot produce any other operation if it's not enqueued on an OperationQueue.")
     }
     
     didProduceOperation(operation)
