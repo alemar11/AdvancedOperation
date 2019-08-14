@@ -74,7 +74,7 @@ open class AdvancedOperation: Operation {
   private let times = Atomic<(CFAbsoluteTime?, CFAbsoluteTime?)>((nil, nil))
 
   /// A list of OperationObservingType.
-  let observers = Atomic([OperationObservingType]())
+  private let observers = Atomic([OperationObservingType]())
 
   /// Returns `true` if the finish command has been fired and the operation is processing it.
   private var _finishing = false
@@ -153,9 +153,7 @@ open class AdvancedOperation: Operation {
     /// If the operation is currently executing or is not ready to execute, this method throws an NSInvalidArgumentException exception.
     super.start()
 
-    // TODO: this is called once the operation is finished or cancelled
-    // but if it is cancelled we need to finish it.
-    // TODO: investigate it a little more for the 4.0 release
+    // Here, the execute method has returned
     if isCancelled {
       // if the the cancellation event has been processed, mark the operation as finished.
       finish()
@@ -207,9 +205,7 @@ open class AdvancedOperation: Operation {
       return true
     }
 
-    guard canBeCancelled else {
-      return
-    }
+    guard canBeCancelled else { return }
 
     willCancel(error: cancelError)
     hasBeenCancelled = true

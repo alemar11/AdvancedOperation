@@ -25,6 +25,10 @@ import XCTest
 @testable import AdvancedOperation
 
 final class NoCancelledDependenciesConditionTests: XCTestCase {
+  func testEmptyMutuallyExclusiveCategories() {
+    let condition = NoCancelledDependeciesCondition()
+    XCTAssertTrue(condition.mutuallyExclusiveCategories.isEmpty)
+  }
 
   func testTwoLevelCondition() {
     let queue = OperationQueue()

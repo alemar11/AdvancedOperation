@@ -25,6 +25,10 @@ import XCTest
 @testable import AdvancedOperation
 
 final class NoFailedDependenciesConditionTests: XCTestCase {
+  func testEmptyMutuallyExclusiveCategories() {
+    let condition = NoFailedDependenciesCondition()
+    XCTAssertTrue(condition.mutuallyExclusiveCategories.isEmpty)
+  }
 
   func testFinishedAndFailedOperation() {
     let queue = OperationQueue()

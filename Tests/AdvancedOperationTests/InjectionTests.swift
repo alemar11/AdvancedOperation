@@ -24,7 +24,7 @@
 import XCTest
 @testable import AdvancedOperation
 
-final class InjectionTests2: XCTestCase {
+final class InjectionTests: XCTestCase {
   func testInputAndOutput() {
     let operation1 = IntToStringOperation()
     operation1.input = 10
@@ -37,30 +37,19 @@ final class InjectionTests2: XCTestCase {
     XCTAssertEqual(operation2.output, 10)
   }
 
-//  func testInjectionUsingClassMethodAndWaitUntilFinished() {
-//    let operation1 = IntToStringOperation()
-//    let operation2 = StringToIntOperation()
-//    operation1.input = 10
-//    let adapterOperation = AdvancedOperation.injectOperation(operation1, into: operation2)
-//    let queue = OperationQueue()
-//    queue.addOperations([operation1, operation2, adapterOperation], waitUntilFinished: true)
-//
-//    XCTAssertEqual(operation2.output, 10)
-//  }
-//
-//  func testInjectionMixedWithOtherOperation() {
-//    let operation1 = IntToStringOperation()
-//    let operation2 = StringToIntOperation()
-//    let operation3 = BlockOperation()
-//    operation3.addDependency(operation2)
-//    operation1.input = 10
-//    let adapterOperation = AdvancedOperation.injectOperation(operation1, into: operation2)
-//    let queue = OperationQueue()
-//    queue.addOperations([operation1, operation2, adapterOperation], waitUntilFinished: true)
-//    queue.addOperations([operation3], waitUntilFinished: false)
-//
-//    XCTAssertEqual(operation2.output, 10)
-//  }
+  func testInjectionMixedWithOtherOperation() {
+    let operation1 = IntToStringOperation()
+    let operation2 = StringToIntOperation()
+    let operation3 = BlockOperation()
+    operation3.addDependency(operation2)
+    operation1.input = 10
+    operation1.injectOutput(into: operation2)
+    let queue = OperationQueue()
+    queue.addOperations([operation1, operation2], waitUntilFinished: true)
+    queue.addOperations([operation3], waitUntilFinished: false)
+
+    XCTAssertEqual(operation2.output, 10)
+  }
 
   func testInjectionUsingInstanceMethodAndWaitUntilFinished() {
     let operation1 = IntToStringOperation()

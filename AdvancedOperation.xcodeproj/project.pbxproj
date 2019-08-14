@@ -119,9 +119,6 @@
 		23856171200A6E9A0061BAA1 /* GroupOperationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23856170200A6E9A0061BAA1 /* GroupOperationTests.swift */; };
 		23856172200A6E9A0061BAA1 /* GroupOperationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23856170200A6E9A0061BAA1 /* GroupOperationTests.swift */; };
 		23856173200A6E9A0061BAA1 /* GroupOperationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23856170200A6E9A0061BAA1 /* GroupOperationTests.swift */; };
-		23856175200A87070061BAA1 /* AdvancedOperationQueueTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23856174200A87070061BAA1 /* AdvancedOperationQueueTests.swift */; };
-		23856176200A87070061BAA1 /* AdvancedOperationQueueTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23856174200A87070061BAA1 /* AdvancedOperationQueueTests.swift */; };
-		23856177200A87070061BAA1 /* AdvancedOperationQueueTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23856174200A87070061BAA1 /* AdvancedOperationQueueTests.swift */; };
 		23856179200A873C0061BAA1 /* Mocks.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23856178200A873C0061BAA1 /* Mocks.swift */; };
 		2385617A200A873C0061BAA1 /* Mocks.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23856178200A873C0061BAA1 /* Mocks.swift */; };
 		2385617B200A873C0061BAA1 /* Mocks.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23856178200A873C0061BAA1 /* Mocks.swift */; };
@@ -129,9 +126,6 @@
 		239BC52320EB7539009A36D9 /* Operation+Injection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 239BC52120EB7539009A36D9 /* Operation+Injection.swift */; };
 		239BC52420EB7539009A36D9 /* Operation+Injection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 239BC52120EB7539009A36D9 /* Operation+Injection.swift */; };
 		239BC52520EB7539009A36D9 /* Operation+Injection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 239BC52120EB7539009A36D9 /* Operation+Injection.swift */; };
-		239BC52720EB7C47009A36D9 /* __InjectionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 239BC52620EB7C47009A36D9 /* __InjectionTests.swift */; };
-		239BC52820EB7C47009A36D9 /* __InjectionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 239BC52620EB7C47009A36D9 /* __InjectionTests.swift */; };
-		239BC52920EB7C47009A36D9 /* __InjectionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 239BC52620EB7C47009A36D9 /* __InjectionTests.swift */; };
 		239ECD31218E11AF00F640F2 /* AdvancedOperationErrorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 239ECD30218E11AF00F640F2 /* AdvancedOperationErrorTests.swift */; };
 		239ECD32218E11AF00F640F2 /* AdvancedOperationErrorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 239ECD30218E11AF00F640F2 /* AdvancedOperationErrorTests.swift */; };
 		239ECD33218E11AF00F640F2 /* AdvancedOperationErrorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 239ECD30218E11AF00F640F2 /* AdvancedOperationErrorTests.swift */; };
@@ -254,11 +248,9 @@
 		23830CA220615E7C00F6EBC9 /* NSLocking+Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSLocking+Utils.swift"; sourceTree = "<group>"; };
 		2385616B200A6BF80061BAA1 /* GroupOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupOperation.swift; sourceTree = "<group>"; };
 		23856170200A6E9A0061BAA1 /* GroupOperationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupOperationTests.swift; sourceTree = "<group>"; };
-		23856174200A87070061BAA1 /* AdvancedOperationQueueTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdvancedOperationQueueTests.swift; sourceTree = "<group>"; };
 		23856178200A873C0061BAA1 /* Mocks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Mocks.swift; sourceTree = "<group>"; };
 		2385617C200A8DC50061BAA1 /* Package.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Package.swift; sourceTree = SOURCE_ROOT; };
 		239BC52120EB7539009A36D9 /* Operation+Injection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Operation+Injection.swift"; sourceTree = "<group>"; };
-		239BC52620EB7C47009A36D9 /* __InjectionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = __InjectionTests.swift; sourceTree = "<group>"; };
 		239ECD30218E11AF00F640F2 /* AdvancedOperationErrorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdvancedOperationErrorTests.swift; sourceTree = "<group>"; };
 		23A1A85720F4AD9100EA3350 /* CHANGELOG.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = CHANGELOG.md; sourceTree = SOURCE_ROOT; };
 		23A1B87821B81C710018D9D5 /* UnfairLock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnfairLock.swift; sourceTree = "<group>"; };
@@ -340,9 +332,7 @@
 			children = (
 				23D3DF3622F9C08900FF5C34 /* InjectionTests.swift */,
 				239ECD30218E11AF00F640F2 /* AdvancedOperationErrorTests.swift */,
-				23856174200A87070061BAA1 /* AdvancedOperationQueueTests.swift */,
 				23F24D1D200771FA00B25A03 /* AdvancedOperationTests.swift */,
-				239BC52620EB7C47009A36D9 /* __InjectionTests.swift */,
 				23856178200A873C0061BAA1 /* Mocks.swift */,
 				235D08D0206A941B00F70142 /* OperationStateTests.swift */,
 				23AC3ADC2038A050003E1B15 /* OperationUtilsTests.swift */,
@@ -960,12 +950,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				23F24D2E2007A33F00B25A03 /* DelayOperationTests.swift in Sources */,
-				23856177200A87070061BAA1 /* AdvancedOperationQueueTests.swift in Sources */,
 				23A813B82020D111008A98E0 /* AdvancedBlockOperationTests.swift in Sources */,
 				235D08CE206A6FCA00F70142 /* NoCancelledDependenciesConditionTests.swift in Sources */,
 				235D08CB206A6FCA00F70142 /* NoFailedDependenciesConditionTests.swift in Sources */,
 				239ECD33218E11AF00F640F2 /* AdvancedOperationErrorTests.swift in Sources */,
-				239BC52920EB7C47009A36D9 /* __InjectionTests.swift in Sources */,
 				2368702E206E4BE8004DFC17 /* BlockObserverTests.swift in Sources */,
 				23B1BE05216F9CE2002D0A5B /* BlockConditionTests.swift in Sources */,
 				232A53C1215B683A008B76AC /* UIBackgroundObserverTests.swift in Sources */,
@@ -986,12 +974,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				23F24D2C2007A33F00B25A03 /* DelayOperationTests.swift in Sources */,
-				23856175200A87070061BAA1 /* AdvancedOperationQueueTests.swift in Sources */,
 				23A813B62020D111008A98E0 /* AdvancedBlockOperationTests.swift in Sources */,
 				235D08CC206A6FCA00F70142 /* NoCancelledDependenciesConditionTests.swift in Sources */,
 				235D08C9206A6FCA00F70142 /* NoFailedDependenciesConditionTests.swift in Sources */,
 				239ECD31218E11AF00F640F2 /* AdvancedOperationErrorTests.swift in Sources */,
-				239BC52720EB7C47009A36D9 /* __InjectionTests.swift in Sources */,
 				2368702C206E4BE8004DFC17 /* BlockObserverTests.swift in Sources */,
 				23B1BE03216F9CE2002D0A5B /* BlockConditionTests.swift in Sources */,
 				232A53BF215B683A008B76AC /* UIBackgroundObserverTests.swift in Sources */,
@@ -1012,12 +998,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				23F24D2D2007A33F00B25A03 /* DelayOperationTests.swift in Sources */,
-				23856176200A87070061BAA1 /* AdvancedOperationQueueTests.swift in Sources */,
 				23A813B72020D111008A98E0 /* AdvancedBlockOperationTests.swift in Sources */,
 				235D08CD206A6FCA00F70142 /* NoCancelledDependenciesConditionTests.swift in Sources */,
 				235D08CA206A6FCA00F70142 /* NoFailedDependenciesConditionTests.swift in Sources */,
 				239ECD32218E11AF00F640F2 /* AdvancedOperationErrorTests.swift in Sources */,
-				239BC52820EB7C47009A36D9 /* __InjectionTests.swift in Sources */,
 				2368702D206E4BE8004DFC17 /* BlockObserverTests.swift in Sources */,
 				23B1BE04216F9CE2002D0A5B /* BlockConditionTests.swift in Sources */,
 				232A53C0215B683A008B76AC /* UIBackgroundObserverTests.swift in Sources */,

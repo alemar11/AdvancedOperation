@@ -24,50 +24,52 @@
 import XCTest
 @testable import AdvancedOperation
 
-class BlockConditionTests: XCTestCase {
-
+final class BlockConditionTests: XCTestCase {
+  func testEmptyMutuallyExclusiveCategories() {
+    let condition = BlockCondition { false }
+    XCTAssertTrue(condition.mutuallyExclusiveCategories.isEmpty)
+  }
+  
   func testFailedCondition() {
     let queue = OperationQueue()
-    let condition = BlockCondition { () -> Bool in
-      return false
-    }
-
+    let condition = BlockCondition { false }
+    
     let operation = SleepyAsyncOperation()
     operation.addCondition(condition)
     operation.name = "operation"
     operation.log = TestsLog
-
+    
     queue.addOperations([operation], waitUntilFinished: true)
-
+    
     XCTAssertTrue(operation.isCancelled)
     XCTAssertTrue(operation.hasError)
     XCTAssertTrue(operation.isFinished)
   }
-
+  
   func testFailedConditionAfterAThrowedError() {
     let queue = OperationQueue()
     let condition = BlockCondition { () -> Bool in
       throw MockError.failed
     }
-
+    
     let operation = SleepyAsyncOperation()
     operation.addCondition(condition)
-
+    
     operation.name = "Operation"
     operation.log = TestsLog
-
+    
     queue.addOperations([operation], waitUntilFinished: true)
     XCTAssertTrue(operation.isCancelled)
     XCTAssertTrue(operation.hasError)
     XCTAssertTrue(operation.isFinished)
   }
-
+  
   func testSuccessfulCondition() {
     let queue = OperationQueue()
     let condition = BlockCondition { () -> Bool in
       return true
     }
-
+    
     let operation = SleepyAsyncOperation()
     operation.addCondition(condition)
     queue.addOperations([operation], waitUntilFinished: true)
