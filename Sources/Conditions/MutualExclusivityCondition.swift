@@ -23,7 +23,8 @@
 
 import Foundation
 
-public enum ExclusivityMode: Hashable { // TODO rename ExclusivityCategory
+/// Defines categories to be used inside a `MutualExclusivityCondition`.
+public enum ExclusivityCategory: Hashable {
   /// If there is already an operation with the same identifier, the new one will be cancelled.
   case cancel(identifier: String)
   /// If there is already an operation with the same identifier, the new one will be added as a dependency of the oldest one.
@@ -41,13 +42,13 @@ public enum ExclusivityMode: Hashable { // TODO rename ExclusivityCategory
 
 /// A condition that defines how an operation should be added to an `AdvancedOperationQueue`.
 public struct MutualExclusivityCondition: OperationCondition {
-  private var _mutuallyExclusiveCategories = Set<ExclusivityMode>()
+  private var _mutuallyExclusiveCategories = Set<ExclusivityCategory>()
 
-  public var mutuallyExclusiveCategories: Set<ExclusivityMode> {
+  public var mutuallyExclusiveCategories: Set<ExclusivityCategory> {
     return _mutuallyExclusiveCategories
   }
 
-  public init(mode: ExclusivityMode) {
+  public init(mode: ExclusivityCategory) {
     _mutuallyExclusiveCategories.insert(mode)
   }
 

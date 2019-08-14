@@ -29,7 +29,7 @@ public protocol OperationCondition {
   /// The name of the condition.
   var name: String { get }
   /// Mutually exclusive categories to apply to the AdvancedOperation.
-  var mutuallyExclusiveCategories: Set<ExclusivityMode> { get }
+  var mutuallyExclusiveCategories: Set<ExclusivityCategory> { get }
 
   /// Evaluate the condition, to see if it has been satisfied or not.
   ///
@@ -44,7 +44,7 @@ public extension OperationCondition {
     return String(describing: type(of: self))
   }
 
-  var mutuallyExclusiveCategories: Set<ExclusivityMode> {
+  var mutuallyExclusiveCategories: Set<ExclusivityCategory> {
     return Set()
   }
 }

@@ -27,7 +27,7 @@ public final class ExclusivityManager {
   public static let shared = ExclusivityManager()
 
   internal struct Ticket {
-    let categories: Set<ExclusivityMode>
+    let categories: Set<ExclusivityCategory>
   }
 
   private enum LockRequest {
@@ -49,7 +49,7 @@ public final class ExclusivityManager {
     self.locksQueue = DispatchQueue(label: label + ".Locks", qos: qos, attributes: [.concurrent])
   }
 
-  internal func lock(for categories: Set<ExclusivityMode>, completion: @escaping (Ticket?) -> Void) {
+  internal func lock(for categories: Set<ExclusivityCategory>, completion: @escaping (Ticket?) -> Void) {
     guard !categories.isEmpty else {
       fatalError("A request for Mutual Exclusivity locks was made with no categories specified. This request is unnecessary.") // TODO
     }
@@ -59,7 +59,7 @@ public final class ExclusivityManager {
     }
   }
 
-  private func _lock(for categories: Set<ExclusivityMode>, completion: @escaping (Ticket?) -> Void) {
+  private func _lock(for categories: Set<ExclusivityCategory>, completion: @escaping (Ticket?) -> Void) {
     // check the status for cancellables categories
     let cancellations = categories.filter {
       if case .cancel = $0 {
@@ -118,11 +118,11 @@ public final class ExclusivityManager {
      return isFrontOfTheQueueForThisCategory ? LockRequest.available : .waiting
   }
 
-  internal func unlock(categories: Set<ExclusivityMode>) {
+  internal func unlock(categories: Set<ExclusivityCategory>) {
     queue.async { self._unlock(categories: categories) }
   }
 
-  private func _unlock(categories: Set<ExclusivityMode>) {
+  private func _unlock(categories: Set<ExclusivityCategory>) {
     categories.forEach { _unlock(category: $0.category) }
   }
 

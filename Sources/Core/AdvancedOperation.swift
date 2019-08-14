@@ -311,9 +311,9 @@ open class AdvancedOperation: Operation {
   
   public private(set) var conditions = [OperationCondition]()
   
-  lazy var mutuallyExclusiveCategories: Set<ExclusivityMode> = {
+  lazy var mutuallyExclusiveCategories: Set<ExclusivityCategory> = {
     let categoriesInConditions = conditions.map { $0.mutuallyExclusiveCategories }
-    let categories = categoriesInConditions.reduce(Set<ExclusivityMode>()) { (result: Set<ExclusivityMode>, set: Set<ExclusivityMode>) -> Set<ExclusivityMode> in
+    let categories = categoriesInConditions.reduce(Set<ExclusivityCategory>()) { (result: Set<ExclusivityCategory>, set: Set<ExclusivityCategory>) -> Set<ExclusivityCategory> in
       var partialResult = result
       partialResult.formUnion(set)
       return partialResult
