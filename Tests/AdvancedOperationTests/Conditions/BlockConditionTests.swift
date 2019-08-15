@@ -29,69 +29,69 @@ final class BlockConditionTests: XCTestCase {
     let condition = BlockCondition { false }
     XCTAssertTrue(condition.mutuallyExclusiveCategories.isEmpty)
   }
-  
+
   func testNotFulFilledConditionWithoutOperationQueue() {
     let condition = BlockCondition { false }
     let operation = SleepyOperation()
     operation.addCondition(condition)
-    
+
     operation.start()
     XCTAssertTrue(operation.isCancelled)
     XCTAssertTrue(operation.hasError)
     XCTAssertTrue(operation.isFinished)
   }
-  
+
   func testFulFilledConditionWithoutOperationQueue() {
     let condition = BlockCondition { true }
     let operation = SleepyOperation()
     operation.addCondition(condition)
-    
+
     operation.start()
     XCTAssertFalse(operation.isCancelled)
     XCTAssertFalse(operation.hasError)
     XCTAssertTrue(operation.isFinished)
   }
-  
+
   func testFailedCondition() {
     let queue = OperationQueue()
     let condition = BlockCondition { false }
-    
+
     let operation = SleepyAsyncOperation()
     operation.addCondition(condition)
     operation.name = "operation"
     operation.log = TestsLog
-    
+
     queue.addOperations([operation], waitUntilFinished: true)
-    
+
     XCTAssertTrue(operation.isCancelled)
     XCTAssertTrue(operation.hasError)
     XCTAssertTrue(operation.isFinished)
   }
-  
+
   func testFailedConditionAfterAThrowedError() {
     let queue = OperationQueue()
     let condition = BlockCondition { () -> Bool in
       throw MockError.failed
     }
-    
+
     let operation = SleepyAsyncOperation()
     operation.addCondition(condition)
-    
+
     operation.name = "Operation"
     operation.log = TestsLog
-    
+
     queue.addOperations([operation], waitUntilFinished: true)
     XCTAssertTrue(operation.isCancelled)
     XCTAssertTrue(operation.hasError)
     XCTAssertTrue(operation.isFinished)
   }
-  
+
   func testSuccessfulCondition() {
     let queue = OperationQueue()
     let condition = BlockCondition { () -> Bool in
       return true
     }
-    
+
     let operation = SleepyAsyncOperation()
     operation.addCondition(condition)
     queue.addOperations([operation], waitUntilFinished: true)

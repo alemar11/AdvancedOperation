@@ -69,15 +69,15 @@ public final class ExclusivityManager {
     }
 
     if !cancellations.isEmpty {
-    let shouldBeCancelled = cancellations.map { $0.category }.reduce(true) { result, category in
-      let status = _status(forCategory: category)
-      return result && (status == .waiting)
-    }
+      let shouldBeCancelled = cancellations.map { $0.category }.allSatisfy { category -> Bool in
+        let status = _status(forCategory: category)
+        return status == .waiting
+      }
 
-    if shouldBeCancelled {
-      completion(nil)
-      return
-    }
+      if shouldBeCancelled {
+        completion(nil)
+        return
+      }
     }
 
     // start the mutual exclusivity lock
@@ -115,7 +115,7 @@ public final class ExclusivityManager {
     let isFrontOfTheQueueForThisCategory = queuesByCategory.isEmpty
     queuesByCategory.append(group)
     _categories[category] = queuesByCategory
-     return isFrontOfTheQueueForThisCategory ? LockRequest.available : .waiting
+    return isFrontOfTheQueueForThisCategory ? LockRequest.available : .waiting
   }
 
   internal func unlock(categories: Set<ExclusivityCategory>) {

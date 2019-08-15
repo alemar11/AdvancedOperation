@@ -27,25 +27,25 @@ import Foundation
 /// If any dependency fails (finishes or cancels with errors), the target operation will be cancelled.
 public struct NoFailedDependenciesCondition: OperationCondition {
   public let ignoreCancellations: Bool
-  
+
   static var noFailedDependenciesConditionKey: String { return "NoFailedDependenciesCondition" }
-  
+
   /// Create a new `NoFailedDependenciesCondition` element.
   ///
   /// - Parameter ignoreCancellations: `true` if cancellations should be ignored (defaults to `false`).
   public init(ignoreCancellations: Bool = false) {
     self.ignoreCancellations = ignoreCancellations
   }
-  
+
   public func evaluate(for operation: AdvancedOperation, completion: @escaping (Result<Void, Error>) -> Void) {
     var dependencies = operation.dependencies
-    
+
     if ignoreCancellations {
       dependencies = dependencies.filter { !$0.isCancelled }
     }
-    
+
     let failures = dependencies.compactMap { $0 as? AdvancedOperation }.filter { $0.hasError }
-    
+
     if !failures.isEmpty {
       let names = failures.map { $0.name ?? "\(type(of: $0))" }
       let error = NSError.conditionFailed(message: "Some dependencies have failures.",

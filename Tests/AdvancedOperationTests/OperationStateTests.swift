@@ -30,13 +30,13 @@ final class OperationStateTests: XCTestCase {
     XCTAssertTrue(AdvancedOperation.State.pending.canTransition(to: .executing))
     XCTAssertTrue(AdvancedOperation.State.pending.canTransition(to: .finished))
     XCTAssertFalse(AdvancedOperation.State.pending.canTransition(to: .pending))
-    
+
     // Executing
     XCTAssertFalse(AdvancedOperation.State.executing.canTransition(to: .executing))
     XCTAssertTrue(AdvancedOperation.State.executing.canTransition(to: .finished))
     XCTAssertFalse(AdvancedOperation.State.executing.canTransition(to: .pending))
   }
-  
+
   func testDebugDescription() {
     XCTAssertEqual(AdvancedOperation.State.pending.debugDescription.lowercased(), "pending")
     XCTAssertEqual(AdvancedOperation.State.executing.debugDescription.lowercased(), "executing")

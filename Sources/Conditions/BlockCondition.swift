@@ -29,15 +29,15 @@ import Foundation
 public struct BlockCondition: OperationCondition {
   /// The block type which returns a Bool.
   public typealias Block = () throws -> Bool
-  
+
   static var blockConditionKey: String { return "BlockCondition" }
-  
+
   let block: Block
-  
+
   public init(block: @escaping Block) {
     self.block = block
   }
-  
+
   public func evaluate(for operation: AdvancedOperation, completion: @escaping (Result<Void, Error>) -> Void) {
     do {
       let result = try block()
