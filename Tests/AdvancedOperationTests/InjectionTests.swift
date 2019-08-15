@@ -145,6 +145,7 @@ final class InjectionTests: XCTestCase {
   }
 
   func testMemoryLeaks() {
+    let queue = OperationQueue()
     var operation1: IntToStringOperation? = IntToStringOperation()
     var operation2: StringToIntOperation? = StringToIntOperation()
 
@@ -154,17 +155,66 @@ final class InjectionTests: XCTestCase {
     autoreleasepool {
       operation1!.input = 10
       operation1!.injectOutput(into: operation2!)
-      let queue = OperationQueue()
+
       queue.addOperations([operation1!, operation2!], waitUntilFinished: true)
 
       XCTAssertEqual(operation2!.output, 10)
 
-      operation1 = nil
-      operation2 = nil
+      // replacing operations with new ones to force deini on the previous ones.
+      operation1 = IntToStringOperation()
+      operation2 = StringToIntOperation()
     }
 
     XCTAssertNil(weakOperation1)
     XCTAssertNil(weakOperation2)
+  }
+
+  func testInjectionWithMutuallyExclusiveConditionInEnqueueMode() {
+    let operation1 = IntToStringOperation()
+    let operation2 = StringToIntOperation()
+
+    operation1.exclusivityManager = .shared
+    operation1.addCondition(MutualExclusivityCondition(mode: .enqueue(identifier: "condition1")))
+    operation2.exclusivityManager = .shared
+    operation2.addCondition(MutualExclusivityCondition(mode: .enqueue(identifier: "condition1")))
+
+    operation1.input = 10
+    operation1.injectOutput(into: operation2) // After an injection, operation2 will be dependant from operation1
+    let queue = OperationQueue()
+    queue.addOperations([operation1, operation2], waitUntilFinished: true)
+    XCTAssertEqual(operation2.output, 10)
+  }
+
+  func testInjectionWithMutuallyExclusiveConditionInCancelMode() {
+    let operation1 = IntToStringOperation()
+    let operation2 = StringToIntOperation()
+
+    operation1.exclusivityManager = .shared
+    operation1.addCondition(MutualExclusivityCondition(mode: .cancel(identifier: "condition1")))
+    operation2.exclusivityManager = .shared
+    operation2.addCondition(MutualExclusivityCondition(mode: .cancel(identifier: "condition1")))
+
+    operation1.input = 10
+    operation1.injectOutput(into: operation2) // After an injection, operation2 will be dependant from operation1
+    let queue = OperationQueue()
+    queue.addOperations([operation1, operation2], waitUntilFinished: true)
+    XCTAssertEqual(operation2.output, 10)
+  }
+
+  func testInjectionWithNoFailedDependenciesConditions() {
+    let operation1 = IntToStringOperation()
+    let operation2 = StringToIntOperation()
+
+    operation2.addCondition(NoFailedDependenciesCondition(ignoreCancellations: false))
+
+    operation1.input = 10
+    operation1.injectOutput(into: operation2) // After an injection, operation2 will be dependant from operation1
+    operation1.cancel()
+    let queue = OperationQueue()
+    queue.addOperations([operation1, operation2], waitUntilFinished: true)
+    XCTAssertNil(operation2.output)
+    XCTAssertNil(operation2.input)
+    XCTAssertTrue(operation2.isCancelled)
   }
 
   //  func testInvestigationWithStandardDependency() {

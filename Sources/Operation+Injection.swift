@@ -43,7 +43,7 @@ extension OutputProducing {
   public func injectOutput<E: InputRequiring>(into operation: E) -> Self where Output == E.Input {
     return injectOutput(into: operation, transform: { (output) -> E.Input? in return output })
   }
-
+  
   /// Injects the operation's output into the given operation.
   ///
   /// - Parameter operation: The input requiring AdvancedOperation.
@@ -53,29 +53,26 @@ extension OutputProducing {
     precondition(operation !== self, "Cannot inject output of self into self.")
     precondition(state == .pending, "Injection cannot be done after the OutputProducing operation execution has begun.")
     precondition(operation.state == .pending, "Injection cannot be done after the InputRequiring oepration execution has begun.")
-
+    
     let willFinishObserver = WillFinishObserver { [unowned self, unowned operation] _, error in
-      if let error = error {
-        // TODO: error from injected operation
-        operation.cancel(error: error)
+      if error != nil {
+        let cancelError = NSError.injectionCancelled(message: "The output producing operation has finished with an error.")
+        operation.cancel(error: cancelError)
       } else {
         operation.input = transform(self.output)
       }
     }
-
+    
     let didCancelObserver = DidCancelObserver { [unowned operation] _, error in
-      // TODO: error from injected operation
-      operation.cancel(error: error)
+      let cancelError = NSError.injectionCancelled(message: "The output producing operation has been cancelled.")
+      operation.cancel(error: cancelError)
     }
-
+    
     self.addObserver(didCancelObserver)
     self.addObserver(willFinishObserver)
-
-    // TODO what about conditions? It shouldn't cause any problems but test it
-    // TODO test any leaks
-
+    
     operation.addDependency(self)
-
+    
     return self
   }
 }

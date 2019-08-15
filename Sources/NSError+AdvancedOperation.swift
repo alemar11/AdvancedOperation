@@ -34,6 +34,16 @@ public extension NSError {
 
   // MARK: - Execution
 
+  /// Creates an error usable when an operation has been cancelled due to an injection error.
+  static func injectionCancelled(message: String) -> NSError {
+    let info: [String: Any] =  [
+      NSLocalizedFailureReasonErrorKey: "The operation cannot inject his output.",
+      NSLocalizedDescriptionKey: message
+    ]
+
+    return NSError(domain: identifier, code: Code.executionCancelled, userInfo: info)
+  }
+
   /// Creates an error usable when an operation has been cancelled due to an error.
   static func executionCancelled(message: String, userInfo: [String: Any]? = nil) -> NSError {
     var info: [String: Any] =  [
@@ -45,7 +55,6 @@ public extension NSError {
       info[key] = value
     }
 
-    /// Creates an error usable when an operation finishes with errors.
     return NSError(domain: identifier, code: Code.executionCancelled, userInfo: info)
   }
 
