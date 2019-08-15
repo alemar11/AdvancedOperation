@@ -144,6 +144,29 @@ final class InjectionTests: XCTestCase {
     wait(for: [expectation1], timeout: 10)
   }
 
+  func testMemoryLeaks() {
+    var operation1: IntToStringOperation? = IntToStringOperation()
+    var operation2: StringToIntOperation? = StringToIntOperation()
+
+    weak var weakOperation1 = operation1
+    weak var weakOperation2 = operation2
+
+    autoreleasepool {
+      operation1!.input = 10
+      operation1!.injectOutput(into: operation2!)
+      let queue = OperationQueue()
+      queue.addOperations([operation1!, operation2!], waitUntilFinished: true)
+
+      XCTAssertEqual(operation2!.output, 10)
+
+      operation1 = nil
+      operation2 = nil
+    }
+
+    XCTAssertNil(weakOperation1)
+    XCTAssertNil(weakOperation2)
+  }
+
   //  func testInvestigationWithStandardDependency() {
   //    let operation1 = BlockOperation {}
   //    let operation3 = BlockOperation {}

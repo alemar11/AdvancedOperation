@@ -36,11 +36,18 @@ public protocol OutputProducing: AdvancedOperation {
 }
 
 extension OutputProducing {
+  /// Injects the operation's output into the given operation.
+  ///
+  /// - Parameter operation: The input requiring AdvancedOperation.
   @discardableResult
   public func injectOutput<E: InputRequiring>(into operation: E) -> Self where Output == E.Input {
     return injectOutput(into: operation, transform: { (output) -> E.Input? in return output })
   }
 
+  /// Injects the operation's output into the given operation.
+  ///
+  /// - Parameter operation: The input requiring AdvancedOperation.
+  /// - Parameter transform: The block that transform the outpu into a suitable input for the given operation.
   @discardableResult
   public func injectOutput<E: InputRequiring>(into operation: E, transform: @escaping (Output?) -> E.Input?) -> Self {
     precondition(operation !== self, "Cannot inject output of self into self.")
@@ -52,17 +59,16 @@ extension OutputProducing {
         // TODO: error from injected operation
         operation.cancel(error: error)
       } else {
-        // TODO error from injected operation
         operation.input = transform(self.output)
       }
     }
 
-    let didCanceObserver = DidCancelObserver { [unowned operation] _, error in
+    let didCancelObserver = DidCancelObserver { [unowned operation] _, error in
       // TODO: error from injected operation
       operation.cancel(error: error)
     }
 
-    self.addObserver(didCanceObserver)
+    self.addObserver(didCancelObserver)
     self.addObserver(willFinishObserver)
 
     // TODO what about conditions? It shouldn't cause any problems but test it
