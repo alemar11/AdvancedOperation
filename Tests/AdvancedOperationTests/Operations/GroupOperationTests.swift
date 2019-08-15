@@ -348,6 +348,15 @@ final class GroupOperationTests: XCTestCase {
     let exepectation1 = expectation(description: "\(#function)\(#line)")
     group.addCompletionBlock { exepectation1.fulfill() }
 
+    group1.log = TestsLog
+    group1.name = "GroupOperation1"
+
+    group2.log = TestsLog
+    group2.name = "GroupOperation2"
+
+    group.log = TestsLog
+    group.name = "GroupOperation"
+
     group.start()
     waitForExpectations(timeout: 10)
 
