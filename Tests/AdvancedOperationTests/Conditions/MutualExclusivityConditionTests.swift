@@ -359,7 +359,7 @@ final class MutualExclusivityConditionTests: XCTestCase {
     XCTAssertTrue(operation1.isFinished)
     XCTAssertTrue(operation2.isFinished)
 
-    XCTAssertFalse(operation1.isCancelled) // TODO failed
+    XCTAssertFalse(operation1.isCancelled)
     XCTAssertFalse(operation2.isCancelled)
   }
 
