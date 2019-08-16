@@ -215,8 +215,11 @@ open class AdvancedOperation: Operation {
     willExecute()
     state = .executing
     didExecute()
-    execute()
-    
+
+    autoreleasepool {
+      execute()
+    }
+
     if !isAsynchronous {
       finish()
     }
