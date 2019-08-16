@@ -195,7 +195,7 @@ open class AdvancedOperation: Operation {
     /// If the operation is currently executing or is not ready to execute, this method throws an NSInvalidArgumentException exception.
     super.start()
     
-    // Here, the execute method has returned
+    //the execute method has returned
     if isCancelled {
       // if the the cancellation event has been processed, mark the operation as finished.
       finish()
@@ -209,7 +209,7 @@ open class AdvancedOperation: Operation {
     evaluateConditions()
     guard !isCancelled else { return }
     
-    evaluateMutuallyExclusiveness()
+    requestMutuallyExclusiveness()
     guard !isCancelled else { return }
     
     willExecute()
@@ -362,39 +362,41 @@ open class AdvancedOperation: Operation {
   private func evaluateConditions() {
     guard !conditions.isEmpty else { return }
     
-    os_log("%{public}s conditions are being evaluated.", log: log, type: .info, operationName)
+    //os_log("%{public}s conditions are being evaluated.", log: log, type: .info, operationName)
+    operationWillStartEvaluatingConditions()
     if let error = AdvancedOperation.evaluateConditions(conditions, for: self) {
-      os_log("%{public}s conditions have been evaluated with an error.", log: log, type: .info, operationName)
+      operationDidFinishEvaluatingConditions(error: error)
       self.cancel(error: error)
     } else {
-      os_log("%{public}s conditions have been evaluated.", log: log, type: .info, operationName)
+      operationDidFinishEvaluatingConditions(error: nil)
     }
   }
   
-  private func evaluateMutuallyExclusiveness() {
+  private func requestMutuallyExclusiveness() {
     guard !mutuallyExclusiveCategories.isEmpty else { return }
     
     guard let exclusivityManager = exclusivityManager else {
       fatalError("An ExclusivityManager is required.")
     }
-    
-    os_log("%{public}s mutual exclusive conditions are being evaluated.", log: log, type: .info, operationName)
+
+    operationWillRequestMutualExclusiveness()
+
     let group = DispatchGroup()
     group.enter()
     exclusivityManager.lock(for: mutuallyExclusiveCategories) { [weak self] ticket in
       guard let self = self else { return }
       
       if let ticket = ticket {
-        os_log("%{public}s's exclusivity execution has been evaluated and the operation is ready to start.'", log: self.log, type: .info, self.operationName)
+        self.operationDidFinishRequestingMutualExclusiveness(success: true)
         self._mutuallyExclusiveTicket.mutate { $0 = ticket }
       } else {
-        os_log("%{public}s's exclusivity execution has been evaluated and the operation will be cancelled.'", log: self.log, type: .info, self.operationName)
+        self.operationDidFinishRequestingMutualExclusiveness(success: false)
         self.cancel()
       }
       group.leave()
     }
-    
-    os_log("%{public}s is waiting...", log: log, type: .info, operationName)
+
+    operationIsWaitingForMutualExclusiveness()
     group.wait()
   }
   
@@ -425,6 +427,45 @@ open class AdvancedOperation: Operation {
   }
   
   // MARK: - Subclass
+
+  /// Subclass this method to know when the operation will start evaluating conditions.
+  /// - Note: Calling the `super` implementation will keep the logging messages.
+  open func operationWillStartEvaluatingConditions() {
+    os_log("%{public}s conditions are being evaluated.", log: log, type: .info, operationName)
+  }
+
+  /// Subclass this method to know when the operation has finished evaluating conditions.
+  /// - Note: Calling the `super` implementation will keep the logging messages.
+  open func operationDidFinishEvaluatingConditions(error: Error?) {
+    if error != nil {
+      os_log("%{public}s conditions have been evaluated with an error.", log: log, type: .info, operationName)
+    } else {
+      os_log("%{public}s conditions have been evaluated.", log: log, type: .info, operationName)
+    }
+  }
+
+  /// Subclass this method to know when the operation will request mutual exclusivenesss.
+  /// - Note: Calling the `super` implementation will keep the logging messages.
+  open func operationWillRequestMutualExclusiveness() {
+    os_log("%{public}s mutual exclusive conditions are being evaluated.", log: log, type: .info, operationName)
+  }
+
+  /// Subclass this method to know when the operation is waiting until the  mutual exclusiveness request has been fulfilled.
+  /// - Note: Calling the `super` implementation will keep the logging messages.
+  open func operationIsWaitingForMutualExclusiveness() {
+    os_log("%{public}s is waiting...", log: log, type: .info, operationName)
+  }
+
+  /// Subclass this method to know when the operation has finished requesting mutual exclusivenesss.
+  /// - Parameter success: if `true` the operation will start executing else it will be cancelled.
+  /// - Note: Calling the `super` implementation will keep the logging messages.
+  open func operationDidFinishRequestingMutualExclusiveness(success: Bool) {
+    if success {
+      os_log("%{public}s's exclusivity execution has been evaluated and the operation is ready to start.'", log: self.log, type: .info, self.operationName)
+    } else {
+      os_log("%{public}s's exclusivity execution has been evaluated and the operation will be cancelled.'", log: self.log, type: .info, self.operationName)
+    }
+  }
   
   /// Subclass this method to know when the operation will start executing.
   /// - Note: Calling the `super` implementation will keep the logging messages.
