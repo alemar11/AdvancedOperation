@@ -51,7 +51,6 @@ final class AdvancedOperationTests: XCTestCase {
     XCTAssertTrue(operation.isExecuting)
 
     operation.cancel()
-    XCTAssertNil(operation.duration)
     XCTAssertTrue(operation.isCancelled)
 
     wait(for: [expectation1], timeout: 10)

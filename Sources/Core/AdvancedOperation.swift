@@ -189,37 +189,42 @@ open class AdvancedOperation: Operation {
   // MARK: - Execution
   
   public final override func start() {
+    if isCancelled {
+      // if the the cancellation event has been processed before starting, mark the operation as finished.
+      finish()
+      return
+    }
+    
     /// The default implementation of this method updates the execution state of the operation and calls the receiver’s main() method.
     /// This method also performs several checks to ensure that the operation can actually run.
     /// For example, if the receiver was cancelled or is already finished, this method simply returns without calling main().
     /// If the operation is currently executing or is not ready to execute, this method throws an NSInvalidArgumentException exception.
     super.start()
-    
-    //the execute method has returned
-    if isCancelled {
-      // if the the cancellation event has been processed, mark the operation as finished.
-      finish()
-      return
-    }
   }
   
   public final override func main() {
     times.mutate { $0.0 = CFAbsoluteTimeGetCurrent() }
     
     evaluateConditions()
-    guard !isCancelled else { return }
+    guard !isCancelled else {
+      finish()
+      return
+    }
     
     requestMutuallyExclusiveness()
-    guard !isCancelled else { return }
+    guard !isCancelled else {
+      finish()
+      return
+    }
     
     willExecute()
     state = .executing
     didExecute()
-
+    
     autoreleasepool {
       execute()
     }
-
+    
     if !isAsynchronous {
       finish()
     }
@@ -381,9 +386,9 @@ open class AdvancedOperation: Operation {
     guard let exclusivityManager = exclusivityManager else {
       fatalError("An ExclusivityManager is required.")
     }
-
+    
     operationWillRequestMutualExclusiveness()
-
+    
     let group = DispatchGroup()
     group.enter()
     exclusivityManager.lock(for: mutuallyExclusiveCategories) { [weak self] ticket in
@@ -398,7 +403,7 @@ open class AdvancedOperation: Operation {
       }
       group.leave()
     }
-
+    
     operationIsWaitingForMutualExclusiveness()
     group.wait()
   }
@@ -430,13 +435,13 @@ open class AdvancedOperation: Operation {
   }
   
   // MARK: - Subclass
-
+  
   /// Subclass this method to know when the operation will start evaluating conditions.
   /// - Note: Calling the `super` implementation will keep the logging messages.
   open func operationWillStartEvaluatingConditions() {
     os_log("%{public}s conditions are being evaluated.", log: log, type: .info, operationName)
   }
-
+  
   /// Subclass this method to know when the operation has finished evaluating conditions.
   /// - Note: Calling the `super` implementation will keep the logging messages.
   open func operationDidFinishEvaluatingConditions(error: Error?) {
@@ -446,19 +451,19 @@ open class AdvancedOperation: Operation {
       os_log("%{public}s conditions have been evaluated.", log: log, type: .info, operationName)
     }
   }
-
+  
   /// Subclass this method to know when the operation will request mutual exclusivenesss.
   /// - Note: Calling the `super` implementation will keep the logging messages.
   open func operationWillRequestMutualExclusiveness() {
     os_log("%{public}s mutual exclusive conditions are being evaluated.", log: log, type: .info, operationName)
   }
-
+  
   /// Subclass this method to know when the operation is waiting until the  mutual exclusiveness request has been fulfilled.
   /// - Note: Calling the `super` implementation will keep the logging messages.
   open func operationIsWaitingForMutualExclusiveness() {
     os_log("%{public}s is waiting...", log: log, type: .info, operationName)
   }
-
+  
   /// Subclass this method to know when the operation has finished requesting mutual exclusivenesss.
   /// - Parameter success: if `true` the operation will start executing else it will be cancelled.
   /// - Note: Calling the `super` implementation will keep the logging messages.
