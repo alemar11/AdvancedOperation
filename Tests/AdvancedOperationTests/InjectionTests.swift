@@ -165,6 +165,10 @@ final class InjectionTests: XCTestCase {
       operation2 = StringToIntOperation()
     }
 
+    // sometimes the OperationQueue needs more time to remove the operations
+    usleep(5000) // //will sleep for .005 seconds
+    // while weakOperation1 != nil || weakOperation2 != nil { }
+
     XCTAssertNil(weakOperation1)
     XCTAssertNil(weakOperation2)
   }
