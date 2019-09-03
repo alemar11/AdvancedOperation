@@ -90,7 +90,7 @@ final class DelayOperationTests: XCTestCase {
     wait(for: [expectation1], timeout: 3)
 
     let seconds = Date().timeIntervalSince(start)
-    XCTAssertEqual(seconds, 0, accuracy: 0.3)
+    XCTAssertEqual(seconds, 0.5, accuracy: 0.5)
 
     XCTAssertTrue(operation.isCancelled)
     XCTAssertTrue(operation.isFinished)
