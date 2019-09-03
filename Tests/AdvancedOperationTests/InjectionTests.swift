@@ -160,7 +160,7 @@ final class InjectionTests: XCTestCase {
 
       XCTAssertEqual(operation2!.output, 10)
 
-      // replacing operations with new ones to force deini on the previous ones.
+      // replacing operations with new ones to force deinit on the previous ones.
       operation1 = IntToStringOperation()
       operation2 = StringToIntOperation()
     }
