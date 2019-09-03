@@ -77,7 +77,7 @@ open class AdvancedOperation: Operation {
   /// Returns `true` if the `AdvancedOperation` has generated an error during its lifetime.
   public var hasError: Bool { return error != nil }
   
-  /// Returns the oepration progress.
+  /// Returns the operation progress.
   @objc
   public lazy var progress: Progress = {
     let progress = Progress(totalUnitCount: 1)

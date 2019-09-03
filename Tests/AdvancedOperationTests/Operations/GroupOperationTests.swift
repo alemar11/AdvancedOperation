@@ -856,7 +856,7 @@ final class GroupOperationTests: XCTestCase {
     operation5.name = "Operation5"
 
     let group = GroupOperation(operations: operation1, operation2, operation3, operation4) // w: 4
-    group.addOperation(operation: operation5, withProgressWeight: 4) // w: 4
+    group.addOperation(operation: operation5) // w: 1
 
     let expectation0 = self.expectation(description: "\(#function)\(#line)")
     let currentToken = currentProgress.observe(\.fractionCompleted, options: [.old, .new]) { (progress, change) in
@@ -868,7 +868,7 @@ final class GroupOperationTests: XCTestCase {
 
     let expectation1 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isFinished), object: group, expectedValue: true)
     XCTAssertFalse(group.progress.isPausable)
-    XCTAssertEqual(group.progress.totalUnitCount, 9) // 4 + 4 + 1 (see GroupOperation comments about progress report with a concurrent queue)
+    XCTAssertEqual(group.progress.totalUnitCount, 6) // 4 + 1 + 1 (see GroupOperation comments about progress report with a concurrent queue)
     group.start()
 
     wait(for: [expectation0, expectation1], timeout: 30)
@@ -907,7 +907,7 @@ final class GroupOperationTests: XCTestCase {
 
     let group = GroupOperation(operations: operation1, operation2, operation3, operation4) // w: 4
     group.log = TestsLog
-    group.addOperation(operation: operation5, withProgressWeight: 4) // w: 4
+    group.addOperation(operation: operation5) // w: 1
 
     let expectation0 = self.expectation(description: "\(#function)\(#line)")
     let currentProgress = Progress(totalUnitCount: 1)
@@ -922,11 +922,10 @@ final class GroupOperationTests: XCTestCase {
 
     let expectation1 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isFinished), object: group, expectedValue: true)
     XCTAssertFalse(group.progress.isPausable)
-    XCTAssertEqual(group.progress.totalUnitCount, 9) // 4 + 4 + 1 (see GroupOperation comments about progress report with a concurrent queue)
+    XCTAssertEqual(group.progress.totalUnitCount, 6) // 4 + 41 + 1 (see GroupOperation comments about progress report with a concurrent queue)
     group.start()
 
     wait(for: [expectation0, expectation1], timeout: 30)
-
 
     XCTAssertTrue(operation1.isFinished)
     XCTAssertTrue(operation1.progress.isFinished)
@@ -961,7 +960,7 @@ final class GroupOperationTests: XCTestCase {
 
     let group = GroupOperation(operations: [operation1, operation2, operation3, operation4], maxConcurrentOperationCount: 1) // w: 4
     group.log = TestsLog
-    group.addOperation(operation: operation5, withProgressWeight: 4) // w: 4
+    group.addOperation(operation: operation5) // w: 1
 
     let expectation0 = self.expectation(description: "\(#function)\(#line)")
     let currentProgress = Progress(totalUnitCount: 1)
@@ -975,7 +974,7 @@ final class GroupOperationTests: XCTestCase {
 
     let expectation1 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isFinished), object: group, expectedValue: true)
     XCTAssertFalse(group.progress.isPausable)
-    XCTAssertEqual(group.progress.totalUnitCount, 8) // 4 + 4
+    XCTAssertEqual(group.progress.totalUnitCount, 5) // 4 + 1
     group.start()
 
     wait(for: [expectation0, expectation1], timeout: 30)
@@ -1012,7 +1011,7 @@ final class GroupOperationTests: XCTestCase {
     group.maxConcurrentOperationCount = 1
     currentProgress.addChild(group.progress, withPendingUnitCount: 1)
     group.log = TestsLog
-    group.addOperation(operation: operation5, withProgressWeight: 4)
+    group.addOperation(operation: operation5)
     operation1.name = "Operation1"
     operation2.name = "Operation2"
     operation3.name = "Operation3"
@@ -1033,7 +1032,7 @@ final class GroupOperationTests: XCTestCase {
     let expectation10 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isFinished), object: operation5, expectedValue: true)
 
 
-    XCTAssertEqual(group.progress.totalUnitCount, 9)
+    XCTAssertEqual(group.progress.totalUnitCount, 6)
 
     currentProgress.cancel()
 

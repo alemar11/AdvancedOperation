@@ -169,17 +169,16 @@ open class GroupOperation: AdvancedOperation {
   ///
   /// - Parameters:
   ///   - operation: The operation to add.
-  ///   - weight: The `AdvancedOperation` weight for the progress report (it defaults to 1).
   ///   - Atention: The progress report ignores normal `Operations`, instead consider using only `AdvancedOperations`.
-  public func addOperation(operation: Operation, withProgressWeight weight: Int64 = 1) {
+  public func addOperation(operation: Operation) {
     precondition(!isExecuting, "The GroupOperation is executing and cannot accept more operations.")
     precondition(!isCancelled || !isFinished, "The GroupOperation is finishing and cannot accept more operations.")
 
     if let advancedOperation = operation as? AdvancedOperation {
       // "The value for pending unit count is the amount of the parent’s totalUnitCount consumed by the child."
       // but for concurrent GroupOperation the value is increased by 1 (read comments above)
-      progress.totalUnitCount += weight
-      progress.addChild(advancedOperation.progress, withPendingUnitCount: weight)
+      progress.totalUnitCount += 1
+      progress.addChild(advancedOperation.progress, withPendingUnitCount: 1)
 
       if advancedOperation.log === OSLog.disabled {
         advancedOperation.log = log
