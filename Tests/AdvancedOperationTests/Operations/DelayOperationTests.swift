@@ -48,7 +48,6 @@ final class DelayOperationTests: XCTestCase {
 
     let seconds = Date().timeIntervalSince(start)
     XCTAssertEqual(seconds, 2, accuracy: 0.3)
-
   }
 
   func testNegativeInterval() {
