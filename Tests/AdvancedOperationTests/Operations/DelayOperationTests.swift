@@ -44,10 +44,23 @@ final class DelayOperationTests: XCTestCase {
     let expectation1 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isFinished), object: operation, expectedValue: true)
     operation.start()
 
-    wait(for: [expectation1], timeout: 3)
+    wait(for: [expectation1], timeout: 10)
 
     let seconds = Date().timeIntervalSince(start)
     XCTAssertEqual(seconds, 2, accuracy: 0.3)
+  }
+
+  func testDateWithSmallInterval() {
+    let start = Date()
+    let end = start.addingTimeInterval(0.2)
+    let operation = DelayOperation(until: end)
+    let expectation1 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isFinished), object: operation, expectedValue: true)
+    operation.start()
+
+    wait(for: [expectation1], timeout: 3)
+
+    let seconds = Date().timeIntervalSince(start)
+    XCTAssertEqual(seconds, 0.2, accuracy: 0.3)
   }
 
   func testNegativeInterval() {
