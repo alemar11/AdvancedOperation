@@ -94,9 +94,3 @@ script:
         xcodebuild -scheme "$SCHEME" -sdk "$SDK" -destination "$DESTINATION" -configuration Release ONLY_ACTIVE_ARCH=NO build | xcpretty;
       fi
     fi
-
-# after_failure:
-#   - cat ~/Library/Developer/Xcode/DerivedData/AdvancedOperation-*/Logs/Test/*/*/*/AdvancedOperation*/*/Session-AdvancedOperation*.log
-
-#after_success:
-  #- sleep 5      
