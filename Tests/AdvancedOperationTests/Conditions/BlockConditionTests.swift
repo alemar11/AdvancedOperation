@@ -24,13 +24,37 @@
 import XCTest
 @testable import AdvancedOperation
 
-class BlockConditionTests: XCTestCase {
+final class BlockConditionTests: XCTestCase {
+  func testEmptyMutuallyExclusiveCategories() {
+    let condition = BlockCondition { false }
+    XCTAssertTrue(condition.mutuallyExclusiveCategories.isEmpty)
+  }
+
+  func testNotFulFilledConditionWithoutOperationQueue() {
+    let condition = BlockCondition { false }
+    let operation = SleepyOperation()
+    operation.addCondition(condition)
+
+    operation.start()
+    XCTAssertTrue(operation.isCancelled)
+    XCTAssertTrue(operation.hasError)
+    XCTAssertTrue(operation.isFinished)
+  }
+
+  func testFulFilledConditionWithoutOperationQueue() {
+    let condition = BlockCondition { true }
+    let operation = SleepyOperation()
+    operation.addCondition(condition)
+
+    operation.start()
+    XCTAssertFalse(operation.isCancelled)
+    XCTAssertFalse(operation.hasError)
+    XCTAssertTrue(operation.isFinished)
+  }
 
   func testFailedCondition() {
-    let queue = AdvancedOperationQueue()
-    let condition = BlockCondition { () -> Bool in
-      return false
-    }
+    let queue = OperationQueue()
+    let condition = BlockCondition { false }
 
     let operation = SleepyAsyncOperation()
     operation.addCondition(condition)
@@ -40,12 +64,12 @@ class BlockConditionTests: XCTestCase {
     queue.addOperations([operation], waitUntilFinished: true)
 
     XCTAssertTrue(operation.isCancelled)
-    XCTAssertTrue(operation.hasErrors)
+    XCTAssertTrue(operation.hasError)
     XCTAssertTrue(operation.isFinished)
   }
 
   func testFailedConditionAfterAThrowedError() {
-    let queue = AdvancedOperationQueue()
+    let queue = OperationQueue()
     let condition = BlockCondition { () -> Bool in
       throw MockError.failed
     }
@@ -58,12 +82,12 @@ class BlockConditionTests: XCTestCase {
 
     queue.addOperations([operation], waitUntilFinished: true)
     XCTAssertTrue(operation.isCancelled)
-    XCTAssertTrue(operation.hasErrors)
+    XCTAssertTrue(operation.hasError)
     XCTAssertTrue(operation.isFinished)
   }
 
   func testSuccessfulCondition() {
-    let queue = AdvancedOperationQueue()
+    let queue = OperationQueue()
     let condition = BlockCondition { () -> Bool in
       return true
     }
@@ -72,7 +96,7 @@ class BlockConditionTests: XCTestCase {
     operation.addCondition(condition)
     queue.addOperations([operation], waitUntilFinished: true)
     XCTAssertFalse(operation.isCancelled)
-    XCTAssertFalse(operation.hasErrors)
+    XCTAssertFalse(operation.hasError)
     XCTAssertTrue(operation.isFinished)
   }
 }

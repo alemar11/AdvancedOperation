@@ -21,36 +21,13 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-import Foundation
-
-// MARK: - Condition Evaluation
-
-internal extension AdvancedOperation {
-  func makeConditionsEvaluator(queue: AdvancedOperationQueue) -> AdvancedOperation? {
-    guard !conditions.isEmpty else {
+extension Result {
+  var failure: Failure? {
+    switch self {
+    case .success:
       return nil
+    case .failure(let error):
+      return error
     }
-
-    guard !(self is ConditionEvaluatorOperation) else {
-      return nil
-    }
-
-    let evaluator = ConditionEvaluatorOperation(operation: self, conditions: conditions)
-
-    // observe if self is beeing cancelled
-    let willCancelObserver = WillCancelObserver { [weak evaluator] _, errors in
-      guard let evaluator = evaluator else {
-        return
-      }
-
-      evaluator.cancel(errors: errors)
-    }
-
-    addObserver(willCancelObserver)
-    evaluator.log = log
-    dependencies.forEach(evaluator.addDependency)
-    addDependency(evaluator)
-
-    return evaluator
   }
 }

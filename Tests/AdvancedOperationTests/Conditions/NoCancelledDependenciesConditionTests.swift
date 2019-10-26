@@ -25,9 +25,42 @@ import XCTest
 @testable import AdvancedOperation
 
 final class NoCancelledDependenciesConditionTests: XCTestCase {
+  func testEmptyMutuallyExclusiveCategories() {
+    let condition = NoCancelledDependeciesCondition()
+    XCTAssertTrue(condition.mutuallyExclusiveCategories.isEmpty)
+  }
+
+  func testFulFilledConditionWithoutOperationQueue() {
+    // edge case: operation with dependencies must run on a queue
+    let operation = SleepyOperation()
+    operation.addCondition(NoCancelledDependeciesCondition())
+
+    operation.start()
+    XCTAssertFalse(operation.isCancelled)
+    XCTAssertFalse(operation.hasError)
+    XCTAssertTrue(operation.isFinished)
+  }
+
+  func testConditionNotFulfilled() {
+    let queue = OperationQueue()
+
+    let operation1 = SleepyAsyncOperation(interval1: 1, interval2: 1, interval3: 1)
+    operation1.name = "operation1"
+    operation1.log = TestsLog
+    let operation2 = SleepyAsyncOperation(interval1: 1, interval2: 1, interval3: 1)
+    operation2.name = "operation2"
+    operation2.log = TestsLog
+
+    operation2.addDependency(operation1)
+    operation2.addCondition(NoCancelledDependeciesCondition())
+
+    queue.addOperations([operation1, operation2], waitUntilFinished: true)
+    XCTAssertTrue(operation1.isFinished)
+    XCTAssertTrue(operation2.isFinished)
+  }
 
   func testTwoLevelCondition() {
-    let queue = AdvancedOperationQueue()
+    let queue = OperationQueue()
 
     let operation1 = SleepyAsyncOperation(interval1: 1, interval2: 1, interval3: 1)
     let operation2 = SleepyAsyncOperation(interval1: 1, interval2: 1, interval3: 1)
@@ -55,15 +88,15 @@ final class NoCancelledDependenciesConditionTests: XCTestCase {
     queue.addOperations([operation1, operation2, operation3, operation4], waitUntilFinished: true)
 
     XCTAssertTrue(operation4.isCancelled)
-    XCTAssertTrue(operation3.hasErrors)
+    XCTAssertTrue(operation3.hasError)
     XCTAssertFalse(operation2.isCancelled)
-    XCTAssertTrue(operation1.hasErrors)
+    XCTAssertTrue(operation1.hasError)
     XCTAssertTrue(operation1.isCancelled)
     XCTAssertTrue(operation1.isFinished)
   }
 
   func testAllOperationCancelled() {
-    let queue = AdvancedOperationQueue()
+    let queue = OperationQueue()
 
     let expectation1 = expectation(description: "\(#function)\(#line)")
     let expectation2 = expectation(description: "\(#function)\(#line)")
@@ -104,18 +137,18 @@ final class NoCancelledDependenciesConditionTests: XCTestCase {
     waitForExpectations(timeout: 10)
     XCTAssertTrue(operation4.isCancelled)
 
-    XCTAssertFalse(operation3.hasErrors)
+    XCTAssertFalse(operation3.hasError)
     XCTAssertTrue(operation3.isCancelled)
 
-    XCTAssertFalse(operation2.hasErrors)
+    XCTAssertFalse(operation2.hasError)
     XCTAssertTrue(operation2.isCancelled)
 
-    XCTAssertFalse(operation1.hasErrors)
+    XCTAssertFalse(operation1.hasError)
     XCTAssertTrue(operation1.isCancelled)
   }
 
   func testWithNoFailedDependeciesCondition() {
-    let queue = AdvancedOperationQueue()
+    let queue = OperationQueue()
 
     let operation1 = NotExecutableOperation()
     let operation2 = SleepyAsyncOperation()
@@ -140,16 +173,16 @@ final class NoCancelledDependenciesConditionTests: XCTestCase {
     queue.addOperations([operation1, operation2, operation3, operation4], waitUntilFinished: true)
 
     XCTAssertTrue(operation4.isCancelled)
-    XCTAssertFalse(operation4.hasErrors)
+    XCTAssertFalse(operation4.hasError)
 
-    XCTAssertTrue(operation3.hasErrors)
+    XCTAssertTrue(operation3.hasError)
     XCTAssertTrue(operation3.isCancelled)
     XCTAssertTrue(operation3.isFinished)
 
     XCTAssertFalse(operation2.isCancelled)
-    XCTAssertFalse(operation2.hasErrors)
+    XCTAssertFalse(operation2.hasError)
 
-    XCTAssertTrue(operation1.hasErrors)
+    XCTAssertTrue(operation1.hasError)
     XCTAssertTrue(operation1.isCancelled)
   }
 }

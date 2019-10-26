@@ -24,11 +24,39 @@
 import XCTest
 @testable import AdvancedOperation
 
-class NegatedConditionTests: XCTestCase {
+final class NegatedConditionTests: XCTestCase {
+  func testEmptyMutuallyExclusiveCategories() {
+    let condition = NegatedCondition(condition: NoFailedDependenciesCondition())
+    XCTAssertTrue(condition.mutuallyExclusiveCategories.isEmpty)
+  }
 
   func testName() {
     let conditionName = NoFailedDependenciesCondition().name
     XCTAssertEqual(NegatedCondition(condition: NoFailedDependenciesCondition()).name, "Not<\(conditionName)>")
+  }
+
+  func testNotFulFilledConditionWithoutOperationQueue() {
+    let condition = BlockCondition { true }
+    let negatedCondition = NegatedCondition(condition: condition)
+    let operation = SleepyOperation()
+    operation.addCondition(negatedCondition)
+
+    operation.start()
+    XCTAssertTrue(operation.isCancelled)
+    XCTAssertTrue(operation.hasError)
+    XCTAssertTrue(operation.isFinished)
+  }
+
+  func testFulFilledConditionWithoutOperationQueue() {
+    let condition = BlockCondition { false }
+    let negatedCondition = NegatedCondition(condition: condition)
+    let operation = SleepyOperation()
+    operation.addCondition(negatedCondition)
+
+    operation.start()
+    XCTAssertFalse(operation.isCancelled)
+    XCTAssertFalse(operation.hasError)
+    XCTAssertTrue(operation.isFinished)
   }
 
   func testNegationWithFailingCondition() {
@@ -37,8 +65,7 @@ class NegatedConditionTests: XCTestCase {
     let expectation1 = expectation(description: "\(#function)\(#line)")
     negatedFailingCondition.evaluate(for: dummyOperation) { (result) in
       switch result {
-      case .satisfied:
-        XCTAssertNil(result.errors)
+      case .success:
         expectation1.fulfill()
       default: return
       }
@@ -52,9 +79,7 @@ class NegatedConditionTests: XCTestCase {
     let expectation1 = expectation(description: "\(#function)\(#line)")
     negatedFailingCondition.evaluate(for: dummyOperation) { (result) in
       switch result {
-      case .failed(_):
-        XCTAssertNotNil(result.errors)
-        XCTAssertEqual(result.errors?.count, 1)
+      case .failure:
         expectation1.fulfill()
       default: return
       }
@@ -63,15 +88,15 @@ class NegatedConditionTests: XCTestCase {
   }
 
   func testMutitpleNegatedConditions() {
-    let queue = AdvancedOperationQueue()
+    let queue = OperationQueue()
 
     let operation1 = AdvancedBlockOperation { }
     operation1.name = "operation1"
 
-    let operation2 = FailingAsyncOperation(errors: [.failed])
+    let operation2 = FailingAsyncOperation(error: .failed)
     operation2.name = "operation2"
 
-    let operation3 = FailingAsyncOperation(errors: [.failed])
+    let operation3 = FailingAsyncOperation(error: .failed)
     operation3.name = "operation3"
 
     let operation4 = DelayOperation(interval: 1)
@@ -91,6 +116,6 @@ class NegatedConditionTests: XCTestCase {
 
     wait(for: [expectation1, expectation2, expectation3, expectation4], timeout: 10)
 
-    XCTAssertFalse(operation1.hasErrors)
+    XCTAssertFalse(operation1.hasError)
   }
 }

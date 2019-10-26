@@ -49,7 +49,7 @@ final class GroupOperationTests: XCTestCase {
     let operation1 = SleepyAsyncOperation()
     let operation2 = AdvancedBlockOperation { complete in
       sleep(1)
-      complete([])
+      complete(nil)
     }
 
     let group = GroupOperation(operations: operation1, operation2)
@@ -77,7 +77,7 @@ final class GroupOperationTests: XCTestCase {
     let operation1 = SleepyAsyncOperation()
     let operation2 = AdvancedBlockOperation { complete in
       sleep(1)
-      complete([])
+      complete(nil)
     }
 
     let group = GroupOperation(operations: operation1, operation2)
@@ -109,7 +109,7 @@ final class GroupOperationTests: XCTestCase {
     let operation1 = SleepyAsyncOperation()
     let operation2 = AdvancedBlockOperation { complete in
       sleep(1)
-      complete([])
+      complete(nil)
     }
 
     let group = GroupOperation(operations: operation1, operation2)
@@ -147,13 +147,17 @@ final class GroupOperationTests: XCTestCase {
     XCTAssertEqual(group.maxConcurrentOperationCount, OperationQueue.defaultMaxConcurrentOperationCount)
 
     group.start()
-    operation1.cancel(errors: [MockError.test])
+    operation1.cancel(error: MockError.test)
 
     wait(for: [expectation1, expectation2, expectation3], timeout: 10)
 
     XCTAssertTrue(operation1.isCancelled, "It should be cancelled - state: \(operation1.state).")
     XCTAssertTrue(operation1.isFinished, "It should be finished - state: \(operation1.state).")
-    XCTAssertEqual(operation1.errors.count, 1)
+    if let op1Error = operation1.error as? MockError {
+      XCTAssertEqual(op1Error, .test)
+    } else {
+      XCTFail("Wrong error type.")
+    }
 
     XCTAssertFalse(group.isCancelled, "It should be cancelled - state: \(group.state).")
     XCTAssertTrue(group.isFinished, "It should be finished for state: \(group.state).")
@@ -162,11 +166,11 @@ final class GroupOperationTests: XCTestCase {
 
   func testOperationCancelledAsynchronously() {
     let expectation1 = expectation(description: "\(#function)\(#line)")
-    let operation1 = CancellingAsyncOperation()
+    let operation1 = CancellingAsyncOperation() // 1 error
     operation1.addCompletionBlock { expectation1.fulfill() }
 
     let expectation2 = expectation(description: "\(#function)\(#line)")
-    let operation2 = BlockOperation(block: { sleep(1)} )
+    let operation2 = BlockOperation(block: { sleep(1)} ) // 0 error
     operation2.addCompletionBlock { expectation2.fulfill() }
 
     let expectation3 = expectation(description: "\(#function)\(#line)")
@@ -181,11 +185,11 @@ final class GroupOperationTests: XCTestCase {
 
     XCTAssertTrue(operation1.isCancelled)
     XCTAssertTrue(operation1.isFinished)
-    XCTAssertEqual(operation1.errors.count, 2)
+    XCTAssertNotNil(operation1.error)
 
     XCTAssertFalse(group.isCancelled)
     XCTAssertTrue(group.isFinished)
-    XCTAssertEqual(group.aggregatedErrors.value.count, 2)
+    XCTAssertEqual(group.aggregatedErrors.value.count, 1)
   }
 
   func testBlockOperationCancelled() {
@@ -264,7 +268,7 @@ final class GroupOperationTests: XCTestCase {
       XCTAssertFalse(operation1.isExecuting)
       XCTAssertTrue(operation1.isCancelled)
       XCTAssertTrue(operation1.isFinished)
-      XCTAssertEqual(operation1.errors.count, 0)
+      XCTAssertFalse(operation1.hasError)
       expectation1.fulfill()
     }
 
@@ -274,7 +278,7 @@ final class GroupOperationTests: XCTestCase {
       XCTAssertFalse(operation2.isExecuting)
       XCTAssertTrue(operation2.isCancelled)
       XCTAssertTrue(operation2.isFinished)
-      XCTAssertEqual(operation2.errors.count, 0)
+      XCTAssertFalse(operation2.hasError)
       expectation2.fulfill()
     }
 
@@ -284,7 +288,7 @@ final class GroupOperationTests: XCTestCase {
       XCTAssertFalse(operation3.isExecuting)
       XCTAssertTrue(operation3.isCancelled)
       XCTAssertTrue(operation3.isFinished)
-      XCTAssertEqual(operation3.errors.count, 0)
+      XCTAssertFalse(operation3.hasError)
       expectation3.fulfill()
     }
 
@@ -294,15 +298,15 @@ final class GroupOperationTests: XCTestCase {
       XCTAssertFalse(group.isExecuting)
       XCTAssertTrue(group.isCancelled)
       XCTAssertTrue(group.isFinished)
-      XCTAssertEqual(group.errors.count, 1)
+      XCTAssertNotNil(group.error)
       XCTAssertEqual(group.aggregatedErrors.value.count, 0)
       expectation4.fulfill()
     }
 
     group.start()
-    group.cancel(errors: [MockError.test])
-    group.cancel(errors: [MockError.test])
-    group.cancel(errors: [MockError.test])
+    group.cancel(error: MockError.test)
+    group.cancel(error: MockError.test)
+    group.cancel(error: MockError.test)
 
     waitForExpectations(timeout: 10)
   }
@@ -321,7 +325,7 @@ final class GroupOperationTests: XCTestCase {
       XCTAssertFalse(operation.isCancelled)
       XCTAssertTrue(operation.isFinished)
       if let advancedOperation = operation as? AdvancedOperation {
-        XCTAssertEqual(advancedOperation.errors.count, 0)
+        XCTAssertFalse(advancedOperation.hasError)
       } else if let groupOperation = operation as? GroupOperation {
         XCTAssertEqual(groupOperation.aggregatedErrors.value.count, 0)
       }
@@ -344,6 +348,15 @@ final class GroupOperationTests: XCTestCase {
     let exepectation1 = expectation(description: "\(#function)\(#line)")
     group.addCompletionBlock { exepectation1.fulfill() }
 
+    group1.log = TestsLog
+    group1.name = "GroupOperation1"
+
+    group2.log = TestsLog
+    group2.name = "GroupOperation2"
+
+    group.log = TestsLog
+    group.name = "GroupOperation"
+
     group.start()
     waitForExpectations(timeout: 10)
 
@@ -351,26 +364,29 @@ final class GroupOperationTests: XCTestCase {
   }
 
   func testMultipleNestedGroupOperations() {
+    // group 1
     let operation1 = BlockOperation { }
     let operation2 = BlockOperation(block: { sleep(2) } )
     let group1 = GroupOperation(operations: [operation1, operation2])
-
     let expectation1 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isFinished), object: group1, expectedValue: true)
 
-    let operation3 = SleepyOperation()
-    let operation4 = SleepyAsyncOperation(interval1: 1, interval2: 1, interval3: 1)
-    let operation5 = BlockOperation(block: { sleep(1) } )
-
+    // group 3
     let operation6 = SleepyAsyncOperation(interval1: 1, interval2: 1, interval3: 1)
     let group3 = GroupOperation(operations: operation6)
     let expectation3 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isFinished), object: group3, expectedValue: true)
 
+    // group 2
+    let operation3 = SleepyOperation()
+    let operation4 = SleepyAsyncOperation(interval1: 1, interval2: 1, interval3: 1)
+    let operation5 = BlockOperation(block: { sleep(1) } )
     let group2 = GroupOperation(operations: operation3, operation4, operation5, group3)
     let expectation2 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isFinished), object: group2, expectedValue: true)
 
+    // group 4
     let group4 = GroupOperation(operations: [])
     let expectation4 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isFinished), object: group4, expectedValue: true)
 
+    // group 0
     let operation7 = SleepyAsyncOperation(interval1: 0, interval2: 0, interval3: 1)
     let group0 = GroupOperation(operations: group1, group2, operation7, group4)
     let expectation0 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isFinished), object: group0, expectedValue: true)
@@ -418,7 +434,7 @@ final class GroupOperationTests: XCTestCase {
     let exepectation1 = expectation(description: "\(#function)\(#line)")
     group.addCompletionBlock { exepectation1.fulfill() }
 
-    group2.cancel(errors: [MockError.test])
+    group2.cancel(error: MockError.test)
     group.start()
     waitForExpectations(timeout: 10)
 
@@ -452,13 +468,18 @@ final class GroupOperationTests: XCTestCase {
     let exepectation1 = expectation(description: "\(#function)\(#line)")
     group.addCompletionBlock { exepectation1.fulfill() }
     group.log = TestsLog
-    group.cancel(errors: [MockError.test])
+    group.cancel(error: MockError.test)
     group.start()
     waitForExpectations(timeout: 10)
 
     XCTAssertTrue(group.isCancelled)
     XCTAssertTrue(group.isFinished)
-    XCTAssertSameErrorQuantity(errors: group.errors, expectedErrors: [MockError.test])
+
+    if let opError = group.error as? MockError {
+      XCTAssertEqual(opError, .test)
+    } else {
+      XCTFail("Wrong error type.")
+    }
   }
 
   func testCancelledGroupOperationContainingNonCancellableOperations() {
@@ -506,21 +527,20 @@ final class GroupOperationTests: XCTestCase {
     group.addCompletionBlock { exepectation1.fulfill() }
     group.name = "group"
 
-    group.cancel(errors: [MockError.test])
+    group.cancel(error: MockError.test)
     group.start()
     waitForExpectations(timeout: 10)
 
     XCTAssertTrue(group.isCancelled)
     XCTAssertTrue(group.isFinished)
-    XCTAssertSameErrorQuantity(errors: group.errors, expectedErrors: [MockError.test])
+
+    XCTAssertNotNil(group.error)
   }
 
   func testFailedOperationInSimpleNestedGroupOperations() {
-    let errors = [MockError.test]
-
     let operation1 = SleepyAsyncOperation(interval1: 3, interval2: 4, interval3: 1)
     let group1 = GroupOperation(operations: operation1)
-    operation1.cancel(errors: [MockError.test])
+    operation1.cancel(error: MockError.test)
 
     group1.name = "group1"
 
@@ -534,18 +554,19 @@ final class GroupOperationTests: XCTestCase {
 
     waitForExpectations(timeout: 10)
     XCTAssertTrue(group.isFinished)
-    XCTAssertSameErrorQuantity(errors: group.errors, expectedErrors: errors)
+
+    XCTAssertNotNil(group.error)
   }
 
   func testFailedOperationInNestedGroupOperations() {
-    let errors = [MockError.test, MockError.failed, MockError.failed]
+    let error = MockError.test
 
     let operation1 = SleepyOperation()
     let operation2 = SleepyOperation()
     let group1 = GroupOperation(operations: operation1, operation2)
 
     let operation3 = SleepyAsyncOperation()
-    let operation4 = FailingAsyncOperation(errors: errors)
+    let operation4 = FailingAsyncOperation(error: error)
     let group2 = GroupOperation(operations: operation3, operation4)
 
     let group = GroupOperation(operations: group1, group2)
@@ -556,18 +577,18 @@ final class GroupOperationTests: XCTestCase {
     waitForExpectations(timeout: 10)
 
     XCTAssertTrue(group.isFinished)
-    XCTAssertSameErrorQuantity(errors: group.errors, expectedErrors: errors)
+    XCTAssertNotNil(group.error)
   }
 
   func testFailedAndCancelledOperationsInNestedGroupOperations() {
-    let errors = [MockError.test, MockError.failed, MockError.failed]
+    let error = MockError.failed
 
     let operation1 = SleepyOperation()
     let operation2 = SleepyOperation()
     let group1 = GroupOperation(operations: operation1, operation2)
 
     let operation3 = SleepyAsyncOperation()
-    let operation4 = FailingAsyncOperation(errors: errors)
+    let operation4 = FailingAsyncOperation(error: error)
     let group2 = GroupOperation(operations: operation3, operation4)
 
     let group = GroupOperation(operations: group1, group2)
@@ -575,27 +596,32 @@ final class GroupOperationTests: XCTestCase {
     group.addCompletionBlock { exepectation1.fulfill() }
 
     group.start()
-    operation3.cancel(errors: [MockError.failed])
+    operation3.cancel(error: MockError.failed)
     waitForExpectations(timeout: 10)
 
     XCTAssertTrue(operation3.isCancelled)
     XCTAssertTrue(operation3.isFinished)
-    XCTAssertSameErrorQuantity(errors: operation3.errors, expectedErrors: [MockError.failed])
+
+    if let op3Error = operation3.error as? MockError {
+      XCTAssertEqual(op3Error, .failed)
+    } else {
+      XCTFail("Wrong error type.")
+    }
 
     XCTAssertTrue(group.isFinished)
-    XCTAssertSameErrorQuantity(errors: group.errors, expectedErrors: [MockError.test, MockError.failed, MockError.failed, MockError.failed])
+    XCTAssertNotNil(group.error)
   }
 
   func testMultipleFailedOperationsInNestedGroupOperations() {
-    let errors1 = [MockError.test, MockError.failed, MockError.failed]
-    let errors2 = [MockError.test, MockError.generic(date: Date()), MockError.generic(date: Date())]
+    let error1 = MockError.failed
+    let error2 = MockError.generic(date: Date())
 
-    let operation1 = FailingAsyncOperation(errors: errors1)
+    let operation1 = FailingAsyncOperation(error: error1)
     let operation2 = SleepyOperation()
     let group1 = GroupOperation(operations: operation1, operation2)
 
     let operation3 = SleepyAsyncOperation()
-    let operation4 = FailingAsyncOperation(errors: errors2)
+    let operation4 = FailingAsyncOperation(error: error2)
     let group2 = GroupOperation(operations: operation3, operation4)
 
     let group = GroupOperation(operations: group1, group2)
@@ -615,12 +641,12 @@ final class GroupOperationTests: XCTestCase {
     waitForExpectations(timeout: 10)
 
     XCTAssertTrue(group.isFinished)
-    XCTAssertSameErrorQuantity(errors: group.errors, expectedErrors: errors1 + errors2)
+    XCTAssertTrue(group.hasError)
   }
 
   func testMaxConcurrentOperationCount() {
-    let errors = [MockError.test, MockError.failed, MockError.failed]
-    let operation1 = FailingAsyncOperation(errors: errors)
+    let error = MockError.test
+    let operation1 = FailingAsyncOperation(error: error)
     let operation2 = SleepyOperation()
     let group = GroupOperation(operations: operation1, operation2)
     let exepectation1 = expectation(description: "\(#function)\(#line)")
@@ -674,12 +700,12 @@ final class GroupOperationTests: XCTestCase {
   }
 
   func testCompositionWithCondition() {
-    let operation1 = AdvancedBlockOperation { complete in complete([]) }
+    let operation1 = AdvancedBlockOperation { complete in complete(nil) }
 
-    let operation2 = AdvancedBlockOperation { complete in complete([]) }
+    let operation2 = AdvancedBlockOperation { complete in complete(nil) }
     operation2.addCondition(NoFailedDependenciesCondition())
 
-    let operation3 = AdvancedBlockOperation { complete in complete([]) }
+    let operation3 = AdvancedBlockOperation { complete in complete(nil) }
 
     let adapterOperation = AdvancedBlockOperation { [unowned operation2] in
       operation2.cancel()
@@ -732,8 +758,8 @@ final class GroupOperationTests: XCTestCase {
   }
 
   func testObservers() {
-    let errors = [MockError.test, MockError.failed, MockError.failed]
-    let operation1 = FailingAsyncOperation(errors: errors)
+    let error = MockError.failed
+    let operation1 = FailingAsyncOperation(error: error)
     let operation2 = SleepyOperation()
     let group = GroupOperation(operations: operation1, operation2)
     let exepectation1 = expectation(description: "\(#function)\(#line)")
@@ -756,7 +782,7 @@ final class GroupOperationTests: XCTestCase {
 
   func testCancelledGroupOperationInsideAnotherQueue() {
     // cancel a group right after it has been added to the queue
-    let queue = AdvancedOperationQueue()
+    let queue = OperationQueue()
     let operation = SleepyAsyncOperation(interval1: 1, interval2: 0, interval3: 0)
     operation.name = "operation"
     let group = GroupOperation(operations: [operation])
@@ -785,7 +811,7 @@ final class GroupOperationTests: XCTestCase {
 
   func testCancelledGroupOperationInsideAnotherQueueWithDelay() {
     // cancel a group after a delay once it has been added to the queue
-    let queue = AdvancedOperationQueue()
+    let queue = OperationQueue()
     let operation = SleepyAsyncOperation(interval1: 6, interval2: 0, interval3: 0)
     let group = GroupOperation(operations: [operation])
     let delay = 2.0
@@ -830,7 +856,7 @@ final class GroupOperationTests: XCTestCase {
     operation5.name = "Operation5"
 
     let group = GroupOperation(operations: operation1, operation2, operation3, operation4) // w: 4
-    group.addOperation(operation: operation5, withProgressWeight: 4) // w: 4
+    group.addOperation(operation: operation5) // w: 1
 
     let expectation0 = self.expectation(description: "\(#function)\(#line)")
     let currentToken = currentProgress.observe(\.fractionCompleted, options: [.old, .new]) { (progress, change) in
@@ -842,7 +868,7 @@ final class GroupOperationTests: XCTestCase {
 
     let expectation1 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isFinished), object: group, expectedValue: true)
     XCTAssertFalse(group.progress.isPausable)
-    XCTAssertEqual(group.progress.totalUnitCount, 9) // 4 + 4 + 1 (see GroupOperation comments about progress report with a concurrent queue)
+    XCTAssertEqual(group.progress.totalUnitCount, 6) // 4 + 1 + 1 (see GroupOperation comments about progress report with a concurrent queue)
     group.start()
 
     wait(for: [expectation0, expectation1], timeout: 30)
@@ -881,7 +907,7 @@ final class GroupOperationTests: XCTestCase {
 
     let group = GroupOperation(operations: operation1, operation2, operation3, operation4) // w: 4
     group.log = TestsLog
-    group.addOperation(operation: operation5, withProgressWeight: 4) // w: 4
+    group.addOperation(operation: operation5) // w: 1
 
     let expectation0 = self.expectation(description: "\(#function)\(#line)")
     let currentProgress = Progress(totalUnitCount: 1)
@@ -896,11 +922,10 @@ final class GroupOperationTests: XCTestCase {
 
     let expectation1 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isFinished), object: group, expectedValue: true)
     XCTAssertFalse(group.progress.isPausable)
-    XCTAssertEqual(group.progress.totalUnitCount, 9) // 4 + 4 + 1 (see GroupOperation comments about progress report with a concurrent queue)
+    XCTAssertEqual(group.progress.totalUnitCount, 6) // 4 + 41 + 1 (see GroupOperation comments about progress report with a concurrent queue)
     group.start()
 
     wait(for: [expectation0, expectation1], timeout: 30)
-
 
     XCTAssertTrue(operation1.isFinished)
     XCTAssertTrue(operation1.progress.isFinished)
@@ -935,7 +960,7 @@ final class GroupOperationTests: XCTestCase {
 
     let group = GroupOperation(operations: [operation1, operation2, operation3, operation4], maxConcurrentOperationCount: 1) // w: 4
     group.log = TestsLog
-    group.addOperation(operation: operation5, withProgressWeight: 4) // w: 4
+    group.addOperation(operation: operation5) // w: 1
 
     let expectation0 = self.expectation(description: "\(#function)\(#line)")
     let currentProgress = Progress(totalUnitCount: 1)
@@ -949,7 +974,7 @@ final class GroupOperationTests: XCTestCase {
 
     let expectation1 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isFinished), object: group, expectedValue: true)
     XCTAssertFalse(group.progress.isPausable)
-    XCTAssertEqual(group.progress.totalUnitCount, 8) // 4 + 4
+    XCTAssertEqual(group.progress.totalUnitCount, 5) // 4 + 1
     group.start()
 
     wait(for: [expectation0, expectation1], timeout: 30)
@@ -986,7 +1011,7 @@ final class GroupOperationTests: XCTestCase {
     group.maxConcurrentOperationCount = 1
     currentProgress.addChild(group.progress, withPendingUnitCount: 1)
     group.log = TestsLog
-    group.addOperation(operation: operation5, withProgressWeight: 4)
+    group.addOperation(operation: operation5)
     operation1.name = "Operation1"
     operation2.name = "Operation2"
     operation3.name = "Operation3"
@@ -1007,7 +1032,7 @@ final class GroupOperationTests: XCTestCase {
     let expectation10 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isFinished), object: operation5, expectedValue: true)
 
 
-    XCTAssertEqual(group.progress.totalUnitCount, 9)
+    XCTAssertEqual(group.progress.totalUnitCount, 6)
 
     currentProgress.cancel()
 
@@ -1051,7 +1076,7 @@ final class GroupOperationTests: XCTestCase {
 
     XCTAssertEqual(group.maxConcurrentOperationCount, OperationQueue.defaultMaxConcurrentOperationCount)
 
-    operation1.cancel(errors: [MockError.test])
+    operation1.cancel(error: MockError.test)
     group.cancel()
 
     wait(for: [expectation1, expectation2], timeout: 10)
@@ -1111,7 +1136,7 @@ final class GroupOperationTests: XCTestCase {
       expectation3.fulfill()
     }
 
-    let queue = AdvancedOperationQueue()
+    let queue = OperationQueue()
     queue.addOperation(groupOperation)
 
     wait(for: [expectation1, expectation2, expectation3], timeout: 10)

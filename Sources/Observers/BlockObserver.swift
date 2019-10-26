@@ -23,25 +23,27 @@
 
 import Foundation
 
+// MARK: - Public Observers
+
 /// The `BlockObserver` is a way to attach arbitrary blocks to significant events in an `Operation`'s lifecycle.
 public class BlockObserver: OperationObserving {
   // MARK: - Properties
 
   private let willExecuteHandler: ((AdvancedOperation) -> Void)?
   private let didExecuteHandler: ((AdvancedOperation) -> Void)?
-  private let willFinishHandler: ((AdvancedOperation, [Error]) -> Void)?
-  private let didFinishHandler: ((AdvancedOperation, [Error]) -> Void)?
-  private let willCancelHandler: ((AdvancedOperation, [Error]) -> Void)?
-  private let didCancelHandler: ((AdvancedOperation, [Error]) -> Void)?
+  private let willFinishHandler: ((AdvancedOperation, Error?) -> Void)?
+  private let didFinishHandler: ((AdvancedOperation, Error?) -> Void)?
+  private let willCancelHandler: ((AdvancedOperation, Error?) -> Void)?
+  private let didCancelHandler: ((AdvancedOperation, Error?) -> Void)?
   private let didProduceOperationHandler: ((Operation, Operation) -> Void)?
 
   public init (willExecute: ((AdvancedOperation) -> Void)? = nil,
                didExecute: ((AdvancedOperation) -> Void)? = nil,
                didProduce: ((Operation, Operation) -> Void)? = nil,
-               willCancel: ((AdvancedOperation, [Error]) -> Void)? = nil,
-               didCancel: ((AdvancedOperation, [Error]) -> Void)? = nil,
-               willFinish: ((AdvancedOperation, [Error]) -> Void)? = nil,
-               didFinish: ((AdvancedOperation, [Error]) -> Void)? = nil) {
+               willCancel: ((AdvancedOperation, Error?) -> Void)? = nil,
+               didCancel: ((AdvancedOperation, Error?) -> Void)? = nil,
+               willFinish: ((AdvancedOperation, Error?) -> Void)? = nil,
+               didFinish: ((AdvancedOperation, Error?) -> Void)? = nil) {
     self.willExecuteHandler = willExecute
     self.didExecuteHandler = didExecute
     self.didProduceOperationHandler = didProduce
@@ -61,21 +63,20 @@ public class BlockObserver: OperationObserving {
     didExecuteHandler?(operation)
   }
 
-
-  public func operationWillFinish(operation: AdvancedOperation, withErrors errors: [Error]) {
-    willFinishHandler?(operation, errors)
+  public func operationWillFinish(operation: AdvancedOperation, withError error: Error?) {
+    willFinishHandler?(operation, error)
   }
 
-  public func operationDidFinish(operation: AdvancedOperation, withErrors errors: [Error]) {
-    didFinishHandler?(operation, errors)
+  public func operationDidFinish(operation: AdvancedOperation, withError error: Error?) {
+    didFinishHandler?(operation, error)
   }
 
-  public func operationWillCancel(operation: AdvancedOperation, withErrors errors: [Error]) {
-    willCancelHandler?(operation, errors)
+  public func operationWillCancel(operation: AdvancedOperation, withError error: Error?) {
+    willCancelHandler?(operation, error)
   }
 
-  public func operationDidCancel(operation: AdvancedOperation, withErrors errors: [Error]) {
-    didCancelHandler?(operation, errors)
+  public func operationDidCancel(operation: AdvancedOperation, withError error: Error?) {
+    didCancelHandler?(operation, error)
   }
 
   public func operation(operation: AdvancedOperation, didProduce producedOperation: Operation) {
@@ -83,19 +84,40 @@ public class BlockObserver: OperationObserving {
   }
 }
 
-/// The `BlockObserver` is a way to attach arbitrary blocks to significant events in an `Operation`'s lifecycle.
-internal final class WillCancelObserver: OperationWillCancelObserving {
-  // MARK: - Properties
+// MARK: - Internal Observers
 
-  private let willCancelHandler: ((AdvancedOperation, [Error]) -> Void)?
+internal final class DidCancelObserver: OperationDidCancelObserving {
+  private let didCancelHandler: ((AdvancedOperation, Error?) -> Void)?
 
-  public init (willCancel: ((AdvancedOperation, [Error]) -> Void)? = nil) {
-    self.willCancelHandler = willCancel
+  public init (didCancelHandler: ((AdvancedOperation, Error?) -> Void)? = nil) {
+    self.didCancelHandler = didCancelHandler
   }
 
-  // MARK: - OperationObserving
+  public func operationDidCancel(operation: AdvancedOperation, withError error: Error?) {
+    didCancelHandler?(operation, error)
+  }
+}
 
-  public func operationWillCancel(operation: AdvancedOperation, withErrors errors: [Error]) {
-    willCancelHandler?(operation, errors)
+internal final class WillFinishObserver: OperationWillFinishObserving {
+  private let willFinishHandler: ((AdvancedOperation, Error?) -> Void)?
+
+  public init (willFinishHandler: ((AdvancedOperation, Error?) -> Void)? = nil) {
+    self.willFinishHandler = willFinishHandler
+  }
+
+  func operationWillFinish(operation: AdvancedOperation, withError error: Error?) {
+    willFinishHandler?(operation, error)
+  }
+}
+
+internal final class DidFinishObserver: OperationDidFinishObserving {
+  private let didFinishHandler: ((AdvancedOperation, Error?) -> Void)?
+
+  public init (didFinishHandler: ((AdvancedOperation, Error?) -> Void)? = nil) {
+    self.didFinishHandler = didFinishHandler
+  }
+
+  func operationDidFinish(operation: AdvancedOperation, withError error: Error?) {
+    didFinishHandler?(operation, error)
   }
 }

@@ -35,19 +35,19 @@ public struct NegatedCondition<T: OperationCondition>: OperationCondition {
     self.condition = condition
   }
 
-  public func evaluate(for operation: AdvancedOperation, completion: @escaping (OperationConditionResult) -> Void) {
+  public func evaluate(for operation: AdvancedOperation, completion: @escaping (Result<Void, Error>) -> Void) {
     let conditionName = self.name
     let conditionKey = type(of: self).negatedConditionKey
 
     condition.evaluate(for: operation) { (result) in
       switch result {
-      case .satisfied:
-        let error = AdvancedOperationError.conditionFailed(message: "The condition has been negated.",
-                                                           userInfo: [operationConditionKey: conditionName,
-                                                                      conditionKey: operation.operationName])
-        return completion(.failed([error]))
-      case .failed:
-        return completion(.satisfied)
+      case .success:
+        let error = NSError.conditionFailed(message: "The condition has been negated.",
+                                            userInfo: [operationConditionKey: conditionName,
+                                                       conditionKey: operation.operationName])
+        return completion(.failure(error))
+      case .failure:
+        return completion(.success(()))
       }
     }
   }

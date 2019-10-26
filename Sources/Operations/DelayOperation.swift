@@ -70,17 +70,14 @@ public final class DelayOperation: AdvancedOperation {
     self.queue = queue
 
     super.init()
+
+    name = "DelayOperation <\(delay)>"
   }
 
   // MARK: - Methods
 
   public override func execute() {
-    guard !isCancelled else {
-      finish()
-      return
-    }
-
-    guard delay.seconds > 0 else {
+    guard !isCancelled && delay.seconds > 0 else {
       finish()
       return
     }

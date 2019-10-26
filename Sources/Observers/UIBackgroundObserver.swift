@@ -131,7 +131,7 @@ extension UIBackgroundObserver: OperationDidExecuteObserving & OperationDidFinis
     isExecuting = true
   }
 
-  public func operationDidFinish(operation: AdvancedOperation, withErrors errors: [Error]) {
+  public func operationDidFinish(operation: AdvancedOperation, withError error: Error?) {
     isExecuting = false
     endBackgroundTask()
   }
@@ -150,7 +150,8 @@ extension AdvancedOperation {
   public func continueToRunInBackground(application: UIApplicationBackgroundTask) -> UIBackgroundObserver {
     assert(state == .pending, "The option for running in backgroung must be enabled before the operation has started running.")
 
-    let backgroundObserver = observers.read { $0.first { $0 is UIBackgroundObserver } }
+
+    let backgroundObserver = observers.first { $0 is UIBackgroundObserver }
 
     if let observer = backgroundObserver as? UIBackgroundObserver {
       return observer

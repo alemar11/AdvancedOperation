@@ -37,24 +37,24 @@ public struct NoFailedDependenciesCondition: OperationCondition {
     self.ignoreCancellations = ignoreCancellations
   }
 
-  public func evaluate(for operation: AdvancedOperation, completion: @escaping (OperationConditionResult) -> Void) {
-    var dependencies = operation.dependencies.filter { !($0 is ConditionEvaluatorOperation) }
+  public func evaluate(for operation: AdvancedOperation, completion: @escaping (Result<Void, Error>) -> Void) {
+    var dependencies = operation.dependencies
 
     if ignoreCancellations {
       dependencies = dependencies.filter { !$0.isCancelled }
     }
 
-    let failures = dependencies.compactMap { $0 as? AdvancedOperation }.filter { $0.hasErrors }
+    let failures = dependencies.compactMap { $0 as? AdvancedOperation }.filter { $0.hasError }
 
     if !failures.isEmpty {
       let names = failures.map { $0.name ?? "\(type(of: $0))" }
-      let error = AdvancedOperationError.conditionFailed(message: "Some dependencies have failures.",
-                                                         userInfo: [operationConditionKey: self.name,
-                                                                    type(of: self).noFailedDependenciesConditionKey: names])
-      let errors = [error] + failures.flatMap { $0.errors }
-      completion(.failed(errors))
+      let error = NSError.conditionFailed(message: "Some dependencies have failures.",
+                                          userInfo: [operationConditionKey: self.name,
+                                                     type(of: self).noFailedDependenciesConditionKey: names,
+                                                     NSError.errorsKey: failures.compactMap { $0.error } ])
+      completion(.failure(error))
     } else {
-      completion(.satisfied)
+      completion(.success(()))
     }
   }
 }
