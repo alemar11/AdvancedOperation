@@ -344,6 +344,7 @@
 		230B47FD200EABEE00F46852 /* AdvancedOperationTests */ = {
 			isa = PBXGroup;
 			children = (
+				D2093D392366175200230A2A /* OperationInjectionTests.swift */,
 				D2093D35236606F400230A2A /* AsynchronousOperationTests.swift */,
 				23D3DF3622F9C08900FF5C34 /* InjectionTests.swift */,
 				239ECD30218E11AF00F640F2 /* AdvancedOperationErrorTests.swift */,
@@ -354,7 +355,6 @@
 				235D08CF206A80ED00F70142 /* Conditions */,
 				23555F9621709396009FBE81 /* Observers */,
 				23555FA22170C789009FBE81 /* Operations */,
-				D2093D392366175200230A2A /* OperationInjectionTests.swift */,
 			);
 			path = AdvancedOperationTests;
 			sourceTree = "<group>";
