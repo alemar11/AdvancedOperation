@@ -67,6 +67,117 @@ class SimpleOperation: Operation {
   }
 }
 
+// MARK: - AsynchronousOperation
+
+extension AsynchronousOperation {
+  final internal class SleepyAsyncOperation: AsynchronousOperation<Void> {
+    private let interval1: UInt32
+    private let interval2: UInt32
+    private let interval3: UInt32
+
+    init(interval1: UInt32 = 1, interval2: UInt32 = 1, interval3: UInt32 = 1) {
+      self.interval1 = interval1
+      self.interval2 = interval2
+      self.interval3 = interval3
+      super.init(name: "AsynchronousOperation")
+    }
+
+    override func execute(completion: @escaping (Result<Void, Error>) -> Void) {
+      DispatchQueue.global().async { [weak weakSelf = self] in
+        guard let strongSelf = weakSelf else {
+          completion(.failure(MockError.test))
+          return
+        }
+
+        if strongSelf.isCancelled {
+          completion(.failure(MockError.cancelled(date: Date())))
+          return
+        }
+
+        sleep(self.interval1)
+
+        if strongSelf.isCancelled {
+          completion(.failure(MockError.cancelled(date: Date())))
+          return
+        }
+
+        sleep(self.interval2)
+
+        if strongSelf.isCancelled {
+          completion(.failure(MockError.cancelled(date: Date())))
+          return
+        }
+
+        sleep(self.interval3)
+        completion(.success(Void()))
+      }
+    }
+  }
+
+  /// This operation fails if the input is greater than **1000**
+  /// This operation cancels itself if the input is **100**
+  internal class IntToStringOperation: AsynchronousOperation<String> & InputConsuming {
+    var input: Int?
+
+    override func execute(completion: @escaping (Result<String, Error>) -> Void) {
+      if isCancelled {
+        completion(.failure(NSError.cancelled))
+        return
+      }
+
+      guard let input = self.input else {
+        completion(.failure(MockError.failed))
+        return
+      }
+
+      if input == 100 {
+        cancel()
+        assert(self.isCancelled)
+        completion(.success("\(input)"))
+      } else if input <= 1000 {
+        completion(.success("\(input)"))
+      } else {
+        completion(.failure(MockError.failed))
+      }
+    }
+}
+
+internal class StringToIntOperation: AsynchronousOperation<Int> & InputConsuming  {
+  var input: String?
+
+  override func execute(completion: @escaping (Result<Int, Error>) -> Void) {
+    if isCancelled {
+      completion(.failure(NSError.cancelled))
+      return
+    }
+    if let input = self.input, let value = Int(input) {
+      completion(.success(value))
+    } else {
+      completion(.failure(MockError.failed))
+    }
+  }
+}
+
+/// An operation that finishes with errors
+final internal class FailingAsyncOperation: AsynchronousOperation<Void> {
+  private let defaultError: Error
+
+  init(error: MockError = MockError.failed) {
+    self.defaultError = error
+  }
+
+  override func execute(completion: @escaping (Result<Void, Error>) -> Void) {
+    DispatchQueue.global().asyncAfter(deadline: .now() + 1.0) { [weak weakSelf = self] in
+      guard let strongSelf = weakSelf else {
+        completion(.failure(MockError.test))
+        return
+      }
+      completion(.failure(strongSelf.defaultError))
+    }
+  }
+}
+}
+
 // MARK: - AdvancedOperation
 
 final internal class SelfObservigOperation: AdvancedOperation {

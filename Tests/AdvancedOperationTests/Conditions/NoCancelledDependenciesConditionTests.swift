@@ -173,7 +173,7 @@ final class NoCancelledDependenciesConditionTests: XCTestCase {
     queue.addOperations([operation1, operation2, operation3, operation4], waitUntilFinished: true)
 
     XCTAssertTrue(operation4.isCancelled)
-    XCTAssertFalse(operation4.hasError)
+    XCTAssertNil(operation4.output.failure)
 
     XCTAssertTrue(operation3.hasError)
     XCTAssertTrue(operation3.isCancelled)

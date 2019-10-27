@@ -77,3 +77,14 @@ extension Operation {
     }
   }
 }
+
+extension Sequence where Element: Operation {
+  public func addDependencies(_ dependencies: Operation...) {
+    forEach { $0.addDependencies(dependencies) }
+  }
+
+  public func addDependencies(_ dependencies: [Operation]) {
+    forEach { $0.addDependencies(dependencies) }
+  }
+}
+

@@ -24,10 +24,10 @@
 import Dispatch
 import Foundation
 
-/// An `AdvancedOperation` that will simply wait for a given time interval, or until a specific `Date`.
+/// An `AsynchronousOperation` that will simply wait for a given time interval, or until a specific `Date`.
 /// If the interval is negative, or the `Date` is in the past, then this operation immediately finishes.
 /// - Note: A `DelayOperation` cannot be cancelled once started running.
-public final class DelayOperation: AdvancedOperation {
+public final class DelayOperation: AsynchronousOperation<Void> {
   // MARK: - Properties
 
   private let delay: Delay
@@ -76,18 +76,12 @@ public final class DelayOperation: AdvancedOperation {
 
   // MARK: - Methods
 
-  public override func execute() {
+  public final override func execute(completion: @escaping (Result<Void, Error>) -> Void) {
     guard !isCancelled && delay.seconds > 0 else {
-      finish()
+      completion(.success(())) // TODO: isCancelled and delay are two different error
       return
     }
 
-    queue.asyncAfter(deadline: .now() + delay.seconds) { [weak self] in
-      guard let self = self else {
-        return
-      }
-
-      self.finish()
-    }
+    queue.asyncAfter(deadline: .now() + delay.seconds) { completion(.success(())) }
   }
 }

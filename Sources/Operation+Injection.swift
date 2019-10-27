@@ -76,3 +76,33 @@ extension OutputProducing {
     return self
   }
 }
+
+extension OutputProducing_NEW {
+  /// Creates a new operation that passes the output of `self` into the given `AdvancedOperation`
+  ///
+  /// - Parameters:
+  ///   - operation: The operation that needs the output of `self` to generate an output.
+  ///   - requirements: A list of options that the injected input must satisfy.
+  /// - Returns: Returns an *adapter* operation which passes the output of `self` into the given `AdvancedOperation`.
+  public func inject<E: InputConsuming>(into operation: E, orCancel: Bool = false) -> Operation where Output == E.Input {
+    let injectionOperation = BlockOperation { [unowned self, unowned operation] in
+      operation.input = self.output
+    }
+
+    injectionOperation.addDependency(self)
+    operation.addDependency(injectionOperation)
+
+    return injectionOperation
+  }
+
+  public func inject<E: InputConsuming>(into operation: E, orCancel: Bool = false, transform: @escaping (Output) -> E.Input?) -> Operation {
+    let injectionOperation = BlockOperation { [unowned self, unowned operation] in
+      operation.input = transform(self.output)
+    }
+
+    injectionOperation.addDependency(self)
+    operation.addDependency(injectionOperation)
+
+    return injectionOperation
+  }
+}
