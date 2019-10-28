@@ -110,7 +110,7 @@ final class AsynchronousOperationTests: XCTestCase {
       let expectation2 = expectation(description: "\(#function)\(#line)")
 
       XCTAssertTrue(operation.isReady)
-
+      operation.log = TestsLog
       operation.start()
       XCTAssertTrue(operation.isExecuting)
 

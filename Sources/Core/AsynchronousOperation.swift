@@ -128,6 +128,11 @@ open class AsynchronousOperation<T>: Operation, OutputProducing_NEW {
   }
 
   open override func cancel() {
+    lock.lock()
+    defer { lock.unlock() }
+
+    guard !isCancelled else { return }
+
     super.cancel()
     os_log("%{public}s has been cancelled.", log: log, type: .info, operationName)
   }
