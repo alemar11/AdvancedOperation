@@ -60,21 +60,17 @@
 		234130BD1F96076D002BE7FC /* AdvancedOperation.h in Headers */ = {isa = PBXBuildFile; fileRef = 2341308A1F9605F5002BE7FC /* AdvancedOperation.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		234130BE1F960770002BE7FC /* AdvancedOperation.h in Headers */ = {isa = PBXBuildFile; fileRef = 2341308A1F9605F5002BE7FC /* AdvancedOperation.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		235D08AC206A498400F70142 /* NegatedCondition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 235D08A6206A494D00F70142 /* NegatedCondition.swift */; };
-		235D08AF206A498400F70142 /* OperationCondition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 235D08A7206A494E00F70142 /* OperationCondition.swift */; };
+		235D08AF206A498400F70142 /* Condition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 235D08A7206A494E00F70142 /* Condition.swift */; };
 		235D08B0206A498400F70142 /* NoCancelledDependenciesCondition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 235D08A4206A494D00F70142 /* NoCancelledDependenciesCondition.swift */; };
-		235D08B1206A498400F70142 /* NoFailedDependenciesCondition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 235D08A5206A494D00F70142 /* NoFailedDependenciesCondition.swift */; };
 		235D08B3206A498400F70142 /* NegatedCondition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 235D08A6206A494D00F70142 /* NegatedCondition.swift */; };
-		235D08B6206A498400F70142 /* OperationCondition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 235D08A7206A494E00F70142 /* OperationCondition.swift */; };
+		235D08B6206A498400F70142 /* Condition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 235D08A7206A494E00F70142 /* Condition.swift */; };
 		235D08B7206A498400F70142 /* NoCancelledDependenciesCondition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 235D08A4206A494D00F70142 /* NoCancelledDependenciesCondition.swift */; };
-		235D08B8206A498400F70142 /* NoFailedDependenciesCondition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 235D08A5206A494D00F70142 /* NoFailedDependenciesCondition.swift */; };
 		235D08BA206A498500F70142 /* NegatedCondition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 235D08A6206A494D00F70142 /* NegatedCondition.swift */; };
-		235D08BD206A498500F70142 /* OperationCondition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 235D08A7206A494E00F70142 /* OperationCondition.swift */; };
+		235D08BD206A498500F70142 /* Condition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 235D08A7206A494E00F70142 /* Condition.swift */; };
 		235D08BE206A498500F70142 /* NoCancelledDependenciesCondition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 235D08A4206A494D00F70142 /* NoCancelledDependenciesCondition.swift */; };
-		235D08BF206A498500F70142 /* NoFailedDependenciesCondition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 235D08A5206A494D00F70142 /* NoFailedDependenciesCondition.swift */; };
 		235D08C1206A498500F70142 /* NegatedCondition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 235D08A6206A494D00F70142 /* NegatedCondition.swift */; };
-		235D08C4206A498500F70142 /* OperationCondition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 235D08A7206A494E00F70142 /* OperationCondition.swift */; };
+		235D08C4206A498500F70142 /* Condition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 235D08A7206A494E00F70142 /* Condition.swift */; };
 		235D08C5206A498500F70142 /* NoCancelledDependenciesCondition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 235D08A4206A494D00F70142 /* NoCancelledDependenciesCondition.swift */; };
-		235D08C6206A498500F70142 /* NoFailedDependenciesCondition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 235D08A5206A494D00F70142 /* NoFailedDependenciesCondition.swift */; };
 		235D08C9206A6FCA00F70142 /* NoFailedDependenciesConditionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 235D08C7206A6FC800F70142 /* NoFailedDependenciesConditionTests.swift */; };
 		235D08CA206A6FCA00F70142 /* NoFailedDependenciesConditionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 235D08C7206A6FC800F70142 /* NoFailedDependenciesConditionTests.swift */; };
 		235D08CB206A6FCA00F70142 /* NoFailedDependenciesConditionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 235D08C7206A6FC800F70142 /* NoFailedDependenciesConditionTests.swift */; };
@@ -205,9 +201,8 @@
 		234130B41F9606CD002BE7FC /* AdvancedOperation.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = AdvancedOperation.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		234130B71F9606CD002BE7FC /* Info-tvOS.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Info-tvOS.plist"; sourceTree = "<group>"; };
 		235D08A4206A494D00F70142 /* NoCancelledDependenciesCondition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoCancelledDependenciesCondition.swift; sourceTree = "<group>"; };
-		235D08A5206A494D00F70142 /* NoFailedDependenciesCondition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoFailedDependenciesCondition.swift; sourceTree = "<group>"; };
 		235D08A6206A494D00F70142 /* NegatedCondition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NegatedCondition.swift; sourceTree = "<group>"; };
-		235D08A7206A494E00F70142 /* OperationCondition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OperationCondition.swift; sourceTree = "<group>"; };
+		235D08A7206A494E00F70142 /* Condition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Condition.swift; sourceTree = "<group>"; };
 		235D08C7206A6FC800F70142 /* NoFailedDependenciesConditionTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NoFailedDependenciesConditionTests.swift; sourceTree = "<group>"; };
 		235D08C8206A6FC900F70142 /* NoCancelledDependenciesConditionTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NoCancelledDependenciesConditionTests.swift; sourceTree = "<group>"; };
 		235D08D0206A941B00F70142 /* OperationStateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OperationStateTests.swift; sourceTree = "<group>"; };
@@ -405,8 +400,7 @@
 			children = (
 				235D08A6206A494D00F70142 /* NegatedCondition.swift */,
 				235D08A4206A494D00F70142 /* NoCancelledDependenciesCondition.swift */,
-				235D08A5206A494D00F70142 /* NoFailedDependenciesCondition.swift */,
-				235D08A7206A494E00F70142 /* OperationCondition.swift */,
+				235D08A7206A494E00F70142 /* Condition.swift */,
 				2326CC24206E6199001876A2 /* Result+Utils.swift */,
 				23B1BDFD216F99BA002D0A5B /* BlockCondition.swift */,
 				2328AEF521B93C1E00FDB241 /* MutualExclusivityCondition.swift */,
@@ -793,8 +787,7 @@
 				235D08B0206A498400F70142 /* NoCancelledDependenciesCondition.swift in Sources */,
 				2328AEF621B93C1E00FDB241 /* MutualExclusivityCondition.swift in Sources */,
 				236F54B6206CDE070079B033 /* NSError+AdvancedOperation.swift in Sources */,
-				235D08B1206A498400F70142 /* NoFailedDependenciesCondition.swift in Sources */,
-				235D08AF206A498400F70142 /* OperationCondition.swift in Sources */,
+				235D08AF206A498400F70142 /* Condition.swift in Sources */,
 				2328AEFF21B956EF00FDB241 /* ExclusivityManager.swift in Sources */,
 				23B1BDFE216F99BA002D0A5B /* BlockCondition.swift in Sources */,
 			);
@@ -820,8 +813,7 @@
 				235D08B7206A498400F70142 /* NoCancelledDependenciesCondition.swift in Sources */,
 				2328AEF721B93C1E00FDB241 /* MutualExclusivityCondition.swift in Sources */,
 				236F54B7206CDE070079B033 /* NSError+AdvancedOperation.swift in Sources */,
-				235D08B8206A498400F70142 /* NoFailedDependenciesCondition.swift in Sources */,
-				235D08B6206A498400F70142 /* OperationCondition.swift in Sources */,
+				235D08B6206A498400F70142 /* Condition.swift in Sources */,
 				2328AF0021B956EF00FDB241 /* ExclusivityManager.swift in Sources */,
 				23B1BDFF216F99BA002D0A5B /* BlockCondition.swift in Sources */,
 			);
@@ -847,8 +839,7 @@
 				235D08BE206A498500F70142 /* NoCancelledDependenciesCondition.swift in Sources */,
 				2328AEF821B93C1E00FDB241 /* MutualExclusivityCondition.swift in Sources */,
 				236F54B8206CDE070079B033 /* NSError+AdvancedOperation.swift in Sources */,
-				235D08BF206A498500F70142 /* NoFailedDependenciesCondition.swift in Sources */,
-				235D08BD206A498500F70142 /* OperationCondition.swift in Sources */,
+				235D08BD206A498500F70142 /* Condition.swift in Sources */,
 				2328AF0121B956EF00FDB241 /* ExclusivityManager.swift in Sources */,
 				23B1BE00216F99BA002D0A5B /* BlockCondition.swift in Sources */,
 			);
@@ -874,8 +865,7 @@
 				235D08C5206A498500F70142 /* NoCancelledDependenciesCondition.swift in Sources */,
 				2328AEF921B93C1E00FDB241 /* MutualExclusivityCondition.swift in Sources */,
 				236F54B9206CDE070079B033 /* NSError+AdvancedOperation.swift in Sources */,
-				235D08C6206A498500F70142 /* NoFailedDependenciesCondition.swift in Sources */,
-				235D08C4206A498500F70142 /* OperationCondition.swift in Sources */,
+				235D08C4206A498500F70142 /* Condition.swift in Sources */,
 				2328AF0221B956EF00FDB241 /* ExclusivityManager.swift in Sources */,
 				23B1BE01216F99BA002D0A5B /* BlockCondition.swift in Sources */,
 			);

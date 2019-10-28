@@ -42,12 +42,45 @@ open class AsynchronousOperation<T>: Operation, OutputProducing {
     self.name = name ?? "\(type(of: self))"
   }
 
-  /// Serial queue for making state changes atomic under the constraint
-  /// of having to send KVO willChange/didChange notifications.
+  /// Serial queue for making state changes atomic under the constraint of having to send KVO willChange/didChange notifications.
   private let stateChangeQueue = DispatchQueue(label: "\(identifier).AsynchronousOperation.stateChange")
 
   /// Private backing store for `state`
   private var _state: Atomic<State> = Atomic(.ready)
+
+  /// The state of the operation
+  private var state: State {
+    get {
+      return _state.value
+    }
+    set {
+      // A state mutation should be a single atomic transaction. We can't simply perform
+      // everything on the isolation queue for `_state` because the KVO willChange/didChange
+      // notifications have to be sent from outside the isolation queue.
+      // Otherwise we would deadlock because KVO observers will in turn try to read `state` (by calling
+      // `isReady`, `isExecuting`, `isFinished`. Use a second queue to wrap the entire
+      // transaction.
+      stateChangeQueue.sync {
+        // Retrieve the existing value first. Necessary for sending fine-grained KVO
+        // willChange/didChange notifications only for the key paths that actually change.
+        let oldValue = _state.value
+        //guard newValue != oldValue else { return }
+
+        willChangeValue(forKey: oldValue.objcKeyPath)
+        willChangeValue(forKey: newValue.objcKeyPath)
+
+        _state.mutate {
+          assert($0.canTransition(to: newValue), "Performing an invalid state transition from: \($0) to: \(newValue).")
+          $0 = newValue
+        }
+
+        didChangeValue(forKey: oldValue.objcKeyPath)
+        didChangeValue(forKey: newValue.objcKeyPath)
+      }
+    }
+  }
+
+  private var _log = Atomic(OSLog.disabled) // TODO: work in progress
 
   /// An instance of `OSLog` (by default is disabled).
   public var log: OSLog {
@@ -60,7 +93,12 @@ open class AsynchronousOperation<T>: Operation, OutputProducing {
     }
   }
 
-  private var _log = Atomic(OSLog.disabled) // TODO: work in progress
+  private var _conditions = Atomic([Condition]())
+
+  /// Conditions evaluated before executing the operation.
+  public var conditions: [Condition] {
+    return _conditions.value
+  }
 
   open override var isReady: Bool {
     return state == .ready && super.isReady
@@ -102,6 +140,10 @@ open class AsynchronousOperation<T>: Operation, OutputProducing {
 
     // TODO: before executing the operation we could validate it with some conditions
     // if the conditions fail, cancel the operation and return without executing run
+    if let error = evaluateConditions() {
+      self.cancel()
+      return
+    }
 
     os_log("%{public}s has started.", log: log, type: .info, operationName)
     execute(completion: finish)
@@ -165,6 +207,40 @@ open class AsynchronousOperation<T>: Operation, OutputProducing {
 }
 
 extension AsynchronousOperation {
+  private func evaluateConditions() -> Error? {
+    guard !conditions.isEmpty else { return nil }
+
+    return Self.evaluateConditions(conditions, for: self)
+  }
+
+  private static func evaluateConditions(_ conditions: [Condition], for operation: Operation) -> Error? {
+    let conditionGroup = DispatchGroup()
+    var results = [Result<Void, Error>?](repeating: nil, count: conditions.count)
+    let lock = UnfairLock()
+
+    for (index, condition) in conditions.enumerated() {
+      conditionGroup.enter()
+      condition.evaluate(for: operation) { result in
+        lock.synchronized {
+          results[index] = result
+        }
+        conditionGroup.leave()
+      }
+    }
+
+    conditionGroup.wait()
+
+    let errors = results.compactMap { $0?.failure }
+    if errors.isEmpty {
+      return nil
+    } else {
+      let aggregateError = NSError.conditionsEvaluationFinished(message: "\(operation.operationName) didn't pass the conditions evaluation.", errors: errors)
+      return aggregateError
+    }
+  }
+}
+
+extension AsynchronousOperation {
   /// Mirror of the possible states an Operation can be in.
   private enum State: Int, CustomStringConvertible {
     case ready
@@ -194,38 +270,6 @@ extension AsynchronousOperation {
       case (.ready, .finished): return true // investigate (start after a cancel)
       case (.executing, .finished): return true
       default: return false
-      }
-    }
-  }
-
-  /// The state of the operation
-  private var state: State {
-    get {
-      return _state.value
-    }
-    set {
-      // A state mutation should be a single atomic transaction. We can't simply perform
-      // everything on the isolation queue for `_state` because the KVO willChange/didChange
-      // notifications have to be sent from outside the isolation queue.
-      // Otherwise we would deadlock because KVO observers will in turn try to read `state` (by calling
-      // `isReady`, `isExecuting`, `isFinished`. Use a second queue to wrap the entire
-      // transaction.
-      stateChangeQueue.sync {
-        // Retrieve the existing value first. Necessary for sending fine-grained KVO
-        // willChange/didChange notifications only for the key paths that actually change.
-        let oldValue = _state.value
-        //guard newValue != oldValue else { return }
-
-        willChangeValue(forKey: oldValue.objcKeyPath)
-        willChangeValue(forKey: newValue.objcKeyPath)
-
-        _state.mutate {
-          assert($0.canTransition(to: newValue), "Performing an invalid state transition from: \($0) to: \(newValue).")
-          $0 = newValue
-        }
-
-        didChangeValue(forKey: oldValue.objcKeyPath)
-        didChangeValue(forKey: newValue.objcKeyPath)
       }
     }
   }

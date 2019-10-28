@@ -25,7 +25,7 @@ import Foundation
 
 /// A condition that specifies that every dependency must finish.
 /// If any dependency was cancelled, the target operation will be cancelled as well.
-public struct NoCancelledDependeciesCondition: OperationCondition {
+public struct NoCancelledDependeciesCondition: Condition {
   static var noCancelledDependeciesConditionKey: String { return "NoCancelledDependeciesCondition" }
 
   /// Create a new `NoCancelledDependeciesCondition` element.

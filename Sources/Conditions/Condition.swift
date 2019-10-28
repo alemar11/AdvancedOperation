@@ -25,7 +25,7 @@ import Foundation
 
 let operationConditionKey = "OperationCondition"
 
-public protocol OperationCondition {
+public protocol Condition {
   /// The name of the condition.
   var name: String { get }
 
@@ -37,7 +37,7 @@ public protocol OperationCondition {
   func evaluate(for operation: Operation, completion: @escaping (Result<Void, Error>) -> Void)
 }
 
-public extension OperationCondition {
+public extension Condition {
   var name: String {
     return String(describing: type(of: self))
   }

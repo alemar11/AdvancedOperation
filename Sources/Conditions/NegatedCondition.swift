@@ -24,7 +24,7 @@
 import Foundation
 
 /// A condition that negates the evaluation of another condition.
-public struct NegatedCondition<T: OperationCondition>: OperationCondition {
+public struct NegatedCondition<T: Condition>: Condition {
   public var name: String { return "Not<\(condition.name)>" }
 
   static var negatedConditionKey: String { return "NegatedCondition" }
@@ -53,7 +53,7 @@ public struct NegatedCondition<T: OperationCondition>: OperationCondition {
   }
 }
 
-extension OperationCondition {
+extension Condition {
   /// Returns a condition that negates the evaluation of the current condition.
   public var negated: NegatedCondition<Self> {
     return NegatedCondition(condition: self)

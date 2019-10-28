@@ -24,35 +24,35 @@
 import Foundation
 
 /// Defines categories to be used inside a `MutualExclusivityCondition`.
-public enum ExclusivityCategory: Hashable {
-  /// If there is already an operation with the same identifier, the new one will be cancelled.
-  case cancel(identifier: String)
-  /// If there is already an operation with the same identifier, the new one will be added as a dependency of the oldest one.
-  case enqueue(identifier: String)
-
-  var category: String {
-    switch self {
-    case .cancel(identifier: let category):
-      return category
-    case .enqueue(identifier: let category):
-      return category
-    }
-  }
-}
-
-/// A condition that defines how an operation should be added to an `AdvancedOperationQueue`.
-public struct MutualExclusivityCondition: OperationCondition {
-  private var _mutuallyExclusiveCategories = Set<ExclusivityCategory>()
-
-  public var mutuallyExclusiveCategories: Set<ExclusivityCategory> {
-    return _mutuallyExclusiveCategories
-  }
-
-  public init(mode: ExclusivityCategory) {
-    _mutuallyExclusiveCategories.insert(mode)
-  }
-
-  public func evaluate(for operation: Operation, completion: @escaping (Result<Void, Error>) -> Void) {
-    completion(.success(()))
-  }
-}
+//public enum ExclusivityCategory: Hashable {
+//  /// If there is already an operation with the same identifier, the new one will be cancelled.
+//  case cancel(identifier: String)
+//  /// If there is already an operation with the same identifier, the new one will be added as a dependency of the oldest one.
+//  case enqueue(identifier: String)
+//
+//  var category: String {
+//    switch self {
+//    case .cancel(identifier: let category):
+//      return category
+//    case .enqueue(identifier: let category):
+//      return category
+//    }
+//  }
+//}
+//
+///// A condition that defines how an operation should be added to an `AdvancedOperationQueue`.
+//public struct MutualExclusivityCondition: Condition {
+//  private var _mutuallyExclusiveCategories = Set<ExclusivityCategory>()
+//
+//  public var mutuallyExclusiveCategories: Set<ExclusivityCategory> {
+//    return _mutuallyExclusiveCategories
+//  }
+//
+//  public init(mode: ExclusivityCategory) {
+//    _mutuallyExclusiveCategories.insert(mode)
+//  }
+//
+//  public func evaluate(for operation: Operation, completion: @escaping (Result<Void, Error>) -> Void) {
+//    completion(.success(()))
+//  }
+//}
