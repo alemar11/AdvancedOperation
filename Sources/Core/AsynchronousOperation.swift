@@ -157,7 +157,7 @@ open class AsynchronousOperation<T>: Operation, OutputProducing_NEW {
         case .success:
           os_log("%{public}s has finished.", log: log, type: .info, operationName)
         case .failure(let error):
-          os_log("%{public}s has finished with error: %{private}s.", log: log, type: .info, operationName, error.localizedDescription)
+          os_log("%{public}s has finished with error: %{private}s.", log: log, type: .error, operationName, error.localizedDescription)
         }
       }
     case .finished:
