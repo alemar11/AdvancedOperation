@@ -31,7 +31,7 @@ public protocol InputConsuming: Operation {
   var input: Input? { get set }
 }
 
-public protocol OutputProducing_NEW: Operation {
+public protocol OutputProducing: Operation {
   associatedtype Output
   var output: Output { get }
 }
@@ -41,7 +41,7 @@ public protocol OutputProducing_NEW: Operation {
 /// when they are done. All `NSOperation` work will be handled automatically.
 ///
 /// Source/Inspiration: https://stackoverflow.com/a/48104095/116862 and https://gist.github.com/calebd/93fa347397cec5f88233
-open class AsynchronousOperation<T>: Operation, OutputProducing_NEW {
+open class AsynchronousOperation<T>: Operation, OutputProducing {
   public typealias Output = Result<T,Error>
 
   public final override var isAsynchronous: Bool { return true }

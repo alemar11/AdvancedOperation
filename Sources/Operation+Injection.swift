@@ -77,7 +77,7 @@ import Foundation
 //  }
 //}
 
-extension OutputProducing_NEW {
+extension OutputProducing {
   /// Creates a new operation that passes the output of `self` into the given `AdvancedOperation`
   ///
   /// - Parameters:
