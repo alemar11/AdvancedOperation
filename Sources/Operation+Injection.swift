@@ -23,67 +23,23 @@
 
 import Foundation
 
-// AdvancedOperation conforming to this protocol, requires an input to be executed.
-//public protocol InputRequiring: AdvancedOperation {
-//  associatedtype Input
-//  var input: Input? { get set }
-//}
-//
-//// AdvancedOperation conforming to this protocol, produce an output once finished.
-//public protocol OutputProducing: AdvancedOperation {
-//  associatedtype Output
-//  var output: Output? { get set }
-//}
-//
-//extension OutputProducing {
-//  /// Injects the operation's output into the given operation.
-//  ///
-//  /// - Parameter operation: The input requiring AdvancedOperation.
-//  @discardableResult
-//  public func injectOutput<E: InputRequiring>(into operation: E) -> Self where Output == E.Input {
-//    return injectOutput(into: operation, transform: { (output) -> E.Input? in return output })
-//  }
-//  
-//  /// Injects the operation's output into the given operation.
-//  ///
-//  /// - Parameter operation: The input requiring AdvancedOperation.
-//  /// - Parameter transform: The block that transform the outpu into a suitable input for the given operation.
-//  @discardableResult
-//  public func injectOutput<E: InputRequiring>(into operation: E, transform: @escaping (Output?) -> E.Input?) -> Self {
-//    precondition(operation !== self, "Cannot inject output of self into self.")
-//    precondition(state == .pending, "Injection cannot be done after the OutputProducing operation execution has begun.")
-//    precondition(operation.state == .pending, "Injection cannot be done after the InputRequiring oepration execution has begun.")
-//    
-//    let willFinishObserver = WillFinishObserver { [unowned self, unowned operation] _, error in
-//      if error != nil {
-//        let cancelError = NSError.injectionCancelled(message: "The output producing operation has finished with an error.")
-//        operation.cancel(error: cancelError)
-//      } else {
-//        operation.input = transform(self.output)
-//      }
-//    }
-//    
-//    let didCancelObserver = DidCancelObserver { [unowned operation] _, error in
-//      let cancelError = NSError.injectionCancelled(message: "The output producing operation has been cancelled.")
-//      operation.cancel(error: cancelError)
-//    }
-//    
-//    self.addObserver(didCancelObserver)
-//    self.addObserver(willFinishObserver)
-//    
-//    operation.addDependency(self)
-//    
-//    return self
-//  }
-//}
+public protocol InputConsuming: Operation {
+  associatedtype Input
+  var input: Input? { get set }
+}
+
+public protocol OutputProducing: Operation {
+  associatedtype Output
+  var output: Output { get }
+}
 
 extension OutputProducing {
-  /// Creates a new operation that passes the output of `self` into the given `AdvancedOperation`
+  /// Creates a new operation that passes the output of `self` into the given `Operation`
   ///
   /// - Parameters:
   ///   - operation: The operation that needs the output of `self` to generate an output.
   ///   - requirements: A list of options that the injected input must satisfy.
-  /// - Returns: Returns an *adapter* operation which passes the output of `self` into the given `AdvancedOperation`.
+  /// - Returns: Returns an *adapter* operation which passes the output of `self` into the given `Operation`.
   public func inject<E: InputConsuming>(into operation: E, orCancel: Bool = false) -> Operation where Output == E.Input {
     let injectionOperation = BlockOperation { [unowned self, unowned operation] in
       operation.input = self.output

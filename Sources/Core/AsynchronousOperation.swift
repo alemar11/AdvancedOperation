@@ -26,16 +26,6 @@
 import Foundation
 import os.log
 
-public protocol InputConsuming: Operation {
-  associatedtype Input
-  var input: Input? { get set }
-}
-
-public protocol OutputProducing: Operation {
-  associatedtype Output
-  var output: Output { get }
-}
-
 /// An abstract class that makes building simple asynchronous operations easy.
 /// Subclasses must override `main()` to perform any work and call `finish()`
 /// when they are done. All `NSOperation` work will be handled automatically.

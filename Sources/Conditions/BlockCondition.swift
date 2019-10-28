@@ -27,7 +27,6 @@ import Foundation
 /// If the block is not satisfied, the target operation will be cancelled.
 /// - Note: The block may ´throw´ an error, or return ´false´, both of which are considered as a condition failure.
 public struct BlockCondition: OperationCondition {
-  /// The block type which returns a Bool.
   public typealias Block = () throws -> Bool
 
   static var blockConditionKey: String { return "BlockCondition" }
