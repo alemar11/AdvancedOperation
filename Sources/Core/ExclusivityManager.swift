@@ -23,6 +23,46 @@
 
 import Foundation
 
+public final class ExclusivityManager2 {
+  public struct Token {
+    public let categories: Set<String>
+    private var unlockClosure: (Set<String>) -> Void
+
+    fileprivate init(categories: Set<String>, unlockClosure: @escaping (Set<String>) -> Void) {
+      self.categories = categories
+      self.unlockClosure = unlockClosure
+    }
+
+    public func unlock() {
+      unlockClosure(categories)
+    }
+  }
+
+  public static let shared = ExclusivityManager2()
+
+  let dispatchGroupQueue: DispatchQueue
+  /// The private queue used for thread safe operations.
+  private let queue: DispatchQueue = DispatchQueue(label: "TODO", qos: .userInteractive) //an high priority qos is needed to avoid thread starvation
+  private var _categories: [String: [DispatchGroup]] = [:]
+
+  /// Creates a new `ExclusivityManager` instance.
+  internal init(qos: DispatchQoS = .userInteractive) {
+    // https://www.fivestars.blog/code/semaphores.html
+    let label = "\(identifier).\(type(of: self)).\(UUID().uuidString)"
+    dispatchGroupQueue = DispatchQueue(label: label + ".DispatchGroup", qos: qos, attributes: [.concurrent])
+  }
+
+  public func lock(for categoris: Set<String>, onAvailability completion: @escaping (Token) -> Void) {
+    queue.async {
+    }
+  }
+
+  private func unlock(categories: Set<ExclusivityCategory>) {
+    queue.async {
+    }
+  }
+}
+
 /// `ExclusivityManager` manages exclusivity locks.
 public final class ExclusivityManager {
   /// A shared ExclusivityManager instance (per-process) that can be used accross multiple AdvanceOperations.
