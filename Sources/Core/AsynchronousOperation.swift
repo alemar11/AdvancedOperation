@@ -50,7 +50,7 @@ open class AsynchronousOperation<T>: Operation, OutputProducing_NEW {
 
   /// Serial queue for making state changes atomic under the constraint
   /// of having to send KVO willChange/didChange notifications.
-  private let stateChangeQueue = DispatchQueue(label: "com.alessandromarzoli.AsynchronousOperation.stateChange")
+  private let stateChangeQueue = DispatchQueue(label: "\(identifier).AsynchronousOperation.stateChange")
 
   /// Private backing store for `state`
   private var _state: Atomic<State> = Atomic(.ready)
@@ -63,7 +63,7 @@ open class AsynchronousOperation<T>: Operation, OutputProducing_NEW {
       return _log.value
     }
     set {
-      precondition(state == .ready, "Cannot add a OSLog if the operation is \(state).")
+      precondition(state == .ready, "Cannot add OSLog if the operation is \(state).")
       _log.mutate { $0 = newValue }
     }
   }
@@ -118,19 +118,8 @@ open class AsynchronousOperation<T>: Operation, OutputProducing_NEW {
     preconditionFailure("Subclasses must implement `execute`.")
   }
 
-  // Override points
-
-  // A subclass will probably need to override -operationDidStart and -operationWillFinish
-  // to set up and tear down its run loop sources, respectively.  These are always called
-  // on the actual run loop thread.
-  //
-  // Note that -operationWillFinish will be called even if the operation is cancelled.
-  //
-  // -operationWillFinish can check the error property to see whether the operation was
-  // successful.  error will be NSCocoaErrorDomain/NSUserCancelledError on cancellation.
-  //
-  // -operationDidStart is allowed to call -finishWithError:.
-
+  // A subclass will probably need to `cleanup` to tear down resources.
+  // - Note: It is called even if the operation is cancelled.
   open func cleanup() {
     // At this point the operation is about to be finished, the result is already populated and can be checked
     //preconditionFailure("Subclasses must implement `cleanup`.")
@@ -160,17 +149,6 @@ open class AsynchronousOperation<T>: Operation, OutputProducing_NEW {
     case .finished:
       return
     }
-
-    //    if isFinished {
-    //      print("‼️‼️‼️‼️‼️‼️‼️‼️")
-    //      return
-    //    } else if isExecuting || isReady {
-    //      self.result = result
-    //      cleanup()
-    //      state = .finished
-    //    } else {
-    //      assert(true) // TODO remove this: it's just for test purposes
-    //    }
   }
 
   open override var description: String {
@@ -183,7 +161,7 @@ open class AsynchronousOperation<T>: Operation, OutputProducing_NEW {
 }
 
 extension AsynchronousOperation {
-  /// Mirror of the possible states an (NS)Operation can be in
+  /// Mirror of the possible states an Operation can be in.
   private enum State: Int, CustomStringConvertible {
     case ready
     case executing
