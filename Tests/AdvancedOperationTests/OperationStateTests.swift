@@ -25,21 +25,21 @@ import XCTest
 @testable import AdvancedOperation
 
 final class OperationStateTests: XCTestCase {
-  func testTransition() {
-    // Pending
-    XCTAssertTrue(AdvancedOperation.State.pending.canTransition(to: .executing))
-    XCTAssertTrue(AdvancedOperation.State.pending.canTransition(to: .finished))
-    XCTAssertFalse(AdvancedOperation.State.pending.canTransition(to: .pending))
-
-    // Executing
-    XCTAssertFalse(AdvancedOperation.State.executing.canTransition(to: .executing))
-    XCTAssertTrue(AdvancedOperation.State.executing.canTransition(to: .finished))
-    XCTAssertFalse(AdvancedOperation.State.executing.canTransition(to: .pending))
-  }
-
-  func testDebugDescription() {
-    XCTAssertEqual(AdvancedOperation.State.pending.debugDescription.lowercased(), "pending")
-    XCTAssertEqual(AdvancedOperation.State.executing.debugDescription.lowercased(), "executing")
-    XCTAssertEqual(AdvancedOperation.State.finished.debugDescription.lowercased(), "finished")
-  }
+//  func testTransition() {
+//    // Pending
+//    XCTAssertTrue(AdvancedOperation.State.pending.canTransition(to: .executing))
+//    XCTAssertTrue(AdvancedOperation.State.pending.canTransition(to: .finished))
+//    XCTAssertFalse(AdvancedOperation.State.pending.canTransition(to: .pending))
+//
+//    // Executing
+//    XCTAssertFalse(AdvancedOperation.State.executing.canTransition(to: .executing))
+//    XCTAssertTrue(AdvancedOperation.State.executing.canTransition(to: .finished))
+//    XCTAssertFalse(AdvancedOperation.State.executing.canTransition(to: .pending))
+//  }
+//
+//  func testDebugDescription() {
+//    XCTAssertEqual(AdvancedOperation.State.pending.debugDescription.lowercased(), "pending")
+//    XCTAssertEqual(AdvancedOperation.State.executing.debugDescription.lowercased(), "executing")
+//    XCTAssertEqual(AdvancedOperation.State.finished.debugDescription.lowercased(), "finished")
+//  }
 }

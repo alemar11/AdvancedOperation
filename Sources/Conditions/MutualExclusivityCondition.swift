@@ -52,7 +52,7 @@ public struct MutualExclusivityCondition: OperationCondition {
     _mutuallyExclusiveCategories.insert(mode)
   }
 
-  public func evaluate(for operation: AdvancedOperation, completion: @escaping (Result<Void, Error>) -> Void) {
+  public func evaluate(for operation: Operation, completion: @escaping (Result<Void, Error>) -> Void) {
     completion(.success(()))
   }
 }

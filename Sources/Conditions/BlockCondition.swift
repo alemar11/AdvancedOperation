@@ -38,7 +38,7 @@ public struct BlockCondition: OperationCondition {
     self.block = block
   }
 
-  public func evaluate(for operation: AdvancedOperation, completion: @escaping (Result<Void, Error>) -> Void) {
+  public func evaluate(for operation: Operation, completion: @escaping (Result<Void, Error>) -> Void) {
     do {
       let result = try block()
       if result {

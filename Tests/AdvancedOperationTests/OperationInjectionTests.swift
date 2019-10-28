@@ -135,7 +135,7 @@ class OperationInjectionTests: XCTestCase {
   func testInputInjectionWithAnAlreadyCancelledOutputProducingOperation() {
     let operation1 = AsynchronousOperation<Void>.IntToStringOperation() // no input -> fails
     let operation2 = AsynchronousOperation<Void>.StringToIntOperation()
-    let expectation1 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isFinished), object: operation2, expectedValue: true)
+    let expectation1 = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: operation2, expectedValue: true)
     let injection = operation1.inject(into: operation2) { $0.success }
     let queue = OperationQueue()
 

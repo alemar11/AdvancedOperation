@@ -23,45 +23,45 @@
 
 import Foundation
 
-internal extension AdvancedOperation {
-  /// The possible internal states an AdvancedOperation can be in.
-  enum State: Int, CustomDebugStringConvertible {
-    case pending
-    case executing
-    case finished
-
-    /// Determines wheter or not a transition between the current state and another one is possible.
-    func canTransition(to state: State) -> Bool {
-      switch (self, state) {
-      case (.pending, .executing):
-        return true
-      case (.pending, .finished):
-        return true
-      case (.executing, .finished):
-        return true
-      default:
-        return false
-      }
-    }
-
-   /// The `#keyPath` for the `Operation` property that's associated with this value.
-    var objcKeyPath: String? {
-      switch self {
-      case .pending: return nil
-      case .executing: return #keyPath(isExecuting)
-      case .finished: return #keyPath(isFinished)
-      }
-    }
-
-    var debugDescription: String {
-      switch self {
-      case .pending:
-        return "pending"
-      case .executing:
-        return "executing"
-      case .finished:
-        return "finished"
-      }
-    }
-  }
-}
+//internal extension AdvancedOperation {
+//  /// The possible internal states an AdvancedOperation can be in.
+//  enum State: Int, CustomDebugStringConvertible {
+//    case pending
+//    case executing
+//    case finished
+//
+//    /// Determines wheter or not a transition between the current state and another one is possible.
+//    func canTransition(to state: State) -> Bool {
+//      switch (self, state) {
+//      case (.pending, .executing):
+//        return true
+//      case (.pending, .finished):
+//        return true
+//      case (.executing, .finished):
+//        return true
+//      default:
+//        return false
+//      }
+//    }
+//
+//   /// The `#keyPath` for the `Operation` property that's associated with this value.
+//    var objcKeyPath: String? {
+//      switch self {
+//      case .pending: return nil
+//      case .executing: return #keyPath(isExecuting)
+//      case .finished: return #keyPath(isFinished)
+//      }
+//    }
+//
+//    var debugDescription: String {
+//      switch self {
+//      case .pending:
+//        return "pending"
+//      case .executing:
+//        return "executing"
+//      case .finished:
+//        return "finished"
+//      }
+//    }
+//  }
+//}

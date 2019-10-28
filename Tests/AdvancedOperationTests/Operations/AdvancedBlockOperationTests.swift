@@ -34,7 +34,7 @@ final class AdvancedBlockOperationTests: XCTestCase {
     XCTAssertTrue(operation.isAsynchronous)
     XCTAssertTrue(operation.isConcurrent)
 
-    let expectation1 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isFinished), object: operation, expectedValue: true)
+    let expectation1 = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: operation, expectedValue: true)
     operation.start()
     operation.cancel()
 
@@ -52,7 +52,7 @@ final class AdvancedBlockOperationTests: XCTestCase {
     XCTAssertTrue(operation.isAsynchronous)
     XCTAssertTrue(operation.isConcurrent)
 
-    let expectation1 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isFinished), object: operation, expectedValue: true)
+    let expectation1 = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: operation, expectedValue: true)
     operation.cancel()
     operation.start()
 
@@ -66,7 +66,7 @@ final class AdvancedBlockOperationTests: XCTestCase {
       complete(nil)
     }
 
-    let expectation1 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isFinished), object: operation, expectedValue: true)
+    let expectation1 = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: operation, expectedValue: true)
     operation.cancel()
     operation.start()
 
@@ -83,7 +83,7 @@ final class AdvancedBlockOperationTests: XCTestCase {
       }
     }
 
-    let expectation1 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isFinished), object: operation, expectedValue: true)
+    let expectation1 = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: operation, expectedValue: true)
     operation.start()
 
     wait(for: [expectation1], timeout: 4)
@@ -158,7 +158,7 @@ final class AdvancedBlockOperationTests: XCTestCase {
     let expectation3 = expectation(description: "\(#function)\(#line)")
 
     let operation1 = SleepyOperation()
-    let operation2 = SleepyAsyncOperation()
+    let operation2 = AsynchronousOperation<Void>.SleepyAsyncOperation()
     let operation3 = SleepyOperation()
 
     operation3.addCompletionBlock { expectation3.fulfill() }

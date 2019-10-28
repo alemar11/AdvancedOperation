@@ -28,7 +28,7 @@ final class DelayOperationTests: XCTestCase {
   func testInterval() {
     let start = Date()
     let operation = DelayOperation(interval: 2)
-    let expectation1 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isFinished), object: operation, expectedValue: true)
+    let expectation1 = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: operation, expectedValue: true)
     operation.start()
 
     wait(for: [expectation1], timeout: 3)
@@ -41,7 +41,7 @@ final class DelayOperationTests: XCTestCase {
     let start = Date()
     let end = start.addingTimeInterval(2)
     let operation = DelayOperation(until: end)
-    let expectation1 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isFinished), object: operation, expectedValue: true)
+    let expectation1 = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: operation, expectedValue: true)
     operation.start()
 
     wait(for: [expectation1], timeout: 10)
@@ -54,7 +54,7 @@ final class DelayOperationTests: XCTestCase {
     let start = Date()
     let end = start.addingTimeInterval(0.2)
     let operation = DelayOperation(until: end)
-    let expectation1 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isFinished), object: operation, expectedValue: true)
+    let expectation1 = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: operation, expectedValue: true)
     operation.start()
 
     wait(for: [expectation1], timeout: 3)
@@ -65,7 +65,7 @@ final class DelayOperationTests: XCTestCase {
 
   func testNegativeInterval() {
     let operation = DelayOperation(interval: -2)
-    let expectation1 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isFinished), object: operation, expectedValue: true)
+    let expectation1 = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: operation, expectedValue: true)
 
     operation.start()
 
@@ -78,7 +78,7 @@ final class DelayOperationTests: XCTestCase {
     let start = Date()
     let end = start.addingTimeInterval(4)
     let operation = DelayOperation(until: end)
-    let expectation1 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isFinished), object: operation, expectedValue: true)
+    let expectation1 = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: operation, expectedValue: true)
 
     operation.start()
     operation.cancel()
@@ -95,7 +95,7 @@ final class DelayOperationTests: XCTestCase {
   func testCancelBeforeStart() {
     let start = Date()
     let operation = DelayOperation(interval: 2)
-    let expectation1 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isFinished), object: operation, expectedValue: true)
+    let expectation1 = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: operation, expectedValue: true)
 
     operation.cancel()
     operation.start()

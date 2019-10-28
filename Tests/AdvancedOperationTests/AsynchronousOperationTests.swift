@@ -50,7 +50,7 @@ final class AsynchronousOperationTests: XCTestCase {
   }
     func testStart() {
       let operation = AsynchronousOperation<Any>.SleepyAsyncOperation() // by default is 3 second long
-      let expectation1 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isFinished), object: operation, expectedValue: true)
+      let expectation1 = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: operation, expectedValue: true)
       XCTAssertTrue(operation.isReady)
 
       operation.start()
@@ -62,7 +62,7 @@ final class AsynchronousOperationTests: XCTestCase {
 
     func testCancel() {
       let operation = AsynchronousOperation<Any>.SleepyAsyncOperation()
-      let expectation1 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isFinished), object: operation, expectedValue: true)
+      let expectation1 = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: operation, expectedValue: true)
 
       XCTAssertTrue(operation.isReady)
 
@@ -81,7 +81,7 @@ final class AsynchronousOperationTests: XCTestCase {
       let operation = AsynchronousOperation<Any>.SleepyAsyncOperation()
 
       XCTAssertTrue(operation.isReady)
-      let expectation = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isCancelled), object: operation, expectedValue: true)
+      let expectation = XCTKVOExpectation(keyPath: #keyPath(Operation.isCancelled), object: operation, expectedValue: true)
       operation.cancel()
 
       wait(for: [expectation], timeout: 10)
@@ -106,7 +106,7 @@ final class AsynchronousOperationTests: XCTestCase {
 
     func testMultipleCancel() {
       let operation = AsynchronousOperation<Any>.SleepyAsyncOperation()
-      let expectation1 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isFinished), object: operation, expectedValue: true)
+      let expectation1 = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: operation, expectedValue: true)
       let expectation2 = expectation(description: "\(#function)\(#line)")
 
       XCTAssertTrue(operation.isReady)
@@ -129,7 +129,7 @@ final class AsynchronousOperationTests: XCTestCase {
 
     func testFinishWithErrors() {
       let operation = AsynchronousOperation<Any>.FailingAsyncOperation()
-      let expectation1 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isFinished), object: operation, expectedValue: true)
+      let expectation1 = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: operation, expectedValue: true)
 
       operation.start()
 
@@ -141,7 +141,7 @@ final class AsynchronousOperationTests: XCTestCase {
     func testReadiness() {
       // Given
       let operation1 = AsynchronousOperation<Any>.SleepyAsyncOperation()
-      let expectation1 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isFinished), object: operation1, expectedValue: true)
+      let expectation1 = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: operation1, expectedValue: true)
       XCTAssertTrue(operation1.isReady)
 
       let operation2 = BlockOperation(block: { } )
