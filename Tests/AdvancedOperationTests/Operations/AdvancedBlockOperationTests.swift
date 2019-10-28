@@ -62,10 +62,7 @@ final class AdvancedBlockOperationTests: XCTestCase {
   }
 
   func testEarlyBailOut() {
-    let operation = AdvancedBlockOperation { complete in
-      complete(nil)
-    }
-
+    let operation = AdvancedBlockOperation { complete in complete(nil) }
     let expectation1 = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: operation, expectedValue: true)
     operation.cancel()
     operation.start()
@@ -75,7 +72,7 @@ final class AdvancedBlockOperationTests: XCTestCase {
     XCTAssertTrue(operation.isCancelled)
   }
 
-  func testBlockOperationWithAsyncQueue() {
+  func testBlockOperationCompletedInAsyncQueue() {
     let operation = AdvancedBlockOperation { complete in
       XCTAssertTrue(Thread.isMainThread)
       DispatchQueue(label: "\(identifier).\(#function)", attributes: .concurrent).asyncAfter(deadline: .now() + 3) {
@@ -90,35 +87,36 @@ final class AdvancedBlockOperationTests: XCTestCase {
 
   }
 
-  func testBlockOperationWithAsyncQueueFinishedWithErrors() {
+  func testBlockOperationCompletedWithErrorsInAsyncQueue() {
     let error = MockError.generic(date: Date())
-
     var object = NSObject()
     weak var weakObject = object
 
-    var operation = AdvancedBlockOperation { [object] complete in
-      DispatchQueue(label: "\(identifier).\(#function)", attributes: .concurrent).asyncAfter(deadline: .now() + 2) {
-        _ = object
-        complete(error)
+    autoreleasepool {
+      var operation = AdvancedBlockOperation { [weak object] complete in
+        DispatchQueue(label: "\(identifier).\(#function)", attributes: .concurrent).asyncAfter(deadline: .now() + 2) {
+          _ = object
+          complete(error)
+        }
       }
+
+      let expectation1 = expectation(description: "\(#function)\(#line)")
+      operation.addCompletionBlock { expectation1.fulfill() }
+      operation.start()
+
+      waitForExpectations(timeout: 5)
+      XCTAssertTrue(operation.isFinished)
+
+      if let opError = operation.output.failure as? MockError {
+        XCTAssertEqual(opError, error)
+      } else {
+        XCTFail("Wrong error type.")
+      }
+
+      // Memory leaks test: once release the operation, the captured object (by reference) should be nil (weakObject)
+      operation = AdvancedBlockOperation { }
+      object = NSObject()
     }
-
-    let expectation1 = expectation(description: "\(#function)\(#line)")
-    operation.addCompletionBlock { expectation1.fulfill() }
-    operation.start()
-
-    waitForExpectations(timeout: 5)
-    XCTAssertTrue(operation.isFinished)
-
-    if let opError = operation.output.failure as? MockError {
-      XCTAssertEqual(opError, error)
-    } else {
-      XCTFail("Wrong error type.")
-    }
-
-    // Memory leaks test: once release the operation, the captured object (by reference) should be nil (weakObject)
-    operation = AdvancedBlockOperation { }
-    object = NSObject()
     XCTAssertNil(weakObject)
   }
 
@@ -203,6 +201,6 @@ final class AdvancedBlockOperationTests: XCTestCase {
       object = NSObject()
     }
 
-    XCTAssertNil(weakObject)
+    XCTAssertNil(weakObject, "Memory leak: the object should have been deallocated at this point.")
   }
 }
