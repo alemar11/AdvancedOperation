@@ -23,10 +23,11 @@
 
 import Foundation
 
-public final class ExclusivityManager {
+extension ExclusivityManager {
   public final class Token {
     public let categories: Set<String>
     private var unlockClosure: ((Set<String>) -> Void)?
+    private let lock = UnfairLock()
 
     fileprivate init(categories: Set<String>, unlockClosure: @escaping (Set<String>) -> Void) {
       self.categories = categories
@@ -34,11 +35,17 @@ public final class ExclusivityManager {
     }
 
     public func unlock() {
+      lock.lock()
+      defer { lock.unlock() }
+
       unlockClosure?(categories)
-      unlockClosure = nil // the token is consumed and cannot be used again
+      // the token is consumed and cannot be used again
+      unlockClosure = nil
     }
   }
+}
 
+public final class ExclusivityManager {
   public static let shared = ExclusivityManager()
 
   private enum Exclusivity {
@@ -48,11 +55,11 @@ public final class ExclusivityManager {
 
   let dispatchGroupsQueue: DispatchQueue
   /// The private queue used for thread safe operations.
-  private let queue: DispatchQueue = DispatchQueue(label: "\(identifier).ExclusivityManager", qos: .userInteractive) //an high priority qos is needed to avoid thread starvation
+  private let queue: DispatchQueue = DispatchQueue(label: "\(identifier).ExclusivityManager", qos: .userInitiated) //an high priority qos is needed to avoid thread starvation
   private var categories: [String: [DispatchGroup]] = [:]
 
   /// Creates a new `ExclusivityManager` instance.
-  internal init(qos: DispatchQoS = .userInteractive) {
+  internal init(qos: DispatchQoS = .userInitiated) {
     // https://www.fivestars.blog/code/semaphores.html
     dispatchGroupsQueue = DispatchQueue(label: "\(identifier).ExclusivityManager.DispatchGroupsQueue.\(UUID().uuidString)", qos: qos, attributes: [.concurrent])
   }
@@ -105,8 +112,6 @@ public final class ExclusivityManager {
     guard var groupsByCategory = categories[category], !groupsByCategory.isEmpty else {
       return
     }
-
-    //assert(!groupsByCategory.isEmpty, "The queue for the \(category) category is already empty.")
 
     // Removes the first item (that has currently the exclusivity lock) for this category.
     _ = groupsByCategory.removeFirst()
