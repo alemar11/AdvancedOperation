@@ -41,22 +41,22 @@ public protocol OutputProducing_NEW: Operation {
 /// Source/Inspiration: https://stackoverflow.com/a/48104095/116862 and https://gist.github.com/calebd/93fa347397cec5f88233
 open class AsynchronousOperation<T>: Operation, OutputProducing_NEW {
   public typealias Output = Result<T,Error>
+  
+  public final override var isAsynchronous: Bool { return true }
   public private(set) var output: Output = .failure(NSError.notStarted)
-
+  
   public init(name: String? = nil) {
     super.init()
-    self.name = name
+    self.name = name ?? "\(type(of: self))"
   }
-
+  
   /// Serial queue for making state changes atomic under the constraint
   /// of having to send KVO willChange/didChange notifications.
   private let stateChangeQueue = DispatchQueue(label: "\(identifier).AsynchronousOperation.stateChange")
-
+  
   /// Private backing store for `state`
   private var _state: Atomic<State> = Atomic(.ready)
-
-  public final override var isAsynchronous: Bool { return true }
-
+  
   /// An instance of `OSLog` (by default is disabled).
   public var log: OSLog {
     get {
@@ -67,29 +67,30 @@ open class AsynchronousOperation<T>: Operation, OutputProducing_NEW {
       _log.mutate { $0 = newValue }
     }
   }
-
+  
   private var _log = Atomic(OSLog.disabled) // TODO: work in progress
-
+  
   open override var isReady: Bool {
     return state == .ready && super.isReady
   }
-
+  
   public final override var isExecuting: Bool {
     return state == .executing
   }
-
+  
   public final override var isFinished: Bool {
     return state == .finished
   }
-
+  
   // MARK: - Foundation.Operation
+  
   public final override func start() {
     /// The default implementation of this method updates the execution state of the operation and calls the receiver’s main() method.
     /// This method also performs several checks to ensure that the operation can actually run.
     /// For example, if the receiver was cancelled or is already finished, this method simply returns without calling main().
     /// If the operation is currently executing or is not ready to execute, this method throws an NSInvalidArgumentException exception.
     super.start()
-
+    
     // At this point main() has already returned.
     if isCancelled {
       let error = NSError(domain: NSCocoaErrorDomain, code: NSUserCancelledError, userInfo: nil)
@@ -97,64 +98,70 @@ open class AsynchronousOperation<T>: Operation, OutputProducing_NEW {
       return
     }
   }
-
+  
   // MARK: - Public
-
+  
   /// Subclasses must implement this to perform their work and they must not call `super`.
   /// The default implementation of this function traps.
   public final override func main() {
     guard !isCancelled else { return }
-
+    
     state = .executing
-
+    
     // TODO: before executing the operation we could validate it with some conditions
     // if the conditions fail, cancel the operation and return without executing run
-
-    // ⚠️ LOG: operation has started
+    
+    os_log("%{public}s has started.", log: log, type: .info, operationName)
     execute(completion: finish)
   }
-
+  
   open func execute(completion: @escaping (Output) -> Void) {
     preconditionFailure("Subclasses must implement `execute`.")
   }
-
-  // A subclass will probably need to `cleanup` to tear down resources.
-  // - Note: It is called even if the operation is cancelled.
+  
+  /// A subclass will probably need to override `cleanup` to tear down resources.
+  ///
+  /// At this point the operation is about to be finished and the final output is already created.
+  /// - Note: It is called even if the operation is cancelled.
   open func cleanup() {
-    // At this point the operation is about to be finished, the result is already populated and can be checked
-    //preconditionFailure("Subclasses must implement `cleanup`.")
+    // subclass
   }
-
-
-  private let lock = NSLock() // TODO
-
+  
   open override func cancel() {
     super.cancel()
-    // ⚠️ LOG: operation has been cancelled
+    os_log("%{public}s has been cancelled.", log: log, type: .info, operationName)
   }
-
+  
+  private let lock = UnfairLock()
+  
   /// Call this function to finish an operation that is currently executing.
   /// State can also be "ready" here if the operation was cancelled before it started.
   public final func finish(result: Output) {
     lock.lock()
     defer { lock.unlock() }
-
+    
     switch state {
     case .ready, .executing:
       self.output = result
-      // ⚠️ LOG: operation is finishing
       cleanup()
       state = .finished
-      // ⚠️ LOG: operation has finished
+      if log != .disabled {
+        switch output {
+        case .success:
+          os_log("%{public}s has finished.", log: log, type: .info, operationName)
+        case .failure(let error):
+          os_log("%{public}s has finished with error: %{private}s.", log: log, type: .info, operationName, error.localizedDescription)
+        }
+      }
     case .finished:
       return
     }
   }
-
+  
   open override var description: String {
     return debugDescription
   }
-
+  
   open override var debugDescription: String {
     return "\(type(of: self)) — \(name ?? "nil") – \(isCancelled ? "cancelled" : String(describing: state))"
   }
@@ -166,7 +173,7 @@ extension AsynchronousOperation {
     case ready
     case executing
     case finished
-
+    
     /// The `#keyPath` for the `Operation` property that's associated with this value.
     var objcKeyPath: String {
       switch self {
@@ -175,7 +182,7 @@ extension AsynchronousOperation {
       case .finished: return #keyPath(isFinished)
       }
     }
-
+    
     var description: String {
       switch self {
       case .ready: return "ready"
@@ -183,7 +190,7 @@ extension AsynchronousOperation {
       case .finished: return "finished"
       }
     }
-
+    
     func canTransition(to newState: State) -> Bool {
       switch (self, newState) {
       case (.ready, .executing): return true
@@ -193,7 +200,7 @@ extension AsynchronousOperation {
       }
     }
   }
-
+  
   /// The state of the operation
   private var state: State {
     get {
@@ -211,15 +218,15 @@ extension AsynchronousOperation {
         // willChange/didChange notifications only for the key paths that actually change.
         let oldValue = _state.value
         //guard newValue != oldValue else { return }
-
+        
         willChangeValue(forKey: oldValue.objcKeyPath)
         willChangeValue(forKey: newValue.objcKeyPath)
-
+        
         _state.mutate {
           assert($0.canTransition(to: newValue), "Performing an invalid state transition from: \($0) to: \(newValue).")
           $0 = newValue
         }
-
+        
         didChangeValue(forKey: oldValue.objcKeyPath)
         didChangeValue(forKey: newValue.objcKeyPath)
       }
