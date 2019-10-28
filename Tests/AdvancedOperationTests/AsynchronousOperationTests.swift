@@ -45,8 +45,15 @@ final class AsynchronousOperationTests: XCTestCase {
   func testOutputBeforeStarting() throws {
      let operation = AsynchronousOperation<Any>.SleepyAsyncOperation()
     XCTAssertFalse(operation.isExecuting)
-    let output = try XCTUnwrap(operation.output.failure) as NSError
-    XCTAssertEqual(output, NSError.notStarted)
+
+    // https://forums.swift.org/t/xctunwrap-not-available-during-swift-test/28878/4
+    //let output = try XCTUnwrap(operation.output.failure) as NSError
+    guard let output = operation.output.failure else {
+      XCTFail("The operation should have a failure output")
+      return
+    }
+
+    XCTAssertEqual(output as NSError, NSError.notStarted)
   }
     func testStart() {
       let operation = AsynchronousOperation<Any>.SleepyAsyncOperation() // by default is 3 second long
