@@ -24,98 +24,98 @@
 import XCTest
 @testable import AdvancedOperation
 
-final class NegatedConditionTests: XCTestCase {
-  func testEmptyMutuallyExclusiveCategories() {
-    let condition = NegatedCondition(condition: NoFailedDependenciesCondition())
-    XCTAssertTrue(condition.mutuallyExclusiveCategories.isEmpty)
-  }
-
-  func testName() {
-    let conditionName = NoFailedDependenciesCondition().name
-    XCTAssertEqual(NegatedCondition(condition: NoFailedDependenciesCondition()).name, "Not<\(conditionName)>")
-  }
-
-  func testNotFulFilledConditionWithoutOperationQueue() {
-    let condition = BlockCondition { true }
-    let negatedCondition = NegatedCondition(condition: condition)
-    let operation = SleepyOperation()
-    operation.addCondition(negatedCondition)
-
-    operation.start()
-    XCTAssertTrue(operation.isCancelled)
-    XCTAssertTrue(operation.hasError)
-    XCTAssertTrue(operation.isFinished)
-  }
-
-  func testFulFilledConditionWithoutOperationQueue() {
-    let condition = BlockCondition { false }
-    let negatedCondition = NegatedCondition(condition: condition)
-    let operation = SleepyOperation()
-    operation.addCondition(negatedCondition)
-
-    operation.start()
-    XCTAssertFalse(operation.isCancelled)
-    XCTAssertFalse(operation.hasError)
-    XCTAssertTrue(operation.isFinished)
-  }
-
-  func testNegationWithFailingCondition() {
-    let negatedFailingCondition = NegatedCondition(condition: AlwaysFailingCondition())
-    let dummyOperation = AdvancedBlockOperation { }
-    let expectation1 = expectation(description: "\(#function)\(#line)")
-    negatedFailingCondition.evaluate(for: dummyOperation) { (result) in
-      switch result {
-      case .success:
-        expectation1.fulfill()
-      default: return
-      }
-    }
-    waitForExpectations(timeout: 2)
-  }
-
-  func testNegationWithSuccessingCondition() {
-    let negatedFailingCondition = NegatedCondition(condition: AlwaysSuccessingCondition())
-    let dummyOperation = AdvancedBlockOperation { }
-    let expectation1 = expectation(description: "\(#function)\(#line)")
-    negatedFailingCondition.evaluate(for: dummyOperation) { (result) in
-      switch result {
-      case .failure:
-        expectation1.fulfill()
-      default: return
-      }
-    }
-    waitForExpectations(timeout: 2)
-  }
-
-  func testMutitpleNegatedConditions() {
-    let queue = OperationQueue()
-
-    let operation1 = AdvancedBlockOperation { }
-    operation1.name = "operation1"
-
-    let operation2 = FailingAsyncOperation(error: .failed)
-    operation2.name = "operation2"
-
-    let operation3 = FailingAsyncOperation(error: .failed)
-    operation3.name = "operation3"
-
-    let operation4 = DelayOperation(interval: 1)
-    operation4.name = "operation4"
-
-    let expectation1 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isFinished), object: operation1, expectedValue: true)
-    let expectation2 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isFinished), object: operation2, expectedValue: true)
-    let expectation3 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isFinished), object: operation3, expectedValue: true)
-    let expectation4 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isFinished), object: operation4, expectedValue: true)
-
-    operation1.addCondition(NoFailedDependenciesCondition().negated)
-    operation1.addDependency(operation2)
-    operation1.addDependency(operation3)
-    operation1.addDependency(operation4)
-
-    queue.addOperations([operation2, operation1, operation3, operation4], waitUntilFinished: false)
-
-    wait(for: [expectation1, expectation2, expectation3, expectation4], timeout: 10)
-
-    XCTAssertFalse(operation1.hasError)
-  }
-}
+//final class NegatedConditionTests: XCTestCase {
+//  func testEmptyMutuallyExclusiveCategories() {
+//    let condition = NegatedCondition(condition: NoFailedDependenciesCondition())
+//    XCTAssertTrue(condition.mutuallyExclusiveCategories.isEmpty)
+//  }
+//
+//  func testName() {
+//    let conditionName = NoFailedDependenciesCondition().name
+//    XCTAssertEqual(NegatedCondition(condition: NoFailedDependenciesCondition()).name, "Not<\(conditionName)>")
+//  }
+//
+//  func testNotFulFilledConditionWithoutOperationQueue() {
+//    let condition = BlockCondition { true }
+//    let negatedCondition = NegatedCondition(condition: condition)
+//    let operation = SleepyOperation()
+//    operation.addCondition(negatedCondition)
+//
+//    operation.start()
+//    XCTAssertTrue(operation.isCancelled)
+//    XCTAssertTrue(operation.hasError)
+//    XCTAssertTrue(operation.isFinished)
+//  }
+//
+//  func testFulFilledConditionWithoutOperationQueue() {
+//    let condition = BlockCondition { false }
+//    let negatedCondition = NegatedCondition(condition: condition)
+//    let operation = SleepyOperation()
+//    operation.addCondition(negatedCondition)
+//
+//    operation.start()
+//    XCTAssertFalse(operation.isCancelled)
+//    XCTAssertFalse(operation.hasError)
+//    XCTAssertTrue(operation.isFinished)
+//  }
+//
+//  func testNegationWithFailingCondition() {
+//    let negatedFailingCondition = NegatedCondition(condition: AlwaysFailingCondition())
+//    let dummyOperation = AdvancedBlockOperation { }
+//    let expectation1 = expectation(description: "\(#function)\(#line)")
+//    negatedFailingCondition.evaluate(for: dummyOperation) { (result) in
+//      switch result {
+//      case .success:
+//        expectation1.fulfill()
+//      default: return
+//      }
+//    }
+//    waitForExpectations(timeout: 2)
+//  }
+//
+//  func testNegationWithSuccessingCondition() {
+//    let negatedFailingCondition = NegatedCondition(condition: AlwaysSuccessingCondition())
+//    let dummyOperation = AdvancedBlockOperation { }
+//    let expectation1 = expectation(description: "\(#function)\(#line)")
+//    negatedFailingCondition.evaluate(for: dummyOperation) { (result) in
+//      switch result {
+//      case .failure:
+//        expectation1.fulfill()
+//      default: return
+//      }
+//    }
+//    waitForExpectations(timeout: 2)
+//  }
+//
+//  func testMutitpleNegatedConditions() {
+//    let queue = OperationQueue()
+//
+//    let operation1 = AdvancedBlockOperation { }
+//    operation1.name = "operation1"
+//
+//    let operation2 = FailingAsyncOperation(error: .failed)
+//    operation2.name = "operation2"
+//
+//    let operation3 = FailingAsyncOperation(error: .failed)
+//    operation3.name = "operation3"
+//
+//    let operation4 = DelayOperation(interval: 1)
+//    operation4.name = "operation4"
+//
+//    let expectation1 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isFinished), object: operation1, expectedValue: true)
+//    let expectation2 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isFinished), object: operation2, expectedValue: true)
+//    let expectation3 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isFinished), object: operation3, expectedValue: true)
+//    let expectation4 = XCTKVOExpectation(keyPath: #keyPath(AdvancedOperation.isFinished), object: operation4, expectedValue: true)
+//
+//    operation1.addCondition(NoFailedDependenciesCondition().negated)
+//    operation1.addDependency(operation2)
+//    operation1.addDependency(operation3)
+//    operation1.addDependency(operation4)
+//
+//    queue.addOperations([operation2, operation1, operation3, operation4], waitUntilFinished: false)
+//
+//    wait(for: [expectation1, expectation2, expectation3, expectation4], timeout: 10)
+//
+//    XCTAssertFalse(operation1.hasError)
+//  }
+//}

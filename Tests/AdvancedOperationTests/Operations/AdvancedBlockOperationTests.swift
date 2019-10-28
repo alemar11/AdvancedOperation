@@ -110,7 +110,7 @@ final class AdvancedBlockOperationTests: XCTestCase {
     waitForExpectations(timeout: 5)
     XCTAssertTrue(operation.isFinished)
 
-    if let opError = operation.error as? MockError {
+    if let opError = operation.output.failure as? MockError {
       XCTAssertEqual(opError, error)
     } else {
       XCTFail("Wrong error type.")

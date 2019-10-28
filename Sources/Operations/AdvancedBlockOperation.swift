@@ -24,8 +24,8 @@
 import Dispatch
 import Foundation
 
-/// A concurrent sublcass of `AdvancedOperation` to execute a closure.
-public final class AdvancedBlockOperation: AdvancedOperation {
+/// A concurrent sublcass of `AsynchronousOperation` to execute a closure.
+public final class AdvancedBlockOperation: AsynchronousOperation<Void> {
   /// A closure type that takes a closure as its parameter.
   public typealias OperationBlock = (@escaping (Error?) -> Void) -> Void
 
@@ -61,14 +61,18 @@ public final class AdvancedBlockOperation: AdvancedOperation {
 
   // MARK: - Overrides
 
-  public override func execute() {
+  public override func execute(completion: @escaping (Result<Void, Error>) -> Void) {
     guard !isCancelled else {
-      finish()
+      completion(.failure(NSError.cancelled))
       return
     }
 
-    block { [weak self] error in
-      self?.finish(error: error)
+    block { error in
+      if let error = error {
+        completion(.failure(error))
+      } else {
+        completion(.success(()))
+      }
     }
   }
 }

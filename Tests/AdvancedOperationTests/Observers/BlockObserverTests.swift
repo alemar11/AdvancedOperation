@@ -118,32 +118,32 @@ final class BlockObserverTests: XCTestCase {
     XCTAssertTrue(producedOperation.isFinished)
   }
 
-  func testProducedOperationWithFailingConditionsOnConcurrentQueue() {
-    let queue = DispatchQueue(label: "\(#function)")
-    queue.sync {
-      let queue = OperationQueue()
-      queue.maxConcurrentOperationCount = 10
-      let expectation1 = expectation(description: "\(#function)\(#line)")
-      let expectation2 = expectation(description: "\(#function)\(#line)")
-
-      let producedOperation = AdvancedBlockOperation { do { } }
-      producedOperation.log = TestsLog
-      producedOperation.addCompletionBlock { expectation2.fulfill() }
-      producedOperation.addCondition(BlockCondition { false })
-
-      let producer = ProducingOperationsOperation.OperationProducer(producedOperation, true, 5)
-      let operation = ProducingOperationsOperation(operationProducers: [producer])
-      operation.addCompletionBlock { expectation1.fulfill() }
-      operation.log = TestsLog
-      queue.addOperation(operation)
-
-      // producedOperation will be executed right after it gets produced but it will have errors because of the condition
-      wait(for: [expectation2, expectation1], timeout: 15, enforceOrder: true)
-
-      XCTAssertTrue(producedOperation.hasError)
-      XCTAssertFalse(operation.hasError)
-      XCTAssertTrue(operation.isFinished)
-      XCTAssertTrue(producedOperation.isFinished)
-    }
-  }
+//  func testProducedOperationWithFailingConditionsOnConcurrentQueue() {
+//    let queue = DispatchQueue(label: "\(#function)")
+//    queue.sync {
+//      let queue = OperationQueue()
+//      queue.maxConcurrentOperationCount = 10
+//      let expectation1 = expectation(description: "\(#function)\(#line)")
+//      let expectation2 = expectation(description: "\(#function)\(#line)")
+//
+//      let producedOperation = AdvancedBlockOperation { do { } }
+//      producedOperation.log = TestsLog
+//      producedOperation.addCompletionBlock { expectation2.fulfill() }
+//      producedOperation.addCondition(BlockCondition { false })
+//
+//      let producer = ProducingOperationsOperation.OperationProducer(producedOperation, true, 5)
+//      let operation = ProducingOperationsOperation(operationProducers: [producer])
+//      operation.addCompletionBlock { expectation1.fulfill() }
+//      operation.log = TestsLog
+//      queue.addOperation(operation)
+//
+//      // producedOperation will be executed right after it gets produced but it will have errors because of the condition
+//      wait(for: [expectation2, expectation1], timeout: 15, enforceOrder: true)
+//
+//      XCTAssertTrue(producedOperation.hasError)
+//      XCTAssertFalse(operation.hasError)
+//      XCTAssertTrue(operation.isFinished)
+//      XCTAssertTrue(producedOperation.isFinished)
+//    }
+//  }
 }

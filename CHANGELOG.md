@@ -1,5 +1,10 @@
 # Changelog
 
+### 5.0.0
+
+- Added `AsynchronousOperation`.
+- Removed `GroupOperation`.
+
 ### 4.0.0
 
 - An `AdvancedOperation` can now be cancelled or finished with only one single `Error`.

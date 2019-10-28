@@ -462,19 +462,6 @@ final internal class ProducingOperationsOperation: AdvancedOperation {
   }
 }
 
-/// Add an operation just before starting executing.
-final internal class LazyGroupOperation: GroupOperation {
-  var onLazyOperationFinished: (() -> Void)?
-
-  override func operationWillExecute() {
-    let operation = SleepyOperation()
-    operation.addCompletionBlock { [weak self] in
-      self?.onLazyOperationFinished?()
-    }
-    addOperation(operation: operation)
-  }
-}
-
 
 final internal class ProgressOperation: AdvancedOperation {
 
