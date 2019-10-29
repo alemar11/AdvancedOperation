@@ -30,20 +30,20 @@ class OperationInjectionTests: XCTestCase {
   // TODO: test the injection with operations that have as input a Result type
   
   func testInputAndOutput() {
-    let operation1 = AsynchronousOperation<Void>.IntToStringOperation()
+    let operation1 = IntToStringOperation()
     operation1.input = 10
     operation1.start()
     XCTAssertEqual(operation1.output.success, "10")
 
-    let operation2 = AsynchronousOperation<Void>.StringToIntOperation()
+    let operation2 = StringToIntOperation()
     operation2.input = "10"
     operation2.start()
     XCTAssertEqual(operation2.output.success, 10)
   }
 
   func testInjectionMixedWithOtherOperation() {
-    let operation1 = AsynchronousOperation<Void>.IntToStringOperation()
-    let operation2 = AsynchronousOperation<Void>.StringToIntOperation()
+    let operation1 = IntToStringOperation()
+    let operation2 = StringToIntOperation()
     let operation3 = BlockOperation()
     operation3.addDependency(operation2)
     operation1.input = 10
@@ -56,8 +56,8 @@ class OperationInjectionTests: XCTestCase {
   }
 
 //  func testInjectionUsingInstanceMethodAndWaitUntilFinished() {
-//    let operation1 = AsynchronousOperation<Void>.IntToStringOperation()
-//    let operation2 = AsynchronousOperation<Void>.StringToIntOperation()
+//    let operation1 = IntToStringOperation()
+//    let operation2 = StringToIntOperation()
 //    operation1.input = 10
 //    let injection = operation1.inject(into: operation2) { $0.success }
 //    let queue = OperationQueue()
@@ -66,8 +66,8 @@ class OperationInjectionTests: XCTestCase {
 //  }
 
 //  func testTransformableInjectionInstanceMethodAndWaitUntilFinishedUsing() {
-//    let operation1 = AsynchronousOperation<Void>.IntToStringOperation()
-//    let operation2 = AsynchronousOperation<Void>.IntToStringOperation()
+//    let operation1 = IntToStringOperation()
+//    let operation2 = IntToStringOperation()
 //    operation1.input = 10
 //    operation1.injectOutput(into: operation2) { value -> Int? in
 //      if let value = value {
@@ -83,8 +83,8 @@ class OperationInjectionTests: XCTestCase {
 //  }
 
   func testTransformableInjectionWithNilResultUsingInstanceMethodAndWaitUntilFinished() {
-    let operation1 = AsynchronousOperation<Void>.IntToStringOperation()
-    let operation2 = AsynchronousOperation<Void>.IntToStringOperation()
+    let operation1 = IntToStringOperation()
+    let operation2 = IntToStringOperation()
     operation1.input = nil
     let injection = operation1.inject(into: operation2) { result -> Int? in
       return nil
@@ -98,8 +98,8 @@ class OperationInjectionTests: XCTestCase {
 
   func testInjectionWithoutWaitingUntilFinished() {
     let expectation = self.expectation(description: "\(#function)\(#line)")
-    let operation1 = AsynchronousOperation<Void>.IntToStringOperation()
-    let operation2 = AsynchronousOperation<Void>.StringToIntOperation()
+    let operation1 = IntToStringOperation()
+    let operation2 = StringToIntOperation()
     let operation3 = AdvancedBlockOperation {
       expectation.fulfill()
     }
@@ -117,8 +117,8 @@ class OperationInjectionTests: XCTestCase {
 
   func testInjectionInputNotOptionalRequirement() {
     let expectation1 = self.expectation(description: "\(#function)\(#line)")
-    let operation1 = AsynchronousOperation<Void>.IntToStringOperation()
-    let operation2 = AsynchronousOperation<Void>.StringToIntOperation()
+    let operation1 = IntToStringOperation()
+    let operation2 = StringToIntOperation()
     operation2.completionBlock = {
       expectation1.fulfill()
     }
@@ -133,8 +133,8 @@ class OperationInjectionTests: XCTestCase {
   }
 
   func testInputInjectionWithAnAlreadyCancelledOutputProducingOperation() {
-    let operation1 = AsynchronousOperation<Void>.IntToStringOperation() // no input -> fails
-    let operation2 = AsynchronousOperation<Void>.StringToIntOperation()
+    let operation1 = IntToStringOperation() // no input -> fails
+    let operation2 = StringToIntOperation()
     let expectation1 = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: operation2, expectedValue: true)
     let injection = operation1.inject(into: operation2) { $0.success }
     let queue = OperationQueue()
@@ -147,8 +147,8 @@ class OperationInjectionTests: XCTestCase {
 
   func testMemoryLeaks() {
     let queue = OperationQueue()
-    var operation1: AsynchronousOperation<Void>.IntToStringOperation? = AsynchronousOperation<Void>.IntToStringOperation()
-    var operation2: AsynchronousOperation<Void>.StringToIntOperation? = AsynchronousOperation<Void>.StringToIntOperation()
+    var operation1: IntToStringOperation? = IntToStringOperation()
+    var operation2: StringToIntOperation? = StringToIntOperation()
 
     weak var weakOperation1 = operation1
     weak var weakOperation2 = operation2
@@ -162,8 +162,8 @@ class OperationInjectionTests: XCTestCase {
       XCTAssertEqual(operation2!.output.success, 10)
 
       // replacing operations with new ones to force deinit on the previous ones.
-      operation1 = AsynchronousOperation<Void>.IntToStringOperation()
-      operation2 = AsynchronousOperation<Void>.StringToIntOperation()
+      operation1 = IntToStringOperation()
+      operation2 = StringToIntOperation()
     }
 
     // sometimes the OperationQueue needs more time to remove the operations

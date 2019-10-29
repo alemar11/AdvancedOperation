@@ -156,7 +156,7 @@ final class AdvancedBlockOperationTests: XCTestCase {
     let expectation3 = expectation(description: "\(#function)\(#line)")
 
     let operation1 = SleepyOperation()
-    let operation2 = AsynchronousOperation<Void>.SleepyAsyncOperation()
+    let operation2 = SleepyAsyncOperation()
     let operation3 = SleepyOperation()
 
     operation3.addCompletionBlock { expectation3.fulfill() }

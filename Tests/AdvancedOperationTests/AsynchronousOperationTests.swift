@@ -42,8 +42,16 @@ final class AsynchronousOperationTests: XCTestCase {
 //    XCTAssertTrue(operation.isFinished)
 //  }
 
+  func testNotFinishingOperation() throws {
+    let operation = NotFinishingAsynchronousOperation()
+    let expectation1 = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: operation, expectedValue: true)
+    expectation1.isInverted = true
+    operation.start()
+    wait(for: [expectation1], timeout: 3)
+  }
+
   func testOutputBeforeStarting() throws {
-     let operation = AsynchronousOperation<Any>.SleepyAsyncOperation()
+     let operation = SleepyAsyncOperation()
     XCTAssertFalse(operation.isExecuting)
 
     // https://forums.swift.org/t/xctunwrap-not-available-during-swift-test/28878/4
@@ -56,7 +64,7 @@ final class AsynchronousOperationTests: XCTestCase {
     XCTAssertEqual(output as NSError, NSError.notStarted)
   }
     func testStart() {
-      let operation = AsynchronousOperation<Any>.SleepyAsyncOperation() // by default is 3 second long
+      let operation = SleepyAsyncOperation() // by default is 3 second long
       let expectation1 = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: operation, expectedValue: true)
       XCTAssertTrue(operation.isReady)
 
@@ -68,7 +76,7 @@ final class AsynchronousOperationTests: XCTestCase {
     }
 
     func testCancel() {
-      let operation = AsynchronousOperation<Any>.SleepyAsyncOperation()
+      let operation = SleepyAsyncOperation()
       let expectation1 = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: operation, expectedValue: true)
 
       XCTAssertTrue(operation.isReady)
@@ -85,7 +93,7 @@ final class AsynchronousOperationTests: XCTestCase {
     }
 
     func testCancelWithoutStarting() {
-      let operation = AsynchronousOperation<Any>.SleepyAsyncOperation()
+      let operation = SleepyAsyncOperation()
 
       XCTAssertTrue(operation.isReady)
       let expectation = XCTKVOExpectation(keyPath: #keyPath(Operation.isCancelled), object: operation, expectedValue: true)
@@ -98,7 +106,7 @@ final class AsynchronousOperationTests: XCTestCase {
     }
 
     func testCancelBeforeStart() {
-      let operation = AsynchronousOperation<Any>.SleepyAsyncOperation(interval1: 1, interval2: 1, interval3: 1)
+      let operation = SleepyAsyncOperation(interval1: 1, interval2: 1, interval3: 1)
       XCTAssertTrue(operation.isReady)
 
       operation.cancel()
@@ -112,7 +120,7 @@ final class AsynchronousOperationTests: XCTestCase {
     }
 
     func testMultipleCancel() {
-      let operation = AsynchronousOperation<Any>.SleepyAsyncOperation()
+      let operation = SleepyAsyncOperation()
       let expectation1 = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: operation, expectedValue: true)
       let expectation2 = expectation(description: "\(#function)\(#line)")
 
@@ -135,7 +143,7 @@ final class AsynchronousOperationTests: XCTestCase {
     }
 
     func testFinishWithErrors() {
-      let operation = AsynchronousOperation<Any>.FailingAsyncOperation()
+      let operation = FailingAsyncOperation()
       let expectation1 = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: operation, expectedValue: true)
 
       operation.start()
@@ -147,7 +155,7 @@ final class AsynchronousOperationTests: XCTestCase {
     // The readiness of operations is determined by their dependencies on other operations and potentially by custom conditions that you define.
     func testReadiness() {
       // Given
-      let operation1 = AsynchronousOperation<Any>.SleepyAsyncOperation()
+      let operation1 = SleepyAsyncOperation()
       let expectation1 = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: operation1, expectedValue: true)
       XCTAssertTrue(operation1.isReady)
 

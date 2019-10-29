@@ -121,7 +121,7 @@ open class AsynchronousOperation<T>: Operation, OutputProducing {
     /// If the operation is currently executing or is not ready to execute, this method throws an NSInvalidArgumentException exception.
     super.start()
 
-    // At this point main() has already returned.
+    // At this point main() has already returned (but it doesn't mean that the operation is finished).
     if isCancelled {
       let error = NSError(domain: NSCocoaErrorDomain, code: NSUserCancelledError, userInfo: nil)
       finish(result: .failure(error))
