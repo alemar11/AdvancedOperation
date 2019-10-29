@@ -22,6 +22,7 @@
 // SOFTWARE.
 
 extension Result {
+  // Returns the content associated with a failure.
   var failure: Failure? {
     switch self {
     case .success:
@@ -30,7 +31,8 @@ extension Result {
       return error
     }
   }
-
+  
+  // Returns the content associated with a success.
   var success: Success? {
     switch self {
     case .success(let success):

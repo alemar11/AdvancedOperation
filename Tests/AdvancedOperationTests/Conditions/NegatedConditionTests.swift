@@ -41,7 +41,7 @@ final class NegatedConditionTests: XCTestCase {
 
   func testFulFilledConditionWithoutOperationQueue() {
     let condition = BlockCondition { _ in .failure(MockError.failed) }
-    let negatedCondition = NegatedCondition(condition: condition)
+    let negatedCondition = NegatedCondition(condition: condition).negated.negated
     let operation = SleepyAsyncOperation()
     operation.addCondition(negatedCondition)
     let expectation1 = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: operation, expectedValue: true)
@@ -81,36 +81,45 @@ final class NegatedConditionTests: XCTestCase {
     waitForExpectations(timeout: 2)
   }
 
-//  func testMutitpleNegatedConditions() {
-//    let queue = OperationQueue()
-//
-//    let operation1 = AdvancedBlockOperation { }
-//    operation1.name = "operation1"
-//
-//    let operation2 = FailingAsyncOperation(error: .failed)
-//    operation2.name = "operation2"
-//
-//    let operation3 = FailingAsyncOperation(error: .failed)
-//    operation3.name = "operation3"
-//
-//    let operation4 = DelayOperation(interval: 1)
-//    operation4.name = "operation4"
-//
-//    let expectation1 = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: operation1, expectedValue: true)
-//    let expectation2 = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: operation2, expectedValue: true)
-//    let expectation3 = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: operation3, expectedValue: true)
-//    let expectation4 = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: operation4, expectedValue: true)
-//
-//    operation1.addCondition(NoFailedDependenciesCondition().negated)
-//    operation1.addCondition(NoFailedDependenciesCondition().negated)
-//    operation1.addDependency(operation2)
-//    operation1.addDependency(operation3)
-//    operation1.addDependency(operation4)
-//
-//    queue.addOperations([operation2, operation1, operation3, operation4], waitUntilFinished: false)
-//
-//    wait(for: [expectation1, expectation2, expectation3, expectation4], timeout: 10)
-//
-//    XCTAssertNotNil(operation.output.failure)
-//  }
+  func testMutitpleNegatedConditions() {
+    let queue = OperationQueue()
+
+    let operation1 = AdvancedBlockOperation { }
+    operation1.name = "operation1"
+
+    let operation2 = CancellingAsyncOperation()
+    operation2.name = "operation2"
+
+    let operation3 = FailingAsyncOperation(error: .failed)
+    operation3.name = "operation3"
+
+    let operation4 = DelayOperation(interval: 1)
+    operation4.name = "operation4"
+
+    let operation5 = AdvancedBlockOperation { }
+    operation5.name = "operation5"
+
+    let expectation1 = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: operation1, expectedValue: true)
+    let expectation2 = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: operation2, expectedValue: true)
+    let expectation3 = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: operation3, expectedValue: true)
+    let expectation4 = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: operation4, expectedValue: true)
+    let expectation5 = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: operation5, expectedValue: true)
+
+    // operation1 is executed only if there is at least one cancelled operation in its dependencies.
+    operation1.addCondition(NoCancelledDependeciesCondition().negated)
+    operation1.addCondition(BlockCondition { _ in .failure(MockError.failed)}.negated)
+    operation1.addDependency(operation2)
+    operation1.addDependency(operation3)
+    operation1.addDependency(operation4)
+    operation5.addDependency(operation2)
+    // operation5 is executed only if there aren't cancelled dependencies.
+    operation5.addCondition(NoCancelledDependeciesCondition().negated.negated)
+
+    queue.addOperations([operation2, operation1, operation3, operation5, operation4], waitUntilFinished: false)
+
+    wait(for: [expectation1, expectation2, expectation3, expectation4, expectation5], timeout: 10)
+
+    XCTAssertNotNil(operation1.output.success)
+    XCTAssertNotNil(operation5.output.failure)
+  }
 }

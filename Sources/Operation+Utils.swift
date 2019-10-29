@@ -83,12 +83,13 @@ extension Operation {
   }
 }
 
-
 extension Sequence where Element: Operation {
+  /// Makes every operation in the sequence dependent on the completion of the specified operations.
   public func addDependencies(_ dependencies: Operation...) {
     forEach { $0.addDependencies(dependencies) }
   }
 
+  /// Makes every operation in the sequence dependent on the completion of the specified operations.
   public func addDependencies(_ dependencies: [Operation]) {
     forEach { $0.addDependencies(dependencies) }
   }

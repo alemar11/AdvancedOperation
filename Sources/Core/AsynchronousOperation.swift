@@ -37,11 +37,6 @@ open class AsynchronousOperation<T>: Operation, OutputProducing {
   public final override var isAsynchronous: Bool { return true }
   public private(set) var output: Output = .failure(NSError.notStarted)
 
-  public init(name: String? = nil) {
-    super.init()
-    self.name = name ?? "\(type(of: self))"
-  }
-
   /// Serial queue for making state changes atomic under the constraint of having to send KVO willChange/didChange notifications.
   private let stateChangeQueue = DispatchQueue(label: "\(identifier).AsynchronousOperation.stateChange")
 
@@ -111,6 +106,13 @@ open class AsynchronousOperation<T>: Operation, OutputProducing {
   public final override var isFinished: Bool {
     return state == .finished
   }
+
+  // MARK: Initializers
+
+//  public init(name: String? = nil) {
+//    super.init()
+//    self.name = name ?? "\(type(of: self))"
+//  }
 
   // MARK: - Foundation.Operation
 
@@ -208,9 +210,12 @@ open class AsynchronousOperation<T>: Operation, OutputProducing {
   }
 
   open override var debugDescription: String {
-    return "\(type(of: self)) — \(name ?? "nil") – \(isCancelled ? "cancelled" : String(describing: state))"
+    // TODO more details here being a debug description
+    return "\(operationName)) – \(isCancelled ? "cancelled" : String(describing: state))"
   }
 }
+
+// MARK: - Conditions
 
 extension AsynchronousOperation {
   private func evaluateConditions() -> Error? {
@@ -245,6 +250,8 @@ extension AsynchronousOperation {
     }
   }
 }
+
+// MARK: - State
 
 extension AsynchronousOperation {
   /// Mirror of the possible states an Operation can be in.

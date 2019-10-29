@@ -83,7 +83,7 @@ final internal class SleepyAsyncOperation: AsynchronousOperation<Void> {
     self.interval1 = interval1
     self.interval2 = interval2
     self.interval3 = interval3
-    super.init(name: "AsynchronousOperation")
+    super.init()
   }
 
   override func execute(completion: @escaping (Result<Void, Error>) -> Void) {
@@ -162,6 +162,19 @@ internal class StringToIntOperation: AsynchronousOperation<Int> & InputConsuming
   }
 }
 
+final internal class CancellingAsyncOperation: AsynchronousOperation<Void> {
+  override func execute(completion: @escaping (Result<Void, Error>) -> Void) {
+    DispatchQueue.global().asyncAfter(deadline: .now() + 1.0) { [weak weakSelf = self] in
+      guard let strongSelf = weakSelf else {
+        completion(.failure(MockError.cancelled(date: Date())))
+        return
+      }
+      strongSelf.cancel()
+      completion(.failure(MockError.cancelled(date: Date())))
+    }
+  }
+}
+
 /// An operation that finishes with errors
 final internal class FailingAsyncOperation: AsynchronousOperation<Void> {
   private let defaultError: Error
@@ -204,25 +217,3 @@ final internal class NotExecutableOperation: AsynchronousOperation<Void> {
     completion(.failure(MockError.test))
     }
   }
-
-//// MARK: - Conditions
-//
-//internal struct SlowCondition: OperationCondition {
-//  public func evaluate(for operation: AdvancedOperation, completion: @escaping (Result<Void,Error>) -> Void) {
-//    DispatchQueue(label: "SlowCondition").asyncAfter(deadline: .now() + 10) {
-//      completion(.success(()))
-//    }
-//  }
-//}
-//
-//internal struct AlwaysFailingCondition: OperationCondition {
-//  public func evaluate(for operation: AdvancedOperation, completion: @escaping (Result<Void,Error>) -> Void) {
-//    completion(.failure(MockError.failed))
-//  }
-//}
-//
-//internal struct AlwaysSuccessingCondition: OperationCondition {
-//  public func evaluate(for operation: AdvancedOperation, completion: @escaping (Result<Void,Error>) -> Void) {
-//    completion(.success(()))
-//  }
-//}
