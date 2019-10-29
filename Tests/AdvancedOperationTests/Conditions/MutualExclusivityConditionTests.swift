@@ -103,7 +103,7 @@ final class MutualExclusivityConditionTests: XCTestCase {
     XCTAssertTrue(result.isEmpty)
   }
 
-  
+
   //
   //  // MARK: - Enqueue Mode
   //

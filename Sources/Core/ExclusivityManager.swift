@@ -55,7 +55,7 @@ public final class ExclusivityManager {
 
   let dispatchGroupsQueue: DispatchQueue
   /// The private queue used for thread safe operations.
-  private let queue: DispatchQueue = DispatchQueue(label: "\(identifier).ExclusivityManager", qos: .userInitiated) //an high priority qos is needed to avoid thread starvation
+  private let queue: DispatchQueue = DispatchQueue(label: "\(identifier).ExclusivityManager", qos: .userInitiated) // an high priority qos is needed to avoid thread starvation
   private var categories: [String: [DispatchGroup]] = [:]
 
   /// Creates a new `ExclusivityManager` instance.
@@ -76,9 +76,10 @@ public final class ExclusivityManager {
       self?.unlock(categories: categories)
     }
 
-    let notAvailableCategoriesCount = categories.map { registerDispatchGroup(dipatchGroup, forCategory: $0) }
-    .filter { $0 == .notAvailable }
-    .count
+    let notAvailableCategoriesCount = categories
+      .map { registerDispatchGroup(dipatchGroup, forCategory: $0) }
+      .filter { $0 == .notAvailable }
+      .count
 
     if notAvailableCategoriesCount == 0 {
       // the item is free to acquire the exclusivity lock without waiting

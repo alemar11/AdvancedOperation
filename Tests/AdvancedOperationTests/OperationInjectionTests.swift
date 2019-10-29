@@ -1,4 +1,4 @@
-// 
+//
 // AdvancedOperation
 //
 // Copyright © 2016-2019 Tinrobots.
@@ -28,7 +28,7 @@ class OperationInjectionTests: XCTestCase {
 
   // TODO: test the injection with normal operations conforming to the injection
   // TODO: test the injection with operations that have as input a Result type
-  
+
   func testInputAndOutput() {
     let operation1 = IntToStringOperation()
     operation1.input = 10
