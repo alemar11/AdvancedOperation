@@ -177,7 +177,7 @@ open class AsynchronousOperation<T>: Operation, OutputProducing {
 
   /// Call this function to finish an operation that is currently executing.
   /// State can also be "ready" here if the operation was cancelled before it started.
-  public final func finish(result: Output) {
+  private final func finish(result: Output) {
     lock.lock()
     defer { lock.unlock() }
 
