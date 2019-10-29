@@ -40,7 +40,7 @@ extension OutputProducing {
   ///   - operation: The operation that needs the output of `self` to generate an output.
   ///   - requirements: A list of options that the injected input must satisfy.
   /// - Returns: Returns an *adapter* operation which passes the output of `self` into the given `Operation`.
-  public func inject<E: InputConsuming>(into operation: E, orCancel: Bool = false) -> Operation where Output == E.Input {
+  public func inject<E: InputConsuming>(into operation: E) -> Operation where Output == E.Input {
     let injectionOperation = BlockOperation { [unowned self, unowned operation] in
       operation.input = self.output
     }
@@ -51,7 +51,7 @@ extension OutputProducing {
     return injectionOperation
   }
 
-  public func inject<E: InputConsuming>(into operation: E, orCancel: Bool = false, transform: @escaping (Output) -> E.Input?) -> Operation {
+  public func inject<E: InputConsuming>(into operation: E, transform: @escaping (Output) -> E.Input?) -> Operation {
     let injectionOperation = BlockOperation { [unowned self, unowned operation] in
       operation.input = transform(self.output)
     }
