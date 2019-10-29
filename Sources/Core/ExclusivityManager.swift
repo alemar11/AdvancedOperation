@@ -23,28 +23,6 @@
 
 import Foundation
 
-extension ExclusivityManager {
-  public final class Token {
-    public let categories: Set<String>
-    private var unlockClosure: ((Set<String>) -> Void)?
-    private let lock = UnfairLock()
-
-    fileprivate init(categories: Set<String>, unlockClosure: @escaping (Set<String>) -> Void) {
-      self.categories = categories
-      self.unlockClosure = unlockClosure
-    }
-
-    public func unlock() {
-      lock.lock()
-      defer { lock.unlock() }
-
-      unlockClosure?(categories)
-      // the token is consumed and cannot be used again
-      unlockClosure = nil
-    }
-  }
-}
-
 public final class ExclusivityManager {
   public static let shared = ExclusivityManager()
 
@@ -127,6 +105,28 @@ public final class ExclusivityManager {
       categories[category] = groupsByCategory
     } else {
       categories.removeValue(forKey: category)
+    }
+  }
+}
+
+extension ExclusivityManager {
+  public final class Token {
+    public let categories: Set<String>
+    private var unlockClosure: ((Set<String>) -> Void)?
+    private let lock = UnfairLock()
+
+    fileprivate init(categories: Set<String>, unlockClosure: @escaping (Set<String>) -> Void) {
+      self.categories = categories
+      self.unlockClosure = unlockClosure
+    }
+
+    public func unlock() {
+      lock.lock()
+      defer { lock.unlock() }
+
+      unlockClosure?(categories)
+      // the token is consumed and cannot be used again
+      unlockClosure = nil
     }
   }
 }

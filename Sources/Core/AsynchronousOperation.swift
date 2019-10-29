@@ -95,7 +95,7 @@ open class AsynchronousOperation<T>: Operation, OutputProducing {
 
   private var _conditions = Atomic([Condition]())
 
-  /// Conditions evaluated before executing the operation.
+  /// Conditions evaluated before executing the operation task.
   public var conditions: [Condition] {
     return _conditions.value
   }
@@ -116,7 +116,8 @@ open class AsynchronousOperation<T>: Operation, OutputProducing {
 
   public final override func start() {
     if isCancelled {
-      let error = NSError(domain: NSCocoaErrorDomain, code: NSUserCancelledError, userInfo: nil)
+      // early bailing out
+      let error = NSError(domain: NSCocoaErrorDomain, code: NSUserCancelledError, userInfo: nil) // TODO
       finish(result: .failure(error))
       return
     }
@@ -127,12 +128,8 @@ open class AsynchronousOperation<T>: Operation, OutputProducing {
     /// If the operation is currently executing or is not ready to execute, this method throws an NSInvalidArgumentException exception.
     super.start()
 
-    // At this point main() has already returned (but it doesn't mean that the operation is finished).
-//    if isCancelled {
-//      let error = NSError(domain: NSCocoaErrorDomain, code: NSUserCancelledError, userInfo: nil)
-//      finish(result: .failure(error))
-//      return
-//    }
+    // At this point main() has already returned but it doesn't mean that the operation is finished.
+    // Only the execute(completion:) overidden implementation can finish the operation now.
   }
 
   // MARK: - Public
@@ -140,23 +137,17 @@ open class AsynchronousOperation<T>: Operation, OutputProducing {
   /// Subclasses must implement this to perform their work and they must not call `super`.
   /// The default implementation of this function traps.
   public final override func main() {
-//    guard !isCancelled else {
-//      let error = NSError(domain: NSCocoaErrorDomain, code: NSUserCancelledError, userInfo: nil)
-//      finish(result: .failure(error))
-//      return
-//    }
-
     state = .executing
+    os_log("%{public}s has started.", log: log, type: .info, operationName)
 
-    // TODO: before executing the operation we could validate it with some conditions
-    // if the conditions fail, cancel the operation and return without executing run
+    // 1. evaluate conditions
     if let error = evaluateConditions() {
       self.cancel()
       finish(result: .failure(error))
       return
     }
 
-    os_log("%{public}s has started.", log: log, type: .info, operationName)
+    // 2. execute the real task
     execute(completion: finish)
   }
 
@@ -289,7 +280,6 @@ extension AsynchronousOperation {
     }
   }
 }
-
 
 extension NSError {
   static let notStarted = NSError(domain: identifier, code: 1, userInfo: nil)

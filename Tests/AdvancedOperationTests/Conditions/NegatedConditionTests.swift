@@ -68,10 +68,10 @@ final class NegatedConditionTests: XCTestCase {
   }
 
   func testNegationWithSuccessingCondition() {
-    let negatedFailingCondition = NegatedCondition(condition: BlockCondition { _ in .success(()) })
+    let negatedCondition = NegatedCondition(condition: BlockCondition { _ in .success(()) })
     let dummyOperation = AdvancedBlockOperation { }
     let expectation1 = expectation(description: "\(#function)\(#line)")
-    negatedFailingCondition.evaluate(for: dummyOperation) { (result) in
+    negatedCondition.evaluate(for: dummyOperation) { (result) in
       switch result {
       case .failure:
         expectation1.fulfill()
@@ -81,7 +81,6 @@ final class NegatedConditionTests: XCTestCase {
     waitForExpectations(timeout: 2)
   }
 
-  // TODO
 //  func testMutitpleNegatedConditions() {
 //    let queue = OperationQueue()
 //
@@ -102,6 +101,7 @@ final class NegatedConditionTests: XCTestCase {
 //    let expectation3 = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: operation3, expectedValue: true)
 //    let expectation4 = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: operation4, expectedValue: true)
 //
+//    operation1.addCondition(NoFailedDependenciesCondition().negated)
 //    operation1.addCondition(NoFailedDependenciesCondition().negated)
 //    operation1.addDependency(operation2)
 //    operation1.addDependency(operation3)

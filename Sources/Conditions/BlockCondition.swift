@@ -23,37 +23,9 @@
 
 import Foundation
 
-/// A Condition which will be satisfied if the block returns ´true´.
+/// A Condition which will be satisfied if the block returns a successful result.
 /// If the block is not satisfied, the target operation will be cancelled.
-/// - Note: The block may ´throw´ an error, or return ´false´, both of which are considered as a condition failure.
-//public struct BlockCondition: Condition {
-//  public typealias Block = () throws -> Bool
-//
-//  private let block: Block
-//
-//  public init(block: @escaping Block) {
-//    self.block = block
-//  }
-//
-//  public func evaluate(for operation: Operation, completion: @escaping (Result<Void, Error>) -> Void) {
-//    do {
-//      let result = try block()
-//      if result {
-//        completion(.success(()))
-//      } else {
-//        let conditionError = NSError.conditionFailed(message: "Condition failed.",
-//                                                     userInfo: ["name": name])
-//        completion(.failure(conditionError))
-//      }
-//    } catch {
-//      let conditionError = NSError.conditionFailed(message: "The BlockCondition has thrown an exception.",
-//                                                   userInfo: ["name": name,
-//                                                              "error": error])
-//      completion(.failure(conditionError))
-//    }
-//  }
-//}
-
+/// - Note: The block may ´throw´ an error, or return a failure, both of which are considered as a condition failure.
 public struct BlockCondition: Condition {
   public typealias Block = (Operation) throws -> Result<Void, Error>
   private let block: Block
@@ -69,52 +41,5 @@ public struct BlockCondition: Condition {
     } catch {
       completion(.failure(error))
     }
-  }
-}
-
-public struct NoCancelledDependeciesCondition: Condition {
-  private let blockCondition = BlockCondition {
-    if $0.hasSomeCancelledDependencies {
-      return .failure(NSError.conditionFailed(message: "TODO")) // TODO
-    } else {
-      return .success(())
-    }
-  }
-
-  public init() { }
-
-  public func evaluate(for operation: Operation, completion: @escaping (Result<Void, Error>) -> Void) {
-    blockCondition.evaluate(for: operation) { completion($0) }
-  }
-}
-
-public struct NegatedCondition<T: Condition>: Condition {
-  public var name: String { return "Not<\(condition.name)>" }
-  private let condition: T
-
-  public init(condition: T) {
-    self.condition = condition
-  }
-
-  public func evaluate(for operation: Operation, completion: @escaping (Result<Void, Error>) -> Void) {
-    let conditionName = name
-
-    condition.evaluate(for: operation) { (result) in
-      switch result {
-      case .success:
-        let error = NSError.conditionFailed(message: "Condition failed.",
-                                            userInfo: ["condition": conditionName])
-        return completion(.failure(error))
-      case .failure:
-        return completion(.success(()))
-      }
-    }
-  }
-}
-
-extension Condition {
-  /// Returns a condition that negates the evaluation of the current condition.
-  public var negated: NegatedCondition<Self> {
-    return NegatedCondition(condition: self)
   }
 }

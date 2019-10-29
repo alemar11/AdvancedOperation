@@ -24,38 +24,33 @@
 import Foundation
 
 /// A condition that negates the evaluation of another condition.
-//public struct NegatedCondition<T: Condition>: Condition {
-//  public var name: String { return "Not<\(condition.name)>" }
-//
-//  static var negatedConditionKey: String { return "NegatedCondition" }
-//
-//  let condition: T
-//
-//  public init(condition: T) {
-//    self.condition = condition
-//  }
-//
-//  public func evaluate(for operation: Operation, completion: @escaping (Result<Void, Error>) -> Void) {
-//    let conditionName = self.name
-//    let conditionKey = type(of: self).negatedConditionKey
-//
-//    condition.evaluate(for: operation) { (result) in
-//      switch result {
-//      case .success:
-//        let error = NSError.conditionFailed(message: "The condition has been negated.",
-//                                            userInfo: [operationConditionKey: conditionName,
-//                                                       conditionKey: operation.operationName])
-//        return completion(.failure(error))
-//      case .failure:
-//        return completion(.success(()))
-//      }
-//    }
-//  }
-//}
-//
-//extension Condition {
-//  /// Returns a condition that negates the evaluation of the current condition.
-//  public var negated: NegatedCondition<Self> {
-//    return NegatedCondition(condition: self)
-//  }
-//}
+public struct NegatedCondition<T: Condition>: Condition {
+  public var name: String { return "Not<\(condition.name)>" }
+  private let condition: T
+
+  public init(condition: T) {
+    self.condition = condition
+  }
+
+  public func evaluate(for operation: Operation, completion: @escaping (Result<Void, Error>) -> Void) {
+    let conditionName = name
+
+    condition.evaluate(for: operation) { (result) in
+      switch result {
+      case .success:
+        let error = NSError.conditionFailed(message: "Condition failed.",
+                                            userInfo: ["condition": conditionName])
+        return completion(.failure(error))
+      case .failure:
+        return completion(.success(()))
+      }
+    }
+  }
+}
+
+extension Condition {
+  /// Returns a condition that negates the evaluation of the current condition.
+  public var negated: NegatedCondition<Self> {
+    return NegatedCondition(condition: self)
+  }
+}

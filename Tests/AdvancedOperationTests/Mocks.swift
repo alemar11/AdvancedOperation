@@ -269,22 +269,22 @@ final internal class FailingAsyncOperation: AsynchronousOperation<Void> {
 //  }
 //}
 //
-//final internal class RunUntilCancelledAsyncOperation: AdvancedOperation {
-//  let queue: DispatchQueue
-//
-//  init(queue: DispatchQueue = DispatchQueue.global()) {
-//    self.queue = queue
-//  }
-//
-//  override func execute() {
-//    queue.async {
-//      while !self.isCancelled {
-//        sleep(1)
-//      }
-//      self.finish()
-//    }
-//  }
-//}
+final internal class RunUntilCancelledAsyncOperation: AsynchronousOperation<Void> {
+  let queue: DispatchQueue
+
+  init(queue: DispatchQueue = DispatchQueue.global()) {
+    self.queue = queue
+  }
+
+  override func execute(completion: @escaping (Result<Void, Error>) -> Void) {
+          queue.async {
+            while !self.isCancelled {
+              sleep(1)
+            }
+            completion(.success(()))
+          }
+  }
+}
 //
 //final internal class SleepyAsyncOperation: AdvancedOperation {
 //
