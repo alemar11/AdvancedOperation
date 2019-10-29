@@ -25,23 +25,23 @@ import Foundation
 
 /// A condition that specifies that every dependency must finish.
 /// If any dependency was cancelled, the target operation will be cancelled as well.
-public struct NoCancelledDependeciesCondition: Condition {
-  static var noCancelledDependeciesConditionKey: String { return "NoCancelledDependeciesCondition" }
-
-  /// Create a new `NoCancelledDependeciesCondition` element.
-  public init() { }
-
-  public func evaluate(for operation: Operation, completion: @escaping (Result<Void, Error>) -> Void) {
-    let cancellations = operation.dependencies.filter { $0.isCancelled }
-
-    if !cancellations.isEmpty {
-      let names = cancellations.map { $0.name ?? "\(type(of: $0))" }
-      let error = NSError.conditionFailed(message: "Some dependencies have been cancelled.",
-                                          userInfo: [operationConditionKey: self.name,
-                                                     type(of: self).noCancelledDependeciesConditionKey: names])
-      completion(.failure(error))
-    } else {
-      completion(.success(()))
-    }
-  }
-}
+//public struct NoCancelledDependeciesCondition: Condition {
+//  static var noCancelledDependeciesConditionKey: String { return "NoCancelledDependeciesCondition" }
+//
+//  /// Create a new `NoCancelledDependeciesCondition` element.
+//  public init() { }
+//
+//  public func evaluate(for operation: Operation, completion: @escaping (Result<Void, Error>) -> Void) {
+//    let cancellations = operation.dependencies.filter { $0.isCancelled }
+//
+//    if !cancellations.isEmpty {
+//      let names = cancellations.map { $0.name ?? "\(type(of: $0))" }
+//      let error = NSError.conditionFailed(message: "Some dependencies have been cancelled.",
+//                                          userInfo: [operationConditionKey: self.name,
+//                                                     type(of: self).noCancelledDependeciesConditionKey: names])
+//      completion(.failure(error))
+//    } else {
+//      completion(.success(()))
+//    }
+//  }
+//}

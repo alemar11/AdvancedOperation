@@ -26,37 +26,35 @@ import Foundation
 /// A Condition which will be satisfied if the block returns ´true´.
 /// If the block is not satisfied, the target operation will be cancelled.
 /// - Note: The block may ´throw´ an error, or return ´false´, both of which are considered as a condition failure.
+//public struct BlockCondition: Condition {
+//  public typealias Block = () throws -> Bool
+//
+//  private let block: Block
+//
+//  public init(block: @escaping Block) {
+//    self.block = block
+//  }
+//
+//  public func evaluate(for operation: Operation, completion: @escaping (Result<Void, Error>) -> Void) {
+//    do {
+//      let result = try block()
+//      if result {
+//        completion(.success(()))
+//      } else {
+//        let conditionError = NSError.conditionFailed(message: "Condition failed.",
+//                                                     userInfo: ["name": name])
+//        completion(.failure(conditionError))
+//      }
+//    } catch {
+//      let conditionError = NSError.conditionFailed(message: "The BlockCondition has thrown an exception.",
+//                                                   userInfo: ["name": name,
+//                                                              "error": error])
+//      completion(.failure(conditionError))
+//    }
+//  }
+//}
+
 public struct BlockCondition: Condition {
-  public typealias Block = () throws -> Bool
-
-  static var blockConditionKey: String { return "BlockCondition" }
-
-  let block: Block
-
-  public init(block: @escaping Block) {
-    self.block = block
-  }
-
-  public func evaluate(for operation: Operation, completion: @escaping (Result<Void, Error>) -> Void) {
-    do {
-      let result = try block()
-      if result {
-        completion(.success(()))
-      } else {
-        let conditionError = NSError.conditionFailed(message: "The BlockCondition has returned false.",
-                                                     userInfo: [operationConditionKey: name])
-        completion(.failure(conditionError))
-      }
-    } catch {
-      let conditionError = NSError.conditionFailed(message: "The BlockCondition has thrown an exception.",
-                                                   userInfo: [operationConditionKey: name,
-                                                              type(of: self).blockConditionKey: error])
-      completion(.failure(conditionError))
-    }
-  }
-}
-
-public struct _BlockCondition: Condition {
   public typealias Block = (Operation) throws -> Result<Void, Error>
   private let block: Block
 
@@ -74,8 +72,8 @@ public struct _BlockCondition: Condition {
   }
 }
 
-public struct _NoCancelledDependeciesCondition: Condition {
-  private let blockCondition = _BlockCondition {
+public struct NoCancelledDependeciesCondition: Condition {
+  private let blockCondition = BlockCondition {
     if $0.hasSomeCancelledDependencies {
       return .failure(NSError()) // TODO
     } else {
@@ -90,11 +88,8 @@ public struct _NoCancelledDependeciesCondition: Condition {
   }
 }
 
-public struct _NegatedCondition<T: Condition>: Condition {
+public struct NegatedCondition<T: Condition>: Condition {
   public var name: String { return "Not<\(condition.name)>" }
-
-  static var negatedConditionKey: String { return "NegatedCondition" }
-
   private let condition: T
 
   public init(condition: T) {
@@ -102,15 +97,13 @@ public struct _NegatedCondition<T: Condition>: Condition {
   }
 
   public func evaluate(for operation: Operation, completion: @escaping (Result<Void, Error>) -> Void) {
-    let conditionName = self.name
-    let conditionKey = type(of: self).negatedConditionKey
+    let conditionName = name
 
     condition.evaluate(for: operation) { (result) in
       switch result {
       case .success:
-        let error = NSError.conditionFailed(message: "The condition has been negated.",
-                                            userInfo: [operationConditionKey: conditionName,
-                                                       conditionKey: operation.operationName])
+        let error = NSError.conditionFailed(message: "Condition failed.",
+                                            userInfo: ["condition": conditionName])
         return completion(.failure(error))
       case .failure:
         return completion(.success(()))
@@ -119,7 +112,7 @@ public struct _NegatedCondition<T: Condition>: Condition {
   }
 }
 
-extension _NegatedCondition {
+extension Condition {
   /// Returns a condition that negates the evaluation of the current condition.
   public var negated: NegatedCondition<Self> {
     return NegatedCondition(condition: self)

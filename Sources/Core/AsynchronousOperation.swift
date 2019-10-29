@@ -197,6 +197,10 @@ open class AsynchronousOperation<T>: Operation, OutputProducing {
     }
   }
 
+  final public func addCondition(_ condition: Condition) {
+    _conditions.mutate { $0.append(condition) }
+  }
+
   open override var description: String {
     return debugDescription
   }
