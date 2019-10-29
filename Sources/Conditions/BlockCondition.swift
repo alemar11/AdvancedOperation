@@ -75,7 +75,7 @@ public struct BlockCondition: Condition {
 public struct NoCancelledDependeciesCondition: Condition {
   private let blockCondition = BlockCondition {
     if $0.hasSomeCancelledDependencies {
-      return .failure(NSError()) // TODO
+      return .failure(NSError.conditionFailed(message: "TODO")) // TODO
     } else {
       return .success(())
     }

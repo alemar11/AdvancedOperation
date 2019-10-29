@@ -65,7 +65,7 @@ final class BlockConditionTests: XCTestCase {
     XCTAssertTrue(operation.isFinished)
   }
 
-  func testFailedConditionAfterAThrowedError() {
+  func testFailedConditionAfterAThrownError() {
     let queue = OperationQueue()
     let condition = BlockCondition { _ in
       throw MockError.failed

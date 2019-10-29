@@ -25,18 +25,17 @@ import XCTest
 @testable import AdvancedOperation
 
 final class AsynchronousOperationTests: XCTestCase {
-//  func test_investigation() throws {
-//    let operation = BlockOperation()
-//      let expectation1 = XCTKVOExpectation(keyPath: #keyPath(BlockOperation.isFinished), object: operation, expectedValue: true)
-//    operation.addExecutionBlock {
-//      //DispatchQueue.global().asyncAfter(deadline: .now() + 2) {
-//        print("1")
-//      //}
+//  class StrangeOperation: AsynchronousOperation<Void> {
+//    override func execute(completion: @escaping (Result<Void, Error>) -> Void) {
 //
+//      DispatchQueue.global().asyncAfter(deadline: .now() + 3) {
+//         self.cancel()
+//      }
 //    }
-//    operation.addExecutionBlock {
-//      print("2")
-//    }
+//  }
+//  func test_investigation() throws {
+//    let operation = StrangeOperation()
+//      let expectation1 = XCTKVOExpectation(keyPath: #keyPath(BlockOperation.isFinished), object: operation, expectedValue: true)
 //    operation.start()
 //    wait(for: [expectation1], timeout: 10)
 //    XCTAssertTrue(operation.isFinished)

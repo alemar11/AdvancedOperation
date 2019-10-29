@@ -173,7 +173,7 @@ final internal class FailingAsyncOperation: AsynchronousOperation<Void> {
   override func execute(completion: @escaping (Result<Void, Error>) -> Void) {
     DispatchQueue.global().asyncAfter(deadline: .now() + 1.0) { [weak weakSelf = self] in
       guard let strongSelf = weakSelf else {
-        completion(.failure(MockError.test))
+        completion(.failure(MockError.failed))
         return
       }
       completion(.failure(strongSelf.defaultError))
@@ -332,19 +332,19 @@ final internal class FailingAsyncOperation: AsynchronousOperation<Void> {
 //  }
 //}
 //
-final internal class SleepyOperation: Operation {
-  override var isAsynchronous: Bool { return false }
-  private let interval: UInt32
-
-  init(interval: UInt32 = 1) {
-    self.interval = interval
-    super.init()
-  }
-
-  override func main() {
-    sleep(interval)
-  }
-}
+//final internal class SleepyOperation: Operation {
+//  override var isAsynchronous: Bool { return false }
+//  private let interval: UInt32
+//
+//  init(interval: UInt32 = 1) {
+//    self.interval = interval
+//    super.init()
+//  }
+//
+//  override func main() {
+//    sleep(interval)
+//  }
+//}
 //
 //final internal class SleepyBlockOperation: AdvancedOperation {
 //
@@ -364,19 +364,13 @@ final internal class SleepyOperation: Operation {
 //  }
 //}
 //
-//final internal class NotExecutableOperation: AdvancedOperation {
-//
-//  override public var isAsynchronous: Bool { return false }
-//
-//  override func execute() {
-//    if isCancelled {
-//      return
-//    }
-//
-//    XCTFail("This operation shouldn't be executed.")
-//  }
-//}
-//
+final internal class NotExecutableOperation: AsynchronousOperation<Void> {
+  override func execute(completion: @escaping (Result<Void, Error>) -> Void) {
+    XCTFail("This operation shouldn't be executed.")
+    completion(.failure(MockError.test))
+    }
+  }
+
 ///// An operation that finishes with errors
 //final internal class FailingAsyncOperation: AdvancedOperation {
 //

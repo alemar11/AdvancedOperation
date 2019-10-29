@@ -115,6 +115,12 @@ open class AsynchronousOperation<T>: Operation, OutputProducing {
   // MARK: - Foundation.Operation
 
   public final override func start() {
+    if isCancelled {
+      let error = NSError(domain: NSCocoaErrorDomain, code: NSUserCancelledError, userInfo: nil)
+      finish(result: .failure(error))
+      return
+    }
+
     /// The default implementation of this method updates the execution state of the operation and calls the receiver’s main() method.
     /// This method also performs several checks to ensure that the operation can actually run.
     /// For example, if the receiver was cancelled or is already finished, this method simply returns without calling main().
@@ -122,11 +128,11 @@ open class AsynchronousOperation<T>: Operation, OutputProducing {
     super.start()
 
     // At this point main() has already returned (but it doesn't mean that the operation is finished).
-    if isCancelled {
-      let error = NSError(domain: NSCocoaErrorDomain, code: NSUserCancelledError, userInfo: nil)
-      finish(result: .failure(error))
-      return
-    }
+//    if isCancelled {
+//      let error = NSError(domain: NSCocoaErrorDomain, code: NSUserCancelledError, userInfo: nil)
+//      finish(result: .failure(error))
+//      return
+//    }
   }
 
   // MARK: - Public
@@ -134,7 +140,11 @@ open class AsynchronousOperation<T>: Operation, OutputProducing {
   /// Subclasses must implement this to perform their work and they must not call `super`.
   /// The default implementation of this function traps.
   public final override func main() {
-    guard !isCancelled else { return }
+//    guard !isCancelled else {
+//      let error = NSError(domain: NSCocoaErrorDomain, code: NSUserCancelledError, userInfo: nil)
+//      finish(result: .failure(error))
+//      return
+//    }
 
     state = .executing
 
@@ -142,6 +152,7 @@ open class AsynchronousOperation<T>: Operation, OutputProducing {
     // if the conditions fail, cancel the operation and return without executing run
     if let error = evaluateConditions() {
       self.cancel()
+      finish(result: .failure(error))
       return
     }
 
