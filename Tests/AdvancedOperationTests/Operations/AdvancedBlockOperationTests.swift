@@ -137,7 +137,6 @@ final class AdvancedBlockOperationTests: XCTestCase {
     }
     operation.start()
     wait(for: [expectation1, expectation2], timeout: 10, enforceOrder: true)
-
   }
 
   func testBlockOperationWithDispatchQueue() {
