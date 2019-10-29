@@ -55,3 +55,73 @@ public struct BlockCondition: Condition {
     }
   }
 }
+
+public struct _BlockCondition: Condition {
+  public typealias Block = (Operation) throws -> Result<Void, Error>
+  private let block: Block
+
+  public init(block: @escaping Block) {
+    self.block = block
+  }
+
+  public func evaluate(for operation: Operation, completion: @escaping (Result<Void, Error>) -> Void) {
+    do {
+      let result = try block(operation)
+      completion(result)
+    } catch {
+      completion(.failure(error))
+    }
+  }
+}
+
+public struct _NoCancelledDependeciesCondition: Condition {
+  private let blockCondition = _BlockCondition {
+    if $0.hasSomeCancelledDependencies {
+      return .failure(NSError()) // TODO
+    } else {
+      return .success(())
+    }
+  }
+
+  public init() { }
+
+  public func evaluate(for operation: Operation, completion: @escaping (Result<Void, Error>) -> Void) {
+    blockCondition.evaluate(for: operation) { completion($0) }
+  }
+}
+
+public struct _NegatedCondition<T: Condition>: Condition {
+  public var name: String { return "Not<\(condition.name)>" }
+
+  static var negatedConditionKey: String { return "NegatedCondition" }
+
+  private let condition: T
+
+  public init(condition: T) {
+    self.condition = condition
+  }
+
+  public func evaluate(for operation: Operation, completion: @escaping (Result<Void, Error>) -> Void) {
+    let conditionName = self.name
+    let conditionKey = type(of: self).negatedConditionKey
+
+    condition.evaluate(for: operation) { (result) in
+      switch result {
+      case .success:
+        let error = NSError.conditionFailed(message: "The condition has been negated.",
+                                            userInfo: [operationConditionKey: conditionName,
+                                                       conditionKey: operation.operationName])
+        return completion(.failure(error))
+      case .failure:
+        return completion(.success(()))
+      }
+    }
+  }
+}
+
+extension _NegatedCondition {
+  /// Returns a condition that negates the evaluation of the current condition.
+  public var negated: NegatedCondition<Self> {
+    return NegatedCondition(condition: self)
+  }
+}
