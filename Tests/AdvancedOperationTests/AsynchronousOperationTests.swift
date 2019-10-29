@@ -25,24 +25,6 @@ import XCTest
 @testable import AdvancedOperation
 
 final class AsynchronousOperationTests: XCTestCase {
-
-  // //TODO
-  //  class StrangeOperation: AsynchronousOperation<Void> {
-  //    override func execute(completion: @escaping (Result<Void, Error>) -> Void) {
-  //
-  //      DispatchQueue.global().asyncAfter(deadline: .now() + 3) {
-  //         self.cancel()
-  //      }
-  //    }
-  //  }
-  //  func test_investigation() throws {
-  //    let operation = StrangeOperation()
-  //      let expectation1 = XCTKVOExpectation(keyPath: #keyPath(BlockOperation.isFinished), object: operation, expectedValue: true)
-  //    operation.start()
-  //    wait(for: [expectation1], timeout: 10)
-  //    XCTAssertTrue(operation.isFinished)
-  //  }
-
   func testNotFinishingOperation() throws {
     let operation = NotFinishingAsynchronousOperation()
     let expectation1 = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: operation, expectedValue: true)
@@ -69,9 +51,9 @@ final class AsynchronousOperationTests: XCTestCase {
       XCTFail("The operation should have a failure output")
       return
     }
-
     XCTAssertEqual(output as NSError, NSError.notStarted)
   }
+
   func testStart() {
     let operation = SleepyAsyncOperation() // by default is 3 second long
     let expectation1 = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: operation, expectedValue: true)
