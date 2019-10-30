@@ -25,18 +25,18 @@ import Foundation
 
 /// A condition that specifies that every dependency must finish.
 /// If any dependency was cancelled, the target operation will be cancelled as well.
-public struct NoCancelledDependeciesCondition: Condition {
-  private let blockCondition = BlockCondition {
-    if $0.hasSomeCancelledDependencies {
-      return .failure(NSError.conditionFailed(message: "TODO")) // TODO
-    } else {
-      return .success(())
-    }
-  }
-
-  public init() { }
-
-  public func evaluate(for operation: Operation, completion: @escaping (Result<Void, Error>) -> Void) {
-    blockCondition.evaluate(for: operation) { completion($0) }
-  }
-}
+//public struct NoCancelledDependeciesCondition: Condition {
+//  private let blockCondition = BlockCondition {
+//    if $0.hasSomeCancelledDependencies {
+//      return .failure(NSError.conditionFailed(message: "TODO")) // TODO
+//    } else {
+//      return .success(())
+//    }
+//  }
+//
+//  public init() { }
+//
+//  public func evaluate(for operation: Operation, completion: @escaping (Result<Void, Error>) -> Void) {
+//    blockCondition.evaluate(for: operation) { completion($0) }
+//  }
+//}

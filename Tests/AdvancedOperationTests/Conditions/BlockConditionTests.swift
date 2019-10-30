@@ -24,73 +24,73 @@
 import XCTest
 @testable import AdvancedOperation
 
-final class BlockConditionTests: XCTestCase {
-  func testNotFulFilledConditionWithoutOperationQueue() {
-    let condition = BlockCondition { _ in .failure(MockError.failed) }
-    let operation = SleepyAsyncOperation()
-    operation.addCondition(condition)
-    let expectation1 = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: operation, expectedValue: true)
-    operation.start()
-
-    wait(for: [expectation1], timeout: 3)
-    XCTAssertTrue(operation.isCancelled)
-    XCTAssertNotNil(operation.output.failure)
-    XCTAssertTrue(operation.isFinished)
-  }
-
-  func testFulFilledConditionWithoutOperationQueue() {
-    let condition = BlockCondition { _ in .success(()) }
-    let operation = SleepyAsyncOperation(interval1: 1, interval2: 0, interval3: 0)
-    operation.addCondition(condition)
-    let expectation1 = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: operation, expectedValue: true)
-    operation.start()
-
-    wait(for: [expectation1], timeout: 5)
-    XCTAssertFalse(operation.isCancelled)
-    XCTAssertNotNil(operation.output.success)
-    XCTAssertTrue(operation.isFinished)
-  }
-
-  func testFailedCondition() {
-    let queue = OperationQueue()
-    let condition = BlockCondition { _ in .failure(MockError.failed) }
-    let operation = SleepyAsyncOperation()
-    operation.addCondition(condition)
-    operation.name = "operation"
-    operation.log = TestsLog
-    queue.addOperations([operation], waitUntilFinished: true)
-
-    XCTAssertTrue(operation.isCancelled)
-    XCTAssertNotNil(operation.output.failure)
-    XCTAssertTrue(operation.isFinished)
-  }
-
-  func testFailedConditionAfterAThrownError() {
-    let queue = OperationQueue()
-    let condition = BlockCondition { _ in
-      throw MockError.failed
-    }
-
-    let operation = SleepyAsyncOperation()
-    operation.addCondition(condition)
-    operation.name = "Operation"
-    operation.log = TestsLog
-
-    queue.addOperations([operation], waitUntilFinished: true)
-    XCTAssertTrue(operation.isCancelled)
-    XCTAssertNotNil(operation.output.failure)
-    XCTAssertTrue(operation.isFinished)
-  }
-
-  func testSuccessfulCondition() {
-    let queue = OperationQueue()
-    let condition = BlockCondition { _ in .success(()) }
-    let operation = SleepyAsyncOperation()
-    operation.addCondition(condition)
-    queue.addOperations([operation], waitUntilFinished: true)
-
-    XCTAssertFalse(operation.isCancelled)
-    XCTAssertNotNil(operation.output.success)
-    XCTAssertTrue(operation.isFinished)
-  }
-}
+//final class BlockConditionTests: XCTestCase {
+//  func testNotFulFilledConditionWithoutOperationQueue() {
+//    let condition = BlockCondition { _ in .failure(MockError.failed) }
+//    let operation = SleepyAsyncOperation()
+//    operation.addCondition(condition)
+//    let expectation1 = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: operation, expectedValue: true)
+//    operation.start()
+//
+//    wait(for: [expectation1], timeout: 3)
+//    XCTAssertTrue(operation.isCancelled)
+//    XCTAssertNotNil(operation.output.failure)
+//    XCTAssertTrue(operation.isFinished)
+//  }
+//
+//  func testFulFilledConditionWithoutOperationQueue() {
+//    let condition = BlockCondition { _ in .success(()) }
+//    let operation = SleepyAsyncOperation(interval1: 1, interval2: 0, interval3: 0)
+//    operation.addCondition(condition)
+//    let expectation1 = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: operation, expectedValue: true)
+//    operation.start()
+//
+//    wait(for: [expectation1], timeout: 5)
+//    XCTAssertFalse(operation.isCancelled)
+//    XCTAssertNotNil(operation.output.success)
+//    XCTAssertTrue(operation.isFinished)
+//  }
+//
+//  func testFailedCondition() {
+//    let queue = OperationQueue()
+//    let condition = BlockCondition { _ in .failure(MockError.failed) }
+//    let operation = SleepyAsyncOperation()
+//    operation.addCondition(condition)
+//    operation.name = "operation"
+//    operation.log = TestsLog
+//    queue.addOperations([operation], waitUntilFinished: true)
+//
+//    XCTAssertTrue(operation.isCancelled)
+//    XCTAssertNotNil(operation.output.failure)
+//    XCTAssertTrue(operation.isFinished)
+//  }
+//
+//  func testFailedConditionAfterAThrownError() {
+//    let queue = OperationQueue()
+//    let condition = BlockCondition { _ in
+//      throw MockError.failed
+//    }
+//
+//    let operation = SleepyAsyncOperation()
+//    operation.addCondition(condition)
+//    operation.name = "Operation"
+//    operation.log = TestsLog
+//
+//    queue.addOperations([operation], waitUntilFinished: true)
+//    XCTAssertTrue(operation.isCancelled)
+//    XCTAssertNotNil(operation.output.failure)
+//    XCTAssertTrue(operation.isFinished)
+//  }
+//
+//  func testSuccessfulCondition() {
+//    let queue = OperationQueue()
+//    let condition = BlockCondition { _ in .success(()) }
+//    let operation = SleepyAsyncOperation()
+//    operation.addCondition(condition)
+//    queue.addOperations([operation], waitUntilFinished: true)
+//
+//    XCTAssertFalse(operation.isCancelled)
+//    XCTAssertNotNil(operation.output.success)
+//    XCTAssertTrue(operation.isFinished)
+//  }
+//}

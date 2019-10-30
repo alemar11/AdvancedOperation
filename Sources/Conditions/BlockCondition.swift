@@ -26,20 +26,20 @@ import Foundation
 /// A Condition which will be satisfied if the block returns a successful result.
 /// If the block is not satisfied, the target operation will be cancelled.
 /// - Note: The block may ´throw´ an error, or return a failure, both of which are considered as a condition failure.
-public struct BlockCondition: Condition {
-  public typealias Block = (Operation) throws -> Result<Void, Error>
-  private let block: Block
-
-  public init(block: @escaping Block) {
-    self.block = block
-  }
-
-  public func evaluate(for operation: Operation, completion: @escaping (Result<Void, Error>) -> Void) {
-    do {
-      let result = try block(operation)
-      completion(result)
-    } catch {
-      completion(.failure(error))
-    }
-  }
-}
+//public struct BlockCondition: Condition {
+//  public typealias Block = (Operation) throws -> Result<Void, Error>
+//  private let block: Block
+//
+//  public init(block: @escaping Block) {
+//    self.block = block
+//  }
+//
+//  public func evaluate(for operation: Operation, completion: @escaping (Result<Void, Error>) -> Void) {
+//    do {
+//      let result = try block(operation)
+//      completion(result)
+//    } catch {
+//      completion(.failure(error))
+//    }
+//  }
+//}

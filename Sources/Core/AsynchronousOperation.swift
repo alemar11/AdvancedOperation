@@ -87,12 +87,12 @@ open class AsynchronousOperation<T>: Operation, OutputProducing {
     }
   }
 
-  private var _conditions = Atomic([Condition]())
-
-  /// Conditions evaluated before executing the operation task.
-  public var conditions: [Condition] {
-    return _conditions.value
-  }
+//  private var _conditions = Atomic([Condition]())
+//
+//  /// Conditions evaluated before executing the operation task.
+//  public var conditions: [Condition] {
+//    return _conditions.value
+//  }
 
   open override var isReady: Bool {
     return state == .ready && super.isReady
@@ -135,11 +135,11 @@ open class AsynchronousOperation<T>: Operation, OutputProducing {
     os_log("%{public}s has started.", log: log, type: .info, operationName)
 
     // 1. evaluate conditions
-    if let error = evaluateConditions() {
-      self.cancel()
-      finish(result: .failure(error))
-      return
-    }
+//    if let error = evaluateConditions() {
+//      self.cancel()
+//      finish(result: .failure(error))
+//      return
+//    }
 
     // 2. execute the real task
     execute(completion: finish)
@@ -193,9 +193,9 @@ open class AsynchronousOperation<T>: Operation, OutputProducing {
     }
   }
 
-  final public func addCondition(_ condition: Condition) {
-    _conditions.mutate { $0.append(condition) }
-  }
+//  final public func addCondition(_ condition: Condition) {
+//    _conditions.mutate { $0.append(condition) }
+//  }
 
   open override var description: String {
     return debugDescription
@@ -209,39 +209,39 @@ open class AsynchronousOperation<T>: Operation, OutputProducing {
 
 // MARK: - Conditions
 
-extension AsynchronousOperation {
-  private func evaluateConditions() -> Error? {
-    guard !conditions.isEmpty else { return nil }
-
-    return Self.evaluateConditions(conditions, for: self)
-  }
-
-  private static func evaluateConditions(_ conditions: [Condition], for operation: Operation) -> Error? {
-    let conditionGroup = DispatchGroup()
-    var results = [Result<Void, Error>?](repeating: nil, count: conditions.count)
-    let lock = UnfairLock()
-
-    for (index, condition) in conditions.enumerated() {
-      conditionGroup.enter()
-      condition.evaluate(for: operation) { result in
-        lock.synchronized {
-          results[index] = result
-        }
-        conditionGroup.leave()
-      }
-    }
-
-    conditionGroup.wait()
-
-    let errors = results.compactMap { $0?.failure }
-    if errors.isEmpty {
-      return nil
-    } else {
-      let aggregateError = NSError.conditionsEvaluationFinished(message: "\(operation.operationName) didn't pass the conditions evaluation.", errors: errors)
-      return aggregateError
-    }
-  }
-}
+//extension AsynchronousOperation {
+//  private func evaluateConditions() -> Error? {
+//    guard !conditions.isEmpty else { return nil }
+//
+//    return Self.evaluateConditions(conditions, for: self)
+//  }
+//
+//  private static func evaluateConditions(_ conditions: [Condition], for operation: Operation) -> Error? {
+//    let conditionGroup = DispatchGroup()
+//    var results = [Result<Void, Error>?](repeating: nil, count: conditions.count)
+//    let lock = UnfairLock()
+//
+//    for (index, condition) in conditions.enumerated() {
+//      conditionGroup.enter()
+//      condition.evaluate(for: operation) { result in
+//        lock.synchronized {
+//          results[index] = result
+//        }
+//        conditionGroup.leave()
+//      }
+//    }
+//
+//    conditionGroup.wait()
+//
+//    let errors = results.compactMap { $0?.failure }
+//    if errors.isEmpty {
+//      return nil
+//    } else {
+//      let aggregateError = NSError.conditionsEvaluationFinished(message: "\(operation.operationName) didn't pass the conditions evaluation.", errors: errors)
+//      return aggregateError
+//    }
+//  }
+//}
 
 // MARK: - State
 

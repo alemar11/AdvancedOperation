@@ -23,22 +23,22 @@
 
 import Foundation
 
-let operationConditionKey = "OperationCondition"
-
-public protocol Condition {
-  /// The name of the condition.
-  var name: String { get }
-
-  /// Evaluate the condition, to see if it has been satisfied or not.
-  ///
-  /// - Parameters:
-  ///   - operation: the `AdvancedOperation` which this condition is attached to.
-  ///   - completion: a closure which receives a `Result`.
-  func evaluate(for operation: Operation, completion: @escaping (Result<Void, Error>) -> Void)
-}
-
-public extension Condition {
-  var name: String {
-    return String(describing: type(of: self))
-  }
-}
+//let operationConditionKey = "OperationCondition"
+//
+//public protocol Condition {
+//  /// The name of the condition.
+//  var name: String { get }
+//
+//  /// Evaluate the condition, to see if it has been satisfied or not.
+//  ///
+//  /// - Parameters:
+//  ///   - operation: the `AdvancedOperation` which this condition is attached to.
+//  ///   - completion: a closure which receives a `Result`.
+//  func evaluate(for operation: Operation, completion: @escaping (Result<Void, Error>) -> Void)
+//}
+//
+//public extension Condition {
+//  var name: String {
+//    return String(describing: type(of: self))
+//  }
+//}
