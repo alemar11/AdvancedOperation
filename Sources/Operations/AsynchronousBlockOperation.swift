@@ -25,9 +25,9 @@ import Dispatch
 import Foundation
 
 /// A concurrent sublcass of `AsynchronousOperation` to execute a closure.
-public final class AdvancedBlockOperation: AsynchronousOperation<Void> {
+public final class AsynchronousBlockOperation: AsynchronousOperation<Void> {
   /// A closure type that takes a closure as its parameter.
-  public typealias OperationBlock = (@escaping (Error?) -> Void) -> Void
+  public typealias OperationBlock = (@escaping (Error?) -> Void) -> Void // TODO: it should have a Result type instead of an Error?
 
   // MARK: - Private Properties
 
@@ -38,7 +38,7 @@ public final class AdvancedBlockOperation: AsynchronousOperation<Void> {
   /// The designated initializer.
   ///
   /// - Parameters:
-  ///   - block: The closure to run when the operation executes; the parameter passed to the block **MUST** be invoked by your code, or else the `AdvancedBlockOperation` will never finish executing.
+  ///   - block: The closure to run when the operation executes; the parameter passed to the block **MUST** be invoked by your code, or else the `AsynchronousOperation` will never finish executing.
   public init(block: @escaping OperationBlock) {
     self.block = block
     super.init()

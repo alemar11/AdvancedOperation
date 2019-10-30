@@ -51,10 +51,6 @@
 		232F3AAF206041DE00FC45CB /* AdvancedOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 232F3AAD206041DE00FC45CB /* AdvancedOperation.swift */; };
 		232F3AB0206041DE00FC45CB /* AdvancedOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 232F3AAD206041DE00FC45CB /* AdvancedOperation.swift */; };
 		232F3AB1206041DE00FC45CB /* AdvancedOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 232F3AAD206041DE00FC45CB /* AdvancedOperation.swift */; };
-		232F9444217F29AE00A86699 /* _AdvancedOperation+State.swift in Sources */ = {isa = PBXBuildFile; fileRef = 232F9443217F29AE00A86699 /* _AdvancedOperation+State.swift */; };
-		232F9445217F29AE00A86699 /* _AdvancedOperation+State.swift in Sources */ = {isa = PBXBuildFile; fileRef = 232F9443217F29AE00A86699 /* _AdvancedOperation+State.swift */; };
-		232F9446217F29AE00A86699 /* _AdvancedOperation+State.swift in Sources */ = {isa = PBXBuildFile; fileRef = 232F9443217F29AE00A86699 /* _AdvancedOperation+State.swift */; };
-		232F9447217F29AE00A86699 /* _AdvancedOperation+State.swift in Sources */ = {isa = PBXBuildFile; fileRef = 232F9443217F29AE00A86699 /* _AdvancedOperation+State.swift */; };
 		2341308C1F9605F5002BE7FC /* AdvancedOperation.h in Headers */ = {isa = PBXBuildFile; fileRef = 2341308A1F9605F5002BE7FC /* AdvancedOperation.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		234130BC1F96076A002BE7FC /* AdvancedOperation.h in Headers */ = {isa = PBXBuildFile; fileRef = 2341308A1F9605F5002BE7FC /* AdvancedOperation.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		234130BD1F96076D002BE7FC /* AdvancedOperation.h in Headers */ = {isa = PBXBuildFile; fileRef = 2341308A1F9605F5002BE7FC /* AdvancedOperation.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -85,16 +81,8 @@
 		236F54B8206CDE070079B033 /* NSError+AdvancedOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 236F54B5206CDE070079B033 /* NSError+AdvancedOperation.swift */; };
 		236F54B9206CDE070079B033 /* NSError+AdvancedOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 236F54B5206CDE070079B033 /* NSError+AdvancedOperation.swift */; };
 		23725076200522820000A442 /* AdvancedOperation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2341309A1F960691002BE7FC /* AdvancedOperation.framework */; };
-		2372507D200524860000A442 /* _AdvancedOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2372507C200524860000A442 /* _AdvancedOperation.swift */; };
-		2372507E200524860000A442 /* _AdvancedOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2372507C200524860000A442 /* _AdvancedOperation.swift */; };
-		2372507F200524860000A442 /* _AdvancedOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2372507C200524860000A442 /* _AdvancedOperation.swift */; };
-		23725080200524860000A442 /* _AdvancedOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2372507C200524860000A442 /* _AdvancedOperation.swift */; };
 		2372B4331F960DBA00189A32 /* AdvancedOperation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 234130871F9605F5002BE7FC /* AdvancedOperation.framework */; };
 		2372B4421F960DCB00189A32 /* AdvancedOperation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 234130A71F9606B8002BE7FC /* AdvancedOperation.framework */; };
-		23830CA320615E7C00F6EBC9 /* NSLocking+Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23830CA220615E7C00F6EBC9 /* NSLocking+Utils.swift */; };
-		23830CA420615E7C00F6EBC9 /* NSLocking+Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23830CA220615E7C00F6EBC9 /* NSLocking+Utils.swift */; };
-		23830CA520615E7C00F6EBC9 /* NSLocking+Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23830CA220615E7C00F6EBC9 /* NSLocking+Utils.swift */; };
-		23830CA620615E7C00F6EBC9 /* NSLocking+Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23830CA220615E7C00F6EBC9 /* NSLocking+Utils.swift */; };
 		23856179200A873C0061BAA1 /* Mocks.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23856178200A873C0061BAA1 /* Mocks.swift */; };
 		2385617A200A873C0061BAA1 /* Mocks.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23856178200A873C0061BAA1 /* Mocks.swift */; };
 		2385617B200A873C0061BAA1 /* Mocks.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23856178200A873C0061BAA1 /* Mocks.swift */; };
@@ -113,10 +101,10 @@
 		23A1B88021B8307F0018D9D5 /* Atomic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23A1B87E21B8307F0018D9D5 /* Atomic.swift */; };
 		23A1B88121B8307F0018D9D5 /* Atomic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23A1B87E21B8307F0018D9D5 /* Atomic.swift */; };
 		23A1B88221B8307F0018D9D5 /* Atomic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23A1B87E21B8307F0018D9D5 /* Atomic.swift */; };
-		23A813B12020CF1E008A98E0 /* AdvancedBlockOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23A813B02020CF1E008A98E0 /* AdvancedBlockOperation.swift */; };
-		23A813B22020CF1E008A98E0 /* AdvancedBlockOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23A813B02020CF1E008A98E0 /* AdvancedBlockOperation.swift */; };
-		23A813B32020CF1E008A98E0 /* AdvancedBlockOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23A813B02020CF1E008A98E0 /* AdvancedBlockOperation.swift */; };
-		23A813B42020CF1E008A98E0 /* AdvancedBlockOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23A813B02020CF1E008A98E0 /* AdvancedBlockOperation.swift */; };
+		23A813B12020CF1E008A98E0 /* AsynchronousBlockOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23A813B02020CF1E008A98E0 /* AsynchronousBlockOperation.swift */; };
+		23A813B22020CF1E008A98E0 /* AsynchronousBlockOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23A813B02020CF1E008A98E0 /* AsynchronousBlockOperation.swift */; };
+		23A813B32020CF1E008A98E0 /* AsynchronousBlockOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23A813B02020CF1E008A98E0 /* AsynchronousBlockOperation.swift */; };
+		23A813B42020CF1E008A98E0 /* AsynchronousBlockOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23A813B02020CF1E008A98E0 /* AsynchronousBlockOperation.swift */; };
 		23A813B62020D111008A98E0 /* AdvancedBlockOperationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23A813B52020D111008A98E0 /* AdvancedBlockOperationTests.swift */; };
 		23A813B72020D111008A98E0 /* AdvancedBlockOperationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23A813B52020D111008A98E0 /* AdvancedBlockOperationTests.swift */; };
 		23A813B82020D111008A98E0 /* AdvancedBlockOperationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23A813B52020D111008A98E0 /* AdvancedBlockOperationTests.swift */; };
@@ -186,7 +174,6 @@
 		2328AEFA21B9414000FDB241 /* _MutualExclusivityConditionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = _MutualExclusivityConditionTests.swift; sourceTree = "<group>"; };
 		2328AEFE21B956EF00FDB241 /* ExclusivityManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExclusivityManager.swift; sourceTree = "<group>"; };
 		232F3AAD206041DE00FC45CB /* AdvancedOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdvancedOperation.swift; sourceTree = "<group>"; };
-		232F9443217F29AE00A86699 /* _AdvancedOperation+State.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "_AdvancedOperation+State.swift"; sourceTree = "<group>"; };
 		234130871F9605F5002BE7FC /* AdvancedOperation.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = AdvancedOperation.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		2341308A1F9605F5002BE7FC /* AdvancedOperation.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AdvancedOperation.h; sourceTree = "<group>"; };
 		2341308B1F9605F5002BE7FC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -202,13 +189,11 @@
 		235F7B08206B883800218F32 /* NegatedConditionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NegatedConditionTests.swift; sourceTree = "<group>"; };
 		236F54B5206CDE070079B033 /* NSError+AdvancedOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSError+AdvancedOperation.swift"; sourceTree = "<group>"; };
 		23725071200522820000A442 /* AdvancedOperation Tests macOS.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "AdvancedOperation Tests macOS.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
-		2372507C200524860000A442 /* _AdvancedOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = _AdvancedOperation.swift; sourceTree = "<group>"; };
 		237250812005258D0000A442 /* IDETemplateMacros.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = IDETemplateMacros.plist; path = AdvancedOperation.xcodeproj/xcshareddata/IDETemplateMacros.plist; sourceTree = SOURCE_ROOT; };
 		2372B42E1F960DBA00189A32 /* AdvancedOperation Tests iOS.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "AdvancedOperation Tests iOS.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2372B4321F960DBA00189A32 /* Info-Tests.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Info-Tests.plist"; sourceTree = "<group>"; };
 		2372B43D1F960DCB00189A32 /* AdvancedOperation Tests tvOS.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "AdvancedOperation Tests tvOS.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2382D97D22BE4A3C0082FFDD /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = SOURCE_ROOT; };
-		23830CA220615E7C00F6EBC9 /* NSLocking+Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSLocking+Utils.swift"; sourceTree = "<group>"; };
 		23856178200A873C0061BAA1 /* Mocks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Mocks.swift; sourceTree = "<group>"; };
 		2385617C200A8DC50061BAA1 /* Package.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Package.swift; sourceTree = SOURCE_ROOT; };
 		239BC52120EB7539009A36D9 /* Injection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Injection.swift; sourceTree = "<group>"; };
@@ -217,7 +202,7 @@
 		23A1A85720F4AD9100EA3350 /* CHANGELOG.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = CHANGELOG.md; sourceTree = SOURCE_ROOT; };
 		23A1B87821B81C710018D9D5 /* UnfairLock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnfairLock.swift; sourceTree = "<group>"; };
 		23A1B87E21B8307F0018D9D5 /* Atomic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Atomic.swift; sourceTree = "<group>"; };
-		23A813B02020CF1E008A98E0 /* AdvancedBlockOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdvancedBlockOperation.swift; sourceTree = "<group>"; };
+		23A813B02020CF1E008A98E0 /* AsynchronousBlockOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsynchronousBlockOperation.swift; sourceTree = "<group>"; };
 		23A813B52020D111008A98E0 /* AdvancedBlockOperationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdvancedBlockOperationTests.swift; sourceTree = "<group>"; };
 		23AC3ADC2038A050003E1B15 /* OperationUtilsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OperationUtilsTests.swift; sourceTree = "<group>"; };
 		23B1BDFD216F99BA002D0A5B /* BlockCondition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockCondition.swift; sourceTree = "<group>"; };
@@ -307,8 +292,6 @@
 			isa = PBXGroup;
 			children = (
 				2328AEFE21B956EF00FDB241 /* ExclusivityManager.swift */,
-				2372507C200524860000A442 /* _AdvancedOperation.swift */,
-				232F9443217F29AE00A86699 /* _AdvancedOperation+State.swift */,
 				D2093D302366068B00230A2A /* AsynchronousOperation.swift */,
 			);
 			path = Core;
@@ -413,7 +396,7 @@
 		236F54BA206CE5390079B033 /* Operations */ = {
 			isa = PBXGroup;
 			children = (
-				23A813B02020CF1E008A98E0 /* AdvancedBlockOperation.swift */,
+				23A813B02020CF1E008A98E0 /* AsynchronousBlockOperation.swift */,
 				23F24D2620079CDE00B25A03 /* DelayOperation.swift */,
 			);
 			path = Operations;
@@ -422,7 +405,6 @@
 		23A1B87D21B8306F0018D9D5 /* Lock */ = {
 			isa = PBXGroup;
 			children = (
-				23830CA220615E7C00F6EBC9 /* NSLocking+Utils.swift */,
 				23A1B87821B81C710018D9D5 /* UnfairLock.swift */,
 				23A1B87E21B8307F0018D9D5 /* Atomic.swift */,
 			);
@@ -762,18 +744,15 @@
 			buildActionMask = 2147483647;
 			files = (
 				23F24D2720079CDE00B25A03 /* DelayOperation.swift in Sources */,
-				2372507D200524860000A442 /* _AdvancedOperation.swift in Sources */,
 				23A1B87921B81C710018D9D5 /* UnfairLock.swift in Sources */,
 				23A1B87F21B8307F0018D9D5 /* Atomic.swift in Sources */,
 				23F24D22200799B800B25A03 /* Operation+Utils.swift in Sources */,
 				232F3AAE206041DE00FC45CB /* AdvancedOperation.swift in Sources */,
 				235D08AC206A498400F70142 /* NegatedCondition.swift in Sources */,
 				D2093D312366068B00230A2A /* AsynchronousOperation.swift in Sources */,
-				232F9444217F29AE00A86699 /* _AdvancedOperation+State.swift in Sources */,
 				239BC52220EB7539009A36D9 /* Injection.swift in Sources */,
-				23830CA320615E7C00F6EBC9 /* NSLocking+Utils.swift in Sources */,
 				2326CC25206E6199001876A2 /* Result+Utils.swift in Sources */,
-				23A813B12020CF1E008A98E0 /* AdvancedBlockOperation.swift in Sources */,
+				23A813B12020CF1E008A98E0 /* AsynchronousBlockOperation.swift in Sources */,
 				235D08B0206A498400F70142 /* NoCancelledDependenciesCondition.swift in Sources */,
 				2328AEF621B93C1E00FDB241 /* MutualExclusivityCondition.swift in Sources */,
 				236F54B6206CDE070079B033 /* NSError+AdvancedOperation.swift in Sources */,
@@ -788,18 +767,15 @@
 			buildActionMask = 2147483647;
 			files = (
 				23F24D2820079CDE00B25A03 /* DelayOperation.swift in Sources */,
-				2372507E200524860000A442 /* _AdvancedOperation.swift in Sources */,
 				23A1B87A21B81C710018D9D5 /* UnfairLock.swift in Sources */,
 				23A1B88021B8307F0018D9D5 /* Atomic.swift in Sources */,
 				23F24D23200799B800B25A03 /* Operation+Utils.swift in Sources */,
 				232F3AAF206041DE00FC45CB /* AdvancedOperation.swift in Sources */,
 				235D08B3206A498400F70142 /* NegatedCondition.swift in Sources */,
 				D2093D322366068B00230A2A /* AsynchronousOperation.swift in Sources */,
-				232F9445217F29AE00A86699 /* _AdvancedOperation+State.swift in Sources */,
 				239BC52320EB7539009A36D9 /* Injection.swift in Sources */,
-				23830CA420615E7C00F6EBC9 /* NSLocking+Utils.swift in Sources */,
 				2326CC26206E6199001876A2 /* Result+Utils.swift in Sources */,
-				23A813B22020CF1E008A98E0 /* AdvancedBlockOperation.swift in Sources */,
+				23A813B22020CF1E008A98E0 /* AsynchronousBlockOperation.swift in Sources */,
 				235D08B7206A498400F70142 /* NoCancelledDependenciesCondition.swift in Sources */,
 				2328AEF721B93C1E00FDB241 /* MutualExclusivityCondition.swift in Sources */,
 				236F54B7206CDE070079B033 /* NSError+AdvancedOperation.swift in Sources */,
@@ -814,18 +790,15 @@
 			buildActionMask = 2147483647;
 			files = (
 				23F24D2920079CDE00B25A03 /* DelayOperation.swift in Sources */,
-				2372507F200524860000A442 /* _AdvancedOperation.swift in Sources */,
 				23A1B87B21B81C710018D9D5 /* UnfairLock.swift in Sources */,
 				23A1B88121B8307F0018D9D5 /* Atomic.swift in Sources */,
 				23F24D24200799B800B25A03 /* Operation+Utils.swift in Sources */,
 				232F3AB0206041DE00FC45CB /* AdvancedOperation.swift in Sources */,
 				235D08BA206A498500F70142 /* NegatedCondition.swift in Sources */,
 				D2093D332366068B00230A2A /* AsynchronousOperation.swift in Sources */,
-				232F9446217F29AE00A86699 /* _AdvancedOperation+State.swift in Sources */,
 				239BC52420EB7539009A36D9 /* Injection.swift in Sources */,
-				23830CA520615E7C00F6EBC9 /* NSLocking+Utils.swift in Sources */,
 				2326CC27206E6199001876A2 /* Result+Utils.swift in Sources */,
-				23A813B32020CF1E008A98E0 /* AdvancedBlockOperation.swift in Sources */,
+				23A813B32020CF1E008A98E0 /* AsynchronousBlockOperation.swift in Sources */,
 				235D08BE206A498500F70142 /* NoCancelledDependenciesCondition.swift in Sources */,
 				2328AEF821B93C1E00FDB241 /* MutualExclusivityCondition.swift in Sources */,
 				236F54B8206CDE070079B033 /* NSError+AdvancedOperation.swift in Sources */,
@@ -840,18 +813,15 @@
 			buildActionMask = 2147483647;
 			files = (
 				23F24D2A20079CDE00B25A03 /* DelayOperation.swift in Sources */,
-				23725080200524860000A442 /* _AdvancedOperation.swift in Sources */,
 				23A1B87C21B81C710018D9D5 /* UnfairLock.swift in Sources */,
 				23A1B88221B8307F0018D9D5 /* Atomic.swift in Sources */,
 				23F24D25200799B800B25A03 /* Operation+Utils.swift in Sources */,
 				232F3AB1206041DE00FC45CB /* AdvancedOperation.swift in Sources */,
 				235D08C1206A498500F70142 /* NegatedCondition.swift in Sources */,
 				D2093D342366068B00230A2A /* AsynchronousOperation.swift in Sources */,
-				232F9447217F29AE00A86699 /* _AdvancedOperation+State.swift in Sources */,
 				239BC52520EB7539009A36D9 /* Injection.swift in Sources */,
-				23830CA620615E7C00F6EBC9 /* NSLocking+Utils.swift in Sources */,
 				2326CC28206E6199001876A2 /* Result+Utils.swift in Sources */,
-				23A813B42020CF1E008A98E0 /* AdvancedBlockOperation.swift in Sources */,
+				23A813B42020CF1E008A98E0 /* AsynchronousBlockOperation.swift in Sources */,
 				235D08C5206A498500F70142 /* NoCancelledDependenciesCondition.swift in Sources */,
 				2328AEF921B93C1E00FDB241 /* MutualExclusivityCondition.swift in Sources */,
 				236F54B9206CDE070079B033 /* NSError+AdvancedOperation.swift in Sources */,

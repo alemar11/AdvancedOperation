@@ -22,15 +22,13 @@
 // SOFTWARE.
 
 // https://developer.apple.com/library/archive/documentation/General/Conceptual/ConcurrencyProgrammingGuide/OperationObjects/OperationObjects.html#//apple_ref/doc/uid/TP40008091-CH101-SW8
+// Source/Inspiration: https://stackoverflow.com/a/48104095/116862 and https://gist.github.com/calebd/93fa347397cec5f88233
 
 import Foundation
 import os.log
 
-/// An abstract class that makes building simple asynchronous operations easy.
-/// Subclasses must override `main()` to perform any work and call `finish()`
-/// when they are done. All `NSOperation` work will be handled automatically.
-///
-/// Source/Inspiration: https://stackoverflow.com/a/48104095/116862 and https://gist.github.com/calebd/93fa347397cec5f88233
+/// An abstract subclass of `Operation` to build asynchronous operations.
+/// Subclasses must override `execute(completion:)` to perform any work and call the completion handler to finish it.
 open class AsynchronousOperation<T>: Operation, OutputProducing {
   public typealias Output = Result<T,Error>
 
@@ -56,7 +54,8 @@ open class AsynchronousOperation<T>: Operation, OutputProducing {
       // `isReady`, `isExecuting`, `isFinished`. Use a second queue to wrap the entire
       // transaction.
       stateChangeQueue.sync {
-        // Retrieve the existing value first. Necessary for sending fine-grained KVO
+        // Retrieve the existing value first.
+        // Necessary for sending fine-grained KVO
         // willChange/didChange notifications only for the key paths that actually change.
         let oldValue = _state.value
         //guard newValue != oldValue else { return }
@@ -106,13 +105,6 @@ open class AsynchronousOperation<T>: Operation, OutputProducing {
   public final override var isFinished: Bool {
     return state == .finished
   }
-
-  // MARK: Initializers
-
-//  public init(name: String? = nil) {
-//    super.init()
-//    self.name = name ?? "\(type(of: self))"
-//  }
 
   // MARK: - Foundation.Operation
 
@@ -255,7 +247,7 @@ extension AsynchronousOperation {
 
 extension AsynchronousOperation {
   /// Mirror of the possible states an Operation can be in.
-  private enum State: Int, CustomStringConvertible {
+  internal enum State: Int, CustomStringConvertible, CustomDebugStringConvertible {
     case ready
     case executing
     case finished
@@ -275,6 +267,10 @@ extension AsynchronousOperation {
       case .executing: return "executing"
       case .finished: return "finished"
       }
+    }
+
+    var debugDescription: String {
+      return description
     }
 
     func canTransition(to newState: State) -> Bool {

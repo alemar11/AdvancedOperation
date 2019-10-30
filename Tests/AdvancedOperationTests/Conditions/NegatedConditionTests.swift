@@ -55,7 +55,7 @@ final class NegatedConditionTests: XCTestCase {
 
   func testNegationWithFailingCondition() {
     let negatedFailingCondition = NegatedCondition(condition: BlockCondition { _ in .failure(MockError.failed) })
-    let dummyOperation = AdvancedBlockOperation { }
+    let dummyOperation = AsynchronousBlockOperation { }
     let expectation1 = expectation(description: "\(#function)\(#line)")
     negatedFailingCondition.evaluate(for: dummyOperation) { (result) in
       switch result {
@@ -69,7 +69,7 @@ final class NegatedConditionTests: XCTestCase {
 
   func testNegationWithSuccessingCondition() {
     let negatedCondition = NegatedCondition(condition: BlockCondition { _ in .success(()) })
-    let dummyOperation = AdvancedBlockOperation { }
+    let dummyOperation = AsynchronousBlockOperation { }
     let expectation1 = expectation(description: "\(#function)\(#line)")
     negatedCondition.evaluate(for: dummyOperation) { (result) in
       switch result {
@@ -84,7 +84,7 @@ final class NegatedConditionTests: XCTestCase {
   func testMutitpleNegatedConditions() {
     let queue = OperationQueue()
 
-    let operation1 = AdvancedBlockOperation { }
+    let operation1 = AsynchronousBlockOperation { }
     operation1.name = "operation1"
 
     let operation2 = CancellingAsyncOperation()
@@ -96,7 +96,7 @@ final class NegatedConditionTests: XCTestCase {
     let operation4 = DelayOperation(interval: 1)
     operation4.name = "operation4"
 
-    let operation5 = AdvancedBlockOperation { }
+    let operation5 = AsynchronousBlockOperation { }
     operation5.name = "operation5"
 
     let expectation1 = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: operation1, expectedValue: true)

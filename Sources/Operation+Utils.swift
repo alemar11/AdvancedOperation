@@ -24,7 +24,7 @@
 import Foundation
 
 extension Operation {
-  /// Returns the `AdvancedOperation` name or its type if the name is nil.
+  /// Returns the `Operation` name or its type if the name is nil.
   public var operationName: String {
     return name ?? "\(type(of: self))"
   }

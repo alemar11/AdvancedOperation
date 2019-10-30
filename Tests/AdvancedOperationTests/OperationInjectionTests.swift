@@ -100,7 +100,7 @@ class OperationInjectionTests: XCTestCase {
     let expectation = self.expectation(description: "\(#function)\(#line)")
     let operation1 = IntToStringOperation()
     let operation2 = StringToIntOperation()
-    let operation3 = AdvancedBlockOperation {
+    let operation3 = AsynchronousBlockOperation {
       expectation.fulfill()
     }
     operation3.addDependency(operation2)

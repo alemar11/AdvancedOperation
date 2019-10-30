@@ -28,33 +28,12 @@ import Foundation
 /// If the interval is negative, or the `Date` is in the past, then this operation immediately finishes.
 /// - Note: A `DelayOperation` cannot be cancelled once started running.
 public final class DelayOperation: AsynchronousOperation<Void> {
-  // MARK: - Properties
+  // MARK: - Private Properties
 
   private let delay: Delay
   private let queue: DispatchQueue
 
-  // MARK: - Delay Types
-
-  private enum Delay {
-    case interval(TimeInterval)
-    case date(Date)
-
-    /// Returns the delay in seconds.
-    var seconds: TimeInterval {
-      let interval: TimeInterval
-
-      switch self {
-      case .interval(let seconds):
-        interval = seconds
-
-      case .date(let date):
-        interval = date.timeIntervalSinceNow
-      }
-      return interval
-    }
-  }
-
-  // MARK: - Initialization
+  // MARK: - Initializers
 
   public init(interval: TimeInterval, queue: DispatchQueue = .global(qos: .default)) {
     self.delay = .interval(interval)
@@ -74,7 +53,7 @@ public final class DelayOperation: AsynchronousOperation<Void> {
     name = "DelayOperation <\(delay)>"
   }
 
-  // MARK: - Methods
+  // MARK: - Public Methods
 
   public final override func execute(completion: @escaping (Result<Void, Error>) -> Void) {
     guard !isCancelled && delay.seconds > 0 else {
@@ -84,4 +63,27 @@ public final class DelayOperation: AsynchronousOperation<Void> {
 
     queue.asyncAfter(deadline: .now() + delay.seconds) { completion(.success(())) }
   }
+}
+
+extension DelayOperation {
+  // MARK: - Delay Type
+
+   private enum Delay {
+     case interval(TimeInterval)
+     case date(Date)
+
+     /// Returns the delay in seconds.
+     var seconds: TimeInterval {
+       let interval: TimeInterval
+
+       switch self {
+       case .interval(let seconds):
+         interval = seconds
+
+       case .date(let date):
+         interval = date.timeIntervalSinceNow
+       }
+       return interval
+     }
+   }
 }

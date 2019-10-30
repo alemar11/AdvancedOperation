@@ -3,6 +3,9 @@
 ### 5.0.0
 
 - Added `AsynchronousOperation`.
+- Added `AsynchronousBlockOperation`.
+- Removed `AdvancedOperation`
+- Removed `AdvancedBlockOperation`
 - Removed `GroupOperation`.
 
 ### 4.0.0

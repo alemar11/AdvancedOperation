@@ -23,6 +23,16 @@
 
 import Foundation
 
+internal extension NSLocking { // TODO: remove it once the condition evaluator is gone
+  @discardableResult
+  func synchronized<T>(_ block: () -> T) -> T {
+    lock()
+    defer { unlock() }
+
+    return block()
+  }
+}
+
 /// An object that coordinates the operation of multiple threads of execution within the same application.
 internal final class UnfairLock: NSLocking {
   private var unfairLock: os_unfair_lock_t

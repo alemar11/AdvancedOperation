@@ -26,7 +26,7 @@ import XCTest
 
 final class AdvancedBlockOperationTests: XCTestCase {
   func testCancel() {
-    let operation = AdvancedBlockOperation { complete in
+    let operation = AsynchronousBlockOperation { complete in
       DispatchQueue(label: "\(identifier).\(#function)", attributes: .concurrent).asyncAfter(deadline: .now() + 2) {
         complete(nil)
       }
@@ -44,7 +44,7 @@ final class AdvancedBlockOperationTests: XCTestCase {
   }
 
   func testCancelBeforeStarting() {
-    let operation = AdvancedBlockOperation { complete in
+    let operation = AsynchronousBlockOperation { complete in
       DispatchQueue(label: "\(identifier).\(#function)", attributes: .concurrent).asyncAfter(deadline: .now() + 2) {
         complete(nil)
       }
@@ -62,7 +62,7 @@ final class AdvancedBlockOperationTests: XCTestCase {
   }
 
   func testEarlyBailOut() {
-    let operation = AdvancedBlockOperation { complete in complete(nil) }
+    let operation = AsynchronousBlockOperation { complete in complete(nil) }
     let expectation1 = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: operation, expectedValue: true)
     operation.cancel()
     operation.start()
@@ -73,7 +73,7 @@ final class AdvancedBlockOperationTests: XCTestCase {
   }
 
   func testBlockOperationCompletedInAsyncQueue() {
-    let operation = AdvancedBlockOperation { complete in
+    let operation = AsynchronousBlockOperation { complete in
       XCTAssertTrue(Thread.isMainThread)
       DispatchQueue(label: "\(identifier).\(#function)", attributes: .concurrent).asyncAfter(deadline: .now() + 3) {
         complete(nil)
@@ -93,7 +93,7 @@ final class AdvancedBlockOperationTests: XCTestCase {
     weak var weakObject = object
 
     autoreleasepool {
-      var operation = AdvancedBlockOperation { [weak object] complete in
+      var operation = AsynchronousBlockOperation { [weak object] complete in
         DispatchQueue(label: "\(identifier).\(#function)", attributes: .concurrent).asyncAfter(deadline: .now() + 2) {
           _ = object
           complete(error)
@@ -114,7 +114,7 @@ final class AdvancedBlockOperationTests: XCTestCase {
       }
 
       // Memory leaks test: once release the operation, the captured object (by reference) should be nil (weakObject)
-      operation = AdvancedBlockOperation { }
+      operation = AsynchronousBlockOperation { }
       object = NSObject()
     }
     XCTAssertNil(weakObject)
@@ -125,7 +125,7 @@ final class AdvancedBlockOperationTests: XCTestCase {
     let expectation2 = expectation(description: "\(#function)\(#line)")
     // The other AdvancedBlockOperation initializer will fail here becase we need a more fine control
     // on when the operation should be considered finished.
-    let operation = AdvancedBlockOperation() { complete in
+    let operation = AsynchronousBlockOperation() { complete in
       DispatchQueue.global().async {
         sleep(3)
         expectation1.fulfill()
@@ -141,7 +141,7 @@ final class AdvancedBlockOperationTests: XCTestCase {
 
   func testBlockOperationWithDispatchQueue() {
     let queue = DispatchQueue(label: "\(identifier).\(#function)")
-    let operation = AdvancedBlockOperation(queue: queue) {
+    let operation = AsynchronousBlockOperation(queue: queue) {
       XCTAssertFalse(Thread.isMainThread)
     }
 
@@ -159,7 +159,7 @@ final class AdvancedBlockOperationTests: XCTestCase {
     let operation3 = SleepyAsyncOperation()
 
     operation3.addCompletionBlock { expectation3.fulfill() }
-    let adapterOperation = AdvancedBlockOperation { [unowned operation2] in
+    let adapterOperation = AsynchronousBlockOperation { [unowned operation2] in
       operation2.cancel()
     }
     adapterOperation.addDependency(operation1)
@@ -182,7 +182,7 @@ final class AdvancedBlockOperationTests: XCTestCase {
     weak var weakObject = object
 
     autoreleasepool {
-      var operation = AdvancedBlockOperation { [unowned object] complete in
+      var operation = AsynchronousBlockOperation { [unowned object] complete in
         DispatchQueue(label: "\(identifier).\(#function)", attributes: .concurrent).async {
           _ = object
           complete(nil)
@@ -196,7 +196,7 @@ final class AdvancedBlockOperationTests: XCTestCase {
       waitForExpectations(timeout: 3)
 
       // Memory leaks test: once the operation is released, the captured object (by reference) should be nil (weakObject)
-      operation = AdvancedBlockOperation(block: { })
+      operation = AsynchronousBlockOperation(block: { })
       object = NSObject()
     }
 
