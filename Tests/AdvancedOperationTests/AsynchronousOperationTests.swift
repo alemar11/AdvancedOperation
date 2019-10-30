@@ -51,7 +51,7 @@ final class AsynchronousOperationTests: XCTestCase {
       XCTFail("The operation should have a failure output")
       return
     }
-    XCTAssertEqual(output as NSError, NSError.notStarted)
+    XCTAssertEqual(output as NSError, NSError.AdvancedOperation.notStarted)
   }
 
   func testStart() {

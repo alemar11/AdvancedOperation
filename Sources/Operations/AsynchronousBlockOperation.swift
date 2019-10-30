@@ -63,7 +63,7 @@ public final class AsynchronousBlockOperation: AsynchronousOperation<Void> {
 
   public override func execute(completion: @escaping (Result<Void, Error>) -> Void) {
     guard !isCancelled else {
-      completion(.failure(NSError.cancelled))
+      completion(.failure(NSError.AdvancedOperation.cancelled))
       return
     }
 

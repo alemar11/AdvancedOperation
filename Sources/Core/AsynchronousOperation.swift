@@ -33,7 +33,7 @@ open class AsynchronousOperation<T>: Operation, OutputProducing {
   public typealias Output = Result<T,Error>
 
   public final override var isAsynchronous: Bool { return true }
-  public private(set) var output: Output = .failure(NSError.notStarted)
+  public private(set) var output: Output = .failure(NSError.AdvancedOperation.notStarted)
 
   /// Serial queue for making state changes atomic under the constraint of having to send KVO willChange/didChange notifications.
   private let stateChangeQueue = DispatchQueue(label: "\(identifier).AsynchronousOperation.stateChange")

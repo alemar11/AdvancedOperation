@@ -21,24 +21,21 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-import Foundation
+import XCTest
+@testable import AdvancedOperation
 
+final class NSErrorAdvancedOperationTests: XCTestCase {
+  func testNotStartedError() {
+    let error = NSError.AdvancedOperation.notStarted
+    XCTAssertEqual(error.domain, identifier)
+    XCTAssertEqual(error.code, 1)
+    XCTAssertEqual(error.userInfo[NSDebugDescriptionErrorKey] as! String, "The operation hasn't started yet.")
+  }
 
-extension NSError {
-  enum AdvancedOperation {
-    static let notStarted: NSError = {
-      var info = [String: Any]()
-      info[NSDebugDescriptionErrorKey] = "The operation hasn't started yet."
-
-      let error = NSError(domain: identifier, code: 1, userInfo: info)
-      return error
-    }()
-
-    static let cancelled: NSError = {
-      var info = [String: Any]()
-      info[NSDebugDescriptionErrorKey] = "The operation has been cancelled."
-      let error = NSError(domain: identifier, code: 2, userInfo: info)
-      return error
-    }()
+  func testCancelledError() {
+    let error = NSError.AdvancedOperation.cancelled
+    XCTAssertEqual(error.domain, identifier)
+    XCTAssertEqual(error.code, 2)
+    XCTAssertEqual(error.userInfo[NSDebugDescriptionErrorKey] as! String, "The operation has been cancelled.")
   }
 }
