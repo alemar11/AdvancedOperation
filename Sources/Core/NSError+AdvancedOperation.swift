@@ -23,6 +23,12 @@
 
 import Foundation
 
+
+extension NSError {
+  static let notStarted = NSError(domain: identifier, code: 1, userInfo: nil)
+  static let cancelled = NSError(domain: identifier, code: 2, userInfo: nil)
+}
+
 public extension NSError {
   enum Code {
     static let conditionFailed = 100

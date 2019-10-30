@@ -27,7 +27,7 @@
 import Foundation
 import os.log
 
-/// An abstract subclass of `Operation` to build asynchronous operations.
+/// An abstract thread safe subclass of `Operation` to build asynchronous operations.
 /// Subclasses must override `execute(completion:)` to perform any work and call the completion handler to finish it.
 open class AsynchronousOperation<T>: Operation, OutputProducing {
   public typealias Output = Result<T,Error>
@@ -87,13 +87,6 @@ open class AsynchronousOperation<T>: Operation, OutputProducing {
     }
   }
 
-//  private var _conditions = Atomic([Condition]())
-//
-//  /// Conditions evaluated before executing the operation task.
-//  public var conditions: [Condition] {
-//    return _conditions.value
-//  }
-
   open override var isReady: Bool {
     return state == .ready && super.isReady
   }
@@ -133,15 +126,6 @@ open class AsynchronousOperation<T>: Operation, OutputProducing {
   public final override func main() {
     state = .executing
     os_log("%{public}s has started.", log: log, type: .info, operationName)
-
-    // 1. evaluate conditions
-//    if let error = evaluateConditions() {
-//      self.cancel()
-//      finish(result: .failure(error))
-//      return
-//    }
-
-    // 2. execute the real task
     execute(completion: finish)
   }
 
@@ -207,42 +191,6 @@ open class AsynchronousOperation<T>: Operation, OutputProducing {
   }
 }
 
-// MARK: - Conditions
-
-//extension AsynchronousOperation {
-//  private func evaluateConditions() -> Error? {
-//    guard !conditions.isEmpty else { return nil }
-//
-//    return Self.evaluateConditions(conditions, for: self)
-//  }
-//
-//  private static func evaluateConditions(_ conditions: [Condition], for operation: Operation) -> Error? {
-//    let conditionGroup = DispatchGroup()
-//    var results = [Result<Void, Error>?](repeating: nil, count: conditions.count)
-//    let lock = UnfairLock()
-//
-//    for (index, condition) in conditions.enumerated() {
-//      conditionGroup.enter()
-//      condition.evaluate(for: operation) { result in
-//        lock.synchronized {
-//          results[index] = result
-//        }
-//        conditionGroup.leave()
-//      }
-//    }
-//
-//    conditionGroup.wait()
-//
-//    let errors = results.compactMap { $0?.failure }
-//    if errors.isEmpty {
-//      return nil
-//    } else {
-//      let aggregateError = NSError.conditionsEvaluationFinished(message: "\(operation.operationName) didn't pass the conditions evaluation.", errors: errors)
-//      return aggregateError
-//    }
-//  }
-//}
-
 // MARK: - State
 
 extension AsynchronousOperation {
@@ -283,9 +231,3 @@ extension AsynchronousOperation {
     }
   }
 }
-
-extension NSError {
-  static let notStarted = NSError(domain: identifier, code: 1, userInfo: nil)
-  static let cancelled = NSError(domain: identifier, code: 2, userInfo: nil)
-}
-

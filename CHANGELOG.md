@@ -1,14 +1,15 @@
 # Changelog
 
-### 5.0.0
+### 5.0.0 ⭐
 
 - Added `AsynchronousOperation`.
 - Added `AsynchronousBlockOperation`.
 - Removed `AdvancedOperation`
 - Removed `AdvancedBlockOperation`
 - Removed `GroupOperation`.
+- Removed conditions.
 
-### 4.0.0
+### 4.0.0 ⭐
 
 - An `AdvancedOperation` can now be cancelled or finished with only one single `Error`.
 - Injection doesn't require an *adapter* operation anymore.
