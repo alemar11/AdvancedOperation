@@ -162,6 +162,7 @@
 		23A813B02020CF1E008A98E0 /* AsynchronousBlockOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsynchronousBlockOperation.swift; sourceTree = "<group>"; };
 		23A813B52020D111008A98E0 /* AdvancedBlockOperationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdvancedBlockOperationTests.swift; sourceTree = "<group>"; };
 		23AC3ADC2038A050003E1B15 /* OperationUtilsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OperationUtilsTests.swift; sourceTree = "<group>"; };
+		23BAA540236B460400411F5B /* ci.yml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; path = ci.yml; sourceTree = "<group>"; };
 		23F24D21200799B800B25A03 /* Operation+Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Operation+Utils.swift"; sourceTree = "<group>"; };
 		23F24D2620079CDE00B25A03 /* DelayOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DelayOperation.swift; sourceTree = "<group>"; };
 		23F24D2B2007A33F00B25A03 /* DelayOperationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DelayOperationTests.swift; sourceTree = "<group>"; };
@@ -299,6 +300,7 @@
 		234130941F96061E002BE7FC /* Support */ = {
 			isa = PBXGroup;
 			children = (
+				23BAA53F236B460400411F5B /* workflows */,
 				239C4D4D2304720300EBDEF6 /* .travis.yml */,
 				2382D97D22BE4A3C0082FFDD /* README.md */,
 				23A1A85720F4AD9100EA3350 /* CHANGELOG.md */,
@@ -338,6 +340,15 @@
 			);
 			path = Helpers;
 			sourceTree = "<group>";
+		};
+		23BAA53F236B460400411F5B /* workflows */ = {
+			isa = PBXGroup;
+			children = (
+				23BAA540236B460400411F5B /* ci.yml */,
+			);
+			name = workflows;
+			path = .github/workflows;
+			sourceTree = SOURCE_ROOT;
 		};
 /* End PBXGroup section */
 
