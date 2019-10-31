@@ -32,10 +32,6 @@
 /* End PBXAggregateTarget section */
 
 /* Begin PBXBuildFile section */
-		2326CC25206E6199001876A2 /* Result+Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2326CC24206E6199001876A2 /* Result+Utils.swift */; };
-		2326CC26206E6199001876A2 /* Result+Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2326CC24206E6199001876A2 /* Result+Utils.swift */; };
-		2326CC27206E6199001876A2 /* Result+Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2326CC24206E6199001876A2 /* Result+Utils.swift */; };
-		2326CC28206E6199001876A2 /* Result+Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2326CC24206E6199001876A2 /* Result+Utils.swift */; };
 		2328AEFF21B956EF00FDB241 /* ExclusivityManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2328AEFE21B956EF00FDB241 /* ExclusivityManager.swift */; };
 		2328AF0021B956EF00FDB241 /* ExclusivityManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2328AEFE21B956EF00FDB241 /* ExclusivityManager.swift */; };
 		2328AF0121B956EF00FDB241 /* ExclusivityManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2328AEFE21B956EF00FDB241 /* ExclusivityManager.swift */; };
@@ -86,6 +82,9 @@
 		23AC3ADD2038A050003E1B15 /* OperationUtilsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23AC3ADC2038A050003E1B15 /* OperationUtilsTests.swift */; };
 		23AC3ADE2038A050003E1B15 /* OperationUtilsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23AC3ADC2038A050003E1B15 /* OperationUtilsTests.swift */; };
 		23AC3ADF2038A050003E1B15 /* OperationUtilsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23AC3ADC2038A050003E1B15 /* OperationUtilsTests.swift */; };
+		23BAA53B236B420900411F5B /* Result+Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2326CC24206E6199001876A2 /* Result+Utils.swift */; };
+		23BAA53C236B420A00411F5B /* Result+Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2326CC24206E6199001876A2 /* Result+Utils.swift */; };
+		23BAA53D236B420A00411F5B /* Result+Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2326CC24206E6199001876A2 /* Result+Utils.swift */; };
 		23F24D22200799B800B25A03 /* Operation+Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23F24D21200799B800B25A03 /* Operation+Utils.swift */; };
 		23F24D23200799B800B25A03 /* Operation+Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23F24D21200799B800B25A03 /* Operation+Utils.swift */; };
 		23F24D24200799B800B25A03 /* Operation+Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23F24D21200799B800B25A03 /* Operation+Utils.swift */; };
@@ -230,10 +229,10 @@
 		230B47FD200EABEE00F46852 /* AdvancedOperationTests */ = {
 			isa = PBXGroup;
 			children = (
+				23BAA53E236B42BA00411F5B /* Helpers */,
 				D2093D392366175200230A2A /* OperationInjectionTests.swift */,
 				D2093D35236606F400230A2A /* AsynchronousOperationTests.swift */,
 				239ECD30218E11AF00F640F2 /* NSErrorAdvancedOperationTests.swift */,
-				23856178200A873C0061BAA1 /* Mocks.swift */,
 				235D08D0206A941B00F70142 /* OperationStateTests.swift */,
 				23AC3ADC2038A050003E1B15 /* OperationUtilsTests.swift */,
 				23555FA22170C789009FBE81 /* Operations */,
@@ -251,7 +250,6 @@
 				239BC52120EB7539009A36D9 /* Injection.swift */,
 				236F54B5206CDE070079B033 /* NSError+AdvancedOperation.swift */,
 				23F24D21200799B800B25A03 /* Operation+Utils.swift */,
-				2326CC24206E6199001876A2 /* Result+Utils.swift */,
 				23A1B87821B81C710018D9D5 /* UnfairLock.swift */,
 			);
 			path = Core;
@@ -330,6 +328,15 @@
 				23F24D2620079CDE00B25A03 /* DelayOperation.swift */,
 			);
 			path = Operations;
+			sourceTree = "<group>";
+		};
+		23BAA53E236B42BA00411F5B /* Helpers */ = {
+			isa = PBXGroup;
+			children = (
+				2326CC24206E6199001876A2 /* Result+Utils.swift */,
+				23856178200A873C0061BAA1 /* Mocks.swift */,
+			);
+			path = Helpers;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -671,7 +678,6 @@
 				232F3AAE206041DE00FC45CB /* AdvancedOperation.swift in Sources */,
 				D2093D312366068B00230A2A /* AsynchronousOperation.swift in Sources */,
 				239BC52220EB7539009A36D9 /* Injection.swift in Sources */,
-				2326CC25206E6199001876A2 /* Result+Utils.swift in Sources */,
 				23A813B12020CF1E008A98E0 /* AsynchronousBlockOperation.swift in Sources */,
 				236F54B6206CDE070079B033 /* NSError+AdvancedOperation.swift in Sources */,
 				2328AEFF21B956EF00FDB241 /* ExclusivityManager.swift in Sources */,
@@ -689,7 +695,6 @@
 				232F3AAF206041DE00FC45CB /* AdvancedOperation.swift in Sources */,
 				D2093D322366068B00230A2A /* AsynchronousOperation.swift in Sources */,
 				239BC52320EB7539009A36D9 /* Injection.swift in Sources */,
-				2326CC26206E6199001876A2 /* Result+Utils.swift in Sources */,
 				23A813B22020CF1E008A98E0 /* AsynchronousBlockOperation.swift in Sources */,
 				236F54B7206CDE070079B033 /* NSError+AdvancedOperation.swift in Sources */,
 				2328AF0021B956EF00FDB241 /* ExclusivityManager.swift in Sources */,
@@ -707,7 +712,6 @@
 				232F3AB0206041DE00FC45CB /* AdvancedOperation.swift in Sources */,
 				D2093D332366068B00230A2A /* AsynchronousOperation.swift in Sources */,
 				239BC52420EB7539009A36D9 /* Injection.swift in Sources */,
-				2326CC27206E6199001876A2 /* Result+Utils.swift in Sources */,
 				23A813B32020CF1E008A98E0 /* AsynchronousBlockOperation.swift in Sources */,
 				236F54B8206CDE070079B033 /* NSError+AdvancedOperation.swift in Sources */,
 				2328AF0121B956EF00FDB241 /* ExclusivityManager.swift in Sources */,
@@ -725,7 +729,6 @@
 				232F3AB1206041DE00FC45CB /* AdvancedOperation.swift in Sources */,
 				D2093D342366068B00230A2A /* AsynchronousOperation.swift in Sources */,
 				239BC52520EB7539009A36D9 /* Injection.swift in Sources */,
-				2326CC28206E6199001876A2 /* Result+Utils.swift in Sources */,
 				23A813B42020CF1E008A98E0 /* AsynchronousBlockOperation.swift in Sources */,
 				236F54B9206CDE070079B033 /* NSError+AdvancedOperation.swift in Sources */,
 				2328AF0221B956EF00FDB241 /* ExclusivityManager.swift in Sources */,
@@ -737,6 +740,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				D2093D38236606F400230A2A /* AsynchronousOperationTests.swift in Sources */,
+				23BAA53D236B420A00411F5B /* Result+Utils.swift in Sources */,
 				D2093D3C2366175200230A2A /* OperationInjectionTests.swift in Sources */,
 				23F24D2E2007A33F00B25A03 /* DelayOperationTests.swift in Sources */,
 				23A813B82020D111008A98E0 /* AdvancedBlockOperationTests.swift in Sources */,
@@ -752,6 +756,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				D2093D36236606F400230A2A /* AsynchronousOperationTests.swift in Sources */,
+				23BAA53B236B420900411F5B /* Result+Utils.swift in Sources */,
 				D2093D3A2366175200230A2A /* OperationInjectionTests.swift in Sources */,
 				23F24D2C2007A33F00B25A03 /* DelayOperationTests.swift in Sources */,
 				23A813B62020D111008A98E0 /* AdvancedBlockOperationTests.swift in Sources */,
@@ -767,6 +772,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				D2093D37236606F400230A2A /* AsynchronousOperationTests.swift in Sources */,
+				23BAA53C236B420A00411F5B /* Result+Utils.swift in Sources */,
 				D2093D3B2366175200230A2A /* OperationInjectionTests.swift in Sources */,
 				23F24D2D2007A33F00B25A03 /* DelayOperationTests.swift in Sources */,
 				23A813B72020D111008A98E0 /* AdvancedBlockOperationTests.swift in Sources */,

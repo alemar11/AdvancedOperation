@@ -25,7 +25,7 @@ import Foundation
 
 public protocol InputConsuming: Operation {
   associatedtype Input
-  var input: Input? { get set }
+  var input: Input { get set }
 }
 
 public protocol OutputProducing: Operation {
@@ -51,7 +51,7 @@ extension OutputProducing {
     return injectionOperation
   }
 
-  public func inject<E: InputConsuming>(into operation: E, transform: @escaping (Output) -> E.Input?) -> Operation {
+  public func inject<E: InputConsuming>(into operation: E, transform: @escaping (Output) -> E.Input) -> Operation {
     let injectionOperation = BlockOperation { [unowned self, unowned operation] in
       operation.input = transform(self.output)
     }

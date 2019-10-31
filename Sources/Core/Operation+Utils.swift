@@ -58,18 +58,16 @@ extension Operation {
   }
 
   /// Adds multiple dependencies to the operation.
+  /// If the receiver is already executing its task, adding dependencies has no practical effect.
   public func addDependencies(_ dependencies: [Operation]) {
-    precondition(!isExecuting, "Dependencies cannot be modified after execution has begun.")
-
     for dependency in dependencies {
       addDependency(dependency)
     }
   }
 
   /// Adds multiple dependencies to the operation.
+  /// If the receiver is already executing its task, adding dependencies has no practical effect.
   public func addDependencies(_ dependencies: Operation...) {
-    precondition(!isExecuting, "Dependencies cannot be modified after execution has begun.")
-
     for dependency in dependencies {
       addDependency(dependency)
     }

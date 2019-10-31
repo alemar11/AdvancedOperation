@@ -26,10 +26,10 @@ import XCTest
 
 final class NSErrorAdvancedOperationTests: XCTestCase {
   func testNotStartedError() {
-    let error = NSError.AdvancedOperation.notStarted
+    let error = NSError.AdvancedOperation.noOutputYet
     XCTAssertEqual(error.domain, identifier)
     XCTAssertEqual(error.code, 1)
-    XCTAssertEqual(error.userInfo[NSDebugDescriptionErrorKey] as! String, "The operation hasn't started yet.")
+    XCTAssertEqual(error.userInfo[NSDebugDescriptionErrorKey] as! String, "The operation hasn't produced and output yet.")
   }
 
   func testCancelledError() {

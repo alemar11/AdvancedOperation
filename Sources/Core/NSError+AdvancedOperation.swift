@@ -23,12 +23,12 @@
 
 import Foundation
 
-
 extension NSError {
   enum AdvancedOperation {
-    static let notStarted: NSError = {
+    // Error thrown when accessing the output of an Operation not yet finished
+    static let noOutputYet: NSError = {
       var info = [String: Any]()
-      info[NSDebugDescriptionErrorKey] = "The operation hasn't started yet."
+      info[NSDebugDescriptionErrorKey] = "The operation hasn't produced and output yet."
 
       let error = NSError(domain: identifier, code: 1, userInfo: info)
       return error
