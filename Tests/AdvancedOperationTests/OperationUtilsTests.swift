@@ -124,4 +124,28 @@ final class OperationUtilsTests: XCTestCase {
     operation2.cancel()
     XCTAssertTrue(operation4.hasSomeCancelledDependencies)
   }
+
+  func testAddDepedenciesToMultipleOperationsAllTogether() {
+    let operation1 = BlockOperation()
+    let operation2 = BlockOperation()
+    let operation3 = BlockOperation()
+    let operation4 = BlockOperation()
+
+    let sequence = [operation1, operation2, operation3, operation4]
+
+    let operation5 = BlockOperation()
+    let operation6 = BlockOperation()
+    let operation7 = BlockOperation()
+    let operation8 = BlockOperation()
+
+    sequence.addDependencies(operation5, operation6, operation7)
+
+    sequence.forEach {
+      XCTAssertTrue($0.dependencies.contains(operation5))
+      XCTAssertTrue($0.dependencies.contains(operation6))
+      XCTAssertTrue($0.dependencies.contains(operation7))
+      XCTAssertTrue($0.dependencies.contains(operation7))
+      XCTAssertFalse($0.dependencies.contains(operation8))
+    }
+  }
 }
