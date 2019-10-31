@@ -105,4 +105,23 @@ final class OperationUtilsTests: XCTestCase {
     operation4.removeDependencies()
     XCTAssertEqual(operation4.dependencies.count, 0)
   }
+
+  func testHasSomeDependenciesCancelled() {
+    let operation1 = BlockOperation()
+    let operation2 = BlockOperation()
+    let operation3 = BlockOperation()
+    let operation4 = BlockOperation()
+
+    operation4.addDependencies(operation1, operation2, operation3)
+    XCTAssertFalse(operation4.hasSomeCancelledDependencies)
+
+    operation1.cancel()
+    XCTAssertTrue(operation4.hasSomeCancelledDependencies)
+
+    operation2.cancel()
+    XCTAssertTrue(operation4.hasSomeCancelledDependencies)
+
+    operation2.cancel()
+    XCTAssertTrue(operation4.hasSomeCancelledDependencies)
+  }
 }
