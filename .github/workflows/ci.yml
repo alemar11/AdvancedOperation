@@ -75,4 +75,6 @@ jobs:
     steps:
       - uses: actions/checkout@v1
       - name: SPM Test
-        run: swift test
+        run: |
+          swift --version
+          swift test
