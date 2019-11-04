@@ -34,7 +34,7 @@ public protocol OutputProducing: Operation {
 }
 
 extension OutputProducing {
-  /// Creates a new operation that passes the output of `self` into the given `Operation`
+  /// Creates a new operation that passes the output of `self` into the given `Operation`.
   ///
   /// - Parameters:
   ///   - operation: The operation that needs the output of `self` to generate an output.

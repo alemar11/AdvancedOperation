@@ -23,7 +23,6 @@
 
 // https://developer.apple.com/library/archive/documentation/General/Conceptual/ConcurrencyProgrammingGuide/OperationObjects/OperationObjects.html#//apple_ref/doc/uid/TP40008091-CH101-SW8
 // https://developer.apple.com/library/archive/documentation/Performance/Conceptual/EnergyGuide-iOS/PrioritizeWorkWithQoS.html
-// Source/Inspiration: https://stackoverflow.com/a/48104095/116862 and https://gist.github.com/calebd/93fa347397cec5f88233
 
 import Foundation
 import os.log
@@ -77,6 +76,7 @@ open class AsynchronousOperation<T>: Operation, OutputProducing {
       return _state.value
     }
     set {
+      // credits: https://gist.github.com/ole/5034ce19c62d248018581b1db0eabb2b
       // A state mutation should be a single atomic transaction. We can't simply perform
       // everything on the isolation queue for `_state` because the KVO willChange/didChange
       // notifications have to be sent from outside the isolation queue.
@@ -88,7 +88,7 @@ open class AsynchronousOperation<T>: Operation, OutputProducing {
         // Necessary for sending fine-grained KVO
         // willChange/didChange notifications only for the key paths that actually change.
         let oldValue = _state.value
-        //guard newValue != oldValue else { return }
+        guard newValue != oldValue else { return }
 
         willChangeValue(forKey: oldValue.objcKeyPath)
         willChangeValue(forKey: newValue.objcKeyPath)

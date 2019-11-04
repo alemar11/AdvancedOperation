@@ -38,18 +38,14 @@ public final class DelayOperation: AsynchronousOperation<Void> {
   public init(interval: TimeInterval, queue: DispatchQueue = .global(qos: .default)) {
     self.delay = .interval(interval)
     self.queue = queue
-
     super.init()
-
     name = "DelayOperation <\(delay)>"
   }
 
   public init(until date: Date, queue: DispatchQueue = .global(qos: .default)) {
     self.delay = .date(date)
     self.queue = queue
-
     super.init()
-
     name = "DelayOperation <\(delay)>"
   }
 
