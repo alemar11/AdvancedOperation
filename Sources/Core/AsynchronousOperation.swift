@@ -113,8 +113,7 @@ open class AsynchronousOperation<T>: Operation, OutputProducing {
   public final override func start() {
     if isCancelled {
       // early bailing out
-      let error = NSError(domain: NSCocoaErrorDomain, code: NSUserCancelledError, userInfo: nil) // TODO
-      finish(result: .failure(error))
+      finish(result: .failure(NSError.AdvancedOperation.cancelled))
       return
     }
 
