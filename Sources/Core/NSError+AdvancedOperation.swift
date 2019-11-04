@@ -25,7 +25,7 @@ import Foundation
 
 extension NSError {
   enum AdvancedOperation {
-    // Error thrown when accessing the output of an Operation not yet finished
+    // Error thrown when accessing the output of an Operation not yet finished.
     static let noOutputYet: NSError = {
       var info = [String: Any]()
       info[NSDebugDescriptionErrorKey] = "The operation hasn't produced an output yet."
@@ -34,6 +34,7 @@ extension NSError {
       return error
     }()
 
+    // Error thrown when an Operation gets cancelled.
     static let cancelled: NSError = {
       var info = [String: Any]()
       info[NSDebugDescriptionErrorKey] = "The operation has been cancelled."
@@ -41,7 +42,7 @@ extension NSError {
       return error
     }()
 
-
+    // Generic error.
     static func generic(debugMessage message: String) -> NSError {
       var info = [String: Any]()
       info[NSDebugDescriptionErrorKey] = message
