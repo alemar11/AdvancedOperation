@@ -30,22 +30,23 @@ extension NSError {
       var info = [String: Any]()
       info[NSDebugDescriptionErrorKey] = "The operation hasn't produced and output yet."
 
-      let error = NSError(domain: identifier, code: 1, userInfo: info)
+      let error = NSError(domain: identifier, code: 100, userInfo: info)
       return error
     }()
 
     static let cancelled: NSError = {
       var info = [String: Any]()
       info[NSDebugDescriptionErrorKey] = "The operation has been cancelled."
-      let error = NSError(domain: identifier, code: 2, userInfo: info)
+      let error = NSError(domain: identifier, code: 200, userInfo: info)
       return error
     }()
 
-    static let invalidDelay: NSError = {
+
+    static func generic(debugMessage message: String) -> NSError {
       var info = [String: Any]()
-      info[NSDebugDescriptionErrorKey] = "Delay time not valid."
-      let error = NSError(domain: identifier, code: 3, userInfo: info)
+      info[NSDebugDescriptionErrorKey] = message
+      let error = NSError(domain: identifier, code: 300, userInfo: info)
       return error
-    }()
+    }
   }
 }
