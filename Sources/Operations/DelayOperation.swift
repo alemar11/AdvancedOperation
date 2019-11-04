@@ -56,8 +56,13 @@ public final class DelayOperation: AsynchronousOperation<Void> {
   // MARK: - Public Methods
 
   public final override func execute(completion: @escaping (Result<Void, Error>) -> Void) {
-    guard !isCancelled && delay.seconds > 0 else {
-      completion(.success(())) // TODO: isCancelled and delay are two different error
+    guard !isCancelled else {
+      completion(.failure(NSError.AdvancedOperation.cancelled))
+      return
+    }
+
+    guard delay.seconds > 0 else {
+      completion(.failure(NSError.AdvancedOperation.invalidDelay))
       return
     }
 

@@ -40,5 +40,12 @@ extension NSError {
       let error = NSError(domain: identifier, code: 2, userInfo: info)
       return error
     }()
+
+    static let invalidDelay: NSError = {
+      var info = [String: Any]()
+      info[NSDebugDescriptionErrorKey] = "Delay time not valid."
+      let error = NSError(domain: identifier, code: 3, userInfo: info)
+      return error
+    }()
   }
 }
