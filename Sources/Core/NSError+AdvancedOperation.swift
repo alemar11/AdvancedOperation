@@ -28,7 +28,7 @@ extension NSError {
     // Error thrown when accessing the output of an Operation not yet finished
     static let noOutputYet: NSError = {
       var info = [String: Any]()
-      info[NSDebugDescriptionErrorKey] = "The operation hasn't produced and output yet."
+      info[NSDebugDescriptionErrorKey] = "The operation hasn't produced an output yet."
 
       let error = NSError(domain: identifier, code: 100, userInfo: info)
       return error
