@@ -38,7 +38,7 @@ internal enum MockError: Swift.Error, Equatable {
   case failed
   case cancelled(date: Date)
   case generic(date: Date)
-  
+
   static func ==(lhs: MockError, rhs: MockError) -> Bool {
     switch (lhs, rhs) {
     case (.test, .test):
@@ -59,7 +59,7 @@ internal enum MockError: Swift.Error, Equatable {
 
 class NotFinishingAsynchronousOperation: AsynchronousOperation<Void> {
   override func execute(completion: @escaping (Result<Void, Error>) -> Void) {
-    
+
   }
 }
 
@@ -67,14 +67,14 @@ final internal class SleepyAsyncOperation: AsynchronousOperation<Void> {
   private let interval1: UInt32
   private let interval2: UInt32
   private let interval3: UInt32
-  
+
   init(interval1: UInt32 = 1, interval2: UInt32 = 1, interval3: UInt32 = 1) {
     self.interval1 = interval1
     self.interval2 = interval2
     self.interval3 = interval3
     super.init()
   }
-  
+
   override func execute(completion: @escaping (Result<Void, Error>) -> Void) {
     DispatchQueue.global().async { [weak weakSelf = self] in
 
@@ -82,26 +82,26 @@ final internal class SleepyAsyncOperation: AsynchronousOperation<Void> {
         completion(.failure(MockError.test))
         return
       }
-      
+
       if strongSelf.isCancelled {
         completion(.failure(MockError.cancelled(date: Date())))
         return
       }
-      
+
       sleep(self.interval1)
-      
+
       if strongSelf.isCancelled {
         completion(.failure(MockError.cancelled(date: Date())))
         return
       }
-      
+
       sleep(self.interval2)
-      
+
       if strongSelf.isCancelled {
         completion(.failure(MockError.cancelled(date: Date())))
         return
       }
-      
+
       sleep(self.interval3)
       completion(.success(Void()))
     }
@@ -112,18 +112,18 @@ final internal class SleepyAsyncOperation: AsynchronousOperation<Void> {
 /// This operation cancels itself if the input is **100**
 internal class IntToStringAsyncOperation: AsynchronousOperation<String> & InputConsuming {
   var input: Int?
-  
+
   override func execute(completion: @escaping (Result<String, Error>) -> Void) {
     if isCancelled {
       completion(.failure(NSError.AdvancedOperation.cancelled))
       return
     }
-    
+
     guard let input = self.input else {
       completion(.failure(MockError.failed))
       return
     }
-    
+
     if input == 100 {
       cancel()
       assert(self.isCancelled)
@@ -138,7 +138,7 @@ internal class IntToStringAsyncOperation: AsynchronousOperation<String> & InputC
 
 internal class StringToIntAsyncOperation: AsynchronousOperation<Int> & InputConsuming  {
   var input: String?
-  
+
   override func execute(completion: @escaping (Result<Int, Error>) -> Void) {
     if isCancelled {
       completion(.failure(NSError.AdvancedOperation.cancelled))
@@ -169,11 +169,11 @@ final internal class CancellingAsyncOperation: AsynchronousOperation<Void> {
 /// An operation that finishes with errors
 final internal class FailingAsyncOperation: AsynchronousOperation<Void> {
   private let defaultError: Error
-  
+
   init(error: MockError = MockError.failed) {
     self.defaultError = error
   }
-  
+
   override func execute(completion: @escaping (Result<Void, Error>) -> Void) {
     DispatchQueue.global().asyncAfter(deadline: .now() + 1.0) { [weak weakSelf = self] in
       guard let strongSelf = weakSelf else {
@@ -187,11 +187,11 @@ final internal class FailingAsyncOperation: AsynchronousOperation<Void> {
 
 final internal class RunUntilCancelledAsyncOperation: AsynchronousOperation<Void> {
   let queue: DispatchQueue
-  
+
   init(queue: DispatchQueue = DispatchQueue.global()) {
     self.queue = queue
   }
-  
+
   override func execute(completion: @escaping (Result<Void, Error>) -> Void) {
     queue.async {
       while !self.isCancelled {

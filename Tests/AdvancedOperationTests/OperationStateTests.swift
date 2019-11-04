@@ -30,18 +30,18 @@ final class OperationStateTests: XCTestCase {
     XCTAssertTrue(AsynchronousOperation<Void>.State.ready.canTransition(to: .executing))
     XCTAssertTrue(AsynchronousOperation<Void>.State.ready.canTransition(to: .finished))
     XCTAssertFalse(AsynchronousOperation<Void>.State.ready.canTransition(to: .ready))
-    
+
     // Executing
     XCTAssertFalse(AsynchronousOperation<Void>.State.executing.canTransition(to: .executing))
     XCTAssertTrue(AsynchronousOperation<Void>.State.executing.canTransition(to: .finished))
     XCTAssertFalse(AsynchronousOperation<Void>.State.executing.canTransition(to: .ready))
-    
+
     // finished
     XCTAssertFalse(AsynchronousOperation<Void>.State.finished.canTransition(to: .executing))
     XCTAssertFalse(AsynchronousOperation<Void>.State.finished.canTransition(to: .finished))
     XCTAssertFalse(AsynchronousOperation<Void>.State.finished.canTransition(to: .ready))
   }
-  
+
   func testDebugDescription() {
     XCTAssertEqual(AsynchronousOperation<Void>.State.ready.debugDescription.lowercased(), "ready")
     XCTAssertEqual(AsynchronousOperation<Void>.State.executing.debugDescription.lowercased(), "executing")

@@ -31,7 +31,7 @@ extension Result {
       return error
     }
   }
-  
+
   // Returns the content associated with a success.
   var success: Success? {
     switch self {

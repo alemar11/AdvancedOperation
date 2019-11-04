@@ -30,7 +30,7 @@ import os.log
 /// An abstract thread safe subclass of `Operation` to build asynchronous operations.
 /// Subclasses must override `execute(completion:)` to perform any work and call the completion handler to finish it.
 open class AsynchronousOperation<T>: Operation, OutputProducing {
-  public typealias Output = Result<T,Error>
+  public typealias Output = Result<T, Error>
 
   // MARK: - Public Properties
 

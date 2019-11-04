@@ -33,29 +33,29 @@ final class AdvancedBlockOperationTests: XCTestCase {
     }
     XCTAssertTrue(operation.isAsynchronous)
     XCTAssertTrue(operation.isConcurrent)
-    
+
     let expectation1 = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: operation, expectedValue: true)
     operation.start()
     operation.cancel()
-    
+
     wait(for: [expectation1], timeout: 4)
-    
+
     XCTAssertTrue(operation.isCancelled)
     XCTAssertEqual(operation.name, "AsynchronousBlockOperation <()>")
   }
-  
+
   func testInitializerWithQueue() {
     let operation = AsynchronousBlockOperation<Int>(queue: .main) {
       return .success(11)
     }
-    
+
     let expectation1 = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: operation, expectedValue: true)
     operation.start()
     wait(for: [expectation1], timeout: 4)
     XCTAssertEqual(operation.output.success, 11)
     XCTAssertEqual(operation.name, "AsynchronousBlockOperation <Int>")
   }
-  
+
   func testCancelBeforeStarting() {
     let operation = AsynchronousBlockOperation<Void> { complete in
       DispatchQueue(label: "\(identifier).\(#function)", attributes: .concurrent).asyncAfter(deadline: .now() + 2) {
@@ -64,27 +64,27 @@ final class AdvancedBlockOperationTests: XCTestCase {
     }
     XCTAssertTrue(operation.isAsynchronous)
     XCTAssertTrue(operation.isConcurrent)
-    
+
     let expectation1 = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: operation, expectedValue: true)
     operation.cancel()
     operation.start()
-    
+
     wait(for: [expectation1], timeout: 4)
-    
+
     XCTAssertTrue(operation.isCancelled)
   }
-  
+
   func testEarlyBailOut() {
     let operation = AsynchronousBlockOperation<Void> { complete in complete(.success(())) }
     let expectation1 = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: operation, expectedValue: true)
     operation.cancel()
     operation.start()
-    
+
     wait(for: [expectation1], timeout: 4)
-    
+
     XCTAssertTrue(operation.isCancelled)
   }
-  
+
   func testBlockOperationCompletedInAsyncQueue() {
     let operation = AsynchronousBlockOperation<Void> { complete in
       XCTAssertTrue(Thread.isMainThread)
@@ -92,43 +92,43 @@ final class AdvancedBlockOperationTests: XCTestCase {
         complete(.success(()))
       }
     }
-    
+
     let expectation1 = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: operation, expectedValue: true)
     operation.start()
-    
+
     wait(for: [expectation1], timeout: 4)
   }
-  
+
   func testSuccessfulOutput() {
     let text = "Hello World"
     let operation = AsynchronousBlockOperation<String> { complete in
       complete(.success(text))
     }
-    
+
     let expectation1 = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: operation, expectedValue: true)
     operation.start()
     wait(for: [expectation1], timeout: 4)
     XCTAssertEqual(operation.output.success, text)
     XCTAssertEqual(operation.name, "AsynchronousBlockOperation <String>")
   }
-  
+
   func testFailedOutput() {
     let operation = AsynchronousBlockOperation<String> { complete in
       complete(.failure(MockError.failed))
     }
-    
+
     let expectation1 = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: operation, expectedValue: true)
     operation.start()
     wait(for: [expectation1], timeout: 4)
     XCTAssertNil(operation.output.success)
     XCTAssertNotNil(operation.output.failure)
   }
-  
+
   func testBlockOperationCompletedWithErrorsInAsyncQueue() {
     let error = MockError.generic(date: Date())
     var object = NSObject()
     weak var weakObject = object
-    
+
     autoreleasepool {
       var operation = AsynchronousBlockOperation<Void> { [weak object] complete in
         DispatchQueue(label: "\(identifier).\(#function)", attributes: .concurrent).asyncAfter(deadline: .now() + 2) {
@@ -136,27 +136,27 @@ final class AdvancedBlockOperationTests: XCTestCase {
           complete(.failure(error))
         }
       }
-      
+
       let expectation1 = expectation(description: "\(#function)\(#line)")
       operation.addCompletionBlock { expectation1.fulfill() }
       operation.start()
-      
+
       waitForExpectations(timeout: 5)
       XCTAssertTrue(operation.isFinished)
-      
+
       if let opError = operation.output.failure as? MockError {
         XCTAssertEqual(opError, error)
       } else {
         XCTFail("Wrong error type.")
       }
-      
+
       // Memory leaks test: once release the operation, the captured object (by reference) should be nil (weakObject)
       operation = AsynchronousBlockOperation { .success(()) }
       object = NSObject()
     }
     XCTAssertNil(weakObject)
   }
-  
+
   func testBlockOperationWithAnAsyncQueueInside() {
     let expectation1 = expectation(description: "\(#function)\(#line)")
     let expectation2 = expectation(description: "\(#function)\(#line)")
@@ -175,25 +175,25 @@ final class AdvancedBlockOperationTests: XCTestCase {
     operation.start()
     wait(for: [expectation1, expectation2], timeout: 10, enforceOrder: true)
   }
-  
+
   func testBlockOperationWithDispatchQueue() {
     let queue = DispatchQueue(label: "\(identifier).\(#function)")
     let operation = AsynchronousBlockOperation(queue: queue) {
       XCTAssertFalse(Thread.isMainThread)
     }
-    
+
     let expectation1 = expectation(description: "\(#function)\(#line)")
     operation.addCompletionBlock { expectation1.fulfill() }
     operation.start()
     waitForExpectations(timeout: 3)
   }
-  
+
   func testComposition() {
     let expectation3 = expectation(description: "\(#function)\(#line)")
     let operation1 = SleepyAsyncOperation()
     let operation2 = SleepyAsyncOperation()
     let operation3 = SleepyAsyncOperation()
-    
+
     operation3.addCompletionBlock { expectation3.fulfill() }
     let adapterOperation = AsynchronousBlockOperation { [unowned operation2] in
       operation2.cancel()
@@ -202,21 +202,21 @@ final class AdvancedBlockOperationTests: XCTestCase {
     operation2.addDependency(adapterOperation)
     operation3.addDependency(operation2)
     let queue = OperationQueue()
-    
+
     queue.addOperations([operation1, operation2, operation3, adapterOperation], waitUntilFinished: false)
-    
+
     waitForExpectations(timeout: 10)
-    
+
     XCTAssertTrue(operation1.isFinished)
     XCTAssertTrue(operation2.isCancelled)
     XCTAssertTrue(operation3.isFinished)
     XCTAssertTrue(adapterOperation.isFinished)
   }
-  
+
   func testMemoryLeak() {
     var object = NSObject()
     weak var weakObject = object
-    
+
     autoreleasepool {
       var operation = AsynchronousBlockOperation<Void> { [unowned object] complete in
         DispatchQueue(label: "\(identifier).\(#function)", attributes: .concurrent).async {
@@ -224,18 +224,18 @@ final class AdvancedBlockOperationTests: XCTestCase {
           complete(.success(()))
         }
       }
-      
+
       let expectation1 = expectation(description: "\(#function)\(#line)")
       operation.addCompletionBlock { expectation1.fulfill() }
       operation.start()
-      
+
       waitForExpectations(timeout: 3)
-      
+
       // Memory leaks test: once the operation is released, the captured object (by reference) should be nil (weakObject)
       operation = AsynchronousBlockOperation(block: { })
       object = NSObject()
     }
-    
+
     XCTAssertNil(weakObject, "Memory leak: the object should have been deallocated at this point.")
   }
 }

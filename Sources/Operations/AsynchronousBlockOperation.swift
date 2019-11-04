@@ -38,7 +38,8 @@ public final class AsynchronousBlockOperation<T>: AsynchronousOperation<T> {
   /// The designated initializer.
   ///
   /// - Parameters:
-  ///   - block: The closure to run when the operation executes; the parameter passed to the block **MUST** be invoked by your code, or else the `AsynchronousBlockOperation` will never finish executing.
+  ///   - block: The closure to run when the operation executes; the parameter passed to the block **MUST** be invoked by your code,
+  ///   or else the `AsynchronousBlockOperation` will never finish executing.
   public init(block: @escaping OperationBlock) {
     self.block = block
     super.init()
