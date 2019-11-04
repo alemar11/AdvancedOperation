@@ -102,13 +102,6 @@ final class OperationInjectionTests: XCTestCase {
     XCTAssertNotNil(operation2.output.failure)
   }
 
-  func testStress() {
-    (1...1000).forEach { (i) in
-      print(i)
-      testInjectionTransformingOutputOfAnAlreadyCancelledOutputProducingOperation()
-    }
-  }
-
   func testInjectionTransformingOutputOfAnAlreadyCancelledOutputProducingOperation() {
     let operation1 = IntToStringAsyncOperation() // no input -> fails
     let operation2 = StringToIntAsyncOperation()

@@ -31,27 +31,28 @@ import os.log
 /// Subclasses must override `execute(completion:)` to perform any work and call the completion handler to finish it.
 open class AsynchronousOperation<T>: Operation, OutputProducing {
   public typealias Output = Result<T, Error>
-
+  
   // MARK: - Public Properties
-
+  
   open override var isReady: Bool {
     return state == .ready && super.isReady
   }
-
+  
   public final override var isExecuting: Bool {
     return state == .executing
   }
-
+  
   public final override var isFinished: Bool {
     return state == .finished
   }
-
+  
   public final override var isAsynchronous: Bool { return true }
-
+  
   /// The output produced by the `AsynchronousOperation`.
   public private(set) var output: Output = .failure(NSError.AdvancedOperation.noOutputYet)
 
   /// The `OSLog` instance used to track the main operation changes (by default is disabled).
+  // TODO: make it internal with some strings to enable it as process argument
   public var log: OSLog {
     get {
       return _log.value
@@ -62,14 +63,20 @@ open class AsynchronousOperation<T>: Operation, OutputProducing {
     }
   }
 
+  // An identifier you use to distinguish signposts that have the same name and that log to the same OSLog.
+  @available(iOS 12.0, iOSApplicationExtension 12.0, tvOS 12.0, watchOS 5.0, macOS 10.14, OSXApplicationExtension 10.14, *)
+  private lazy var signpostID = {
+    return OSSignpostID(log: log, object: self)
+  }()
+  
   // MARK: - Private Properties
-
+  
   /// Lock to ensure thread safety.
   private let lock = UnfairLock()
-
+  
   /// Serial queue for making state changes atomic under the constraint of having to send KVO willChange/didChange notifications.
   private let stateChangeQueue = DispatchQueue(label: "\(identifier).AsynchronousOperation.stateChange")
-
+  
   /// The state of the operation
   private var state: State {
     get {
@@ -89,59 +96,65 @@ open class AsynchronousOperation<T>: Operation, OutputProducing {
         // willChange/didChange notifications only for the key paths that actually change.
         let oldValue = _state.value
         guard newValue != oldValue else { return }
-
+        
         willChangeValue(forKey: oldValue.objcKeyPath)
         willChangeValue(forKey: newValue.objcKeyPath)
-
+        
         _state.mutate {
           assert($0.canTransition(to: newValue), "Performing an invalid state transition from: \($0) to: \(newValue).")
           $0 = newValue
         }
-
+        
         didChangeValue(forKey: oldValue.objcKeyPath)
         didChangeValue(forKey: newValue.objcKeyPath)
       }
     }
   }
-
+  
   /// Private backing store for `state`
   private var _state: Atomic<State> = Atomic(.ready)
-
+  
   private var _log = Atomic(OSLog.disabled)
-
+  
   // MARK: - Foundation.Operation
-
+  
   public final override func start() {
+    // TODO: begin signpost here?
     if isCancelled {
       // early bailing out
       finish(result: .failure(NSError.AdvancedOperation.cancelled))
       return
     }
-
+    
     /// The default implementation of this method updates the execution state of the operation and calls the receiver’s main() method.
     /// This method also performs several checks to ensure that the operation can actually run.
     /// For example, if the receiver was cancelled or is already finished, this method simply returns without calling main().
     /// If the operation is currently executing or is not ready to execute, this method throws an NSInvalidArgumentException exception.
     super.start()
-
+    
     // At this point main() has already returned but it doesn't mean that the operation is finished.
     // Only the execute(completion:) overidden implementation can finish the operation now.
   }
-
+  
   // MARK: - Public
-
+  
   /// Subclasses must implement this to perform their work and they must not call `super`.
   /// The default implementation of this function traps.
   public final override func main() {
     state = .executing
-    os_log("%{public}s has started.", log: log, type: .info, operationName)
+    if #available(iOS 12.0, iOSApplicationExtension 12.0, tvOS 12.0, watchOS 5.0, macOS 10.14, OSXApplicationExtension 10.14, *) {
+      os_log(.info, log: log, "%{public}s has started.", operationName)
+      os_signpost(.begin, log: log, name: "Execution", signpostID: signpostID, "%{public}s has started.", operationName)
+    } else {
+      os_log("%{public}s has started.", log: log, type: .info, operationName)
+    }
     execute(completion: finish)
   }
-
+  
   open func execute(completion: @escaping (Output) -> Void) {
     preconditionFailure("Subclasses must implement `execute`.")
   }
-
+  
   /// A subclass will probably need to override `cleanup` to tear down resources.
   ///
   /// At this point the operation is about to be finished and the final output is already created.
@@ -149,23 +162,29 @@ open class AsynchronousOperation<T>: Operation, OutputProducing {
   open func cleanup() {
     // subclass
   }
-
+  
   open override func cancel() {
     lock.lock()
     defer { lock.unlock() }
-
+    
     guard !isCancelled else { return }
-
+    
     super.cancel()
     os_log("%{public}s has been cancelled.", log: log, type: .info, operationName)
-  }
 
+    // TODO: this event signpost can be emitted before the operation has begun
+    // https://agostini.tech/2018/11/19/measuring-performance-with-os_signpost/
+    if #available(iOS 12.0, iOSApplicationExtension 12.0, tvOS 12.0, watchOS 5.0, macOS 10.14, OSXApplicationExtension 10.14, *) {
+      os_signpost(.event, log: log, name: "Execution", signpostID: signpostID, "%{public}s has been cancelled.", operationName)
+    }
+  }
+  
   /// Call this function to finish an operation that is currently executing.
   private final func finish(result: Output) {
     // State can also be "ready" here if the operation was cancelled before it started.
     lock.lock()
     defer { lock.unlock() }
-
+    
     switch state {
     case .ready, .executing:
       self.output = result
@@ -174,20 +193,34 @@ open class AsynchronousOperation<T>: Operation, OutputProducing {
       if log != .disabled {
         switch output {
         case .success:
-          os_log("%{public}s has finished.", log: log, type: .info, operationName)
+          if #available(iOS 12.0, iOSApplicationExtension 12.0, tvOS 12.0, watchOS 5.0, macOS 10.14, OSXApplicationExtension 10.14, *) {
+            os_log(.info, log: log, "%{public}s has finished.", operationName)
+            os_signpost(.end, log: log, name: "Execution", signpostID: signpostID, "%{public}s has finished.", operationName)
+          } else {
+            os_log("%{public}s has finished.", log: log, type: .info, operationName)
+          }
+          
         case .failure(let error):
-          os_log("%{public}s has finished with error: %{private}s.", log: log, type: .error, operationName, error.localizedDescription)
+          let debugErrorMessage = (error as NSError).debugErrorMessage
+          
+          if #available(iOS 12.0, iOSApplicationExtension 12.0, tvOS 12.0, watchOS 5.0, macOS 10.14, OSXApplicationExtension 10.14, *) {
+            os_log(.info, log: log, "%{public}s has finished with error: %{private}s.", operationName, debugErrorMessage)
+            os_signpost(.end, log: log, name: "Execution", signpostID: signpostID, "%{public}s has finished with error: %{private}s.", operationName, debugErrorMessage)
+          } else {
+            os_log("%{public}s has finished with error: %{private}s.", log: log, type: .error, operationName, debugErrorMessage)
+          }
         }
       }
+
     case .finished:
       return
     }
   }
-
+  
   open override var description: String {
     return debugDescription
   }
-
+  
   open override var debugDescription: String {
     return "\(operationName)) – \(isCancelled ? "cancelled" : String(describing: state))"
   }
@@ -201,7 +234,7 @@ extension AsynchronousOperation {
     case ready
     case executing
     case finished
-
+    
     /// The `#keyPath` for the `Operation` property that's associated with this value.
     var objcKeyPath: String {
       switch self {
@@ -210,7 +243,7 @@ extension AsynchronousOperation {
       case .finished: return #keyPath(isFinished)
       }
     }
-
+    
     var description: String {
       switch self {
       case .ready: return "ready"
@@ -218,11 +251,11 @@ extension AsynchronousOperation {
       case .finished: return "finished"
       }
     }
-
+    
     var debugDescription: String {
       return description
     }
-
+    
     func canTransition(to newState: State) -> Bool {
       switch (self, newState) {
       case (.ready, .executing): return true

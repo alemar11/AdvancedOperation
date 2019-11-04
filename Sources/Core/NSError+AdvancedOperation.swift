@@ -24,6 +24,13 @@
 import Foundation
 
 extension NSError {
+  // Not localizable debug error message.
+  var debugErrorMessage: String {
+    return userInfo[NSDebugDescriptionErrorKey] as? String ?? "No debug message evailable."
+  }
+}
+
+extension NSError {
   enum AdvancedOperation {
     // Error thrown when accessing the output of an Operation not yet finished.
     static let noOutputYet: NSError = {
@@ -42,8 +49,8 @@ extension NSError {
       return error
     }()
 
-    // Generic error.
-    static func generic(debugMessage message: String) -> NSError {
+    // Creates an AdvancedOperation generic error.
+    static func makeGenericError(debugMessage message: String) -> NSError {
       var info = [String: Any]()
       info[NSDebugDescriptionErrorKey] = message
       let error = NSError(domain: identifier, code: 300, userInfo: info)

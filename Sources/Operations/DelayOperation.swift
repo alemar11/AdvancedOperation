@@ -58,7 +58,7 @@ public final class DelayOperation: AsynchronousOperation<Void> {
     }
 
     guard delay.seconds > 0 else {
-      completion(.failure(NSError.AdvancedOperation.generic(debugMessage: "Delay time not valid: it should be greater than 0.")))
+      completion(.failure(NSError.AdvancedOperation.makeGenericError(debugMessage: "Delay time not valid: it should be greater than 0.")))
       return
     }
 
