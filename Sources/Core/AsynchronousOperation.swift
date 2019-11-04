@@ -33,14 +33,42 @@ import os.log
 open class AsynchronousOperation<T>: Operation, OutputProducing {
   public typealias Output = Result<T,Error>
 
+  // MARK: - Public Properties
+
+  open override var isReady: Bool {
+    return state == .ready && super.isReady
+  }
+
+  public final override var isExecuting: Bool {
+    return state == .executing
+  }
+
+  public final override var isFinished: Bool {
+    return state == .finished
+  }
+
   public final override var isAsynchronous: Bool { return true }
+
+  /// The output produced by the `AsynchronousOperation`.
   public private(set) var output: Output = .failure(NSError.AdvancedOperation.noOutputYet)
+
+  /// The `OSLog` instance used to track the main operation changes (by default is disabled).
+  public var log: OSLog {
+    get {
+      return _log.value
+    }
+    set {
+      precondition(state == .ready, "Cannot add OSLog if the operation is \(state).")
+      _log.mutate { $0 = newValue }
+    }
+  }
+
+  // MARK: - Private Properties
+
+  private let lock = UnfairLock()
 
   /// Serial queue for making state changes atomic under the constraint of having to send KVO willChange/didChange notifications.
   private let stateChangeQueue = DispatchQueue(label: "\(identifier).AsynchronousOperation.stateChange")
-
-  /// Private backing store for `state`
-  private var _state: Atomic<State> = Atomic(.ready)
 
   /// The state of the operation
   private var state: State {
@@ -75,30 +103,10 @@ open class AsynchronousOperation<T>: Operation, OutputProducing {
     }
   }
 
-  private var _log = Atomic(OSLog.disabled) // TODO: work in progress
+  /// Private backing store for `state`
+  private var _state: Atomic<State> = Atomic(.ready)
 
-  /// An instance of `OSLog` (by default is disabled).
-  public var log: OSLog {
-    get {
-      return _log.value
-    }
-    set {
-      precondition(state == .ready, "Cannot add OSLog if the operation is \(state).")
-      _log.mutate { $0 = newValue }
-    }
-  }
-
-  open override var isReady: Bool {
-    return state == .ready && super.isReady
-  }
-
-  public final override var isExecuting: Bool {
-    return state == .executing
-  }
-
-  public final override var isFinished: Bool {
-    return state == .finished
-  }
+  private var _log = Atomic(OSLog.disabled)
 
   // MARK: - Foundation.Operation
 
@@ -152,11 +160,9 @@ open class AsynchronousOperation<T>: Operation, OutputProducing {
     os_log("%{public}s has been cancelled.", log: log, type: .info, operationName)
   }
 
-  private let lock = UnfairLock()
-
   /// Call this function to finish an operation that is currently executing.
-  /// State can also be "ready" here if the operation was cancelled before it started.
   private final func finish(result: Output) {
+    // State can also be "ready" here if the operation was cancelled before it started.
     lock.lock()
     defer { lock.unlock() }
 
@@ -178,16 +184,11 @@ open class AsynchronousOperation<T>: Operation, OutputProducing {
     }
   }
 
-//  final public func addCondition(_ condition: Condition) {
-//    _conditions.mutate { $0.append(condition) }
-//  }
-
   open override var description: String {
     return debugDescription
   }
 
   open override var debugDescription: String {
-    // TODO more details here being a debug description
     return "\(operationName)) – \(isCancelled ? "cancelled" : String(describing: state))"
   }
 }
@@ -196,7 +197,7 @@ open class AsynchronousOperation<T>: Operation, OutputProducing {
 
 extension AsynchronousOperation {
   /// Mirror of the possible states an Operation can be in.
-  internal enum State: Int, CustomStringConvertible, CustomDebugStringConvertible {
+  enum State: Int, CustomStringConvertible, CustomDebugStringConvertible {
     case ready
     case executing
     case finished
@@ -225,7 +226,7 @@ extension AsynchronousOperation {
     func canTransition(to newState: State) -> Bool {
       switch (self, newState) {
       case (.ready, .executing): return true
-      case (.ready, .finished): return true // investigate (start after a cancel)
+      case (.ready, .finished): return true
       case (.executing, .finished): return true
       default: return false
       }
