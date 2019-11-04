@@ -25,9 +25,9 @@ import Dispatch
 import Foundation
 
 /// A concurrent sublcass of `AsynchronousOperation` to execute a closure.
-public final class AsynchronousBlockOperation: AsynchronousOperation<Void> {
+public final class AsynchronousBlockOperation<T>: AsynchronousOperation<T> {
   /// A closure type that takes a closure as its parameter.
-  public typealias OperationBlock = (@escaping (Error?) -> Void) -> Void // TODO: it should have a Result type instead of an Error?
+  public typealias OperationBlock = (@escaping (Result<T, Error>) -> Void) -> Void
 
   // MARK: - Private Properties
 
@@ -38,10 +38,11 @@ public final class AsynchronousBlockOperation: AsynchronousOperation<Void> {
   /// The designated initializer.
   ///
   /// - Parameters:
-  ///   - block: The closure to run when the operation executes; the parameter passed to the block **MUST** be invoked by your code, or else the `AsynchronousOperation` will never finish executing.
+  ///   - block: The closure to run when the operation executes; the parameter passed to the block **MUST** be invoked by your code, or else the `AsynchronousBlockOperation` will never finish executing.
   public init(block: @escaping OperationBlock) {
     self.block = block
     super.init()
+    name = "AsynchronousBlockOperation <\(T.self)>"
   }
 
   /// A convenience initializer.
@@ -49,30 +50,41 @@ public final class AsynchronousBlockOperation: AsynchronousOperation<Void> {
   /// - Parameters:
   ///   - queue: The `DispatchQueue` where the operation will run its `block`.
   ///   - block: The closure to run when the operation executes.
-  /// - Note: The block is run concurrently on the given `queue`.
-  public convenience init(queue: DispatchQueue = .main, block: @escaping () -> Void) {
+  /// - Note: The block is run concurrently on the given `queue` and must return a result type to complete.
+  public convenience init(queue: DispatchQueue = .main, block: @escaping () -> Result<T, Error>) {
     self.init(block: { complete in
       queue.async {
-        block()
-        complete(nil)
+        let result = block()
+        complete(result)
+      }
+    })
+  }
+
+  /// A convenience initializer that creates an always succeeding `AsynchronousBlockOperation`.
+  ///
+  /// - Parameters:
+  ///   - queue: The `DispatchQueue` where the operation will run its `block`.
+  ///   - block: The closure to run when the operation executes.
+  /// - Note: The block is run concurrently on the given `queue` and must return a value to complete successfully.
+  public convenience init(queue: DispatchQueue = .main, block: @escaping () -> T) {
+    self.init(block: { complete in
+      queue.async {
+        let result = block()
+        complete(.success(result))
       }
     })
   }
 
   // MARK: - Overrides
 
-  public override func execute(completion: @escaping (Result<Void, Error>) -> Void) {
+  public override func execute(completion: @escaping (Result<T, Error>) -> Void) {
     guard !isCancelled else {
       completion(.failure(NSError.AdvancedOperation.cancelled))
       return
     }
 
-    block { error in
-      if let error = error {
-        completion(.failure(error))
-      } else {
-        completion(.success(()))
-      }
+    block {
+      completion($0)
     }
   }
 }
