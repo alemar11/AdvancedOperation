@@ -28,14 +28,14 @@ final class NSErrorAdvancedOperationTests: XCTestCase {
   func testNotStartedError() {
     let error = NSError.AdvancedOperation.noOutputYet
     XCTAssertEqual(error.domain, identifier)
-    XCTAssertEqual(error.code, 1)
+    XCTAssertEqual(error.code, 100)
     XCTAssertEqual(error.userInfo[NSDebugDescriptionErrorKey] as! String, "The operation hasn't produced and output yet.")
   }
 
   func testCancelledError() {
     let error = NSError.AdvancedOperation.cancelled
     XCTAssertEqual(error.domain, identifier)
-    XCTAssertEqual(error.code, 2)
+    XCTAssertEqual(error.code, 200)
     XCTAssertEqual(error.userInfo[NSDebugDescriptionErrorKey] as! String, "The operation has been cancelled.")
   }
 }

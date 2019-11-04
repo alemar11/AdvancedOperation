@@ -37,6 +37,16 @@ final class OperationInjectionTests: XCTestCase {
     XCTAssertEqual(operation2.output.success, 10)
   }
 
+//  func testStress() {
+//    let lock = NSLock()
+//    (1...1000).forEach { (i) in
+//      print(i)
+//      lock.lock()
+//      testSuccessfulInjectionBetweenOperations()
+//      lock.unlock()
+//    }
+//  }
+
   func testSuccessfulInjectionBetweenOperations() {
     let queue = OperationQueue()
     let operation1 = IntToStringOperation()
