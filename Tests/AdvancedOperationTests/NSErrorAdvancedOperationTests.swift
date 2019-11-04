@@ -25,11 +25,11 @@ import XCTest
 @testable import AdvancedOperation
 
 final class NSErrorAdvancedOperationTests: XCTestCase {
-  func testNotStartedError() {
+  func testNoOutputYet() {
     let error = NSError.AdvancedOperation.noOutputYet
     XCTAssertEqual(error.domain, identifier)
     XCTAssertEqual(error.code, 100)
-    XCTAssertEqual(error.userInfo[NSDebugDescriptionErrorKey] as! String, "The operation hasn't produced and output yet.")
+    XCTAssertEqual(error.userInfo[NSDebugDescriptionErrorKey] as! String, "The operation hasn't produced an output yet.")
   }
 
   func testCancelledError() {
