@@ -65,6 +65,7 @@ open class AsynchronousOperation<T>: Operation, OutputProducing {
 
   // MARK: - Private Properties
 
+  /// Lock to ensure thread safety.
   private let lock = UnfairLock()
 
   /// Serial queue for making state changes atomic under the constraint of having to send KVO willChange/didChange notifications.
