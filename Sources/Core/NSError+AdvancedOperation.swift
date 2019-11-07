@@ -26,7 +26,7 @@ import Foundation
 extension NSError {
   // Not localizable debug error message.
   var debugErrorMessage: String {
-    return userInfo[NSDebugDescriptionErrorKey] as? String ?? "No debug message evailable."
+    return userInfo[NSDebugDescriptionErrorKey] as? String ?? "No debug message evailable for NSDebugDescriptionErrorKey."
   }
 }
 

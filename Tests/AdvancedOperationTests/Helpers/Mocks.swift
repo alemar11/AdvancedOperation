@@ -27,10 +27,6 @@ import XCTest
 import os.log
 @testable import AdvancedOperation
 
-// MARK: - OSLog
-
-let TestsLog = OSLog(subsystem: identifier, category: "Tests")
-
 // MARK: - Error
 
 internal enum MockError: Swift.Error, Equatable {

@@ -20,7 +20,7 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
-
+//
 // https://developer.apple.com/library/archive/documentation/General/Conceptual/ConcurrencyProgrammingGuide/OperationObjects/OperationObjects.html#//apple_ref/doc/uid/TP40008091-CH101-SW8
 // https://developer.apple.com/library/archive/documentation/Performance/Conceptual/EnergyGuide-iOS/PrioritizeWorkWithQoS.html
 
@@ -51,23 +51,11 @@ open class AsynchronousOperation<T>: Operation, OutputProducing {
   /// The output produced by the `AsynchronousOperation`.
   public private(set) var output: Output = .failure(NSError.AdvancedOperation.noOutputYet)
   
-  /// The `OSLog` instance used to track the main operation changes (by default is disabled).
-  // TODO: make it internal with some strings to enable it as process argument
-  public var log: OSLog {
-    get {
-      return _log.value
-    }
-    set {
-      precondition(state == .ready, "Cannot add OSLog if the operation is \(state).")
-      _log.mutate { $0 = newValue }
-    }
-  }
-  
   // TODO: should it be public for nested signpoints?
   // An identifier you use to distinguish signposts that have the same name and that log to the same OSLog.
   @available(iOS 12.0, iOSApplicationExtension 12.0, tvOS 12.0, watchOS 5.0, macOS 10.14, OSXApplicationExtension 10.14, *)
   private lazy var signpostID = {
-    return OSSignpostID(log: log, object: self)
+    return OSSignpostID(log: Log.signpost, object: self)
   }()
   
   // Log for Point of Interest signpoints.
@@ -126,8 +114,6 @@ open class AsynchronousOperation<T>: Operation, OutputProducing {
   /// Private backing store for `state`
   private var _state: Atomic<State> = Atomic(.ready)
   
-  private var _log = Atomic(OSLog.disabled)
-  
   // MARK: - Foundation.Operation
   
   public final override func start() {
@@ -150,10 +136,10 @@ open class AsynchronousOperation<T>: Operation, OutputProducing {
     // early bailing out
     if isCancelled {
       if #available(iOS 12.0, iOSApplicationExtension 12.0, tvOS 12.0, watchOS 5.0, macOS 10.14, OSXApplicationExtension 10.14, *) {
-        os_log(.info, log: log, "%{public}s has started after being cancelled.", operationName)
-        os_signpost(.begin, log: log, name: "Operation", signpostID: signpostID, "%{public}s has started.", operationName)
+        os_log(.info, log: Log.general, "%{public}s has started after being cancelled.", operationName)
+        os_signpost(.begin, log: Log.signpost, name: "Operation", signpostID: signpostID, "%{public}s has started.", operationName)
       } else {
-        os_log("%{public}s has started after being cancelled.", log: log, type: .info, operationName)
+        os_log("%{public}s has started after being cancelled.", log: Log.general, type: .info, operationName)
       }
       
       finish(result: .failure(NSError.AdvancedOperation.cancelled))
@@ -161,10 +147,10 @@ open class AsynchronousOperation<T>: Operation, OutputProducing {
     }
     
     if #available(iOS 12.0, iOSApplicationExtension 12.0, tvOS 12.0, watchOS 5.0, macOS 10.14, OSXApplicationExtension 10.14, *) {
-      os_log(.info, log: log, "%{public}s has started.", operationName)
-      os_signpost(.begin, log: log, name: "Operation", signpostID: signpostID, "%{public}s has started.", operationName)
+      os_log(.info, log: Log.general, "%{public}s has started.", operationName)
+      os_signpost(.begin, log: Log.signpost, name: "Operation", signpostID: signpostID, "%{public}s has started.", operationName)
     } else {
-      os_log("%{public}s has started.", log: log, type: .info, operationName)
+      os_log("%{public}s has started.", log: Log.general, type: .info, operationName)
     }
     
     /// The default implementation of this method updates the execution state of the operation and calls the receiver’s main() method.
@@ -185,7 +171,7 @@ open class AsynchronousOperation<T>: Operation, OutputProducing {
     state = .executing
     
     if #available(iOS 12.0, iOSApplicationExtension 12.0, tvOS 12.0, watchOS 5.0, macOS 10.14, OSXApplicationExtension 10.14, *) {
-      os_signpost(.event, log: pointOfInterestsLog, name: "Execution", signpostID: signpostID, "%{public}s is executing.", operationName)
+      os_signpost(.event, log: Log.poi, name: "Execution", signpostID: signpostID, "%{public}s is executing.", operationName)
     }
     
     execute(completion: finish)
@@ -210,10 +196,15 @@ open class AsynchronousOperation<T>: Operation, OutputProducing {
     guard !isCancelled else { return }
     
     super.cancel()
-    os_log("%{public}s has been cancelled.", log: log, type: .info, operationName)
     
     if #available(iOS 12.0, iOSApplicationExtension 12.0, tvOS 12.0, watchOS 5.0, macOS 10.14, OSXApplicationExtension 10.14, *) {
-      os_signpost(.event, log: pointOfInterestsLog, name: "Cancel", signpostID: signpostID, "%{public}s has been cancelled.", operationName)
+      os_log(.info, log: Log.general, "%{public}s has been cancelled.", operationName)
+    } else {
+      os_log("%{public}s has been cancelled.", log: Log.general, type: .info, operationName)
+    }
+    
+    if #available(iOS 12.0, iOSApplicationExtension 12.0, tvOS 12.0, watchOS 5.0, macOS 10.14, OSXApplicationExtension 10.14, *) {
+      os_signpost(.event, log: Log.poi, name: "Cancel", signpostID: signpostID, "%{public}s has been cancelled.", operationName)
     }
   }
   
@@ -233,25 +224,23 @@ open class AsynchronousOperation<T>: Operation, OutputProducing {
       state = .finished
       isRunning.mutate { $0 = false }
       
-      if log != .disabled { // TODO
-        switch output {
-        case .success:
-          if #available(iOS 12.0, iOSApplicationExtension 12.0, tvOS 12.0, watchOS 5.0, macOS 10.14, OSXApplicationExtension 10.14, *) {
-            os_log(.info, log: log, "%{public}s has finished.", operationName)
-            os_signpost(.end, log: log, name: "Operation", signpostID: signpostID, "%{public}s has finished.", operationName)
-          } else {
-            os_log("%{public}s has finished.", log: log, type: .info, operationName)
-          }
-          
-        case .failure(let error):
-          let debugErrorMessage = (error as NSError).debugErrorMessage
-          
-          if #available(iOS 12.0, iOSApplicationExtension 12.0, tvOS 12.0, watchOS 5.0, macOS 10.14, OSXApplicationExtension 10.14, *) {
-            os_log(.info, log: log, "%{public}s has finished with error: %{private}s", operationName, debugErrorMessage)
-            os_signpost(.end, log: log, name: "Operation", signpostID: signpostID, "%{public}s has finished with error: %{private}s", operationName, debugErrorMessage)
-          } else {
-            os_log("%{public}s has finished with error: %{private}s", log: log, type: .error, operationName, debugErrorMessage)
-          }
+      switch output {
+      case .success:
+        if #available(iOS 12.0, iOSApplicationExtension 12.0, tvOS 12.0, watchOS 5.0, macOS 10.14, OSXApplicationExtension 10.14, *) {
+          os_log(.info, log: Log.general, "%{public}s has finished.", operationName)
+          os_signpost(.end, log: Log.signpost, name: "Operation", signpostID: signpostID, "%{public}s has finished.", operationName)
+        } else {
+          os_log("%{public}s has finished.", log:  Log.general, type: .info, operationName)
+        }
+        
+      case .failure(let error):
+        let debugErrorMessage = (error as NSError).debugErrorMessage
+        
+        if #available(iOS 12.0, iOSApplicationExtension 12.0, tvOS 12.0, watchOS 5.0, macOS 10.14, OSXApplicationExtension 10.14, *) {
+          os_log(.info, log:  Log.general, "%{public}s has finished with error: %{private}s", operationName, debugErrorMessage)
+          os_signpost(.end, log: Log.signpost, name: "Operation", signpostID: signpostID, "%{public}s has finished with error: %{private}s", operationName, debugErrorMessage)
+        } else {
+          os_log("%{public}s has finished with error: %{private}s", log:  Log.general, type: .error, operationName, debugErrorMessage)
         }
       }
       
@@ -310,7 +299,10 @@ extension AsynchronousOperation {
   }
 }
 
+// MARK: - Log
+
 fileprivate enum Log {
+  /// The `OSLog` instance used to track the operation changes (by default is disabled).
   static var general: OSLog {
     if ProcessInfo.processInfo.environment.keys.contains("\(identifier).LOG_ENABLED") {
       return OSLog(subsystem: identifier, category: "Operation")
@@ -318,7 +310,8 @@ fileprivate enum Log {
       return .disabled
     }
   }
-  
+
+  /// The `OSLog` instance used to track operation signposts (by default is disabled).
   @available(iOS 12.0, iOSApplicationExtension 12.0, tvOS 12.0, watchOS 5.0, macOS 10.14, OSXApplicationExtension 10.14, *)
   static var signpost: OSLog {
     if ProcessInfo.processInfo.environment.keys.contains("\(identifier).SIGNPOST_ENABLED") {
@@ -327,7 +320,8 @@ fileprivate enum Log {
       return .disabled
     }
   }
-  
+
+  /// The `OSLog` instance used to track operation point of interests (by default is disabled).
   @available(iOS 12.0, iOSApplicationExtension 12.0, tvOS 12.0, watchOS 5.0, macOS 10.14, OSXApplicationExtension 10.14, *)
   static var poi: OSLog {
     if ProcessInfo.processInfo.environment.keys.contains("\(identifier).SIGNPOST_ENABLED") {

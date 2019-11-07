@@ -77,6 +77,13 @@
             ReferencedContainer = "container:AdvancedOperation.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
+      <EnvironmentVariables>
+         <EnvironmentVariable
+            key = "org.tinrobots.AdvancedOperation.LOG_ENABLED"
+            value = ""
+            isEnabled = "YES">
+         </EnvironmentVariable>
+      </EnvironmentVariables>
    </LaunchAction>
    <ProfileAction
       buildConfiguration = "Release"

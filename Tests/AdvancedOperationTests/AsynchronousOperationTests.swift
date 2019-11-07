@@ -115,7 +115,6 @@ final class AsynchronousOperationTests: XCTestCase {
     let expectation2 = expectation(description: "\(#function)\(#line)")
     
     XCTAssertTrue(operation.isReady)
-    operation.log = TestsLog
     operation.start()
     XCTAssertTrue(operation.isExecuting)
 
@@ -138,7 +137,6 @@ final class AsynchronousOperationTests: XCTestCase {
     let expectation2 = expectation(description: "\(#function)\(#line)")
 
     XCTAssertTrue(operation.isReady)
-    operation.log = TestsLog
     operation.cancel()
     XCTAssertFalse(operation.isExecuting)
 
@@ -211,10 +209,8 @@ final class AsynchronousOperationTests: XCTestCase {
     let queue = OperationQueue()
     let operation1 = SleepyAsyncOperation(interval1: 1, interval2: 1, interval3: 1)
     operation1.name = "operation1"
-    operation1.log = TestsLog
     let operation2 = SleepyAsyncOperation(interval1: 1, interval2: 1, interval3: 1)
     operation2.name = "operation2"
-    operation2.log = TestsLog
 
     let conditionsOperation = BlockOperation { [unowned operation1, unowned operation2] in
       if operation1.isCancelled {
@@ -236,10 +232,8 @@ final class AsynchronousOperationTests: XCTestCase {
     let queue = OperationQueue()
     let operation1 = CancellingAsyncOperation()
     operation1.name = "operation1"
-    operation1.log = TestsLog
     let operation2 = SleepyAsyncOperation(interval1: 1, interval2: 1, interval3: 1)
     operation2.name = "operation2"
-    operation2.log = TestsLog
 
     let conditionsOperation = BlockOperation { [unowned operation1, unowned operation2] in
       if operation1.isCancelled {
@@ -268,11 +262,6 @@ final class AsynchronousOperationTests: XCTestCase {
     operation2.name = "operation2"
     operation3.name = "operation3"
     operation4.name = "operation4"
-
-    operation1.log = TestsLog
-    operation2.log = TestsLog
-    operation3.log = TestsLog
-    operation4.log = TestsLog
 
     let conditionsOperationToLetOperationOneRun = BlockOperation { [unowned operation2, unowned operation3] in
       if operation2.isCancelled || operation3.isCancelled {
@@ -322,11 +311,6 @@ final class AsynchronousOperationTests: XCTestCase {
     operation3.name = "operation3"
     let operation4 = DelayOperation(interval: 1)
     operation4.name = "operation4"
-
-    operation1.log = TestsLog
-    operation2.log = TestsLog
-    operation3.log = TestsLog
-    operation4.log = TestsLog
 
     operation1.addCompletionBlock { expectation1.fulfill() }
     operation2.addCompletionBlock { expectation2.fulfill() }
