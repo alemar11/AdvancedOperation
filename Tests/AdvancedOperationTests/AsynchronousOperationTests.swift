@@ -99,7 +99,6 @@ final class AsynchronousOperationTests: XCTestCase {
   func testCancelBeforeStart() {
     let operation = SleepyAsyncOperation(interval1: 1, interval2: 1, interval3: 1)
     XCTAssertTrue(operation.isReady)
-
     operation.cancel()
     operation.start()
     XCTAssertTrue(operation.isCancelled)
@@ -114,7 +113,7 @@ final class AsynchronousOperationTests: XCTestCase {
     let operation = SleepyAsyncOperation()
     let expectation1 = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: operation, expectedValue: true)
     let expectation2 = expectation(description: "\(#function)\(#line)")
-
+    
     XCTAssertTrue(operation.isReady)
     operation.log = TestsLog
     operation.start()
@@ -126,6 +125,30 @@ final class AsynchronousOperationTests: XCTestCase {
     }
     operation.cancel()
     operation.cancel()
+    XCTAssertTrue(operation.isCancelled)
+
+    wait(for: [expectation1, expectation2], timeout: 10)
+    XCTAssertTrue(operation.isCancelled)
+    XCTAssertTrue(operation.isFinished)
+  }
+
+  func testMultipleStartAfterCancellation() {
+    let operation = SleepyAsyncOperation()
+    let expectation1 = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: operation, expectedValue: true)
+    let expectation2 = expectation(description: "\(#function)\(#line)")
+
+    XCTAssertTrue(operation.isReady)
+    operation.log = TestsLog
+    operation.cancel()
+    XCTAssertFalse(operation.isExecuting)
+
+    DispatchQueue.global().async {
+      operation.start()
+      expectation2.fulfill()
+    }
+
+    operation.start()
+    operation.start()
     XCTAssertTrue(operation.isCancelled)
 
     wait(for: [expectation1, expectation2], timeout: 10)
@@ -256,7 +279,7 @@ final class AsynchronousOperationTests: XCTestCase {
         operation1.cancel()
       }
     }
-
+    
     conditionsOperationToLetOperationOneRun.addDependencies(operation2, operation3)
     operation1.addDependencies(conditionsOperationToLetOperationOneRun)
 

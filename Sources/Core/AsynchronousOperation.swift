@@ -73,6 +73,9 @@ open class AsynchronousOperation<T>: Operation, OutputProducing {
   
   /// Lock to ensure thread safety.
   private let lock = UnfairLock()
+
+  /// An operation is considered as "running" since the `start()` method is called until it gets finished.
+  private var isRunning = Atomic(false)
   
   /// Serial queue for making state changes atomic under the constraint of having to send KVO willChange/didChange notifications.
   private let stateChangeQueue = DispatchQueue(label: "\(identifier).AsynchronousOperation.stateChange")
@@ -117,15 +120,44 @@ open class AsynchronousOperation<T>: Operation, OutputProducing {
   private var _log = Atomic(OSLog.disabled)
   
   // MARK: - Foundation.Operation
-  
+
   public final override func start() {
-    // TODO: begin signpost here?
+    guard !isFinished else { return }
+
+    // The super.start() method is already able to disambiguate started operations (see notes below)
+    // but we need this to support os_log and os_signpost without having duplicates.
+    let isAlreadyRunning = isRunning.safeAccess { running -> Bool in
+      if running {
+        return true
+      } else {
+        // it will be considered as running from now on
+        running = true
+        return false
+      }
+    }
+
+    guard !isAlreadyRunning else { return }
+
+    // early bailing out
     if isCancelled {
-      // early bailing out
+      if #available(iOS 12.0, iOSApplicationExtension 12.0, tvOS 12.0, watchOS 5.0, macOS 10.14, OSXApplicationExtension 10.14, *) {
+        os_log(.info, log: log, "%{public}s has started after being cancelled.", operationName)
+        os_signpost(.begin, log: log, name: "Execution", signpostID: signpostID, "%{public}s has started.", operationName)
+      } else {
+        os_log("%{public}s has started after being cancelled.", log: log, type: .info, operationName)
+      }
+
       finish(result: .failure(NSError.AdvancedOperation.cancelled))
       return
     }
-    
+
+    if #available(iOS 12.0, iOSApplicationExtension 12.0, tvOS 12.0, watchOS 5.0, macOS 10.14, OSXApplicationExtension 10.14, *) {
+      os_log(.info, log: log, "%{public}s has started.", operationName)
+      os_signpost(.begin, log: log, name: "Execution", signpostID: signpostID, "%{public}s has started.", operationName)
+    } else {
+      os_log("%{public}s has started.", log: log, type: .info, operationName)
+    }
+
     /// The default implementation of this method updates the execution state of the operation and calls the receiver’s main() method.
     /// This method also performs several checks to ensure that the operation can actually run.
     /// For example, if the receiver was cancelled or is already finished, this method simply returns without calling main().
@@ -142,12 +174,6 @@ open class AsynchronousOperation<T>: Operation, OutputProducing {
   /// The default implementation of this function traps.
   public final override func main() {
     state = .executing
-    if #available(iOS 12.0, iOSApplicationExtension 12.0, tvOS 12.0, watchOS 5.0, macOS 10.14, OSXApplicationExtension 10.14, *) {
-      os_log(.info, log: log, "%{public}s has started.", operationName)
-      os_signpost(.begin, log: log, name: "Execution", signpostID: signpostID, "%{public}s has started.", operationName)
-    } else {
-      os_log("%{public}s has started.", log: log, type: .info, operationName)
-    }
     execute(completion: finish)
   }
   
@@ -172,8 +198,6 @@ open class AsynchronousOperation<T>: Operation, OutputProducing {
     super.cancel()
     os_log("%{public}s has been cancelled.", log: log, type: .info, operationName)
 
-    // TODO: this event signpost can be emitted before the operation has begun
-    // https://agostini.tech/2018/11/19/measuring-performance-with-os_signpost/
     if #available(iOS 12.0, iOSApplicationExtension 12.0, tvOS 12.0, watchOS 5.0, macOS 10.14, OSXApplicationExtension 10.14, *) {
       os_signpost(.event, log: log, name: "Execution", signpostID: signpostID, "%{public}s has been cancelled.", operationName)
     }
@@ -182,6 +206,9 @@ open class AsynchronousOperation<T>: Operation, OutputProducing {
   /// Call this function to finish an operation that is currently executing.
   private final func finish(result: Output) {
     // State can also be "ready" here if the operation was cancelled before it started.
+
+    guard !isFinished else { return }
+
     lock.lock()
     defer { lock.unlock() }
     
@@ -190,6 +217,8 @@ open class AsynchronousOperation<T>: Operation, OutputProducing {
       self.output = result
       cleanup()
       state = .finished
+      isRunning.mutate { $0 = false }
+
       if log != .disabled {
         switch output {
         case .success:
@@ -204,10 +233,10 @@ open class AsynchronousOperation<T>: Operation, OutputProducing {
           let debugErrorMessage = (error as NSError).debugErrorMessage
           
           if #available(iOS 12.0, iOSApplicationExtension 12.0, tvOS 12.0, watchOS 5.0, macOS 10.14, OSXApplicationExtension 10.14, *) {
-            os_log(.info, log: log, "%{public}s has finished with error: %{private}s.", operationName, debugErrorMessage)
-            os_signpost(.end, log: log, name: "Execution", signpostID: signpostID, "%{public}s has finished with error: %{private}s.", operationName, debugErrorMessage)
+            os_log(.info, log: log, "%{public}s has finished with error: %{private}s", operationName, debugErrorMessage)
+            os_signpost(.end, log: log, name: "Execution", signpostID: signpostID, "%{public}s has finished with error: %{private}s", operationName, debugErrorMessage)
           } else {
-            os_log("%{public}s has finished with error: %{private}s.", log: log, type: .error, operationName, debugErrorMessage)
+            os_log("%{public}s has finished with error: %{private}s", log: log, type: .error, operationName, debugErrorMessage)
           }
         }
       }
