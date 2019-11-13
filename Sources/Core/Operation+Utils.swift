@@ -31,7 +31,7 @@ extension Operation {
 
   /// Returns `true` if at least one dependency has been cancelled.
   public var hasSomeCancelledDependencies: Bool {
-    return dependencies.filter { $0.isCancelled }.count > 0
+    return dependencies.first { $0.isCancelled } != nil
   }
 
   /// Adds a completion block to be executed after the `Operation` enters the "finished" state.
