@@ -43,7 +43,7 @@ public final class AsynchronousBlockOperation<T>: AsynchronousOperation<T> {
   public init(block: @escaping OperationBlock) {
     self.block = block
     super.init()
-    name = "AsynchronousBlockOperation <\(T.self)>"
+    name = "AsynchronousBlockOperation<\(T.self)>"
   }
 
   /// A convenience initializer.

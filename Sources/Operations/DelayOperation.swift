@@ -39,14 +39,14 @@ public final class DelayOperation: AsynchronousOperation<Void> {
     self.delay = .interval(interval)
     self.queue = queue
     super.init()
-    name = "DelayOperation <\(delay)>"
+    name = "DelayOperation<\(delay)>"
   }
 
   public init(until date: Date, queue: DispatchQueue = .global(qos: .default)) {
     self.delay = .date(date)
     self.queue = queue
     super.init()
-    name = "DelayOperation <\(delay)>"
+    name = "DelayOperation<\(delay)>"
   }
 
   // MARK: - Public Methods

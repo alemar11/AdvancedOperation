@@ -41,7 +41,7 @@ final class AdvancedBlockOperationTests: XCTestCase {
     wait(for: [expectation1], timeout: 4)
 
     XCTAssertTrue(operation.isCancelled)
-    XCTAssertEqual(operation.name, "AsynchronousBlockOperation <()>")
+    XCTAssertEqual(operation.name, "AsynchronousBlockOperation<()>")
   }
 
   func testInitializerWithQueue() {
@@ -53,7 +53,7 @@ final class AdvancedBlockOperationTests: XCTestCase {
     operation.start()
     wait(for: [expectation1], timeout: 4)
     XCTAssertEqual(operation.output?.success, 11)
-    XCTAssertEqual(operation.name, "AsynchronousBlockOperation <Int>")
+    XCTAssertEqual(operation.name, "AsynchronousBlockOperation<Int>")
   }
 
   func testCancelBeforeStarting() {
@@ -109,7 +109,7 @@ final class AdvancedBlockOperationTests: XCTestCase {
     operation.start()
     wait(for: [expectation1], timeout: 4)
     XCTAssertEqual(operation.output?.success, text)
-    XCTAssertEqual(operation.name, "AsynchronousBlockOperation <String>")
+    XCTAssertEqual(operation.name, "AsynchronousBlockOperation<String>")
   }
 
   func testFailedOutput() {
