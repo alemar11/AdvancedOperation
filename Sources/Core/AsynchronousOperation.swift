@@ -237,10 +237,10 @@ open class AsynchronousOperation<T>: Operation, OutputProducing {
         let debugErrorMessage = (error as NSError).debugErrorMessage
         
         if #available(iOS 12.0, iOSApplicationExtension 12.0, tvOS 12.0, watchOS 5.0, macOS 10.14, OSXApplicationExtension 10.14, *) {
-          os_log(.info, log:  Log.general, "%{public}s has finished with error: %{private}s", operationName, debugErrorMessage)
-          os_signpost(.end, log: Log.signpost, name: "Operation", signpostID: signpostID, "%{public}s has finished with error: %{private}s", operationName, debugErrorMessage)
+          os_log(.info, log:  Log.general, "%{public}s has finished with error: %{private}s.", operationName, debugErrorMessage)
+          os_signpost(.end, log: Log.signpost, name: "Operation", signpostID: signpostID, "%{public}s has finished with error: %{private}s.", operationName, debugErrorMessage)
         } else {
-          os_log("%{public}s has finished with error: %{private}s", log:  Log.general, type: .error, operationName, debugErrorMessage)
+          os_log("%{public}s has finished with error: %{private}s.", log:  Log.general, type: .error, operationName, debugErrorMessage)
         }
       }
       
