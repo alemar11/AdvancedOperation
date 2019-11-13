@@ -47,6 +47,8 @@ open class AsynchronousOperation<T>: Operation, OutputProducing {
   }
   
   public final override var isAsynchronous: Bool { return true }
+
+  public final override var isConcurrent: Bool { return true }
   
   /// The output produced by the `AsynchronousOperation`.
   /// It's `nil` while the operation is not finished.
