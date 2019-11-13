@@ -52,7 +52,7 @@ final class AdvancedBlockOperationTests: XCTestCase {
     let expectation1 = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: operation, expectedValue: true)
     operation.start()
     wait(for: [expectation1], timeout: 4)
-    XCTAssertEqual(operation.output.success, 11)
+    XCTAssertEqual(operation.output?.success, 11)
     XCTAssertEqual(operation.name, "AsynchronousBlockOperation <Int>")
   }
 
@@ -108,7 +108,7 @@ final class AdvancedBlockOperationTests: XCTestCase {
     let expectation1 = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: operation, expectedValue: true)
     operation.start()
     wait(for: [expectation1], timeout: 4)
-    XCTAssertEqual(operation.output.success, text)
+    XCTAssertEqual(operation.output?.success, text)
     XCTAssertEqual(operation.name, "AsynchronousBlockOperation <String>")
   }
 
@@ -120,8 +120,8 @@ final class AdvancedBlockOperationTests: XCTestCase {
     let expectation1 = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: operation, expectedValue: true)
     operation.start()
     wait(for: [expectation1], timeout: 4)
-    XCTAssertNil(operation.output.success)
-    XCTAssertNotNil(operation.output.failure)
+    XCTAssertNil(operation.output?.success)
+    XCTAssertNotNil(operation.output?.failure)
   }
 
   func testBlockOperationCompletedWithErrorsInAsyncQueue() {
@@ -144,7 +144,7 @@ final class AdvancedBlockOperationTests: XCTestCase {
       waitForExpectations(timeout: 5)
       XCTAssertTrue(operation.isFinished)
 
-      if let opError = operation.output.failure as? MockError {
+      if let opError = operation.output?.failure as? MockError {
         XCTAssertEqual(opError, error)
       } else {
         XCTFail("Wrong error type.")

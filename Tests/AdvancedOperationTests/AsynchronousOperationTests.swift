@@ -45,13 +45,9 @@ final class AsynchronousOperationTests: XCTestCase {
     let operation = SleepyAsyncOperation()
     XCTAssertFalse(operation.isExecuting)
 
-    // https://forums.swift.org/t/xctunwrap-not-available-during-swift-test/28878/4
+    // TODO: https://forums.swift.org/t/xctunwrap-not-available-during-swift-test/28878/4
     //let output = try XCTUnwrap(operation.output.failure) as NSError
-    guard let output = operation.output.failure else {
-      XCTFail("The operation should have a failure output")
-      return
-    }
-    XCTAssertEqual(output as NSError, NSError.AdvancedOperation.noOutputYet)
+    XCTAssertNil(operation.output, "An operation not yet started shouldn't have an output,")
   }
 
   func testStart() {
@@ -161,7 +157,7 @@ final class AsynchronousOperationTests: XCTestCase {
     operation.start()
 
     wait(for: [expectation1], timeout: 10)
-    XCTAssertNotNil(operation.output.failure)
+    XCTAssertNotNil(operation.output?.failure)
   }
 
   // The readiness of operations is determined by their dependencies on other operations and potentially by custom conditions that you define.
@@ -289,9 +285,9 @@ final class AsynchronousOperationTests: XCTestCase {
     queue.addOperations([operation1, operation2, operation3, operation4, conditionsOperationToLetOperationOneRun, conditionsOperationToLetOperationThreeRun], waitUntilFinished: true)
 
     XCTAssertTrue(operation4.isCancelled)
-    XCTAssertNotNil(operation3.output.failure)
+    XCTAssertNotNil(operation3.output?.failure)
     XCTAssertFalse(operation2.isCancelled)
-    XCTAssertNotNil(operation1.output.failure)
+    XCTAssertNotNil(operation1.output?.failure)
     XCTAssertTrue(operation1.isCancelled)
     XCTAssertTrue(operation1.isFinished)
   }
@@ -346,13 +342,13 @@ final class AsynchronousOperationTests: XCTestCase {
     waitForExpectations(timeout: 10)
     XCTAssertTrue(operation4.isCancelled)
 
-    XCTAssertNotNil(operation3.output.failure)
+    XCTAssertNotNil(operation3.output?.failure)
     XCTAssertTrue(operation3.isCancelled)
 
-    XCTAssertNotNil(operation2.output.failure)
+    XCTAssertNotNil(operation2.output?.failure)
     XCTAssertTrue(operation2.isCancelled)
 
-    XCTAssertNotNil(operation1.output.failure)
+    XCTAssertNotNil(operation1.output?.failure)
     XCTAssertTrue(operation1.isCancelled)
   }
 }

@@ -30,7 +30,7 @@ import os.log
 /// An abstract thread safe subclass of `Operation` to build asynchronous operations.
 /// Subclasses must override `execute(completion:)` to perform any work and call the completion handler to finish it.
 open class AsynchronousOperation<T>: Operation, OutputProducing {
-  public typealias Output = Result<T, Error>
+  public typealias OperationOutput = Result<T, Error>
   
   // MARK: - Public Properties
   
@@ -49,7 +49,8 @@ open class AsynchronousOperation<T>: Operation, OutputProducing {
   public final override var isAsynchronous: Bool { return true }
   
   /// The output produced by the `AsynchronousOperation`.
-  public private(set) var output: Output = .failure(NSError.AdvancedOperation.noOutputYet)
+  /// It's `nil` while the operation is not finished.
+  public private(set) var output: OperationOutput? //= .failure(NSError.AdvancedOperation.noOutputYet)
   
   // TODO: should it be public for nested signpoints?
   // An identifier you use to distinguish signposts that have the same name and that log to the same OSLog.
@@ -177,7 +178,7 @@ open class AsynchronousOperation<T>: Operation, OutputProducing {
     execute(completion: finish)
   }
   
-  open func execute(completion: @escaping (Output) -> Void) {
+  open func execute(completion: @escaping (OperationOutput) -> Void) {
     preconditionFailure("Subclasses must implement `execute`.")
   }
   
@@ -209,7 +210,7 @@ open class AsynchronousOperation<T>: Operation, OutputProducing {
   }
   
   /// Call this function to finish an operation that is currently executing.
-  private final func finish(result: Output) {
+  private final func finish(result: OperationOutput) {
     // State can also be "ready" here if the operation was cancelled before it was started.
     guard !isFinished else { return }
     
@@ -223,7 +224,7 @@ open class AsynchronousOperation<T>: Operation, OutputProducing {
       state = .finished
       isRunning.mutate { $0 = false }
       
-      switch output {
+      switch output! {
       case .success:
         if #available(iOS 12.0, iOSApplicationExtension 12.0, tvOS 12.0, watchOS 5.0, macOS 10.14, OSXApplicationExtension 10.14, *) {
           os_log(.info, log: Log.general, "%{public}s has finished.", operationName)
