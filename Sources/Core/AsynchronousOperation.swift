@@ -61,14 +61,6 @@ open class AsynchronousOperation<T>: Operation, OutputProducing {
     return OSSignpostID(log: Log.signpost, object: self)
   }()
 
-  // Log for Point of Interest signpoints.
-  @available(iOS 12.0, iOSApplicationExtension 12.0, tvOS 12.0, watchOS 5.0, macOS 10.14, OSXApplicationExtension 10.14, *)
-  private lazy var pointOfInterestsLog: OSLog = {
-    let log = OSLog(subsystem: identifier, category: .pointsOfInterest)
-    //log.signpostsEnabled
-    return log
-  }()
-
   // MARK: - Private Properties
 
   /// Lock to ensure thread safety.
@@ -232,17 +224,17 @@ open class AsynchronousOperation<T>: Operation, OutputProducing {
           os_log(.info, log: Log.general, "%{public}s has finished.", operationName)
           os_signpost(.end, log: Log.signpost, name: "Operation", signpostID: signpostID, "%{public}s has finished.", operationName)
         } else {
-          os_log("%{public}s has finished.", log:  Log.general, type: .info, operationName)
+          os_log("%{public}s has finished.", log: Log.general, type: .info, operationName)
         }
 
       case .failure(let error):
         let debugErrorMessage = (error as NSError).debugErrorMessage
 
         if #available(iOS 12.0, iOSApplicationExtension 12.0, tvOS 12.0, watchOS 5.0, macOS 10.14, OSXApplicationExtension 10.14, *) {
-          os_log(.info, log:  Log.general, "%{public}s has finished with error: %{private}s.", operationName, debugErrorMessage)
+          os_log(.info, log: Log.general, "%{public}s has finished with error: %{private}s.", operationName, debugErrorMessage)
           os_signpost(.end, log: Log.signpost, name: "Operation", signpostID: signpostID, "%{public}s has finished with error: %{private}s.", operationName, debugErrorMessage)
         } else {
-          os_log("%{public}s has finished with error: %{private}s.", log:  Log.general, type: .error, operationName, debugErrorMessage)
+          os_log("%{public}s has finished with error: %{private}s.", log: Log.general, type: .error, operationName, debugErrorMessage)
         }
       }
 
@@ -303,7 +295,7 @@ extension AsynchronousOperation {
 
 // MARK: - Log
 
-fileprivate enum Log {
+private enum Log {
   /// The `OSLog` instance used to track the operation changes (by default is disabled).
   static var general: OSLog {
     if ProcessInfo.processInfo.environment.keys.contains("\(identifier).LOG_ENABLED") {
