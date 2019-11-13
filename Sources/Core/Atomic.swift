@@ -23,6 +23,7 @@
 
 import Foundation
 
+// TODO: how can I improve this code?
 /// Thread-safe access using a locking mechanism conforming to `NSLocking` protocol.
 internal final class Atomic<T> {
   private var _value: T

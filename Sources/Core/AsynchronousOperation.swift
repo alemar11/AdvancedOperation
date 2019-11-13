@@ -54,7 +54,8 @@ open class AsynchronousOperation<T>: Operation, OutputProducing {
   /// It's `nil` while the operation is not finished.
   public private(set) var output: OperationOutput?
 
-  // TODO: should it be public for nested signpoints?
+  // MARK: - Private Properties
+
   // An identifier you use to distinguish signposts that have the same name and that log to the same OSLog.
   @available(iOS 12.0, iOSApplicationExtension 12.0, tvOS 12.0, watchOS 5.0, macOS 10.14, OSXApplicationExtension 10.14, *)
   private lazy var signpostID = {
@@ -132,7 +133,7 @@ open class AsynchronousOperation<T>: Operation, OutputProducing {
     if isCancelled {
       if #available(iOS 12.0, iOSApplicationExtension 12.0, tvOS 12.0, watchOS 5.0, macOS 10.14, OSXApplicationExtension 10.14, *) {
         os_log(.info, log: Log.general, "%{public}s has started after being cancelled.", operationName)
-        os_signpost(.begin, log: Log.signpost, name: "Operation", signpostID: signpostID, "%{public}s has started.", operationName)
+        os_signpost(.begin, log: Log.signpost, name: Log.signPostIntervalName, signpostID: signpostID, "%{public}s has started.", operationName)
       } else {
         os_log("%{public}s has started after being cancelled.", log: Log.general, type: .info, operationName)
       }
@@ -143,7 +144,7 @@ open class AsynchronousOperation<T>: Operation, OutputProducing {
 
     if #available(iOS 12.0, iOSApplicationExtension 12.0, tvOS 12.0, watchOS 5.0, macOS 10.14, OSXApplicationExtension 10.14, *) {
       os_log(.info, log: Log.general, "%{public}s has started.", operationName)
-      os_signpost(.begin, log: Log.signpost, name: "Operation", signpostID: signpostID, "%{public}s has started.", operationName)
+      os_signpost(.begin, log: Log.signpost, name: Log.signPostIntervalName, signpostID: signpostID, "%{public}s has started.", operationName)
     } else {
       os_log("%{public}s has started.", log: Log.general, type: .info, operationName)
     }
@@ -199,7 +200,7 @@ open class AsynchronousOperation<T>: Operation, OutputProducing {
     }
 
     if #available(iOS 12.0, iOSApplicationExtension 12.0, tvOS 12.0, watchOS 5.0, macOS 10.14, OSXApplicationExtension 10.14, *) {
-      os_signpost(.event, log: Log.poi, name: "Cancel", signpostID: signpostID, "%{public}s has been cancelled.", operationName)
+      os_signpost(.event, log: Log.poi, name: "Cancellation", signpostID: signpostID, "%{public}s has been cancelled.", operationName)
     }
   }
 
@@ -222,7 +223,7 @@ open class AsynchronousOperation<T>: Operation, OutputProducing {
       case .success:
         if #available(iOS 12.0, iOSApplicationExtension 12.0, tvOS 12.0, watchOS 5.0, macOS 10.14, OSXApplicationExtension 10.14, *) {
           os_log(.info, log: Log.general, "%{public}s has finished.", operationName)
-          os_signpost(.end, log: Log.signpost, name: "Operation", signpostID: signpostID, "%{public}s has finished.", operationName)
+          os_signpost(.end, log: Log.signpost, name: Log.signPostIntervalName, signpostID: signpostID, "%{public}s has finished.", operationName)
         } else {
           os_log("%{public}s has finished.", log: Log.general, type: .info, operationName)
         }
@@ -231,10 +232,10 @@ open class AsynchronousOperation<T>: Operation, OutputProducing {
         let debugErrorMessage = (error as NSError).debugErrorMessage
 
         if #available(iOS 12.0, iOSApplicationExtension 12.0, tvOS 12.0, watchOS 5.0, macOS 10.14, OSXApplicationExtension 10.14, *) {
-          os_log(.info, log: Log.general, "%{public}s has finished with error: %{private}s.", operationName, debugErrorMessage)
-          os_signpost(.end, log: Log.signpost, name: "Operation", signpostID: signpostID, "%{public}s has finished with error: %{private}s.", operationName, debugErrorMessage)
+          os_log(.info, log: Log.general, "%{public}s has finished with error: '%{private}s'.", operationName, debugErrorMessage)
+          os_signpost(.end, log: Log.signpost, name: Log.signPostIntervalName, signpostID: signpostID, "%{public}s has finished with error: '%{private}s'.", operationName, debugErrorMessage)
         } else {
-          os_log("%{public}s has finished with error: %{private}s.", log: Log.general, type: .error, operationName, debugErrorMessage)
+          os_log("%{public}s has finished with error: '%{private}s'.", log: Log.general, type: .error, operationName, debugErrorMessage)
         }
       }
 
@@ -296,6 +297,9 @@ extension AsynchronousOperation {
 // MARK: - Log
 
 private enum Log {
+  /// The name used for signpost interval events (.begin and .end).
+  static let signPostIntervalName: StaticString = "Operation"
+
   /// The `OSLog` instance used to track the operation changes (by default is disabled).
   static var general: OSLog {
     if ProcessInfo.processInfo.environment.keys.contains("\(identifier).LOG_ENABLED") {
