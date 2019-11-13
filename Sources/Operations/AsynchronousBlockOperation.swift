@@ -27,7 +27,7 @@ import Foundation
 /// A concurrent sublcass of `AsynchronousOperation` to execute a closure.
 public final class AsynchronousBlockOperation<T>: AsynchronousOperation<T> {
   /// A closure type that takes a closure as its parameter.
-  public typealias OperationBlock = (@escaping (Result<T, Error>) -> Void) -> Void
+  public typealias OperationBlock = (@escaping (OperationOutput) -> Void) -> Void
 
   // MARK: - Private Properties
 
@@ -52,7 +52,7 @@ public final class AsynchronousBlockOperation<T>: AsynchronousOperation<T> {
   ///   - queue: The `DispatchQueue` where the operation will run its `block`.
   ///   - block: The closure to run when the operation executes.
   /// - Note: The block is run concurrently on the given `queue` and must return a result type to complete.
-  public convenience init(queue: DispatchQueue = .main, block: @escaping () -> Result<T, Error>) {
+  public convenience init(queue: DispatchQueue = .main, block: @escaping () -> OperationOutput) {
     self.init(block: { complete in
       queue.async {
         let result = block()
@@ -78,7 +78,7 @@ public final class AsynchronousBlockOperation<T>: AsynchronousOperation<T> {
 
   // MARK: - Overrides
 
-  public override func execute(completion: @escaping (Result<T, Error>) -> Void) {
+  public override func execute(completion: @escaping (OperationOutput) -> Void) {
     guard !isCancelled else {
       completion(.failure(NSError.AdvancedOperation.cancelled))
       return

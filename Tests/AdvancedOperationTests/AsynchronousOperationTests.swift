@@ -109,7 +109,7 @@ final class AsynchronousOperationTests: XCTestCase {
     let operation = SleepyAsyncOperation()
     let expectation1 = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: operation, expectedValue: true)
     let expectation2 = expectation(description: "\(#function)\(#line)")
-    
+
     XCTAssertTrue(operation.isReady)
     operation.start()
     XCTAssertTrue(operation.isExecuting)
@@ -264,7 +264,7 @@ final class AsynchronousOperationTests: XCTestCase {
         operation1.cancel()
       }
     }
-    
+
     conditionsOperationToLetOperationOneRun.addDependencies(operation2, operation3)
     operation1.addDependencies(conditionsOperationToLetOperationOneRun)
 
