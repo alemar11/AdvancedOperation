@@ -23,41 +23,40 @@
 
 import Foundation
 
-// TODO: how can I improve this code?
-/// Thread-safe access using a locking mechanism conforming to `NSLocking` protocol.
-internal final class Atomic<T> {
-  private var _value: T
-  private let lock: NSLocking
-
-  internal init(_ value: T, lock: NSLocking = UnfairLock()) {
-    self.lock = lock
-    self._value = value
+/// A mutex wrapper around contents.
+/// Useful for threadsafe access to single values but less useful for compound values where different components might need to be updated at different times.
+final class Atomic<T> {
+  @usableFromInline
+  var mutex = UnfairLock()
+  
+  @usableFromInline
+  var internalValue: T
+  
+  public init(_ value: T) {
+    internalValue = value
   }
-
-  internal var value: T {
-    // Atomic properties with a setter are kind of dangerous in some scenarios
-    // https://github.com/ReactiveCocoa/ReactiveSwift/issues/269
-    lock.lock()
-    defer { lock.unlock() }
-
-    return _value
+  
+  @inlinable
+  var value: T {
+    get {
+      mutex.lock()
+      defer { mutex.unlock() }
+      return internalValue
+    }
   }
-
-  internal func read<U>(_ value: (T) throws -> U) rethrows -> U {
-    lock.lock()
-    defer { lock.unlock() }
-    return try value(_value)
+  
+  var isMutating: Bool {
+    if mutex.try() {
+      mutex.unlock()
+      return false
+    }
+    return true
   }
-
-  internal func mutate(_ transform: (inout T) throws -> Void) rethrows {
-    lock.lock()
-    defer { lock.unlock() }
-    try transform(&_value)
-  }
-
-  internal func safeAccess<U>(_ transform: (inout T) throws -> U) rethrows -> U {
-    lock.lock()
-    defer { lock.unlock() }
-    return try transform(&_value)
+  
+  @discardableResult @inlinable
+  func mutate<U>(_ f: (inout T) throws -> U) rethrows -> U {
+    mutex.lock()
+    defer { mutex.unlock() }
+    return try f(&internalValue)
   }
 }

@@ -46,7 +46,7 @@ final class AsynchronousOperationTests: XCTestCase {
     XCTAssertFalse(operation.isExecuting)
 
     // TODO: https://forums.swift.org/t/xctunwrap-not-available-during-swift-test/28878/4
-    //let output = try XCTUnwrap(operation.output.failure) as NSError
+    // let output = try XCTUnwrap(operation.output?.failure) as NSError
     XCTAssertNil(operation.output, "An operation not yet started shouldn't have an output,")
   }
 
