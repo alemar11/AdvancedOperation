@@ -14,7 +14,7 @@
     <a title="Classes  Reference"></a>
     <header>
       <div class="content-wrapper">
-        <p><a href="index.html">AdvancedOperation Docs</a> (46% documented)</p>
+        <p><a href="index.html">AdvancedOperation Docs</a> (51% documented)</p>
       </div>
     </header>
     <div class="content-wrapper">
@@ -35,9 +35,6 @@
               </li>
               <li class="nav-group-task">
                 <a href="Classes/AsynchronousOperation.html">AsynchronousOperation</a>
-              </li>
-              <li class="nav-group-task">
-                <a href="Classes/DelayOperation.html">DelayOperation</a>
               </li>
             </ul>
           </li>
@@ -78,39 +75,6 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:17AdvancedOperation012AsynchronousB0C"></a>
-                    <a name="//apple_ref/swift/Class/AsynchronousOperation" class="dashAnchor"></a>
-                    <a class="token" href="#/s:17AdvancedOperation012AsynchronousB0C">AsynchronousOperation</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>An abstract thread safe subclass of <code>Operation</code> to build asynchronous operations.
-Subclasses must override <code>execute(completion:)</code> to perform any work and call the completion handler to finish it.</p>
-
-                        <a href="Classes/AsynchronousOperation.html" class="slightly-smaller">See more</a>
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">open</span> <span class="kd">class</span> <span class="kt">AsynchronousOperation</span><span class="o">&lt;</span><span class="kt">T</span><span class="o">&gt;</span> <span class="p">:</span> <span class="kt">Operation</span><span class="p">,</span> <span class="kt"><a href="Protocols/OutputProducing.html">OutputProducing</a></span></code></pre>
-
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-              </ul>
-            </div>
-            <div class="task-group">
-              <ul>
-                <li class="item">
-                  <div>
-                    <code>
                     <a name="/s:17AdvancedOperation017AsynchronousBlockB0C"></a>
                     <a name="//apple_ref/swift/Class/AsynchronousBlockOperation" class="dashAnchor"></a>
                     <a class="token" href="#/s:17AdvancedOperation017AsynchronousBlockB0C">AsynchronousBlockOperation</a>
@@ -143,9 +107,9 @@ Subclasses must override <code>execute(completion:)</code> to perform any work a
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:17AdvancedOperation05DelayB0C"></a>
-                    <a name="//apple_ref/swift/Class/DelayOperation" class="dashAnchor"></a>
-                    <a class="token" href="#/s:17AdvancedOperation05DelayB0C">DelayOperation</a>
+                    <a name="/s:17AdvancedOperation012AsynchronousB0C"></a>
+                    <a name="//apple_ref/swift/Class/AsynchronousOperation" class="dashAnchor"></a>
+                    <a class="token" href="#/s:17AdvancedOperation012AsynchronousB0C">AsynchronousOperation</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -153,21 +117,24 @@ Subclasses must override <code>execute(completion:)</code> to perform any work a
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>An <code><a href="Classes/AsynchronousOperation.html">AsynchronousOperation</a></code> that will simply wait for a given time interval, or until a specific <code>Date</code>.
-If the interval is negative, or the <code>Date</code> is in the past, then this operation immediately finishes.</p>
-<div class="aside aside-note">
-    <p class="aside-title">Note</p>
-    A <code>DelayOperation</code> cannot be cancelled once started running.
+                        <p>An abstract thread safe subclass of <code>Operation</code> to build asynchronous operations.</p>
 
-</div>
+<p>Subclasses must override <code>execute(completion:)</code> to perform any work and call the completion handler to finish it.</p>
 
-                        <a href="Classes/DelayOperation.html" class="slightly-smaller">See more</a>
+<p>To enable logging:</p>
+
+<ul>
+<li>To enable log add this environment key: <code>org.tinrobots.AdvancedOperation.LOG_ENABLED</code></li>
+<li>To enable signposts add this environment key: <code>org.tinrobots.AdvancedOperation.SIGNPOST_ENABLED</code></li>
+</ul>
+
+                        <a href="Classes/AsynchronousOperation.html" class="slightly-smaller">See more</a>
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">final</span> <span class="kd">class</span> <span class="kt">DelayOperation</span> <span class="p">:</span> <span class="kt"><a href="Classes/AsynchronousOperation.html">AsynchronousOperation</a></span><span class="o">&lt;</span><span class="kt">Void</span><span class="o">&gt;</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">open</span> <span class="kd">class</span> <span class="kt">AsynchronousOperation</span><span class="o">&lt;</span><span class="kt">T</span><span class="o">&gt;</span> <span class="p">:</span> <span class="kt">Operation</span><span class="p">,</span> <span class="kt"><a href="Protocols/OutputProducing.html">OutputProducing</a></span></code></pre>
 
                         </div>
                       </div>
@@ -179,7 +146,7 @@ If the interval is negative, or the <code>Date</code> is in the past, then this 
           </section>
         </section>
         <section id="footer">
-          <p>&copy; 2019 <a class="link" href="https://github.com/tinrobots/AdvancedOperation" target="_blank" rel="external">Alessandro Marzoli</a>. All rights reserved. (Last updated: 2019-11-13)</p>
+          <p>&copy; 2019 <a class="link" href="https://github.com/tinrobots/AdvancedOperation" target="_blank" rel="external">Alessandro Marzoli</a>. All rights reserved. (Last updated: 2019-11-14)</p>
           <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.12.0</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
         </section>
       </article>
