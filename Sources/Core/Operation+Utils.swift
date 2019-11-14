@@ -28,12 +28,12 @@ extension Operation {
   public var operationName: String {
     return name ?? "\(type(of: self))"
   }
-  
+
   /// Returns `true` if at least one dependency has been cancelled.
   public var hasSomeCancelledDependencies: Bool {
     return dependencies.first { $0.isCancelled } != nil
   }
-  
+
   /// Adds a completion block to be executed after the `Operation` enters the "finished" state.
   /// If there is already a completion block, they are chained together.
   ///
@@ -45,7 +45,7 @@ extension Operation {
       completionBlock = block
       return
     }
-    
+
     completionBlock = {
       if asEndingBlock {
         existingBlock()
@@ -56,7 +56,7 @@ extension Operation {
       }
     }
   }
-  
+
   /// Adds multiple dependencies to the operation.
   /// If the receiver is already executing its task, adding dependencies has no practical effect.
   public func addDependencies(_ dependencies: [Operation]) {
@@ -64,13 +64,13 @@ extension Operation {
       addDependency(dependency)
     }
   }
-  
+
   /// Adds multiple dependencies to the operation.
   /// If the receiver is already executing its task, adding dependencies has no practical effect.
   public func addDependencies(_ dependencies: Operation...) {
     addDependencies(dependencies)
   }
-  
+
   /// Removes all the dependencies.
   public func removeDependencies() {
     for dependency in dependencies {
@@ -84,7 +84,7 @@ extension Sequence where Element: Operation {
   public func addDependencies(_ dependencies: Operation...) {
     addDependencies(dependencies)
   }
-  
+
   /// Makes every operation in the sequence dependent on the completion of the specified operations.
   public func addDependencies(_ dependencies: [Operation]) {
     forEach { $0.addDependencies(dependencies) }

@@ -39,5 +39,13 @@ extension NSError {
       let error = NSError(domain: identifier, code: 1, userInfo: info)
       return error
     }()
+
+    // Creates an AdvancedOperation generic error.
+    static func makeFinishError(debugMessage message: String) -> NSError {
+      var info = [String: Any]()
+      info[NSDebugDescriptionErrorKey] = message
+      let error = NSError(domain: identifier, code: 2, userInfo: info)
+      return error
+    }
   }
 }
