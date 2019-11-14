@@ -252,7 +252,7 @@ final class AsynchronousOperationTests: XCTestCase {
     let operation1 = SleepyAsyncOperation(interval1: 1, interval2: 1, interval3: 1)
     let operation2 = SleepyAsyncOperation(interval1: 1, interval2: 1, interval3: 1)
     let operation3 = NotExecutableOperation()
-    let operation4 = DelayOperation(interval: 0.2)
+    let operation4 = SleepyAsyncOperation(interval1: 1, interval2: 2, interval3: 1)
 
     operation1.name = "operation1"
     operation2.name = "operation2"
@@ -305,7 +305,7 @@ final class AsynchronousOperationTests: XCTestCase {
     operation2.name = "operation2"
     let operation3 = NotExecutableOperation()
     operation3.name = "operation3"
-    let operation4 = DelayOperation(interval: 1)
+    let operation4 = SleepyAsyncOperation(interval1: 1, interval2: 1, interval3: 1)
     operation4.name = "operation4"
 
     operation1.addCompletionBlock { expectation1.fulfill() }

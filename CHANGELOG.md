@@ -7,6 +7,7 @@
 - Removed `AdvancedOperation`
 - Removed `AdvancedBlockOperation`
 - Removed `GroupOperation`.
+- Removed `DelayOperation.`
 - Removed conditions.
 
 ### 4.0.0 ⭐
