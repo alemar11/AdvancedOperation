@@ -28,7 +28,12 @@ import Foundation
 import os.log
 
 /// An abstract thread safe subclass of `Operation` to build asynchronous operations.
+///
 /// Subclasses must override `execute(completion:)` to perform any work and call the completion handler to finish it.
+///
+/// To enable logging:
+/// - To enable log add this environment key: `org.tinrobots.AdvancedOperation.LOG_ENABLED`
+/// - To enable signposts add this environment key: `org.tinrobots.AdvancedOperation.SIGNPOST_ENABLED`
 open class AsynchronousOperation<T>: Operation, OutputProducing {
   public typealias OperationOutput = Result<T, Error>
 
