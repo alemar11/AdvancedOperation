@@ -49,3 +49,41 @@ extension NSError {
     }
   }
 }
+
+//public typealias DomainError = CustomNSError
+//
+//public struct Failure: Error {
+//  let underlyingNSError: NSError
+//
+//  public init(_ error: NSError) {
+//    self.underlyingNSError = error
+//  }
+//
+//  public init(_ error: DomainError) {
+//    self.underlyingNSError = NSError(error)
+//  }
+//
+//  public init(debugDescription: String, localizedDescription: String?) {
+//    var info = [String: Any]()
+//    info[NSLocalizedDescriptionKey] = localizedDescription
+//    info[NSDebugDescriptionErrorKey] = debugDescription
+//    self.underlyingNSError = NSError(domain: identifier, code: 3, userInfo: info)
+//  }
+//}
+//
+//extension NSError {
+//  convenience init(_ error: DomainError) {
+//    self.init(domain: type(of: error.self).errorDomain,
+//              code: error.errorCode,
+//              userInfo: error.errorUserInfo)
+//  }
+//}
+//
+//extension Result where Failure == AdvancedOperation.Failure {
+//  func eraseFailureError() -> Result<Success,Error> {
+//    switch self {
+//    case .success(let success): return .success(success)
+//    case .failure(let failure): return .failure(failure.underlyingNSError)
+//    }
+//  }
+//}

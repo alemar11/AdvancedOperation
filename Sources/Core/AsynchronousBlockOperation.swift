@@ -79,11 +79,6 @@ public final class AsynchronousBlockOperation<T>: AsynchronousOperation<T> {
   // MARK: - Overrides
 
   public override func execute(completion: @escaping (OperationOutput) -> Void) {
-    guard !isCancelled else {
-      completion(.failure(NSError.AdvancedOperation.cancelled))
-      return
-    }
-
     block {
       completion($0)
     }

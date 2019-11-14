@@ -159,10 +159,8 @@ open class AsynchronousOperation<T>: Operation, OutputProducing {
     // Only the execute(completion:) overidden implementation can finish the operation now.
   }
 
-  // MARK: - Public
+  // MARK: - Public Methods
 
-  /// Subclasses must implement this to perform their work and they must not call `super`.
-  /// The default implementation of this function traps.
   public final override func main() {
     state = .executing
 
@@ -170,9 +168,16 @@ open class AsynchronousOperation<T>: Operation, OutputProducing {
       os_signpost(.event, log: Log.poi, name: "Execution", signpostID: signpostID, "%{public}s is executing.", operationName)
     }
 
-    execute(completion: finish)
+    if isCancelled {
+      finish(result: .failure(NSError.AdvancedOperation.cancelled))
+    } else {
+      execute(completion: finish)
+    }
   }
 
+  /// Subclasses must implement this to perform their work and they must not call `super`.
+  /// The default implementation of this function traps.
+  /// - Note: Before calling this method, the operation checks if it's already cancelled (and, in that case, finishes itself).
   open func execute(completion: @escaping (OperationOutput) -> Void) {
     preconditionFailure("Subclasses must implement `execute`.")
   }
@@ -203,6 +208,8 @@ open class AsynchronousOperation<T>: Operation, OutputProducing {
       os_signpost(.event, log: Log.poi, name: "Cancellation", signpostID: signpostID, "%{public}s has been cancelled.", operationName)
     }
   }
+
+  // MARK: - Private Methods
 
   /// Call this function to finish an operation that is currently executing.
   private final func finish(result: OperationOutput) {
