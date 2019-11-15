@@ -23,13 +23,17 @@
 
 import Foundation
 
+/// Operations conforming to this protocol require an input before starting.
 public protocol InputConsuming: Operation {
   associatedtype Input
+  /// Required input
   var input: Input { get set }
 }
 
+/// Operations conforming to this protocol produce an output once finished.
 public protocol OutputProducing: Operation {
   associatedtype Output
+  /// Produced output
   var output: Output { get }
 }
 

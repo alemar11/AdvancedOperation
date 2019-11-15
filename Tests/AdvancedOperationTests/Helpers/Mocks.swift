@@ -111,7 +111,7 @@ internal class IntToStringAsyncOperation: AsynchronousOperation<String> & InputC
 
   override func execute(completion: @escaping (Result<String, Error>) -> Void) {
     if isCancelled {
-      completion(.failure(NSError.AdvancedOperation.cancelled))
+      completion(.failure(NSError.cancelled))
       return
     }
 
@@ -129,7 +129,7 @@ internal class StringToIntAsyncOperation: AsynchronousOperation<Int> & InputCons
 
   override func execute(completion: @escaping (Result<Int, Error>) -> Void) {
     if isCancelled {
-      completion(.failure(NSError.AdvancedOperation.cancelled))
+      completion(.failure(NSError.cancelled))
       return
     }
     if let input = self.input, let value = Int(input) {

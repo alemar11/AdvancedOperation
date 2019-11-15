@@ -35,8 +35,6 @@ import os.log
 /// - To enable log add this environment key: `org.tinrobots.AdvancedOperation.LOG_ENABLED`
 /// - To enable signposts add this environment key: `org.tinrobots.AdvancedOperation.SIGNPOST_ENABLED`
 open class AsynchronousOperation<T>: Operation, OutputProducing {
-  public typealias OperationOutput = Result<T, Error>
-
   // MARK: - Public Properties
 
   open override var isReady: Bool {
@@ -57,7 +55,7 @@ open class AsynchronousOperation<T>: Operation, OutputProducing {
 
   /// The output produced by the `AsynchronousOperation`.
   /// It's `nil` while the operation is not finished.
-  public private(set) var output: OperationOutput?
+  public private(set) var output: Result<T, Error>?
 
   // MARK: - Private Properties
 
@@ -143,7 +141,7 @@ open class AsynchronousOperation<T>: Operation, OutputProducing {
         os_log("%{public}s has started after being cancelled.", log: Log.general, type: .info, operationName)
       }
 
-      finish(result: .failure(NSError.AdvancedOperation.cancelled))
+      finish(result: .failure(NSError.cancelled))
       return
     }
 
@@ -174,7 +172,7 @@ open class AsynchronousOperation<T>: Operation, OutputProducing {
     }
 
     if isCancelled {
-      finish(result: .failure(NSError.AdvancedOperation.cancelled))
+      finish(result: .failure(NSError.cancelled))
     } else {
       execute(completion: finish)
     }
@@ -183,7 +181,8 @@ open class AsynchronousOperation<T>: Operation, OutputProducing {
   /// Subclasses must implement this to perform their work and they must not call `super`.
   /// The default implementation of this function traps.
   /// - Note: Before calling this method, the operation checks if it's already cancelled (and, in that case, finishes itself).
-  open func execute(completion: @escaping (OperationOutput) -> Void) {
+  /// - Note: About log in case of failure: you may want to use an `NSError` instance with debug message for the `NSDebugDescriptionErrorKey` key.
+  open func execute(completion: @escaping (Output) -> Void) {
     preconditionFailure("Subclasses must implement `execute`.")
   }
 
@@ -217,7 +216,7 @@ open class AsynchronousOperation<T>: Operation, OutputProducing {
   // MARK: - Private Methods
 
   /// Call this function to finish an operation that is currently executing.
-  private final func finish(result: OperationOutput) {
+  private final func finish(result: Output) {
     // State can also be "ready" here if the operation was cancelled before it was started.
     guard !isFinished else { return }
 
