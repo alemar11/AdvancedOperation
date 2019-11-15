@@ -22,20 +22,24 @@
 // SOFTWARE.
 
 import Foundation
+import XCTest
+@testable import AdvancedOperation
 
-extension NSError {
-  // Not localizable debug error message.
-  var debugErrorMessage: String {
-    return userInfo[NSDebugDescriptionErrorKey] as? String ?? "No debug message evailable for NSDebugDescriptionErrorKey."
+final class NSErrorAdvancedOperationTests: XCTestCase {
+  func testCancelledError() {
+    let error = NSError.cancelled
+    XCTAssertEqual(error.domain, identifier)
+    XCTAssertEqual(error.code, 1)
+    XCTAssertEqual(error.userInfo[NSDebugDescriptionErrorKey] as! String, "The operation has been cancelled.")
   }
-}
 
-extension NSError {
-  // Error thrown when an Operation gets cancelled.
-  static let cancelled: NSError = {
-    var info = [String: Any]()
-    info[NSDebugDescriptionErrorKey] = "The operation has been cancelled."
-    let error = NSError(domain: identifier, code: 1, userInfo: info)
-    return error
-  }()
+  func testNSErrorWithoutDebugKey() {
+    let error = NSError()
+    XCTAssertEqual(error.debugErrorMessage, defaultDebugMessage)
+  }
+
+  func testCustomNSErrorWithoutDebugKey() {
+    let error = MockError.failed
+    XCTAssertEqual(error.debugErrorMessage, defaultDebugMessage)
+  }
 }

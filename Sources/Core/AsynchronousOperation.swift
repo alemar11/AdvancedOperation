@@ -181,7 +181,7 @@ open class AsynchronousOperation<T>: Operation, OutputProducing {
   /// Subclasses must implement this to perform their work and they must not call `super`.
   /// The default implementation of this function traps.
   /// - Note: Before calling this method, the operation checks if it's already cancelled (and, in that case, finishes itself).
-  /// - Note: About log in case of failure: you may want to use an `NSError` instance with debug message for the `NSDebugDescriptionErrorKey` key.
+  /// - Note: For log purposes you may want to use an `NSError` or `CustomNSError` error with a debug message for the `NSDebugDescriptionErrorKey` key.
   open func execute(completion: @escaping (Output) -> Void) {
     preconditionFailure("Subclasses must implement `execute`.")
   }
@@ -240,7 +240,7 @@ open class AsynchronousOperation<T>: Operation, OutputProducing {
         }
 
       case .failure(let error):
-        let debugErrorMessage = (error as NSError).debugErrorMessage
+        let debugErrorMessage = error.debugErrorMessage
 
         if #available(iOS 12.0, iOSApplicationExtension 12.0, tvOS 12.0, watchOS 5.0, macOS 10.14, OSXApplicationExtension 10.14, *) {
           os_log(.info, log: Log.general, "%{public}s has finished with error: '%{private}s'.", operationName, debugErrorMessage)

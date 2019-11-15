@@ -125,7 +125,7 @@ final class AdvancedBlockOperationTests: XCTestCase {
   }
 
   func testBlockOperationCompletedWithErrorsInAsyncQueue() {
-    let error = MockError.generic(date: Date())
+    let error = MockError.generic
     var object = NSObject()
     weak var weakObject = object
 

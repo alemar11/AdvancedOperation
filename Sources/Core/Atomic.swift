@@ -28,21 +28,21 @@ import Foundation
 final class Atomic<T> {
   @usableFromInline
   var mutex = UnfairLock()
-
+  
   @usableFromInline
   var internalValue: T
-
-  public init(_ value: T) {
+  
+  init(_ value: T) {
     internalValue = value
   }
-
+  
   @inlinable
   var value: T {
     mutex.lock()
     defer { mutex.unlock() }
     return internalValue
   }
-
+  
   var isMutating: Bool {
     if mutex.try() {
       mutex.unlock()
@@ -50,7 +50,7 @@ final class Atomic<T> {
     }
     return true
   }
-
+  
   @discardableResult @inlinable
   func mutate<U>(_ transform: (inout T) throws -> U) rethrows -> U {
     mutex.lock()

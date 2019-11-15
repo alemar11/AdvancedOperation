@@ -29,26 +29,10 @@ import os.log
 
 // MARK: - Error
 
-internal enum MockError: Swift.Error, Equatable {
-  case test
-  case failed
+internal enum MockError: CustomNSError, Equatable {
   case cancelled(date: Date)
-  case generic(date: Date)
-
-  static func ==(lhs: MockError, rhs: MockError) -> Bool {
-    switch (lhs, rhs) {
-    case (.test, .test):
-      return true
-    case (.failed, .failed):
-      return true
-    case (let .cancelled(dateLhs), let .cancelled(dateRhs)):
-      return dateLhs == dateRhs
-    case (let .generic(dateLhs), let .generic(dateRhs)):
-      return dateLhs == dateRhs
-    default:
-      return false
-    }
-  }
+  case failed
+  case generic
 }
 
 // MARK: - AsynchronousOperation
@@ -75,7 +59,7 @@ final internal class SleepyAsyncOperation: AsynchronousOperation<Void> {
     DispatchQueue.global().async { [weak weakSelf = self] in
 
       guard let strongSelf = weakSelf else {
-        completion(.failure(MockError.test))
+        completion(.failure(MockError.generic))
         return
       }
 
@@ -193,7 +177,7 @@ final internal class RunUntilCancelledAsyncOperation: AsynchronousOperation<Void
 final internal class NotExecutableOperation: AsynchronousOperation<Void> {
   override func execute(completion: @escaping (Result<Void, Error>) -> Void) {
     XCTFail("This operation shouldn't be executed.")
-    completion(.failure(MockError.test))
+    completion(.failure(MockError.generic))
   }
 }
 
