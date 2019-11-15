@@ -2,133 +2,91 @@
   "warnings": [
     {
       "file": "/Users/amarzoli/Developer/x/AdvancedOperation/Sources/Core/AsynchronousOperation.swift",
-      "line": 38,
-      "symbol": "AsynchronousOperation.OperationOutput",
-      "symbol_kind": "source.lang.swift.decl.typealias",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/amarzoli/Developer/x/AdvancedOperation/Sources/Core/AsynchronousOperation.swift",
-      "line": 42,
+      "line": 40,
       "symbol": "AsynchronousOperation.isReady",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/amarzoli/Developer/x/AdvancedOperation/Sources/Core/AsynchronousOperation.swift",
-      "line": 46,
+      "line": 44,
       "symbol": "AsynchronousOperation.isExecuting",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/amarzoli/Developer/x/AdvancedOperation/Sources/Core/AsynchronousOperation.swift",
-      "line": 50,
+      "line": 48,
       "symbol": "AsynchronousOperation.isFinished",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/amarzoli/Developer/x/AdvancedOperation/Sources/Core/AsynchronousOperation.swift",
-      "line": 54,
+      "line": 52,
       "symbol": "AsynchronousOperation.isAsynchronous",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/amarzoli/Developer/x/AdvancedOperation/Sources/Core/AsynchronousOperation.swift",
-      "line": 56,
+      "line": 54,
       "symbol": "AsynchronousOperation.isConcurrent",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/amarzoli/Developer/x/AdvancedOperation/Sources/Core/AsynchronousOperation.swift",
-      "line": 120,
+      "line": 118,
       "symbol": "AsynchronousOperation.start()",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/amarzoli/Developer/x/AdvancedOperation/Sources/Core/AsynchronousOperation.swift",
-      "line": 169,
+      "line": 167,
       "symbol": "AsynchronousOperation.main()",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/amarzoli/Developer/x/AdvancedOperation/Sources/Core/AsynchronousOperation.swift",
-      "line": 198,
+      "line": 197,
       "symbol": "AsynchronousOperation.cancel()",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/amarzoli/Developer/x/AdvancedOperation/Sources/Core/AsynchronousOperation.swift",
-      "line": 259,
+      "line": 258,
       "symbol": "AsynchronousOperation.description",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/amarzoli/Developer/x/AdvancedOperation/Sources/Core/AsynchronousOperation.swift",
-      "line": 263,
+      "line": 262,
       "symbol": "AsynchronousOperation.debugDescription",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/amarzoli/Developer/x/AdvancedOperation/Sources/Core/Injection.swift",
-      "line": 26,
-      "symbol": "InputConsuming",
-      "symbol_kind": "source.lang.swift.decl.protocol",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/amarzoli/Developer/x/AdvancedOperation/Sources/Core/Injection.swift",
-      "line": 27,
+      "line": 28,
       "symbol": "InputConsuming.Input",
       "symbol_kind": "source.lang.swift.decl.associatedtype",
       "warning": "undocumented"
     },
     {
       "file": "/Users/amarzoli/Developer/x/AdvancedOperation/Sources/Core/Injection.swift",
-      "line": 28,
-      "symbol": "InputConsuming.input",
-      "symbol_kind": "source.lang.swift.decl.var.instance",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/amarzoli/Developer/x/AdvancedOperation/Sources/Core/Injection.swift",
-      "line": 31,
-      "symbol": "OutputProducing",
-      "symbol_kind": "source.lang.swift.decl.protocol",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/amarzoli/Developer/x/AdvancedOperation/Sources/Core/Injection.swift",
-      "line": 32,
+      "line": 35,
       "symbol": "OutputProducing.Output",
       "symbol_kind": "source.lang.swift.decl.associatedtype",
       "warning": "undocumented"
     },
     {
       "file": "/Users/amarzoli/Developer/x/AdvancedOperation/Sources/Core/Injection.swift",
-      "line": 33,
-      "symbol": "OutputProducing.output",
-      "symbol_kind": "source.lang.swift.decl.var.instance",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/amarzoli/Developer/x/AdvancedOperation/Sources/Core/Injection.swift",
-      "line": 36,
-      "symbol": "OutputProducing",
-      "symbol_kind": "source.lang.swift.decl.extension",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/amarzoli/Developer/x/AdvancedOperation/Sources/Core/Injection.swift",
-      "line": 54,
+      "line": 58,
       "symbol": "OutputProducing.inject(into:transform:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
