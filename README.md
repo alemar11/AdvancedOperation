@@ -1,16 +1,18 @@
 [![Swift 5.0](https://img.shields.io/badge/Swift-5.0-orange.svg?style=flat)](https://developer.apple.com/swift)
 ![Platforms](https://img.shields.io/badge/Platform-iOS%2011%2B%20|%20macOS%2010.13+%20|%20tvOS%2011+%20|%20watchOS%204+-blue.svg) 
 
-|Branch|TravisCI Build Status (all os)|Code Coverage
+|Branch|Travis CI Build Status |
 |----|----|----|
-|Master|[![TravisCI](https://travis-ci.org/tinrobots/AdvancedOperation.svg?branch=master)](https://travis-ci.org/tinrobots/AdvancedOperation)|[![codecov](https://codecov.io/gh/tinrobots/AdvancedOperation/branch/master/graph/badge.svg)](https://codecov.io/gh/tinrobots/AdvancedOperation)
+|Master|[![TravisCI](https://travis-ci.org/tinrobots/AdvancedOperation.svg?branch=master)](https://travis-ci.org/tinrobots/AdvancedOperation)|
+
+[![codecov](https://codecov.io/gh/tinrobots/AdvancedOperation/branch/master/graph/badge.svg)](https://codecov.io/gh/tinrobots/AdvancedOperation)
 
 [![codebeat badge](https://codebeat.co/badges/c529e9e6-2ace-45ac-b5d1-3253dcd36ac4)](https://codebeat.co/projects/github-com-tinrobots-advancedoperation-master)
 
 ## AdvancedOperation
 [![GitHub release](https://img.shields.io/github/release/tinrobots/AdvancedOperation.svg)](https://github.com/tinrobots/AdvancedOperation/releases) 
 
-A library of Swift utils to ease your iOS, macOS, watchOS, tvOS and Linux development.
+Operation usefull extensions.
 
 - [Requirements](#requirements)
 - [Documentation](#documentation)
@@ -21,7 +23,7 @@ A library of Swift utils to ease your iOS, macOS, watchOS, tvOS and Linux develo
 ## Requirements
 
 - iOS 11.0+ / macOS 10.13+ / tvOS 11.0+ / watchOS 4.0+
-- Xcode 11.1
+- Xcode 12.2
 - Swift 5.0
 
 ## Documentation
