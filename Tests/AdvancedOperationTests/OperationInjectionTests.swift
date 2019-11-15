@@ -114,33 +114,4 @@ final class OperationInjectionTests: XCTestCase {
 
     wait(for: [expectation1], timeout: 10)
   }
-
-  func testMemoryLeaks() {
-    let queue = OperationQueue()
-    var operation1: IntToStringAsyncOperation? = IntToStringAsyncOperation()
-    var operation2: StringToIntAsyncOperation? = StringToIntAsyncOperation()
-
-    weak var weakOperation1 = operation1
-    weak var weakOperation2 = operation2
-
-    autoreleasepool {
-      operation1!.input = 10
-      let injection = operation1!.inject(into: operation2!) { $0?.success }
-
-      queue.addOperations([operation1!, operation2!, injection], waitUntilFinished: true)
-
-      XCTAssertEqual(operation2!.output?.success, 10)
-
-      // replacing operations with new ones to force deinit on the previous ones.
-      operation1 = IntToStringAsyncOperation()
-      operation2 = StringToIntAsyncOperation()
-    }
-
-    // sometimes the OperationQueue needs more time to remove the operations
-    usleep(5000) // //will sleep for .005 seconds
-    // while weakOperation1 != nil || weakOperation2 != nil { }
-
-    XCTAssertNil(weakOperation1)
-    XCTAssertNil(weakOperation2)
-  }
 }
