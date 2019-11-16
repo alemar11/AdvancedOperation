@@ -21,4 +21,25 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-internal let identifier = "org.tinrobots.AdvancedOperation"
+import Foundation
+import XCTest
+@testable import AdvancedOperation
+
+final class NSErrorAdvancedOperationTests: XCTestCase {
+  func testCancelledError() {
+    let error = NSError.cancelled
+    XCTAssertEqual(error.domain, identifier)
+    XCTAssertEqual(error.code, 1)
+    XCTAssertEqual(error.userInfo[NSDebugDescriptionErrorKey] as! String, "The operation has been cancelled.")
+  }
+
+  func testNSErrorWithoutDebugKey() {
+    let error = NSError()
+    XCTAssertEqual(error.debugErrorMessage, defaultDebugMessage)
+  }
+
+  func testCustomNSErrorWithoutDebugKey() {
+    let error = MockError.failed
+    XCTAssertEqual(error.debugErrorMessage, defaultDebugMessage)
+  }
+}

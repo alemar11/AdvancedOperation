@@ -21,4 +21,40 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-internal let identifier = "org.tinrobots.AdvancedOperation"
+import Foundation
+
+/// A mutex wrapper around contents.
+/// Useful for threadsafe access to single values but less useful for compound values where different components might need to be updated at different times.
+final class Atomic<T> {
+  @usableFromInline
+  var mutex = UnfairLock()
+  
+  @usableFromInline
+  var internalValue: T
+  
+  init(_ value: T) {
+    internalValue = value
+  }
+  
+  @inlinable
+  var value: T {
+    mutex.lock()
+    defer { mutex.unlock() }
+    return internalValue
+  }
+  
+  var isMutating: Bool {
+    if mutex.try() {
+      mutex.unlock()
+      return false
+    }
+    return true
+  }
+  
+  @discardableResult @inlinable
+  func mutate<U>(_ transform: (inout T) throws -> U) rethrows -> U {
+    mutex.lock()
+    defer { mutex.unlock() }
+    return try transform(&internalValue)
+  }
+}

@@ -21,4 +21,24 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-internal let identifier = "org.tinrobots.AdvancedOperation"
+extension Result {
+  // Returns the content associated with a failure.
+  var failure: Failure? {
+    switch self {
+    case .success:
+      return nil
+    case .failure(let error):
+      return error
+    }
+  }
+
+  // Returns the content associated with a success.
+  var success: Success? {
+    switch self {
+    case .success(let success):
+      return success
+    case .failure:
+      return nil
+    }
+  }
+}

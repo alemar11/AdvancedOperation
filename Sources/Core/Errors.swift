@@ -21,4 +21,40 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-internal let identifier = "org.tinrobots.AdvancedOperation"
+import Foundation
+
+let defaultDebugMessage = "No debug message evailable for NSDebugDescriptionErrorKey."
+
+extension NSError {
+  // Not localizable debug error message.
+  var debugErrorMessage: String {
+    return userInfo[NSDebugDescriptionErrorKey] as? String ?? defaultDebugMessage
+  }
+}
+
+extension NSError {
+  // Error thrown when an Operation gets cancelled.
+  static let cancelled: NSError = {
+    var info = [String: Any]()
+    info[NSDebugDescriptionErrorKey] = "The operation has been cancelled."
+    let error = NSError(domain: identifier, code: 1, userInfo: info)
+    return error
+  }()
+}
+
+extension CustomNSError {
+  // Not localizable debug error message.
+  var debugErrorMessage: String {
+    return errorUserInfo[NSDebugDescriptionErrorKey] as? String ?? defaultDebugMessage
+  }
+}
+
+extension Error {
+  // Not localizable debug error message.
+  var debugErrorMessage: String {
+    if let error = self as? CustomNSError {
+      return error.debugErrorMessage
+    }
+    return (self as NSError).debugErrorMessage
+  }
+}

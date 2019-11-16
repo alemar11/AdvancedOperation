@@ -21,4 +21,31 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-internal let identifier = "org.tinrobots.AdvancedOperation"
+import Foundation
+
+/// An object that coordinates the operation of multiple threads of execution within the same application.
+final class UnfairLock: NSLocking {
+  private var unfairLock: os_unfair_lock_t
+
+  init() {
+    unfairLock = .allocate(capacity: 1)
+    unfairLock.initialize(to: os_unfair_lock())
+  }
+
+  func lock() {
+    os_unfair_lock_lock(unfairLock)
+  }
+
+  func unlock() {
+    os_unfair_lock_unlock(unfairLock)
+  }
+
+  func `try`() -> Bool {
+    return os_unfair_lock_trylock(unfairLock)
+  }
+
+  deinit {
+    unfairLock.deinitialize(count: 1)
+    unfairLock.deallocate()
+  }
+}
