@@ -33,7 +33,6 @@
     }
   ],
   "defaultOptions" : {
-    "mainThreadCheckerEnabled" : false,
     "targetForVariableExpansion" : {
       "containerPath" : "container:AdvancedOperation.xcodeproj",
       "identifier" : "234130A61F9606B8002BE7FC",

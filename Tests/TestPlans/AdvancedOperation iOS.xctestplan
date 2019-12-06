@@ -38,6 +38,7 @@
             "value" : "1"
           }
         ],
+        "mainThreadCheckerEnabled" : true,
         "targetForVariableExpansion" : {
           "containerPath" : "container:AdvancedOperation.xcodeproj",
           "identifier" : "234130861F9605F5002BE7FC",

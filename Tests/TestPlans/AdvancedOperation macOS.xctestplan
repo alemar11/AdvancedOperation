@@ -7,6 +7,7 @@
         "addressSanitizer" : {
           "enabled" : true
         },
+        "mainThreadCheckerEnabled" : true,
         "nsZombieEnabled" : true,
         "threadSanitizerEnabled" : false,
         "undefinedBehaviorSanitizerEnabled" : false
