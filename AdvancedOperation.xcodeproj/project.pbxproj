@@ -122,6 +122,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		0622C311239A717D004F3FA5 /* AdvancedOperation macOS.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = "AdvancedOperation macOS.xctestplan"; sourceTree = "<group>"; };
 		2326CC24206E6199001876A2 /* Result+Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Result+Utils.swift"; sourceTree = "<group>"; };
 		232F3AAD206041DE00FC45CB /* AdvancedOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdvancedOperation.swift; sourceTree = "<group>"; };
 		234130871F9605F5002BE7FC /* AdvancedOperation.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = AdvancedOperation.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -213,6 +214,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		0622C313239A71CE004F3FA5 /* TestPlans */ = {
+			isa = PBXGroup;
+			children = (
+				0622C311239A717D004F3FA5 /* AdvancedOperation macOS.xctestplan */,
+			);
+			path = TestPlans;
+			sourceTree = "<group>";
+		};
 		230B47FD200EABEE00F46852 /* AdvancedOperationTests */ = {
 			isa = PBXGroup;
 			children = (
@@ -277,6 +286,7 @@
 		234130931F960618002BE7FC /* Tests */ = {
 			isa = PBXGroup;
 			children = (
+				0622C313239A71CE004F3FA5 /* TestPlans */,
 				230B47FD200EABEE00F46852 /* AdvancedOperationTests */,
 			);
 			path = Tests;

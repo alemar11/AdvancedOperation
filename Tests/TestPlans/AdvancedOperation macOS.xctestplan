@@ -1,0 +1,66 @@
+{
+  "configurations" : [
+    {
+      "id" : "0201F7CB-FB89-4FF7-B78D-57161E51A776",
+      "name" : "Memory Checking",
+      "options" : {
+        "addressSanitizer" : {
+          "enabled" : true
+        },
+        "nsZombieEnabled" : true,
+        "threadSanitizerEnabled" : false,
+        "undefinedBehaviorSanitizerEnabled" : false
+      }
+    },
+    {
+      "id" : "D5F85B0D-44AB-483C-B186-997FA50B6469",
+      "name" : "Concurrency",
+      "options" : {
+
+      }
+    },
+    {
+      "id" : "A41E85D5-7B07-455D-8F5A-44FBCAC3DE6B",
+      "name" : "Extra Diagnostics",
+      "options" : {
+        "environmentVariableEntries" : [
+          {
+            "key" : "org.tinrobots.AdvancedOperation.LOG_ENABLED",
+            "value" : "1"
+          }
+        ],
+        "userAttachmentLifetime" : "deleteOnSuccess"
+      }
+    }
+  ],
+  "defaultOptions" : {
+    "environmentVariableEntries" : [
+      {
+        "key" : "org.tinrobots.AdvancedOperation.LOG_ENABLED",
+        "value" : "1"
+      }
+    ],
+    "mainThreadCheckerEnabled" : false,
+    "targetForVariableExpansion" : {
+      "containerPath" : "container:AdvancedOperation.xcodeproj",
+      "identifier" : "234130991F960691002BE7FC",
+      "name" : "AdvancedOperation macOS"
+    },
+    "testExecutionOrdering" : "random",
+    "threadSanitizerEnabled" : true,
+    "uiTestingScreenshotsLifetime" : "keepNever",
+    "undefinedBehaviorSanitizerEnabled" : true,
+    "userAttachmentLifetime" : "keepNever"
+  },
+  "testTargets" : [
+    {
+      "parallelizable" : true,
+      "target" : {
+        "containerPath" : "container:AdvancedOperation.xcodeproj",
+        "identifier" : "23725070200522820000A442",
+        "name" : "AdvancedOperation Tests macOS"
+      }
+    }
+  ],
+  "version" : 1
+}
