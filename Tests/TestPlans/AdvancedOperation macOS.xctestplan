@@ -16,7 +16,9 @@
       "id" : "D5F85B0D-44AB-483C-B186-997FA50B6469",
       "name" : "Concurrency",
       "options" : {
+        "environmentVariableEntries" : [
 
+        ]
       }
     },
     {
@@ -35,10 +37,7 @@
   ],
   "defaultOptions" : {
     "environmentVariableEntries" : [
-      {
-        "key" : "org.tinrobots.AdvancedOperation.LOG_ENABLED",
-        "value" : "1"
-      }
+
     ],
     "mainThreadCheckerEnabled" : false,
     "targetForVariableExpansion" : {
