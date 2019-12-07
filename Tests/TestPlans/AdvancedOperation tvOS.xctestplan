@@ -1,0 +1,55 @@
+{
+  "configurations" : [
+    {
+      "id" : "029A1CB9-2159-41B8-A2DD-0651322E0A08",
+      "name" : "Memory Checking",
+      "options" : {
+        "addressSanitizer" : {
+          "enabled" : true
+        },
+        "nsZombieEnabled" : true
+      }
+    },
+    {
+      "id" : "003260B1-F0FE-444B-BC16-365F315312C4",
+      "name" : "Concurrency",
+      "options" : {
+        "threadSanitizerEnabled" : true,
+        "undefinedBehaviorSanitizerEnabled" : true
+      }
+    },
+    {
+      "id" : "74A57F05-40D4-414D-AC2D-11C5BB050E49",
+      "name" : "Extra Diagnostics",
+      "options" : {
+        "environmentVariableEntries" : [
+          {
+            "key" : "org.tinrobots.AdvancedOperation.LOG_ENABLED",
+            "value" : "1"
+          }
+        ],
+        "userAttachmentLifetime" : "deleteOnSuccess"
+      }
+    }
+  ],
+  "defaultOptions" : {
+    "targetForVariableExpansion" : {
+      "containerPath" : "container:AdvancedOperation.xcodeproj",
+      "identifier" : "234130A61F9606B8002BE7FC",
+      "name" : "AdvancedOperation tvOS"
+    },
+    "testExecutionOrdering" : "random",
+    "userAttachmentLifetime" : "keepNever"
+  },
+  "testTargets" : [
+    {
+      "parallelizable" : true,
+      "target" : {
+        "containerPath" : "container:AdvancedOperation.xcodeproj",
+        "identifier" : "2372B43C1F960DCB00189A32",
+        "name" : "AdvancedOperation Tests tvOS"
+      }
+    }
+  ],
+  "version" : 1
+}
