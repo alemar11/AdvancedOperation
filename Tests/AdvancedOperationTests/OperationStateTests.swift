@@ -27,24 +27,24 @@ import XCTest
 final class OperationStateTests: XCTestCase {
   func testTransition() {
     // ready
-    XCTAssertTrue(AsynchronousOperation<Void>.State.ready.canTransition(to: .executing))
-    XCTAssertTrue(AsynchronousOperation<Void>.State.ready.canTransition(to: .finished))
-    XCTAssertFalse(AsynchronousOperation<Void>.State.ready.canTransition(to: .ready))
+    XCTAssertTrue(AsynchronousOperation<Void, MockError>.State.ready.canTransition(to: .executing))
+    XCTAssertTrue(AsynchronousOperation<Void, MockError>.State.ready.canTransition(to: .finished))
+    XCTAssertFalse(AsynchronousOperation<Void, MockError>.State.ready.canTransition(to: .ready))
 
     // Executing
-    XCTAssertFalse(AsynchronousOperation<Void>.State.executing.canTransition(to: .executing))
-    XCTAssertTrue(AsynchronousOperation<Void>.State.executing.canTransition(to: .finished))
-    XCTAssertFalse(AsynchronousOperation<Void>.State.executing.canTransition(to: .ready))
+    XCTAssertFalse(AsynchronousOperation<Void, MockError>.State.executing.canTransition(to: .executing))
+    XCTAssertTrue(AsynchronousOperation<Void, MockError>.State.executing.canTransition(to: .finished))
+    XCTAssertFalse(AsynchronousOperation<Void, MockError>.State.executing.canTransition(to: .ready))
 
     // finished
-    XCTAssertFalse(AsynchronousOperation<Void>.State.finished.canTransition(to: .executing))
-    XCTAssertFalse(AsynchronousOperation<Void>.State.finished.canTransition(to: .finished))
-    XCTAssertFalse(AsynchronousOperation<Void>.State.finished.canTransition(to: .ready))
+    XCTAssertFalse(AsynchronousOperation<Void, MockError>.State.finished.canTransition(to: .executing))
+    XCTAssertFalse(AsynchronousOperation<Void, MockError>.State.finished.canTransition(to: .finished))
+    XCTAssertFalse(AsynchronousOperation<Void, MockError>.State.finished.canTransition(to: .ready))
   }
 
   func testDebugDescription() {
-    XCTAssertEqual(AsynchronousOperation<Void>.State.ready.debugDescription.lowercased(), "ready")
-    XCTAssertEqual(AsynchronousOperation<Void>.State.executing.debugDescription.lowercased(), "executing")
-    XCTAssertEqual(AsynchronousOperation<Void>.State.finished.debugDescription.lowercased(), "finished")
+    XCTAssertEqual(AsynchronousOperation<Void, MockError>.State.ready.debugDescription.lowercased(), "ready")
+    XCTAssertEqual(AsynchronousOperation<Void, MockError>.State.executing.debugDescription.lowercased(), "executing")
+    XCTAssertEqual(AsynchronousOperation<Void, MockError>.State.finished.debugDescription.lowercased(), "finished")
   }
 }

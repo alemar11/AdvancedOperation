@@ -26,13 +26,6 @@ import XCTest
 @testable import AdvancedOperation
 
 final class NSErrorAdvancedOperationTests: XCTestCase {
-  func testCancelledError() {
-    let error = NSError.cancelled
-    XCTAssertEqual(error.domain, identifier)
-    XCTAssertEqual(error.code, 1)
-    XCTAssertEqual(error.userInfo[NSDebugDescriptionErrorKey] as! String, "The operation has been cancelled.")
-  }
-
   func testNSErrorWithoutDebugKey() {
     let error = NSError()
     XCTAssertEqual(error.debugErrorMessage, defaultDebugMessage)

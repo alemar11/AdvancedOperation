@@ -278,16 +278,16 @@ final class AsynchronousOperationTests: XCTestCase {
 
     conditionsOperationToLetOperationThreeRun.addDependency(operation4)
     operation3.addDependency(conditionsOperationToLetOperationThreeRun)
-    operation4.name = "DelayOperation - Cancelled"
+    operation4.name = "DelayOperation<Cancelled>"
 
     operation4.cancel()
 
     queue.addOperations([operation1, operation2, operation3, operation4, conditionsOperationToLetOperationOneRun, conditionsOperationToLetOperationThreeRun], waitUntilFinished: true)
 
     XCTAssertTrue(operation4.isCancelled)
-    XCTAssertNotNil(operation3.output?.failure)
+    XCTAssertNil(operation3.output?.failure, "Cancelled \(operation3.operationName) shouldn't have any output")
     XCTAssertFalse(operation2.isCancelled)
-    XCTAssertNotNil(operation1.output?.failure)
+    XCTAssertNil(operation1.output?.failure, "Cancelled \(operation1.operationName) shouldn't have any output")
     XCTAssertTrue(operation1.isCancelled)
     XCTAssertTrue(operation1.isFinished)
   }
@@ -342,13 +342,13 @@ final class AsynchronousOperationTests: XCTestCase {
     waitForExpectations(timeout: 10)
     XCTAssertTrue(operation4.isCancelled)
 
-    XCTAssertNotNil(operation3.output?.failure)
+    XCTAssertNil(operation3.output?.failure, "Cancelled \(operation3.operationName) shouldn't have any output")
     XCTAssertTrue(operation3.isCancelled)
 
-    XCTAssertNotNil(operation2.output?.failure)
+    XCTAssertNil(operation2.output?.failure, "Cancelled \(operation3.operationName) shouldn't have any output")
     XCTAssertTrue(operation2.isCancelled)
 
-    XCTAssertNotNil(operation1.output?.failure)
+    XCTAssertNil(operation1.output?.failure, "Cancelled \(operation3.operationName) shouldn't have any output")
     XCTAssertTrue(operation1.isCancelled)
   }
 }

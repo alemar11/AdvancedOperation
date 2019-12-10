@@ -32,16 +32,6 @@ extension NSError {
   }
 }
 
-extension NSError {
-  // Error thrown when an Operation gets cancelled.
-  static let cancelled: NSError = {
-    var info = [String: Any]()
-    info[NSDebugDescriptionErrorKey] = "The operation has been cancelled."
-    let error = NSError(domain: identifier, code: 1, userInfo: info)
-    return error
-  }()
-}
-
 extension CustomNSError {
   // Not localizable debug error message.
   var debugErrorMessage: String {
