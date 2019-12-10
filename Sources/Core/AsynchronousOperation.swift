@@ -35,7 +35,7 @@ import os.log
 /// To enable logging:
 /// - To enable log add this environment key: `org.tinrobots.AdvancedOperation.LOG_ENABLED`
 /// - To enable signposts add this environment key: `org.tinrobots.AdvancedOperation.SIGNPOST_ENABLED`
-open class AsynchronousOperation<Success, Failure>: Operation, OutputProducing where Failure: Error {
+open class AsynchronousOperation<Success, Failure>: Operation, OutputProducing where Failure: Swift.Error {
   // MARK: - Public Properties
   
   open override var isReady: Bool {

@@ -25,7 +25,7 @@ import Dispatch
 import Foundation
 
 /// A concurrent sublcass of `AsynchronousOperation` to execute a closure.
-public final class AsynchronousBlockOperation<Success, Failure>: AsynchronousOperation<Success, Failure> where Failure: Error {
+public final class AsynchronousBlockOperation<Success, Failure>: AsynchronousOperation<Success, Failure> where Failure: Swift.Error {
   /// A closure type that takes a closure as its parameter.
   public typealias OperationBlock = (@escaping (Output) -> Void) -> Void
 
@@ -70,7 +70,7 @@ public final class AsynchronousBlockOperation<Success, Failure>: AsynchronousOpe
   }
 }
 
-extension AsynchronousBlockOperation where Failure == Never {
+extension AsynchronousBlockOperation where Failure == Swift.Never {
   /// A convenience initializer that creates an always succeeding `AsynchronousBlockOperation`.
   ///
   /// - Parameters:
