@@ -1,5 +1,10 @@
 # Changelog
 
+### 5.1.0 (WIP)
+
+- AsynchronousOperation now is generic over `Success` and `Failure` types.
+- removed `cleanup` method.
+
 ### 5.0.0 ⭐
 
 - Added `AsynchronousOperation`.

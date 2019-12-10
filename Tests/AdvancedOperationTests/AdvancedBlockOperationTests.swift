@@ -26,7 +26,7 @@ import XCTest
 
 final class AdvancedBlockOperationTests: XCTestCase {
   func testCancel() {
-    let operation = AsynchronousBlockOperation<Void> { complete in
+    let operation = AsynchronousBlockOperation<Void, MockError> { complete in
       DispatchQueue(label: "\(identifier).\(#function)", attributes: .concurrent).asyncAfter(deadline: .now() + 2) {
         complete(.success(()))
       }
@@ -41,11 +41,11 @@ final class AdvancedBlockOperationTests: XCTestCase {
     wait(for: [expectation1], timeout: 4)
 
     XCTAssertTrue(operation.isCancelled)
-    XCTAssertEqual(operation.name, "AsynchronousBlockOperation<()>")
+    XCTAssertEqual(operation.name, "AsynchronousBlockOperation<(), MockError>")
   }
 
   func testInitializerWithQueue() {
-    let operation = AsynchronousBlockOperation<Int>(queue: .main) {
+    let operation = AsynchronousBlockOperation<Int, MockError>(queue: .main) {
       return .success(11)
     }
 
@@ -53,11 +53,11 @@ final class AdvancedBlockOperationTests: XCTestCase {
     operation.start()
     wait(for: [expectation1], timeout: 4)
     XCTAssertEqual(operation.output?.success, 11)
-    XCTAssertEqual(operation.name, "AsynchronousBlockOperation<Int>")
+    XCTAssertEqual(operation.name, "AsynchronousBlockOperation<Int, MockError>")
   }
 
   func testCancelBeforeStarting() {
-    let operation = AsynchronousBlockOperation<Void> { complete in
+    let operation = AsynchronousBlockOperation<Void, MockError> { complete in
       DispatchQueue(label: "\(identifier).\(#function)", attributes: .concurrent).asyncAfter(deadline: .now() + 2) {
         complete(.success(()))
       }
@@ -75,7 +75,7 @@ final class AdvancedBlockOperationTests: XCTestCase {
   }
 
   func testEarlyBailOut() {
-    let operation = AsynchronousBlockOperation<Void> { complete in complete(.success(())) }
+    let operation = AsynchronousBlockOperation<Void, MockError> { complete in complete(.success(())) }
     let expectation1 = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: operation, expectedValue: true)
     operation.cancel()
     operation.start()
@@ -86,7 +86,7 @@ final class AdvancedBlockOperationTests: XCTestCase {
   }
 
   func testBlockOperationCompletedInAsyncQueue() {
-    let operation = AsynchronousBlockOperation<Void> { complete in
+    let operation = AsynchronousBlockOperation<Void, MockError> { complete in
       XCTAssertTrue(Thread.isMainThread)
       DispatchQueue(label: "\(identifier).\(#function)", attributes: .concurrent).asyncAfter(deadline: .now() + 3) {
         complete(.success(()))
@@ -101,7 +101,7 @@ final class AdvancedBlockOperationTests: XCTestCase {
 
   func testSuccessfulOutput() {
     let text = "Hello World"
-    let operation = AsynchronousBlockOperation<String> { complete in
+    let operation = AsynchronousBlockOperation<String, MockError> { complete in
       complete(.success(text))
     }
 
@@ -109,11 +109,11 @@ final class AdvancedBlockOperationTests: XCTestCase {
     operation.start()
     wait(for: [expectation1], timeout: 4)
     XCTAssertEqual(operation.output?.success, text)
-    XCTAssertEqual(operation.name, "AsynchronousBlockOperation<String>")
+    XCTAssertEqual(operation.name, "AsynchronousBlockOperation<String, MockError>")
   }
 
   func testFailedOutput() {
-    let operation = AsynchronousBlockOperation<String> { complete in
+    let operation = AsynchronousBlockOperation<String, MockError> { complete in
       complete(.failure(MockError.failed))
     }
 
@@ -130,7 +130,7 @@ final class AdvancedBlockOperationTests: XCTestCase {
     weak var weakObject = object
 
     autoreleasepool {
-      var operation = AsynchronousBlockOperation<Void> { [weak object] complete in
+      var operation = AsynchronousBlockOperation<Void, MockError> { [weak object] complete in
         DispatchQueue(label: "\(identifier).\(#function)", attributes: .concurrent).asyncAfter(deadline: .now() + 2) {
           _ = object
           complete(.failure(error))
@@ -144,7 +144,7 @@ final class AdvancedBlockOperationTests: XCTestCase {
       waitForExpectations(timeout: 5)
       XCTAssertTrue(operation.isFinished)
 
-      if let opError = operation.output?.failure as? MockError {
+      if let opError = operation.output?.failure {
         XCTAssertEqual(opError, error)
       } else {
         XCTFail("Wrong error type.")
@@ -162,7 +162,7 @@ final class AdvancedBlockOperationTests: XCTestCase {
     let expectation2 = expectation(description: "\(#function)\(#line)")
     // The other AdvancedBlockOperation initializer will fail here becase we need a more fine control
     // on when the operation should be considered finished.
-    let operation = AsynchronousBlockOperation<Void>() { complete in
+    let operation = AsynchronousBlockOperation<Void, MockError>() { complete in
       DispatchQueue.global().async {
         sleep(3)
         expectation1.fulfill()
@@ -218,7 +218,7 @@ final class AdvancedBlockOperationTests: XCTestCase {
     weak var weakObject = object
 
     autoreleasepool {
-      var operation = AsynchronousBlockOperation<Void> { [unowned object] complete in
+      var operation = AsynchronousBlockOperation<Void, MockError> { [unowned object] complete in
         DispatchQueue(label: "\(identifier).\(#function)", attributes: .concurrent).async {
           _ = object
           complete(.success(()))
@@ -232,7 +232,7 @@ final class AdvancedBlockOperationTests: XCTestCase {
       waitForExpectations(timeout: 3)
 
       // Memory leaks test: once the operation is released, the captured object (by reference) should be nil (weakObject)
-      operation = AsynchronousBlockOperation(block: { })
+      operation = AsynchronousBlockOperation { _ in }
       object = NSObject()
     }
 

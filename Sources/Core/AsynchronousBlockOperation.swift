@@ -25,7 +25,7 @@ import Dispatch
 import Foundation
 
 /// A concurrent sublcass of `AsynchronousOperation` to execute a closure.
-public final class AsynchronousBlockOperation<T>: AsynchronousOperation<T> {
+public final class AsynchronousBlockOperation<Success, Failure>: AsynchronousOperation<Success, Failure> where Failure: Error {
   /// A closure type that takes a closure as its parameter.
   public typealias OperationBlock = (@escaping (Output) -> Void) -> Void
 
@@ -43,7 +43,7 @@ public final class AsynchronousBlockOperation<T>: AsynchronousOperation<T> {
   public init(block: @escaping OperationBlock) {
     self.block = block
     super.init()
-    self.name = "AsynchronousBlockOperation<\(T.self)>"
+    self.name = "AsynchronousBlockOperation<\(Success.self), \(Failure.self)>"
   }
 
   /// A convenience initializer.
@@ -61,26 +61,28 @@ public final class AsynchronousBlockOperation<T>: AsynchronousOperation<T> {
     })
   }
 
-  /// A convenience initializer that creates an always succeeding `AsynchronousBlockOperation`.
-  ///
-  /// - Parameters:
-  ///   - queue: The `DispatchQueue` where the operation will run its `block`.
-  ///   - block: The closure to run when the operation executes.
-  /// - Note: The block is run concurrently on the given `queue` and must return a value to complete successfully.
-  public convenience init(queue: DispatchQueue = .main, block: @escaping () -> T) {
-    self.init(block: { complete in
-      queue.async {
-        let result = block()
-        complete(.success(result))
-      }
-    })
-  }
-
   // MARK: - Overrides
 
   public override func execute(completion: @escaping (Output) -> Void) {
     block {
       completion($0)
     }
+  }
+}
+
+extension AsynchronousBlockOperation where Failure == Never {
+  /// A convenience initializer that creates an always succeeding `AsynchronousBlockOperation`.
+  ///
+  /// - Parameters:
+  ///   - queue: The `DispatchQueue` where the operation will run its `block`.
+  ///   - block: The closure to run when the operation executes.
+  /// - Note: The block is run concurrently on the given `queue` and must return a value to complete successfully.
+  public convenience init(queue: DispatchQueue = .main, block: @escaping () -> Success) {
+    self.init(block: { complete in
+      queue.async {
+        let result = block()
+        complete(.success(result))
+      }
+    })
   }
 }
