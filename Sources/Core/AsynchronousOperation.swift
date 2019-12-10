@@ -186,14 +186,6 @@ open class AsynchronousOperation<T>: Operation, OutputProducing {
     preconditionFailure("Subclasses must implement `execute`.")
   }
 
-  /// A subclass will probably need to override `cleanup` to tear down resources.
-  ///
-  /// At this point the operation is about to be finished and the final output is already created.
-  /// - Note: It is called even if the operation is cancelled.
-  open func cleanup() {
-    // subclass
-  }
-
   open override func cancel() {
     lock.lock()
     defer { lock.unlock() }
@@ -226,7 +218,6 @@ open class AsynchronousOperation<T>: Operation, OutputProducing {
     switch state {
     case .ready, .executing:
       self.output = result
-      cleanup()
       state = .finished
       isRunning.mutate { $0 = false }
 
