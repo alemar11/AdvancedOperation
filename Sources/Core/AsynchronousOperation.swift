@@ -35,6 +35,7 @@ import os.log
 /// To enable logging:
 /// - To enable log add this environment key: `org.tinrobots.AdvancedOperation.LOG_ENABLED`
 /// - To enable signposts add this environment key: `org.tinrobots.AdvancedOperation.SIGNPOST_ENABLED`
+/// - To enable point of interests add this environment key: `org.tinrobots.AdvancedOperation.POI_ENABLED`
 open class AsynchronousOperation<Success, Failure>: Operation, OutputProducing where Failure: Swift.Error {
   // MARK: - Public Properties
   
@@ -307,7 +308,7 @@ private enum Log {
   /// The `OSLog` instance used to track the operation changes (by default is disabled).
   static var general: OSLog {
     if ProcessInfo.processInfo.environment.keys.contains("\(identifier).LOG_ENABLED") {
-      return OSLog(subsystem: identifier, category: "Operation")
+      return OSLog(subsystem: identifier, category: "General")
     } else {
       return .disabled
     }
@@ -317,7 +318,7 @@ private enum Log {
   @available(iOS 12.0, iOSApplicationExtension 12.0, tvOS 12.0, watchOS 5.0, macOS 10.14, OSXApplicationExtension 10.14, *)
   static var signpost: OSLog {
     if ProcessInfo.processInfo.environment.keys.contains("\(identifier).SIGNPOST_ENABLED") {
-      return OSLog(subsystem: identifier, category: .pointsOfInterest)
+      return OSLog(subsystem: identifier, category: "Signpost")
     } else {
       return .disabled
     }
@@ -326,7 +327,7 @@ private enum Log {
   /// The `OSLog` instance used to track operation point of interests (by default is disabled).
   @available(iOS 12.0, iOSApplicationExtension 12.0, tvOS 12.0, watchOS 5.0, macOS 10.14, OSXApplicationExtension 10.14, *)
   static var poi: OSLog {
-    if ProcessInfo.processInfo.environment.keys.contains("\(identifier).SIGNPOST_ENABLED") {
+    if ProcessInfo.processInfo.environment.keys.contains("\(identifier).POI_ENABLED") {
       return OSLog(subsystem: identifier, category: .pointsOfInterest)
     } else {
       return .disabled
