@@ -158,6 +158,7 @@
 		D2093D302366068B00230A2A /* AsynchronousOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsynchronousOperation.swift; sourceTree = "<group>"; };
 		D2093D35236606F400230A2A /* AsynchronousOperationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsynchronousOperationTests.swift; sourceTree = "<group>"; };
 		D2093D392366175200230A2A /* OperationInjectionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OperationInjectionTests.swift; sourceTree = "<group>"; };
+		D254E22323C3A68800A1586E /* LICENSE.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = LICENSE.md; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -299,16 +300,17 @@
 		234130941F96061E002BE7FC /* Support */ = {
 			isa = PBXGroup;
 			children = (
-				23BAA53F236B460400411F5B /* workflows */,
 				239C4D4D2304720300EBDEF6 /* .travis.yml */,
-				2382D97D22BE4A3C0082FFDD /* README.md */,
-				23A1A85720F4AD9100EA3350 /* CHANGELOG.md */,
-				2385617C200A8DC50061BAA1 /* Package.swift */,
-				237250812005258D0000A442 /* IDETemplateMacros.plist */,
 				2341308A1F9605F5002BE7FC /* AdvancedOperation.h */,
+				23A1A85720F4AD9100EA3350 /* CHANGELOG.md */,
+				237250812005258D0000A442 /* IDETemplateMacros.plist */,
 				2372B4321F960DBA00189A32 /* Info-Tests.plist */,
 				234130B71F9606CD002BE7FC /* Info-tvOS.plist */,
 				2341308B1F9605F5002BE7FC /* Info.plist */,
+				D254E22323C3A68800A1586E /* LICENSE.md */,
+				2385617C200A8DC50061BAA1 /* Package.swift */,
+				2382D97D22BE4A3C0082FFDD /* README.md */,
+				23BAA53F236B460400411F5B /* workflows */,
 			);
 			path = Support;
 			sourceTree = "<group>";
