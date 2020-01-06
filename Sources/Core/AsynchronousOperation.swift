@@ -223,7 +223,6 @@ open class AsynchronousOperation<Success, Failure>: Operation, OutputProducing w
       state = .finished
       isRunning.mutate { $0 = false }
       
-      
       switch output {
       case nil, .success:
         if #available(iOS 12.0, iOSApplicationExtension 12.0, tvOS 12.0, watchOS 5.0, macOS 10.14, OSXApplicationExtension 10.14, *) {
