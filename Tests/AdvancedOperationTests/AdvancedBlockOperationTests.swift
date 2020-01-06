@@ -33,22 +33,16 @@ final class AdvancedBlockOperationTests: XCTestCase {
     }
     XCTAssertTrue(operation.isAsynchronous)
     XCTAssertTrue(operation.isConcurrent)
-
     let expectation1 = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: operation, expectedValue: true)
     operation.start()
     operation.cancel()
-
     wait(for: [expectation1], timeout: 4)
-
     XCTAssertTrue(operation.isCancelled)
     XCTAssertEqual(operation.name, "AsynchronousBlockOperation<(), MockError>")
   }
 
   func testInitializerWithQueue() {
-    let operation = AsynchronousBlockOperation<Int, MockError>(queue: .main) {
-      return .success(11)
-    }
-
+    let operation = AsynchronousBlockOperation<Int, MockError>(queue: .main) { .success(11) }
     let expectation1 = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: operation, expectedValue: true)
     operation.start()
     wait(for: [expectation1], timeout: 4)
@@ -64,13 +58,10 @@ final class AdvancedBlockOperationTests: XCTestCase {
     }
     XCTAssertTrue(operation.isAsynchronous)
     XCTAssertTrue(operation.isConcurrent)
-
     let expectation1 = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: operation, expectedValue: true)
     operation.cancel()
     operation.start()
-
     wait(for: [expectation1], timeout: 4)
-
     XCTAssertTrue(operation.isCancelled)
   }
 
@@ -79,32 +70,25 @@ final class AdvancedBlockOperationTests: XCTestCase {
     let expectation1 = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: operation, expectedValue: true)
     operation.cancel()
     operation.start()
-
     wait(for: [expectation1], timeout: 4)
-
     XCTAssertTrue(operation.isCancelled)
   }
 
   func testBlockOperationCompletedInAsyncQueue() {
     let operation = AsynchronousBlockOperation<Void, MockError> { complete in
       XCTAssertTrue(Thread.isMainThread)
-      DispatchQueue(label: "\(identifier).\(#function)", attributes: .concurrent).asyncAfter(deadline: .now() + 3) {
+      DispatchQueue(label: "\(identifier).\(#function)", attributes: .concurrent).asyncAfter(deadline: .now() + 2) {
         complete(.success(()))
       }
     }
-
     let expectation1 = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: operation, expectedValue: true)
     operation.start()
-
     wait(for: [expectation1], timeout: 4)
   }
 
   func testSuccessfulOutput() {
     let text = "Hello World"
-    let operation = AsynchronousBlockOperation<String, MockError> { complete in
-      complete(.success(text))
-    }
-
+    let operation = AsynchronousBlockOperation<String, MockError> { $0(.success(text)) }
     let expectation1 = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: operation, expectedValue: true)
     operation.start()
     wait(for: [expectation1], timeout: 4)
@@ -113,10 +97,7 @@ final class AdvancedBlockOperationTests: XCTestCase {
   }
 
   func testFailedOutput() {
-    let operation = AsynchronousBlockOperation<String, MockError> { complete in
-      complete(.failure(MockError.failed))
-    }
-
+    let operation = AsynchronousBlockOperation<String, MockError> { $0(.failure(MockError.failed)) }
     let expectation1 = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: operation, expectedValue: true)
     operation.start()
     wait(for: [expectation1], timeout: 4)
