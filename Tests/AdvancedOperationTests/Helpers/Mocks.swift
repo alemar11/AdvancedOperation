@@ -115,7 +115,6 @@ internal class StringToIntAsyncOperation: AsynchronousOperation<Int, MockError> 
   }
 }
 
-
 final internal class CancellingAsyncOperation: AsynchronousOperation<Void, MockError> {
   override func execute(completion: @escaping (Result<Void, MockError>) -> Void) {
     DispatchQueue.global().asyncAfter(deadline: .now() + 1.0) { [weak weakSelf = self] in
