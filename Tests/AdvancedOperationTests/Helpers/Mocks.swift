@@ -192,7 +192,7 @@ internal class IntToStringOperation: Operation & InputConsuming & OutputProducin
   }
 }
 
-internal class StringToIntOperation:  Operation & InputConsuming & OutputProducing  {
+internal class StringToIntOperation: Operation & InputConsuming & OutputProducing  {
   var input: String?
   var output: Int? {
     return _output.value
