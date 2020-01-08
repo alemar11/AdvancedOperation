@@ -60,6 +60,7 @@ final class AsynchronousOperationTests: XCTestCase {
 
     wait(for: [expectation1], timeout: 10)
     XCTAssertTrue(operation.isFinished)
+    XCTAssertNotNil(operation.output)
   }
 
   func testCancel() {
@@ -90,6 +91,7 @@ final class AsynchronousOperationTests: XCTestCase {
 
     XCTAssertTrue(operation.isCancelled)
     XCTAssertFalse(operation.isFinished)
+    XCTAssertNil(operation.output)
   }
 
   func testCancelBeforeStart() {
@@ -103,6 +105,7 @@ final class AsynchronousOperationTests: XCTestCase {
 
     XCTAssertTrue(operation.isCancelled)
     XCTAssertTrue(operation.isFinished)
+    XCTAssertNil(operation.output)
   }
 
   func testMultipleCancel() {
