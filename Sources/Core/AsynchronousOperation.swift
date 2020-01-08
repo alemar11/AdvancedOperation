@@ -56,7 +56,7 @@ open class AsynchronousOperation<Success, Failure>: Operation, OutputProducing w
   public final override var isConcurrent: Bool { return true }
   
   /// The output produced by the `AsynchronousOperation`.
-  /// It's `nil` while the operation is not finished.
+  /// It's `nil` while the operation is not finished or if the operation gets cancelled before being executed.
   public private(set) var output: Result<Success, Failure>?
   
   // MARK: - Private Properties
