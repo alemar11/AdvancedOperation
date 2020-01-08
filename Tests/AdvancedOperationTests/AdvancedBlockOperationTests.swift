@@ -42,7 +42,7 @@ final class AdvancedBlockOperationTests: XCTestCase {
   }
 
   func testInitializerWithQueue() {
-    let operation = AsynchronousBlockOperation<Int, MockError>(queue: .main) { .success(11) }
+    let operation = AsynchronousBlockOperation<Int, MockError>(queue: .init(label: "test")) { .success(11) }
     let expectation1 = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: operation, expectedValue: true)
     operation.start()
     wait(for: [expectation1], timeout: 4)
@@ -132,7 +132,7 @@ final class AdvancedBlockOperationTests: XCTestCase {
       }
 
       // Memory leaks test: once release the operation, the captured object (by reference) should be nil (weakObject)
-      operation = AsynchronousBlockOperation { .success(()) }
+      operation = AsynchronousBlockOperation(queue: .main) { .success(()) }
       object = NSObject()
     }
     XCTAssertNil(weakObject)
@@ -176,7 +176,7 @@ final class AdvancedBlockOperationTests: XCTestCase {
     let operation3 = SleepyAsyncOperation()
 
     operation3.addCompletionBlock { expectation3.fulfill() }
-    let adapterOperation = AsynchronousBlockOperation { [unowned operation2] in
+    let adapterOperation = AsynchronousBlockOperation(queue: .init(label: "test")) { [unowned operation2] in
       operation2.cancel()
     }
     adapterOperation.addDependency(operation1)

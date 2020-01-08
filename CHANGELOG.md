@@ -3,7 +3,8 @@
 ### 5.1.0 (WIP)
 
 - AsynchronousOperation now is generic over `Success` and `Failure` types.
-- removed `cleanup` method.
+- removed  `cleanup` method.
+- removed AsynchronousBlockOperation's `queue` default value.
 
 ### 5.0.0 ⭐
 

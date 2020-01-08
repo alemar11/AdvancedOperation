@@ -52,7 +52,7 @@ public final class AsynchronousBlockOperation<Success, Failure>: AsynchronousOpe
   ///   - queue: The `DispatchQueue` where the operation will run its `block`.
   ///   - block: The closure to run when the operation executes.
   /// - Note: The block is run concurrently on the given `queue` and must return a result type to complete.
-  public convenience init(queue: DispatchQueue = .main, block: @escaping () -> Output) {
+  public convenience init(queue: DispatchQueue, block: @escaping () -> Output) {
     self.init(block: { complete in
       queue.async {
         let result = block()
@@ -77,7 +77,7 @@ extension AsynchronousBlockOperation where Failure == Swift.Never {
   ///   - queue: The `DispatchQueue` where the operation will run its `block`.
   ///   - block: The closure to run when the operation executes.
   /// - Note: The block is run concurrently on the given `queue` and must return a value to complete successfully.
-  public convenience init(queue: DispatchQueue = .main, block: @escaping () -> Success) {
+  public convenience init(queue: DispatchQueue, block: @escaping () -> Success) {
     self.init(block: { complete in
       queue.async {
         let result = block()
