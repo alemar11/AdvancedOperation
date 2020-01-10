@@ -130,6 +130,7 @@
 		060BD361239A76AC0098E835 /* AdvancedOperation tvOS.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = "AdvancedOperation tvOS.xctestplan"; sourceTree = "<group>"; };
 		0622C311239A717D004F3FA5 /* AdvancedOperation macOS.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = "AdvancedOperation macOS.xctestplan"; sourceTree = "<group>"; };
 		0622C314239A7428004F3FA5 /* AdvancedOperation iOS.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = "AdvancedOperation iOS.xctestplan"; sourceTree = "<group>"; };
+		068C554F23C8C6810043B43F /* lint.yml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; path = lint.yml; sourceTree = "<group>"; };
 		2326CC24206E6199001876A2 /* Result+Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Result+Utils.swift"; sourceTree = "<group>"; };
 		232F3AAD206041DE00FC45CB /* AdvancedOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdvancedOperation.swift; sourceTree = "<group>"; };
 		234130871F9605F5002BE7FC /* AdvancedOperation.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = AdvancedOperation.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -333,6 +334,7 @@
 		23BAA53F236B460400411F5B /* workflows */ = {
 			isa = PBXGroup;
 			children = (
+				068C554F23C8C6810043B43F /* lint.yml */,
 				23BAA540236B460400411F5B /* ci.yml */,
 			);
 			name = workflows;
