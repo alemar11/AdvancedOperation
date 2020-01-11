@@ -37,6 +37,8 @@ import os.log
 /// - To enable signposts add this environment key: `org.tinrobots.AdvancedOperation.SIGNPOST_ENABLED`
 /// - To enable point of interests add this environment key: `org.tinrobots.AdvancedOperation.POI_ENABLED`
 open class AsynchronousOperation<Success, Failure>: Operation, OutputProducing where Failure: Swift.Error {
+  public typealias Output = Result<Success, Failure>?
+
   // MARK: - Public Properties
   
   open override var isReady: Bool {
@@ -55,9 +57,9 @@ open class AsynchronousOperation<Success, Failure>: Operation, OutputProducing w
   
   public final override var isConcurrent: Bool { return true }
   
-  /// The output produced by the `AsynchronousOperation`.
+  /// The `Result` output produced by the `AsynchronousOperation`.
   /// It's `nil` while the operation is not finished or if the operation gets cancelled before being executed.
-  public private(set) var output: Result<Success, Failure>?
+  public private(set) var output: Output = nil
   
   // MARK: - Private Properties
   

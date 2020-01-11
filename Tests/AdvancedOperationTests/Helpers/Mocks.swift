@@ -37,10 +37,8 @@ internal enum MockError: CustomNSError, Equatable {
 
 // MARK: - AsynchronousOperation
 
-class NotFinishingAsynchronousOperation: AsynchronousOperation<Void, MockError> {
-  override func execute(completion: @escaping (Result<Void, MockError>) -> Void) {
-
-  }
+class NotFinishingAsynchronousOperation: AsynchronousOperation<Never, MockError> {
+  override func execute(completion: @escaping (Result<Never, MockError>) -> Void) { }
 }
 
 final internal class SleepyAsyncOperation: AsynchronousOperation<Void, MockError> {
