@@ -27,7 +27,7 @@ import Foundation
 /// A concurrent sublcass of `AsynchronousOperation` to execute a closure.
 public final class AsynchronousBlockOperation<Success, Failure>: AsynchronousOperation<Success, Failure> where Failure: Swift.Error {
   /// A closure type that takes a closure as its parameter.
-  public typealias OperationBlock = (@escaping (Output) -> Void) -> Void
+  public typealias OperationBlock = (@escaping (OperationResult) -> Void) -> Void
 
   // MARK: - Private Properties
 
@@ -52,7 +52,7 @@ public final class AsynchronousBlockOperation<Success, Failure>: AsynchronousOpe
   ///   - queue: The `DispatchQueue` where the operation will run its `block`.
   ///   - block: The closure to run when the operation executes.
   /// - Note: The block is run concurrently on the given `queue` and must return a result type to complete.
-  public convenience init(queue: DispatchQueue, block: @escaping () -> Output) {
+  public convenience init(queue: DispatchQueue, block: @escaping () -> OperationResult) {
     self.init(block: { complete in
       queue.async {
         let result = block()
@@ -63,7 +63,7 @@ public final class AsynchronousBlockOperation<Success, Failure>: AsynchronousOpe
 
   // MARK: - Overrides
 
-  public override func execute(completion: @escaping (Output) -> Void) {
+  public override func execute(completion: @escaping (OperationResult) -> Void) {
     block {
       completion($0)
     }

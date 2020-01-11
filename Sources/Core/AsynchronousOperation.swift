@@ -37,7 +37,7 @@ import os.log
 /// - To enable signposts add this environment key: `org.tinrobots.AdvancedOperation.SIGNPOST_ENABLED`
 /// - To enable point of interests add this environment key: `org.tinrobots.AdvancedOperation.POI_ENABLED`
 open class AsynchronousOperation<Success, Failure>: Operation, OutputProducing where Failure: Swift.Error {
-  public typealias Output = Result<Success, Failure>?
+  public typealias OperationResult = Swift.Result<Success, Failure>
 
   // MARK: - Public Properties
   
@@ -59,7 +59,7 @@ open class AsynchronousOperation<Success, Failure>: Operation, OutputProducing w
   
   /// The `Result` output produced by the `AsynchronousOperation`.
   /// It's `nil` while the operation is not finished or if the operation gets cancelled before being executed.
-  public private(set) var output: Output = nil
+  public private(set) var output: OperationResult? = nil
   
   // MARK: - Private Properties
   
@@ -183,10 +183,13 @@ open class AsynchronousOperation<Success, Failure>: Operation, OutputProducing w
   }
   
   /// Subclasses must implement this to perform their work and they must not call `super`.
-  /// The default implementation of this function traps.
+  ///
+  /// - Parameter completion: the block to be called with an appropriate result to finish the operation execution.
+  ///
+  /// - Warning: The default implementation of this function traps.
   /// - Note: Before calling this method, the operation checks if it's already cancelled (and, in that case, finishes itself).
   /// - Note: For log purposes you may want to use an `NSError` or `CustomNSError` error with a debug message for the `NSDebugDescriptionErrorKey` key.
-  open func execute(completion: @escaping (Output) -> Void) {
+  open func execute(completion: @escaping (OperationResult) -> Void) {
     preconditionFailure("Subclasses must implement `execute`.")
   }
   
