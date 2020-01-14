@@ -27,7 +27,7 @@ import XCTest
 
 final class NSErrorAdvancedOperationTests: XCTestCase {
   func testNSErrorWithoutDebugKey() {
-    let error = NSError()
+    let error = NSError(domain: "AdvancedOperation.Tests", code: 0, userInfo: nil)
     XCTAssertEqual(error.debugErrorMessage, defaultDebugMessage)
   }
 
