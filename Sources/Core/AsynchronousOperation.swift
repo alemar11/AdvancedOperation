@@ -293,7 +293,7 @@ extension AsynchronousOperation {
 
 // MARK: - Log
 
-private enum Log {
+internal enum Log {
     /// The name used for signpost interval events (.begin and .end).
     static let signPostIntervalName: StaticString = "Operation"
     
