@@ -123,7 +123,7 @@ open class AsynchronousOperation<OutputType>: Operation, OutputProducing {
         guard !isFinished else { return }
         
         // The super.start() method is already able to disambiguate started operations (see notes below)
-        // but we need this to support os_log and os_signpost without having duplicates.
+        // but to avoid os_log and os_signpost possible duplicates we need to do more checks
         let isAlreadyRunning = isRunning.mutate { running -> Bool in
             if running {
                 return true
@@ -171,9 +171,9 @@ open class AsynchronousOperation<OutputType>: Operation, OutputProducing {
     public final override func main() {
         state = .executing
         
-        if #available(iOS 12.0, iOSApplicationExtension 12.0, tvOS 12.0, watchOS 5.0, macOS 10.14, OSXApplicationExtension 10.14, *) {
-            os_signpost(.event, log: Log.poi, name: "Execution", signpostID: signpostID, "%{public}s is executing.", operationName)
-        }
+//        if #available(iOS 12.0, iOSApplicationExtension 12.0, tvOS 12.0, watchOS 5.0, macOS 10.14, OSXApplicationExtension 10.14, *) {
+//            os_signpost(.event, log: Log.poi, name: "Execution", signpostID: signpostID, "%{public}s is executing.", operationName)
+//        }
         
         if isCancelled {
             finish(result: nil)
