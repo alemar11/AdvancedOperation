@@ -29,10 +29,6 @@ import os.log
 
 // MARK: - AsynchronousOperation
 
-class NotFinishingAsynchronousOperation: AsynchronousOperation<Never> {
-    override func execute(completion: @escaping (Never?) -> Void) { }
-}
-
 final internal class SleepyAsyncOperation: AsynchronousOperation<Never> {
   private let interval1: UInt32
   private let interval2: UInt32

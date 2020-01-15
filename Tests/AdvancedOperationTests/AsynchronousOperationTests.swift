@@ -25,14 +25,6 @@ import XCTest
 @testable import AdvancedOperation
 
 final class AsynchronousOperationTests: XCTestCase {
-  func testNotFinishingOperation() throws {
-    let operation = NotFinishingAsynchronousOperation()
-    let expectation1 = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: operation, expectedValue: true)
-    expectation1.isInverted = true
-    operation.start()
-    wait(for: [expectation1], timeout: 3)
-  }
-
   func testEarlyBailOut() {
     let operation = RunUntilCancelledAsyncOperation()
     let expectation1 = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: operation, expectedValue: true)
