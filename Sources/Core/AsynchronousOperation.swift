@@ -296,7 +296,7 @@ internal enum Log {
     /// The `OSLog` instance used to track the operation changes (by default is disabled).
     static var general: OSLog {
         if ProcessInfo.processInfo.environment.keys.contains("\(identifier).LOG_ENABLED") {
-            return OSLog(subsystem: identifier, category: "General")
+            return OSLog(subsystem: identifier, category: "General") // TODO: rename this
         } else {
             return .disabled
         }
