@@ -41,7 +41,7 @@ final class OperationInjectionTests: XCTestCase {
     let queue = OperationQueue()
     let operation1 = IntToStringOperation()
     let operation2 = StringToIntOperation()
-    let injectionOperation = operation1.inject(into: operation2)
+    let injectionOperation = operation1.injectOutput(into: operation2)
     operation1.input = 10
 
     queue.addOperations([operation1, operation2, injectionOperation], waitUntilFinished: true)
@@ -53,7 +53,7 @@ final class OperationInjectionTests: XCTestCase {
     let queue = OperationQueue()
     let operation1 = IntToStringOperation()
     let operation2 = StringToIntOperation()
-    let injectionOperation = operation1.inject(into: operation2)
+    let injectionOperation = operation1.injectOutput(into: operation2)
     operation1.input = nil
 
     queue.addOperations([operation1, operation2, injectionOperation], waitUntilFinished: true)
@@ -65,7 +65,7 @@ final class OperationInjectionTests: XCTestCase {
     let queue = OperationQueue()
     let operation1 = IntToStringOperation()
     let operation2 = StringToIntOperation()
-    let injectionOperation = operation1.inject(into: operation2)
+    let injectionOperation = operation1.injectOutput(into: operation2)
     operation1.input = 10
     operation1.cancel()
 
@@ -80,7 +80,7 @@ final class OperationInjectionTests: XCTestCase {
     let operation3 = BlockOperation() // noise
     operation3.addDependency(operation2)
     operation1.input = 10
-    let injection = operation1.inject(into: operation2) { $0 }
+    let injection = operation1.injectOutput(into: operation2) { $0 }
     let queue = OperationQueue()
     queue.addOperations([operation1, operation2, injection], waitUntilFinished: true)
     queue.addOperations([operation3], waitUntilFinished: false)
@@ -92,7 +92,7 @@ final class OperationInjectionTests: XCTestCase {
     let operation1 = IntToStringAsyncOperation()
     let operation2 = IntToStringAsyncOperation()
     operation1.input = nil
-    let injection = operation1.inject(into: operation2) { _ in return nil }
+    let injection = operation1.injectOutput(into: operation2) { _ in return nil }
 
     let queue = OperationQueue()
     queue.addOperations([operation1, operation2, injection], waitUntilFinished: true)
@@ -104,7 +104,7 @@ final class OperationInjectionTests: XCTestCase {
     let operation1 = IntToStringAsyncOperation() // no input -> fails
     let operation2 = StringToIntAsyncOperation()
     let expectation1 = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: operation2, expectedValue: true)
-    let injection = operation1.inject(into: operation2) { $0 }
+    let injection = operation1.injectOutput(into: operation2) { $0 }
     let queue = OperationQueue()
 
     operation1.cancel()

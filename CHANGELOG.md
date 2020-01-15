@@ -2,6 +2,7 @@
 
 ### 5.1.0
 
+- renamed `inject` into `injectOutput`.
 - removed  `cleanup` method.
 - removed AsynchronousBlockOperation's `queue` default value.
 - Bugfixes.
