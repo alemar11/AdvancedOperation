@@ -24,7 +24,7 @@
 import Dispatch
 import Foundation
 
-/// A concurrent sublcass of `AsynchronousOperation` to execute a closure.
+/// A concurrent sublcass of `AsynchronousOperation` to execute a closure that can optionally produce an output.
 public final class AsynchronousBlockOperation<OutputType>: AsynchronousOperation<OutputType> {
   /// A closure type that takes a closure as its parameter.
   public typealias Block = (@escaping (Output) -> Void) -> Void
