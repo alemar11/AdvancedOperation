@@ -32,7 +32,7 @@ public typealias AsyncOperation = AsynchronousOperation
 /// An abstract thread safe subclass of `Operation` to build asynchronous operations.
 ///
 /// Subclasses must override `execute(completion:)` to perform any work and call the completion handler to finish it.
-/// When an `AsynchronousOperation` finished wihout being cancelled, it will always produce a result output.
+/// `AsynchronousOperation` conforms to `OutputProducing` and it can produce an output.
 ///
 /// To enable logging:
 /// - To enable log add this environment key: `org.tinrobots.AdvancedOperation.LOG_ENABLED`
