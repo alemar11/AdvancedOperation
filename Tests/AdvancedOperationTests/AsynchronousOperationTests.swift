@@ -46,7 +46,7 @@ final class AsynchronousOperationTests: XCTestCase {
     XCTAssertFalse(operation.isExecuting)
 
     // TODO: https://forums.swift.org/t/xctunwrap-not-available-during-swift-test/28878/4
-    // let output = try XCTUnwrap(operation.output?.failure) as NSError
+    // let output = try XCTUnwrap(operation.output) as NSError
     XCTAssertNil(operation.output, "An operation not yet started shouldn't have an output,")
   }
 
@@ -153,16 +153,6 @@ final class AsynchronousOperationTests: XCTestCase {
     XCTAssertTrue(operation.isFinished)
   }
 
-  func testFinishWithErrors() {
-    let operation = FailingAsyncOperation()
-    let expectation1 = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: operation, expectedValue: true)
-
-    operation.start()
-
-    wait(for: [expectation1], timeout: 10)
-    XCTAssertNotNil(operation.output?.failure)
-  }
-
   // The readiness of operations is determined by their dependencies on other operations and potentially by custom conditions that you define.
   func testReadiness() {
     // Given
@@ -229,7 +219,7 @@ final class AsynchronousOperationTests: XCTestCase {
 
   func testDependencyCancellingDependantOperation() {
     let queue = OperationQueue()
-    let operation1 = CancellingAsyncOperation()
+    let operation1 = AutoCancellingAsyncOperation()
     operation1.name = "operation1"
     let operation2 = SleepyAsyncOperation(interval1: 1, interval2: 1, interval3: 1)
     operation2.name = "operation2"
@@ -288,9 +278,9 @@ final class AsynchronousOperationTests: XCTestCase {
     queue.addOperations([operation1, operation2, operation3, operation4, conditionsOperationToLetOperationOneRun, conditionsOperationToLetOperationThreeRun], waitUntilFinished: true)
 
     XCTAssertTrue(operation4.isCancelled)
-    XCTAssertNil(operation3.output?.failure, "Cancelled \(operation3.operationName) shouldn't have any output")
+    XCTAssertNil(operation3.output, "Cancelled \(operation3.operationName) shouldn't have any output")
     XCTAssertFalse(operation2.isCancelled)
-    XCTAssertNil(operation1.output?.failure, "Cancelled \(operation1.operationName) shouldn't have any output")
+    XCTAssertNil(operation1.output, "Cancelled \(operation1.operationName) shouldn't have any output")
     XCTAssertTrue(operation1.isCancelled)
     XCTAssertTrue(operation1.isFinished)
   }
@@ -345,13 +335,13 @@ final class AsynchronousOperationTests: XCTestCase {
     waitForExpectations(timeout: 10)
     XCTAssertTrue(operation4.isCancelled)
 
-    XCTAssertNil(operation3.output?.failure, "Cancelled \(operation3.operationName) shouldn't have any output")
+    XCTAssertNil(operation3.output, "Cancelled \(operation3.operationName) shouldn't have any output")
     XCTAssertTrue(operation3.isCancelled)
 
-    XCTAssertNil(operation2.output?.failure, "Cancelled \(operation3.operationName) shouldn't have any output")
+    XCTAssertNil(operation2.output, "Cancelled \(operation3.operationName) shouldn't have any output")
     XCTAssertTrue(operation2.isCancelled)
 
-    XCTAssertNil(operation1.output?.failure, "Cancelled \(operation3.operationName) shouldn't have any output")
+    XCTAssertNil(operation1.output, "Cancelled \(operation3.operationName) shouldn't have any output")
     XCTAssertTrue(operation1.isCancelled)
   }
 }

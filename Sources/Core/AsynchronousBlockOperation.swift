@@ -25,13 +25,13 @@ import Dispatch
 import Foundation
 
 /// A concurrent sublcass of `AsynchronousOperation` to execute a closure.
-public final class AsynchronousBlockOperation<Success, Failure>: AsynchronousOperation<Success, Failure> where Failure: Swift.Error {
+public final class AsynchronousBlockOperation<OutputType>: AsynchronousOperation<OutputType> {
   /// A closure type that takes a closure as its parameter.
-  public typealias OperationBlock = (@escaping (OperationResult) -> Void) -> Void
+  public typealias Block = (@escaping (Output) -> Void) -> Void
 
   // MARK: - Private Properties
 
-  private var block: OperationBlock
+  private var block: Block
 
   // MARK: - Initializers
 
@@ -40,10 +40,10 @@ public final class AsynchronousBlockOperation<Success, Failure>: AsynchronousOpe
   /// - Parameters:
   ///   - block: The closure to run when the operation executes; the parameter passed to the block **MUST** be invoked by your code,
   ///   or else the `AsynchronousBlockOperation` will never finish executing.
-  public init(block: @escaping OperationBlock) {
+  public init(block: @escaping Block) {
     self.block = block
     super.init()
-    self.name = "AsynchronousBlockOperation<\(Success.self), \(Failure.self)>"
+    self.name = "AsynchronousBlockOperation<\(OutputType.self)>"
   }
 
   /// A convenience initializer.
@@ -52,7 +52,7 @@ public final class AsynchronousBlockOperation<Success, Failure>: AsynchronousOpe
   ///   - queue: The `DispatchQueue` where the operation will run its `block`.
   ///   - block: The closure to run when the operation executes.
   /// - Note: The block is run concurrently on the given `queue` and must return a result type to complete.
-  public convenience init(queue: DispatchQueue, block: @escaping () -> OperationResult) {
+  public convenience init(queue: DispatchQueue, block: @escaping () -> Output) {
     self.init(block: { complete in
       queue.async {
         let result = block()
@@ -63,26 +63,9 @@ public final class AsynchronousBlockOperation<Success, Failure>: AsynchronousOpe
 
   // MARK: - Overrides
 
-  public override func execute(completion: @escaping (OperationResult) -> Void) {
+  public override func execute(completion: @escaping (Output) -> Void) {
     block {
       completion($0)
     }
-  }
-}
-
-extension AsynchronousBlockOperation where Failure == Swift.Never {
-  /// A convenience initializer that creates an always succeeding `AsynchronousBlockOperation`.
-  ///
-  /// - Parameters:
-  ///   - queue: The `DispatchQueue` where the operation will run its `block`.
-  ///   - block: The closure to run when the operation executes.
-  /// - Note: The block is run concurrently on the given `queue` and must return a value to complete successfully.
-  public convenience init(queue: DispatchQueue, block: @escaping () -> Success) {
-    self.init(block: { complete in
-      queue.async {
-        let result = block()
-        complete(.success(result))
-      }
-    })
   }
 }

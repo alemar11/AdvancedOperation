@@ -27,21 +27,13 @@ import XCTest
 import os.log
 @testable import AdvancedOperation
 
-// MARK: - Error
-
-internal enum MockError: CustomNSError, Equatable {
-  case cancelled(date: Date)
-  case failed
-  case generic
-}
-
 // MARK: - AsynchronousOperation
 
-class NotFinishingAsynchronousOperation: AsynchronousOperation<Never, MockError> {
-  override func execute(completion: @escaping (Result<Never, MockError>) -> Void) { }
+class NotFinishingAsynchronousOperation: AsynchronousOperation<Void> {
+    override func execute(completion: @escaping (Void?) -> Void) { }
 }
 
-final internal class SleepyAsyncOperation: AsynchronousOperation<Void, MockError> {
+final internal class SleepyAsyncOperation: AsynchronousOperation<Void> {
   private let interval1: UInt32
   private let interval2: UInt32
   private let interval3: UInt32
@@ -53,119 +45,100 @@ final internal class SleepyAsyncOperation: AsynchronousOperation<Void, MockError
     super.init()
   }
 
-  override func execute(completion: @escaping (Result<Void, MockError>) -> Void) {
+  override func execute(completion: @escaping (Void?) -> Void) {
     DispatchQueue.global().async { [weak weakSelf = self] in
 
       guard let strongSelf = weakSelf else {
-        completion(.failure(MockError.generic))
+        completion(nil)
         return
       }
 
       if strongSelf.isCancelled {
-        completion(.failure(MockError.cancelled(date: Date())))
+        completion(nil)
         return
       }
 
       sleep(self.interval1)
 
       if strongSelf.isCancelled {
-        completion(.failure(MockError.cancelled(date: Date())))
+        completion(nil)
         return
       }
 
       sleep(self.interval2)
 
       if strongSelf.isCancelled {
-        completion(.failure(MockError.cancelled(date: Date())))
+        completion(nil)
         return
       }
 
       sleep(self.interval3)
-      completion(.success(Void()))
+      completion(Void())
     }
   }
 }
 
 /// This operation fails if the input is greater than **1000**
 /// This operation cancels itself if the input is **100**
-internal class IntToStringAsyncOperation: AsynchronousOperation<String, MockError> & InputConsuming {
+internal class IntToStringAsyncOperation: AsynchronousOperation<String> & InputConsuming {
   var input: Int?
 
-  override func execute(completion: @escaping (Result<String, MockError>) -> Void) {
+  override func execute(completion: @escaping (String?) -> Void) {
     if let input = self.input {
-      completion(.success("\(input)"))
+      completion("\(input)")
     } else {
-      completion(.failure(MockError.failed))
+      completion(nil)
       return
     }
   }
 }
 
-internal class StringToIntAsyncOperation: AsynchronousOperation<Int, MockError> & InputConsuming  {
+internal class StringToIntAsyncOperation: AsynchronousOperation<Int> & InputConsuming  {
   var input: String?
 
-  override func execute(completion: @escaping (Result<Int, MockError>) -> Void) {
+  override func execute(completion: @escaping (Int?) -> Void) {
     if let input = self.input, let value = Int(input) {
-      completion(.success(value))
+      completion(value)
     } else {
-      completion(.failure(MockError.failed))
+      completion(nil)
     }
   }
 }
 
-final internal class CancellingAsyncOperation: AsynchronousOperation<Void, MockError> {
-  override func execute(completion: @escaping (Result<Void, MockError>) -> Void) {
+final internal class AutoCancellingAsyncOperation: AsynchronousOperation<Void> {
+  override func execute(completion: @escaping (Void?) -> Void) {
     DispatchQueue.global().asyncAfter(deadline: .now() + 1.0) { [weak weakSelf = self] in
       guard let strongSelf = weakSelf else {
-        completion(.failure(MockError.cancelled(date: Date())))
+        completion(nil)
         return
       }
       strongSelf.cancel()
-      completion(.failure(MockError.cancelled(date: Date())))
+      completion(nil)
     }
   }
 }
 
-/// An operation that finishes with errors
-final internal class FailingAsyncOperation: AsynchronousOperation<Void, MockError> {
-  private let defaultError: MockError
-
-  init(error: MockError = MockError.failed) {
-    self.defaultError = error
-  }
-
-  override func execute(completion: @escaping (Result<Void, MockError>) -> Void) {
-    DispatchQueue.global().asyncAfter(deadline: .now() + 1.0) { [weak weakSelf = self] in
-      guard let strongSelf = weakSelf else {
-        completion(.failure(MockError.failed))
-        return
-      }
-      completion(.failure(strongSelf.defaultError))
-    }
-  }
-}
-
-final internal class RunUntilCancelledAsyncOperation: AsynchronousOperation<Void, MockError> {
+final internal class RunUntilCancelledAsyncOperation: AsynchronousOperation<Void> {
   let queue: DispatchQueue
 
   init(queue: DispatchQueue = DispatchQueue.global()) {
     self.queue = queue
   }
 
-  override func execute(completion: @escaping (Result<Void, MockError>) -> Void) {
+  override func execute(completion: @escaping (Void?) -> Void) {
     queue.async {
       while !self.isCancelled {
         sleep(1)
       }
-      completion(.success(()))
+      completion(Void())
     }
   }
 }
 
-final internal class NotExecutableOperation: AsynchronousOperation<Void, MockError> {
-  override func execute(completion: @escaping (Result<Void, MockError>) -> Void) {
+final internal class NotExecutableOperation: AsynchronousOperation<Void> {
+  override func execute(completion: @escaping (Void?) -> Void) {
     XCTFail("This operation shouldn't be executed.")
-    completion(.failure(MockError.generic))
+    completion(nil)
   }
 }
 

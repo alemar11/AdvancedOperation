@@ -29,12 +29,12 @@ final class OperationInjectionTests: XCTestCase {
     let operation1 = IntToStringAsyncOperation()
     operation1.input = 10
     operation1.start()
-    XCTAssertEqual(operation1.output?.success, "10")
+    XCTAssertEqual(operation1.output, "10")
 
     let operation2 = StringToIntAsyncOperation()
     operation2.input = "10"
     operation2.start()
-    XCTAssertEqual(operation2.output?.success, 10)
+    XCTAssertEqual(operation2.output, 10)
   }
 
   func testSuccessfulInjectionBetweenOperations() {
@@ -80,33 +80,31 @@ final class OperationInjectionTests: XCTestCase {
     let operation3 = BlockOperation() // noise
     operation3.addDependency(operation2)
     operation1.input = 10
-    let injection = operation1.inject(into: operation2) { $0?.success }
+    let injection = operation1.inject(into: operation2) { $0 }
     let queue = OperationQueue()
     queue.addOperations([operation1, operation2, injection], waitUntilFinished: true)
     queue.addOperations([operation3], waitUntilFinished: false)
 
-    XCTAssertEqual(operation2.output?.success, 10)
+    XCTAssertEqual(operation2.output, 10)
   }
 
   func testFailingInjectionTransforminOutput() {
     let operation1 = IntToStringAsyncOperation()
     let operation2 = IntToStringAsyncOperation()
     operation1.input = nil
-    let injection = operation1.inject(into: operation2) { result -> Int? in
-      return nil
-    }
+    let injection = operation1.inject(into: operation2) { _ in return nil }
 
     let queue = OperationQueue()
     queue.addOperations([operation1, operation2, injection], waitUntilFinished: true)
 
-    XCTAssertNotNil(operation2.output?.failure)
+    XCTAssertNil(operation2.output)
   }
 
   func testInjectionTransformingOutputOfAnAlreadyCancelledOutputProducingOperation() {
     let operation1 = IntToStringAsyncOperation() // no input -> fails
     let operation2 = StringToIntAsyncOperation()
     let expectation1 = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: operation2, expectedValue: true)
-    let injection = operation1.inject(into: operation2) { $0?.success }
+    let injection = operation1.inject(into: operation2) { $0 }
     let queue = OperationQueue()
 
     operation1.cancel()
