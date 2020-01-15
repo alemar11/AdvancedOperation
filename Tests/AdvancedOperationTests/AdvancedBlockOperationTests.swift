@@ -26,9 +26,9 @@ import XCTest
 
 final class AdvancedBlockOperationTests: XCTestCase {
   func testCancel() {
-    let operation = AsynchronousBlockOperation<Void> { complete in
+    let operation = AsynchronousBlockOperation<Never> { complete in
       DispatchQueue(label: "\(identifier).\(#function)", attributes: .concurrent).asyncAfter(deadline: .now() + 2) {
-        complete(Void())
+        complete(nil)
       }
     }
     XCTAssertTrue(operation.isAsynchronous)
@@ -38,7 +38,7 @@ final class AdvancedBlockOperationTests: XCTestCase {
     operation.cancel()
     wait(for: [expectation1], timeout: 4)
     XCTAssertTrue(operation.isCancelled)
-    XCTAssertEqual(operation.name, "AsynchronousBlockOperation<()>")
+    XCTAssertEqual(operation.name, "AsynchronousBlockOperation<Never>")
   }
 
   func testInitializerWithQueue() {
@@ -51,9 +51,9 @@ final class AdvancedBlockOperationTests: XCTestCase {
   }
 
   func testCancelBeforeStarting() {
-    let operation = AsynchronousBlockOperation<Void> { complete in
+    let operation = AsynchronousBlockOperation<Never> { complete in
       DispatchQueue(label: "\(identifier).\(#function)", attributes: .concurrent).asyncAfter(deadline: .now() + 2) {
-        complete(Void())
+        complete(nil)
       }
     }
     XCTAssertTrue(operation.isAsynchronous)
@@ -66,7 +66,7 @@ final class AdvancedBlockOperationTests: XCTestCase {
   }
 
   func testEarlyBailOut() {
-    let operation = AsynchronousBlockOperation<Void> { complete in complete(Void()) }
+    let operation = AsynchronousBlockOperation<Never> { complete in complete(nil) }
     let expectation1 = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: operation, expectedValue: true)
     operation.cancel()
     operation.start()
@@ -75,10 +75,10 @@ final class AdvancedBlockOperationTests: XCTestCase {
   }
 
   func testBlockOperationCompletedInAsyncQueue() {
-    let operation = AsynchronousBlockOperation<Void> { complete in
+    let operation = AsynchronousBlockOperation<Never> { complete in
       XCTAssertTrue(Thread.isMainThread)
       DispatchQueue(label: "\(identifier).\(#function)", attributes: .concurrent).asyncAfter(deadline: .now() + 2) {
-        complete(Void())
+        complete(nil)
       }
     }
     let expectation1 = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: operation, expectedValue: true)
@@ -109,11 +109,11 @@ final class AdvancedBlockOperationTests: XCTestCase {
     let expectation2 = expectation(description: "\(#function)\(#line)")
     // The other AdvancedBlockOperation initializer will fail here becase we need a more fine control
     // on when the operation should be considered finished.
-    let operation = AsynchronousBlockOperation<Void>() { complete in
+    let operation = AsynchronousBlockOperation<Never>() { complete in
       DispatchQueue.global().async {
         sleep(3)
         expectation1.fulfill()
-        complete(Void())
+        complete(nil)
       }
     }
     operation.addCompletionBlock {
@@ -165,10 +165,10 @@ final class AdvancedBlockOperationTests: XCTestCase {
     weak var weakObject = object
 
     autoreleasepool {
-      var operation = AsynchronousBlockOperation<Void> { [unowned object] complete in
+      var operation = AsynchronousBlockOperation<Never> { [unowned object] complete in
         DispatchQueue(label: "\(identifier).\(#function)", attributes: .concurrent).async {
           _ = object
-          complete(Void())
+          complete(nil)
         }
       }
 
