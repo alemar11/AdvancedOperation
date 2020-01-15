@@ -27,18 +27,50 @@
 import Foundation
 import os.log
 
-public typealias AsyncOperation = AsynchronousOperation
+open class AsynchronousOutputOperation<OutputType>: AsyncOperation, OutputProducing {
+  public private(set) var output: OutputType? = nil
+
+ // private let completed = Atomic(false)
+
+  open override func execute(completion: @escaping ((() -> Void)?) -> Void) {
+    // interesting idea but the execute method for a non output operation can lead to strange behaviours
+    self.execute { output in
+      completion {
+        self.output = output
+      }
+    }
+  }
+//  public final override func execute(completion: @escaping () -> Void) {
+//    self.execute { output in
+//      self.completed.mutate { value in
+//        if value {
+//          preconditionFailure("The completion block can't be called multiple times")
+//        } else {
+//          value = true
+//        }
+//      }
+//
+//      self.output = output
+//      completion()
+//    }
+//  }
+
+  open func execute(completion: @escaping (Output) -> Void) {
+    preconditionFailure("Subclasses must implement `execute(completion:)`.")
+  }
+}
+
+public typealias AsynchronousOperation = AsynchronousOutputOperation
 
 /// An abstract thread safe subclass of `Operation` to build asynchronous operations.
 ///
 /// Subclasses must override `execute(completion:)` to perform any work and call the completion handler to finish it.
-/// `AsynchronousOperation` conforms to `OutputProducing` and it can produce an output.
 ///
 /// To enable logging:
 /// - To enable log add this environment key: `org.tinrobots.AdvancedOperation.LOG_ENABLED`
 /// - To enable signposts add this environment key: `org.tinrobots.AdvancedOperation.SIGNPOST_ENABLED`
 /// - To enable point of interests add this environment key: `org.tinrobots.AdvancedOperation.POI_ENABLED`
-open class AsynchronousOperation<OutputType>: Operation, OutputProducing {
+open class AsyncOperation: Operation {
     // MARK: - Public Properties
     
     open override var isReady: Bool {
@@ -56,10 +88,6 @@ open class AsynchronousOperation<OutputType>: Operation, OutputProducing {
     public final override var isAsynchronous: Bool { return true }
     
     public final override var isConcurrent: Bool { return true }
-    
-    /// The  output produced by the `AsynchronousOperation`.
-    /// It's always `nil` while the operation is not finished or if the operation gets cancelled before being executed.
-    public private(set) var output: OutputType? = nil
     
     // MARK: - Private Properties
     
@@ -145,7 +173,7 @@ open class AsynchronousOperation<OutputType>: Operation, OutputProducing {
                 os_log("%{public}s has started after being cancelled.", log: Log.general, type: .info, operationName)
             }
             
-            finish(result: nil)
+            finish()
             return
         }
         
@@ -172,9 +200,9 @@ open class AsynchronousOperation<OutputType>: Operation, OutputProducing {
         state = .executing
                 
         if isCancelled {
-            finish(result: nil)
+            finish()
         } else {
-            execute(completion: finish)
+          execute(completion: finish)
         }
     }
     
@@ -184,8 +212,8 @@ open class AsynchronousOperation<OutputType>: Operation, OutputProducing {
     ///
     /// - Warning: The default implementation of this function traps.
     /// - Note: Before calling this method, the operation checks if it's already cancelled (and, in that case, finishes itself).
-    open func execute(completion: @escaping (Output) -> Void) {
-        preconditionFailure("Subclasses must implement `execute`.")
+    open func execute(completion: @escaping ((() -> Void)?) -> Void) {
+        preconditionFailure("Subclasses must implement `execute(completion:)`.")
     }
     
     open override func cancel() {
@@ -210,7 +238,7 @@ open class AsynchronousOperation<OutputType>: Operation, OutputProducing {
     // MARK: - Private Methods
     
     /// Call this function to finish an operation that is currently executing.
-    private final func finish(result: Output) {
+  private final func finish(handler: (() -> Void)? = nil) {
         // State can also be "ready" here if the operation was cancelled before it was started.
         guard !isFinished else { return }
         
@@ -219,7 +247,7 @@ open class AsynchronousOperation<OutputType>: Operation, OutputProducing {
         
         switch state {
         case .ready, .executing:
-            self.output = result
+            handler?()
             state = .finished
             isRunning.mutate { $0 = false }
             
@@ -234,7 +262,7 @@ open class AsynchronousOperation<OutputType>: Operation, OutputProducing {
             return
         }
     }
-    
+
     // MARK: - Debug
     
     open override var description: String {
@@ -248,7 +276,7 @@ open class AsynchronousOperation<OutputType>: Operation, OutputProducing {
 
 // MARK: - State
 
-extension AsynchronousOperation {
+extension AsyncOperation {
     /// Mirror of the possible states an Operation can be in.
     enum State: Int, CustomStringConvertible, CustomDebugStringConvertible {
         case ready

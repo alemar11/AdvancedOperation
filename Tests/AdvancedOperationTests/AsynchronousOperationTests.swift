@@ -336,4 +336,26 @@ final class AsynchronousOperationTests: XCTestCase {
     XCTAssertNil(operation1.output, "Cancelled \(operation3.operationName) shouldn't have any output")
     XCTAssertTrue(operation1.isCancelled)
   }
+
+  // TODO
+//  func testMemoryLeak() {
+//    var object = Leak()
+//    weak var weakObject = object
+//
+//    autoreleasepool {
+//      var operation = MemoryLeakAsyncOperation()
+//      operation.leak = object
+//      let expectation1 = expectation(description: "\(#function)\(#line)")
+//      operation.addCompletionBlock { expectation1.fulfill() }
+//      operation.start()
+//
+//      waitForExpectations(timeout: 3)
+//
+//      // Memory leaks test: once the operation is released, the captured object (by reference) should be nil (weakObject)
+//      operation = MemoryLeakAsyncOperation()
+//      object = Leak()
+//    }
+//
+//    XCTAssertNil(weakObject, "Memory leak: the object should have been deallocated at this point.")
+//  }
 }

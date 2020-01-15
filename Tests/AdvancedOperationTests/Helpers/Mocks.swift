@@ -174,3 +174,21 @@ internal class StringToIntOperation: Operation & InputConsuming & OutputProducin
     }
   }
 }
+
+  // TODO
+//class Leak {
+//  weak var operation: Operation?
+//}
+//
+//class MemoryLeakAsyncOperation: AsynchronousOperation<Leak> {
+//  weak var leak: Leak?
+//  override func execute(completion: @escaping (Leak?) -> Void) {
+//    leak?.operation = self
+//
+//    DispatchQueue.global().async {
+//      completion(self.leak)
+//    }
+//    completion(leak)
+//
+//  }
+//}
