@@ -27,6 +27,8 @@
 import Foundation
 import os.log
 
+public typealias AsyncOperation = AsynchronousOperation
+
 /// An abstract thread safe subclass of `Operation` to build asynchronous operations.
 ///
 /// Subclasses must override `execute(completion:)` to perform any work and call the completion handler to finish it.

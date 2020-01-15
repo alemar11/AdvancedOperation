@@ -29,11 +29,11 @@ import os.log
 
 // MARK: - AsynchronousOperation
 
-class NotFinishingAsynchronousOperation: AsynchronousOperation<Void> {
-    override func execute(completion: @escaping (Void?) -> Void) { }
+class NotFinishingAsynchronousOperation: AsynchronousOperation<Never> {
+    override func execute(completion: @escaping (Never?) -> Void) { }
 }
 
-final internal class SleepyAsyncOperation: AsynchronousOperation<Void> {
+final internal class SleepyAsyncOperation: AsynchronousOperation<Never> {
   private let interval1: UInt32
   private let interval2: UInt32
   private let interval3: UInt32
@@ -45,7 +45,7 @@ final internal class SleepyAsyncOperation: AsynchronousOperation<Void> {
     super.init()
   }
 
-  override func execute(completion: @escaping (Void?) -> Void) {
+  override func execute(completion: @escaping (Never?) -> Void) {
     DispatchQueue.global().async { [weak weakSelf = self] in
 
       guard let strongSelf = weakSelf else {
@@ -73,7 +73,7 @@ final internal class SleepyAsyncOperation: AsynchronousOperation<Void> {
       }
 
       sleep(self.interval3)
-      completion(Void())
+      completion(nil)
     }
   }
 }
@@ -105,8 +105,8 @@ internal class StringToIntAsyncOperation: AsynchronousOperation<Int> & InputCons
   }
 }
 
-final internal class AutoCancellingAsyncOperation: AsynchronousOperation<Void> {
-  override func execute(completion: @escaping (Void?) -> Void) {
+final internal class AutoCancellingAsyncOperation: AsynchronousOperation<Never> {
+  override func execute(completion: @escaping (Never?) -> Void) {
     DispatchQueue.global().asyncAfter(deadline: .now() + 1.0) { [weak weakSelf = self] in
       guard let strongSelf = weakSelf else {
         completion(nil)
@@ -118,25 +118,25 @@ final internal class AutoCancellingAsyncOperation: AsynchronousOperation<Void> {
   }
 }
 
-final internal class RunUntilCancelledAsyncOperation: AsynchronousOperation<Void> {
+final internal class RunUntilCancelledAsyncOperation: AsynchronousOperation<Never> {
   let queue: DispatchQueue
 
   init(queue: DispatchQueue = DispatchQueue.global()) {
     self.queue = queue
   }
 
-  override func execute(completion: @escaping (Void?) -> Void) {
+  override func execute(completion: @escaping (Never?) -> Void) {
     queue.async {
       while !self.isCancelled {
         sleep(1)
       }
-      completion(Void())
+      completion(nil)
     }
   }
 }
 
-final internal class NotExecutableOperation: AsynchronousOperation<Void> {
-  override func execute(completion: @escaping (Void?) -> Void) {
+final internal class NotExecutableOperation: AsynchronousOperation<Never> {
+  override func execute(completion: @escaping (Never?) -> Void) {
     XCTFail("This operation shouldn't be executed.")
     completion(nil)
   }
