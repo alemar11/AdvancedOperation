@@ -170,11 +170,7 @@ open class AsynchronousOperation<OutputType>: Operation, OutputProducing {
     
     public final override func main() {
         state = .executing
-        
-//        if #available(iOS 12.0, iOSApplicationExtension 12.0, tvOS 12.0, watchOS 5.0, macOS 10.14, OSXApplicationExtension 10.14, *) {
-//            os_signpost(.event, log: Log.poi, name: "Execution", signpostID: signpostID, "%{public}s is executing.", operationName)
-//        }
-        
+                
         if isCancelled {
             finish(result: nil)
         } else {
