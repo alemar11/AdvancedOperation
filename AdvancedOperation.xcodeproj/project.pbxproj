@@ -94,9 +94,6 @@
 		23AC3ADD2038A050003E1B15 /* OperationUtilsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23AC3ADC2038A050003E1B15 /* OperationUtilsTests.swift */; };
 		23AC3ADE2038A050003E1B15 /* OperationUtilsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23AC3ADC2038A050003E1B15 /* OperationUtilsTests.swift */; };
 		23AC3ADF2038A050003E1B15 /* OperationUtilsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23AC3ADC2038A050003E1B15 /* OperationUtilsTests.swift */; };
-		23BAA53B236B420900411F5B /* Result+Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2326CC24206E6199001876A2 /* Result+Utils.swift */; };
-		23BAA53C236B420A00411F5B /* Result+Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2326CC24206E6199001876A2 /* Result+Utils.swift */; };
-		23BAA53D236B420A00411F5B /* Result+Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2326CC24206E6199001876A2 /* Result+Utils.swift */; };
 		23F24D22200799B800B25A03 /* Operation+Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23F24D21200799B800B25A03 /* Operation+Utils.swift */; };
 		23F24D23200799B800B25A03 /* Operation+Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23F24D21200799B800B25A03 /* Operation+Utils.swift */; };
 		23F24D24200799B800B25A03 /* Operation+Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23F24D21200799B800B25A03 /* Operation+Utils.swift */; };
@@ -148,7 +145,6 @@
 		06C92B4A23D0A9FF000D12C8 /* AsynchronousBlockOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsynchronousBlockOperation.swift; sourceTree = "<group>"; };
 		06C92B4F23D0AAEA000D12C8 /* AsynchronousBlockOperationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsynchronousBlockOperationTests.swift; sourceTree = "<group>"; };
 		06C92B5723D0C17C000D12C8 /* AsynchronousInputOutputOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsynchronousInputOutputOperation.swift; sourceTree = "<group>"; };
-		2326CC24206E6199001876A2 /* Result+Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Result+Utils.swift"; sourceTree = "<group>"; };
 		232F3AAD206041DE00FC45CB /* AdvancedOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdvancedOperation.swift; sourceTree = "<group>"; };
 		234130871F9605F5002BE7FC /* AdvancedOperation.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = AdvancedOperation.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		2341308A1F9605F5002BE7FC /* AdvancedOperation.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AdvancedOperation.h; sourceTree = "<group>"; };
@@ -343,7 +339,6 @@
 		23BAA53E236B42BA00411F5B /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
-				2326CC24206E6199001876A2 /* Result+Utils.swift */,
 				23856178200A873C0061BAA1 /* Mocks.swift */,
 			);
 			path = Helpers;
@@ -768,7 +763,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				D2093D38236606F400230A2A /* AsynchronousOperationTests.swift in Sources */,
-				23BAA53D236B420A00411F5B /* Result+Utils.swift in Sources */,
 				D2093D3C2366175200230A2A /* OperationInjectionTests.swift in Sources */,
 				06C92B5623D0AB07000D12C8 /* AsynchronousBlockOperationTests.swift in Sources */,
 				23A813B82020D111008A98E0 /* AsynchronousOutputBlockOperationTests.swift in Sources */,
@@ -783,7 +777,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				D2093D36236606F400230A2A /* AsynchronousOperationTests.swift in Sources */,
-				23BAA53B236B420900411F5B /* Result+Utils.swift in Sources */,
 				D2093D3A2366175200230A2A /* OperationInjectionTests.swift in Sources */,
 				06C92B5423D0AB06000D12C8 /* AsynchronousBlockOperationTests.swift in Sources */,
 				23A813B62020D111008A98E0 /* AsynchronousOutputBlockOperationTests.swift in Sources */,
@@ -798,7 +791,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				D2093D37236606F400230A2A /* AsynchronousOperationTests.swift in Sources */,
-				23BAA53C236B420A00411F5B /* Result+Utils.swift in Sources */,
 				D2093D3B2366175200230A2A /* OperationInjectionTests.swift in Sources */,
 				06C92B5523D0AB06000D12C8 /* AsynchronousBlockOperationTests.swift in Sources */,
 				23A813B72020D111008A98E0 /* AsynchronousOutputBlockOperationTests.swift in Sources */,
