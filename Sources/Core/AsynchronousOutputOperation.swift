@@ -28,10 +28,16 @@ public typealias AsyncOutputOperation = AsynchronousOutputOperation
 
 /// An abstract  subclass of `AsynchronousOperation` to build output producing asynchronous operations.
 open class AsynchronousOutputOperation<OutputType>: AsyncOperation, OutputProducing {
+    // MARK: - Public Properties
+    
     /// The output produced once `self` is finished.
     public private(set) var output: OutputType? = nil
     
+    // MARK: - PRivate Properties
+    
     private let gate = Atomic(false)
+    
+    // MARK: - Public Methods
     
     public final override func execute(completion: @escaping () -> Void) {
         self.execute { output in
@@ -51,7 +57,7 @@ open class AsynchronousOutputOperation<OutputType>: AsyncOperation, OutputProduc
             completion()
         }
     }
-    
+        
     open func execute(completion: @escaping (Output) -> Void) {
         preconditionFailure("Subclasses must implement `execute(completion:)`.")
     }

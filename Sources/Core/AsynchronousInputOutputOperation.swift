@@ -27,6 +27,8 @@ public typealias AsyncInputOutputOperation = AsynchronousInputOutputOperation
 
 /// An abstract  subclass of `AsynchronousOperation` to build output producing asynchronous operations that require an initial input value.
 open class AsynchronousInputOutputOperation<InputType, OutputType>: AsynchronousOutputOperation<OutputType>, InputConsuming {
+    // MARK: - Public Properties
+    
     /// The input value required by `self`.
     public var input: InputType? {
         get {
@@ -37,7 +39,11 @@ open class AsynchronousInputOutputOperation<InputType, OutputType>: Asynchronous
         }
     }
     
+    // MARK: - Private Properties
+    
     private var _input = Atomic<InputType?>(nil)
+    
+    // MARK: - Initializers
     
     public required init(input: InputType? = nil) {
         super.init()
