@@ -40,6 +40,10 @@
 		06B8DF1523CF59AE0053058F /* _SynchronousBlockOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06B8DF1323CF59AE0053058F /* _SynchronousBlockOperation.swift */; };
 		06B8DF1623CF59AE0053058F /* _SynchronousBlockOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06B8DF1323CF59AE0053058F /* _SynchronousBlockOperation.swift */; };
 		06B8DF1723CF59AE0053058F /* _SynchronousBlockOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06B8DF1323CF59AE0053058F /* _SynchronousBlockOperation.swift */; };
+		06C92B4623D0A78C000D12C8 /* AsynchronousOutputOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06C92B4523D0A78C000D12C8 /* AsynchronousOutputOperation.swift */; };
+		06C92B4723D0A78C000D12C8 /* AsynchronousOutputOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06C92B4523D0A78C000D12C8 /* AsynchronousOutputOperation.swift */; };
+		06C92B4823D0A78C000D12C8 /* AsynchronousOutputOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06C92B4523D0A78C000D12C8 /* AsynchronousOutputOperation.swift */; };
+		06C92B4923D0A78C000D12C8 /* AsynchronousOutputOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06C92B4523D0A78C000D12C8 /* AsynchronousOutputOperation.swift */; };
 		232F3AAE206041DE00FC45CB /* AdvancedOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 232F3AAD206041DE00FC45CB /* AdvancedOperation.swift */; };
 		232F3AAF206041DE00FC45CB /* AdvancedOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 232F3AAD206041DE00FC45CB /* AdvancedOperation.swift */; };
 		232F3AB0206041DE00FC45CB /* AdvancedOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 232F3AAD206041DE00FC45CB /* AdvancedOperation.swift */; };
@@ -129,6 +133,7 @@
 		0622C314239A7428004F3FA5 /* AdvancedOperation iOS.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = "AdvancedOperation iOS.xctestplan"; sourceTree = "<group>"; };
 		068C554F23C8C6810043B43F /* lint.yml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; path = lint.yml; sourceTree = "<group>"; };
 		06B8DF1323CF59AE0053058F /* _SynchronousBlockOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = _SynchronousBlockOperation.swift; sourceTree = "<group>"; };
+		06C92B4523D0A78C000D12C8 /* AsynchronousOutputOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsynchronousOutputOperation.swift; sourceTree = "<group>"; };
 		2326CC24206E6199001876A2 /* Result+Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Result+Utils.swift"; sourceTree = "<group>"; };
 		232F3AAD206041DE00FC45CB /* AdvancedOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdvancedOperation.swift; sourceTree = "<group>"; };
 		234130871F9605F5002BE7FC /* AdvancedOperation.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = AdvancedOperation.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -245,15 +250,16 @@
 		232F9442217F299100A86699 /* Core */ = {
 			isa = PBXGroup;
 			children = (
+				06B8DF1323CF59AE0053058F /* _SynchronousBlockOperation.swift */,
 				232F3AAD206041DE00FC45CB /* AdvancedOperation.swift */,
 				23A813B02020CF1E008A98E0 /* AsynchronousBlockOperation.swift */,
 				D2093D302366068B00230A2A /* AsynchronousOperation.swift */,
+				06C92B4523D0A78C000D12C8 /* AsynchronousOutputOperation.swift */,
 				23A1B87E21B8307F0018D9D5 /* Atomic.swift */,
 				239BC52120EB7539009A36D9 /* InputConsuming.swift */,
 				23F24D21200799B800B25A03 /* Operation+Utils.swift */,
-				23A1B87821B81C710018D9D5 /* UnfairLock.swift */,
 				060B667023C4EBC80085FCB4 /* OutputProducing.swift */,
-				06B8DF1323CF59AE0053058F /* _SynchronousBlockOperation.swift */,
+				23A1B87821B81C710018D9D5 /* UnfairLock.swift */,
 			);
 			path = Core;
 			sourceTree = "<group>";
@@ -668,6 +674,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				06C92B4623D0A78C000D12C8 /* AsynchronousOutputOperation.swift in Sources */,
 				23A1B87921B81C710018D9D5 /* UnfairLock.swift in Sources */,
 				23A1B87F21B8307F0018D9D5 /* Atomic.swift in Sources */,
 				23F24D22200799B800B25A03 /* Operation+Utils.swift in Sources */,
@@ -684,6 +691,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				06C92B4723D0A78C000D12C8 /* AsynchronousOutputOperation.swift in Sources */,
 				23A1B87A21B81C710018D9D5 /* UnfairLock.swift in Sources */,
 				23A1B88021B8307F0018D9D5 /* Atomic.swift in Sources */,
 				23F24D23200799B800B25A03 /* Operation+Utils.swift in Sources */,
@@ -700,6 +708,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				06C92B4823D0A78C000D12C8 /* AsynchronousOutputOperation.swift in Sources */,
 				23A1B87B21B81C710018D9D5 /* UnfairLock.swift in Sources */,
 				23A1B88121B8307F0018D9D5 /* Atomic.swift in Sources */,
 				23F24D24200799B800B25A03 /* Operation+Utils.swift in Sources */,
@@ -716,6 +725,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				06C92B4923D0A78C000D12C8 /* AsynchronousOutputOperation.swift in Sources */,
 				23A1B87C21B81C710018D9D5 /* UnfairLock.swift in Sources */,
 				23A1B88221B8307F0018D9D5 /* Atomic.swift in Sources */,
 				23F24D25200799B800B25A03 /* Operation+Utils.swift in Sources */,

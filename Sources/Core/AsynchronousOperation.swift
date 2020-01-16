@@ -27,40 +27,7 @@
 import Foundation
 import os.log
 
-open class AsynchronousOutputOperation<OutputType>: AsyncOperation, OutputProducing {
-  public private(set) var output: OutputType? = nil
-
- // private let completed = Atomic(false)
-
-  open override func execute(completion: @escaping ((() -> Void)?) -> Void) {
-    // interesting idea but the execute method for a non output operation can lead to strange behaviours
-    self.execute { output in
-      completion {
-        self.output = output
-      }
-    }
-  }
-//  public final override func execute(completion: @escaping () -> Void) {
-//    self.execute { output in
-//      self.completed.mutate { value in
-//        if value {
-//          preconditionFailure("The completion block can't be called multiple times")
-//        } else {
-//          value = true
-//        }
-//      }
-//
-//      self.output = output
-//      completion()
-//    }
-//  }
-
-  open func execute(completion: @escaping (Output) -> Void) {
-    preconditionFailure("Subclasses must implement `execute(completion:)`.")
-  }
-}
-
-public typealias AsynchronousOperation = AsynchronousOutputOperation
+public typealias AsyncOperation = AsynchronousOperation
 
 /// An abstract thread safe subclass of `Operation` to build asynchronous operations.
 ///
@@ -70,7 +37,7 @@ public typealias AsynchronousOperation = AsynchronousOutputOperation
 /// - To enable log add this environment key: `org.tinrobots.AdvancedOperation.LOG_ENABLED`
 /// - To enable signposts add this environment key: `org.tinrobots.AdvancedOperation.SIGNPOST_ENABLED`
 /// - To enable point of interests add this environment key: `org.tinrobots.AdvancedOperation.POI_ENABLED`
-open class AsyncOperation: Operation {
+open class AsynchronousOperation: Operation {
     // MARK: - Public Properties
     
     open override var isReady: Bool {
@@ -198,11 +165,11 @@ open class AsyncOperation: Operation {
     
     public final override func main() {
         state = .executing
-                
+        
         if isCancelled {
             finish()
         } else {
-          execute(completion: finish)
+            execute(completion: finish)
         }
     }
     
@@ -212,7 +179,7 @@ open class AsyncOperation: Operation {
     ///
     /// - Warning: The default implementation of this function traps.
     /// - Note: Before calling this method, the operation checks if it's already cancelled (and, in that case, finishes itself).
-    open func execute(completion: @escaping ((() -> Void)?) -> Void) {
+    open func execute(completion: @escaping () -> Void) {
         preconditionFailure("Subclasses must implement `execute(completion:)`.")
     }
     
@@ -238,7 +205,7 @@ open class AsyncOperation: Operation {
     // MARK: - Private Methods
     
     /// Call this function to finish an operation that is currently executing.
-  private final func finish(handler: (() -> Void)? = nil) {
+    private final func finish() {
         // State can also be "ready" here if the operation was cancelled before it was started.
         guard !isFinished else { return }
         
@@ -247,7 +214,6 @@ open class AsyncOperation: Operation {
         
         switch state {
         case .ready, .executing:
-            handler?()
             state = .finished
             isRunning.mutate { $0 = false }
             
@@ -262,7 +228,7 @@ open class AsyncOperation: Operation {
             return
         }
     }
-
+    
     // MARK: - Debug
     
     open override var description: String {
@@ -276,7 +242,7 @@ open class AsyncOperation: Operation {
 
 // MARK: - State
 
-extension AsyncOperation {
+extension AsynchronousOperation {
     /// Mirror of the possible states an Operation can be in.
     enum State: Int, CustomStringConvertible, CustomDebugStringConvertible {
         case ready

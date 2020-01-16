@@ -29,7 +29,7 @@ import os.log
 
 // MARK: - AsynchronousOperation
 
-final internal class SleepyAsyncOperation: AsynchronousOperation<Never> {
+final internal class SleepyAsyncOperation: AsynchronousOutputOperation<Never> {
   private let interval1: UInt32
   private let interval2: UInt32
   private let interval3: UInt32
@@ -76,7 +76,7 @@ final internal class SleepyAsyncOperation: AsynchronousOperation<Never> {
 
 /// This operation fails if the input is greater than **1000**
 /// This operation cancels itself if the input is **100**
-internal class IntToStringAsyncOperation: AsynchronousOperation<String> & InputConsuming {
+internal class IntToStringAsyncOperation: AsynchronousOutputOperation<String> & InputConsuming {
   var input: Int?
 
   override func execute(completion: @escaping (String?) -> Void) {
@@ -89,7 +89,7 @@ internal class IntToStringAsyncOperation: AsynchronousOperation<String> & InputC
   }
 }
 
-internal class StringToIntAsyncOperation: AsynchronousOperation<Int> & InputConsuming  {
+internal class StringToIntAsyncOperation: AsynchronousOutputOperation<Int> & InputConsuming  {
   var input: String?
 
   override func execute(completion: @escaping (Int?) -> Void) {
@@ -101,7 +101,7 @@ internal class StringToIntAsyncOperation: AsynchronousOperation<Int> & InputCons
   }
 }
 
-final internal class AutoCancellingAsyncOperation: AsynchronousOperation<Never> {
+final internal class AutoCancellingAsyncOperation: AsynchronousOutputOperation<Never> {
   override func execute(completion: @escaping (Never?) -> Void) {
     DispatchQueue.global().asyncAfter(deadline: .now() + 1.0) { [weak weakSelf = self] in
       guard let strongSelf = weakSelf else {
@@ -114,7 +114,7 @@ final internal class AutoCancellingAsyncOperation: AsynchronousOperation<Never> 
   }
 }
 
-final internal class RunUntilCancelledAsyncOperation: AsynchronousOperation<Never> {
+final internal class RunUntilCancelledAsyncOperation: AsynchronousOutputOperation<Never> {
   let queue: DispatchQueue
 
   init(queue: DispatchQueue = DispatchQueue.global()) {
@@ -131,7 +131,7 @@ final internal class RunUntilCancelledAsyncOperation: AsynchronousOperation<Neve
   }
 }
 
-final internal class NotExecutableOperation: AsynchronousOperation<Never> {
+final internal class NotExecutableOperation: AsynchronousOutputOperation<Never> {
   override func execute(completion: @escaping (Never?) -> Void) {
     XCTFail("This operation shouldn't be executed.")
     completion(nil)
