@@ -1,4 +1,4 @@
-// 
+//
 // AdvancedOperation
 //
 // Copyright © 2016-2020 Tinrobots.
@@ -21,14 +21,15 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
+import Dispatch
 import Foundation
 
-public typealias AsyncBlockOperation = AsynchronousBlockOperation
+public typealias AsyncOutputBlockOperation = AsynchronousOutputBlockOperation
 
-/// A concurrent sublcass of `AsynchronousOperation` to execute a closure.
-public final class AsynchronousBlockOperation: AsynchronousOperation {
+/// A concurrent sublcass of `AsynchronousOutputOperation` to execute a closure that can optionally produce an output.
+public final class AsynchronousOutputBlockOperation<OutputType>: AsynchronousOutputOperation<OutputType> {
     /// A closure type that takes a closure as its parameter.
-    public typealias Block = (@escaping () -> Void) -> Void
+    public typealias Block = (@escaping (Output) -> Void) -> Void
     
     // MARK: - Private Properties
     
@@ -44,7 +45,7 @@ public final class AsynchronousBlockOperation: AsynchronousOperation {
     public init(block: @escaping Block) {
         self.block = block
         super.init()
-        self.name = "\(type(of: self))"
+        self.name = "AsynchronousOutputBlockOperation<\(OutputType.self)>"
     }
     
     /// A convenience initializer.
@@ -53,20 +54,21 @@ public final class AsynchronousBlockOperation: AsynchronousOperation {
     ///   - queue: The `DispatchQueue` where the operation will run its `block`.
     ///   - block: The closure to run when the operation executes.
     /// - Note: The block is run concurrently on the given `queue` and must return a result type to complete.
-    public convenience init(queue: DispatchQueue, block: @escaping () -> Void) {
+    public convenience init(queue: DispatchQueue, block: @escaping () -> Output) {
         self.init(block: { complete in
             queue.async {
-                block()
-                complete()
+                let result = block()
+                complete(result)
             }
         })
     }
     
     // MARK: - Overrides
     
-    public override func execute(completion: @escaping () -> Void) {
+    public override func execute(completion: @escaping (Output) -> Void) {
         block {
-            completion()
+            completion($0)
         }
     }
 }
+

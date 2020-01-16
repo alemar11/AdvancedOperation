@@ -94,7 +94,7 @@ final class OperationUtilsTests: XCTestCase {
   }
 
   func testRemoveDependencies() {
-    let operation1 = AsynchronousBlockOperation(queue: .main, block: { })
+    let operation1 = AsynchronousOutputBlockOperation(queue: .main, block: { })
     let operation2 = SleepyAsyncOperation()
     let operation3 = BlockOperation { }
     let operation4 = SleepyAsyncOperation()
