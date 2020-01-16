@@ -74,11 +74,11 @@ final internal class SleepyAsyncOperation: AsynchronousOutputOperation<Never> {
   }
 }
 
+// MARK: - AsynchronousInputOutputOperation
+
 /// This operation fails if the input is greater than **1000**
 /// This operation cancels itself if the input is **100**
-internal class IntToStringAsyncOperation: AsynchronousOutputOperation<String> & InputConsuming {
-  var input: Int?
-
+internal class IntToStringAsyncOperation: AsynchronousInputOutputOperation<Int, String> {
   override func execute(completion: @escaping (String?) -> Void) {
     if let input = self.input {
       completion("\(input)")
@@ -89,9 +89,7 @@ internal class IntToStringAsyncOperation: AsynchronousOutputOperation<String> & 
   }
 }
 
-internal class StringToIntAsyncOperation: AsynchronousOutputOperation<Int> & InputConsuming  {
-  var input: String?
-
+internal class StringToIntAsyncOperation: AsynchronousInputOutputOperation<String, Int>  {
   override func execute(completion: @escaping (Int?) -> Void) {
     if let input = self.input, let value = Int(input) {
       completion(value)

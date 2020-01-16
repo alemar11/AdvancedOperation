@@ -26,9 +26,8 @@ import Foundation
 
 public typealias AsyncOutputOperation = AsynchronousOutputOperation
 
-/// An abstract  safe subclass of `AsynchronousOperation` to build output producing asynchronous operations.
+/// An abstract  subclass of `AsynchronousOperation` to build output producing asynchronous operations.
 open class AsynchronousOutputOperation<OutputType>: AsyncOperation, OutputProducing {
-    
     /// The output produced once `self` is finished.
     public private(set) var output: OutputType? = nil
     
