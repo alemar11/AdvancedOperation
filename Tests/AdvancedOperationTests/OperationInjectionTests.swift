@@ -27,13 +27,17 @@ import XCTest
 final class OperationInjectionTests: XCTestCase {
   func testInputAndOutputValues() {
     let operation1 = IntToStringAsyncOperation()
+    let expectation1 = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: operation1, expectedValue: true)
     operation1.input = 10
     operation1.start()
+    wait(for: [expectation1], timeout: 3)
     XCTAssertEqual(operation1.output, "10")
 
     let operation2 = StringToIntAsyncOperation()
+    let expectation2 = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: operation2, expectedValue: true)
     operation2.input = "10"
     operation2.start()
+    wait(for: [expectation2], timeout: 3)
     XCTAssertEqual(operation2.output, 10)
   }
 
@@ -43,7 +47,6 @@ final class OperationInjectionTests: XCTestCase {
     let operation2 = StringToIntOperation()
     let injectionOperation = operation1.injectOutput(into: operation2)
     operation1.input = 10
-
     queue.addOperations([operation1, operation2, injectionOperation], waitUntilFinished: true)
 
     XCTAssertEqual(operation2.output, 10)
