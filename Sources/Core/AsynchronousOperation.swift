@@ -56,6 +56,11 @@ open class AsynchronousOperation: Operation {
     
     public final override var isConcurrent: Bool { return true }
     
+    /// An `OSLog` instance to log additional informations.
+    ///
+    /// - Note: To enable log add this environment key: `org.tinrobots.AdvancedOperation.LOG_ENABLED`
+    public final var log: OSLog { return Log.`default` }
+    
     // MARK: - Private Properties
     
     // An identifier you use to distinguish signposts that have the same name and that log to the same OSLog.
@@ -134,10 +139,10 @@ open class AsynchronousOperation: Operation {
         // early bailing out
         if isCancelled {
             if #available(iOS 12.0, iOSApplicationExtension 12.0, tvOS 12.0, watchOS 5.0, macOS 10.14, OSXApplicationExtension 10.14, *) {
-                os_log(.info, log: Log.general, "%{public}s has started after being cancelled.", operationName)
+                os_log(.info, log: Log.`default`, "%{public}s has started after being cancelled.", operationName)
                 os_signpost(.begin, log: Log.signpost, name: Log.signPostIntervalName, signpostID: signpostID, "%{public}s has started.", operationName)
             } else {
-                os_log("%{public}s has started after being cancelled.", log: Log.general, type: .info, operationName)
+                os_log("%{public}s has started after being cancelled.", log: Log.`default`, type: .info, operationName)
             }
             
             finish()
@@ -145,10 +150,10 @@ open class AsynchronousOperation: Operation {
         }
         
         if #available(iOS 12.0, iOSApplicationExtension 12.0, tvOS 12.0, watchOS 5.0, macOS 10.14, OSXApplicationExtension 10.14, *) {
-            os_log(.info, log: Log.general, "%{public}s has started.", operationName)
+            os_log(.info, log: Log.`default`, "%{public}s has started.", operationName)
             os_signpost(.begin, log: Log.signpost, name: Log.signPostIntervalName, signpostID: signpostID, "%{public}s has started.", operationName)
         } else {
-            os_log("%{public}s has started.", log: Log.general, type: .info, operationName)
+            os_log("%{public}s has started.", log: log, type: .info, operationName)
         }
         
         /// The default implementation of this method updates the execution state of the operation and calls the receiver’s main() method.
@@ -192,9 +197,9 @@ open class AsynchronousOperation: Operation {
         super.cancel()
         
         if #available(iOS 12.0, iOSApplicationExtension 12.0, tvOS 12.0, watchOS 5.0, macOS 10.14, OSXApplicationExtension 10.14, *) {
-            os_log(.info, log: Log.general, "%{public}s has been cancelled.", operationName)
+            os_log(.info, log: Log.`default`, "%{public}s has been cancelled.", operationName)
         } else {
-            os_log("%{public}s has been cancelled.", log: Log.general, type: .info, operationName)
+            os_log("%{public}s has been cancelled.", log: Log.`default`, type: .info, operationName)
         }
         
         if #available(iOS 12.0, iOSApplicationExtension 12.0, tvOS 12.0, watchOS 5.0, macOS 10.14, OSXApplicationExtension 10.14, *) {
@@ -218,10 +223,10 @@ open class AsynchronousOperation: Operation {
             isRunning.mutate { $0 = false }
             
             if #available(iOS 12.0, iOSApplicationExtension 12.0, tvOS 12.0, watchOS 5.0, macOS 10.14, OSXApplicationExtension 10.14, *) {
-                os_log(.info, log: Log.general, "%{public}s has finished.", operationName)
+                os_log(.info, log: Log.`default`, "%{public}s has finished.", operationName)
                 os_signpost(.end, log: Log.signpost, name: Log.signPostIntervalName, signpostID: signpostID, "%{public}s has finished.", operationName)
             } else {
-                os_log("%{public}s has finished.", log: Log.general, type: .info, operationName)
+                os_log("%{public}s has finished.", log: Log.`default`, type: .info, operationName)
             }
             
         case .finished:
@@ -288,7 +293,7 @@ internal enum Log {
     static let signPostIntervalName: StaticString = "Operation"
     
     /// The `OSLog` instance used to track the operation changes (by default is disabled).
-    static var general: OSLog {
+    static var `default`: OSLog {
         if ProcessInfo.processInfo.environment.keys.contains("\(identifier).LOG_ENABLED") {
             return OSLog(subsystem: identifier, category: "General") // TODO: rename this
         } else {
