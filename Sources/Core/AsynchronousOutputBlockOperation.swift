@@ -53,7 +53,7 @@ public final class AsynchronousOutputBlockOperation<OutputType>: AsynchronousOut
     /// - Parameters:
     ///   - queue: The `DispatchQueue` where the operation will run its `block`.
     ///   - block: The closure to run when the operation executes.
-    /// - Note: The block is run concurrently on the given `queue` and must return a result type to complete.
+    /// - Note: The block is run **concurrently** on the given `queue` and must return a result type to complete.
     public convenience init(queue: DispatchQueue, block: @escaping () -> Output) {
         self.init(block: { complete in
             queue.async {

@@ -52,7 +52,7 @@ public final class AsynchronousBlockOperation: AsynchronousOperation {
     /// - Parameters:
     ///   - queue: The `DispatchQueue` where the operation will run its `block`.
     ///   - block: The closure to run when the operation executes.
-    /// - Note: The block is run concurrently on the given `queue`.
+    /// - Note: The block is run **concurrently** on the given `queue`.
     public convenience init(queue: DispatchQueue, block: @escaping () -> Void) {
         self.init(block: { complete in
             queue.async {

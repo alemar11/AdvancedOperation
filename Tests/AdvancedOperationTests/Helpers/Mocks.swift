@@ -29,6 +29,51 @@ import os.log
 
 // MARK: - AsynchronousBlockOperation
 
+final internal class SleepyAsyncOperation: AsynchronousOutputOperation<Never> {
+  private let interval1: UInt32
+  private let interval2: UInt32
+  private let interval3: UInt32
+
+  init(interval1: UInt32 = 1, interval2: UInt32 = 1, interval3: UInt32 = 1) {
+    self.interval1 = interval1
+    self.interval2 = interval2
+    self.interval3 = interval3
+    super.init()
+  }
+
+  override func execute(completion: @escaping (Never?) -> Void) {
+    DispatchQueue.global().async { [weak weakSelf = self] in
+
+      guard let strongSelf = weakSelf else {
+        completion(nil)
+        return
+      }
+
+      if strongSelf.isCancelled {
+        completion(nil)
+        return
+      }
+
+      sleep(self.interval1)
+
+      if strongSelf.isCancelled {
+        completion(nil)
+        return
+      }
+
+      sleep(self.interval2)
+
+      if strongSelf.isCancelled {
+        completion(nil)
+        return
+      }
+
+      sleep(self.interval3)
+      completion(nil)
+    }
+  }
+}
+
 /// This operation fails if the input is greater than **1000**
 /// This operation cancels itself if the input is **100**
 internal class IntToStringAsyncOperation: AsynchronousOutputOperation<String> & InputConsuming {
@@ -57,51 +102,6 @@ internal class StringToIntAsyncOperation: AsynchronousOutputOperation<Int> & Inp
 }
 
 // MARK: - AsynchronousOperation
-
-final internal class SleepyAsyncOperation: AsynchronousOperation {
-  private let interval1: UInt32
-  private let interval2: UInt32
-  private let interval3: UInt32
-
-  init(interval1: UInt32 = 1, interval2: UInt32 = 1, interval3: UInt32 = 1) {
-    self.interval1 = interval1
-    self.interval2 = interval2
-    self.interval3 = interval3
-    super.init()
-  }
-
-  override func execute(completion: @escaping () -> Void) {
-    DispatchQueue.global().async { [weak weakSelf = self] in
-
-      guard let strongSelf = weakSelf else {
-        completion()
-        return
-      }
-
-      if strongSelf.isCancelled {
-        completion()
-        return
-      }
-
-      sleep(self.interval1)
-
-      if strongSelf.isCancelled {
-        completion()
-        return
-      }
-
-      sleep(self.interval2)
-
-      if strongSelf.isCancelled {
-        completion()
-        return
-      }
-
-      sleep(self.interval3)
-      completion()
-    }
-  }
-}
 
 final internal class NotExecutableOperation: AsynchronousOperation {
   override func execute(completion: @escaping () -> Void) {
