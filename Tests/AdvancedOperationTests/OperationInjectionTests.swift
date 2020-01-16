@@ -58,7 +58,6 @@ final class OperationInjectionTests: XCTestCase {
     let operation2 = StringToIntOperation()
     let injectionOperation = operation1.injectOutput(into: operation2)
     operation1.input = nil
-
     queue.addOperations([operation1, operation2, injectionOperation], waitUntilFinished: true)
 
     XCTAssertNil(operation2.output)
@@ -71,7 +70,6 @@ final class OperationInjectionTests: XCTestCase {
     let injectionOperation = operation1.injectOutput(into: operation2)
     operation1.input = 10
     operation1.cancel()
-
     queue.addOperations([operation1, operation2, injectionOperation], waitUntilFinished: true)
 
     XCTAssertNil(operation2.output)
@@ -96,7 +94,6 @@ final class OperationInjectionTests: XCTestCase {
     let operation2 = IntToStringAsyncOperation()
     operation1.input = nil
     let injection = operation1.injectOutput(into: operation2) { _ in return nil }
-
     let queue = OperationQueue()
     queue.addOperations([operation1, operation2, injection], waitUntilFinished: true)
 
@@ -109,7 +106,6 @@ final class OperationInjectionTests: XCTestCase {
     let expectation1 = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: operation2, expectedValue: true)
     let injection = operation1.injectOutput(into: operation2) { $0 }
     let queue = OperationQueue()
-
     operation1.cancel()
     queue.addOperations([operation1, operation2, injection], waitUntilFinished: false)
 
