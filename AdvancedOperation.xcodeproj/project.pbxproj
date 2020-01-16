@@ -246,13 +246,13 @@
 		230B47FD200EABEE00F46852 /* AdvancedOperationTests */ = {
 			isa = PBXGroup;
 			children = (
-				23A813B52020D111008A98E0 /* AsynchronousOutputBlockOperationTests.swift */,
+				06C92B4F23D0AAEA000D12C8 /* AsynchronousBlockOperationTests.swift */,
 				D2093D35236606F400230A2A /* AsynchronousOperationTests.swift */,
+				23A813B52020D111008A98E0 /* AsynchronousOutputBlockOperationTests.swift */,
 				23BAA53E236B42BA00411F5B /* Helpers */,
 				D2093D392366175200230A2A /* OperationInjectionTests.swift */,
 				235D08D0206A941B00F70142 /* OperationStateTests.swift */,
 				23AC3ADC2038A050003E1B15 /* OperationUtilsTests.swift */,
-				06C92B4F23D0AAEA000D12C8 /* AsynchronousBlockOperationTests.swift */,
 			);
 			path = AdvancedOperationTests;
 			sourceTree = "<group>";

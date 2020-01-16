@@ -27,52 +27,7 @@ import XCTest
 import os.log
 @testable import AdvancedOperation
 
-// MARK: - AsynchronousOperation
-
-final internal class SleepyAsyncOperation: AsynchronousOutputOperation<Never> {
-  private let interval1: UInt32
-  private let interval2: UInt32
-  private let interval3: UInt32
-
-  init(interval1: UInt32 = 1, interval2: UInt32 = 1, interval3: UInt32 = 1) {
-    self.interval1 = interval1
-    self.interval2 = interval2
-    self.interval3 = interval3
-    super.init()
-  }
-
-  override func execute(completion: @escaping (Never?) -> Void) {
-    DispatchQueue.global().async { [weak weakSelf = self] in
-
-      guard let strongSelf = weakSelf else {
-        completion(nil)
-        return
-      }
-
-      if strongSelf.isCancelled {
-        completion(nil)
-        return
-      }
-
-      sleep(self.interval1)
-
-      if strongSelf.isCancelled {
-        completion(nil)
-        return
-      }
-
-      sleep(self.interval2)
-
-      if strongSelf.isCancelled {
-        completion(nil)
-        return
-      }
-
-      sleep(self.interval3)
-      completion(nil)
-    }
-  }
-}
+// MARK: - AsynchronousBlockOperation
 
 /// This operation fails if the input is greater than **1000**
 /// This operation cancels itself if the input is **100**
@@ -101,43 +56,90 @@ internal class StringToIntAsyncOperation: AsynchronousOutputOperation<Int> & Inp
   }
 }
 
-final internal class AutoCancellingAsyncOperation: AsynchronousOutputOperation<Never> {
-  override func execute(completion: @escaping (Never?) -> Void) {
-    DispatchQueue.global().asyncAfter(deadline: .now() + 1.0) { [weak weakSelf = self] in
+// MARK: - AsynchronousOperation
+
+final internal class SleepyAsyncOperation: AsynchronousOperation {
+  private let interval1: UInt32
+  private let interval2: UInt32
+  private let interval3: UInt32
+
+  init(interval1: UInt32 = 1, interval2: UInt32 = 1, interval3: UInt32 = 1) {
+    self.interval1 = interval1
+    self.interval2 = interval2
+    self.interval3 = interval3
+    super.init()
+  }
+
+  override func execute(completion: @escaping () -> Void) {
+    DispatchQueue.global().async { [weak weakSelf = self] in
+
       guard let strongSelf = weakSelf else {
-        completion(nil)
+        completion()
         return
       }
-      strongSelf.cancel()
-      completion(nil)
+
+      if strongSelf.isCancelled {
+        completion()
+        return
+      }
+
+      sleep(self.interval1)
+
+      if strongSelf.isCancelled {
+        completion()
+        return
+      }
+
+      sleep(self.interval2)
+
+      if strongSelf.isCancelled {
+        completion()
+        return
+      }
+
+      sleep(self.interval3)
+      completion()
     }
   }
 }
 
-final internal class RunUntilCancelledAsyncOperation: AsynchronousOutputOperation<Never> {
+final internal class NotExecutableOperation: AsynchronousOperation {
+  override func execute(completion: @escaping () -> Void) {
+    XCTFail("This operation shouldn't be executed.")
+    completion()
+  }
+}
+
+
+final internal class AutoCancellingAsyncOperation: AsynchronousOperation {
+  override func execute(completion: @escaping () -> Void) {
+    DispatchQueue.global().asyncAfter(deadline: .now() + 1.0) { [weak weakSelf = self] in
+      guard let strongSelf = weakSelf else {
+        completion()
+        return
+      }
+      strongSelf.cancel()
+      completion()
+    }
+  }
+}
+
+final internal class RunUntilCancelledAsyncOperation: AsynchronousOperation {
   let queue: DispatchQueue
 
   init(queue: DispatchQueue = DispatchQueue.global()) {
     self.queue = queue
   }
 
-  override func execute(completion: @escaping (Never?) -> Void) {
+  override func execute(completion: @escaping () -> Void) {
     queue.async {
       while !self.isCancelled {
         sleep(1)
       }
-      completion(nil)
+      completion()
     }
   }
 }
-
-final internal class NotExecutableOperation: AsynchronousOutputOperation<Never> {
-  override func execute(completion: @escaping (Never?) -> Void) {
-    XCTFail("This operation shouldn't be executed.")
-    completion(nil)
-  }
-}
-
 
 // MARK: - Operation
 
@@ -174,21 +176,3 @@ internal class StringToIntOperation: Operation & InputConsuming & OutputProducin
     }
   }
 }
-
-  // TODO
-//class Leak {
-//  weak var operation: Operation?
-//}
-//
-//class MemoryLeakAsyncOperation: AsynchronousOperation<Leak> {
-//  weak var leak: Leak?
-//  override func execute(completion: @escaping (Leak?) -> Void) {
-//    leak?.operation = self
-//
-//    DispatchQueue.global().async {
-//      completion(self.leak)
-//    }
-//    completion(leak)
-//
-//  }
-//}
