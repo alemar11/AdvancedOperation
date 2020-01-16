@@ -48,7 +48,6 @@ final class OperationInjectionTests: XCTestCase {
     let injectionOperation = operation1.injectOutput(into: operation2)
     operation1.input = 10
     queue.addOperations([operation1, operation2, injectionOperation], waitUntilFinished: true)
-
     XCTAssertEqual(operation2.output, 10)
   }
 
@@ -59,7 +58,6 @@ final class OperationInjectionTests: XCTestCase {
     let injectionOperation = operation1.injectOutput(into: operation2)
     operation1.input = nil
     queue.addOperations([operation1, operation2, injectionOperation], waitUntilFinished: true)
-
     XCTAssertNil(operation2.output)
   }
 
@@ -71,7 +69,6 @@ final class OperationInjectionTests: XCTestCase {
     operation1.input = 10
     operation1.cancel()
     queue.addOperations([operation1, operation2, injectionOperation], waitUntilFinished: true)
-
     XCTAssertNil(operation2.output)
   }
 
@@ -85,7 +82,6 @@ final class OperationInjectionTests: XCTestCase {
     let queue = OperationQueue()
     queue.addOperations([operation1, operation2, injection], waitUntilFinished: true)
     queue.addOperations([operation3], waitUntilFinished: false)
-
     XCTAssertEqual(operation2.output, 10)
   }
 
@@ -96,7 +92,6 @@ final class OperationInjectionTests: XCTestCase {
     let injection = operation1.injectOutput(into: operation2) { _ in return nil }
     let queue = OperationQueue()
     queue.addOperations([operation1, operation2, injection], waitUntilFinished: true)
-
     XCTAssertNil(operation2.output)
   }
 
@@ -108,7 +103,6 @@ final class OperationInjectionTests: XCTestCase {
     let queue = OperationQueue()
     operation1.cancel()
     queue.addOperations([operation1, operation2, injection], waitUntilFinished: false)
-
     wait(for: [expectation1], timeout: 10)
   }
 }
