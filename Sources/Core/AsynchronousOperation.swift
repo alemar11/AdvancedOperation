@@ -54,7 +54,7 @@ open class AsynchronousOperation: Operation {
     
     public final override var isAsynchronous: Bool { return true }
     
-    public final override var isConcurrent: Bool { return true }
+    public final override var isConcurrent: Bool { return isAsynchronous }
     
     /// An `OSLog` instance to log additional informations.
     ///
