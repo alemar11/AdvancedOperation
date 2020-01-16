@@ -21,6 +21,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
+// TODO: remove these utils
 extension Result {
   // Returns the content associated with a failure.
   var failure: Failure? {
