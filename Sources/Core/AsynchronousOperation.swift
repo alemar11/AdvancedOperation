@@ -171,6 +171,11 @@ open class AsynchronousOperation: Operation {
     public final override func main() {
         state = .executing
         
+        // TODO: conditions here
+        // - if the conditions aren't satisfied:
+        //      - the operation will get cancelled
+        //      - the first error will be stored
+        
         if isCancelled {
             finish()
         } else {
