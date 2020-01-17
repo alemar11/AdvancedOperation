@@ -29,7 +29,7 @@ public typealias AsyncOutputBlockOperation = AsynchronousOutputBlockOperation
 /// A concurrent sublcass of `AsynchronousOutputOperation` to execute a closure that can optionally produce an output.
 public final class AsynchronousOutputBlockOperation<OutputType>: AsynchronousOutputOperation<OutputType> {
     /// A closure type that takes a closure as its parameter.
-    public typealias Block = (@escaping (Output) -> Void) -> Void
+    public typealias Block = (@escaping (Result<Output, Error>) -> Void) -> Void
     
     // MARK: - Private Properties
     
@@ -58,16 +58,16 @@ public final class AsynchronousOutputBlockOperation<OutputType>: AsynchronousOut
         self.init(block: { complete in
             queue.async {
                 let result = block()
-                complete(result)
+                complete(.success(result))
             }
         })
     }
     
     // MARK: - Overrides
     
-    public override func execute(completion: @escaping (Output) -> Void) {
+    public override func execute(result: @escaping (Result<Output, Error>) -> Void) {
         block {
-            completion($0)
+            result($0)
         }
     }
 }

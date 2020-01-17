@@ -28,7 +28,7 @@ public typealias AsyncBlockOperation = AsynchronousBlockOperation
 /// A concurrent sublcass of `AsynchronousOperation` to execute a closure.
 public final class AsynchronousBlockOperation: AsynchronousOperation {
     /// A closure type that takes a closure as its parameter.
-    public typealias Block = (@escaping () -> Void) -> Void
+    public typealias Block = (@escaping (Finish) -> Void) -> Void
     
     // MARK: - Private Properties
     
@@ -57,16 +57,16 @@ public final class AsynchronousBlockOperation: AsynchronousOperation {
         self.init(block: { complete in
             queue.async {
                 block()
-                complete()
+                complete(.success)
             }
         })
     }
     
     // MARK: - Overrides
     
-    public override func execute(completion: @escaping () -> Void) {
+    public override func execute(completion: @escaping (Finish) -> Void) {
         block {
-            completion()
+            completion($0)
         }
     }
 }

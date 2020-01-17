@@ -28,7 +28,7 @@ final class AsynchronousBlockOperationTests: XCTestCase {
     func testCancel() {
         let operation = AsynchronousBlockOperation { complete in
             DispatchQueue(label: "\(identifier).\(#function)", attributes: .concurrent).asyncAfter(deadline: .now() + 2) {
-                complete()
+                complete(.success)
             }
         }
         XCTAssertTrue(operation.isAsynchronous)
@@ -52,7 +52,7 @@ final class AsynchronousBlockOperationTests: XCTestCase {
     func testCancelBeforeStarting() {
         let operation = AsynchronousBlockOperation { complete in
             DispatchQueue(label: "\(identifier).\(#function)", attributes: .concurrent).asyncAfter(deadline: .now() + 2) {
-                complete()
+                complete(.success)
             }
         }
         XCTAssertTrue(operation.isAsynchronous)
@@ -65,7 +65,7 @@ final class AsynchronousBlockOperationTests: XCTestCase {
     }
     
     func testEarlyBailOut() {
-        let operation = AsynchronousBlockOperation { complete in complete() }
+        let operation = AsynchronousBlockOperation { complete in complete(.success) }
         let expectation1 = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: operation, expectedValue: true)
         operation.cancel()
         operation.start()
@@ -77,7 +77,7 @@ final class AsynchronousBlockOperationTests: XCTestCase {
         let operation = AsynchronousBlockOperation { complete in
             XCTAssertTrue(Thread.isMainThread)
             DispatchQueue(label: "\(identifier).\(#function)", attributes: .concurrent).asyncAfter(deadline: .now() + 2) {
-                complete()
+                complete(.success)
             }
         }
         let expectation1 = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: operation, expectedValue: true)
@@ -94,7 +94,7 @@ final class AsynchronousBlockOperationTests: XCTestCase {
             DispatchQueue.global().async {
                 sleep(3)
                 expectation1.fulfill()
-                complete()
+                complete(.success)
             }
         }
         operation.addCompletionBlock {
@@ -149,7 +149,7 @@ final class AsynchronousBlockOperationTests: XCTestCase {
             var operation = AsynchronousBlockOperation { [unowned object] complete in
                 DispatchQueue(label: "\(identifier).\(#function)", attributes: .concurrent).async {
                     _ = object
-                    complete()
+                    complete(.success)
                 }
             }
             

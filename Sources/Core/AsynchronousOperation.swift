@@ -27,6 +27,11 @@
 import Foundation
 import os.log
 
+public enum Finish {
+    case success
+    case failure(error: Error)
+}
+
 public typealias AsyncOperation = AsynchronousOperation
 
 /// An abstract thread safe subclass of `Operation` to build asynchronous operations.
@@ -55,6 +60,12 @@ open class AsynchronousOperation: Operation {
     public final override var isAsynchronous: Bool { return true }
     
     public final override var isConcurrent: Bool { return isAsynchronous }
+    
+    /// Returns `true` in the operation has finished with an error.
+    public final var isFailed: Bool { return isFinished && error != nil }
+    
+    /// The error  occurred during the operation evaluation.
+    public private(set) var error: Error?
     
     /// An `OSLog` instance to log additional informations.
     ///
@@ -179,7 +190,14 @@ open class AsynchronousOperation: Operation {
         if isCancelled {
             finish()
         } else {
-            execute(completion: finish)
+            execute { result in
+                switch result {
+                case .success:
+                    self.finish()
+                case .failure(let error):
+                    self.finish(error: error)
+                }
+            }
         }
     }
     
@@ -189,7 +207,7 @@ open class AsynchronousOperation: Operation {
     ///
     /// - Warning: The default implementation of this function traps.
     /// - Note: Before calling this method, the operation checks if it's already cancelled (and, in that case, finishes itself).
-    open func execute(completion: @escaping () -> Void) {
+    open func execute(completion: @escaping (Finish) -> Void) {
         preconditionFailure("Subclasses must implement `execute(completion:)`.")
     }
     
@@ -215,7 +233,7 @@ open class AsynchronousOperation: Operation {
     // MARK: - Private Methods
     
     /// Call this function to finish an operation that is currently executing.
-    private final func finish() {
+    private final func finish(error: Error? = nil) {
         // State can also be "ready" here if the operation was cancelled before it was started.
         guard !isFinished else { return }
         
@@ -224,6 +242,7 @@ open class AsynchronousOperation: Operation {
         
         switch state {
         case .ready, .executing:
+            self.error = error
             state = .finished
             isRunning.mutate { $0 = false }
             

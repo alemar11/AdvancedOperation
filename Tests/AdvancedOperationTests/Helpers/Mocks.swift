@@ -41,35 +41,35 @@ final internal class SleepyAsyncOperation: AsynchronousOutputOperation<Never> {
         super.init()
     }
     
-    override func execute(completion: @escaping (Never?) -> Void) {
+    override func execute(result: @escaping (Result<Never?, Error>) -> Void) {
         DispatchQueue.global().async { [weak weakSelf = self] in
             
             guard let strongSelf = weakSelf else {
-                completion(nil)
+                result(.success(nil))
                 return
             }
             
             if strongSelf.isCancelled {
-                completion(nil)
+                result(.success(nil))
                 return
             }
             
             sleep(self.interval1)
             
             if strongSelf.isCancelled {
-                completion(nil)
+                result(.success(nil))
                 return
             }
             
             sleep(self.interval2)
             
             if strongSelf.isCancelled {
-                completion(nil)
+                result(.success(nil))
                 return
             }
             
             sleep(self.interval3)
-            completion(nil)
+            result(.success(nil))
         }
     }
 }
@@ -79,24 +79,24 @@ final internal class SleepyAsyncOperation: AsynchronousOutputOperation<Never> {
 /// This operation fails if the input is greater than **1000**
 /// This operation cancels itself if the input is **100**
 internal class IntToStringAsyncOperation: AsynchronousInputOutputOperation<Int, String> {
-    override func execute(completion: @escaping (String?) -> Void) {
+    override func execute(result: @escaping (Result<String?, Error>) -> Void) {
         DispatchQueue.global().async {
             if let input = self.input {
-                completion("\(input)")
+                result(.success("\(input)"))
             } else {
-                completion(nil)
+                result(.success(nil))
             }
         }
     }
 }
 
 internal class StringToIntAsyncOperation: AsynchronousInputOutputOperation<String, Int>  {
-    override func execute(completion: @escaping (Int?) -> Void) {
+    override func execute(result: @escaping (Result<Int?, Error>) -> Void) {
         DispatchQueue.global().async {
             if let input = self.input, let value = Int(input) {
-                completion(value)
+                result(.success(value))
             } else {
-                completion(nil)
+                result(.success(nil))
             }
         }
     }
@@ -105,22 +105,22 @@ internal class StringToIntAsyncOperation: AsynchronousInputOutputOperation<Strin
 // MARK: - AsynchronousOperation
 
 final internal class NotExecutableOperation: AsynchronousOperation {
-    override func execute(completion: @escaping () -> Void) {
+    override func execute(completion: @escaping (Finish) -> Void) {
         XCTFail("This operation shouldn't be executed.")
-        completion()
+        completion(.success)
     }
 }
 
 
 final internal class AutoCancellingAsyncOperation: AsynchronousOperation {
-    override func execute(completion: @escaping () -> Void) {
+    override func execute(completion: @escaping (Finish) -> Void) {
         DispatchQueue.global().asyncAfter(deadline: .now() + 1.0) { [weak weakSelf = self] in
             guard let strongSelf = weakSelf else {
-                completion()
+                completion(.success)
                 return
             }
             strongSelf.cancel()
-            completion()
+            completion(.success)
         }
     }
 }
@@ -132,12 +132,12 @@ final internal class RunUntilCancelledAsyncOperation: AsynchronousOperation {
         self.queue = queue
     }
     
-    override func execute(completion: @escaping () -> Void) {
+    override func execute(completion: @escaping (Finish) -> Void) {
         queue.async {
             while !self.isCancelled {
                 sleep(1)
             }
-            completion()
+            completion(.success)
         }
     }
 }

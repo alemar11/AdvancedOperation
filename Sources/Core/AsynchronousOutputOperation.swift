@@ -39,9 +39,8 @@ open class AsynchronousOutputOperation<OutputType>: AsyncOperation, OutputProduc
     
     // MARK: - Public Methods
     
-    public final override func execute(completion: @escaping () -> Void) {
-        self.execute { output in
-            // ensure that the completion is called only once
+    public final override func execute(completion: @escaping (Finish) -> Void) {
+        self.execute(result: { result in
             let completable =  self.gate.mutate { value -> Bool in
                 if value {
                     assertionFailure("The completion block can't be called multiple times")
@@ -53,12 +52,18 @@ open class AsynchronousOutputOperation<OutputType>: AsyncOperation, OutputProduc
             }
             
             guard completable else { return }
-            self.output = output
-            completion()
-        }
-    }
+            
+            do {
+                self.output = try result.get()
+                completion(.success)
+            } catch {
+                completion(.failure(error: error))
+            }
+        })
         
-    open func execute(completion: @escaping (Output) -> Void) {
+    }
+    
+    open func execute(result: @escaping (Result<Output, Error>) -> Void) {
         preconditionFailure("Subclasses must implement `execute(completion:)`.")
     }
 }
