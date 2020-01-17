@@ -27,9 +27,16 @@
 import Foundation
 import os.log
 
-public enum Finish {
+public enum Finish { // TODO: better name
     case success
     case failure(error: Error)
+    
+    fileprivate var error: Error? {
+        if case let .failure(error) = self {
+            return error
+        }
+        return nil
+    }
 }
 
 public typealias AsyncOperation = AsynchronousOperation
@@ -190,14 +197,7 @@ open class AsynchronousOperation: Operation {
         if isCancelled {
             finish()
         } else {
-            execute { result in
-                switch result {
-                case .success:
-                    self.finish()
-                case .failure(let error):
-                    self.finish(error: error)
-                }
-            }
+            execute { self.finish(error: $0.error) }
         }
     }
     

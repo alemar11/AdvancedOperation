@@ -63,7 +63,9 @@ open class AsynchronousOutputOperation<OutputType>: AsyncOperation, OutputProduc
         
     }
     
-    open func execute(result: @escaping (Result<Output, Error>) -> Void) {
+    // TODO: add a completion handler with the result once the output has been added
+    
+    open func execute(result: @escaping (Result<Output, Error>) -> Void) {  // TODO: better name
         preconditionFailure("Subclasses must implement `execute(completion:)`.")
     }
 }
