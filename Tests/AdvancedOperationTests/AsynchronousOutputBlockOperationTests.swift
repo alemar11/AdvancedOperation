@@ -165,6 +165,7 @@ final class AsynchronousOutputBlockOperationTests: XCTestCase {
 //    (1...1000).forEach { (i) in
 //      print(i)
 //      testMemoryLeak()
+//      testMemoryLeak2()
 //    }
 //  }
 
