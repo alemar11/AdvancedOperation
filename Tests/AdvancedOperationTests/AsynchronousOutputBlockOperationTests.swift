@@ -159,6 +159,33 @@ final class AsynchronousOutputBlockOperationTests: XCTestCase {
         XCTAssertTrue(operation3.isFinished)
         XCTAssertTrue(adapterOperation.isFinished)
     }
+
+  func testStress() {
+    (1...1000).forEach { (i) in
+      print(i)
+      testMemoryLeak()
+    }
+  }
+  func testMemoryLeak2() {
+      var object = NSObject()
+      weak var weakObject = object
+
+      autoreleasepool {
+          var operation = TestOp()
+          let expectation1 = expectation(description: "\(#function)\(#line)")
+          operation.addCompletionBlock { expectation1.fulfill() }
+          operation.start()
+
+          waitForExpectations(timeout: 3)
+
+          // Memory leaks test: once the operation is released, the captured object (by reference) should be nil (weakObject)
+          operation = TestOp() //AsynchronousOutputBlockOperation { _ in }
+
+          object = NSObject()
+      }
+
+      XCTAssertNil(weakObject, "Memory leak: the object should have been deallocated at this point.")
+  }
     
     func testMemoryLeak() {
         var object = NSObject()
@@ -166,12 +193,11 @@ final class AsynchronousOutputBlockOperationTests: XCTestCase {
         
         autoreleasepool {
             var operation = AsynchronousOutputBlockOperation<Never> { [unowned object] complete in
-                DispatchQueue(label: "\(identifier).\(#function)", attributes: .concurrent).async {
+               DispatchQueue(label: "\(identifier).\(#function)", attributes: .concurrent).async {
                     _ = object
                     complete(.success(nil))
                 }
             }
-            
             let expectation1 = expectation(description: "\(#function)\(#line)")
             operation.addCompletionBlock { expectation1.fulfill() }
             operation.start()
@@ -185,4 +211,12 @@ final class AsynchronousOutputBlockOperationTests: XCTestCase {
         
         XCTAssertNil(weakObject, "Memory leak: the object should have been deallocated at this point.")
     }
+}
+
+class TestOp: AsyncOperation {
+  override func execute(completion: @escaping (Finish) -> Void) {
+        DispatchQueue(label: "\(identifier).\(#function)", attributes: .concurrent).async {
+                   completion(.success)
+               }
+  }
 }

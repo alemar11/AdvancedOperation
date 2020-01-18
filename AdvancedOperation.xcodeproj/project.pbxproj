@@ -36,10 +36,6 @@
 		060B667223C4EBC80085FCB4 /* OutputProducing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 060B667023C4EBC80085FCB4 /* OutputProducing.swift */; };
 		060B667323C4EBC80085FCB4 /* OutputProducing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 060B667023C4EBC80085FCB4 /* OutputProducing.swift */; };
 		060B667423C4EBC80085FCB4 /* OutputProducing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 060B667023C4EBC80085FCB4 /* OutputProducing.swift */; };
-		06B8DF1423CF59AE0053058F /* _SynchronousOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06B8DF1323CF59AE0053058F /* _SynchronousOperation.swift */; };
-		06B8DF1523CF59AE0053058F /* _SynchronousOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06B8DF1323CF59AE0053058F /* _SynchronousOperation.swift */; };
-		06B8DF1623CF59AE0053058F /* _SynchronousOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06B8DF1323CF59AE0053058F /* _SynchronousOperation.swift */; };
-		06B8DF1723CF59AE0053058F /* _SynchronousOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06B8DF1323CF59AE0053058F /* _SynchronousOperation.swift */; };
 		06C92B4623D0A78C000D12C8 /* AsynchronousOutputOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06C92B4523D0A78C000D12C8 /* AsynchronousOutputOperation.swift */; };
 		06C92B4723D0A78C000D12C8 /* AsynchronousOutputOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06C92B4523D0A78C000D12C8 /* AsynchronousOutputOperation.swift */; };
 		06C92B4823D0A78C000D12C8 /* AsynchronousOutputOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06C92B4523D0A78C000D12C8 /* AsynchronousOutputOperation.swift */; };
@@ -59,10 +55,6 @@
 		06C92B5E23D1AA4F000D12C8 /* Log.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06C92B5C23D1AA4F000D12C8 /* Log.swift */; };
 		06C92B5F23D1AA4F000D12C8 /* Log.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06C92B5C23D1AA4F000D12C8 /* Log.swift */; };
 		06C92B6023D1AA4F000D12C8 /* Log.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06C92B5C23D1AA4F000D12C8 /* Log.swift */; };
-		232F3AAE206041DE00FC45CB /* AdvancedOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 232F3AAD206041DE00FC45CB /* AdvancedOperation.swift */; };
-		232F3AAF206041DE00FC45CB /* AdvancedOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 232F3AAD206041DE00FC45CB /* AdvancedOperation.swift */; };
-		232F3AB0206041DE00FC45CB /* AdvancedOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 232F3AAD206041DE00FC45CB /* AdvancedOperation.swift */; };
-		232F3AB1206041DE00FC45CB /* AdvancedOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 232F3AAD206041DE00FC45CB /* AdvancedOperation.swift */; };
 		2341308C1F9605F5002BE7FC /* AdvancedOperation.h in Headers */ = {isa = PBXBuildFile; fileRef = 2341308A1F9605F5002BE7FC /* AdvancedOperation.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		234130BC1F96076A002BE7FC /* AdvancedOperation.h in Headers */ = {isa = PBXBuildFile; fileRef = 2341308A1F9605F5002BE7FC /* AdvancedOperation.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		234130BD1F96076D002BE7FC /* AdvancedOperation.h in Headers */ = {isa = PBXBuildFile; fileRef = 2341308A1F9605F5002BE7FC /* AdvancedOperation.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -112,6 +104,10 @@
 		D2093D3A2366175200230A2A /* OperationInjectionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2093D392366175200230A2A /* OperationInjectionTests.swift */; };
 		D2093D3B2366175200230A2A /* OperationInjectionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2093D392366175200230A2A /* OperationInjectionTests.swift */; };
 		D2093D3C2366175200230A2A /* OperationInjectionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2093D392366175200230A2A /* OperationInjectionTests.swift */; };
+		D21C5D8423D3674E005F8D51 /* AdvancedOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = D21C5D8323D3674E005F8D51 /* AdvancedOperation.swift */; };
+		D21C5D8523D3674E005F8D51 /* AdvancedOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = D21C5D8323D3674E005F8D51 /* AdvancedOperation.swift */; };
+		D21C5D8623D3674E005F8D51 /* AdvancedOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = D21C5D8323D3674E005F8D51 /* AdvancedOperation.swift */; };
+		D21C5D8723D3674E005F8D51 /* AdvancedOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = D21C5D8323D3674E005F8D51 /* AdvancedOperation.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -144,13 +140,11 @@
 		0622C311239A717D004F3FA5 /* AdvancedOperation macOS.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = "AdvancedOperation macOS.xctestplan"; sourceTree = "<group>"; };
 		0622C314239A7428004F3FA5 /* AdvancedOperation iOS.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = "AdvancedOperation iOS.xctestplan"; sourceTree = "<group>"; };
 		068C554F23C8C6810043B43F /* lint.yml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; path = lint.yml; sourceTree = "<group>"; };
-		06B8DF1323CF59AE0053058F /* _SynchronousOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = _SynchronousOperation.swift; sourceTree = "<group>"; };
 		06C92B4523D0A78C000D12C8 /* AsynchronousOutputOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsynchronousOutputOperation.swift; sourceTree = "<group>"; };
 		06C92B4A23D0A9FF000D12C8 /* AsynchronousBlockOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsynchronousBlockOperation.swift; sourceTree = "<group>"; };
 		06C92B4F23D0AAEA000D12C8 /* AsynchronousBlockOperationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsynchronousBlockOperationTests.swift; sourceTree = "<group>"; };
 		06C92B5723D0C17C000D12C8 /* AsynchronousInputOutputOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsynchronousInputOutputOperation.swift; sourceTree = "<group>"; };
 		06C92B5C23D1AA4F000D12C8 /* Log.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Log.swift; sourceTree = "<group>"; };
-		232F3AAD206041DE00FC45CB /* AdvancedOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdvancedOperation.swift; sourceTree = "<group>"; };
 		234130871F9605F5002BE7FC /* AdvancedOperation.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = AdvancedOperation.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		2341308A1F9605F5002BE7FC /* AdvancedOperation.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AdvancedOperation.h; sourceTree = "<group>"; };
 		2341308B1F9605F5002BE7FC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -180,6 +174,7 @@
 		D2093D302366068B00230A2A /* AsynchronousOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsynchronousOperation.swift; sourceTree = "<group>"; };
 		D2093D35236606F400230A2A /* AsynchronousOperationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsynchronousOperationTests.swift; sourceTree = "<group>"; };
 		D2093D392366175200230A2A /* OperationInjectionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OperationInjectionTests.swift; sourceTree = "<group>"; };
+		D21C5D8323D3674E005F8D51 /* AdvancedOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdvancedOperation.swift; sourceTree = "<group>"; };
 		D254E22323C3A68800A1586E /* LICENSE.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = LICENSE.md; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
@@ -266,8 +261,6 @@
 		232F9442217F299100A86699 /* Core */ = {
 			isa = PBXGroup;
 			children = (
-				06B8DF1323CF59AE0053058F /* _SynchronousOperation.swift */,
-				232F3AAD206041DE00FC45CB /* AdvancedOperation.swift */,
 				06C92B4A23D0A9FF000D12C8 /* AsynchronousBlockOperation.swift */,
 				06C92B5723D0C17C000D12C8 /* AsynchronousInputOutputOperation.swift */,
 				D2093D302366068B00230A2A /* AsynchronousOperation.swift */,
@@ -279,6 +272,7 @@
 				060B667023C4EBC80085FCB4 /* OutputProducing.swift */,
 				23A1B87821B81C710018D9D5 /* UnfairLock.swift */,
 				06C92B5C23D1AA4F000D12C8 /* Log.swift */,
+				D21C5D8323D3674E005F8D51 /* AdvancedOperation.swift */,
 			);
 			path = Core;
 			sourceTree = "<group>";
@@ -698,11 +692,10 @@
 				23A1B87F21B8307F0018D9D5 /* Atomic.swift in Sources */,
 				06C92B4B23D0A9FF000D12C8 /* AsynchronousBlockOperation.swift in Sources */,
 				23F24D22200799B800B25A03 /* Operation+Utils.swift in Sources */,
-				232F3AAE206041DE00FC45CB /* AdvancedOperation.swift in Sources */,
 				D2093D312366068B00230A2A /* AsynchronousOperation.swift in Sources */,
 				239BC52220EB7539009A36D9 /* InputConsuming.swift in Sources */,
 				23A813B12020CF1E008A98E0 /* AsynchronousOutputBlockOperation.swift in Sources */,
-				06B8DF1423CF59AE0053058F /* _SynchronousOperation.swift in Sources */,
+				D21C5D8423D3674E005F8D51 /* AdvancedOperation.swift in Sources */,
 				060B667123C4EBC80085FCB4 /* OutputProducing.swift in Sources */,
 				06C92B5823D0C17C000D12C8 /* AsynchronousInputOutputOperation.swift in Sources */,
 			);
@@ -718,11 +711,10 @@
 				23A1B88021B8307F0018D9D5 /* Atomic.swift in Sources */,
 				06C92B4C23D0A9FF000D12C8 /* AsynchronousBlockOperation.swift in Sources */,
 				23F24D23200799B800B25A03 /* Operation+Utils.swift in Sources */,
-				232F3AAF206041DE00FC45CB /* AdvancedOperation.swift in Sources */,
 				D2093D322366068B00230A2A /* AsynchronousOperation.swift in Sources */,
 				239BC52320EB7539009A36D9 /* InputConsuming.swift in Sources */,
 				23A813B22020CF1E008A98E0 /* AsynchronousOutputBlockOperation.swift in Sources */,
-				06B8DF1523CF59AE0053058F /* _SynchronousOperation.swift in Sources */,
+				D21C5D8523D3674E005F8D51 /* AdvancedOperation.swift in Sources */,
 				060B667223C4EBC80085FCB4 /* OutputProducing.swift in Sources */,
 				06C92B5923D0C17C000D12C8 /* AsynchronousInputOutputOperation.swift in Sources */,
 			);
@@ -738,11 +730,10 @@
 				23A1B88121B8307F0018D9D5 /* Atomic.swift in Sources */,
 				06C92B4D23D0A9FF000D12C8 /* AsynchronousBlockOperation.swift in Sources */,
 				23F24D24200799B800B25A03 /* Operation+Utils.swift in Sources */,
-				232F3AB0206041DE00FC45CB /* AdvancedOperation.swift in Sources */,
 				D2093D332366068B00230A2A /* AsynchronousOperation.swift in Sources */,
 				239BC52420EB7539009A36D9 /* InputConsuming.swift in Sources */,
 				23A813B32020CF1E008A98E0 /* AsynchronousOutputBlockOperation.swift in Sources */,
-				06B8DF1623CF59AE0053058F /* _SynchronousOperation.swift in Sources */,
+				D21C5D8623D3674E005F8D51 /* AdvancedOperation.swift in Sources */,
 				060B667323C4EBC80085FCB4 /* OutputProducing.swift in Sources */,
 				06C92B5A23D0C17C000D12C8 /* AsynchronousInputOutputOperation.swift in Sources */,
 			);
@@ -758,11 +749,10 @@
 				23A1B88221B8307F0018D9D5 /* Atomic.swift in Sources */,
 				06C92B4E23D0A9FF000D12C8 /* AsynchronousBlockOperation.swift in Sources */,
 				23F24D25200799B800B25A03 /* Operation+Utils.swift in Sources */,
-				232F3AB1206041DE00FC45CB /* AdvancedOperation.swift in Sources */,
 				D2093D342366068B00230A2A /* AsynchronousOperation.swift in Sources */,
 				239BC52520EB7539009A36D9 /* InputConsuming.swift in Sources */,
 				23A813B42020CF1E008A98E0 /* AsynchronousOutputBlockOperation.swift in Sources */,
-				06B8DF1723CF59AE0053058F /* _SynchronousOperation.swift in Sources */,
+				D21C5D8723D3674E005F8D51 /* AdvancedOperation.swift in Sources */,
 				060B667423C4EBC80085FCB4 /* OutputProducing.swift in Sources */,
 				06C92B5B23D0C17C000D12C8 /* AsynchronousInputOutputOperation.swift in Sources */,
 			);

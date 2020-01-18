@@ -59,3 +59,22 @@ internal enum Log {
         }
     }
 }
+
+extension ProcessInfo {
+  // TODO: we should probably use a different key -> identifier.LOG.ALL_ENABLED
+  static var hasAllLogsEnabled: Bool {
+    return ProcessInfo.processInfo.environment.keys.contains("\(identifier).LOG_ALL_ENABLED")
+  }
+
+  static var hasDefaultLogEnabled: Bool {
+    return hasAllLogsEnabled || ProcessInfo.processInfo.environment.keys.contains("\(identifier).LOG_ENABLED")
+  }
+
+  static var hasSignpostEnabled: Bool {
+    return hasAllLogsEnabled || ProcessInfo.processInfo.environment.keys.contains("\(identifier).SIGNPOST_ENABLED")
+  }
+
+  static var hasPointsOfInterestEnabled: Bool {
+    return hasAllLogsEnabled || ProcessInfo.processInfo.environment.keys.contains("\(identifier).POI_ENABLED")
+  }
+}
