@@ -160,12 +160,14 @@ final class AsynchronousOutputBlockOperationTests: XCTestCase {
         XCTAssertTrue(adapterOperation.isFinished)
     }
 
-  func testStress() {
-    (1...1000).forEach { (i) in
-      print(i)
-      testMemoryLeak()
-    }
-  }
+  // TODO
+//  func testStress() {
+//    (1...1000).forEach { (i) in
+//      print(i)
+//      testMemoryLeak()
+//    }
+//  }
+
   func testMemoryLeak2() {
       var object = NSObject()
       weak var weakObject = object
