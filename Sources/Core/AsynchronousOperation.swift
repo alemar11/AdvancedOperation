@@ -159,6 +159,9 @@ open class AsynchronousOperation: AdvancedOperation {
     // - if the conditions aren't satisfied:
     //      - the operation will get cancelled
     //      - the first error will be stored
+    // update: if we have at least one condition that generates an error, instead of cancelling the operaiton
+    // we simply finish it with the error (in that case the isCancelled check below should be replaced
+    // or we can cancel it with an error if we implement cancel(error:)
     
     if isCancelled {
       finish()
