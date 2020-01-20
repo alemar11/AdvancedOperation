@@ -152,15 +152,15 @@ final class AsynchronousOutputBlockOperationTests: XCTestCase {
     }
     
     // TODO
-    //  func testStress() {
-    //    (1...1000).forEach { (i) in
-    //      print(i)
-    //      testMemoryLeak()
-    //      testMemoryLeak2()
-    //    }
-    //  }
+//      func testStress() {
+//        (1...1000).forEach { (i) in
+//          print(i)
+//          testMemoryLeak()
+//          testMemoryLeak2()
+//        }
+//      }
     
-    func testMemoryLeak2() {
+    func testMemoryLeak2() { // TODO
         var object = NSObject()
         weak var weakObject = object
         
