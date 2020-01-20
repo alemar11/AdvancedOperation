@@ -25,84 +25,118 @@ import XCTest
 @testable import AdvancedOperation
 
 final class OperationInjectionTests: XCTestCase {
-  func testInputAndOutputValues() {
-    let operation1 = IntToStringAsyncOperation()
-    let expectation1 = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: operation1, expectedValue: true)
-    operation1.input = 10
-    operation1.start()
-    wait(for: [expectation1], timeout: 3)
-    XCTAssertEqual(operation1.output, "10")
-
-    let operation2 = StringToIntAsyncOperation()
-    let expectation2 = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: operation2, expectedValue: true)
-    operation2.input = "10"
-    operation2.start()
-    wait(for: [expectation2], timeout: 3)
-    XCTAssertEqual(operation2.output, 10)
-  }
-
-  func testSuccessfulInjectionBetweenOperations() {
-    let queue = OperationQueue()
-    let operation1 = IntToStringOperation()
-    let operation2 = StringToIntOperation()
-    let injectionOperation = operation1.injectOutput(into: operation2)
-    operation1.input = 10
-    queue.addOperations([operation1, operation2, injectionOperation], waitUntilFinished: true)
-    XCTAssertEqual(operation2.output, 10)
-  }
-
-  func testFailingInjectionBetweenOperations() {
-    let queue = OperationQueue()
-    let operation1 = IntToStringOperation()
-    let operation2 = StringToIntOperation()
-    let injectionOperation = operation1.injectOutput(into: operation2)
-    operation1.input = nil
-    queue.addOperations([operation1, operation2, injectionOperation], waitUntilFinished: true)
-    XCTAssertNil(operation2.output)
-  }
-
-  func testFailingInjectionBetweenOperationsWhenTheOutputProducingOperationGetsCancelled() {
-    let queue = OperationQueue()
-    let operation1 = IntToStringOperation()
-    let operation2 = StringToIntOperation()
-    let injectionOperation = operation1.injectOutput(into: operation2)
-    operation1.input = 10
-    operation1.cancel()
-    queue.addOperations([operation1, operation2, injectionOperation], waitUntilFinished: true)
-    XCTAssertNil(operation2.output)
-  }
-
-  func testSuccessfulInjectionTransformingOutput() {
-    let operation1 = IntToStringAsyncOperation()
-    let operation2 = StringToIntAsyncOperation()
-    let operation3 = BlockOperation() // noise
-    operation3.addDependency(operation2)
-    operation1.input = 10
-    let injection = operation1.injectOutput(into: operation2) { $0 }
-    let queue = OperationQueue()
-    queue.addOperations([operation1, operation2, injection], waitUntilFinished: true)
-    queue.addOperations([operation3], waitUntilFinished: false)
-    XCTAssertEqual(operation2.output, 10)
-  }
-
-  func testFailingInjectionTransforminOutput() {
-    let operation1 = IntToStringAsyncOperation()
-    let operation2 = IntToStringAsyncOperation()
-    operation1.input = nil
-    let injection = operation1.injectOutput(into: operation2) { _ in return nil }
-    let queue = OperationQueue()
-    queue.addOperations([operation1, operation2, injection], waitUntilFinished: true)
-    XCTAssertNil(operation2.output)
-  }
-
-  func testInjectionTransformingOutputOfAnAlreadyCancelledOutputProducingOperation() {
-    let operation1 = IntToStringAsyncOperation() // no input -> fails
-    let operation2 = StringToIntAsyncOperation()
-    let expectation1 = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: operation2, expectedValue: true)
-    let injection = operation1.injectOutput(into: operation2) { $0 }
-    let queue = OperationQueue()
-    operation1.cancel()
-    queue.addOperations([operation1, operation2, injection], waitUntilFinished: false)
-    wait(for: [expectation1], timeout: 10)
-  }
+      func testInputAndOutputValues() {
+        let operation1 = IntToStringAsyncOperation()
+        let expectation1 = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: operation1, expectedValue: true)
+        operation1.input = 10
+        operation1.start()
+        wait(for: [expectation1], timeout: 3)
+        XCTAssertEqual(operation1.output, "10")
+    
+        let operation2 = StringToIntAsyncOperation()
+        let expectation2 = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: operation2, expectedValue: true)
+        operation2.input = "10"
+        operation2.start()
+        wait(for: [expectation2], timeout: 3)
+        XCTAssertEqual(operation2.output, 10)
+      }
+    
+    func testSuccessfulInjectionBetweenOperations() {
+        let queue = OperationQueue()
+        let operation1 = IntToStringOperation()
+        let operation2 = StringToIntOperation()
+        let injectionOperation = operation1.injectOutput(into: operation2)
+        operation1.input = 10
+        XCTAssertEqual(operation1.input, 10)
+        queue.addOperations([operation1, operation2, injectionOperation], waitUntilFinished: true)
+        XCTAssertEqual(operation2.output, 10)
+    }
+    
+    func testFailingInjectionBetweenOperations() {
+        let queue = OperationQueue()
+        let operation1 = IntToStringOperation()
+        let operation2 = StringToIntOperation()
+        let injectionOperation = operation1.injectOutput(into: operation2)
+        operation1.input = nil
+        queue.addOperations([operation1, operation2, injectionOperation], waitUntilFinished: true)
+        XCTAssertNil(operation2.output)
+    }
+    
+    func testFailingInjectionBetweenOperationsWhenTheOutputProducingOperationGetsCancelled() {
+        let queue = OperationQueue()
+        let operation1 = IntToStringOperation()
+        let operation2 = StringToIntOperation()
+        let injectionOperation = operation1.injectOutput(into: operation2)
+        operation1.input = 10
+        operation1.cancel()
+        queue.addOperations([operation1, operation2, injectionOperation], waitUntilFinished: true)
+        XCTAssertNil(operation2.output)
+    }
+    
+    func testSuccessfulInjectionBetweenOperationsTransformingOutput() {
+        let queue = OperationQueue()
+        let operation1 = IntToStringOperation()
+        let operation2 = IntToStringOperation()
+        let injectionOperation = operation1.injectOutput(into: operation2) { result -> Int? in
+            if let result = result {
+                return Int(result)
+            } else {
+                return nil
+            }
+        }
+        operation1.input = 10
+        XCTAssertEqual(operation1.input, 10)
+        queue.addOperations([operation1, operation2, injectionOperation], waitUntilFinished: true)
+        
+        XCTAssertEqual(operation1.output, "10")
+        XCTAssertEqual(operation2.input, 10)
+        XCTAssertEqual(operation2.output, "10")
+    }
+    
+    func testFailingInjectionBetweenOperationsTransformingOutput() {
+        let queue = OperationQueue()
+        let operation1 = IntToStringOperation()
+        let operation2 = IntToStringOperation()
+        let injectionOperation = operation1.injectOutput(into: operation2) { _ -> Int? in return nil }
+        operation1.input = 10
+        XCTAssertEqual(operation1.input, 10)
+        queue.addOperations([operation1, operation2, injectionOperation], waitUntilFinished: true)
+        XCTAssertEqual(operation1.output, "10")
+        XCTAssertNil(operation2.input)
+        XCTAssertNil(operation2.output)
+    }
+    
+      func testSuccessfulInjectionTransformingOutput() {
+        let operation1 = IntToStringAsyncOperation()
+        let operation2 = StringToIntAsyncOperation()
+        let operation3 = BlockOperation() // noise
+        operation3.addDependency(operation2)
+        operation1.input = 10
+        let injection = operation1.injectOutput(into: operation2) { $0 }
+        let queue = OperationQueue()
+        queue.addOperations([operation1, operation2, injection], waitUntilFinished: true)
+        queue.addOperations([operation3], waitUntilFinished: false)
+        XCTAssertEqual(operation2.output, 10)
+      }
+    
+      func testFailingInjectionTransforminOutput() {
+        let operation1 = IntToStringAsyncOperation()
+        let operation2 = IntToStringAsyncOperation()
+        operation1.input = nil
+        let injection = operation1.injectOutput(into: operation2) { _ in return nil }
+        let queue = OperationQueue()
+        queue.addOperations([operation1, operation2, injection], waitUntilFinished: true)
+        XCTAssertNil(operation2.output)
+      }
+    
+      func testInjectionTransformingOutputOfAnAlreadyCancelledOutputProducingOperation() {
+        let operation1 = IntToStringAsyncOperation() // no input -> fails
+        let operation2 = StringToIntAsyncOperation()
+        let expectation1 = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: operation2, expectedValue: true)
+        let injection = operation1.injectOutput(into: operation2) { $0 }
+        let queue = OperationQueue()
+        operation1.cancel()
+        queue.addOperations([operation1, operation2, injection], waitUntilFinished: false)
+        wait(for: [expectation1], timeout: 10)
+      }
 }

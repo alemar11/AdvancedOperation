@@ -29,7 +29,7 @@ import os.log
 
 // MARK: - AsynchronousBlockOperation
 
-final internal class SleepyAsyncOperation: AsynchronousOutputOperation<Never> {
+final internal class SleepyAsyncOperation: AsynchronousOperation {
     private let interval1: UInt32
     private let interval2: UInt32
     private let interval3: UInt32
@@ -41,35 +41,29 @@ final internal class SleepyAsyncOperation: AsynchronousOutputOperation<Never> {
         super.init()
     }
     
-    override func execute(result: @escaping (Result<Never?, Error>) -> Void) {
-        DispatchQueue.global().async { [weak weakSelf = self] in
-            
-            guard let strongSelf = weakSelf else {
-                result(.success(nil))
-                return
-            }
-            
-            if strongSelf.isCancelled {
-                result(.success(nil))
+    override func main() {
+        DispatchQueue.global().async {
+            if self.isCancelled {
+                self.finish()
                 return
             }
             
             sleep(self.interval1)
             
-            if strongSelf.isCancelled {
-                result(.success(nil))
+            if self.isCancelled {
+                self.finish()
                 return
             }
             
             sleep(self.interval2)
             
-            if strongSelf.isCancelled {
-                result(.success(nil))
+            if self.isCancelled {
+                self.finish()
                 return
             }
             
             sleep(self.interval3)
-            result(.success(nil))
+            self.finish()
         }
     }
 }
@@ -78,26 +72,30 @@ final internal class SleepyAsyncOperation: AsynchronousOutputOperation<Never> {
 
 /// This operation fails if the input is greater than **1000**
 /// This operation cancels itself if the input is **100**
-internal class IntToStringAsyncOperation: AsynchronousInputOutputOperation<Int, String> {
-    override func execute(result: @escaping (Result<String?, Error>) -> Void) {
+internal class IntToStringAsyncOperation: AsynchronousOperation, InputConsumingOperation, OutputProducingOperation {
+    var input: Int?
+    private(set) var output: String?
+    
+    override func main() {
         DispatchQueue.global().async {
             if let input = self.input {
-                result(.success("\(input)"))
-            } else {
-                result(.success(nil))
+                self.output = "\(input)"
             }
+            self.finish()
         }
     }
 }
 
-internal class StringToIntAsyncOperation: AsynchronousInputOutputOperation<String, Int>  {
-    override func execute(result: @escaping (Result<Int?, Error>) -> Void) {
+internal class StringToIntAsyncOperation: AsynchronousOperation, InputConsumingOperation, OutputProducingOperation {
+    var input: String?
+    private(set) var output: Int?
+    
+    override func main() {
         DispatchQueue.global().async {
-            if let input = self.input, let value = Int(input) {
-                result(.success(value))
-            } else {
-                result(.success(nil))
+            if let input = self.input {
+                self.output = Int(input)
             }
+            self.finish()
         }
     }
 }
@@ -105,22 +103,18 @@ internal class StringToIntAsyncOperation: AsynchronousInputOutputOperation<Strin
 // MARK: - AsynchronousOperation
 
 final internal class NotExecutableOperation: AsynchronousOperation {
-    override func execute(completion: @escaping (Finish) -> Void) {
+    override func main() {
         XCTFail("This operation shouldn't be executed.")
-        completion(.success)
+        self.finish()
     }
 }
 
 
 final internal class AutoCancellingAsyncOperation: AsynchronousOperation {
-    override func execute(completion: @escaping (Finish) -> Void) {
-        DispatchQueue.global().asyncAfter(deadline: .now() + 1.0) { [weak weakSelf = self] in
-            guard let strongSelf = weakSelf else {
-                completion(.success)
-                return
-            }
-            strongSelf.cancel()
-            completion(.success)
+    override func main() {
+        DispatchQueue.global().asyncAfter(deadline: .now() + 1.0) {
+            self.cancel()
+            self.finish()
         }
     }
 }
@@ -132,48 +126,36 @@ final internal class RunUntilCancelledAsyncOperation: AsynchronousOperation {
         self.queue = queue
     }
     
-    override func execute(completion: @escaping (Finish) -> Void) {
+    override func main() {
         queue.async {
             while !self.isCancelled {
                 sleep(1)
             }
-            completion(.success)
+            self.finish()
         }
     }
 }
 
 // MARK: - Operation
 
-internal class IntToStringOperation: Operation & InputConsuming & OutputProducing {
+internal final class IntToStringOperation: Operation & InputConsumingOperation & OutputProducingOperation {
     var input: Int?
-    var output: String? {
-        return _output.value
-    }
-    
-    private var _output = Atomic<String?>(nil)
+    private(set) var output: String?
     
     override func main() {
-        if let input = input {
-            _output.mutate {
-                $0 = "\(input)"
-            }
+        if let input = self.input {
+            output = "\(input)"
         }
     }
 }
 
-internal class StringToIntOperation: Operation & InputConsuming & OutputProducing  {
+internal final class StringToIntOperation: Operation & InputConsumingOperation & OutputProducingOperation  {
     var input: String?
-    var output: Int? {
-        return _output.value
-    }
-    
-    private var _output = Atomic<Int?>(nil)
+    private(set) var output: Int?
     
     override func main() {
-        if let input = input {
-            _output.mutate {
-                $0 = Int(input)
-            }
+        if let input = self.input {
+            output = Int(input)
         }
     }
 }

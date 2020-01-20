@@ -27,17 +27,17 @@
 import Foundation
 import os.log
 
-public enum Finish { // TODO: better name
-  case success
-  case failure(error: Error)
-  
-  fileprivate var error: Error? {
-    if case let .failure(error) = self {
-      return error
-    }
-    return nil
-  }
-}
+//public enum Finish { // TODO: better name
+//  case success
+//  case failure(error: Error)
+//  
+//  fileprivate var error: Error? {
+//    if case let .failure(error) = self {
+//      return error
+//    }
+//    return nil
+//  }
+//}
 
 public typealias AsyncOperation = AsynchronousOperation
 
@@ -175,18 +175,8 @@ open class AsynchronousOperation: AdvancedOperation {
   
   // MARK: - Public Methods
   
-  public final override func main() {
-    execute { self.finish(error: $0.error) }
-  }
-  
-  /// Subclasses must implement this to perform their work and they must not call `super`.
-  ///
-  /// - Parameter completion: the block to be called with an appropriate result to finish the operation execution.
-  ///
-  /// - Warning: The default implementation of this function traps.
-  /// - Note: Before calling this method, the operation checks if it's already cancelled (and, in that case, finishes itself).
-  open func execute(completion: @escaping (Finish) -> Void) {
-    //preconditionFailure("Subclasses must implement `execute(completion:)`.")
+  public override func main() {
+    //execute { self.finish(error: $0.error) }
   }
   
   open override func cancel() {
@@ -202,7 +192,7 @@ open class AsynchronousOperation: AdvancedOperation {
   // MARK: - Private Methods
   
   /// Call this function to finish an operation that is currently executing.
-  private final func finish(error: Error? = nil) {
+  public final func finish() {
     // State can also be "ready" here if the operation was cancelled before it was started.
     
     //guard !isFinished else { return } // TODO: needed? there is a lock and a switch that skips the finished state
@@ -212,7 +202,6 @@ open class AsynchronousOperation: AdvancedOperation {
     
     switch state {
     case .ready, .executing:
-      self.error = error
       state = .finished
       isRunning.mutate { $0 = false }
     case .finished:

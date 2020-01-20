@@ -27,9 +27,11 @@ import Foundation
 public typealias AsyncOutputBlockOperation = AsynchronousOutputBlockOperation
 
 /// A concurrent sublcass of `AsynchronousOutputOperation` to execute a closure that can optionally produce an output.
-public final class AsynchronousOutputBlockOperation<OutputType>: AsynchronousOutputOperation<OutputType> {
+public final class AsynchronousOutputBlockOperation<OutputType>: AsynchronousOperation, OutputProducingOperation {
     /// A closure type that takes a closure as its parameter.
-    public typealias Block = (@escaping (Result<Output, Error>) -> Void) -> Void
+    public typealias Block = (@escaping (Output?) -> Void) -> Void
+    /// The produced output.
+    public private(set) var output: OutputType?
     
     // MARK: - Private Properties
     
@@ -47,27 +49,14 @@ public final class AsynchronousOutputBlockOperation<OutputType>: AsynchronousOut
         super.init()
         self.name = "AsynchronousOutputBlockOperation<\(OutputType.self)>"
     }
-    
-    /// A convenience initializer.
-    ///
-    /// - Parameters:
-    ///   - queue: The `DispatchQueue` where the operation will run its `block`.
-    ///   - block: The closure to run when the operation executes.
-    /// - Note: The block is run **concurrently** on the given `queue` and must return a result type to complete.
-    public convenience init(queue: DispatchQueue, block: @escaping () -> Output) {
-        self.init(block: { complete in
-            queue.async {
-                let result = block()
-                complete(.success(result))
-            }
-        })
-    }
-    
+        
     // MARK: - Overrides
     
-    public override func execute(result: @escaping (Result<Output, Error>) -> Void) {
-        block {
-            result($0)
+    public final override func main() {
+        block { output in
+            // TODO: leak
+            self.output = output
+            self.finish()
         }
     }
 }

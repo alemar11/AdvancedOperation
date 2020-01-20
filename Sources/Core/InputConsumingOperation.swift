@@ -23,30 +23,9 @@
 
 import Foundation
 
-public typealias AsyncInputOutputOperation = AsynchronousInputOutputOperation
-
-/// An abstract  subclass of `AsynchronousOperation` to build output producing asynchronous operations that require an initial input value.
-open class AsynchronousInputOutputOperation<InputType, OutputType>: AsynchronousOutputOperation<OutputType>, InputConsuming {
-    // MARK: - Public Properties
-    
-    /// The input value required by `self`.
-    public var input: InputType? {
-        get {
-            return _input.value
-        }
-        set {
-            return _input.mutate { $0 = newValue }
-        }
-    }
-    
-    // MARK: - Private Properties
-    
-    private var _input = Atomic<InputType?>(nil)
-    
-    // MARK: - Initializers
-    
-    public required init(input: InputType? = nil) {
-        super.init()
-        self.input = input
-    }
+/// Operations conforming to this protocol require an input before starting.
+public protocol InputConsumingOperation: Operation {
+  associatedtype Input
+  /// Required input
+  var input: Input? { get set }
 }

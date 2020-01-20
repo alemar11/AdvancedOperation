@@ -28,7 +28,7 @@ public typealias AsyncBlockOperation = AsynchronousBlockOperation
 /// A concurrent sublcass of `AsynchronousOperation` to execute a closure.
 public final class AsynchronousBlockOperation: AsynchronousOperation {
     /// A closure type that takes a closure as its parameter.
-    public typealias Block = (@escaping (Finish) -> Void) -> Void
+    public typealias Block = (@escaping () -> Void) -> Void
     
     // MARK: - Private Properties
     
@@ -47,26 +47,12 @@ public final class AsynchronousBlockOperation: AsynchronousOperation {
         self.name = "\(type(of: self))"
     }
     
-    /// A convenience initializer.
-    ///
-    /// - Parameters:
-    ///   - queue: The `DispatchQueue` where the operation will run its `block`.
-    ///   - block: The closure to run when the operation executes.
-    /// - Note: The block is run **concurrently** on the given `queue`.
-    public convenience init(queue: DispatchQueue, block: @escaping () -> Void) {
-        self.init(block: { complete in
-            queue.async {
-                block()
-                complete(.success)
-            }
-        })
-    }
-    
     // MARK: - Overrides
     
-    public override func execute(completion: @escaping (Finish) -> Void) {
+    public final override func main() {
         block {
-            completion($0)
+            // TODO: leak
+            self.finish()
         }
     }
 }

@@ -24,19 +24,19 @@
 import Foundation
 
 /// Operations conforming to this protocol produce an output once finished.
-public protocol OutputProducing: Operation {
+public protocol OutputProducingOperation: Operation {
   associatedtype Output
   /// Produced output
-  var output: Output { get }
+  var output: Output? { get }
 }
 
-extension OutputProducing {
+extension OutputProducingOperation {
   /// Creates a new operation that passes the output of `self` into the given `Operation` input.
   ///
   /// - Parameters:
   ///   - operation: The operation that needs the output of `self` to generate an output.
-  /// - Returns: Returns an *adapter* operation which passes the output of `self` into the given `InputConsuming` operation.
-  public func injectOutput<O: InputConsuming>(into operation: O) -> Operation where Output == O.Input {
+  /// - Returns: Returns an *adapter* operation which passes the output of `self` into the given `InputConsumingOperation` operation.
+  public func injectOutput<O: InputConsumingOperation>(into operation: O) -> Operation where Output == O.Input {
     let injectionOperation = BlockOperation { [unowned self, unowned operation] in
       operation.input = self.output
     }
@@ -45,13 +45,13 @@ extension OutputProducing {
     return injectionOperation
   }
 
-  /// Creates a new operation that passes the output of `self` into the given `InputConsuming` operation after being transformed.
+  /// Creates a new operation that passes the output of `self` into the given `InputConsumingOperation` operation after being transformed.
   ///
   /// - Parameters:
   ///   - operation: The operation that needs the output of `self` to generate an output.
-  ///   - transform: The block to transform the output of `self` to be of the same type of the `InputConsuming` operation.
+  ///   - transform: The block to transform the output of `self` to be of the same type of the `InputConsumingOperation` operation.
   /// - Returns: Returns an *adapter* operation which passes the output of `self` into the given `Operation`.
-  public func injectOutput<O: InputConsuming>(into operation: O, transform: @escaping (Output) -> O.Input) -> Operation {
+  public func injectOutput<O: InputConsumingOperation>(into operation: O, transform: @escaping (Output?) -> O.Input?) -> Operation {
     let injectionOperation = BlockOperation { [unowned self, unowned operation] in
       operation.input = transform(self.output)
     }

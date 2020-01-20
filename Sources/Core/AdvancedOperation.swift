@@ -32,17 +32,11 @@ open class AdvancedOperation: Operation {
   ///
   /// - Note: To enable log add this environment key: `org.tinrobots.AdvancedOperation.LOG_ENABLED`
   public final var log: OSLog { return Log.`default` }
-  
-  /// Returns `true` in the operation has finished with an error.
-  public final var isFailed: Bool { return isFinished && error != nil }
-  
-  /// The error  occurred during the operation evaluation.
-  public internal(set) var error: Error?
-  
+    
   // MARK: - Private Properties
   
-  private lazy var observer: Observer = {
-    return Observer(operation: self)
+  private lazy var tracker: Tracker = {
+    return Tracker(operation: self)
   }()
   
   // An identifier you use to distinguish signposts that have the same name and that log to the same OSLog.
@@ -53,7 +47,7 @@ open class AdvancedOperation: Operation {
   
   override init() {
     super.init()
-    _ = observer
+    _ = tracker
   }
 }
 
@@ -61,7 +55,7 @@ import os.log
 
 // TODO: rename this class
 // TODO: add memory leak tests
-class Observer {
+class Tracker {
   private var tokens = [NSKeyValueObservation]()
   private var started: Bool = false
   private var cancelled: Bool = false

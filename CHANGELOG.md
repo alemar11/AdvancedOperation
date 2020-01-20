@@ -2,7 +2,7 @@
 
 ### 5.1.0
 
-- Added `AsynchronousOutputOperation`.
+- Added `AdvancedOperation`.
 - Added `AsynchronousOutputBlockOperation`.
 - renamed `inject` into `injectOutput`.
 - removed  `cleanup` method.
