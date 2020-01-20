@@ -30,7 +30,7 @@ public typealias AsyncOutputBlockOperation = AsynchronousOutputBlockOperation
 public final class AsynchronousOutputBlockOperation<OutputType>: AsynchronousOperation, OutputProducingOperation {
   /// A closure type that takes a closure as its parameter.
   public typealias Block = (@escaping (Output?) -> Void) -> Void
-  /// The produced output.
+  
   public private(set) var output: OutputType?
   
   // MARK: - Private Properties

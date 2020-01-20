@@ -27,6 +27,12 @@ import XCTest
 // TODO: https://forums.swift.org/t/xctunwrap-not-available-during-swift-test/28878/4
 
 final class AsynchronousOperationTests: XCTestCase {
+  override class func setUp() {
+    #if swift(<5.1)
+    AdvancedOperation.KVOCrashWorkaround.installFix()
+    #endif
+  }
+  
   func testEarlyBailOut() {
     let operation = RunUntilCancelledAsyncOperation()
     let expectation1 = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: operation, expectedValue: true)

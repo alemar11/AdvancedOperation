@@ -159,3 +159,11 @@ internal final class StringToIntOperation: Operation & InputConsumingOperation &
         }
     }
 }
+
+internal final class FailingOperation: Operation, FailableOperation {
+  private(set) var error: Error?
+  
+  override func main() {
+    self.error = NSError(domain: identifier, code: 0, userInfo: nil) // TODO: errors
+  }
+}

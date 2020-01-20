@@ -24,27 +24,27 @@
 import XCTest
 @testable import AdvancedOperation
 
-//final class OperationStateTests: XCTestCase {
-//  func testTransition() {
-//    // ready
-//    XCTAssertTrue(AsynchronousOutputOperation<Void>.State.ready.canTransition(to: .executing))
-//    XCTAssertTrue(AsynchronousOutputOperation<Void>.State.ready.canTransition(to: .finished))
-//    XCTAssertFalse(AsynchronousOutputOperation<Void>.State.ready.canTransition(to: .ready))
-//
-//    // Executing
-//    XCTAssertFalse(AsynchronousOutputOperation<Void>.State.executing.canTransition(to: .executing))
-//    XCTAssertTrue(AsynchronousOutputOperation<Void>.State.executing.canTransition(to: .finished))
-//    XCTAssertFalse(AsynchronousOutputOperation<Void>.State.executing.canTransition(to: .ready))
-//
-//    // finished
-//    XCTAssertFalse(AsynchronousOutputOperation<Void>.State.finished.canTransition(to: .executing))
-//    XCTAssertFalse(AsynchronousOutputOperation<Void>.State.finished.canTransition(to: .finished))
-//    XCTAssertFalse(AsynchronousOutputOperation<Void>.State.finished.canTransition(to: .ready))
-//  }
-//
-//  func testDebugDescription() {
-//    XCTAssertEqual(AsynchronousOutputOperation<Void>.State.ready.debugDescription.lowercased(), "ready")
-//    XCTAssertEqual(AsynchronousOutputOperation<Void>.State.executing.debugDescription.lowercased(), "executing")
-//    XCTAssertEqual(AsynchronousOutputOperation<Void>.State.finished.debugDescription.lowercased(), "finished")
-//  }
-//}
+final class OperationStateTests: XCTestCase {
+  func testTransition() {
+    // ready
+    XCTAssertTrue(AsynchronousOperation.State.ready.canTransition(to: .executing))
+    XCTAssertTrue(AsynchronousOperation.State.ready.canTransition(to: .finished))
+    XCTAssertFalse(AsynchronousOperation.State.ready.canTransition(to: .ready))
+
+    // Executing
+    XCTAssertFalse(AsynchronousOperation.State.executing.canTransition(to: .executing))
+    XCTAssertTrue(AsynchronousOperation.State.executing.canTransition(to: .finished))
+    XCTAssertFalse(AsynchronousOperation.State.executing.canTransition(to: .ready))
+
+    // finished
+    XCTAssertFalse(AsynchronousOperation.State.finished.canTransition(to: .executing))
+    XCTAssertFalse(AsynchronousOperation.State.finished.canTransition(to: .finished))
+    XCTAssertFalse(AsynchronousOperation.State.finished.canTransition(to: .ready))
+  }
+
+  func testDebugDescription() {
+    XCTAssertEqual(AsynchronousOperation.State.ready.debugDescription.lowercased(), "ready")
+    XCTAssertEqual(AsynchronousOperation.State.executing.debugDescription.lowercased(), "executing")
+    XCTAssertEqual(AsynchronousOperation.State.finished.debugDescription.lowercased(), "finished")
+  }
+}

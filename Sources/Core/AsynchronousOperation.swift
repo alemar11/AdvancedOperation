@@ -27,20 +27,7 @@
 import Foundation
 import os.log
 
-//public enum Finish { // TODO: better name
-//  case success
-//  case failure(error: Error)
-//  
-//  fileprivate var error: Error? {
-//    if case let .failure(error) = self {
-//      return error
-//    }
-//    return nil
-//  }
-//}
-
 public typealias AsyncOperation = AsynchronousOperation
-
 /// An abstract thread safe subclass of `AdvancedOperation` to build asynchronous operations.
 ///
 /// Subclasses must override `execute(completion:)` to perform any work and call the completion handler to finish it.
@@ -73,7 +60,7 @@ open class AsynchronousOperation: AdvancedOperation {
   /// Lock to ensure thread safety.
   private let lock = UnfairLock()
   
-  /// An operation is considered as "running" since the `start()` method is called until it gets finished.
+  /// An operation is considered as "running" from the `start()` method is called until it gets finished.
   private var isRunning = Atomic(false)
   
   /// Serial queue for making state changes atomic under the constraint of having to send KVO willChange/didChange notifications.
@@ -103,7 +90,7 @@ open class AsynchronousOperation: AdvancedOperation {
         willChangeValue(forKey: newValue.objcKeyPath)
         
         _state.mutate {
-          assert($0.canTransition(to: newValue), "Performing an invalid state transition from: \($0) to: \(newValue).")
+          assert($0.canTransition(to: newValue), "Performing an invalid state transition from: \($0) to: \(newValue) for \(operationName).")
           $0 = newValue
         }
         
@@ -119,36 +106,29 @@ open class AsynchronousOperation: AdvancedOperation {
   // MARK: - Foundation.Operation
   
   public final override func start() {
-    guard isReady else {
-      // TODO: this should trap to have a similar behaviour to the standard default
-      return
-    }
     guard !isFinished else { return }
-    
-    // TODO: now that we can't super.start anymore, we should probably be sure that start isnt' called more than once
-    // update: that's what isAlreadyRunning check is for
     
     let isAlreadyRunning = isRunning.mutate { running -> Bool in
       if running {
-        return true
-      } else {
-        // it will be considered as running from now on
+        return true // already running
+      } else if isReady {
         running = true
-        return false
+        return false // it will be considered as running from now on
+      } else {
+        preconditionFailure("The operation \(operationName) is not ready yet.")
       }
     }
     
     guard !isAlreadyRunning else { return }
     
     // early bailing out
-    if isCancelled {
+    guard !isCancelled else {
       finish()
       return
     }
     
-    // TODO: move into AdvancedOperation file
     // Calling super.start() here causes some KVO issues (the doc says "Your (concurrent) custom implementation must not call super at any time").
-    // The default implementation of this method updates the execution state of the operation and calls the receiver’s main() method.
+    // The default implementation of this method ("start") updates the execution state of the operation and calls the receiver’s main() method.
     // This method also performs several checks to ensure that the operation can actually run.
     // For example, if the receiver was cancelled or is already finished, this method simply returns without calling main().
     // If the operation is currently executing or is not ready to execute, this method throws an NSInvalidArgumentException exception.
@@ -170,33 +150,30 @@ open class AsynchronousOperation: AdvancedOperation {
     }
     
     // At this point main() has already returned but it doesn't mean that the operation is finished.
-    // Only the execute(completion:) overidden implementation can finish the operation now.
+    // Only calling `finish()` will finish the operation at this point.
   }
   
   // MARK: - Public Methods
   
   public override func main() {
-    //execute { self.finish(error: $0.error) }
+    preconditionFailure("Subclasses must implement `main`.")
   }
   
-  open override func cancel() {
-    // TODO: remove ?
-    lock.lock()
-    defer { lock.unlock() }
-    
-    guard !isCancelled else { return }
-    
-    super.cancel()
-  }
+//  open override func cancel() {
+//    // TODO: remove ?
+//    lock.lock()
+//    defer { lock.unlock() }
+//    
+//    guard !isCancelled else { return }
+//    
+//    super.cancel()
+//  }
   
   // MARK: - Private Methods
   
   /// Call this function to finish an operation that is currently executing.
   public final func finish() {
-    // State can also be "ready" here if the operation was cancelled before it was started.
-    
-    //guard !isFinished else { return } // TODO: needed? there is a lock and a switch that skips the finished state
-    
+    // State can also be "ready" here if the operation was cancelled before it was started.    
     lock.lock()
     defer { lock.unlock() }
     
@@ -205,7 +182,7 @@ open class AsynchronousOperation: AdvancedOperation {
       state = .finished
       isRunning.mutate { $0 = false }
     case .finished:
-      fatalError("An AsyncOperation finish method shouldn't be called more than once.") // TODO: refine
+      preconditionFailure("The finish() method shouldn't be called more than once for \(operationName).")
     }
   }
   
