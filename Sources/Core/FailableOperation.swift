@@ -27,12 +27,12 @@ import Foundation
 
 /// Operations conformin to this protocolor may generate an error while executing.
 public protocol FailableOperation: Operation {
-    /// Returns `true` in the operation has finished with an error.
-    var isFailed: Bool { get }
-    /// The error  occurred during the operation evaluation.
-    var error: Error? { get set }
+  /// Returns `true` in the operation has finished with an error.
+  var isFailed: Bool { get }
+  /// The error  occurred during the operation evaluation.
+  var error: Error? { get set }
 }
 
 public extension FailableOperation {
-    var isFailed: Bool { return isFinished && error != nil }
+  var isFailed: Bool { return isFinished && error != nil }
 }

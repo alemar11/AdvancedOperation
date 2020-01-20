@@ -32,7 +32,7 @@ open class AdvancedOperation: Operation {
   ///
   /// - Note: To enable log add this environment key: `org.tinrobots.AdvancedOperation.LOG_ENABLED`
   public final var log: OSLog { return Log.`default` }
-    
+  
   // MARK: - Private Properties
   
   private lazy var tracker: Tracker = {

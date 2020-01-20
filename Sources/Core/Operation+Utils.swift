@@ -24,74 +24,74 @@
 import Foundation
 
 extension Operation {
-    /// Returns the `Operation` name or its type if the name is nil.
-    public var operationName: String {
-        return name ?? "\(type(of: self))"
+  /// Returns the `Operation` name or its type if the name is nil.
+  public var operationName: String {
+    return name ?? "\(type(of: self))"
+  }
+  
+  /// Returns `true` if at least one dependency has been cancelled.
+  public var hasSomeCancelledDependencies: Bool {
+    return dependencies.first { $0.isCancelled } != nil
+  }
+  
+  /// Returns `true` if at least one dependency conforming to `FailableOperation` has generated an error.
+  public var hasSomeFailedDependencies: Bool {
+    return dependencies.first { ($0 as? FailableOperation)?.isFailed ?? false } != nil // TODO test
+  }
+  
+  /// Adds a completion block to be executed after the `Operation` enters the "finished" state.
+  /// If there is already a completion block, they are chained together.
+  ///
+  /// - Parameters:
+  ///   - asEndingBlock: The block can be executed before the current completion block (`asEndingBlock` = false) or after (`asEndingBlock` = true).
+  ///   - block: The block to be executed after the `Operation` enters the "finished" state.
+  public func addCompletionBlock(asEndingBlock: Bool = true, block: @escaping () -> Void) {
+    guard let existingBlock = completionBlock else {
+      completionBlock = block
+      return
     }
     
-    /// Returns `true` if at least one dependency has been cancelled.
-    public var hasSomeCancelledDependencies: Bool {
-        return dependencies.first { $0.isCancelled } != nil
+    completionBlock = {
+      if asEndingBlock {
+        existingBlock()
+        block()
+      } else {
+        block()
+        existingBlock()
+      }
     }
-    
-    /// Returns `true` if at least one dependency conforming to `FailableOperation` has generated an error.
-    public var hasSomeFailedDependencies: Bool {
-        return dependencies.first { ($0 as? FailableOperation)?.isFailed ?? false } != nil // TODO test
+  }
+  
+  /// Adds multiple dependencies to the operation.
+  /// If the receiver is already executing its task, adding dependencies has no practical effect.
+  public func addDependencies(_ dependencies: [Operation]) {
+    for dependency in dependencies {
+      addDependency(dependency)
     }
-    
-    /// Adds a completion block to be executed after the `Operation` enters the "finished" state.
-    /// If there is already a completion block, they are chained together.
-    ///
-    /// - Parameters:
-    ///   - asEndingBlock: The block can be executed before the current completion block (`asEndingBlock` = false) or after (`asEndingBlock` = true).
-    ///   - block: The block to be executed after the `Operation` enters the "finished" state.
-    public func addCompletionBlock(asEndingBlock: Bool = true, block: @escaping () -> Void) {
-        guard let existingBlock = completionBlock else {
-            completionBlock = block
-            return
-        }
-        
-        completionBlock = {
-            if asEndingBlock {
-                existingBlock()
-                block()
-            } else {
-                block()
-                existingBlock()
-            }
-        }
+  }
+  
+  /// Adds multiple dependencies to the operation.
+  /// If the receiver is already executing its task, adding dependencies has no practical effect.
+  public func addDependencies(_ dependencies: Operation...) {
+    addDependencies(dependencies)
+  }
+  
+  /// Removes all the dependencies.
+  public func removeDependencies() {
+    for dependency in dependencies {
+      removeDependency(dependency)
     }
-    
-    /// Adds multiple dependencies to the operation.
-    /// If the receiver is already executing its task, adding dependencies has no practical effect.
-    public func addDependencies(_ dependencies: [Operation]) {
-        for dependency in dependencies {
-            addDependency(dependency)
-        }
-    }
-    
-    /// Adds multiple dependencies to the operation.
-    /// If the receiver is already executing its task, adding dependencies has no practical effect.
-    public func addDependencies(_ dependencies: Operation...) {
-        addDependencies(dependencies)
-    }
-    
-    /// Removes all the dependencies.
-    public func removeDependencies() {
-        for dependency in dependencies {
-            removeDependency(dependency)
-        }
-    }
+  }
 }
 
 extension Sequence where Element: Operation {
-    /// Makes every operation in the sequence dependent on the completion of the specified operations.
-    public func addDependencies(_ dependencies: Operation...) {
-        addDependencies(dependencies)
-    }
-    
-    /// Makes every operation in the sequence dependent on the completion of the specified operations.
-    public func addDependencies(_ dependencies: [Operation]) {
-        forEach { $0.addDependencies(dependencies) }
-    }
+  /// Makes every operation in the sequence dependent on the completion of the specified operations.
+  public func addDependencies(_ dependencies: Operation...) {
+    addDependencies(dependencies)
+  }
+  
+  /// Makes every operation in the sequence dependent on the completion of the specified operations.
+  public func addDependencies(_ dependencies: [Operation]) {
+    forEach { $0.addDependencies(dependencies) }
+  }
 }

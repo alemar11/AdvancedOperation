@@ -28,36 +28,36 @@ public typealias AsyncOutputBlockOperation = AsynchronousOutputBlockOperation
 
 /// A concurrent sublcass of `AsynchronousOutputOperation` to execute a closure that can optionally produce an output.
 public final class AsynchronousOutputBlockOperation<OutputType>: AsynchronousOperation, OutputProducingOperation {
-    /// A closure type that takes a closure as its parameter.
-    public typealias Block = (@escaping (Output?) -> Void) -> Void
-    /// The produced output.
-    public private(set) var output: OutputType?
-    
-    // MARK: - Private Properties
-    
-    private var block: Block
-    
-    // MARK: - Initializers
-    
-    /// The designated initializer.
-    ///
-    /// - Parameters:
-    ///   - block: The closure to run when the operation executes; the parameter passed to the block **MUST** be invoked by your code,
-    ///   or else the `AsynchronousBlockOperation` will never finish executing.
-    public init(block: @escaping Block) {
-        self.block = block
-        super.init()
-        self.name = "AsynchronousOutputBlockOperation<\(OutputType.self)>"
+  /// A closure type that takes a closure as its parameter.
+  public typealias Block = (@escaping (Output?) -> Void) -> Void
+  /// The produced output.
+  public private(set) var output: OutputType?
+  
+  // MARK: - Private Properties
+  
+  private var block: Block
+  
+  // MARK: - Initializers
+  
+  /// The designated initializer.
+  ///
+  /// - Parameters:
+  ///   - block: The closure to run when the operation executes; the parameter passed to the block **MUST** be invoked by your code,
+  ///   or else the `AsynchronousBlockOperation` will never finish executing.
+  public init(block: @escaping Block) {
+    self.block = block
+    super.init()
+    self.name = "AsynchronousOutputBlockOperation<\(OutputType.self)>"
+  }
+  
+  // MARK: - Overrides
+  
+  public final override func main() {
+    block { output in
+      // TODO: leak
+      self.output = output
+      self.finish()
     }
-        
-    // MARK: - Overrides
-    
-    public final override func main() {
-        block { output in
-            // TODO: leak
-            self.output = output
-            self.finish()
-        }
-    }
+  }
 }
 
