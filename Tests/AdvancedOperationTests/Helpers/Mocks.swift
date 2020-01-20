@@ -109,7 +109,6 @@ final internal class NotExecutableOperation: AsynchronousOperation {
     }
 }
 
-
 final internal class AutoCancellingAsyncOperation: AsynchronousOperation {
     override func main() {
         DispatchQueue.global().asyncAfter(deadline: .now() + 1.0) {
