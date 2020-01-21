@@ -331,4 +331,61 @@ final class AsynchronousOperationTests: XCTestCase {
     //XCTAssertNil(operation1.output, "Cancelled \(operation3.operationName) shouldn't have any output") // TODO
     XCTAssertTrue(operation1.isCancelled)
   }
+  
+  func testGate() { // TODO: refine this test
+    let operation1 = _BlockOperation()
+    let operation2 = FailingOperation()
+    let operation3 = BlockOperation()
+    let gate = GateOperation { [unowned operation3] gate in
+      if gate.hasSomeFailedDependencies {
+        operation3.cancel()
+      }
+    }
+    
+    gate.addDependencies(operation1, operation2)
+    operation3.addDependency(gate)
+    operation1.installTracker()
+    operation2.installTracker()
+    operation3.installTracker()
+    gate.installTracker()
+    
+    operation1.name = "op1"
+    operation2.name = "op2"
+    operation3.name = "op3"
+    gate.name = "gate"
+    let queue = OperationQueue()
+    queue.maxConcurrentOperationCount = 5
+    queue.addOperations([operation1, operation2, operation3, gate], waitUntilFinished: true)
+    XCTAssertTrue(operation3.isCancelled)
+    XCTAssertTrue(operation3.isFinished)
+    
+    print("123")
+    sleep(5)
+  }
+}
+
+extension BlockOperation: TrackableOperation {
+  
+}
+
+class _BlockOperation: BlockOperation {
+  deinit {
+    print("deinit")
+  }
+}
+
+class GateOperation: Operation, TrackableOperation {
+  private let block: (GateOperation) -> Void
+  
+  init(block: @escaping (GateOperation) -> Void) {
+    self.block = block
+  }
+  
+  override func main() {
+    block(self)
+  }
+  
+  deinit {
+    print("deinit")
+  }
 }

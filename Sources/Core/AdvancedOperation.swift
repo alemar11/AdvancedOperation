@@ -90,10 +90,10 @@ extension TrackableOperation {
     tracker = Tracker(operation: self)
   }
   
-//  func uninstallTracker() {
-//    precondition(!self.isExecuting || !self.isFinished || !self.isCancelled, "The tracker should be uninstalled before any relevation operation phases are occurred.")
-//    self.tracker = nil
-//  }
+  //  func uninstallTracker() {
+  //    precondition(!self.isExecuting || !self.isFinished || !self.isCancelled, "The tracker should be uninstalled before any relevation operation phases are occurred.")
+  //    self.tracker = nil
+  //  }
 }
 
 
@@ -115,4 +115,3 @@ extension TrackableOperation {
 //extension PrecondiotionedOperation {
 //  
 //}
-
