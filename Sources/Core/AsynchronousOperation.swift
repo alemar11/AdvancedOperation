@@ -66,6 +66,9 @@ open class AsynchronousOperation: AdvancedOperation {
   /// Serial queue for making state changes atomic under the constraint of having to send KVO willChange/didChange notifications.
   private let stateChangeQueue = DispatchQueue(label: "\(identifier).AsynchronousOperation.stateChange")
   
+  /// Private backing store for `state`
+  private var _state: Atomic<State> = Atomic(.ready)
+  
   /// The state of the operation
   private var state: State {
     get {
@@ -99,9 +102,6 @@ open class AsynchronousOperation: AdvancedOperation {
       }
     }
   }
-  
-  /// Private backing store for `state`
-  private var _state: Atomic<State> = Atomic(.ready)
   
   // MARK: - Foundation.Operation
   
