@@ -49,7 +49,7 @@ public final class AsynchronousOutputBlockOperation<OutputType>: AsynchronousOpe
     super.init()
     self.name = "AsynchronousOutputBlockOperation<\(OutputType.self)>"
   }
-  
+
   // MARK: - Overrides
   
   public final override func main() {
