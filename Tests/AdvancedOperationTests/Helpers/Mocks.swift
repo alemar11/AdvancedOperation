@@ -161,7 +161,7 @@ internal final class StringToIntOperation: Operation & InputConsumingOperation &
 
 // MARK: - AdvancedOperation
 
-internal final class FailingOperation: AdvancedOperation, FailableOperation {
+internal final class FailingOperation: Operation, FailableOperation, TrackableOperation {
   private(set) var error: Error?
   
   override func main() {

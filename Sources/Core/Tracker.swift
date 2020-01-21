@@ -32,7 +32,12 @@ class Tracker {
   private var cancelled: Bool = false
   private var finished: Bool = false
   
-  init(operation: AdvancedOperation) {
+  @available(iOS 12.0, iOSApplicationExtension 12.0, tvOS 12.0, watchOS 5.0, macOS 10.14, OSXApplicationExtension 10.14, *)
+  lazy var signpostID = {
+    return OSSignpostID(log: Log.signpost, object: self)
+  }()
+  
+  init<O>(operation: O) where O: TrackableOperation {
     // uses default and poi logs
     let cancelToken = operation.observe(\.isCancelled, options: [.old, .new]) { [weak self] (operation, changes) in
       guard let self = self else { return }
@@ -49,7 +54,7 @@ class Tracker {
       
       if self.started {
         if #available(iOS 12.0, iOSApplicationExtension 12.0, tvOS 12.0, watchOS 5.0, macOS 10.14, OSXApplicationExtension 10.14, *) {
-          os_signpost(.event, log: Log.poi, name: "Cancellation", signpostID: operation.signpostID, "⏺ %{public}s has been cancelled.", operation.operationName)
+          os_signpost(.event, log: Log.poi, name: "Cancellation", signpostID: self.signpostID, "⏺ %{public}s has been cancelled.", operation.operationName)
         }
       }
     }
@@ -65,7 +70,7 @@ class Tracker {
         
         if #available(iOS 12.0, iOSApplicationExtension 12.0, tvOS 12.0, watchOS 5.0, macOS 10.14, OSXApplicationExtension 10.14, *) {
           os_log(.info, log: Log.`default`, "%{public}s has started.", operation.operationName)
-          os_signpost(.begin, log: Log.signpost, name: Log.signPostIntervalName, signpostID: operation.signpostID, "🔼 %{public}s has started.", operation.operationName)
+          os_signpost(.begin, log: Log.signpost, name: Log.signPostIntervalName, signpostID: self.signpostID, "🔼 %{public}s has started.", operation.operationName)
         } else {
           os_log("%{public}s has started.", log: operation.log, type: .info, operation.operationName)
         }
@@ -93,7 +98,7 @@ class Tracker {
       
       if self.started { // a started operation can be cancelled, but the END signal should be fired
         if #available(iOS 12.0, iOSApplicationExtension 12.0, tvOS 12.0, watchOS 5.0, macOS 10.14, OSXApplicationExtension 10.14, *) {
-          os_signpost(.end, log: Log.signpost, name: Log.signPostIntervalName, signpostID: operation.signpostID, "🔽 %{public}s has finished.", operation.operationName)
+          os_signpost(.end, log: Log.signpost, name: Log.signPostIntervalName, signpostID: self.signpostID, "🔽 %{public}s has finished.", operation.operationName)
         }
       } else if self.cancelled {
         //print("♦️ \(op.operationName)  \(ObjectIdentifier(op)) finished after cancellation", newValue)

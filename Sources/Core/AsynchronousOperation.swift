@@ -36,7 +36,7 @@ public typealias AsyncOperation = AsynchronousOperation
 /// - To enable log add this environment key: `org.tinrobots.AdvancedOperation.LOG_ENABLED`
 /// - To enable signposts add this environment key: `org.tinrobots.AdvancedOperation.SIGNPOST_ENABLED`
 /// - To enable point of interests add this environment key: `org.tinrobots.AdvancedOperation.POI_ENABLED`
-open class AsynchronousOperation: AdvancedOperation {
+open class AsynchronousOperation: Operation {
   // MARK: - Public Properties
   
   open override var isReady: Bool {

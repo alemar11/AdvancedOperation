@@ -56,3 +56,44 @@ public final class AsynchronousBlockOperation: AsynchronousOperation {
     }
   }
 }
+
+
+//public final class AdvancedBlockOperation: AdvancedOperation {
+//  /// A closure type that takes a closure as its parameter.
+//  public typealias Block = () -> Void
+//  
+//  /// Adds the specified block to the receiver’s list of blocks to perform.
+//  func addExecutionBlock(_ block: @escaping Block) {
+//    blocks.mutate { $0.append(block) }
+//  }
+//
+//  var executionBlocks: [Block] {
+//    return blocks.value
+//  }
+//  
+//  // MARK: - Private Properties
+//  
+//  private var blocks = Atomic([Block]())
+//  
+//  // MARK: - Initializers
+//  
+//  /// The designated initializer.
+//  ///
+//  /// - Parameters:
+//  ///   - block: The closure to run when the operation executes.
+//  ///   or else the `AsynchronousBlockOperation` will never finish executing.
+//  public init(block: @escaping Block) {
+//    super.init()
+//    addExecutionBlock(block)
+//    self.name = "\(type(of: self))"
+//  }
+//  
+//  // MARK: - Overrides
+//  
+//  public final override func main() {
+//    blocks.mutate { blocks in
+//      blocks.forEach { $0() }
+//    }
+//  }
+//}
+
