@@ -44,6 +44,10 @@
 		067C482723D60EE800F73096 /* AdvancedOperation+KVOCrashWorkaround.swift in Sources */ = {isa = PBXBuildFile; fileRef = 067C482523D60EE800F73096 /* AdvancedOperation+KVOCrashWorkaround.swift */; };
 		067C482823D60EE800F73096 /* AdvancedOperation+KVOCrashWorkaround.swift in Sources */ = {isa = PBXBuildFile; fileRef = 067C482523D60EE800F73096 /* AdvancedOperation+KVOCrashWorkaround.swift */; };
 		067C482923D60EE800F73096 /* AdvancedOperation+KVOCrashWorkaround.swift in Sources */ = {isa = PBXBuildFile; fileRef = 067C482523D60EE800F73096 /* AdvancedOperation+KVOCrashWorkaround.swift */; };
+		069731C823D71135006A51CB /* Tracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 069731C723D71135006A51CB /* Tracker.swift */; };
+		069731C923D71135006A51CB /* Tracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 069731C723D71135006A51CB /* Tracker.swift */; };
+		069731CA23D71135006A51CB /* Tracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 069731C723D71135006A51CB /* Tracker.swift */; };
+		069731CB23D71135006A51CB /* Tracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 069731C723D71135006A51CB /* Tracker.swift */; };
 		06C92B4B23D0A9FF000D12C8 /* AsynchronousBlockOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06C92B4A23D0A9FF000D12C8 /* AsynchronousBlockOperation.swift */; };
 		06C92B4C23D0A9FF000D12C8 /* AsynchronousBlockOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06C92B4A23D0A9FF000D12C8 /* AsynchronousBlockOperation.swift */; };
 		06C92B4D23D0A9FF000D12C8 /* AsynchronousBlockOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06C92B4A23D0A9FF000D12C8 /* AsynchronousBlockOperation.swift */; };
@@ -142,6 +146,7 @@
 		0664BF3523D5B91100B491E6 /* FailableOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FailableOperation.swift; sourceTree = "<group>"; };
 		067C482523D60EE800F73096 /* AdvancedOperation+KVOCrashWorkaround.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AdvancedOperation+KVOCrashWorkaround.swift"; sourceTree = "<group>"; };
 		068C554F23C8C6810043B43F /* lint.yml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; path = lint.yml; sourceTree = "<group>"; };
+		069731C723D71135006A51CB /* Tracker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tracker.swift; sourceTree = "<group>"; };
 		06C92B4A23D0A9FF000D12C8 /* AsynchronousBlockOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsynchronousBlockOperation.swift; sourceTree = "<group>"; };
 		06C92B4F23D0AAEA000D12C8 /* AsynchronousBlockOperationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsynchronousBlockOperationTests.swift; sourceTree = "<group>"; };
 		06C92B5C23D1AA4F000D12C8 /* Log.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Log.swift; sourceTree = "<group>"; };
@@ -273,6 +278,7 @@
 				060B667023C4EBC80085FCB4 /* OutputProducingOperation.swift */,
 				23A1B87821B81C710018D9D5 /* UnfairLock.swift */,
 				067C482523D60EE800F73096 /* AdvancedOperation+KVOCrashWorkaround.swift */,
+				069731C723D71135006A51CB /* Tracker.swift */,
 			);
 			path = Core;
 			sourceTree = "<group>";
@@ -687,6 +693,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				23A1B87921B81C710018D9D5 /* UnfairLock.swift in Sources */,
+				069731C823D71135006A51CB /* Tracker.swift in Sources */,
 				06C92B5D23D1AA4F000D12C8 /* Log.swift in Sources */,
 				23A1B87F21B8307F0018D9D5 /* Atomic.swift in Sources */,
 				067C482623D60EE800F73096 /* AdvancedOperation+KVOCrashWorkaround.swift in Sources */,
@@ -706,6 +713,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				23A1B87A21B81C710018D9D5 /* UnfairLock.swift in Sources */,
+				069731C923D71135006A51CB /* Tracker.swift in Sources */,
 				06C92B5E23D1AA4F000D12C8 /* Log.swift in Sources */,
 				23A1B88021B8307F0018D9D5 /* Atomic.swift in Sources */,
 				067C482723D60EE800F73096 /* AdvancedOperation+KVOCrashWorkaround.swift in Sources */,
@@ -725,6 +733,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				23A1B87B21B81C710018D9D5 /* UnfairLock.swift in Sources */,
+				069731CA23D71135006A51CB /* Tracker.swift in Sources */,
 				06C92B5F23D1AA4F000D12C8 /* Log.swift in Sources */,
 				23A1B88121B8307F0018D9D5 /* Atomic.swift in Sources */,
 				067C482823D60EE800F73096 /* AdvancedOperation+KVOCrashWorkaround.swift in Sources */,
@@ -744,6 +753,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				23A1B87C21B81C710018D9D5 /* UnfairLock.swift in Sources */,
+				069731CB23D71135006A51CB /* Tracker.swift in Sources */,
 				06C92B6023D1AA4F000D12C8 /* Log.swift in Sources */,
 				23A1B88221B8307F0018D9D5 /* Atomic.swift in Sources */,
 				067C482923D60EE800F73096 /* AdvancedOperation+KVOCrashWorkaround.swift in Sources */,

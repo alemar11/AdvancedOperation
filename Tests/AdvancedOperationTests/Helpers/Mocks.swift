@@ -151,7 +151,7 @@ internal final class IntToStringOperation: Operation & InputConsumingOperation &
 internal final class StringToIntOperation: Operation & InputConsumingOperation & OutputProducingOperation  {
     var input: String?
     private(set) var output: Int?
-    
+      
     override func main() {
         if let input = self.input {
             output = Int(input)
@@ -159,7 +159,9 @@ internal final class StringToIntOperation: Operation & InputConsumingOperation &
     }
 }
 
-internal final class FailingOperation: Operation, FailableOperation {
+// MARK: - AdvancedOperation
+
+internal final class FailingOperation: AdvancedOperation, FailableOperation {
   private(set) var error: Error?
   
   override func main() {

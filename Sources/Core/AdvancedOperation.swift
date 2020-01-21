@@ -22,6 +22,7 @@
 // SOFTWARE.
 
 import Foundation
+import os.log
 
 internal let identifier = "org.tinrobots.AdvancedOperation"
 
@@ -33,107 +34,22 @@ open class AdvancedOperation: Operation {
   /// - Note: To enable log add this environment key: `org.tinrobots.AdvancedOperation.LOG_ENABLED`
   public final var log: OSLog { return Log.`default` }
   
+  // MARK: - Internal Properties
+  
+  // An identifier you use to distinguish signposts that have the same name and that log to the same OSLog.
+  @available(iOS 12.0, iOSApplicationExtension 12.0, tvOS 12.0, watchOS 5.0, macOS 10.14, OSXApplicationExtension 10.14, *)
+  lazy var signpostID = {
+    return OSSignpostID(log: Log.signpost, object: self)
+  }()
+  
   // MARK: - Private Properties
   
   private lazy var tracker: Tracker = {
     return Tracker(operation: self)
   }()
   
-  // An identifier you use to distinguish signposts that have the same name and that log to the same OSLog.
-  @available(iOS 12.0, iOSApplicationExtension 12.0, tvOS 12.0, watchOS 5.0, macOS 10.14, OSXApplicationExtension 10.14, *)
-  fileprivate lazy var signpostID = {
-    return OSSignpostID(log: Log.signpost, object: self)
-  }()
-  
-  override init() {
+  public override init() {
     super.init()
     _ = tracker
-  }
-}
-
-import os.log
-
-// TODO: rename this class
-// TODO: add memory leak tests
-class Tracker {
-  private var tokens = [NSKeyValueObservation]()
-  private var started: Bool = false
-  private var cancelled: Bool = false
-  private var finished: Bool = false
-  
-  init(operation: AdvancedOperation) {
-    // uses default and poi logs
-    let cancelToken = operation.observe(\.isCancelled, options: [.old, .new]) { [weak self] (operation, changes) in
-      guard let self = self else { return }
-      guard let oldValue = changes.oldValue, let newValue = changes.newValue, oldValue != newValue else { return }
-      
-      assert(!self.cancelled)  // TODO: assert or a more aggressive check?
-      self.cancelled = true
-      
-      if #available(iOS 12.0, iOSApplicationExtension 12.0, tvOS 12.0, watchOS 5.0, macOS 10.14, OSXApplicationExtension 10.14, *) {
-        os_log(.info, log: Log.`default`, "%{public}s has been cancelled.", operation.operationName)
-      } else {
-        os_log("%{public}s has been cancelled.", log: Log.`default`, type: .info, operation.operationName)
-      }
-      
-      if self.started {
-        if #available(iOS 12.0, iOSApplicationExtension 12.0, tvOS 12.0, watchOS 5.0, macOS 10.14, OSXApplicationExtension 10.14, *) {
-          os_signpost(.event, log: Log.poi, name: "Cancellation", signpostID: operation.signpostID, "⏺ %{public}s has been cancelled.", operation.operationName)
-        }
-      }
-    }
-    
-    // uses default and signpost logs
-    let executionToken = operation.observe(\.isExecuting, options: [.old, .new]) { [weak self] (operation, changes) in
-      guard let self = self else { return }
-      guard let oldValue = changes.oldValue, let newValue = changes.newValue, oldValue != newValue else { return }
-      
-      if newValue {
-        assert(!self.started)
-        self.started = true
-        
-        if #available(iOS 12.0, iOSApplicationExtension 12.0, tvOS 12.0, watchOS 5.0, macOS 10.14, OSXApplicationExtension 10.14, *) {
-          os_log(.info, log: Log.`default`, "%{public}s has started.", operation.operationName)
-          os_signpost(.begin, log: Log.signpost, name: Log.signPostIntervalName, signpostID: operation.signpostID, "🔼 %{public}s has started.", operation.operationName)
-        } else {
-          os_log("%{public}s has started.", log: operation.log, type: .info, operation.operationName)
-        }
-      }
-    }
-    
-    // uses default and signpost logs
-    let finishToken = operation.observe(\.isFinished, options: [.old, .new]) { [weak self] (operation, changes) in
-      guard let self = self else { return }
-      guard let oldValue = changes.oldValue, let newValue = changes.newValue, oldValue != newValue else { return }
-      
-      guard newValue else { return }
-      
-      assert(!self.finished)
-      // The orded should be kept as follow:
-      self.finished = true
-      
-      // TODO: log that an operation has finished producing an error or not
-      
-      if #available(iOS 12.0, iOSApplicationExtension 12.0, tvOS 12.0, watchOS 5.0, macOS 10.14, OSXApplicationExtension 10.14, *) {
-        os_log(.info, log: Log.`default`, "%{public}s has finished.", operation.operationName)
-      } else {
-        os_log("%{public}s has finished.", log: Log.`default`, type: .info, operation.operationName)
-      }
-      
-      if self.started { // a started operation can be cancelled, but the END signal should be fired
-        if #available(iOS 12.0, iOSApplicationExtension 12.0, tvOS 12.0, watchOS 5.0, macOS 10.14, OSXApplicationExtension 10.14, *) {
-          os_signpost(.end, log: Log.signpost, name: Log.signPostIntervalName, signpostID: operation.signpostID, "🔽 %{public}s has finished.", operation.operationName)
-        }
-      } else if self.cancelled {
-        //print("♦️ \(op.operationName)  \(ObjectIdentifier(op)) finished after cancellation", newValue)
-      }
-      
-    }
-    tokens = [cancelToken, executionToken, finishToken]
-  }
-  
-  deinit {
-    tokens.forEach { $0.invalidate() }
-    tokens = []
   }
 }
