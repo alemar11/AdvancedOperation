@@ -137,7 +137,7 @@ final internal class RunUntilCancelledAsyncOperation: AsynchronousOperation {
 
 // MARK: - Operation
 
-internal final class IntToStringOperation: Operation & InputConsumingOperation & OutputProducingOperation {
+internal final class IntToStringOperation: AdvancedOperation & InputConsumingOperation & OutputProducingOperation {
     var input: Int?
     private(set) var output: String?
     
@@ -148,7 +148,7 @@ internal final class IntToStringOperation: Operation & InputConsumingOperation &
     }
 }
 
-internal final class StringToIntOperation: Operation & InputConsumingOperation & OutputProducingOperation  {
+internal final class StringToIntOperation: AdvancedOperation & InputConsumingOperation & OutputProducingOperation  {
     var input: String?
     private(set) var output: Int?
       
