@@ -129,10 +129,11 @@ open class AdvancedOperation: Operation {
     guard !isCancelled else {
       // TODO: this check is useless as we could check the cancel status directly in the main
       // it can only help to avoid a needless preconditions evaluations
+      // NOTE: this can happen if a KVO observer cancel the operation, I think that a re-entrant lock for start() cancel and _finish is the only solution
       _finish()
       return
     }
-        
+
     let errors = evaluatePreconditions()
     if errors.isEmpty {
       main()
