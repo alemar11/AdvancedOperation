@@ -23,70 +23,20 @@
 
 import Foundation
 
+/// Components conforming to this protocol can be used as preconditions for an operation execution.
 public protocol Precondition {
-  /// The name of the condition.
+  /// The name of the precondition.
   var name: String { get }
-  /// Evaluate the condition, to see if it has been satisfied or not.
+  /// Evaluate the precondition, to see if it has been satisfied or not.
   ///
   /// - Parameters:
   ///   - operation: the `AdvancedOperation` which this condition is attached to.
   ///   - completion: a closure which receives a `Result`.
-  func evaluate(for operation: Operation, completion: @escaping (Result<Void, Error>) -> Void)
+  func evaluate(for operation: AdvancedOperation, completion: @escaping (Result<Void, Error>) -> Void)
 }
 
 public extension Precondition {
   var name: String {
     return String(describing: type(of: self))
-  }
-}
-
-
-protocol Preconditioned: Operation {
-  var preconditions: [Precondition] { get }
-}
-
-private var preconditionKey: UInt8 = 1
-extension Preconditioned {
-  private(set) var preconditions: [Precondition] {
-    get {
-      if let preconditions = objc_getAssociatedObject(self, &preconditionKey) as? [Precondition] {
-        return preconditions
-      } else {
-        return []
-      }
-    }
-    set {
-      objc_setAssociatedObject(self, &preconditionKey, newValue, objc_AssociationPolicy.OBJC_ASSOCIATION_RETAIN_NONATOMIC)
-    }
-  }
-  
-  
-  func addPrecondition(_ precondition: Precondition) {
-    preconditions.append(precondition)
-  }
-  
-  func evaluatePreconditions() -> [Error] {
-    return Self.evaluateConditions(preconditions, for: self)
-  }
-  
-  private static func evaluateConditions(_ conditions: [Precondition], for operation: Operation) -> [Error] {
-    let conditionGroup = DispatchGroup()
-    var results = [Result<Void, Error>?](repeating: nil, count: conditions.count)
-    let lock = UnfairLock()
-    
-    for (index, condition) in conditions.enumerated() {
-      conditionGroup.enter()
-      condition.evaluate(for: operation) { result in
-        lock.lock()
-        results[index] = result
-        lock.unlock()
-        conditionGroup.leave()
-      }
-    }
-    
-    conditionGroup.wait()
-    
-    let errors = [Error]() //results.filter(<#T##isIncluded: (Result<Void, Error>?) throws -> Bool##(Result<Void, Error>?) throws -> Bool#>)
-    return errors
   }
 }

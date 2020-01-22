@@ -168,3 +168,25 @@ internal final class FailingOperation: Operation, FailableOperation, TrackableOp
     self.error = NSError(domain: identifier, code: 0, userInfo: nil) // TODO: errors
   }
 }
+
+// MARK: - Preconditions
+
+struct NoCancelledDependencies: Precondition {
+  func evaluate(for operation: AdvancedOperation, completion: @escaping (Result<Void, Error>) -> Void) {
+    if operation.hasSomeCancelledDependencies {
+      completion(.failure(NSError(domain: identifier, code: 1, userInfo: nil)))
+    } else {
+      completion(.success(()))
+    }
+  }
+}
+
+struct NoFailedDependencies: Precondition {
+  func evaluate(for operation: AdvancedOperation, completion: @escaping (Result<Void, Error>) -> Void) {
+    if operation.hasSomeFailedDependencies {
+      completion(.failure(NSError(domain: identifier, code: 1, userInfo: nil)))
+    } else {
+      completion(.success(()))
+    }
+  }
+}

@@ -49,6 +49,8 @@ open class AdvancedOperation: Operation {
   /// Lock to ensure thread safety.
   private let lock = UnfairLock()
   
+  private var preconditions = [Precondition]()
+  
   /// An operation is considered as "running" from the `start()` method is called until it gets finished.
   private var isRunning = Atomic(false)
   
@@ -123,22 +125,23 @@ open class AdvancedOperation: Operation {
     // If the operation is currently executing or is not ready to execute, this method throws an NSInvalidArgumentException exception.
     
     state = .executing
-        
-    if isCancelled {
+    
+    guard !isCancelled else {
+      // TODO: this check is useless as we could check the cancel status directly in the main
+      // it can only help to avoid a needless preconditions evaluations
       _finish()
-    } else {
-      // TODO: conditions here
-      // - if the conditions aren't satisfied:
-      //      - the operation will get cancelled
-      //      - the first error will be stored
-      // update: if we have at least one condition that generates an error, instead of cancelling the operaiton
-      // we simply finish it with the error (in that case the isCancelled check below should be replaced
-      // or we can cancel it with an error if we implement cancel(error:)
-      
+      return
+    }
+        
+    let errors = evaluatePreconditions()
+    if errors.isEmpty {
       main()
       if !isAsynchronous {
         _finish()
       }
+    } else {
+      cancel()
+      _finish() // or we could simply finish it with an error (instead of a cancel)
     }
     
     // If asynchronous:
@@ -152,15 +155,23 @@ open class AdvancedOperation: Operation {
     preconditionFailure("Subclasses must implement `main`.")
   }
   
-//  open override func cancel() {
-//    // TODO: remove ?
-//    lock.lock()
-//    defer { lock.unlock() }
-//
-//    guard !isCancelled else { return }
-//
-//    super.cancel()
-//  }
+  //  open override func cancel() {
+  //    // TODO: remove ?
+  //    lock.lock()
+  //    defer { lock.unlock() }
+  //
+  //    guard !isCancelled else { return }
+  //
+  //    super.cancel()
+  //  }
+  
+  public final func addPrecondition(_ condition: Precondition) {
+    lock.lock()
+    defer { lock.unlock() }
+    
+    precondition(!isRunning.value, "Preconditions should be added only before executing the operation")
+    preconditions.append(condition)
+  }
   
   // MARK: - Private Methods
   
@@ -236,4 +247,42 @@ extension AdvancedOperation {
   }
 }
 
+// MARK: - Precondition
 
+extension AdvancedOperation {
+  fileprivate final func evaluatePreconditions() -> [Error] {
+    return Self.evaluatePreconditions(preconditions, for: self)
+  }
+  
+  fileprivate static func evaluatePreconditions(_ preconditions: [Precondition], for operation: AdvancedOperation) -> [Error] {
+    let group = DispatchGroup()
+    var results = [Result<Void, Error>?](repeating: nil, count: preconditions.count)
+    let lock = UnfairLock()
+    
+    for (index, precondition) in preconditions.enumerated() {
+      group.enter()
+      precondition.evaluate(for: operation) { result in
+        lock.lock()
+        results[index] = result
+        lock.unlock()
+        group.leave()
+      }
+    }
+    
+    group.wait()
+    
+    let errors = results.compactMap { $0?.error }
+    return errors
+  }
+}
+
+private extension Result {
+  var error: Error? {
+    switch self {
+    case .failure(let error):
+      return error
+    case .success(_):
+      return nil
+    }
+  }
+}

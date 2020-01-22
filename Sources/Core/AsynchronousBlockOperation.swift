@@ -26,7 +26,7 @@ import Foundation
 public typealias AsyncBlockOperation = AsynchronousBlockOperation
 
 /// A  sublcass of `AsynchronousOperation` to execute a closure.
-public final class AsynchronousBlockOperation: AsynchronousOperation {
+public final class AsynchronousBlockOperation: AsynchronousOperation, TrackableOperation {
   /// A closure type that takes a closure as its parameter.
   public typealias Block = (@escaping () -> Void) -> Void
   
