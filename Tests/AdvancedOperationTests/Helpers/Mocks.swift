@@ -137,7 +137,7 @@ final internal class RunUntilCancelledAsyncOperation: AsynchronousOperation {
 
 // MARK: - Operation
 
-internal final class IntToStringOperation: Operation & InputConsumingOperation & OutputProducingOperation {
+internal final class IntToStringOperation: AdvancedOperation & InputConsumingOperation & OutputProducingOperation {
     var input: Int?
     private(set) var output: String?
     
@@ -148,7 +148,7 @@ internal final class IntToStringOperation: Operation & InputConsumingOperation &
     }
 }
 
-internal final class StringToIntOperation: Operation & InputConsumingOperation & OutputProducingOperation  {
+internal final class StringToIntOperation: AdvancedOperation & InputConsumingOperation & OutputProducingOperation  {
     var input: String?
     private(set) var output: Int?
       
@@ -166,5 +166,27 @@ internal final class FailingOperation: Operation, FailableOperation, TrackableOp
   
   override func main() {
     self.error = NSError(domain: identifier, code: 0, userInfo: nil) // TODO: errors
+  }
+}
+
+// MARK: - Preconditions
+
+struct NoCancelledDependencies: Precondition {
+  func evaluate(for operation: AdvancedOperation, completion: @escaping (Result<Void, Error>) -> Void) {
+    if operation.hasSomeCancelledDependencies {
+      completion(.failure(NSError(domain: identifier, code: 1, userInfo: nil)))
+    } else {
+      completion(.success(()))
+    }
+  }
+}
+
+struct NoFailedDependencies: Precondition {
+  func evaluate(for operation: AdvancedOperation, completion: @escaping (Result<Void, Error>) -> Void) {
+    if operation.hasSomeFailedDependencies {
+      completion(.failure(NSError(domain: identifier, code: 1, userInfo: nil)))
+    } else {
+      completion(.success(()))
+    }
   }
 }

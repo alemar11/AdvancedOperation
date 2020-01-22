@@ -335,27 +335,31 @@ final class AsynchronousOperationTests: XCTestCase {
   func testGate() { // TODO: refine this test
     let operation1 = _BlockOperation()
     let operation2 = FailingOperation()
-    let operation3 = BlockOperation()
-    let gate = GateOperation { [unowned operation3] gate in
-      if gate.hasSomeFailedDependencies {
-        operation3.cancel()
-      }
+    let operation3 = AsyncBlockOperation { complete in
+      XCTFail("It shouldn't be executed")
+      complete()
     }
+//    let gate = GateOperation { [unowned operation3] gate in
+//      if gate.hasSomeFailedDependencies {
+//        operation3.cancel()
+//      }
+//    }
     
-    gate.addDependencies(operation1, operation2)
-    operation3.addDependency(gate)
+    //gate.addDependencies(operation1, operation2)
+    operation3.addDependencies(operation1, operation2)
+    operation3.addPrecondition(NoFailedDependencies())
     operation1.installTracker()
     operation2.installTracker()
     operation3.installTracker()
-    gate.installTracker()
+    //gate.installTracker()
     
     operation1.name = "op1"
     operation2.name = "op2"
     operation3.name = "op3"
-    gate.name = "gate"
+    //gate.name = "gate"
     let queue = OperationQueue()
     queue.maxConcurrentOperationCount = 5
-    queue.addOperations([operation1, operation2, operation3, gate], waitUntilFinished: true)
+    queue.addOperations([operation1, operation2, operation3], waitUntilFinished: true)
     XCTAssertTrue(operation3.isCancelled)
     XCTAssertTrue(operation3.isFinished)
     

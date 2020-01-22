@@ -26,7 +26,7 @@ import Foundation
 
 public typealias AsyncOutputBlockOperation = AsynchronousOutputBlockOperation
 
-/// A concurrent sublcass of `AsynchronousOutputOperation` to execute a closure that can optionally produce an output.
+/// A concurrent sublcass of `AsynchronousOperation` to execute a closure that can (optionally) produce an output.
 public final class AsynchronousOutputBlockOperation<OutputType>: AsynchronousOperation, OutputProducingOperation {
   /// A closure type that takes a closure as its parameter.
   public typealias Block = (@escaping (Output?) -> Void) -> Void

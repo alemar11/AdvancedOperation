@@ -25,8 +25,8 @@ import Foundation
 
 public typealias AsyncBlockOperation = AsynchronousBlockOperation
 
-/// A concurrent sublcass of `AsynchronousOperation` to execute a closure.
-public final class AsynchronousBlockOperation: AsynchronousOperation {
+/// A  sublcass of `AsynchronousOperation` to execute a closure.
+public final class AsynchronousBlockOperation: AsynchronousOperation, TrackableOperation {
   /// A closure type that takes a closure as its parameter.
   public typealias Block = (@escaping () -> Void) -> Void
   
@@ -51,8 +51,36 @@ public final class AsynchronousBlockOperation: AsynchronousOperation {
   
   public final override func main() {
     block {
-      // TODO: leak
+      // TODO: test if it's leaking
       self.finish()
     }
+  }
+}
+
+
+public final class SynchronousBlockOperation: AdvancedOperation {
+  /// A closure type that takes a closure as its parameter.
+  public typealias Block = () -> Void
+  
+  // MARK: - Private Properties
+  
+  private var block: Block
+  
+  // MARK: - Initializers
+  
+  /// The designated initializer.
+  ///
+  /// - Parameters:
+  ///   - block: The closure to run when the operation executes
+  public init(block: @escaping Block) {
+    self.block = block
+    super.init()
+    self.name = "\(type(of: self))"
+  }
+  
+  // MARK: - Overrides
+  
+  public final override func main() {
+    block()
   }
 }
