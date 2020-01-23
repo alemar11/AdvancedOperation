@@ -27,7 +27,7 @@ import os.log
 final class AsynchronousBlockOperationTests: XCTestCase {
   override class func setUp() {
     #if swift(<5.1)
-    AdvancedOperation.KVOCrashWorkaround.installFix()
+    KVOCrashWorkaround.installFix()
     #endif
   }
   

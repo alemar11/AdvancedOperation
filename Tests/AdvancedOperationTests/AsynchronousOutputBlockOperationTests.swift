@@ -27,14 +27,14 @@ import XCTest
 final class AsynchronousOutputBlockOperationTests: XCTestCase {
   override class func setUp() {
     #if swift(<5.1)
-    AdvancedOperation.KVOCrashWorkaround.installFix()
+    KVOCrashWorkaround.installFix()
     #endif
   }
   
   func testCancel() {
-    let operation = AsynchronousOutputBlockOperation<Never> { complete in
-      DispatchQueue(label: "\(identifier).\(#function)", attributes: .concurrent).asyncAfter(deadline: .now() + 2) {
-        complete(nil)
+    let operation =  AsynchronousOutputBlockOperation<String> { (complete) in
+       DispatchQueue(label: "\(identifier).\(#function)", attributes: .concurrent).asyncAfter(deadline: .now() + 2) {
+      complete(.success(""))
       }
     }
     XCTAssertTrue(operation.isAsynchronous)
@@ -44,13 +44,13 @@ final class AsynchronousOutputBlockOperationTests: XCTestCase {
     operation.cancel()
     wait(for: [expectation1], timeout: 4)
     XCTAssertTrue(operation.isCancelled)
-    XCTAssertEqual(operation.name, "AsynchronousOutputBlockOperation<Never>")
+    XCTAssertEqual(operation.name, "AsynchronousOutputBlockOperation<String>")
   }
   
   func testCancelBeforeStarting() {
     let operation = AsynchronousOutputBlockOperation<Void> { complete in
-      DispatchQueue(label: "\(identifier).\(#function)", attributes: .concurrent).asyncAfter(deadline: .now() + 2) {
-        complete(nil)
+        DispatchQueue(label: "\(identifier).\(#function)", attributes: .concurrent).asyncAfter(deadline: .now() + 2) {
+          complete(.success(()))
       }
     }
     XCTAssertTrue(operation.isAsynchronous)
@@ -63,7 +63,7 @@ final class AsynchronousOutputBlockOperationTests: XCTestCase {
   }
   
   func testEarlyBailOut() {
-    let operation = AsynchronousOutputBlockOperation<Never> { complete in complete(nil) }
+    let operation = AsynchronousOutputBlockOperation<Void> { complete in complete(.success(())) }
     let expectation1 = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: operation, expectedValue: true)
     operation.cancel()
     operation.start()
@@ -72,10 +72,10 @@ final class AsynchronousOutputBlockOperationTests: XCTestCase {
   }
   
   func testBlockOperationCompletedInAsyncQueue() {
-    let operation = AsynchronousOutputBlockOperation<Never> { complete in
+    let operation = AsynchronousOutputBlockOperation<Void> { complete in
       XCTAssertTrue(Thread.isMainThread)
       DispatchQueue(label: "\(identifier).\(#function)", attributes: .concurrent).asyncAfter(deadline: .now() + 2) {
-        complete(nil)
+        complete(.success(()))
       }
     }
     let expectation1 = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: operation, expectedValue: true)
@@ -85,7 +85,7 @@ final class AsynchronousOutputBlockOperationTests: XCTestCase {
   
   func testSuccessfulOutput() {
     let text = "Hello World"
-    let operation = AsynchronousOutputBlockOperation<String> { $0(text) }
+    let operation = AsynchronousOutputBlockOperation<String> { $0(.success(text)) }
     let expectation1 = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: operation, expectedValue: true)
     operation.start()
     wait(for: [expectation1], timeout: 4)
@@ -94,7 +94,7 @@ final class AsynchronousOutputBlockOperationTests: XCTestCase {
   }
   
   func testFailedOutput() {
-    let operation = AsynchronousOutputBlockOperation<String> { $0(nil) }
+    let operation = AsynchronousOutputBlockOperation<String> { $0(.failure(NSError(domain: "", code: 0, userInfo: nil))) }
     let expectation1 = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: operation, expectedValue: true)
     operation.start()
     wait(for: [expectation1], timeout: 4)
@@ -106,11 +106,11 @@ final class AsynchronousOutputBlockOperationTests: XCTestCase {
     let expectation2 = expectation(description: "\(#function)\(#line)")
     // The other AdvancedBlockOperation initializer will fail here becase we need a more fine control
     // on when the operation should be considered finished.
-    let operation = AsynchronousOutputBlockOperation<Never>() { complete in
+    let operation = AsynchronousOutputBlockOperation<Void>() { complete in
       DispatchQueue.global().async {
         sleep(3)
         expectation1.fulfill()
-        complete(nil)
+        complete(.success(()))
       }
     }
     operation.addCompletionBlock {
@@ -121,7 +121,7 @@ final class AsynchronousOutputBlockOperationTests: XCTestCase {
   }
   
   func testComposition() {
-    let exepctedOutput = "exepctedOutput"
+    let expcetedOutput = "expcetedOutput"
     let expectation3 = expectation(description: "\(#function)\(#line)")
     let operation1 = SleepyAsyncOperation()
     let operation2 = SleepyAsyncOperation()
@@ -130,7 +130,7 @@ final class AsynchronousOutputBlockOperationTests: XCTestCase {
     operation3.addCompletionBlock { expectation3.fulfill() }
     let adapterOperation = AsynchronousOutputBlockOperation<String>() { [unowned operation2] complete in
       operation2.cancel()
-      complete(exepctedOutput)
+      complete(.success(expcetedOutput))
     }
     adapterOperation.addDependency(operation1)
     operation2.addDependency(adapterOperation)
@@ -145,7 +145,7 @@ final class AsynchronousOutputBlockOperationTests: XCTestCase {
     XCTAssertTrue(operation2.isCancelled)
     XCTAssertTrue(operation3.isFinished)
     XCTAssertTrue(adapterOperation.isFinished)
-    XCTAssertEqual(adapterOperation.output, exepctedOutput)
+    XCTAssertEqual(adapterOperation.output, expcetedOutput)
   }
   
   // TODO
@@ -183,10 +183,10 @@ final class AsynchronousOutputBlockOperationTests: XCTestCase {
     weak var weakObject = object
     
     autoreleasepool {
-      var operation = AsynchronousOutputBlockOperation<Never> { [unowned object] complete in
+      var operation = AsynchronousOutputBlockOperation<Int> { [unowned object] complete in
         DispatchQueue(label: "\(identifier).\(#function)", attributes: .concurrent).async {
           _ = object
-          complete(nil)
+          complete(.success(1))
         }
       }
       let expectation1 = expectation(description: "\(#function)\(#line)")

@@ -23,20 +23,26 @@
 
 import Foundation
 
-/// Components conforming to this protocol can be used as preconditions for an operation execution.
-public protocol Precondition {
-  /// The name of the precondition.
-  var name: String { get }
-  /// Evaluate the precondition, to see if it has been satisfied or not.
-  ///
-  /// - Parameters:
-  ///   - operation: the `AdvancedOperation` which this condition is attached to.
-  ///   - completion: a closure which receives a `Result`.
-  func evaluate(for operation: AdvancedOperation, completion: @escaping (Result<Void, Error>) -> Void)
-}
-
-public extension Precondition {
-  var name: String {
-    return String(describing: type(of: self))
+#if swift(<5.1)
+/// Workaround to solve some  multithreading bugs in Swift's KVO.
+/// This needs to execute before anything can register KVO in the background so the best way to do this is before the application ever runs
+///
+/// `KVOCrashWorkaround.installFix()`
+///
+/// - Note: it's not required for Swift 5.1 and above, see this [Swift PR](https://github.com/apple/swift/pull/20103)
+public final class KVOCrashWorkaround: NSObject {
+  @objc dynamic var test: String = ""
+  
+  /// Install the workaround: it shoud be done from the **main** thread.
+  public static func installFix() {
+    assert(Thread.isMainThread)
+    let obj = KVOCrashWorkaround()
+    let observer = obj.observe(\.test, options: [.new]) { (_, _) in
+      fatalError("Shouldn't be called, value doesn't change")
+    }
+    observer.invalidate()
   }
 }
+#endif
+
+

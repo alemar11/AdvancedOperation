@@ -29,7 +29,7 @@ import XCTest
 final class AsynchronousOperationTests: XCTestCase {
   override class func setUp() {
     #if swift(<5.1)
-    AdvancedOperation.KVOCrashWorkaround.installFix()
+    KVOCrashWorkaround.installFix()
     #endif
   }
   
@@ -339,15 +339,14 @@ final class AsynchronousOperationTests: XCTestCase {
       XCTFail("It shouldn't be executed")
       complete()
     }
-//    let gate = GateOperation { [unowned operation3] gate in
-//      if gate.hasSomeFailedDependencies {
-//        operation3.cancel()
-//      }
-//    }
+    let gate = GateOperation { [unowned operation3] gate in
+      if gate.hasSomeFailedDependencies {
+        operation3.cancel()
+      }
+    }
     
-    //gate.addDependencies(operation1, operation2)
-    operation3.addDependencies(operation1, operation2)
-    operation3.addPrecondition(NoFailedDependencies())
+    gate.addDependencies(operation1, operation2)
+    operation3.addDependencies(gate)
     operation1.installTracker()
     operation2.installTracker()
     operation3.installTracker()
@@ -359,7 +358,7 @@ final class AsynchronousOperationTests: XCTestCase {
     //gate.name = "gate"
     let queue = OperationQueue()
     queue.maxConcurrentOperationCount = 5
-    queue.addOperations([operation1, operation2, operation3], waitUntilFinished: true)
+    queue.addOperations([operation1, operation2, operation3, gate], waitUntilFinished: true)
     XCTAssertTrue(operation3.isCancelled)
     XCTAssertTrue(operation3.isFinished)
     
@@ -367,6 +366,8 @@ final class AsynchronousOperationTests: XCTestCase {
     sleep(5)
   }
 }
+
+extension AsyncBlockOperation: TrackableOperation { }
 
 extension BlockOperation: TrackableOperation {
   

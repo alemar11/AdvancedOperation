@@ -26,12 +26,13 @@ import Foundation
 
 public typealias AsyncOutputBlockOperation = AsynchronousOutputBlockOperation
 
-/// A concurrent sublcass of `AsynchronousOperation` to execute a closure that can (optionally) produce an output.
-public final class AsynchronousOutputBlockOperation<OutputType>: AsynchronousOperation, OutputProducingOperation {
+/// A concurrent sublcass of `AsynchronousOperation` to execute a closure that should produce a `Result`.
+public final class AsynchronousOutputBlockOperation<OutputType>: AsynchronousOperation, OutputProducingOperation, FailableOperation {
   /// A closure type that takes a closure as its parameter.
-  public typealias Block = (@escaping (Output?) -> Void) -> Void
+  public typealias Block = (@escaping (Result<OutputType, Error>) -> Void) -> Void
   
   public private(set) var output: OutputType?
+  public private(set) var error: Error?
   
   // MARK: - Private Properties
   
@@ -49,15 +50,18 @@ public final class AsynchronousOutputBlockOperation<OutputType>: AsynchronousOpe
     super.init()
     self.name = "AsynchronousOutputBlockOperation<\(OutputType.self)>"
   }
-
+  
   // MARK: - Overrides
   
-  public final override func main() {
-    block { output in
-      // TODO: leak
-      self.output = output
+  public override func main() {
+    block { result in
+      switch result {
+      case .failure(let error):
+        self.error = error
+      case .success(let output):
+        self.output = output
+      }
       self.finish()
     }
   }
 }
-

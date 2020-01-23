@@ -27,24 +27,24 @@ import XCTest
 final class OperationStateTests: XCTestCase {
   func testTransition() {
     // ready
-    XCTAssertTrue(AdvancedOperation.State.ready.canTransition(to: .executing))
-    XCTAssertTrue(AdvancedOperation.State.ready.canTransition(to: .finished))
-    XCTAssertFalse(AdvancedOperation.State.ready.canTransition(to: .ready))
+    XCTAssertTrue(AsyncOperation.State.ready.canTransition(to: .executing))
+    XCTAssertTrue(AsyncOperation.State.ready.canTransition(to: .finished))
+    XCTAssertFalse(AsyncOperation.State.ready.canTransition(to: .ready))
 
     // Executing
-    XCTAssertFalse(AdvancedOperation.State.executing.canTransition(to: .executing))
-    XCTAssertTrue(AdvancedOperation.State.executing.canTransition(to: .finished))
-    XCTAssertFalse(AdvancedOperation.State.executing.canTransition(to: .ready))
+    XCTAssertFalse(AsyncOperation.State.executing.canTransition(to: .executing))
+    XCTAssertTrue(AsyncOperation.State.executing.canTransition(to: .finished))
+    XCTAssertFalse(AsyncOperation.State.executing.canTransition(to: .ready))
 
     // finished
-    XCTAssertFalse(AdvancedOperation.State.finished.canTransition(to: .executing))
-    XCTAssertFalse(AdvancedOperation.State.finished.canTransition(to: .finished))
-    XCTAssertFalse(AdvancedOperation.State.finished.canTransition(to: .ready))
+    XCTAssertFalse(AsyncOperation.State.finished.canTransition(to: .executing))
+    XCTAssertFalse(AsyncOperation.State.finished.canTransition(to: .finished))
+    XCTAssertFalse(AsyncOperation.State.finished.canTransition(to: .ready))
   }
 
   func testDebugDescription() {
-    XCTAssertEqual(AdvancedOperation.State.ready.debugDescription.lowercased(), "ready")
-    XCTAssertEqual(AdvancedOperation.State.executing.debugDescription.lowercased(), "executing")
-    XCTAssertEqual(AdvancedOperation.State.finished.debugDescription.lowercased(), "finished")
+    XCTAssertEqual(AsyncOperation.State.ready.debugDescription.lowercased(), "ready")
+    XCTAssertEqual(AsyncOperation.State.executing.debugDescription.lowercased(), "executing")
+    XCTAssertEqual(AsyncOperation.State.finished.debugDescription.lowercased(), "finished")
   }
 }
