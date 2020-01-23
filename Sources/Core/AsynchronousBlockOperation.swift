@@ -1,4 +1,4 @@
-// 
+//
 // AdvancedOperation
 //
 // Copyright © 2016-2020 Tinrobots.
@@ -29,13 +29,13 @@ public typealias AsyncBlockOperation = AsynchronousBlockOperation
 public final class AsynchronousBlockOperation: AsynchronousOperation {
   /// A closure type that takes a closure as its parameter.
   public typealias Block = (@escaping () -> Void) -> Void
-  
+
   // MARK: - Private Properties
-  
+
   private var block: Block
-  
+
   // MARK: - Initializers
-  
+
   /// The designated initializer.
   ///
   /// - Parameters:
@@ -46,9 +46,9 @@ public final class AsynchronousBlockOperation: AsynchronousOperation {
     super.init()
     self.name = "\(type(of: self))"
   }
-  
+
   // MARK: - Overrides
-  
+
   public final override func main() {
     block {
       self.finish()

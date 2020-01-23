@@ -1,4 +1,4 @@
-// 
+//
 // AdvancedOperation
 //
 // Copyright © 2016-2020 Tinrobots.
@@ -33,37 +33,37 @@ public typealias AsyncOperation = AsynchronousOperation
 /// Subclasses must override `main` to perform any work and, if they are asynchronous, call the `finish()` method to complete the execution.
 open class AsynchronousOperation: Operation {
   // MARK: - Public Properties
-  
+
   open override var isReady: Bool {
     return state == .ready && super.isReady
   }
-  
+
   public final override var isExecuting: Bool {
     return state == .executing
   }
-  
+
   public final override var isFinished: Bool {
     return state == .finished
   }
-  
+
   public final override var isAsynchronous: Bool { return isConcurrent }
-  
+
   public final override var isConcurrent: Bool { return true }
-  
+
   // MARK: - Private Properties
-  
+
   /// Lock to ensure thread safety.
   private let lock = UnfairLock()
-  
+
   /// An operation is considered as "running" from the `start()` method is called until it gets finished.
   private var isRunning = Atomic(false)
-  
+
   /// Serial queue for making state changes atomic under the constraint of having to send KVO willChange/didChange notifications.
   private let stateChangeQueue = DispatchQueue(label: "\(identifier).AsynchronousOperation.stateChange")
-  
+
   /// Private backing store for `state`
   private var _state: Atomic<State> = Atomic(.ready)
-  
+
   /// The state of the operation
   private var state: State {
     get {
@@ -83,26 +83,26 @@ open class AsynchronousOperation: Operation {
         // willChange/didChange notifications only for the key paths that actually change.
         let oldValue = _state.value
         guard newValue != oldValue else { return }
-        
+
         willChangeValue(forKey: oldValue.objcKeyPath)
         willChangeValue(forKey: newValue.objcKeyPath)
-        
+
         _state.mutate {
           assert($0.canTransition(to: newValue), "Performing an invalid state transition from: \($0) to: \(newValue) for \(operationName).")
           $0 = newValue
         }
-        
+
         didChangeValue(forKey: oldValue.objcKeyPath)
         didChangeValue(forKey: newValue.objcKeyPath)
       }
     }
   }
-  
+
   // MARK: - Foundation.Operation
-  
+
   public final override func start() {
     guard !isFinished else { return }
-    
+
     let isAlreadyRunning = isRunning.mutate { running -> Bool in
       if running {
         return true // already running
@@ -113,30 +113,30 @@ open class AsynchronousOperation: Operation {
         preconditionFailure("The operation \(operationName) is not ready yet.")
       }
     }
-    
+
     guard !isAlreadyRunning else { return }
-    
+
     // early bailing out
     guard !isCancelled else {
       finish()
       return
     }
-    
+
     // Calling super.start() here causes some KVO issues (the doc says "Your (concurrent) custom implementation must not call super at any time").
     // The default implementation of this method ("start") updates the execution state of the operation and calls the receiver’s main() method.
     // This method also performs several checks to ensure that the operation can actually run.
     // For example, if the receiver was cancelled or is already finished, this method simply returns without calling main().
     // If the operation is currently executing or is not ready to execute, this method throws an NSInvalidArgumentException exception.
-    
+
     state = .executing
     main()
-    
+
     // At this point main() has already returned but it doesn't mean that the operation is finished.
     // Only calling `finish()` will finish the operation at this point.
   }
-  
+
   // MARK: - Public Methods
-  
+
   ///  The default implementation of this method does nothing.
   /// You should override this method to perform the desired task. In your implementation, do not invoke super.
   ///  This method will automatically execute within an autorelease pool provided by Operation, so you do not need to create your own autorelease pool block in your implementation.
@@ -144,15 +144,15 @@ open class AsynchronousOperation: Operation {
   public override func main() {
     preconditionFailure("Subclasses must implement `main`.")
   }
-  
+
   // MARK: - Private Methods
-  
+
   /// Call this function to finish an operation that is currently executing.
   public final func finish() {
     // State can also be "ready" here if the operation was cancelled before it was started.
     lock.lock()
     defer { lock.unlock() }
-    
+
     switch state {
     case .ready, .executing:
       state = .finished
@@ -161,13 +161,13 @@ open class AsynchronousOperation: Operation {
       preconditionFailure("The finish() method shouldn't be called more than once for \(operationName).")
     }
   }
-  
+
   // MARK: - Debug
-  
+
   open override var description: String {
     return debugDescription
   }
-  
+
   open override var debugDescription: String {
     return "\(operationName)) – \(isCancelled ? "cancelled" : String(describing: state))"
   }
@@ -181,7 +181,7 @@ extension AsynchronousOperation {
     case ready
     case executing
     case finished
-    
+
     /// The `#keyPath` for the `Operation` property that's associated with this value.
     var objcKeyPath: String {
       switch self {
@@ -190,7 +190,7 @@ extension AsynchronousOperation {
       case .finished: return #keyPath(isFinished)
       }
     }
-    
+
     var description: String {
       switch self {
       case .ready: return "ready"
@@ -198,11 +198,11 @@ extension AsynchronousOperation {
       case .finished: return "finished"
       }
     }
-    
+
     var debugDescription: String {
       return description
     }
-    
+
     func canTransition(to newState: State) -> Bool {
       switch (self, newState) {
       case (.ready, .executing): return true

@@ -1,4 +1,4 @@
-// 
+//
 // AdvancedOperation
 //
 // Copyright © 2016-2020 Tinrobots.
@@ -44,7 +44,7 @@ public extension OutputProducingOperation {
     operation.addDependency(injectionOperation)
     return injectionOperation
   }
-  
+
   /// Creates a new operation that passes the output of `self` into the given `InputConsumingOperation` operation after being transformed.
   ///
   /// - Parameters:
