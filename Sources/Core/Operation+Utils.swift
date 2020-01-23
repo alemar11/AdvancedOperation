@@ -34,11 +34,6 @@ extension Operation {
     return dependencies.first { $0.isCancelled } != nil
   }
   
-  /// Returns `true` if at least one dependency conforming to `FailableOperation` has generated an error.
-  public var hasSomeFailedDependencies: Bool {
-    return dependencies.first { ($0 as? FailableOperation)?.isFailed ?? false } != nil // TODO test
-  }
-  
   /// Adds a completion block to be executed after the `Operation` enters the "finished" state.
   /// If there is already a completion block, they are chained together.
   ///

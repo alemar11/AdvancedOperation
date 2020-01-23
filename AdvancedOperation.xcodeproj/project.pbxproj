@@ -84,13 +84,13 @@
 		23A1B88021B8307F0018D9D5 /* Atomic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23A1B87E21B8307F0018D9D5 /* Atomic.swift */; };
 		23A1B88121B8307F0018D9D5 /* Atomic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23A1B87E21B8307F0018D9D5 /* Atomic.swift */; };
 		23A1B88221B8307F0018D9D5 /* Atomic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23A1B87E21B8307F0018D9D5 /* Atomic.swift */; };
-		23A813B12020CF1E008A98E0 /* AsynchronousOutputBlockOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23A813B02020CF1E008A98E0 /* AsynchronousOutputBlockOperation.swift */; };
-		23A813B22020CF1E008A98E0 /* AsynchronousOutputBlockOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23A813B02020CF1E008A98E0 /* AsynchronousOutputBlockOperation.swift */; };
-		23A813B32020CF1E008A98E0 /* AsynchronousOutputBlockOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23A813B02020CF1E008A98E0 /* AsynchronousOutputBlockOperation.swift */; };
-		23A813B42020CF1E008A98E0 /* AsynchronousOutputBlockOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23A813B02020CF1E008A98E0 /* AsynchronousOutputBlockOperation.swift */; };
-		23A813B62020D111008A98E0 /* AsynchronousOutputBlockOperationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23A813B52020D111008A98E0 /* AsynchronousOutputBlockOperationTests.swift */; };
-		23A813B72020D111008A98E0 /* AsynchronousOutputBlockOperationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23A813B52020D111008A98E0 /* AsynchronousOutputBlockOperationTests.swift */; };
-		23A813B82020D111008A98E0 /* AsynchronousOutputBlockOperationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23A813B52020D111008A98E0 /* AsynchronousOutputBlockOperationTests.swift */; };
+		23A813B12020CF1E008A98E0 /* __AsynchronousOutputBlockOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23A813B02020CF1E008A98E0 /* __AsynchronousOutputBlockOperation.swift */; };
+		23A813B22020CF1E008A98E0 /* __AsynchronousOutputBlockOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23A813B02020CF1E008A98E0 /* __AsynchronousOutputBlockOperation.swift */; };
+		23A813B32020CF1E008A98E0 /* __AsynchronousOutputBlockOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23A813B02020CF1E008A98E0 /* __AsynchronousOutputBlockOperation.swift */; };
+		23A813B42020CF1E008A98E0 /* __AsynchronousOutputBlockOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23A813B02020CF1E008A98E0 /* __AsynchronousOutputBlockOperation.swift */; };
+		23A813B62020D111008A98E0 /* __AsynchronousOutputBlockOperationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23A813B52020D111008A98E0 /* __AsynchronousOutputBlockOperationTests.swift */; };
+		23A813B72020D111008A98E0 /* __AsynchronousOutputBlockOperationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23A813B52020D111008A98E0 /* __AsynchronousOutputBlockOperationTests.swift */; };
+		23A813B82020D111008A98E0 /* __AsynchronousOutputBlockOperationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23A813B52020D111008A98E0 /* __AsynchronousOutputBlockOperationTests.swift */; };
 		23AC3ADD2038A050003E1B15 /* OperationUtilsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23AC3ADC2038A050003E1B15 /* OperationUtilsTests.swift */; };
 		23AC3ADE2038A050003E1B15 /* OperationUtilsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23AC3ADC2038A050003E1B15 /* OperationUtilsTests.swift */; };
 		23AC3ADF2038A050003E1B15 /* OperationUtilsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23AC3ADC2038A050003E1B15 /* OperationUtilsTests.swift */; };
@@ -167,8 +167,8 @@
 		23A1A85720F4AD9100EA3350 /* CHANGELOG.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = CHANGELOG.md; sourceTree = SOURCE_ROOT; };
 		23A1B87821B81C710018D9D5 /* UnfairLock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnfairLock.swift; sourceTree = "<group>"; };
 		23A1B87E21B8307F0018D9D5 /* Atomic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Atomic.swift; sourceTree = "<group>"; };
-		23A813B02020CF1E008A98E0 /* AsynchronousOutputBlockOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsynchronousOutputBlockOperation.swift; sourceTree = "<group>"; };
-		23A813B52020D111008A98E0 /* AsynchronousOutputBlockOperationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsynchronousOutputBlockOperationTests.swift; sourceTree = "<group>"; };
+		23A813B02020CF1E008A98E0 /* __AsynchronousOutputBlockOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = __AsynchronousOutputBlockOperation.swift; sourceTree = "<group>"; };
+		23A813B52020D111008A98E0 /* __AsynchronousOutputBlockOperationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = __AsynchronousOutputBlockOperationTests.swift; sourceTree = "<group>"; };
 		23AC3ADC2038A050003E1B15 /* OperationUtilsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OperationUtilsTests.swift; sourceTree = "<group>"; };
 		23BAA540236B460400411F5B /* ci.yml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; path = ci.yml; sourceTree = "<group>"; };
 		23F24D21200799B800B25A03 /* Operation+Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Operation+Utils.swift"; sourceTree = "<group>"; };
@@ -249,7 +249,7 @@
 			children = (
 				06C92B4F23D0AAEA000D12C8 /* AsynchronousBlockOperationTests.swift */,
 				D2093D35236606F400230A2A /* AsynchronousOperationTests.swift */,
-				23A813B52020D111008A98E0 /* AsynchronousOutputBlockOperationTests.swift */,
+				23A813B52020D111008A98E0 /* __AsynchronousOutputBlockOperationTests.swift */,
 				23BAA53E236B42BA00411F5B /* Helpers */,
 				D2093D392366175200230A2A /* OperationInjectionTests.swift */,
 				235D08D0206A941B00F70142 /* OperationStateTests.swift */,
@@ -263,7 +263,7 @@
 			children = (
 				D21C5D8323D3674E005F8D51 /* AsynchronousOperation.swift */,
 				06C92B4A23D0A9FF000D12C8 /* AsynchronousBlockOperation.swift */,
-				23A813B02020CF1E008A98E0 /* AsynchronousOutputBlockOperation.swift */,
+				23A813B02020CF1E008A98E0 /* __AsynchronousOutputBlockOperation.swift */,
 				23A1B87E21B8307F0018D9D5 /* Atomic.swift */,
 				0664BF3523D5B91100B491E6 /* FailableOperation.swift */,
 				239BC52120EB7539009A36D9 /* InputConsumingOperation.swift */,
@@ -695,7 +695,7 @@
 				0664BF3623D5B91100B491E6 /* FailableOperation.swift in Sources */,
 				23F24D22200799B800B25A03 /* Operation+Utils.swift in Sources */,
 				239BC52220EB7539009A36D9 /* InputConsumingOperation.swift in Sources */,
-				23A813B12020CF1E008A98E0 /* AsynchronousOutputBlockOperation.swift in Sources */,
+				23A813B12020CF1E008A98E0 /* __AsynchronousOutputBlockOperation.swift in Sources */,
 				D21C5D8423D3674E005F8D51 /* AsynchronousOperation.swift in Sources */,
 				060B667123C4EBC80085FCB4 /* OutputProducingOperation.swift in Sources */,
 			);
@@ -714,7 +714,7 @@
 				0664BF3723D5B91100B491E6 /* FailableOperation.swift in Sources */,
 				23F24D23200799B800B25A03 /* Operation+Utils.swift in Sources */,
 				239BC52320EB7539009A36D9 /* InputConsumingOperation.swift in Sources */,
-				23A813B22020CF1E008A98E0 /* AsynchronousOutputBlockOperation.swift in Sources */,
+				23A813B22020CF1E008A98E0 /* __AsynchronousOutputBlockOperation.swift in Sources */,
 				D21C5D8523D3674E005F8D51 /* AsynchronousOperation.swift in Sources */,
 				060B667223C4EBC80085FCB4 /* OutputProducingOperation.swift in Sources */,
 			);
@@ -733,7 +733,7 @@
 				0664BF3823D5B91100B491E6 /* FailableOperation.swift in Sources */,
 				23F24D24200799B800B25A03 /* Operation+Utils.swift in Sources */,
 				239BC52420EB7539009A36D9 /* InputConsumingOperation.swift in Sources */,
-				23A813B32020CF1E008A98E0 /* AsynchronousOutputBlockOperation.swift in Sources */,
+				23A813B32020CF1E008A98E0 /* __AsynchronousOutputBlockOperation.swift in Sources */,
 				D21C5D8623D3674E005F8D51 /* AsynchronousOperation.swift in Sources */,
 				060B667323C4EBC80085FCB4 /* OutputProducingOperation.swift in Sources */,
 			);
@@ -752,7 +752,7 @@
 				0664BF3923D5B91100B491E6 /* FailableOperation.swift in Sources */,
 				23F24D25200799B800B25A03 /* Operation+Utils.swift in Sources */,
 				239BC52520EB7539009A36D9 /* InputConsumingOperation.swift in Sources */,
-				23A813B42020CF1E008A98E0 /* AsynchronousOutputBlockOperation.swift in Sources */,
+				23A813B42020CF1E008A98E0 /* __AsynchronousOutputBlockOperation.swift in Sources */,
 				D21C5D8723D3674E005F8D51 /* AsynchronousOperation.swift in Sources */,
 				060B667423C4EBC80085FCB4 /* OutputProducingOperation.swift in Sources */,
 			);
@@ -765,7 +765,7 @@
 				D2093D38236606F400230A2A /* AsynchronousOperationTests.swift in Sources */,
 				D2093D3C2366175200230A2A /* OperationInjectionTests.swift in Sources */,
 				06C92B5623D0AB07000D12C8 /* AsynchronousBlockOperationTests.swift in Sources */,
-				23A813B82020D111008A98E0 /* AsynchronousOutputBlockOperationTests.swift in Sources */,
+				23A813B82020D111008A98E0 /* __AsynchronousOutputBlockOperationTests.swift in Sources */,
 				235D08D3206A941B00F70142 /* OperationStateTests.swift in Sources */,
 				23AC3ADF2038A050003E1B15 /* OperationUtilsTests.swift in Sources */,
 				2385617B200A873C0061BAA1 /* Mocks.swift in Sources */,
@@ -779,7 +779,7 @@
 				D2093D36236606F400230A2A /* AsynchronousOperationTests.swift in Sources */,
 				D2093D3A2366175200230A2A /* OperationInjectionTests.swift in Sources */,
 				06C92B5423D0AB06000D12C8 /* AsynchronousBlockOperationTests.swift in Sources */,
-				23A813B62020D111008A98E0 /* AsynchronousOutputBlockOperationTests.swift in Sources */,
+				23A813B62020D111008A98E0 /* __AsynchronousOutputBlockOperationTests.swift in Sources */,
 				235D08D1206A941B00F70142 /* OperationStateTests.swift in Sources */,
 				23AC3ADD2038A050003E1B15 /* OperationUtilsTests.swift in Sources */,
 				23856179200A873C0061BAA1 /* Mocks.swift in Sources */,
@@ -793,7 +793,7 @@
 				D2093D37236606F400230A2A /* AsynchronousOperationTests.swift in Sources */,
 				D2093D3B2366175200230A2A /* OperationInjectionTests.swift in Sources */,
 				06C92B5523D0AB06000D12C8 /* AsynchronousBlockOperationTests.swift in Sources */,
-				23A813B72020D111008A98E0 /* AsynchronousOutputBlockOperationTests.swift in Sources */,
+				23A813B72020D111008A98E0 /* __AsynchronousOutputBlockOperationTests.swift in Sources */,
 				235D08D2206A941B00F70142 /* OperationStateTests.swift in Sources */,
 				23AC3ADE2038A050003E1B15 /* OperationUtilsTests.swift in Sources */,
 				2385617A200A873C0061BAA1 /* Mocks.swift in Sources */,
