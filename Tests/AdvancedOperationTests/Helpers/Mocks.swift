@@ -165,6 +165,16 @@ internal final class FailingOperation: Operation, FailableOperation, TrackableOp
   private(set) var error: Error?
   
   override func main() {
-    self.error = NSError(domain: identifier, code: 0, userInfo: nil) // TODO: errors
+    self.error = NSError(domain: identifier, code: 0, userInfo: nil)
   }
+}
+
+// MARK: - Log
+
+internal enum Log {
+  private static let identifier = "xctest"
+  static var `default`: OSLog = OSLog(subsystem: Log.identifier, category: "Default")
+  static var signpost: OSLog = OSLog(subsystem: Log.identifier, category: "Signpost")
+  @available(iOS 12.0, iOSApplicationExtension 12.0, tvOS 12.0, watchOS 5.0, macOS 10.14, OSXApplicationExtension 10.14, *)
+  static var poi: OSLog = OSLog(subsystem: Log.identifier, category: .pointsOfInterest)
 }

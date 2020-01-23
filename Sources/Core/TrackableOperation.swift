@@ -26,21 +26,12 @@ import os.log
 
 /// Operations conforming to this protcol can log their most relevant status changes.
 /// To enable logging:
-/// - To enable log add this environment key: `org.tinrobots.AdvancedOperation.LOG_ENABLED`
-/// - To enable signposts add this environment key: `org.tinrobots.AdvancedOperation.SIGNPOST_ENABLED`
-/// - To enable point of interests add this environment key: `org.tinrobots.AdvancedOperation.POI_ENABLED`
+/// - To enable all logs alltogether add this environment key: `org.tinrobots.AdvancedOperation.LOG.ALL`
+/// - To enable the default log add this environment key: `org.tinrobots.AdvancedOperation.LOG.DEFAULT`
+/// - To enable signposts add this environment key: `org.tinrobots.AdvancedOperation.self.signpost`
+/// - To enable point of interests add this environment key: `org.tinrobots.AdvancedOperation.LOG.POI`
 /// - Warning: If using Swift 5.0  run `KVOCrashWorkaround.installFix()` to solve some  multithreading bugs in Swift's KVO.
-protocol TrackableOperation: Operation {
-  var log: OSLog { get }
-  @available(iOS 12.0, iOSApplicationExtension 12.0, tvOS 12.0, watchOS 5.0, macOS 10.14, OSXApplicationExtension 10.14, *)
-  var poi: OSLog { get }
-}
-
-extension TrackableOperation {
-  var log: OSLog { return Log.`default` }
-  @available(iOS 12.0, iOSApplicationExtension 12.0, tvOS 12.0, watchOS 5.0, macOS 10.14, OSXApplicationExtension 10.14, *)
-  var poi: OSLog { return Log.poi }
-}
+public protocol TrackableOperation: Operation { }
 
 private var trackerKey: UInt8 = 0
 extension TrackableOperation {
@@ -53,10 +44,11 @@ extension TrackableOperation {
     }
   }
   
-  public func installTracker() {
-    precondition(!self.isExecuting || !self.isFinished || !self.isCancelled, "The tracker should be installed before any relevation operation phases are occurred.")
+  public func installTracker(log: OSLog = .default, signpost: OSLog = .disabled, poi: OSLog = .disabled) {
+    precondition(!self.isExecuting || !self.isFinished || !self.isCancelled, "The tracker should be installed before any relevant operation phases are occurred.")
     if tracker == nil {
-      tracker = Tracker(operation: self)
+      tracker = Tracker(log: log, signpost: signpost, poi: poi)
+      tracker?.start(operation: self)
     }
   }
 }
@@ -64,17 +56,28 @@ extension TrackableOperation {
 // MARK: - Tracker
 
 final class Tracker {
-  private var tokens = [NSKeyValueObservation]()
+  static let signPostIntervalName: StaticString = "Operation"
+  
+  private let log: OSLog
+  private let signpost: OSLog
+  private let poi: OSLog
   private var started: Bool = false
   private var cancelled: Bool = false
   private var finished: Bool = false
+  private var tokens = [NSKeyValueObservation]()
+  
+  init(log: OSLog, signpost: OSLog, poi: OSLog) {
+    self.log = log
+    self.signpost = signpost
+    self.poi = poi
+  }
   
   @available(iOS 12.0, iOSApplicationExtension 12.0, tvOS 12.0, watchOS 5.0, macOS 10.14, OSXApplicationExtension 10.14, *)
-  lazy var signpostID = {
-    return OSSignpostID(log: Log.signpost, object: self)
+  private lazy var signpostID = {
+    return OSSignpostID(log: signpost, object: self)
   }()
   
-  init<T>(operation: T) where T: TrackableOperation {
+  func start<T>(operation: T) where T: TrackableOperation {
     // uses default and poi logs
     let cancelToken = operation.observe(\.isCancelled, options: [.old, .new]) { [weak self] (operation, changes) in
       guard let self = self else { return }
@@ -85,14 +88,14 @@ final class Tracker {
       self.cancelled = true
       
       if #available(iOS 12.0, iOSApplicationExtension 12.0, tvOS 12.0, watchOS 5.0, macOS 10.14, OSXApplicationExtension 10.14, *) {
-        os_log(.info, log: Log.`default`, "%{public}s has been cancelled.", operation.operationName)
+        os_log(.info, log: self.log, "%{public}s has been cancelled.", operation.operationName)
       } else {
-        os_log("%{public}s has been cancelled.", log: Log.`default`, type: .info, operation.operationName)
+        os_log("%{public}s has been cancelled.", log: self.log, type: .info, operation.operationName)
       }
       
       if self.started {
         if #available(iOS 12.0, iOSApplicationExtension 12.0, tvOS 12.0, watchOS 5.0, macOS 10.14, OSXApplicationExtension 10.14, *) {
-          os_signpost(.event, log: Log.poi, name: "Cancellation", signpostID: self.signpostID, "⏺ %{public}s has been cancelled.", operation.operationName)
+          os_signpost(.event, log: self.poi, name: "Cancellation", signpostID: self.signpostID, "⏺ %{public}s has been cancelled.", operation.operationName)
         }
       }
     }
@@ -106,10 +109,10 @@ final class Tracker {
         assert(!self.started)
         self.started = true
         if #available(iOS 12.0, iOSApplicationExtension 12.0, tvOS 12.0, watchOS 5.0, macOS 10.14, OSXApplicationExtension 10.14, *) {
-          os_log(.info, log: Log.`default`, "%{public}s has started.", operation.operationName)
-          os_signpost(.begin, log: Log.signpost, name: Log.signPostIntervalName, signpostID: self.signpostID, "🔼 %{public}s has started.", operation.operationName)
+          os_log(.info, log: self.log, "%{public}s has started.", operation.operationName)
+          os_signpost(.begin, log: self.signpost, name: Tracker.signPostIntervalName, signpostID: self.signpostID, "🔼 %{public}s has started.", operation.operationName)
         } else {
-          os_log("%{public}s has started.", log: operation.log, type: .info, operation.operationName)
+          os_log("%{public}s has started.", log: self.log, type: .info, operation.operationName)
         }
       }
     }
@@ -125,14 +128,14 @@ final class Tracker {
       self.finished = true
       
       if #available(iOS 12.0, iOSApplicationExtension 12.0, tvOS 12.0, watchOS 5.0, macOS 10.14, OSXApplicationExtension 10.14, *) {
-        os_log(.info, log: Log.`default`, "%{public}s has finished.", operation.operationName)
+        os_log(.info, log: self.log, "%{public}s has finished.", operation.operationName)
       } else {
-        os_log("%{public}s has finished.", log: Log.`default`, type: .info, operation.operationName)
+        os_log("%{public}s has finished.", log: self.log, type: .info, operation.operationName)
       }
       
       if self.started { // the end signpost should be logged only if the operation has logged the begin signpost
         if #available(iOS 12.0, iOSApplicationExtension 12.0, tvOS 12.0, watchOS 5.0, macOS 10.14, OSXApplicationExtension 10.14, *) {
-          os_signpost(.end, log: Log.signpost, name: Log.signPostIntervalName, signpostID: self.signpostID, "🔽 %{public}s has finished.", operation.operationName)
+          os_signpost(.end, log: self.signpost, name: Tracker.signPostIntervalName, signpostID: self.signpostID, "🔽 %{public}s has finished.", operation.operationName)
         }
       }
     }

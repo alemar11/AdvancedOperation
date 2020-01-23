@@ -39,6 +39,6 @@ public extension FailableOperation {
 public extension Operation {
   /// Returns `true` if at least one dependency conforming to `FailableOperation` has generated an error.
   var hasSomeFailedDependencies: Bool {
-    return dependencies.first { ($0 as? FailableOperation)?.isFailed ?? false } != nil // TODO test
+    return dependencies.first { ($0 as? FailableOperation)?.isFailed ?? false } != nil
   }
 }

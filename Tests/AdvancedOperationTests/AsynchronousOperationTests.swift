@@ -130,7 +130,7 @@ final class AsynchronousOperationTests: XCTestCase {
       operation.start()
       expectation2.fulfill()
     }
-
+    
     operation.start()
     operation.start()
     
@@ -288,12 +288,10 @@ final class AsynchronousOperationTests: XCTestCase {
     
     XCTAssertTrue(operation4.isCancelled)
     XCTAssertFalse(operation2.isCancelled)
-    //XCTAssertNil(operation1.output, "Cancelled \(operation1.operationName) shouldn't have any output") // TODO
     XCTAssertTrue(operation1.isCancelled)
     XCTAssertTrue(operation1.isFinished)
   }
   
-  // TODO: add tests with output? even if the output is just a protocol conformance
   func testAllOperationCancelled() {
     let queue = OperationQueue()
     let expectation1 = expectation(description: "\(#function)\(#line)")
@@ -338,23 +336,19 @@ final class AsynchronousOperationTests: XCTestCase {
     operation3.cancel()
     operation2.cancel()
     operation1.cancel()
-    
     queue.addOperations([operation1, operation2, operation3, operation4, conditionsOperationToLetOperationOneRun, conditionsOperationToLetOperationFourRun], waitUntilFinished: false)
     
     waitForExpectations(timeout: 10)
+
     XCTAssertTrue(operation4.isCancelled)
-    
     XCTAssertTrue(operation3.isCancelled)
-    
-    //XCTAssertNil(operation2.output, "Cancelled \(operation3.operationName) shouldn't have any output") // TODO
     XCTAssertTrue(operation2.isCancelled)
-    
-    //XCTAssertNil(operation1.output, "Cancelled \(operation3.operationName) shouldn't have any output") // TODO
     XCTAssertTrue(operation1.isCancelled)
   }
   
-  func testGate() { // TODO: refine this test
-    let operation1 = _BlockOperation()
+  func testGate() {
+    let operation0 = AutoCancellingAsyncOperation()
+    let operation1 = BlockOperation()
     let operation2 = FailingOperation()
     let operation3 = AsyncBlockOperation { complete in
       XCTFail("It shouldn't be executed")
@@ -368,39 +362,39 @@ final class AsynchronousOperationTests: XCTestCase {
     
     gate.addDependencies(operation1, operation2)
     operation3.addDependencies(gate)
-    operation1.installTracker()
-    operation2.installTracker()
-    operation3.installTracker()
-    //gate.installTracker()
     
+    if #available(iOS 12.0, iOSApplicationExtension 12.0, tvOS 12.0, watchOS 5.0, macOS 10.14, OSXApplicationExtension 10.14, *){
+      operation0.installTracker(log: Log.default, signpost: Log.signpost, poi: Log.poi)
+      operation1.installTracker(log: Log.default, signpost: Log.signpost, poi: Log.poi)
+      operation2.installTracker(log: Log.default, signpost: Log.signpost, poi: Log.poi)
+      operation3.installTracker(log: Log.default, signpost: Log.signpost, poi: Log.poi)
+      gate.installTracker(log: Log.default, signpost: Log.signpost, poi: Log.poi)
+    } else {
+      operation0.installTracker(log: Log.default, signpost: Log.signpost, poi: .disabled)
+      operation1.installTracker(log: Log.default, signpost: Log.signpost, poi: .disabled)
+      operation2.installTracker(log: Log.default, signpost: Log.signpost, poi: .disabled)
+      operation3.installTracker(log: Log.default, signpost: Log.signpost, poi: .disabled)
+      gate.installTracker(log: Log.default, signpost: Log.signpost, poi: .disabled)
+    }
+    
+    operation0.name = "op0"
     operation1.name = "op1"
     operation2.name = "op2"
     operation3.name = "op3"
-    //gate.name = "gate"
+    gate.name = "gate"
     let queue = OperationQueue()
     queue.maxConcurrentOperationCount = 5
-    queue.addOperations([operation1, operation2, operation3, gate], waitUntilFinished: true)
+    queue.addOperations([operation0, operation1, operation2, operation3, gate], waitUntilFinished: true)
     XCTAssertTrue(operation3.isCancelled)
     XCTAssertTrue(operation3.isFinished)
-    
-    print("123")
-    sleep(5)
   }
 }
 
 extension AsyncBlockOperation: TrackableOperation { }
+extension AutoCancellingAsyncOperation: TrackableOperation { }
+extension BlockOperation: TrackableOperation { }
 
-extension BlockOperation: TrackableOperation {
-  
-}
-
-class _BlockOperation: BlockOperation {
-  deinit {
-    print("deinit")
-  }
-}
-
-class GateOperation: Operation, TrackableOperation {
+final class GateOperation: Operation, TrackableOperation {
   private let block: (GateOperation) -> Void
   
   init(block: @escaping (GateOperation) -> Void) {
@@ -409,9 +403,5 @@ class GateOperation: Operation, TrackableOperation {
   
   override func main() {
     block(self)
-  }
-  
-  deinit {
-    print("deinit")
   }
 }

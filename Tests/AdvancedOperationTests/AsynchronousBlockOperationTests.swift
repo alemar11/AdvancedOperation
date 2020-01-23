@@ -127,31 +127,30 @@ final class AsynchronousBlockOperationTests: XCTestCase {
     XCTAssertTrue(adapterOperation.isFinished)
   }
   
-  //    // TODO
-  ////    func testMemoryLeak() {
-  ////        var object = NSObject()
-  ////        weak var weakObject = object
-  ////
-  ////        autoreleasepool {
-  ////            var operation = AsynchronousBlockOperation { [unowned object] complete in
-  ////                DispatchQueue(label: "\(identifier).\(#function)", attributes: .concurrent).async {
-  ////                    _ = object
-  ////                    complete(.success)
-  ////                }
-  ////            }
-  ////
-  ////            let expectation1 = expectation(description: "\(#function)\(#line)")
-  ////            operation.addCompletionBlock { expectation1.fulfill() }
-  ////            operation.start()
-  ////
-  ////            waitForExpectations(timeout: 3)
-  ////
-  ////            // Memory leaks test: once the operation is released, the captured object (by reference) should be nil (weakObject)
-  ////            operation = AsynchronousBlockOperation { _ in }
-  ////            object = NSObject()
-  ////        }
-  ////
-  ////        XCTAssertNil(weakObject, "Memory leak: the object should have been deallocated at this point.")
-  ////    }
+  func testMemoryLeak() {
+    var object = NSObject()
+    weak var weakObject = object
+    
+    autoreleasepool {
+      var operation = AsynchronousBlockOperation { [unowned object] complete in
+        DispatchQueue(label: "\(identifier).\(#function)", attributes: .concurrent).async {
+          _ = object
+          complete()
+        }
+      }
+      
+      let expectation1 = expectation(description: "\(#function)\(#line)")
+      operation.addCompletionBlock { expectation1.fulfill() }
+      operation.start()
+      
+      waitForExpectations(timeout: 3)
+      
+      // Memory leaks test: once the operation is released, the captured object (by reference) should be nil (weakObject)
+      operation = AsynchronousBlockOperation { _ in }
+      object = NSObject()
+    }
+    
+    XCTAssertNil(weakObject, "Memory leak: the object should have been deallocated at this point.")
+  }
 }
 

@@ -27,10 +27,7 @@
       "name" : "Extra Diagnostics",
       "options" : {
         "environmentVariableEntries" : [
-          {
-            "key" : "org.tinrobots.AdvancedOperation.LOG_ENABLED",
-            "value" : "1"
-          }
+
         ],
         "userAttachmentLifetime" : "deleteOnSuccess"
       }

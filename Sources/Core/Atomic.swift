@@ -26,6 +26,9 @@ import Foundation
 /// A mutex wrapper around contents.
 /// Useful for threadsafe access to single values but less useful for compound values where different components might need to be updated at different times.
 final class Atomic<T> {
+  private var mutex = UnfairLock()
+  private var internalValue: T
+  
   @inlinable
   var value: T {
     mutex.lock()
@@ -40,9 +43,6 @@ final class Atomic<T> {
     }
     return true
   }
-  
-  private var mutex = UnfairLock()
-  private var internalValue: T
   
   init(_ value: T) {
     internalValue = value
