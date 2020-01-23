@@ -25,12 +25,7 @@ import Foundation
 import os.log
 
 /// Operations conforming to this protcol can log their most relevant status changes.
-/// To enable logging:
-/// - To enable all logs alltogether add this environment key: `org.tinrobots.AdvancedOperation.LOG.ALL`
-/// - To enable the default log add this environment key: `org.tinrobots.AdvancedOperation.LOG.DEFAULT`
-/// - To enable signposts add this environment key: `org.tinrobots.AdvancedOperation.self.signpost`
-/// - To enable point of interests add this environment key: `org.tinrobots.AdvancedOperation.LOG.POI`
-/// - Warning: If using Swift 5.0  run `KVOCrashWorkaround.installFix()` to solve some  multithreading bugs in Swift's KVO.
+/// - Warning: If using Swift 5.0 or lower run `KVOCrashWorkaround.installFix()` to solve some  multithreading bugs in Swift's KVO.
 public protocol TrackableOperation: Operation { }
 
 private var trackerKey: UInt8 = 0

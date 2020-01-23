@@ -86,7 +86,7 @@
     },
     {
       "file": "/Users/amarzoli/Developer/x/AdvancedOperation/Sources/TrackableOperation.swift",
-      "line": 47,
+      "line": 42,
       "symbol": "TrackableOperation.installTracker(log:signpost:poi:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
