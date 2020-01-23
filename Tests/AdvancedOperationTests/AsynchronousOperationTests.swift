@@ -118,6 +118,27 @@ final class AsynchronousOperationTests: XCTestCase {
     XCTAssertTrue(operation.isFinished)
   }
   
+  func testMultipleStart() {
+    let operation = SleepyAsyncOperation()
+    let expectation1 = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: operation, expectedValue: true)
+    let expectation2 = expectation(description: "\(#function)\(#line)")
+    
+    XCTAssertTrue(operation.isReady)
+    XCTAssertFalse(operation.isExecuting)
+    
+    DispatchQueue.global().async {
+      operation.start()
+      expectation2.fulfill()
+    }
+
+    operation.start()
+    operation.start()
+    
+    wait(for: [expectation1, expectation2], timeout: 10)
+    XCTAssertFalse(operation.isCancelled)
+    XCTAssertTrue(operation.isFinished)
+  }
+  
   func testMultipleStartAfterCancellation() {
     let operation = SleepyAsyncOperation()
     let expectation1 = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: operation, expectedValue: true)
