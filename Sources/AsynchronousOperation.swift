@@ -24,8 +24,6 @@
 import Foundation
 import os.log
 
-internal let identifier = "org.tinrobots.AdvancedOperation"
-
 public typealias AsyncOperation = AsynchronousOperation
 
 /// An abstract thread safe subclass of `Operation` to support asynchronous operations.
