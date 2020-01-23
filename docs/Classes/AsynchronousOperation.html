@@ -14,7 +14,7 @@
     <a title="AsynchronousOperation Class Reference"></a>
     <header>
       <div class="content-wrapper">
-        <p><a href="../index.html">AdvancedOperation Docs</a> (65% documented)</p>
+        <p><a href="../index.html">AdvancedOperation Docs</a> (69% documented)</p>
       </div>
     </header>
     <div class="content-wrapper">
@@ -36,6 +36,9 @@
               <li class="nav-group-task">
                 <a href="../Classes/AsynchronousOperation.html">AsynchronousOperation</a>
               </li>
+              <li class="nav-group-task">
+                <a href="../Classes/KVOCrashWorkaround.html">KVOCrashWorkaround</a>
+              </li>
             </ul>
           </li>
           <li class="nav-group-name">
@@ -53,10 +56,27 @@
             <a href="../Protocols.html">Protocols</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
-                <a href="../Protocols/InputConsuming.html">InputConsuming</a>
+                <a href="../Protocols/FailableOperation.html">FailableOperation</a>
               </li>
               <li class="nav-group-task">
-                <a href="../Protocols/OutputProducing.html">OutputProducing</a>
+                <a href="../Protocols/InputConsumingOperation.html">InputConsumingOperation</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/OutputProducingOperation.html">OutputProducingOperation</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/TrackableOperation.html">TrackableOperation</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Typealiases.html">Type Aliases</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Typealiases.html#/s:17AdvancedOperation010AsyncBlockB0a">AsyncBlockOperation</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Typealiases.html#/s:17AdvancedOperation05AsyncB0a">AsyncOperation</a>
               </li>
             </ul>
           </li>
@@ -68,22 +88,13 @@
             <h1>AsynchronousOperation</h1>
               <div class="declaration">
                 <div class="language">
-                  <pre class="highlight swift"><code><span class="kd">open</span> <span class="kd">class</span> <span class="kt">AsynchronousOperation</span><span class="o">&lt;</span><span class="kt">Success</span><span class="p">,</span> <span class="kt">Failure</span><span class="o">&gt;</span> <span class="p">:</span> <span class="kt">Operation</span><span class="p">,</span> <span class="kt"><a href="../Protocols/OutputProducing.html">OutputProducing</a></span> <span class="k">where</span> <span class="kt">Failure</span> <span class="p">:</span> <span class="kt">Error</span></code></pre>
+                  <pre class="highlight swift"><code><span class="kd">open</span> <span class="kd">class</span> <span class="kt">AsynchronousOperation</span> <span class="p">:</span> <span class="kt">Operation</span></code></pre>
 
                 </div>
               </div>
-            <p>An abstract thread safe subclass of <code>Operation</code> to build asynchronous operations.</p>
+            <p>An abstract thread safe subclass of <code>Operation</code> to support asynchronous operations.</p>
 
-<p>Subclasses must override <code>execute(completion:)</code> to perform any work and call the completion handler to finish it.
-When an <code>AsynchronousOperation</code> finished wihout being cancelled, it will always produce a result output.</p>
-
-<p>To enable logging:</p>
-
-<ul>
-<li>To enable log add this environment key: <code>org.tinrobots.AdvancedOperation.LOG_ENABLED</code></li>
-<li>To enable signposts add this environment key: <code>org.tinrobots.AdvancedOperation.SIGNPOST_ENABLED</code></li>
-<li>To enable point of interests add this environment key: <code>org.tinrobots.AdvancedOperation.POI_ENABLED</code></li>
-</ul>
+<p>Subclasses must override <code>main</code> to perform any work and, if they are asynchronous, call the <code>finish()</code> method to complete the execution.</p>
 
           </section>
           <section class="section task-group-section">
@@ -91,17 +102,19 @@ When an <code>AsynchronousOperation</code> finished wihout being cancelled, it w
               <div class="task-name-container">
                 <a name="/Public%20Properties"></a>
                 <a name="//apple_ref/swift/Section/Public Properties" class="dashAnchor"></a>
-                <a href="#/Public%20Properties">
-                  <h3 class="section-name">Public Properties</h3>
-                </a>
+                <div class="section-name-container">
+                  <a class="section-name-link" href="#/Public%20Properties"></a>
+                  <h3 class="section-name"><p>Public Properties</p>
+</h3>
+                </div>
               </div>
               <ul>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:17AdvancedOperation012AsynchronousB0C7isReadySbvp"></a>
+                    <a name="/c:@M@AdvancedOperation@objc(cs)AsynchronousOperation(py)ready"></a>
                     <a name="//apple_ref/swift/Property/isReady" class="dashAnchor"></a>
-                    <a class="token" href="#/s:17AdvancedOperation012AsynchronousB0C7isReadySbvp">isReady</a>
+                    <a class="token" href="#/c:@M@AdvancedOperation@objc(cs)AsynchronousOperation(py)ready">isReady</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -126,9 +139,9 @@ When an <code>AsynchronousOperation</code> finished wihout being cancelled, it w
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:17AdvancedOperation012AsynchronousB0C11isExecutingSbvp"></a>
+                    <a name="/c:@M@AdvancedOperation@objc(cs)AsynchronousOperation(py)executing"></a>
                     <a name="//apple_ref/swift/Property/isExecuting" class="dashAnchor"></a>
-                    <a class="token" href="#/s:17AdvancedOperation012AsynchronousB0C11isExecutingSbvp">isExecuting</a>
+                    <a class="token" href="#/c:@M@AdvancedOperation@objc(cs)AsynchronousOperation(py)executing">isExecuting</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -153,9 +166,9 @@ When an <code>AsynchronousOperation</code> finished wihout being cancelled, it w
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:17AdvancedOperation012AsynchronousB0C10isFinishedSbvp"></a>
+                    <a name="/c:@M@AdvancedOperation@objc(cs)AsynchronousOperation(py)finished"></a>
                     <a name="//apple_ref/swift/Property/isFinished" class="dashAnchor"></a>
-                    <a class="token" href="#/s:17AdvancedOperation012AsynchronousB0C10isFinishedSbvp">isFinished</a>
+                    <a class="token" href="#/c:@M@AdvancedOperation@objc(cs)AsynchronousOperation(py)finished">isFinished</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -180,9 +193,9 @@ When an <code>AsynchronousOperation</code> finished wihout being cancelled, it w
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:17AdvancedOperation012AsynchronousB0C02isC0Sbvp"></a>
+                    <a name="/c:@M@AdvancedOperation@objc(cs)AsynchronousOperation(py)asynchronous"></a>
                     <a name="//apple_ref/swift/Property/isAsynchronous" class="dashAnchor"></a>
-                    <a class="token" href="#/s:17AdvancedOperation012AsynchronousB0C02isC0Sbvp">isAsynchronous</a>
+                    <a class="token" href="#/c:@M@AdvancedOperation@objc(cs)AsynchronousOperation(py)asynchronous">isAsynchronous</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -207,9 +220,9 @@ When an <code>AsynchronousOperation</code> finished wihout being cancelled, it w
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:17AdvancedOperation012AsynchronousB0C12isConcurrentSbvp"></a>
+                    <a name="/c:@M@AdvancedOperation@objc(cs)AsynchronousOperation(py)concurrent"></a>
                     <a name="//apple_ref/swift/Property/isConcurrent" class="dashAnchor"></a>
-                    <a class="token" href="#/s:17AdvancedOperation012AsynchronousB0C12isConcurrentSbvp">isConcurrent</a>
+                    <a class="token" href="#/c:@M@AdvancedOperation@objc(cs)AsynchronousOperation(py)concurrent">isConcurrent</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -231,51 +244,25 @@ When an <code>AsynchronousOperation</code> finished wihout being cancelled, it w
                     </section>
                   </div>
                 </li>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:17AdvancedOperation012AsynchronousB0C6outputs6ResultOyxq_GSgvp"></a>
-                    <a name="//apple_ref/swift/Property/output" class="dashAnchor"></a>
-                    <a class="token" href="#/s:17AdvancedOperation012AsynchronousB0C6outputs6ResultOyxq_GSgvp">output</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>The output produced by the <code>AsynchronousOperation</code>.
-It&rsquo;s <code>nil</code> while the operation is not finished.</p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">private(set)</span> <span class="k">var</span> <span class="nv">output</span><span class="p">:</span> <span class="kt">Result</span><span class="o">&lt;</span><span class="kt">Success</span><span class="p">,</span> <span class="kt">Failure</span><span class="o">&gt;</span><span class="p">?</span></code></pre>
-
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
               </ul>
             </div>
             <div class="task-group">
               <div class="task-name-container">
                 <a name="/Foundation.Operation"></a>
                 <a name="//apple_ref/swift/Section/Foundation.Operation" class="dashAnchor"></a>
-                <a href="#/Foundation.Operation">
-                  <h3 class="section-name">Foundation.Operation</h3>
-                </a>
+                <div class="section-name-container">
+                  <a class="section-name-link" href="#/Foundation.Operation"></a>
+                  <h3 class="section-name"><p>Foundation.Operation</p>
+</h3>
+                </div>
               </div>
               <ul>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:17AdvancedOperation012AsynchronousB0C5startyyF"></a>
+                    <a name="/c:@M@AdvancedOperation@objc(cs)AsynchronousOperation(im)start"></a>
                     <a name="//apple_ref/swift/Method/start()" class="dashAnchor"></a>
-                    <a class="token" href="#/s:17AdvancedOperation012AsynchronousB0C5startyyF">start()</a>
+                    <a class="token" href="#/c:@M@AdvancedOperation@objc(cs)AsynchronousOperation(im)start">start()</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -303,17 +290,19 @@ It&rsquo;s <code>nil</code> while the operation is not finished.</p>
               <div class="task-name-container">
                 <a name="/Public%20Methods"></a>
                 <a name="//apple_ref/swift/Section/Public Methods" class="dashAnchor"></a>
-                <a href="#/Public%20Methods">
-                  <h3 class="section-name">Public Methods</h3>
-                </a>
+                <div class="section-name-container">
+                  <a class="section-name-link" href="#/Public%20Methods"></a>
+                  <h3 class="section-name"><p>Public Methods</p>
+</h3>
+                </div>
               </div>
               <ul>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:17AdvancedOperation012AsynchronousB0C4mainyyF"></a>
+                    <a name="/c:@M@AdvancedOperation@objc(cs)AsynchronousOperation(im)main"></a>
                     <a name="//apple_ref/swift/Method/main()" class="dashAnchor"></a>
-                    <a class="token" href="#/s:17AdvancedOperation012AsynchronousB0C4mainyyF">main()</a>
+                    <a class="token" href="#/c:@M@AdvancedOperation@objc(cs)AsynchronousOperation(im)main">main()</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -321,43 +310,12 @@ It&rsquo;s <code>nil</code> while the operation is not finished.</p>
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">final</span> <span class="k">override</span> <span class="kd">func</span> <span class="nf">main</span><span class="p">()</span></code></pre>
-
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:17AdvancedOperation012AsynchronousB0C7execute10completionyys6ResultOyxq_GSgc_tF"></a>
-                    <a name="//apple_ref/swift/Method/execute(completion:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:17AdvancedOperation012AsynchronousB0C7execute10completionyys6ResultOyxq_GSgc_tF">execute(completion:)</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>Subclasses must implement this to perform their work and they must not call <code>super</code>.
-The default implementation of this function traps.</p>
+                        <p>The default implementation of this method does nothing.
+You should override this method to perform the desired task. In your implementation, do not invoke super.
+ This method will automatically execute within an autorelease pool provided by Operation, so you do not need to create your own autorelease pool block in your implementation.</p>
 <div class="aside aside-note">
     <p class="aside-title">Note</p>
-    Before calling this method, the operation checks if it&rsquo;s already cancelled (and, in that case, finishes itself).
-
-</div>
-<div class="aside aside-note">
-    <p class="aside-title">Note</p>
-    For log purposes you may want to use an <code>NSError</code> or <code>CustomNSError</code> error with a debug message for the <code>NSDebugDescriptionErrorKey</code> key.
+    Once the task is finished you <strong>must</strong> call <code><a href="../Classes/AsynchronousOperation.html#/s:17AdvancedOperation012AsynchronousB0C6finishyyF">finish()</a></code> to complete the execution.
 
 </div>
 
@@ -366,34 +324,7 @@ The default implementation of this function traps.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">open</span> <span class="kd">func</span> <span class="nf">execute</span><span class="p">(</span><span class="nv">completion</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="p">(</span><span class="kt">Output</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)</span></code></pre>
-
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:17AdvancedOperation012AsynchronousB0C6cancelyyF"></a>
-                    <a name="//apple_ref/swift/Method/cancel()" class="dashAnchor"></a>
-                    <a class="token" href="#/s:17AdvancedOperation012AsynchronousB0C6cancelyyF">cancel()</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>Undocumented</p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">open</span> <span class="k">override</span> <span class="kd">func</span> <span class="nf">cancel</span><span class="p">()</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">override</span> <span class="kd">func</span> <span class="nf">main</span><span class="p">()</span></code></pre>
 
                         </div>
                       </div>
@@ -406,17 +337,59 @@ The default implementation of this function traps.</p>
               <div class="task-name-container">
                 <a name="/Private%20Methods"></a>
                 <a name="//apple_ref/swift/Section/Private Methods" class="dashAnchor"></a>
-                <a href="#/Private%20Methods">
-                  <h3 class="section-name">Private Methods</h3>
-                </a>
+                <div class="section-name-container">
+                  <a class="section-name-link" href="#/Private%20Methods"></a>
+                  <h3 class="section-name"><p>Private Methods</p>
+</h3>
+                </div>
               </div>
               <ul>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:17AdvancedOperation012AsynchronousB0C11descriptionSSvp"></a>
+                    <a name="/s:17AdvancedOperation012AsynchronousB0C6finishyyF"></a>
+                    <a name="//apple_ref/swift/Method/finish()" class="dashAnchor"></a>
+                    <a class="token" href="#/s:17AdvancedOperation012AsynchronousB0C6finishyyF">finish()</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Call this function to finish an operation that is currently executing.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">final</span> <span class="kd">func</span> <span class="nf">finish</span><span class="p">()</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <div class="task-name-container">
+                <a name="/Debug"></a>
+                <a name="//apple_ref/swift/Section/Debug" class="dashAnchor"></a>
+                <div class="section-name-container">
+                  <a class="section-name-link" href="#/Debug"></a>
+                  <h3 class="section-name"><p>Debug</p>
+</h3>
+                </div>
+              </div>
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:@M@AdvancedOperation@objc(cs)AsynchronousOperation(py)description"></a>
                     <a name="//apple_ref/swift/Property/description" class="dashAnchor"></a>
-                    <a class="token" href="#/s:17AdvancedOperation012AsynchronousB0C11descriptionSSvp">description</a>
+                    <a class="token" href="#/c:@M@AdvancedOperation@objc(cs)AsynchronousOperation(py)description">description</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -441,9 +414,9 @@ The default implementation of this function traps.</p>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:17AdvancedOperation012AsynchronousB0C16debugDescriptionSSvp"></a>
+                    <a name="/c:@M@AdvancedOperation@objc(cs)AsynchronousOperation(py)debugDescription"></a>
                     <a name="//apple_ref/swift/Property/debugDescription" class="dashAnchor"></a>
-                    <a class="token" href="#/s:17AdvancedOperation012AsynchronousB0C16debugDescriptionSSvp">debugDescription</a>
+                    <a class="token" href="#/c:@M@AdvancedOperation@objc(cs)AsynchronousOperation(py)debugDescription">debugDescription</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -470,8 +443,8 @@ The default implementation of this function traps.</p>
           </section>
         </section>
         <section id="footer">
-          <p>&copy; 2019 <a class="link" href="https://github.com/tinrobots/AdvancedOperation" target="_blank" rel="external">Alessandro Marzoli</a>. All rights reserved. (Last updated: 2019-12-10)</p>
-          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.12.0</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+          <p>&copy; 2020 <a class="link" href="https://github.com/tinrobots/AdvancedOperation" target="_blank" rel="external">Alessandro Marzoli</a>. All rights reserved. (Last updated: 2020-01-23)</p>
+          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.13.1</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
         </section>
       </article>
     </div>

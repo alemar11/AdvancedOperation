@@ -14,7 +14,7 @@
     <a title="Protocols  Reference"></a>
     <header>
       <div class="content-wrapper">
-        <p><a href="index.html">AdvancedOperation Docs</a> (65% documented)</p>
+        <p><a href="index.html">AdvancedOperation Docs</a> (69% documented)</p>
       </div>
     </header>
     <div class="content-wrapper">
@@ -36,6 +36,9 @@
               <li class="nav-group-task">
                 <a href="Classes/AsynchronousOperation.html">AsynchronousOperation</a>
               </li>
+              <li class="nav-group-task">
+                <a href="Classes/KVOCrashWorkaround.html">KVOCrashWorkaround</a>
+              </li>
             </ul>
           </li>
           <li class="nav-group-name">
@@ -53,10 +56,27 @@
             <a href="Protocols.html">Protocols</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
-                <a href="Protocols/InputConsuming.html">InputConsuming</a>
+                <a href="Protocols/FailableOperation.html">FailableOperation</a>
               </li>
               <li class="nav-group-task">
-                <a href="Protocols/OutputProducing.html">OutputProducing</a>
+                <a href="Protocols/InputConsumingOperation.html">InputConsumingOperation</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Protocols/OutputProducingOperation.html">OutputProducingOperation</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Protocols/TrackableOperation.html">TrackableOperation</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="Typealiases.html">Type Aliases</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="Typealiases.html#/s:17AdvancedOperation010AsyncBlockB0a">AsyncBlockOperation</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Typealiases.html#/s:17AdvancedOperation05AsyncB0a">AsyncOperation</a>
               </li>
             </ul>
           </li>
@@ -75,9 +95,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:17AdvancedOperation14InputConsumingP"></a>
-                    <a name="//apple_ref/swift/Protocol/InputConsuming" class="dashAnchor"></a>
-                    <a class="token" href="#/s:17AdvancedOperation14InputConsumingP">InputConsuming</a>
+                    <a name="/s:17AdvancedOperation08FailableB0P"></a>
+                    <a name="//apple_ref/swift/Protocol/FailableOperation" class="dashAnchor"></a>
+                    <a class="token" href="#/s:17AdvancedOperation08FailableB0P">FailableOperation</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -85,15 +105,15 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Operations conforming to this protocol require an input before starting.</p>
+                        <p>Operations conformin to this protocolor may generate an error while executing.</p>
 
-                        <a href="Protocols/InputConsuming.html" class="slightly-smaller">See more</a>
+                        <a href="Protocols/FailableOperation.html" class="slightly-smaller">See more</a>
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">protocol</span> <span class="kt">InputConsuming</span> <span class="p">:</span> <span class="kt">Operation</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">protocol</span> <span class="kt">FailableOperation</span> <span class="p">:</span> <span class="kt">Operation</span></code></pre>
 
                         </div>
                       </div>
@@ -103,9 +123,37 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:17AdvancedOperation15OutputProducingP"></a>
-                    <a name="//apple_ref/swift/Protocol/OutputProducing" class="dashAnchor"></a>
-                    <a class="token" href="#/s:17AdvancedOperation15OutputProducingP">OutputProducing</a>
+                    <a name="/s:17AdvancedOperation014InputConsumingB0P"></a>
+                    <a name="//apple_ref/swift/Protocol/InputConsumingOperation" class="dashAnchor"></a>
+                    <a class="token" href="#/s:17AdvancedOperation014InputConsumingB0P">InputConsumingOperation</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Operations conforming to this protocol require an input before starting.</p>
+
+                        <a href="Protocols/InputConsumingOperation.html" class="slightly-smaller">See more</a>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">protocol</span> <span class="kt">InputConsumingOperation</span> <span class="p">:</span> <span class="kt">Operation</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:17AdvancedOperation015OutputProducingB0P"></a>
+                    <a name="//apple_ref/swift/Protocol/OutputProducingOperation" class="dashAnchor"></a>
+                    <a class="token" href="#/s:17AdvancedOperation015OutputProducingB0P">OutputProducingOperation</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -115,13 +163,53 @@
                       <div class="abstract">
                         <p>Operations conforming to this protocol produce an output once finished.</p>
 
-                        <a href="Protocols/OutputProducing.html" class="slightly-smaller">See more</a>
+                        <a href="Protocols/OutputProducingOperation.html" class="slightly-smaller">See more</a>
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">protocol</span> <span class="kt">OutputProducing</span> <span class="p">:</span> <span class="kt">Operation</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">protocol</span> <span class="kt">OutputProducingOperation</span> <span class="p">:</span> <span class="kt">Operation</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:17AdvancedOperation09TrackableB0P"></a>
+                    <a name="//apple_ref/swift/Protocol/TrackableOperation" class="dashAnchor"></a>
+                    <a class="token" href="#/s:17AdvancedOperation09TrackableB0P">TrackableOperation</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Operations conforming to this protcol can log their most relevant status changes.
+To enable logging:</p>
+
+<ul>
+<li>To enable all logs alltogether add this environment key: <code>org.tinrobots.AdvancedOperation.LOG.ALL</code></li>
+<li>To enable the default log add this environment key: <code>org.tinrobots.AdvancedOperation.LOG.DEFAULT</code></li>
+<li>To enable signposts add this environment key: <code>org.tinrobots.AdvancedOperation.self.signpost</code></li>
+<li>To enable point of interests add this environment key: <code>org.tinrobots.AdvancedOperation.LOG.POI</code></li>
+</ul><div class="aside aside-warning">
+    <p class="aside-title">Warning</p>
+    If using Swift 5.0  run <code><a href="Classes/KVOCrashWorkaround.html#/installFix()">KVOCrashWorkaround.installFix()</a></code> to solve some  multithreading bugs in Swift&rsquo;s KVO.
+
+</div>
+
+                        <a href="Protocols/TrackableOperation.html" class="slightly-smaller">See more</a>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">protocol</span> <span class="kt">TrackableOperation</span> <span class="p">:</span> <span class="kt">Operation</span></code></pre>
 
                         </div>
                       </div>
@@ -133,8 +221,8 @@
           </section>
         </section>
         <section id="footer">
-          <p>&copy; 2019 <a class="link" href="https://github.com/tinrobots/AdvancedOperation" target="_blank" rel="external">Alessandro Marzoli</a>. All rights reserved. (Last updated: 2019-12-10)</p>
-          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.12.0</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+          <p>&copy; 2020 <a class="link" href="https://github.com/tinrobots/AdvancedOperation" target="_blank" rel="external">Alessandro Marzoli</a>. All rights reserved. (Last updated: 2020-01-23)</p>
+          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.13.1</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
         </section>
       </article>
     </div>
