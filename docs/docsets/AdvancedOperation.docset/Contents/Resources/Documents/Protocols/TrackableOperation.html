@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>Sequence Extension Reference</title>
+    <title>TrackableOperation Protocol Reference</title>
     <link rel="stylesheet" type="text/css" href="../css/jazzy.css" />
     <link rel="stylesheet" type="text/css" href="../css/highlight.css" />
     <meta charset='utf-8'>
@@ -10,8 +10,8 @@
     
   </head>
   <body>
-    <a name="//apple_ref/swift/Extension/Sequence" class="dashAnchor"></a>
-    <a title="Sequence Extension Reference"></a>
+    <a name="//apple_ref/swift/Protocol/TrackableOperation" class="dashAnchor"></a>
+    <a title="TrackableOperation Protocol Reference"></a>
     <header>
       <div class="content-wrapper">
         <p><a href="../index.html">AdvancedOperation Docs</a> (69% documented)</p>
@@ -21,7 +21,7 @@
       <p id="breadcrumbs">
         <a href="../index.html">AdvancedOperation Reference</a>
         <img id="carat" src="../img/carat.png" />
-        Sequence Extension Reference
+        TrackableOperation Protocol Reference
       </p>
     </div>
     <div class="content-wrapper">
@@ -85,75 +85,48 @@
       <article class="main-content">
         <section>
           <section class="section">
-            <h1>Sequence</h1>
+            <h1>TrackableOperation</h1>
               <div class="declaration">
                 <div class="language">
-                  <pre class="highlight swift"><code><span class="kd">extension</span> <span class="kt">Sequence</span> <span class="k">where</span> <span class="kt">Element</span><span class="p">:</span> <span class="kt">Operation</span></code></pre>
+                  <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">protocol</span> <span class="kt">TrackableOperation</span> <span class="p">:</span> <span class="kt">Operation</span></code></pre>
 
                 </div>
               </div>
-            
+            <p>Operations conforming to this protcol can log their most relevant status changes.</p>
+<div class="aside aside-warning">
+    <p class="aside-title">Warning</p>
+    If using Swift 5.0 or lower run <code><a href="../Classes/KVOCrashWorkaround.html#/installFix()">KVOCrashWorkaround.installFix()</a></code> to solve some  multithreading bugs in Swift&rsquo;s KVO.
+
+</div>
+
           </section>
           <section class="section task-group-section">
             <div class="task-group">
-              <div class="task-name-container">
-                <a name="/Available%20where%20%60Element%60:%20%60Operation%60"></a>
-                <a name="//apple_ref/swift/Section/Available where `Element`: `Operation`" class="dashAnchor"></a>
-                <div class="section-name-container">
-                  <a class="section-name-link" href="#/Available%20where%20%60Element%60:%20%60Operation%60"></a>
-                  <h3 class="section-name"><p>Available where <code>Element</code>: <code>Operation</code></p>
-</h3>
-                </div>
-              </div>
               <ul>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:ST17AdvancedOperationSo11NSOperationC7ElementRczrlE15addDependenciesyyACd_tF"></a>
-                    <a name="//apple_ref/swift/Method/addDependencies(_:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:ST17AdvancedOperationSo11NSOperationC7ElementRczrlE15addDependenciesyyACd_tF">addDependencies(_:)</a>
+                    <a name="/s:17AdvancedOperation09TrackableB0PAAE14installTracker3log8signpost3poiySo06OS_os_F0C_A2ItF"></a>
+                    <a name="//apple_ref/swift/Method/installTracker(log:signpost:poi:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:17AdvancedOperation09TrackableB0PAAE14installTracker3log8signpost3poiySo06OS_os_F0C_A2ItF">installTracker(log:signpost:poi:)</a>
                     </code>
+                      <span class="declaration-note">
+                        Extension method
+                      </span>
                   </div>
                   <div class="height-container">
                     <div class="pointer-container"></div>
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Makes every operation in the sequence dependent on the completion of the specified operations.</p>
+                        <p>Undocumented</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">addDependencies</span><span class="p">(</span><span class="n">_</span> <span class="nv">dependencies</span><span class="p">:</span> <span class="kt">Operation</span><span class="o">...</span><span class="p">)</span></code></pre>
-
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:ST17AdvancedOperationSo11NSOperationC7ElementRczrlE15addDependenciesyySayACGF"></a>
-                    <a name="//apple_ref/swift/Method/addDependencies(_:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:ST17AdvancedOperationSo11NSOperationC7ElementRczrlE15addDependenciesyySayACGF">addDependencies(_:)</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>Makes every operation in the sequence dependent on the completion of the specified operations.</p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">addDependencies</span><span class="p">(</span><span class="n">_</span> <span class="nv">dependencies</span><span class="p">:</span> <span class="p">[</span><span class="kt">Operation</span><span class="p">])</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">installTracker</span><span class="p">(</span><span class="nv">log</span><span class="p">:</span> <span class="kt">OSLog</span> <span class="o">=</span> <span class="o">.</span><span class="k">default</span><span class="p">,</span> <span class="nv">signpost</span><span class="p">:</span> <span class="kt">OSLog</span> <span class="o">=</span> <span class="o">.</span><span class="n">disabled</span><span class="p">,</span> <span class="nv">poi</span><span class="p">:</span> <span class="kt">OSLog</span> <span class="o">=</span> <span class="o">.</span><span class="n">disabled</span><span class="p">)</span></code></pre>
 
                         </div>
                       </div>

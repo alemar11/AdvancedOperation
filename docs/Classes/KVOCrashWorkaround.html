@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>Sequence Extension Reference</title>
+    <title>KVOCrashWorkaround Class Reference</title>
     <link rel="stylesheet" type="text/css" href="../css/jazzy.css" />
     <link rel="stylesheet" type="text/css" href="../css/highlight.css" />
     <meta charset='utf-8'>
@@ -10,8 +10,8 @@
     
   </head>
   <body>
-    <a name="//apple_ref/swift/Extension/Sequence" class="dashAnchor"></a>
-    <a title="Sequence Extension Reference"></a>
+    <a name="//apple_ref/swift/Class/KVOCrashWorkaround" class="dashAnchor"></a>
+    <a title="KVOCrashWorkaround Class Reference"></a>
     <header>
       <div class="content-wrapper">
         <p><a href="../index.html">AdvancedOperation Docs</a> (69% documented)</p>
@@ -21,7 +21,7 @@
       <p id="breadcrumbs">
         <a href="../index.html">AdvancedOperation Reference</a>
         <img id="carat" src="../img/carat.png" />
-        Sequence Extension Reference
+        KVOCrashWorkaround Class Reference
       </p>
     </div>
     <div class="content-wrapper">
@@ -85,33 +85,27 @@
       <article class="main-content">
         <section>
           <section class="section">
-            <h1>Sequence</h1>
-              <div class="declaration">
-                <div class="language">
-                  <pre class="highlight swift"><code><span class="kd">extension</span> <span class="kt">Sequence</span> <span class="k">where</span> <span class="kt">Element</span><span class="p">:</span> <span class="kt">Operation</span></code></pre>
+            <h1>KVOCrashWorkaround</h1>
+            <p>Workaround to solve some  multithreading bugs in Swift&rsquo;s KVO.
+This needs to execute before anything can register KVO in the background so the best way to do this is before the application ever runs</p>
 
-                </div>
-              </div>
-            
+<p><code><a href="../Classes/KVOCrashWorkaround.html#/installFix()">KVOCrashWorkaround.installFix()</a></code></p>
+<div class="aside aside-note">
+    <p class="aside-title">Note</p>
+    it&rsquo;s not required for Swift 5.1 and above, see this <a href="https://github.com/apple/swift/pull/20103">Swift PR</a>
+
+</div>
+
           </section>
           <section class="section task-group-section">
             <div class="task-group">
-              <div class="task-name-container">
-                <a name="/Available%20where%20%60Element%60:%20%60Operation%60"></a>
-                <a name="//apple_ref/swift/Section/Available where `Element`: `Operation`" class="dashAnchor"></a>
-                <div class="section-name-container">
-                  <a class="section-name-link" href="#/Available%20where%20%60Element%60:%20%60Operation%60"></a>
-                  <h3 class="section-name"><p>Available where <code>Element</code>: <code>Operation</code></p>
-</h3>
-                </div>
-              </div>
               <ul>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:ST17AdvancedOperationSo11NSOperationC7ElementRczrlE15addDependenciesyyACd_tF"></a>
-                    <a name="//apple_ref/swift/Method/addDependencies(_:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:ST17AdvancedOperationSo11NSOperationC7ElementRczrlE15addDependenciesyyACd_tF">addDependencies(_:)</a>
+                    <a name="/"></a>
+                    <a name="//apple_ref/swift/Method/installFix()" class="dashAnchor"></a>
+                    <a class="token" href="#/">installFix()</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -119,43 +113,8 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Makes every operation in the sequence dependent on the completion of the specified operations.</p>
+                        <p>Install the workaround: it shoud be done from the <strong>main</strong> thread.</p>
 
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">addDependencies</span><span class="p">(</span><span class="n">_</span> <span class="nv">dependencies</span><span class="p">:</span> <span class="kt">Operation</span><span class="o">...</span><span class="p">)</span></code></pre>
-
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:ST17AdvancedOperationSo11NSOperationC7ElementRczrlE15addDependenciesyySayACGF"></a>
-                    <a name="//apple_ref/swift/Method/addDependencies(_:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:ST17AdvancedOperationSo11NSOperationC7ElementRczrlE15addDependenciesyySayACGF">addDependencies(_:)</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>Makes every operation in the sequence dependent on the completion of the specified operations.</p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">addDependencies</span><span class="p">(</span><span class="n">_</span> <span class="nv">dependencies</span><span class="p">:</span> <span class="p">[</span><span class="kt">Operation</span><span class="p">])</span></code></pre>
-
-                        </div>
                       </div>
                     </section>
                   </div>

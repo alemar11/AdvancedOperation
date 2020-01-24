@@ -23,28 +23,35 @@
 
 import Foundation
 
-let defaultDebugMessage = "No debug message evailable for NSDebugDescriptionErrorKey."
+/// A mutex wrapper around contents.
+/// Useful for threadsafe access to single values but less useful for compound values where different components might need to be updated at different times.
+final class Atomic<T> {
+  private var mutex = UnfairLock()
+  private var internalValue: T
 
-extension NSError {
-  // Not localizable debug error message.
-  var debugErrorMessage: String {
-    return userInfo[NSDebugDescriptionErrorKey] as? String ?? defaultDebugMessage
+  @inlinable
+  var value: T {
+    mutex.lock()
+    defer { mutex.unlock() }
+    return internalValue
   }
-}
 
-extension CustomNSError {
-  // Not localizable debug error message.
-  var debugErrorMessage: String {
-    return errorUserInfo[NSDebugDescriptionErrorKey] as? String ?? defaultDebugMessage
-  }
-}
-
-extension Error {
-  // Not localizable debug error message.
-  var debugErrorMessage: String {
-    if let error = self as? CustomNSError {
-      return error.debugErrorMessage
+  var isMutating: Bool {
+    if mutex.try() {
+      mutex.unlock()
+      return false
     }
-    return (self as NSError).debugErrorMessage
+    return true
+  }
+
+  init(_ value: T) {
+    internalValue = value
+  }
+
+  @discardableResult @inlinable
+  func mutate<U>(_ transform: (inout T) throws -> U) rethrows -> U {
+    mutex.lock()
+    defer { mutex.unlock() }
+    return try transform(&internalValue)
   }
 }

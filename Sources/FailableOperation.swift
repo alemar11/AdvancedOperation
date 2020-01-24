@@ -21,24 +21,22 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-extension Result {
-  // Returns the content associated with a failure.
-  var failure: Failure? {
-    switch self {
-    case .success:
-      return nil
-    case .failure(let error):
-      return error
-    }
-  }
+import Foundation
 
-  // Returns the content associated with a success.
-  var success: Success? {
-    switch self {
-    case .success(let success):
-      return success
-    case .failure:
-      return nil
-    }
+/// Operations conformin to this protocolor may generate an error while executing.
+public protocol FailableOperation: Operation {
+  /// The error  occurred during the operation evaluation.
+  var error: Error? { get }
+}
+
+public extension FailableOperation {
+  /// Returns `true` in the operation has finished with an error.
+  var isFailed: Bool { return isFinished && error != nil }
+}
+
+public extension Operation {
+  /// Returns `true` if at least one dependency conforming to `FailableOperation` has generated an error.
+  var hasSomeFailedDependencies: Bool {
+    return dependencies.first { ($0 as? FailableOperation)?.isFailed ?? false } != nil
   }
 }

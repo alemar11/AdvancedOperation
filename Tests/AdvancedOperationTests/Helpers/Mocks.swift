@@ -27,181 +27,154 @@ import XCTest
 import os.log
 @testable import AdvancedOperation
 
-// MARK: - Error
+// MARK: - AsynchronousBlockOperation
 
-internal enum MockError: CustomNSError, Equatable {
-  case cancelled(date: Date)
-  case failed
-  case generic
+final internal class SleepyAsyncOperation: AsynchronousOperation {
+    private let interval1: UInt32
+    private let interval2: UInt32
+    private let interval3: UInt32
+
+    init(interval1: UInt32 = 1, interval2: UInt32 = 1, interval3: UInt32 = 1) {
+        self.interval1 = interval1
+        self.interval2 = interval2
+        self.interval3 = interval3
+        super.init()
+    }
+
+    override func main() {
+        DispatchQueue.global().async {
+            if self.isCancelled {
+                self.finish()
+                return
+            }
+
+            sleep(self.interval1)
+
+            if self.isCancelled {
+                self.finish()
+                return
+            }
+
+            sleep(self.interval2)
+
+            if self.isCancelled {
+                self.finish()
+                return
+            }
+
+            sleep(self.interval3)
+            self.finish()
+        }
+    }
+}
+
+// MARK: - AsynchronousInputOutputOperation
+
+/// This operation fails if the input is greater than **1000**
+/// This operation cancels itself if the input is **100**
+internal class IntToStringAsyncOperation: AsynchronousOperation, InputConsumingOperation, OutputProducingOperation {
+    var input: Int?
+    private(set) var output: String?
+
+    override func main() {
+        DispatchQueue.global().async {
+            if let input = self.input {
+                self.output = "\(input)"
+            }
+            self.finish()
+        }
+    }
+}
+
+internal class StringToIntAsyncOperation: AsynchronousOperation, InputConsumingOperation, OutputProducingOperation {
+    var input: String?
+    private(set) var output: Int?
+
+    override func main() {
+        DispatchQueue.global().async {
+            if let input = self.input {
+                self.output = Int(input)
+            }
+            self.finish()
+        }
+    }
 }
 
 // MARK: - AsynchronousOperation
 
-class NotFinishingAsynchronousOperation: AsynchronousOperation<Never, MockError> {
-  override func execute(completion: @escaping (Result<Never, MockError>) -> Void) { }
-}
-
-final internal class SleepyAsyncOperation: AsynchronousOperation<Void, MockError> {
-  private let interval1: UInt32
-  private let interval2: UInt32
-  private let interval3: UInt32
-
-  init(interval1: UInt32 = 1, interval2: UInt32 = 1, interval3: UInt32 = 1) {
-    self.interval1 = interval1
-    self.interval2 = interval2
-    self.interval3 = interval3
-    super.init()
-  }
-
-  override func execute(completion: @escaping (Result<Void, MockError>) -> Void) {
-    DispatchQueue.global().async { [weak weakSelf = self] in
-
-      guard let strongSelf = weakSelf else {
-        completion(.failure(MockError.generic))
-        return
-      }
-
-      if strongSelf.isCancelled {
-        completion(.failure(MockError.cancelled(date: Date())))
-        return
-      }
-
-      sleep(self.interval1)
-
-      if strongSelf.isCancelled {
-        completion(.failure(MockError.cancelled(date: Date())))
-        return
-      }
-
-      sleep(self.interval2)
-
-      if strongSelf.isCancelled {
-        completion(.failure(MockError.cancelled(date: Date())))
-        return
-      }
-
-      sleep(self.interval3)
-      completion(.success(Void()))
+final internal class NotExecutableOperation: AsynchronousOperation {
+    override func main() {
+        XCTFail("This operation shouldn't be executed.")
+        self.finish()
     }
-  }
 }
 
-/// This operation fails if the input is greater than **1000**
-/// This operation cancels itself if the input is **100**
-internal class IntToStringAsyncOperation: AsynchronousOperation<String, MockError> & InputConsuming {
-  var input: Int?
-
-  override func execute(completion: @escaping (Result<String, MockError>) -> Void) {
-    if let input = self.input {
-      completion(.success("\(input)"))
-    } else {
-      completion(.failure(MockError.failed))
-      return
+final internal class AutoCancellingAsyncOperation: AsynchronousOperation {
+    override func main() {
+        DispatchQueue.global().asyncAfter(deadline: .now() + 1.0) {
+            self.cancel()
+            self.finish()
+        }
     }
-  }
 }
 
-internal class StringToIntAsyncOperation: AsynchronousOperation<Int, MockError> & InputConsuming  {
-  var input: String?
+final internal class RunUntilCancelledAsyncOperation: AsynchronousOperation {
+    let queue: DispatchQueue
 
-  override func execute(completion: @escaping (Result<Int, MockError>) -> Void) {
-    if let input = self.input, let value = Int(input) {
-      completion(.success(value))
-    } else {
-      completion(.failure(MockError.failed))
+    init(queue: DispatchQueue = DispatchQueue.global()) {
+        self.queue = queue
     }
-  }
-}
 
-final internal class CancellingAsyncOperation: AsynchronousOperation<Void, MockError> {
-  override func execute(completion: @escaping (Result<Void, MockError>) -> Void) {
-    DispatchQueue.global().asyncAfter(deadline: .now() + 1.0) { [weak weakSelf = self] in
-      guard let strongSelf = weakSelf else {
-        completion(.failure(MockError.cancelled(date: Date())))
-        return
-      }
-      strongSelf.cancel()
-      completion(.failure(MockError.cancelled(date: Date())))
+    override func main() {
+        queue.async {
+            while !self.isCancelled {
+                sleep(1)
+            }
+            self.finish()
+        }
     }
-  }
 }
-
-/// An operation that finishes with errors
-final internal class FailingAsyncOperation: AsynchronousOperation<Void, MockError> {
-  private let defaultError: MockError
-
-  init(error: MockError = MockError.failed) {
-    self.defaultError = error
-  }
-
-  override func execute(completion: @escaping (Result<Void, MockError>) -> Void) {
-    DispatchQueue.global().asyncAfter(deadline: .now() + 1.0) { [weak weakSelf = self] in
-      guard let strongSelf = weakSelf else {
-        completion(.failure(MockError.failed))
-        return
-      }
-      completion(.failure(strongSelf.defaultError))
-    }
-  }
-}
-
-final internal class RunUntilCancelledAsyncOperation: AsynchronousOperation<Void, MockError> {
-  let queue: DispatchQueue
-
-  init(queue: DispatchQueue = DispatchQueue.global()) {
-    self.queue = queue
-  }
-
-  override func execute(completion: @escaping (Result<Void, MockError>) -> Void) {
-    queue.async {
-      while !self.isCancelled {
-        sleep(1)
-      }
-      completion(.success(()))
-    }
-  }
-}
-
-final internal class NotExecutableOperation: AsynchronousOperation<Void, MockError> {
-  override func execute(completion: @escaping (Result<Void, MockError>) -> Void) {
-    XCTFail("This operation shouldn't be executed.")
-    completion(.failure(MockError.generic))
-  }
-}
-
 
 // MARK: - Operation
 
-internal class IntToStringOperation: Operation & InputConsuming & OutputProducing {
-  var input: Int?
-  var output: String? {
-    return _output.value
-  }
+internal final class IntToStringOperation: Operation & InputConsumingOperation & OutputProducingOperation {
+    var input: Int?
+    private(set) var output: String?
 
-  private var _output = Atomic<String?>(nil)
+    override func main() {
+        if let input = self.input {
+            output = "\(input)"
+        }
+    }
+}
+
+internal final class StringToIntOperation: Operation & InputConsumingOperation & OutputProducingOperation  {
+    var input: String?
+    private(set) var output: Int?
+
+    override func main() {
+        if let input = self.input {
+            output = Int(input)
+        }
+    }
+}
+
+// MARK: - AsynchronousOperation
+
+internal final class FailingOperation: Operation, FailableOperation, TrackableOperation {
+  private(set) var error: Error?
 
   override func main() {
-    if let input = input {
-      _output.mutate {
-        $0 = "\(input)"
-      }
-    }
+    self.error = NSError(domain: identifier, code: 0, userInfo: nil)
   }
 }
 
-internal class StringToIntOperation: Operation & InputConsuming & OutputProducing  {
-  var input: String?
-  var output: Int? {
-    return _output.value
-  }
+// MARK: - Log
 
-  private var _output = Atomic<Int?>(nil)
-
-  override func main() {
-    if let input = input {
-      _output.mutate {
-        $0 = Int(input)
-      }
-    }
-  }
+internal enum Log {
+  private static let identifier = "xctest"
+  static var `default`: OSLog = OSLog(subsystem: Log.identifier, category: "Default")
+  static var signpost: OSLog = OSLog(subsystem: Log.identifier, category: "Signpost")
+  @available(iOS 12.0, iOSApplicationExtension 12.0, tvOS 12.0, watchOS 5.0, macOS 10.14, OSXApplicationExtension 10.14, *)
+  static var poi: OSLog = OSLog(subsystem: Log.identifier, category: .pointsOfInterest)
 }

@@ -14,7 +14,7 @@
     <a title="Classes  Reference"></a>
     <header>
       <div class="content-wrapper">
-        <p><a href="index.html">AdvancedOperation Docs</a> (65% documented)</p>
+        <p><a href="index.html">AdvancedOperation Docs</a> (69% documented)</p>
       </div>
     </header>
     <div class="content-wrapper">
@@ -36,6 +36,9 @@
               <li class="nav-group-task">
                 <a href="Classes/AsynchronousOperation.html">AsynchronousOperation</a>
               </li>
+              <li class="nav-group-task">
+                <a href="Classes/KVOCrashWorkaround.html">KVOCrashWorkaround</a>
+              </li>
             </ul>
           </li>
           <li class="nav-group-name">
@@ -53,10 +56,27 @@
             <a href="Protocols.html">Protocols</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
-                <a href="Protocols/InputConsuming.html">InputConsuming</a>
+                <a href="Protocols/FailableOperation.html">FailableOperation</a>
               </li>
               <li class="nav-group-task">
-                <a href="Protocols/OutputProducing.html">OutputProducing</a>
+                <a href="Protocols/InputConsumingOperation.html">InputConsumingOperation</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Protocols/OutputProducingOperation.html">OutputProducingOperation</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Protocols/TrackableOperation.html">TrackableOperation</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="Typealiases.html">Type Aliases</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="Typealiases.html#/s:17AdvancedOperation010AsyncBlockB0a">AsyncBlockOperation</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Typealiases.html#/s:17AdvancedOperation05AsyncB0a">AsyncOperation</a>
               </li>
             </ul>
           </li>
@@ -75,9 +95,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:17AdvancedOperation017AsynchronousBlockB0C"></a>
+                    <a name="/c:@M@AdvancedOperation@objc(cs)AsynchronousBlockOperation"></a>
                     <a name="//apple_ref/swift/Class/AsynchronousBlockOperation" class="dashAnchor"></a>
-                    <a class="token" href="#/s:17AdvancedOperation017AsynchronousBlockB0C">AsynchronousBlockOperation</a>
+                    <a class="token" href="#/c:@M@AdvancedOperation@objc(cs)AsynchronousBlockOperation">AsynchronousBlockOperation</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -85,7 +105,7 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>A concurrent sublcass of <code><a href="Classes/AsynchronousOperation.html">AsynchronousOperation</a></code> to execute a closure.</p>
+                        <p>A  sublcass of <code><a href="Classes/AsynchronousOperation.html">AsynchronousOperation</a></code> to execute a closure.</p>
 
                         <a href="Classes/AsynchronousBlockOperation.html" class="slightly-smaller">See more</a>
                       </div>
@@ -93,23 +113,19 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">final</span> <span class="kd">class</span> <span class="kt">AsynchronousBlockOperation</span><span class="o">&lt;</span><span class="kt">Success</span><span class="p">,</span> <span class="kt">Failure</span><span class="o">&gt;</span> <span class="p">:</span> <span class="kt"><a href="Classes/AsynchronousOperation.html">AsynchronousOperation</a></span><span class="o">&lt;</span><span class="kt">Success</span><span class="p">,</span> <span class="kt">Failure</span><span class="o">&gt;</span> <span class="k">where</span> <span class="kt">Failure</span> <span class="p">:</span> <span class="kt">Error</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">final</span> <span class="kd">class</span> <span class="kt">AsynchronousBlockOperation</span> <span class="p">:</span> <span class="kt"><a href="Classes/AsynchronousOperation.html">AsynchronousOperation</a></span></code></pre>
 
                         </div>
                       </div>
                     </section>
                   </div>
                 </li>
-              </ul>
-            </div>
-            <div class="task-group">
-              <ul>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:17AdvancedOperation012AsynchronousB0C"></a>
+                    <a name="/c:@M@AdvancedOperation@objc(cs)AsynchronousOperation"></a>
                     <a name="//apple_ref/swift/Class/AsynchronousOperation" class="dashAnchor"></a>
-                    <a class="token" href="#/s:17AdvancedOperation012AsynchronousB0C">AsynchronousOperation</a>
+                    <a class="token" href="#/c:@M@AdvancedOperation@objc(cs)AsynchronousOperation">AsynchronousOperation</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -117,18 +133,9 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>An abstract thread safe subclass of <code>Operation</code> to build asynchronous operations.</p>
+                        <p>An abstract thread safe subclass of <code>Operation</code> to support asynchronous operations.</p>
 
-<p>Subclasses must override <code>execute(completion:)</code> to perform any work and call the completion handler to finish it.
-When an <code>AsynchronousOperation</code> finished wihout being cancelled, it will always produce a result output.</p>
-
-<p>To enable logging:</p>
-
-<ul>
-<li>To enable log add this environment key: <code>org.tinrobots.AdvancedOperation.LOG_ENABLED</code></li>
-<li>To enable signposts add this environment key: <code>org.tinrobots.AdvancedOperation.SIGNPOST_ENABLED</code></li>
-<li>To enable point of interests add this environment key: <code>org.tinrobots.AdvancedOperation.POI_ENABLED</code></li>
-</ul>
+<p>Subclasses must override <code>main</code> to perform any work and, if they are asynchronous, call the <code>finish()</code> method to complete the execution.</p>
 
                         <a href="Classes/AsynchronousOperation.html" class="slightly-smaller">See more</a>
                       </div>
@@ -136,9 +143,37 @@ When an <code>AsynchronousOperation</code> finished wihout being cancelled, it w
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">open</span> <span class="kd">class</span> <span class="kt">AsynchronousOperation</span><span class="o">&lt;</span><span class="kt">Success</span><span class="p">,</span> <span class="kt">Failure</span><span class="o">&gt;</span> <span class="p">:</span> <span class="kt">Operation</span><span class="p">,</span> <span class="kt"><a href="Protocols/OutputProducing.html">OutputProducing</a></span> <span class="k">where</span> <span class="kt">Failure</span> <span class="p">:</span> <span class="kt">Error</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">open</span> <span class="kd">class</span> <span class="kt">AsynchronousOperation</span> <span class="p">:</span> <span class="kt">Operation</span></code></pre>
 
                         </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/"></a>
+                    <a name="//apple_ref/swift/Class/KVOCrashWorkaround" class="dashAnchor"></a>
+                    <a class="token" href="#/">KVOCrashWorkaround</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Workaround to solve some  multithreading bugs in Swift&rsquo;s KVO.
+This needs to execute before anything can register KVO in the background so the best way to do this is before the application ever runs</p>
+
+<p><code><a href="Classes/KVOCrashWorkaround.html#/installFix()">KVOCrashWorkaround.installFix()</a></code></p>
+<div class="aside aside-note">
+    <p class="aside-title">Note</p>
+    it&rsquo;s not required for Swift 5.1 and above, see this <a href="https://github.com/apple/swift/pull/20103">Swift PR</a>
+
+</div>
+
+                        <a href="Classes/KVOCrashWorkaround.html" class="slightly-smaller">See more</a>
                       </div>
                     </section>
                   </div>
@@ -148,8 +183,8 @@ When an <code>AsynchronousOperation</code> finished wihout being cancelled, it w
           </section>
         </section>
         <section id="footer">
-          <p>&copy; 2019 <a class="link" href="https://github.com/tinrobots/AdvancedOperation" target="_blank" rel="external">Alessandro Marzoli</a>. All rights reserved. (Last updated: 2019-12-10)</p>
-          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.12.0</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+          <p>&copy; 2020 <a class="link" href="https://github.com/tinrobots/AdvancedOperation" target="_blank" rel="external">Alessandro Marzoli</a>. All rights reserved. (Last updated: 2020-01-23)</p>
+          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.13.1</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
         </section>
       </article>
     </div>

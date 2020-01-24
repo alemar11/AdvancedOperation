@@ -22,17 +22,10 @@
 // SOFTWARE.
 
 import Foundation
-import XCTest
-@testable import AdvancedOperation
 
-final class NSErrorAdvancedOperationTests: XCTestCase {
-  func testNSErrorWithoutDebugKey() {
-    let error = NSError(domain: "AdvancedOperation.Tests", code: 0, userInfo: nil)
-    XCTAssertEqual(error.debugErrorMessage, defaultDebugMessage)
-  }
-
-  func testCustomNSErrorWithoutDebugKey() {
-    let error = MockError.failed
-    XCTAssertEqual(error.debugErrorMessage, defaultDebugMessage)
-  }
+/// Operations conforming to this protocol require an input before starting.
+public protocol InputConsumingOperation: Operation {
+  associatedtype Input
+  /// Required input
+  var input: Input? { get set }
 }

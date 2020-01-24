@@ -24,13 +24,13 @@
 import XCTest
 @testable import AdvancedOperation
 
+// TODO: https://forums.swift.org/t/xctunwrap-not-available-during-swift-test/28878/4
+
 final class AsynchronousOperationTests: XCTestCase {
-  func testNotFinishingOperation() throws {
-    let operation = NotFinishingAsynchronousOperation()
-    let expectation1 = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: operation, expectedValue: true)
-    expectation1.isInverted = true
-    operation.start()
-    wait(for: [expectation1], timeout: 3)
+  override class func setUp() {
+    #if swift(<5.1)
+    KVOCrashWorkaround.installFix()
+    #endif
   }
 
   func testEarlyBailOut() {
@@ -39,15 +39,6 @@ final class AsynchronousOperationTests: XCTestCase {
     operation.cancel()
     operation.start()
     wait(for: [expectation1], timeout: 3)
-  }
-
-  func testOutputBeforeStarting() throws {
-    let operation = SleepyAsyncOperation()
-    XCTAssertFalse(operation.isExecuting)
-
-    // TODO: https://forums.swift.org/t/xctunwrap-not-available-during-swift-test/28878/4
-    // let output = try XCTUnwrap(operation.output?.failure) as NSError
-    XCTAssertNil(operation.output, "An operation not yet started shouldn't have an output,")
   }
 
   func testStart() {
@@ -60,7 +51,6 @@ final class AsynchronousOperationTests: XCTestCase {
 
     wait(for: [expectation1], timeout: 10)
     XCTAssertTrue(operation.isFinished)
-    XCTAssertNotNil(operation.output)
   }
 
   func testCancel() {
@@ -91,7 +81,6 @@ final class AsynchronousOperationTests: XCTestCase {
 
     XCTAssertTrue(operation.isCancelled)
     XCTAssertFalse(operation.isFinished)
-    XCTAssertNil(operation.output)
   }
 
   func testCancelBeforeStart() {
@@ -105,7 +94,6 @@ final class AsynchronousOperationTests: XCTestCase {
 
     XCTAssertTrue(operation.isCancelled)
     XCTAssertTrue(operation.isFinished)
-    XCTAssertNil(operation.output)
   }
 
   func testMultipleCancel() {
@@ -130,6 +118,27 @@ final class AsynchronousOperationTests: XCTestCase {
     XCTAssertTrue(operation.isFinished)
   }
 
+  func testMultipleStart() {
+    let operation = SleepyAsyncOperation()
+    let expectation1 = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: operation, expectedValue: true)
+    let expectation2 = expectation(description: "\(#function)\(#line)")
+
+    XCTAssertTrue(operation.isReady)
+    XCTAssertFalse(operation.isExecuting)
+
+    DispatchQueue.global().async {
+      operation.start()
+      expectation2.fulfill()
+    }
+
+    operation.start()
+    operation.start()
+
+    wait(for: [expectation1, expectation2], timeout: 10)
+    XCTAssertFalse(operation.isCancelled)
+    XCTAssertTrue(operation.isFinished)
+  }
+
   func testMultipleStartAfterCancellation() {
     let operation = SleepyAsyncOperation()
     let expectation1 = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: operation, expectedValue: true)
@@ -151,16 +160,6 @@ final class AsynchronousOperationTests: XCTestCase {
     wait(for: [expectation1, expectation2], timeout: 10)
     XCTAssertTrue(operation.isCancelled)
     XCTAssertTrue(operation.isFinished)
-  }
-
-  func testFinishWithErrors() {
-    let operation = FailingAsyncOperation()
-    let expectation1 = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: operation, expectedValue: true)
-
-    operation.start()
-
-    wait(for: [expectation1], timeout: 10)
-    XCTAssertNotNil(operation.output?.failure)
   }
 
   // The readiness of operations is determined by their dependencies on other operations and potentially by custom conditions that you define.
@@ -229,7 +228,7 @@ final class AsynchronousOperationTests: XCTestCase {
 
   func testDependencyCancellingDependantOperation() {
     let queue = OperationQueue()
-    let operation1 = CancellingAsyncOperation()
+    let operation1 = AutoCancellingAsyncOperation()
     operation1.name = "operation1"
     let operation2 = SleepyAsyncOperation(interval1: 1, interval2: 1, interval3: 1)
     operation2.name = "operation2"
@@ -288,9 +287,7 @@ final class AsynchronousOperationTests: XCTestCase {
     queue.addOperations([operation1, operation2, operation3, operation4, conditionsOperationToLetOperationOneRun, conditionsOperationToLetOperationThreeRun], waitUntilFinished: true)
 
     XCTAssertTrue(operation4.isCancelled)
-    XCTAssertNil(operation3.output?.failure, "Cancelled \(operation3.operationName) shouldn't have any output")
     XCTAssertFalse(operation2.isCancelled)
-    XCTAssertNil(operation1.output?.failure, "Cancelled \(operation1.operationName) shouldn't have any output")
     XCTAssertTrue(operation1.isCancelled)
     XCTAssertTrue(operation1.isFinished)
   }
@@ -339,19 +336,72 @@ final class AsynchronousOperationTests: XCTestCase {
     operation3.cancel()
     operation2.cancel()
     operation1.cancel()
-
     queue.addOperations([operation1, operation2, operation3, operation4, conditionsOperationToLetOperationOneRun, conditionsOperationToLetOperationFourRun], waitUntilFinished: false)
 
     waitForExpectations(timeout: 10)
+
     XCTAssertTrue(operation4.isCancelled)
-
-    XCTAssertNil(operation3.output?.failure, "Cancelled \(operation3.operationName) shouldn't have any output")
     XCTAssertTrue(operation3.isCancelled)
-
-    XCTAssertNil(operation2.output?.failure, "Cancelled \(operation3.operationName) shouldn't have any output")
     XCTAssertTrue(operation2.isCancelled)
-
-    XCTAssertNil(operation1.output?.failure, "Cancelled \(operation3.operationName) shouldn't have any output")
     XCTAssertTrue(operation1.isCancelled)
+  }
+
+  func testGate() {
+    let operation0 = AutoCancellingAsyncOperation()
+    let operation1 = BlockOperation()
+    let operation2 = FailingOperation()
+    let operation3 = AsyncBlockOperation { complete in
+      XCTFail("It shouldn't be executed")
+      complete()
+    }
+    let gate = GateOperation { [unowned operation3] gate in
+      if gate.hasSomeFailedDependencies {
+        operation3.cancel()
+      }
+    }
+
+    gate.addDependencies(operation1, operation2)
+    operation3.addDependencies(gate)
+
+    if #available(iOS 12.0, iOSApplicationExtension 12.0, tvOS 12.0, watchOS 5.0, macOS 10.14, OSXApplicationExtension 10.14, *){
+      operation0.installTracker(log: Log.default, signpost: Log.signpost, poi: Log.poi)
+      operation1.installTracker(log: Log.default, signpost: Log.signpost, poi: Log.poi)
+      operation2.installTracker(log: Log.default, signpost: Log.signpost, poi: Log.poi)
+      operation3.installTracker(log: Log.default, signpost: Log.signpost, poi: Log.poi)
+      gate.installTracker(log: Log.default, signpost: Log.signpost, poi: Log.poi)
+    } else {
+      operation0.installTracker(log: Log.default, signpost: Log.signpost, poi: .disabled)
+      operation1.installTracker(log: Log.default, signpost: Log.signpost, poi: .disabled)
+      operation2.installTracker(log: Log.default, signpost: Log.signpost, poi: .disabled)
+      operation3.installTracker(log: Log.default, signpost: Log.signpost, poi: .disabled)
+      gate.installTracker(log: Log.default, signpost: Log.signpost, poi: .disabled)
+    }
+
+    operation0.name = "op0"
+    operation1.name = "op1"
+    operation2.name = "op2"
+    operation3.name = "op3"
+    gate.name = "gate"
+    let queue = OperationQueue()
+    queue.maxConcurrentOperationCount = 5
+    queue.addOperations([operation0, operation1, operation2, operation3, gate], waitUntilFinished: true)
+    XCTAssertTrue(operation3.isCancelled)
+    XCTAssertTrue(operation3.isFinished)
+  }
+}
+
+extension AsyncBlockOperation: TrackableOperation { }
+extension AutoCancellingAsyncOperation: TrackableOperation { }
+extension BlockOperation: TrackableOperation { }
+
+final class GateOperation: Operation, TrackableOperation {
+  private let block: (GateOperation) -> Void
+
+  init(block: @escaping (GateOperation) -> Void) {
+    self.block = block
+  }
+
+  override func main() {
+    block(self)
   }
 }

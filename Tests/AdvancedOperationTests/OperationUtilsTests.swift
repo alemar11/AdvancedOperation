@@ -25,6 +25,12 @@ import XCTest
 @testable import AdvancedOperation
 
 final class OperationUtilsTests: XCTestCase {
+  override class func setUp() {
+    #if swift(<5.1)
+    AdvancedOperation.KVOCrashWorkaround.installFix()
+    #endif
+  }
+
   func testAddCompletionBlock() {
     let operation = SleepyAsyncOperation()
     let expectation1 = expectation(description: "\(#function)\(#line)")
@@ -94,7 +100,7 @@ final class OperationUtilsTests: XCTestCase {
   }
 
   func testRemoveDependencies() {
-    let operation1 = AsynchronousBlockOperation(queue: .main, block: { })
+    let operation1 = AsynchronousBlockOperation() { $0() }
     let operation2 = SleepyAsyncOperation()
     let operation3 = BlockOperation { }
     let operation4 = SleepyAsyncOperation()
@@ -104,6 +110,23 @@ final class OperationUtilsTests: XCTestCase {
 
     operation4.removeDependencies()
     XCTAssertEqual(operation4.dependencies.count, 0)
+  }
+
+  func testHasSomeDependenciesFailed() {
+    let operation1 = BlockOperation()
+    let operation2 = BlockOperation()
+    let operation3 = FailingOperation()
+    let operation4 = AsyncBlockOperation() { $0()}
+
+    operation3.addDependencies(operation1, operation2)
+    operation4.addDependency(operation3)
+    XCTAssertFalse(operation3.hasSomeFailedDependencies)
+    XCTAssertFalse(operation4.hasSomeFailedDependencies)
+
+    let queue = OperationQueue()
+    queue.addOperations([operation1, operation2, operation3, operation4], waitUntilFinished: true)
+    XCTAssertFalse(operation3.hasSomeFailedDependencies)
+    XCTAssertTrue(operation4.hasSomeFailedDependencies)
   }
 
   func testHasSomeDependenciesCancelled() {
@@ -130,14 +153,11 @@ final class OperationUtilsTests: XCTestCase {
     let operation2 = BlockOperation()
     let operation3 = BlockOperation()
     let operation4 = BlockOperation()
-
     let sequence = [operation1, operation2, operation3, operation4]
-
     let operation5 = BlockOperation()
     let operation6 = BlockOperation()
     let operation7 = BlockOperation()
     let operation8 = BlockOperation()
-
     sequence.addDependencies(operation5, operation6, operation7)
 
     sequence.forEach {

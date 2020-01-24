@@ -1,19 +1,11 @@
 # Changelog
 
-### 5.1.0
-
-- AsynchronousOperation now is generic over `Success` and `Failure` types.
-- removed  `cleanup` method.
-- removed AsynchronousBlockOperation's `queue` default value.
-
 ### 5.0.0 ⭐
 
 - Added `AsynchronousOperation`.
 - Added `AsynchronousBlockOperation`.
+- renamed `inject` into `injectOutput`.
 - Removed `AdvancedOperation`
-- Removed `AdvancedBlockOperation`
-- Removed `GroupOperation`.
-- Removed `DelayOperation.`
 - Removed conditions.
 
 ### 4.0.0 ⭐
