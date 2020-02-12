@@ -243,8 +243,6 @@ internal final class LazyGroupOperation: GroupOperation {
 
 // MARK: - ResultOperation
 
-// TODO: test it
-
 internal final class IntToStringResultOperation: ResultOperation<String, IntToStringResultOperation.ResultError>, InputConsumingOperation {
   enum ResultError: Error {
     case missingInput

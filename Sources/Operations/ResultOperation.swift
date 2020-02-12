@@ -23,6 +23,8 @@
 
 import Foundation
 
+// TODO: add description
+
 open class ResultOperation<Success, Failure>: AsynchronousOperation, OutputProducingOperation, FailableOperation where Failure: Error {
   public var onOutputProduced: ((Result<Success, Failure>) -> Void)?
 
