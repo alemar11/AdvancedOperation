@@ -55,3 +55,14 @@ public extension Operation {
     return dependencies.first { ($0 as? TypeErasedFailableOperation)?.isFailed ?? false } != nil
   }
 }
+
+//internal protocol MutableFailableOperation: FailableOperation {
+//    var error: ErrorType? { get set }
+//}
+//
+//internal extension MutableFailableOperation where Self: AsynchronousOperation {
+//  func finish(error: ErrorType) {
+//    self.error = error
+//    finish()
+//  }
+//}

@@ -3,8 +3,10 @@
 ### 5.1.0
 
 - Added `GroupOperation`.
+- Added `ResultOperation`
 - Added `GeneratorOperation` protocol.
 - Operations conforming to `OutputProducingOperation` now needs to implement  `onOutputProduced`.
+- `FailableOperation` is now generic over its Error type.
 - Improved logs for operations conforming to `FailableOperation`.
 
 ### 5.0.0 ⭐

@@ -28,7 +28,9 @@ open class ResultOperation<Success, Failure>: AsynchronousOperation, OutputProdu
 
   public final private(set) var output: Result<Success, Failure>? {
     willSet {
-      precondition(self.output == nil, "Output cannot be set more than once.")
+      // An assert is enough since finish(result:) is the only public method to set the output.
+      // the operation will crash if finish(result:) method is called more than once (see finish() implementation)
+      assert(isExecuting, "Output can only be set if \(operationName) is executing.")
     }
     didSet {
       if let output = self.output {

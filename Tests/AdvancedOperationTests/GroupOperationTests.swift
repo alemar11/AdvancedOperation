@@ -198,4 +198,6 @@ final class GroupOperationTests: XCTestCase {
     groupOperation.start()
     wait(for: [expectation1], timeout: 5)
   }
+
+  // TODO: add tests for GroupOperation running inside another OperationQueue
 }

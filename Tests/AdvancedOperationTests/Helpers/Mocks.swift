@@ -191,7 +191,12 @@ internal final class StringToIntOperation: Operation & InputConsumingOperation &
 // MARK: - AsynchronousOperation
 
 internal final class FailingOperation: Operation, FailableOperation, TrackableOperation {
-  private(set) var error: MockError?
+  enum FailureError: Error {
+    case errorOne
+    case errorTwo
+  }
+
+  private(set) var error: FailureError?
   
   override func main() {
     self.error = .errorOne
@@ -238,20 +243,33 @@ internal final class LazyGroupOperation: GroupOperation {
 
 // MARK: - ResultOperation
 
-internal final class StringResultOperation: ResultOperation<String, MockError> {
+// TODO: test it
+
+internal final class IntToStringResultOperation: ResultOperation<String, IntToStringResultOperation.ResultError>, InputConsumingOperation {
+  enum ResultError: Error {
+    case missingInput
+    case invalidInput
+  }
+
+  var input: Int?
+
   override func main() {
     if isCancelled {
       finish()
       return
     }
-    finish(result: .success("Hello World"))
-  }
-}
 
-enum MockError: Error {
-  case errorOne
-  case errorTwo
-  case errorThree
+    guard let input = self.input else {
+      finish(result: .failure(.missingInput))
+      return
+    }
+
+    if input < 0 {
+      finish(result: .failure(.invalidInput))
+    } else {
+      finish(result: .success("\(input)"))
+    }
+  }
 }
 
 // MARK: - Log
