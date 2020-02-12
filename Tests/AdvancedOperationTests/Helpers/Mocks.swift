@@ -27,28 +27,6 @@ import XCTest
 import os.log
 @testable import AdvancedOperation
 
-//final internal class ResultOperation<O,E: Error>: Operation, OutputProducingOperation, FailableOperation {
-//  private(set) var output: Result<O,E>? {
-//    didSet {
-//      if let output = self.output {
-//        onOutputProduced?(output)
-//      }
-//    }
-//  }
-//
-//  var onOutputProduced: ((Output) -> Void)?
-//
-//  var error: Error? {
-//    guard let output = self.output else { return nil }
-//    switch output {
-//    case .failure(let error):
-//      return error
-//    default:
-//      return nil
-//    }
-//  }
-//}
-
 // MARK: - AsynchronousBlockOperation
 
 final internal class SleepyAsyncOperation: AsynchronousOperation {
@@ -117,15 +95,18 @@ internal class StringToIntAsyncOperation: AsynchronousOperation, InputConsumingO
   var onOutputProduced: ((Int) -> Void)?
   
   var input: String?
-  private(set) var output: Int?
+  private(set) var output: Int? {
+    didSet {
+      if let output = self.output {
+        onOutputProduced?(output)
+      }
+    }
+  }
   
   override func main() {
     DispatchQueue.global().async {
       if let input = self.input {
         self.output = Int(input)
-        if let output = self.output {
-          self.onOutputProduced?(output)
-        }
       }
       self.finish()
     }
@@ -173,14 +154,17 @@ internal final class IntToStringOperation: Operation & InputConsumingOperation &
   var onOutputProduced: ((String) -> Void)?
   
   var input: Int?
-  private(set) var output: String?
+  private(set) var output: String? {
+    didSet {
+      if let output = self.output {
+        onOutputProduced?(output)
+      }
+    }
+  }
   
   override func main() {
     if let input = self.input {
       output = "\(input)"
-      if let output = self.output {
-        self.onOutputProduced?(output)
-      }
     }
   }
 }
@@ -189,14 +173,17 @@ internal final class StringToIntOperation: Operation & InputConsumingOperation &
   var onOutputProduced: ((Int) -> Void)?
   
   var input: String?
-  private(set) var output: Int?
+  private(set) var output: Int? {
+    didSet {
+      if let output = self.output {
+        onOutputProduced?(output)
+      }
+    }
+  }
   
   override func main() {
     if let input = self.input {
       output = Int(input)
-      if let output = self.output {
-        self.onOutputProduced?(output)
-      }
     }
   }
 }
@@ -204,10 +191,10 @@ internal final class StringToIntOperation: Operation & InputConsumingOperation &
 // MARK: - AsynchronousOperation
 
 internal final class FailingOperation: Operation, FailableOperation, TrackableOperation {
-  private(set) var error: Error?
+  private(set) var error: MockError?
   
   override func main() {
-    self.error = NSError(domain: identifier, code: 0, userInfo: nil)
+    self.error = .errorOne
   }
 }
 
@@ -247,6 +234,24 @@ internal final class LazyGroupOperation: GroupOperation {
       self?.addOperation(operation)
     }
   }
+}
+
+// MARK: - ResultOperation
+
+internal final class StringResultOperation: ResultOperation<String, MockError> {
+  override func main() {
+    if isCancelled {
+      finish()
+      return
+    }
+    finish(result: .success("Hello World"))
+  }
+}
+
+enum MockError: Error {
+  case errorOne
+  case errorTwo
+  case errorThree
 }
 
 // MARK: - Log

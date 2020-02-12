@@ -127,7 +127,7 @@ final class OperationUtilsTests: XCTestCase {
     queue.addOperations([operation1, operation2, operation3, operation4], waitUntilFinished: true)
     XCTAssertFalse(operation3.hasSomeFailedDependencies)
     XCTAssertTrue(operation4.hasSomeFailedDependencies)
-  }
+    XCTAssertEqual(operation3.error, .errorOne)  }
 
   func testHasSomeDependenciesCancelled() {
     let operation1 = BlockOperation()

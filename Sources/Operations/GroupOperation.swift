@@ -23,6 +23,8 @@
 
 import Foundation
 
+// TODO: add GroupOperation description
+
 open class GroupOperation: AsynchronousOperation {
   // MARK: - Public Properties
 

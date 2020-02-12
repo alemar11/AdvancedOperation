@@ -124,13 +124,13 @@ final class Tracker {
       self.finished = true
 
       if #available(iOS 12.0, iOSApplicationExtension 12.0, tvOS 12.0, watchOS 5.0, macOS 10.14, OSXApplicationExtension 10.14, *) {
-        if let failableOperation = operation as? FailableOperation, failableOperation.error != nil {
+        if let failableOperation = operation as? TypeErasedFailableOperation, failableOperation.isFailed {
           os_log(.info, log: self.log, "%{public}s has finished with an error.", operation.operationName)
         } else {
           os_log(.info, log: self.log, "%{public}s has finished.", operation.operationName)
         }
       } else {
-        if let failableOperation = operation as? FailableOperation, failableOperation.error != nil {
+        if let failableOperation = operation as? TypeErasedFailableOperation, failableOperation.isFailed {
           os_log("%{public}s has finished with an error.", log: self.log, type: .info, operation.operationName)
         } else {
           os_log("%{public}s has finished.", log: self.log, type: .info, operation.operationName)

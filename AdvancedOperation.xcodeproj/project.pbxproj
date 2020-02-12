@@ -112,6 +112,10 @@
 		D21C5D8523D3674E005F8D51 /* AsynchronousOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = D21C5D8323D3674E005F8D51 /* AsynchronousOperation.swift */; };
 		D21C5D8623D3674E005F8D51 /* AsynchronousOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = D21C5D8323D3674E005F8D51 /* AsynchronousOperation.swift */; };
 		D21C5D8723D3674E005F8D51 /* AsynchronousOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = D21C5D8323D3674E005F8D51 /* AsynchronousOperation.swift */; };
+		D25DB57F23F49EFC002B91C5 /* ResultOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = D25DB57E23F49EFC002B91C5 /* ResultOperation.swift */; };
+		D25DB58023F49EFC002B91C5 /* ResultOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = D25DB57E23F49EFC002B91C5 /* ResultOperation.swift */; };
+		D25DB58123F49EFC002B91C5 /* ResultOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = D25DB57E23F49EFC002B91C5 /* ResultOperation.swift */; };
+		D25DB58223F49EFC002B91C5 /* ResultOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = D25DB57E23F49EFC002B91C5 /* ResultOperation.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -181,6 +185,7 @@
 		D2093D392366175200230A2A /* OperationInjectionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OperationInjectionTests.swift; sourceTree = "<group>"; };
 		D21C5D8323D3674E005F8D51 /* AsynchronousOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsynchronousOperation.swift; sourceTree = "<group>"; };
 		D254E22323C3A68800A1586E /* LICENSE.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = LICENSE.md; sourceTree = SOURCE_ROOT; };
+		D25DB57E23F49EFC002B91C5 /* ResultOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultOperation.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -290,19 +295,8 @@
 		234130921F960612002BE7FC /* Sources */ = {
 			isa = PBXGroup;
 			children = (
-				06B3D10123D9E9F3005EBDD8 /* AdvancedOperation.swift */,
-				06C92B4A23D0A9FF000D12C8 /* AsynchronousBlockOperation.swift */,
-				D21C5D8323D3674E005F8D51 /* AsynchronousOperation.swift */,
-				23A1B87E21B8307F0018D9D5 /* Atomic.swift */,
-				0664BF3523D5B91100B491E6 /* FailableOperation.swift */,
-				239BC52120EB7539009A36D9 /* InputConsumingOperation.swift */,
-				067C482523D60EE800F73096 /* KVOCrashWorkaround.swift */,
-				23F24D21200799B800B25A03 /* Operation+Utils.swift */,
-				060B667023C4EBC80085FCB4 /* OutputProducingOperation.swift */,
-				069731C723D71135006A51CB /* TrackableOperation.swift */,
-				23A1B87821B81C710018D9D5 /* UnfairLock.swift */,
-				064B0D8323F4032100C8331F /* GroupOperation.swift */,
-				064B0D9023F451F000C8331F /* GeneratorOperation.swift */,
+				D25DB58423F4A3CB002B91C5 /* Core */,
+				D25DB58323F4A3B9002B91C5 /* Operations */,
 			);
 			path = Sources;
 			sourceTree = "<group>";
@@ -351,6 +345,34 @@
 			name = workflows;
 			path = .github/workflows;
 			sourceTree = SOURCE_ROOT;
+		};
+		D25DB58323F4A3B9002B91C5 /* Operations */ = {
+			isa = PBXGroup;
+			children = (
+				06C92B4A23D0A9FF000D12C8 /* AsynchronousBlockOperation.swift */,
+				064B0D8323F4032100C8331F /* GroupOperation.swift */,
+				D25DB57E23F49EFC002B91C5 /* ResultOperation.swift */,
+			);
+			path = Operations;
+			sourceTree = "<group>";
+		};
+		D25DB58423F4A3CB002B91C5 /* Core */ = {
+			isa = PBXGroup;
+			children = (
+				06B3D10123D9E9F3005EBDD8 /* AdvancedOperation.swift */,
+				D21C5D8323D3674E005F8D51 /* AsynchronousOperation.swift */,
+				23A1B87E21B8307F0018D9D5 /* Atomic.swift */,
+				0664BF3523D5B91100B491E6 /* FailableOperation.swift */,
+				239BC52120EB7539009A36D9 /* InputConsumingOperation.swift */,
+				067C482523D60EE800F73096 /* KVOCrashWorkaround.swift */,
+				23F24D21200799B800B25A03 /* Operation+Utils.swift */,
+				060B667023C4EBC80085FCB4 /* OutputProducingOperation.swift */,
+				069731C723D71135006A51CB /* TrackableOperation.swift */,
+				23A1B87821B81C710018D9D5 /* UnfairLock.swift */,
+				064B0D9023F451F000C8331F /* GeneratorOperation.swift */,
+			);
+			path = Core;
+			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
 
@@ -686,6 +708,7 @@
 			files = (
 				23A1B87921B81C710018D9D5 /* UnfairLock.swift in Sources */,
 				064B0D8423F4032100C8331F /* GroupOperation.swift in Sources */,
+				D25DB57F23F49EFC002B91C5 /* ResultOperation.swift in Sources */,
 				069731C823D71135006A51CB /* TrackableOperation.swift in Sources */,
 				23A1B87F21B8307F0018D9D5 /* Atomic.swift in Sources */,
 				06B3D10223D9E9F3005EBDD8 /* AdvancedOperation.swift in Sources */,
@@ -706,6 +729,7 @@
 			files = (
 				23A1B87A21B81C710018D9D5 /* UnfairLock.swift in Sources */,
 				064B0D8523F4032100C8331F /* GroupOperation.swift in Sources */,
+				D25DB58023F49EFC002B91C5 /* ResultOperation.swift in Sources */,
 				069731C923D71135006A51CB /* TrackableOperation.swift in Sources */,
 				23A1B88021B8307F0018D9D5 /* Atomic.swift in Sources */,
 				06B3D10323D9E9F3005EBDD8 /* AdvancedOperation.swift in Sources */,
@@ -726,6 +750,7 @@
 			files = (
 				23A1B87B21B81C710018D9D5 /* UnfairLock.swift in Sources */,
 				064B0D8623F4032200C8331F /* GroupOperation.swift in Sources */,
+				D25DB58123F49EFC002B91C5 /* ResultOperation.swift in Sources */,
 				069731CA23D71135006A51CB /* TrackableOperation.swift in Sources */,
 				23A1B88121B8307F0018D9D5 /* Atomic.swift in Sources */,
 				06B3D10423D9E9F3005EBDD8 /* AdvancedOperation.swift in Sources */,
@@ -746,6 +771,7 @@
 			files = (
 				23A1B87C21B81C710018D9D5 /* UnfairLock.swift in Sources */,
 				064B0D8723F4032200C8331F /* GroupOperation.swift in Sources */,
+				D25DB58223F49EFC002B91C5 /* ResultOperation.swift in Sources */,
 				069731CB23D71135006A51CB /* TrackableOperation.swift in Sources */,
 				23A1B88221B8307F0018D9D5 /* Atomic.swift in Sources */,
 				06B3D10523D9E9F3005EBDD8 /* AdvancedOperation.swift in Sources */,

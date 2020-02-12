@@ -23,20 +23,35 @@
 
 import Foundation
 
-/// Operations conformin to this protocolo may generate an error while executing.
-public protocol FailableOperation: Operation {
+// TODO: description - https://stackoverflow.com/questions/40387960/in-swift-how-to-cast-to-protocol-with-associated-type
+
+/// Shadow protocol
+///
+///  Swift doesn't currently support the use of protocols with associated types as actual types.
+public protocol TypeErasedFailableOperation: Operation {
+  /// Thetype erased error  occurred during the operation evaluation.
+  var typeErasedError: Error? { get }
+}
+
+public extension TypeErasedFailableOperation {
+  /// Returns `true` in the operation has finished with an error.
+  var isFailed: Bool { return isFinished && typeErasedError != nil }
+}
+
+/// Operations conforming to this protocol may generate an error while executing.
+public protocol FailableOperation: TypeErasedFailableOperation {
+  associatedtype ErrorType: Error
   /// The error  occurred during the operation evaluation.
-  var error: Error? { get }
+  var error: ErrorType? { get }
 }
 
 public extension FailableOperation {
-  /// Returns `true` in the operation has finished with an error.
-  var isFailed: Bool { return isFinished && error != nil }
+  var typeErasedError: Error? { return error }
 }
 
 public extension Operation {
   /// Returns `true` if at least one dependency conforming to `FailableOperation` has generated an error.
   var hasSomeFailedDependencies: Bool {
-    return dependencies.first { ($0 as? FailableOperation)?.isFailed ?? false } != nil
+    return dependencies.first { ($0 as? TypeErasedFailableOperation)?.isFailed ?? false } != nil
   }
 }
