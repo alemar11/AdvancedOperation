@@ -74,8 +74,12 @@ final class Tracker {
 
   // swiftlint:disable:next cyclomatic_complexity
   func start<T>(operation: T) where T: TrackableOperation {
+    let lock = UnfairLock()
+
     // uses default and poi logs
     let cancelToken = operation.observe(\.isCancelled, options: [.old, .new]) { [weak self] (operation, changes) in
+      lock.lock()
+      defer { lock.unlock() }
       guard let self = self else { return }
       guard let oldValue = changes.oldValue, let newValue = changes.newValue, oldValue != newValue else { return }
 
@@ -98,6 +102,8 @@ final class Tracker {
 
     // uses default and signpost logs
     let executionToken = operation.observe(\.isExecuting, options: [.old, .new]) { [weak self] (operation, changes) in
+      lock.lock()
+      defer { lock.unlock() }
       guard let self = self else { return }
       guard let oldValue = changes.oldValue, let newValue = changes.newValue, oldValue != newValue else { return }
 
@@ -115,6 +121,8 @@ final class Tracker {
 
     // uses default and signpost logs
     let finishToken = operation.observe(\.isFinished, options: [.old, .new]) { [weak self] (operation, changes) in
+      lock.lock()
+      defer { lock.unlock() }
       guard let self = self else { return }
       guard let oldValue = changes.oldValue, let newValue = changes.newValue, oldValue != newValue else { return }
       guard newValue else { return }
