@@ -86,7 +86,7 @@ final class AsynchronousBlockOperationTests: XCTestCase {
   func testBlockOperationWithAnAsyncQueueInside() {
     let expectation1 = expectation(description: "\(#function)\(#line)")
     let expectation2 = expectation(description: "\(#function)\(#line)")
-    // The other AdvancedBlockOperation initializer will fail here becase we need a more fine control
+    // The other AdvancedBlockOperation initializer will fail here because we need a more fine control
     // on when the operation should be considered finished.
     let operation = AsynchronousBlockOperation() { complete in
       DispatchQueue.global().async {
