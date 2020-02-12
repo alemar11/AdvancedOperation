@@ -25,5 +25,6 @@ import Foundation
 
 /// Operations conformin to this protocolor may generate other operations while executing.
 public protocol GeneratorOperation: Operation {
+  /// Block called whenever a `GeneratorOperation` generates a new operation.
   var onOperationGenerated: ((Operation) -> Void)? { get set }
 }

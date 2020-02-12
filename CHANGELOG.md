@@ -1,5 +1,11 @@
 # Changelog
 
+### 5.1.0
+
+- Added `GroupOperation`.
+- Added `GeneratorOperation` protocol.
+- Improved logs for operations conforming to `FailableOperation`.
+
 ### 5.0.0 ⭐
 
 - Added `AsynchronousOperation`.
