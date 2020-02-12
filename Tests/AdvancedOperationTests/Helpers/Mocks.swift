@@ -169,6 +169,44 @@ internal final class FailingOperation: Operation, FailableOperation, TrackableOp
   }
 }
 
+// MARK: - GroupOperation
+
+internal final class OperationsGenerator: Operation, GeneratorOperation {
+  var onOperationGenerated: ((Operation) -> Void)?
+  private let builder: () -> [Operation]
+  
+  init(operationsBuilder: @escaping () -> [Operation]) {
+    self.builder = operationsBuilder
+    super.init()
+  }
+
+  override func main() {
+    builder().forEach { setupOperation($0) }
+  }
+  
+  private func setupOperation(_ operation: Operation) {
+    // If the operation is a producing one, we bubble up the produced operation
+    if let generator = operation as? GeneratorOperation {
+      generator.onOperationGenerated = { [weak self] op in
+        self?.setupOperation(op)
+      }
+    }
+    onOperationGenerated?(operation)
+  }
+}
+
+/// This GroupOperation creates its operation lazily: this can be useful if the operations requires expensive work to be configured.
+internal final class LazyGroupOperation: GroupOperation {
+  init(operationsBuilder: @escaping () -> [Operation]) {
+    let generator = OperationsGenerator(operationsBuilder: operationsBuilder)
+    super.init(operations: [generator])
+    generator.name = "Generator<\(self.operationName)>"
+    generator.onOperationGenerated = { [weak self] operation in
+      self?.addOperation(operation)
+    }
+  }
+}
+
 // MARK: - Log
 
 internal enum Log {
@@ -178,3 +216,11 @@ internal enum Log {
   @available(iOS 12.0, iOSApplicationExtension 12.0, tvOS 12.0, watchOS 5.0, macOS 10.14, OSXApplicationExtension 10.14, *)
   static var poi: OSLog = OSLog(subsystem: Log.identifier, category: .pointsOfInterest)
 }
+
+extension RunUntilCancelledAsyncOperation: TrackableOperation { }
+extension GroupOperation: TrackableOperation { }
+extension SleepyAsyncOperation: TrackableOperation { }
+extension OperationsGenerator: TrackableOperation { }
+extension AsyncBlockOperation: TrackableOperation { }
+extension AutoCancellingAsyncOperation: TrackableOperation { }
+extension BlockOperation: TrackableOperation { }

@@ -36,6 +36,17 @@
 		060B667223C4EBC80085FCB4 /* OutputProducingOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 060B667023C4EBC80085FCB4 /* OutputProducingOperation.swift */; };
 		060B667323C4EBC80085FCB4 /* OutputProducingOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 060B667023C4EBC80085FCB4 /* OutputProducingOperation.swift */; };
 		060B667423C4EBC80085FCB4 /* OutputProducingOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 060B667023C4EBC80085FCB4 /* OutputProducingOperation.swift */; };
+		064B0D8423F4032100C8331F /* GroupOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 064B0D8323F4032100C8331F /* GroupOperation.swift */; };
+		064B0D8523F4032100C8331F /* GroupOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 064B0D8323F4032100C8331F /* GroupOperation.swift */; };
+		064B0D8623F4032200C8331F /* GroupOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 064B0D8323F4032100C8331F /* GroupOperation.swift */; };
+		064B0D8723F4032200C8331F /* GroupOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 064B0D8323F4032100C8331F /* GroupOperation.swift */; };
+		064B0D8D23F4168500C8331F /* GroupOperationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 064B0D8823F4166300C8331F /* GroupOperationTests.swift */; };
+		064B0D8E23F4168600C8331F /* GroupOperationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 064B0D8823F4166300C8331F /* GroupOperationTests.swift */; };
+		064B0D8F23F4168600C8331F /* GroupOperationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 064B0D8823F4166300C8331F /* GroupOperationTests.swift */; };
+		064B0D9123F451F000C8331F /* GeneratorOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 064B0D9023F451F000C8331F /* GeneratorOperation.swift */; };
+		064B0D9223F451F000C8331F /* GeneratorOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 064B0D9023F451F000C8331F /* GeneratorOperation.swift */; };
+		064B0D9323F451F000C8331F /* GeneratorOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 064B0D9023F451F000C8331F /* GeneratorOperation.swift */; };
+		064B0D9423F451F000C8331F /* GeneratorOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 064B0D9023F451F000C8331F /* GeneratorOperation.swift */; };
 		0664BF3623D5B91100B491E6 /* FailableOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0664BF3523D5B91100B491E6 /* FailableOperation.swift */; };
 		0664BF3723D5B91100B491E6 /* FailableOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0664BF3523D5B91100B491E6 /* FailableOperation.swift */; };
 		0664BF3823D5B91100B491E6 /* FailableOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0664BF3523D5B91100B491E6 /* FailableOperation.swift */; };
@@ -132,6 +143,9 @@
 		060BD361239A76AC0098E835 /* AdvancedOperation tvOS.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = "AdvancedOperation tvOS.xctestplan"; sourceTree = "<group>"; };
 		0622C311239A717D004F3FA5 /* AdvancedOperation macOS.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = "AdvancedOperation macOS.xctestplan"; sourceTree = "<group>"; };
 		0622C314239A7428004F3FA5 /* AdvancedOperation iOS.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = "AdvancedOperation iOS.xctestplan"; sourceTree = "<group>"; };
+		064B0D8323F4032100C8331F /* GroupOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupOperation.swift; sourceTree = "<group>"; };
+		064B0D8823F4166300C8331F /* GroupOperationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupOperationTests.swift; sourceTree = "<group>"; };
+		064B0D9023F451F000C8331F /* GeneratorOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneratorOperation.swift; sourceTree = "<group>"; };
 		0664BF3523D5B91100B491E6 /* FailableOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FailableOperation.swift; sourceTree = "<group>"; };
 		067C482523D60EE800F73096 /* KVOCrashWorkaround.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KVOCrashWorkaround.swift; sourceTree = "<group>"; };
 		068C554F23C8C6810043B43F /* lint.yml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; path = lint.yml; sourceTree = "<group>"; };
@@ -244,6 +258,7 @@
 				D2093D392366175200230A2A /* OperationInjectionTests.swift */,
 				235D08D0206A941B00F70142 /* OperationStateTests.swift */,
 				23AC3ADC2038A050003E1B15 /* OperationUtilsTests.swift */,
+				064B0D8823F4166300C8331F /* GroupOperationTests.swift */,
 			);
 			path = AdvancedOperationTests;
 			sourceTree = "<group>";
@@ -286,6 +301,8 @@
 				060B667023C4EBC80085FCB4 /* OutputProducingOperation.swift */,
 				069731C723D71135006A51CB /* TrackableOperation.swift */,
 				23A1B87821B81C710018D9D5 /* UnfairLock.swift */,
+				064B0D8323F4032100C8331F /* GroupOperation.swift */,
+				064B0D9023F451F000C8331F /* GeneratorOperation.swift */,
 			);
 			path = Sources;
 			sourceTree = "<group>";
@@ -668,12 +685,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				23A1B87921B81C710018D9D5 /* UnfairLock.swift in Sources */,
+				064B0D8423F4032100C8331F /* GroupOperation.swift in Sources */,
 				069731C823D71135006A51CB /* TrackableOperation.swift in Sources */,
 				23A1B87F21B8307F0018D9D5 /* Atomic.swift in Sources */,
 				06B3D10223D9E9F3005EBDD8 /* AdvancedOperation.swift in Sources */,
 				067C482623D60EE800F73096 /* KVOCrashWorkaround.swift in Sources */,
 				06C92B4B23D0A9FF000D12C8 /* AsynchronousBlockOperation.swift in Sources */,
 				0664BF3623D5B91100B491E6 /* FailableOperation.swift in Sources */,
+				064B0D9123F451F000C8331F /* GeneratorOperation.swift in Sources */,
 				23F24D22200799B800B25A03 /* Operation+Utils.swift in Sources */,
 				239BC52220EB7539009A36D9 /* InputConsumingOperation.swift in Sources */,
 				D21C5D8423D3674E005F8D51 /* AsynchronousOperation.swift in Sources */,
@@ -686,12 +705,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				23A1B87A21B81C710018D9D5 /* UnfairLock.swift in Sources */,
+				064B0D8523F4032100C8331F /* GroupOperation.swift in Sources */,
 				069731C923D71135006A51CB /* TrackableOperation.swift in Sources */,
 				23A1B88021B8307F0018D9D5 /* Atomic.swift in Sources */,
 				06B3D10323D9E9F3005EBDD8 /* AdvancedOperation.swift in Sources */,
 				067C482723D60EE800F73096 /* KVOCrashWorkaround.swift in Sources */,
 				06C92B4C23D0A9FF000D12C8 /* AsynchronousBlockOperation.swift in Sources */,
 				0664BF3723D5B91100B491E6 /* FailableOperation.swift in Sources */,
+				064B0D9223F451F000C8331F /* GeneratorOperation.swift in Sources */,
 				23F24D23200799B800B25A03 /* Operation+Utils.swift in Sources */,
 				239BC52320EB7539009A36D9 /* InputConsumingOperation.swift in Sources */,
 				D21C5D8523D3674E005F8D51 /* AsynchronousOperation.swift in Sources */,
@@ -704,12 +725,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				23A1B87B21B81C710018D9D5 /* UnfairLock.swift in Sources */,
+				064B0D8623F4032200C8331F /* GroupOperation.swift in Sources */,
 				069731CA23D71135006A51CB /* TrackableOperation.swift in Sources */,
 				23A1B88121B8307F0018D9D5 /* Atomic.swift in Sources */,
 				06B3D10423D9E9F3005EBDD8 /* AdvancedOperation.swift in Sources */,
 				067C482823D60EE800F73096 /* KVOCrashWorkaround.swift in Sources */,
 				06C92B4D23D0A9FF000D12C8 /* AsynchronousBlockOperation.swift in Sources */,
 				0664BF3823D5B91100B491E6 /* FailableOperation.swift in Sources */,
+				064B0D9323F451F000C8331F /* GeneratorOperation.swift in Sources */,
 				23F24D24200799B800B25A03 /* Operation+Utils.swift in Sources */,
 				239BC52420EB7539009A36D9 /* InputConsumingOperation.swift in Sources */,
 				D21C5D8623D3674E005F8D51 /* AsynchronousOperation.swift in Sources */,
@@ -722,12 +745,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				23A1B87C21B81C710018D9D5 /* UnfairLock.swift in Sources */,
+				064B0D8723F4032200C8331F /* GroupOperation.swift in Sources */,
 				069731CB23D71135006A51CB /* TrackableOperation.swift in Sources */,
 				23A1B88221B8307F0018D9D5 /* Atomic.swift in Sources */,
 				06B3D10523D9E9F3005EBDD8 /* AdvancedOperation.swift in Sources */,
 				067C482923D60EE800F73096 /* KVOCrashWorkaround.swift in Sources */,
 				06C92B4E23D0A9FF000D12C8 /* AsynchronousBlockOperation.swift in Sources */,
 				0664BF3923D5B91100B491E6 /* FailableOperation.swift in Sources */,
+				064B0D9423F451F000C8331F /* GeneratorOperation.swift in Sources */,
 				23F24D25200799B800B25A03 /* Operation+Utils.swift in Sources */,
 				239BC52520EB7539009A36D9 /* InputConsumingOperation.swift in Sources */,
 				D21C5D8723D3674E005F8D51 /* AsynchronousOperation.swift in Sources */,
@@ -739,6 +764,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				064B0D8F23F4168600C8331F /* GroupOperationTests.swift in Sources */,
 				D2093D38236606F400230A2A /* AsynchronousOperationTests.swift in Sources */,
 				D2093D3C2366175200230A2A /* OperationInjectionTests.swift in Sources */,
 				06C92B5623D0AB07000D12C8 /* AsynchronousBlockOperationTests.swift in Sources */,
@@ -752,6 +778,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				064B0D8D23F4168500C8331F /* GroupOperationTests.swift in Sources */,
 				D2093D36236606F400230A2A /* AsynchronousOperationTests.swift in Sources */,
 				D2093D3A2366175200230A2A /* OperationInjectionTests.swift in Sources */,
 				06C92B5423D0AB06000D12C8 /* AsynchronousBlockOperationTests.swift in Sources */,
@@ -765,6 +792,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				064B0D8E23F4168600C8331F /* GroupOperationTests.swift in Sources */,
 				D2093D37236606F400230A2A /* AsynchronousOperationTests.swift in Sources */,
 				D2093D3B2366175200230A2A /* OperationInjectionTests.swift in Sources */,
 				06C92B5523D0AB06000D12C8 /* AsynchronousBlockOperationTests.swift in Sources */,

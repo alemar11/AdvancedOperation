@@ -390,10 +390,6 @@ final class AsynchronousOperationTests: XCTestCase {
   }
 }
 
-extension AsyncBlockOperation: TrackableOperation { }
-extension AutoCancellingAsyncOperation: TrackableOperation { }
-extension BlockOperation: TrackableOperation { }
-
 final class GateOperation: Operation, TrackableOperation {
   private let block: (GateOperation) -> Void
 

@@ -1,4 +1,4 @@
-//
+// 
 // AdvancedOperation
 //
 // Copyright © 2016-2020 Tinrobots.
@@ -23,20 +23,7 @@
 
 import Foundation
 
-/// Operations conformin to this protocolo may generate an error while executing.
-public protocol FailableOperation: Operation {
-  /// The error  occurred during the operation evaluation.
-  var error: Error? { get }
-}
-
-public extension FailableOperation {
-  /// Returns `true` in the operation has finished with an error.
-  var isFailed: Bool { return isFinished && error != nil }
-}
-
-public extension Operation {
-  /// Returns `true` if at least one dependency conforming to `FailableOperation` has generated an error.
-  var hasSomeFailedDependencies: Bool {
-    return dependencies.first { ($0 as? FailableOperation)?.isFailed ?? false } != nil
-  }
+/// Operations conformin to this protocolor may generate other operations while executing.
+public protocol GeneratorOperation: Operation {
+  var onOperationGenerated: ((Operation) -> Void)? { get set }
 }
