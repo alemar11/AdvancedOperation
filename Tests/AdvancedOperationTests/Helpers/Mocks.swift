@@ -27,45 +27,67 @@ import XCTest
 import os.log
 @testable import AdvancedOperation
 
+//final internal class ResultOperation<O,E: Error>: Operation, OutputProducingOperation, FailableOperation {
+//  private(set) var output: Result<O,E>? {
+//    didSet {
+//      if let output = self.output {
+//        onOutputProduced?(output)
+//      }
+//    }
+//  }
+//
+//  var onOutputProduced: ((Output) -> Void)?
+//
+//  var error: Error? {
+//    guard let output = self.output else { return nil }
+//    switch output {
+//    case .failure(let error):
+//      return error
+//    default:
+//      return nil
+//    }
+//  }
+//}
+
 // MARK: - AsynchronousBlockOperation
 
 final internal class SleepyAsyncOperation: AsynchronousOperation {
-    private let interval1: UInt32
-    private let interval2: UInt32
-    private let interval3: UInt32
-
-    init(interval1: UInt32 = 1, interval2: UInt32 = 1, interval3: UInt32 = 1) {
-        self.interval1 = interval1
-        self.interval2 = interval2
-        self.interval3 = interval3
-        super.init()
+  private let interval1: UInt32
+  private let interval2: UInt32
+  private let interval3: UInt32
+  
+  init(interval1: UInt32 = 1, interval2: UInt32 = 1, interval3: UInt32 = 1) {
+    self.interval1 = interval1
+    self.interval2 = interval2
+    self.interval3 = interval3
+    super.init()
+  }
+  
+  override func main() {
+    DispatchQueue.global().async {
+      if self.isCancelled {
+        self.finish()
+        return
+      }
+      
+      sleep(self.interval1)
+      
+      if self.isCancelled {
+        self.finish()
+        return
+      }
+      
+      sleep(self.interval2)
+      
+      if self.isCancelled {
+        self.finish()
+        return
+      }
+      
+      sleep(self.interval3)
+      self.finish()
     }
-
-    override func main() {
-        DispatchQueue.global().async {
-            if self.isCancelled {
-                self.finish()
-                return
-            }
-
-            sleep(self.interval1)
-
-            if self.isCancelled {
-                self.finish()
-                return
-            }
-
-            sleep(self.interval2)
-
-            if self.isCancelled {
-                self.finish()
-                return
-            }
-
-            sleep(self.interval3)
-            self.finish()
-        }
-    }
+  }
 }
 
 // MARK: - AsynchronousInputOutputOperation
@@ -73,97 +95,117 @@ final internal class SleepyAsyncOperation: AsynchronousOperation {
 /// This operation fails if the input is greater than **1000**
 /// This operation cancels itself if the input is **100**
 internal class IntToStringAsyncOperation: AsynchronousOperation, InputConsumingOperation, OutputProducingOperation {
-    var input: Int?
-    private(set) var output: String?
-
-    override func main() {
-        DispatchQueue.global().async {
-            if let input = self.input {
-                self.output = "\(input)"
-            }
-            self.finish()
+  var onOutputProduced: ((String) -> Void)?
+  
+  var input: Int?
+  private(set) var output: String?
+  
+  override func main() {
+    DispatchQueue.global().async {
+      if let input = self.input {
+        self.output = "\(input)"
+        if let output = self.output {
+          self.onOutputProduced?(output)
         }
+      }
+      self.finish()
     }
+  }
 }
 
 internal class StringToIntAsyncOperation: AsynchronousOperation, InputConsumingOperation, OutputProducingOperation {
-    var input: String?
-    private(set) var output: Int?
-
-    override func main() {
-        DispatchQueue.global().async {
-            if let input = self.input {
-                self.output = Int(input)
-            }
-            self.finish()
+  var onOutputProduced: ((Int) -> Void)?
+  
+  var input: String?
+  private(set) var output: Int?
+  
+  override func main() {
+    DispatchQueue.global().async {
+      if let input = self.input {
+        self.output = Int(input)
+        if let output = self.output {
+          self.onOutputProduced?(output)
         }
+      }
+      self.finish()
     }
+  }
 }
 
 // MARK: - AsynchronousOperation
 
 final internal class NotExecutableOperation: AsynchronousOperation {
-    override func main() {
-        XCTFail("This operation shouldn't be executed.")
-        self.finish()
-    }
+  override func main() {
+    XCTFail("This operation shouldn't be executed.")
+    self.finish()
+  }
 }
 
 final internal class AutoCancellingAsyncOperation: AsynchronousOperation {
-    override func main() {
-        DispatchQueue.global().asyncAfter(deadline: .now() + 1.0) {
-            self.cancel()
-            self.finish()
-        }
+  override func main() {
+    DispatchQueue.global().asyncAfter(deadline: .now() + 1.0) {
+      self.cancel()
+      self.finish()
     }
+  }
 }
 
 final internal class RunUntilCancelledAsyncOperation: AsynchronousOperation {
-    let queue: DispatchQueue
-
-    init(queue: DispatchQueue = DispatchQueue.global()) {
-        self.queue = queue
+  let queue: DispatchQueue
+  
+  init(queue: DispatchQueue = DispatchQueue.global()) {
+    self.queue = queue
+  }
+  
+  override func main() {
+    queue.async {
+      while !self.isCancelled {
+        sleep(1)
+      }
+      self.finish()
     }
-
-    override func main() {
-        queue.async {
-            while !self.isCancelled {
-                sleep(1)
-            }
-            self.finish()
-        }
-    }
+  }
 }
 
 // MARK: - Operation
 
 internal final class IntToStringOperation: Operation & InputConsumingOperation & OutputProducingOperation {
-    var input: Int?
-    private(set) var output: String?
-
-    override func main() {
-        if let input = self.input {
-            output = "\(input)"
-        }
+  var onOutputProduced: ((String) -> Void)?
+  
+  var input: Int?
+  private(set) var output: String?
+  
+  override func main() {
+    if let input = self.input {
+      output = "\(input)"
+      if let output = self.output {
+        self.onOutputProduced?(output)
+      }
     }
+  }
 }
 
 internal final class StringToIntOperation: Operation & InputConsumingOperation & OutputProducingOperation  {
-    var input: String?
-    private(set) var output: Int?
-
-    override func main() {
-        if let input = self.input {
-            output = Int(input)
-        }
+  var onOutputProduced: ((Int) -> Void)?
+  
+  var input: String?
+  private(set) var output: Int?
+  
+  override func main() {
+    if let input = self.input {
+      output = Int(input)
+      if let output = self.output {
+        self.onOutputProduced?(output)
+      }
     }
+  }
 }
 
 // MARK: - AsynchronousOperation
 
 internal final class FailingOperation: Operation, FailableOperation, TrackableOperation {
   private(set) var error: Error?
-
+  
   override func main() {
     self.error = NSError(domain: identifier, code: 0, userInfo: nil)
   }
@@ -174,16 +216,16 @@ internal final class FailingOperation: Operation, FailableOperation, TrackableOp
 internal final class OperationsGenerator: Operation, GeneratorOperation {
   var onOperationGenerated: ((Operation) -> Void)?
   private let builder: () -> [Operation]
-
+  
   init(operationsBuilder: @escaping () -> [Operation]) {
     self.builder = operationsBuilder
     super.init()
   }
-
+  
   override func main() {
     builder().forEach { setupOperation($0) }
   }
-
+  
   private func setupOperation(_ operation: Operation) {
     // If the operation is a producing one, we bubble up the produced operation
     if let generator = operation as? GeneratorOperation {

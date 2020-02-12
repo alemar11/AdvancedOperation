@@ -28,6 +28,8 @@ public protocol OutputProducingOperation: Operation {
   associatedtype Output
   /// Produced output
   var output: Output? { get }
+  /// The block to execute when the operation produces its output.
+  var onOutputProduced: ((Output) -> Void)? { get set }
 }
 
 public extension OutputProducingOperation {
