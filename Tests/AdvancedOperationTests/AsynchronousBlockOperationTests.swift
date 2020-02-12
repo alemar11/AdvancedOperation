@@ -84,6 +84,7 @@ final class AsynchronousBlockOperationTests: XCTestCase {
   }
 
   func testBlockOperationWithAnAsyncQueueInside() {
+    // TODO: https://travis-ci.org/tinrobots/AdvancedOperation/jobs/649553573 failing?
     let expectation1 = expectation(description: "\(#function)\(#line)")
     let expectation2 = expectation(description: "\(#function)\(#line)")
     // The other AdvancedBlockOperation initializer will fail here because we need a more fine control

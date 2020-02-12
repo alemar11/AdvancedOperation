@@ -174,7 +174,7 @@ internal final class FailingOperation: Operation, FailableOperation, TrackableOp
 internal final class OperationsGenerator: Operation, GeneratorOperation {
   var onOperationGenerated: ((Operation) -> Void)?
   private let builder: () -> [Operation]
-  
+
   init(operationsBuilder: @escaping () -> [Operation]) {
     self.builder = operationsBuilder
     super.init()
@@ -183,7 +183,7 @@ internal final class OperationsGenerator: Operation, GeneratorOperation {
   override func main() {
     builder().forEach { setupOperation($0) }
   }
-  
+
   private func setupOperation(_ operation: Operation) {
     // If the operation is a producing one, we bubble up the produced operation
     if let generator = operation as? GeneratorOperation {

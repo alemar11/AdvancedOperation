@@ -1,4 +1,4 @@
-// 
+//
 // AdvancedOperation
 //
 // Copyright © 2016-2020 Tinrobots.
@@ -25,7 +25,7 @@ import Foundation
 
 open class GroupOperation: AsynchronousOperation {
   // MARK: - Public Properties
-  
+
   /// The maximum number of queued operations that can execute at the same time inside the `GroupOperation`.
   ///
   /// The value in this property affects only the operations that the current GroupOperation has executing at the same time.
@@ -46,11 +46,11 @@ open class GroupOperation: AsynchronousOperation {
     }
     set {
       operationQueue.qualityOfService = newValue
-      //startingOperation.qualityOfService = newValue
-      //finishingOperation.qualityOfService = newValue
+      // startingOperation.qualityOfService = newValue
+      // finishingOperation.qualityOfService = newValue
     }
   }
-  
+
   // MARK: - Private Properties
 
   private lazy var operationQueue: OperationQueue = {
@@ -58,42 +58,42 @@ open class GroupOperation: AsynchronousOperation {
     queue.isSuspended = true
     return queue
   }()
-  
+
   private lazy var startingOperation: BlockOperation = {
     let operation = BlockOperation()
     operation.name = "StartingOperation<\(self.operationName)>"
     return operation
   }()
-  
+
   private lazy var finishingOperation: BlockOperation = {
     let operation = BlockOperation()
     operation.name = "FinishingOperation<\(self.operationName)>"
     operation.completionBlock = { [weak self] in self?.finish() }
     return operation
   }()
-  
+
   public convenience init(operations: Operation...) {
     self.init(operations: operations)
   }
-  
+
   public init(operations: [Operation]) {
     super.init()
     operationQueue.addOperation(startingOperation)
-    
+
     operations.forEach { setupOperation($0) }
   }
-  
+
   public final func addOperations(_ operations: Operation...) {
     operations.forEach { addOperation($0) }
   }
-  
+
   public final func addOperation(_ operation: Operation) {
     precondition(!isFinished || !isCancelled, "Operations can only be added if the group operation has not yet finished/canceled.")
     precondition(!finishingOperation.isExecuting || !finishingOperation.isFinished || !finishingOperation.isCancelled, "Operations can't be added while the GroupOperation is finishing.")
-    
+
     setupOperation(operation)
   }
-      
+
   // MARK: - Public Methods
 
   ///  The default implementation of this method executes the scheduled operations.
@@ -104,18 +104,18 @@ open class GroupOperation: AsynchronousOperation {
       self.finish()
       return
     }
-    
+
     operationQueue.addOperation(finishingOperation)
     operationQueue.isSuspended = false
   }
-  
+
   open override func cancel() {
     operationQueue.cancelAllOperations()
     super.cancel()
   }
-  
+
   // MARK: - Private Methods
-  
+
   private func setupOperation(_ operation: Operation) {
     operation.addDependency(startingOperation)
     finishingOperation.addDependency(operation)
