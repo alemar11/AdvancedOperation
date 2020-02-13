@@ -34,6 +34,8 @@ jobs:
     env:
       DEVELOPER_DIR: /Applications/Xcode_11.3.1.app/Contents/Developer
     steps:
+      # set -o pipefail && env NSUnbufferedIO=YES xcodebuild clean test -project "AdvancedOperation.xcodeproj" -scheme "AdvancedOperation macOS" -destination "${{ matrix.destination }}" -testPlan "AdvancedOperation macOS" -parallel-testing-enabled YES -configuration Release | xcbeautify
+      # set -o pipefail && env NSUnbufferedIO=YES xcodebuild -project "AdvancedOperation.xcodeproj" -scheme "AdvancedOperation macOS" -destination "platform=macOS" clean test | xcpretty
       - uses: actions/checkout@v2
       - name: macOS
         run: |
@@ -55,7 +57,7 @@ jobs:
         run: |
           brew tap thii/xcbeautify https://github.com/thii/xcbeautify.git
           brew install xcbeautify 
-          NSUnbufferedIO=YES xcodebuild clean test -project "AdvancedOperation.xcodeproj" -scheme "AdvancedOperation iOS" -destination "${{ matrix.destination }}" -testPlan "AdvancedOperation iOS" -parallel-testing-enabled YES -configuration Release 2>&1 | xcbeautify
+          set -o pipefail && env NSUnbufferedIO=YES xcodebuild clean test -project "AdvancedOperation.xcodeproj" -scheme "AdvancedOperation iOS" -destination "${{ matrix.destination }}" -testPlan "AdvancedOperation iOS" -parallel-testing-enabled YES -configuration Release 2>&1 | xcbeautify
   tvOS:
     name: Test tvOS
     runs-on: macOS-latest
@@ -70,7 +72,7 @@ jobs:
         run: |
           brew tap thii/xcbeautify https://github.com/thii/xcbeautify.git
           brew install xcbeautify 
-          NSUnbufferedIO=YES xcodebuild clean test -project "AdvancedOperation.xcodeproj" -scheme "AdvancedOperation tvOS" -destination "${{ matrix.destination }}" -testPlan "AdvancedOperation tvOS" -parallel-testing-enabled NO -configuration Release 2>&1 | xcbeautify
+          set -o pipefail && env NSUnbufferedIO=YES xcodebuild clean test -project "AdvancedOperation.xcodeproj" -scheme "AdvancedOperation tvOS" -destination "${{ matrix.destination }}" -testPlan "AdvancedOperation tvOS" -parallel-testing-enabled NO -configuration Release 2>&1 | xcbeautify
   watchOS:
     name: Build watchOS
     runs-on: macOS-latest
