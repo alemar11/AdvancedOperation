@@ -24,3 +24,7 @@
 import Foundation
 
 internal let identifier = "org.tinrobots.AdvancedOperation"
+
+// Quality of Service Inference and Promotion
+//
+// https://developer.apple.com/library/archive/documentation/Performance/Conceptual/EnergyGuide-iOS/PrioritizeWorkWithQoS.html#//apple_ref/doc/uid/TP40015243-CH39

@@ -32,6 +32,7 @@ final class AsynchronousBlockOperationTests: XCTestCase {
   }
 
   func testCancel() {
+    // TODO: it can fail sometimes
     let operation = AsynchronousBlockOperation { complete in
       DispatchQueue(label: "\(identifier).\(#function)", attributes: .concurrent).asyncAfter(deadline: .now() + 2) {
         complete()
