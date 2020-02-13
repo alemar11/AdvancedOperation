@@ -48,10 +48,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: iOS - ${{ matrix.destination }}
-        run: |
-          brew tap thii/xcbeautify https://github.com/thii/xcbeautify.git
-          brew install xcbeautify 
-          set -o pipefail && env NSUnbufferedIO=YES xcodebuild clean test -project "AdvancedOperation.xcodeproj" -scheme "AdvancedOperation iOS" -destination "${{ matrix.destination }}" -testPlan "AdvancedOperation iOS" -parallel-testing-enabled YES -configuration Release | xcbeautify
+        run: set -o pipefail && env NSUnbufferedIO=YES xcodebuild clean test -project "AdvancedOperation.xcodeproj" -scheme "AdvancedOperation iOS" -destination "${{ matrix.destination }}" -testPlan "AdvancedOperation iOS" -parallel-testing-enabled NO -configuration Release | xcpretty -c
   tvOS:
     name: Test tvOS
     runs-on: macOS-latest
@@ -63,10 +60,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: tvOS - ${{ matrix.destination }}
-        run: |
-          brew tap thii/xcbeautify https://github.com/thii/xcbeautify.git
-          brew install xcbeautify 
-          set -o pipefail && env NSUnbufferedIO=YES xcodebuild clean test -project "AdvancedOperation.xcodeproj" -scheme "AdvancedOperation tvOS" -destination "${{ matrix.destination }}" -testPlan "AdvancedOperation tvOS" -parallel-testing-enabled NO -configuration Release | xcbeautify
+        run: set -o pipefail && env NSUnbufferedIO=YES xcodebuild clean test -project "AdvancedOperation.xcodeproj" -scheme "AdvancedOperation tvOS" -destination "${{ matrix.destination }}" -testPlan "AdvancedOperation tvOS" -parallel-testing-enabled NO -configuration Release | xcpretty -c
   watchOS:
     name: Build watchOS
     runs-on: macOS-latest
@@ -78,7 +72,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: watchOS - ${{ matrix.destination }}
-        run: set -o pipefail && env NSUnbufferedIO=YES xcodebuild -project "AdvancedOperation.xcodeproj" -scheme "AdvancedOperation watchOS" -destination "${{ matrix.destination }}" clean build | xcpretty
+        run: set -o pipefail && env NSUnbufferedIO=YES xcodebuild clean build -project "AdvancedOperation.xcodeproj" -scheme "AdvancedOperation watchOS" -destination "${{ matrix.destination }}" | xcpretty -c
   spm:
     name: Test SPM Integration
     runs-on: macOS-latest
