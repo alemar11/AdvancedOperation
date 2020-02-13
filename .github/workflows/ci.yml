@@ -51,7 +51,7 @@ jobs:
         run: |
           brew tap thii/xcbeautify https://github.com/thii/xcbeautify.git
           brew install xcbeautify 
-          NSUnbufferedIO=YES xcodebuild clean test -project "AdvancedOperation.xcodeproj" -scheme "AdvancedOperation iOS" -destination "${{ matrix.destination }}" -testPlan "AdvancedOperation iOS" -parallel-testing-enabled YES -configuration Release 2>&1 | xcpretty
+          NSUnbufferedIO=YES xcodebuild clean test -project "AdvancedOperation.xcodeproj" -scheme "AdvancedOperation iOS" -destination "${{ matrix.destination }}" -testPlan "AdvancedOperation iOS" -parallel-testing-enabled YES -configuration Release 2>&1 | xcbeautify
   tvOS:
     name: Test tvOS
     runs-on: macOS-latest
