@@ -89,9 +89,11 @@ script:
   - if [ "$TRAVIS_OS_NAME" == "osx" ]; then
       xcodebuild -version;
       xcodebuild -showsdks;
+      xcodebuild -scheme "$SCHEME" -showTestPlans
 
       if [ "$XCODE_RUN_TESTS" == "YES" ]; then
         #xcodebuild -scheme "$SCHEME" -sdk "$SDK" -destination "$DESTINATION" -configuration Release ONLY_ACTIVE_ARCH=YES ENABLE_TESTABILITY=YES build-for-testing test-without-building | xcpretty;
+        # currently the only test plan has the same name of the of the schema
         NSUnbufferedIO=YES xcodebuild test -scheme "$SCHEME" -sdk "$SDK" -destination "$DESTINATION" -testPlan "$SCHEME" -parallel-testing-enabled YES -configuration Release ONLY_ACTIVE_ARCH=NO ENABLE_TESTABILITY=YES test 2>&1 | xcbeautify
       else
         xcodebuild -scheme "$SCHEME" -sdk "$SDK" -destination "$DESTINATION" -configuration Release ONLY_ACTIVE_ARCH=NO build | xcpretty;
