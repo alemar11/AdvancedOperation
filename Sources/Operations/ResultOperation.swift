@@ -23,8 +23,7 @@
 
 import Foundation
 
-// TODO: add description
-
+/// An `AsynchronousOperation` subclass which produces a `Result` type output.
 open class ResultOperation<Success, Failure>: AsynchronousOperation, OutputProducingOperation, FailableOperation where Failure: Error {
   public var onOutputProduced: ((Result<Success, Failure>) -> Void)?
 
@@ -52,6 +51,7 @@ open class ResultOperation<Success, Failure>: AsynchronousOperation, OutputProdu
     }
   }
 
+  /// Call this method to set the result and finish the operation.
   public final func finish(result: Result<Success, Failure>) {
     self.output = result
     finish()
