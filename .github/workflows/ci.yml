@@ -34,14 +34,12 @@ jobs:
     env:
       DEVELOPER_DIR: /Applications/Xcode_11.3.1.app/Contents/Developer
     steps:
-      # set -o pipefail && env NSUnbufferedIO=YES xcodebuild clean test -project "AdvancedOperation.xcodeproj" -scheme "AdvancedOperation macOS" -destination "${{ matrix.destination }}" -testPlan "AdvancedOperation macOS" -parallel-testing-enabled YES -configuration Release | xcbeautify
-      # set -o pipefail && env NSUnbufferedIO=YES xcodebuild -project "AdvancedOperation.xcodeproj" -scheme "AdvancedOperation macOS" -destination "platform=macOS" clean test | xcpretty
       - uses: actions/checkout@v2
       - name: macOS
         run: |
           brew tap thii/xcbeautify https://github.com/thii/xcbeautify.git
           brew install xcbeautify 
-          set -o pipefail && env NSUnbufferedIO=YES xcodebuild clean test -project "AdvancedOperation.xcodeproj" -scheme "AdvancedOperation macOS" -destination "platform=macOS" -testPlan "AdvancedOperation macOS" -parallel-testing-enabled YES -configuration Release ONLY_ACTIVE_ARCH=NO ENABLE_TESTABILITY=YES | xcbeautify
+          set -o pipefail && env NSUnbufferedIO=YES xcodebuild clean test -project "AdvancedOperation.xcodeproj" -scheme "AdvancedOperation macOS" -destination "platform=macOS" -testPlan "AdvancedOperation macOS" -parallel-testing-enabled YES -configuration Release ENABLE_TESTABILITY=YES | xcbeautify
   iOS:
     name: Test iOS
     runs-on: macOS-latest
@@ -53,11 +51,10 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: iOS - ${{ matrix.destination }}
-        #run: set -o pipefail && env NSUnbufferedIO=YES xcodebuild -project "AdvancedOperation.xcodeproj" -scheme "AdvancedOperation iOS" -destination "${{ matrix.destination }}" clean test | xcpretty
         run: |
           brew tap thii/xcbeautify https://github.com/thii/xcbeautify.git
           brew install xcbeautify 
-          set -o pipefail && env NSUnbufferedIO=YES xcodebuild clean test -project "AdvancedOperation.xcodeproj" -scheme "AdvancedOperation iOS" -destination "${{ matrix.destination }}" -testPlan "AdvancedOperation iOS" -parallel-testing-enabled YES -configuration Release 2>&1 | xcbeautify
+          set -o pipefail && env NSUnbufferedIO=YES xcodebuild clean test -project "AdvancedOperation.xcodeproj" -scheme "AdvancedOperation iOS" -destination "${{ matrix.destination }}" -testPlan "AdvancedOperation iOS" -parallel-testing-enabled YES -configuration Release | xcbeautify
   tvOS:
     name: Test tvOS
     runs-on: macOS-latest
@@ -72,7 +69,7 @@ jobs:
         run: |
           brew tap thii/xcbeautify https://github.com/thii/xcbeautify.git
           brew install xcbeautify 
-          set -o pipefail && env NSUnbufferedIO=YES xcodebuild clean test -project "AdvancedOperation.xcodeproj" -scheme "AdvancedOperation tvOS" -destination "${{ matrix.destination }}" -testPlan "AdvancedOperation tvOS" -parallel-testing-enabled NO -configuration Release 2>&1 | xcbeautify
+          set -o pipefail && env NSUnbufferedIO=YES xcodebuild clean test -project "AdvancedOperation.xcodeproj" -scheme "AdvancedOperation tvOS" -destination "${{ matrix.destination }}" -testPlan "AdvancedOperation tvOS" -parallel-testing-enabled NO -configuration Release | xcbeautify
   watchOS:
     name: Build watchOS
     runs-on: macOS-latest
