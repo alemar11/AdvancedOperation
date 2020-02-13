@@ -27,6 +27,7 @@ jobs:
           xcodebuild -showsdks
           xcrun simctl list
           brew -v
+          brew list
   macOS:
     name: Test macOS
     runs-on: macOS-latest
