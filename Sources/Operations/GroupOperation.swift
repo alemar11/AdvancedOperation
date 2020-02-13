@@ -23,8 +23,8 @@
 
 import Foundation
 
-// TODO: add GroupOperation description
-
+/// An `AsynchronousOperation` subclass which enables a finite grouping of other operations.
+/// Use a `GroupOperation` to associate related operations together, thereby creating higher levels of abstractions.
 open class GroupOperation: AsynchronousOperation {
   // MARK: - Public Properties
 
