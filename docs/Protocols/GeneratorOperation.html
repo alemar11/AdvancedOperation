@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>TrackableOperation Protocol Reference</title>
+    <title>GeneratorOperation Protocol Reference</title>
     <link rel="stylesheet" type="text/css" href="../css/jazzy.css" />
     <link rel="stylesheet" type="text/css" href="../css/highlight.css" />
     <meta charset='utf-8'>
@@ -10,8 +10,8 @@
     
   </head>
   <body>
-    <a name="//apple_ref/swift/Protocol/TrackableOperation" class="dashAnchor"></a>
-    <a title="TrackableOperation Protocol Reference"></a>
+    <a name="//apple_ref/swift/Protocol/GeneratorOperation" class="dashAnchor"></a>
+    <a title="GeneratorOperation Protocol Reference"></a>
     <header>
       <div class="content-wrapper">
         <p><a href="../index.html">AdvancedOperation Docs</a> (70% documented)</p>
@@ -21,7 +21,7 @@
       <p id="breadcrumbs">
         <a href="../index.html">AdvancedOperation Reference</a>
         <img id="carat" src="../img/carat.png" />
-        TrackableOperation Protocol Reference
+        GeneratorOperation Protocol Reference
       </p>
     </div>
     <div class="content-wrapper">
@@ -97,19 +97,14 @@
       <article class="main-content">
         <section>
           <section class="section">
-            <h1>TrackableOperation</h1>
+            <h1>GeneratorOperation</h1>
               <div class="declaration">
                 <div class="language">
-                  <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">protocol</span> <span class="kt">TrackableOperation</span> <span class="p">:</span> <span class="kt">Operation</span></code></pre>
+                  <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">protocol</span> <span class="kt">GeneratorOperation</span> <span class="p">:</span> <span class="kt">Operation</span></code></pre>
 
                 </div>
               </div>
-            <p>Operations conforming to this protcol can log their most relevant status changes.</p>
-<div class="aside aside-warning">
-    <p class="aside-title">Warning</p>
-    If using Swift 5.0 or lower run <code><a href="../Classes/KVOCrashWorkaround.html#/installFix()">KVOCrashWorkaround.installFix()</a></code> to solve some  multithreading bugs in Swift&rsquo;s KVO.
-
-</div>
+            <p>Operations conformin to this protocolor may generate other operations while executing.</p>
 
           </section>
           <section class="section task-group-section">
@@ -118,27 +113,24 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:17AdvancedOperation09TrackableB0PAAE14installTracker3log8signpost3poiySo06OS_os_F0C_A2ItF"></a>
-                    <a name="//apple_ref/swift/Method/installTracker(log:signpost:poi:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:17AdvancedOperation09TrackableB0PAAE14installTracker3log8signpost3poiySo06OS_os_F0C_A2ItF">installTracker(log:signpost:poi:)</a>
+                    <a name="/s:17AdvancedOperation09GeneratorB0P02onB9GeneratedySo11NSOperationCcSgvp"></a>
+                    <a name="//apple_ref/swift/Property/onOperationGenerated" class="dashAnchor"></a>
+                    <a class="token" href="#/s:17AdvancedOperation09GeneratorB0P02onB9GeneratedySo11NSOperationCcSgvp">onOperationGenerated</a>
                     </code>
-                      <span class="declaration-note">
-                        Extension method
-                      </span>
                   </div>
                   <div class="height-container">
                     <div class="pointer-container"></div>
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>The block to execute whenever a <code>GeneratorOperation</code> generates a new operation.</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">installTracker</span><span class="p">(</span><span class="nv">log</span><span class="p">:</span> <span class="kt">OSLog</span> <span class="o">=</span> <span class="o">.</span><span class="k">default</span><span class="p">,</span> <span class="nv">signpost</span><span class="p">:</span> <span class="kt">OSLog</span> <span class="o">=</span> <span class="o">.</span><span class="n">disabled</span><span class="p">,</span> <span class="nv">poi</span><span class="p">:</span> <span class="kt">OSLog</span> <span class="o">=</span> <span class="o">.</span><span class="n">disabled</span><span class="p">)</span></code></pre>
+                          <pre class="highlight swift"><code><span class="k">var</span> <span class="nv">onOperationGenerated</span><span class="p">:</span> <span class="p">((</span><span class="kt">Operation</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)?</span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
 
                         </div>
                       </div>
