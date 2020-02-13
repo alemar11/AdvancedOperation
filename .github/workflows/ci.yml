@@ -2,8 +2,7 @@ name: "AdvancedOperation CI"
 
 on:
   schedule:
-    #- cron:  '0 * * * *' # every 1 hour
-    - cron:  '* 23 * * *' # At the end of every day
+    - cron:  '* 23  */2 * *' # At the end of every 2 days
   push:
     branches:
       - master
