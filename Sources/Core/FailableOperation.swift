@@ -23,46 +23,40 @@
 
 import Foundation
 
-// TODO: description - https://stackoverflow.com/questions/40387960/in-swift-how-to-cast-to-protocol-with-associated-type
+// MARK: - Shadow protocol
 
-/// Shadow protocol
-///
-///  Swift doesn't currently support the use of protocols with associated types as actual types.
-public protocol TypeErasedFailableOperation: Operation {
-  /// Thetype erased error  occurred during the operation evaluation.
-  var typeErasedError: Error? { get }
+/// Since Swift doesn't currently support the use of protocols with associated types as actual types,
+/// a "shadow protocol" is needed to support computed properites such as `isFailed` for operations conforming to `FailableOperation`.
+public protocol _TypeErasedErrorFailable {
+  /// The (type erased) error occurred during an execution failure.
+  var _typeErasedError: Error? { get }
 }
 
-public extension TypeErasedFailableOperation {
+public extension _TypeErasedErrorFailable where Self: Operation {
   /// Returns `true` in the operation has finished with an error.
-  var isFailed: Bool { return isFinished && typeErasedError != nil }
+  var isFailed: Bool { return isFinished && _typeErasedError != nil }
 }
+
+internal typealias _FailableOperation = _TypeErasedErrorFailable & Operation
+
+// MARK: - FailableOperation
 
 /// Operations conforming to this protocol may generate an error while executing.
-public protocol FailableOperation: TypeErasedFailableOperation {
+public protocol FailableOperation: Operation, _TypeErasedErrorFailable {
   associatedtype ErrorType: Error
   /// The error  occurred during the operation evaluation.
   var error: ErrorType? { get }
 }
 
 public extension FailableOperation {
-  var typeErasedError: Error? { return error }
+  var _typeErasedError: Error? { return error }
 }
 
 public extension Operation {
   /// Returns `true` if at least one dependency conforming to `FailableOperation` has generated an error.
   var hasSomeFailedDependencies: Bool {
-    return dependencies.first { ($0 as? TypeErasedFailableOperation)?.isFailed ?? false } != nil
+    return dependencies.first { ($0 as? _FailableOperation)?.isFailed ?? false } != nil
   }
 }
 
-//internal protocol MutableFailableOperation: FailableOperation {
-//    var error: ErrorType? { get set }
-//}
-//
-//internal extension MutableFailableOperation where Self: AsynchronousOperation {
-//  func finish(error: ErrorType) {
-//    self.error = error
-//    finish()
-//  }
-//}
+
