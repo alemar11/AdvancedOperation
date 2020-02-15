@@ -23,6 +23,8 @@
 
 import Foundation
 
+// swiftlint:disable identifier_name
+
 // MARK: - Shadow protocol
 
 /// Since Swift doesn't currently support the use of protocols with associated types as actual types,
@@ -37,6 +39,7 @@ public extension _TypeErasedErrorFailable where Self: Operation {
   var isFailed: Bool { return isFinished && _typeErasedError != nil }
 }
 
+// swiftlint:disable:next type_name
 internal typealias _FailableOperation = _TypeErasedErrorFailable & Operation
 
 // MARK: - FailableOperation
@@ -59,4 +62,4 @@ public extension Operation {
   }
 }
 
-
+// swiftlint:enable identifier_name

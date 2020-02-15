@@ -1,4 +1,4 @@
-// 
+//
 // AdvancedOperation
 //
 // Copyright © 2016-2020 Tinrobots.
@@ -33,20 +33,10 @@ class ResultOperationTests: XCTestCase {
 
   func testSuccess() {
     let operation = IntToStringResultOperation()
-    let resultProducedExpectation = self.expectation(description: "Result produced")
     operation.input = 10
-    operation.onOutputProduced = { output in
-      switch output {
-      case .success(let output):
-        XCTAssertEqual(output, "10")
-      default:
-        XCTFail("The operation should have produced an output.")
-      }
-      resultProducedExpectation.fulfill()
-    }
     let finishedExpectation = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: operation, expectedValue: true)
     operation.start()
-    wait(for: [resultProducedExpectation, finishedExpectation], timeout: 5, enforceOrder: true)
+    wait(for: [finishedExpectation], timeout: 5, enforceOrder: true)
     XCTAssertNotNil(operation.output)
     XCTAssertNil(operation.error)
   }
@@ -55,7 +45,7 @@ class ResultOperationTests: XCTestCase {
     let operation = IntToStringResultOperation()
     let resultProducedExpectation = self.expectation(description: "Result produced")
     operation.input = -10
-    operation.onOutputProduced = { output in
+    operation.onResultProduced = { output in
       switch output {
       case .failure(let error):
         XCTAssertEqual(error, .invalidInput)
@@ -74,12 +64,12 @@ class ResultOperationTests: XCTestCase {
     XCTAssertTrue(operation.isFailed)
   }
 
-  func testCancelBeforeStart() {
+  func testCancelledExecutionBeforeStart() {
     let operation = IntToStringResultOperation()
     let resultProducedExpectation = self.expectation(description: "Result produced")
     resultProducedExpectation.isInverted = true
     operation.input = -10
-    operation.onOutputProduced = { output in
+    operation.onResultProduced = { output in
       resultProducedExpectation.fulfill()
     }
     let finishedExpectation = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: operation, expectedValue: true)

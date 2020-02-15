@@ -33,35 +33,35 @@ final internal class SleepyAsyncOperation: AsynchronousOperation {
   private let interval1: UInt32
   private let interval2: UInt32
   private let interval3: UInt32
-  
+
   init(interval1: UInt32 = 1, interval2: UInt32 = 1, interval3: UInt32 = 1) {
     self.interval1 = interval1
     self.interval2 = interval2
     self.interval3 = interval3
     super.init()
   }
-  
+
   override func main() {
     DispatchQueue.global().async {
       if self.isCancelled {
         self.finish()
         return
       }
-      
+
       sleep(self.interval1)
-      
+
       if self.isCancelled {
         self.finish()
         return
       }
-      
+
       sleep(self.interval2)
-      
+
       if self.isCancelled {
         self.finish()
         return
       }
-      
+
       sleep(self.interval3)
       self.finish()
     }
@@ -75,7 +75,7 @@ final internal class SleepyAsyncOperation: AsynchronousOperation {
 internal class IntToStringAsyncOperation: AsynchronousOperation, InputConsumingOperation, OutputProducingOperation {
   var input: Int?
   private(set) var output: String?
-  
+
   override func main() {
     DispatchQueue.global().async {
       if let input = self.input {
@@ -89,7 +89,7 @@ internal class IntToStringAsyncOperation: AsynchronousOperation, InputConsumingO
 internal class StringToIntAsyncOperation: AsynchronousOperation, InputConsumingOperation, OutputProducingOperation {
   var input: String?
   private(set) var output: Int?
-  
+
   override func main() {
     DispatchQueue.global().async {
       if let input = self.input {
@@ -120,11 +120,11 @@ final internal class AutoCancellingAsyncOperation: AsynchronousOperation {
 
 final internal class RunUntilCancelledAsyncOperation: AsynchronousOperation {
   let queue: DispatchQueue
-  
+
   init(queue: DispatchQueue = DispatchQueue.global()) {
     self.queue = queue
   }
-  
+
   override func main() {
     queue.async {
       while !self.isCancelled {
@@ -140,7 +140,7 @@ final internal class RunUntilCancelledAsyncOperation: AsynchronousOperation {
 internal final class IntToStringOperation: Operation & InputConsumingOperation & OutputProducingOperation {
   var input: Int?
   private(set) var output: String?
-  
+
   override func main() {
     if let input = self.input {
       output = "\(input)"
@@ -151,7 +151,7 @@ internal final class IntToStringOperation: Operation & InputConsumingOperation &
 internal final class StringToIntOperation: Operation & InputConsumingOperation & OutputProducingOperation  {
   var input: String?
   private(set) var output: Int?
-  
+
   override func main() {
     if let input = self.input {
       output = Int(input)
@@ -168,7 +168,7 @@ internal final class FailingOperation: Operation, FailableOperation, TrackableOp
   }
 
   private(set) var error: FailureError?
-  
+
   override func main() {
     self.error = .errorOne
   }
@@ -179,16 +179,16 @@ internal final class FailingOperation: Operation, FailableOperation, TrackableOp
 internal final class OperationsGenerator: Operation, GeneratorOperation {
   var onOperationGenerated: ((Operation) -> Void)?
   private let builder: () -> [Operation]
-  
+
   init(operationsBuilder: @escaping () -> [Operation]) {
     self.builder = operationsBuilder
     super.init()
   }
-  
+
   override func main() {
     builder().forEach { setupOperation($0) }
   }
-  
+
   private func setupOperation(_ operation: Operation) {
     // If the operation is a producing one, we bubble up the produced operation
     if let generator = operation as? GeneratorOperation {

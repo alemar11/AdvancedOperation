@@ -46,7 +46,7 @@ final class OperationInjectionTests: XCTestCase {
     wait(for: [expectation2], timeout: 3)
     XCTAssertEqual(operation2.output, 10)
   }
-  
+
   func testSuccessfulInjectionBetweenOperations() {
     let queue = OperationQueue()
     let operation1 = IntToStringOperation()

@@ -31,7 +31,7 @@ final class AsynchronousBlockOperationTests: XCTestCase {
     #endif
   }
 
-  func testCancel() {
+  func testCancelledExecution() {
     // TODO: it can fail sometimes
     let operation = AsynchronousBlockOperation { complete in
       DispatchQueue(label: "\(identifier).\(#function)", attributes: .concurrent).asyncAfter(deadline: .now() + 2) {
@@ -48,7 +48,7 @@ final class AsynchronousBlockOperationTests: XCTestCase {
     XCTAssertEqual(operation.name, "AsynchronousBlockOperation")
   }
 
-  func testCancelBeforeStarting() {
+  func testCancelledExecutionBeforeStarting() {
     let operation = AsynchronousBlockOperation { complete in
       DispatchQueue(label: "\(identifier).\(#function)", attributes: .concurrent).asyncAfter(deadline: .now() + 2) {
         complete()
