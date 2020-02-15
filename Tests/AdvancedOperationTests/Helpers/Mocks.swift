@@ -73,8 +73,6 @@ final internal class SleepyAsyncOperation: AsynchronousOperation {
 /// This operation fails if the input is greater than **1000**
 /// This operation cancels itself if the input is **100**
 internal class IntToStringAsyncOperation: AsynchronousOperation, InputConsumingOperation, OutputProducingOperation {
-  var onOutputProduced: ((String) -> Void)?
-  
   var input: Int?
   private(set) var output: String?
   
@@ -82,9 +80,6 @@ internal class IntToStringAsyncOperation: AsynchronousOperation, InputConsumingO
     DispatchQueue.global().async {
       if let input = self.input {
         self.output = "\(input)"
-        if let output = self.output {
-          self.onOutputProduced?(output)
-        }
       }
       self.finish()
     }
@@ -92,16 +87,8 @@ internal class IntToStringAsyncOperation: AsynchronousOperation, InputConsumingO
 }
 
 internal class StringToIntAsyncOperation: AsynchronousOperation, InputConsumingOperation, OutputProducingOperation {
-  var onOutputProduced: ((Int) -> Void)?
-  
   var input: String?
-  private(set) var output: Int? {
-    didSet {
-      if let output = self.output {
-        onOutputProduced?(output)
-      }
-    }
-  }
+  private(set) var output: Int?
   
   override func main() {
     DispatchQueue.global().async {
@@ -151,16 +138,8 @@ final internal class RunUntilCancelledAsyncOperation: AsynchronousOperation {
 // MARK: - Operation
 
 internal final class IntToStringOperation: Operation & InputConsumingOperation & OutputProducingOperation {
-  var onOutputProduced: ((String) -> Void)?
-  
   var input: Int?
-  private(set) var output: String? {
-    didSet {
-      if let output = self.output {
-        onOutputProduced?(output)
-      }
-    }
-  }
+  private(set) var output: String?
   
   override func main() {
     if let input = self.input {
@@ -170,16 +149,8 @@ internal final class IntToStringOperation: Operation & InputConsumingOperation &
 }
 
 internal final class StringToIntOperation: Operation & InputConsumingOperation & OutputProducingOperation  {
-  var onOutputProduced: ((Int) -> Void)?
-  
   var input: String?
-  private(set) var output: Int? {
-    didSet {
-      if let output = self.output {
-        onOutputProduced?(output)
-      }
-    }
-  }
+  private(set) var output: Int?
   
   override func main() {
     if let input = self.input {

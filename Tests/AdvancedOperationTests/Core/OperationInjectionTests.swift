@@ -32,16 +32,11 @@ final class OperationInjectionTests: XCTestCase {
   }
 
   func testInputAndOutputValues() {
-    let expectation0 = expectation(description: "\(#function)\(#line)")
     let operation1 = IntToStringAsyncOperation()
-    operation1.onOutputProduced = { output in
-      XCTAssertEqual(output, "10")
-      expectation0.fulfill()
-    }
     let expectation1 = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: operation1, expectedValue: true)
     operation1.input = 10
     operation1.start()
-    wait(for: [expectation0, expectation1], timeout: 3)
+    wait(for: [expectation1], timeout: 3)
     XCTAssertEqual(operation1.output, "10")
 
     let operation2 = StringToIntAsyncOperation()
@@ -141,16 +136,13 @@ final class OperationInjectionTests: XCTestCase {
   }
 
   func testInjectionTransformingOutputOfAnAlreadyCancelledOutputProducingOperation() {
-    let expectation0 = expectation(description: "\(#function)\(#line)")
-    expectation0.isInverted = true
     let operation1 = IntToStringAsyncOperation() // no input -> fails
-    operation1.onOutputProduced = { _ in expectation0.fulfill() }
     let operation2 = StringToIntAsyncOperation()
     let expectation1 = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: operation2, expectedValue: true)
     let injection = operation1.injectOutput(into: operation2) { $0 }
     let queue = OperationQueue()
     operation1.cancel()
     queue.addOperations([operation1, operation2, injection], waitUntilFinished: false)
-    wait(for: [expectation0, expectation1], timeout: 3)
+    wait(for: [expectation1], timeout: 3)
   }
 }
