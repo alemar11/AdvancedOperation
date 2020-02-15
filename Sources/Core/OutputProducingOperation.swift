@@ -29,7 +29,7 @@ public protocol OutputProducingOperation: Operation {
   /// Produced output
   var output: Output? { get }
   /// The block to execute when the operation produces its output.
-  var onOutputProduced: ((Output) -> Void)? { get set }
+  var onOutputProduced: ((Output) -> Void)? { get set } // TODO: remove this var
 }
 
 public extension OutputProducingOperation {
