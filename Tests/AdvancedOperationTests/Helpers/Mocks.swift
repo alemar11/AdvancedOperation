@@ -74,7 +74,15 @@ final internal class SleepyAsyncOperation: AsynchronousOperation {
 /// This operation cancels itself if the input is **100**
 internal class IntToStringAsyncOperation: AsynchronousOperation, InputConsumingOperation, OutputProducingOperation {
   var input: Int?
-  private(set) var output: String?
+  private(set) var output: String? {
+     get {
+       return _output.value
+     }
+     set {
+       _output.mutate { $0 = newValue }
+     }
+   }
+   private var _output = Atomic<String?>(nil)
 
   override func main() {
     DispatchQueue.global().async {
@@ -88,7 +96,15 @@ internal class IntToStringAsyncOperation: AsynchronousOperation, InputConsumingO
 
 internal class StringToIntAsyncOperation: AsynchronousOperation, InputConsumingOperation, OutputProducingOperation {
   var input: String?
-  private(set) var output: Int?
+  private(set) var output: Int? {
+     get {
+       return _output.value
+     }
+     set {
+       _output.mutate { $0 = newValue }
+     }
+   }
+   private var _output = Atomic<Int?>(nil)
 
   override func main() {
     DispatchQueue.global().async {
@@ -139,7 +155,15 @@ final internal class RunUntilCancelledAsyncOperation: AsynchronousOperation {
 
 internal final class IntToStringOperation: Operation & InputConsumingOperation & OutputProducingOperation {
   var input: Int?
-  private(set) var output: String?
+  private(set) var output: String? {
+    get {
+      return _output.value
+    }
+    set {
+      _output.mutate { $0 = newValue }
+    }
+  }
+  private var _output = Atomic<String?>(nil)
 
   override func main() {
     if let input = self.input {
@@ -150,7 +174,15 @@ internal final class IntToStringOperation: Operation & InputConsumingOperation &
 
 internal final class StringToIntOperation: Operation & InputConsumingOperation & OutputProducingOperation  {
   var input: String?
-  private(set) var output: Int?
+  private(set) var output: Int? {
+    get {
+      return _output.value
+    }
+    set {
+      _output.mutate { $0 = newValue }
+    }
+  }
+  private var _output = Atomic<Int?>(nil)
 
   override func main() {
     if let input = self.input {
