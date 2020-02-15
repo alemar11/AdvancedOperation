@@ -152,35 +152,6 @@ final class GroupOperationTests: XCTestCase {
     wait(for: [expectation1], timeout: 5)
   }
 
-  //  func testLazyStart() {
-  //    let groupOperation = LazyGroupOperation { () -> [Operation] in
-  //      let operation1 = SleepyAsyncOperation(interval1: 1, interval2: 0, interval3: 0)
-  //      let operation2 = SleepyAsyncOperation(interval1: 1, interval2: 0, interval3: 0)
-  //      let operation3 = SleepyAsyncOperation(interval1: 1, interval2: 0, interval3: 0)
-  //
-  //      operation1.installTracker()
-  //      operation2.installTracker()
-  //      operation3.installTracker()
-  //      operation3.addDependency(operation2)
-  //
-  //      operation1.name = "op1"
-  //      operation2.name = "op2"
-  //      operation3.name = "op3"
-  //
-  //      return [operation1, operation2, operation3]
-  //    }
-  //
-  //    let operation4 = BlockOperation { }
-  //    operation4.installTracker()
-  //    operation4.name = "op4"
-  //
-  //    groupOperation.installTracker()
-  //    groupOperation.addOperation(operation: operation4)
-  //    let expectation1 = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: groupOperation, expectedValue: true)
-  //    groupOperation.start()
-  //    wait(for: [expectation1], timeout: 5)
-  //  }
-
   func testExecutionWhileGeneratingAdditionalOperations() {
     let groupOperation = LazyGroupOperation { () -> [Operation] in
       let operation1 = SleepyAsyncOperation(interval1: 1, interval2: 0, interval3: 0)
