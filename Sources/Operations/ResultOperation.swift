@@ -42,6 +42,8 @@ open class ResultOperation<Success, Failure>: AsynchronousOperation, OutputProdu
     }
   }
 
+  // TODO: avoid data races on output var
+
   public final var error: Failure? {
     guard let result = self.output else { return nil }
 

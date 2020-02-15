@@ -97,6 +97,7 @@ final class OperationInjectionTests: XCTestCase {
     XCTAssertEqual(operation1.output, "10")
     XCTAssertEqual(operation2.input, 10)
     XCTAssertEqual(operation2.output, "10")
+    // TODO: data race when accessing output on macOS
   }
 
   func testFailingInjectionBetweenOperationsTransformingOutput() {

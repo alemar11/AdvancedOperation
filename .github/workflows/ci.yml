@@ -49,15 +49,10 @@ jobs:
       - name: iOS - ${{ matrix.destination }}
         run: |
           set -o pipefail && env NSUnbufferedIO=YES xcodebuild clean test -project "AdvancedOperation.xcodeproj" -scheme "AdvancedOperation iOS" -destination "${{ matrix.destination }}" -testPlan "AdvancedOperation iOS" -parallel-testing-enabled NO -configuration Release -enableCodeCoverage YES | xcpretty -c
-#          bash <(curl -s https://codecov.io/bash)
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v1
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
-#          file: ./coverage.xml
-#          flags: unittests
-#          name: codecov-umbrella
-#          yml: ./codecov.yml
           fail_ci_if_error: true
   tvOS:
     name: Test tvOS
