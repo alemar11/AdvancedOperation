@@ -316,7 +316,7 @@
 		234130921F960612002BE7FC /* Sources */ = {
 			isa = PBXGroup;
 			children = (
-				D20DF7E723F86468007C0522 /* Utils */,
+				D20DF7E823F88096007C0522 /* Utils */,
 				D25DB58423F4A3CB002B91C5 /* Core */,
 				D25DB58323F4A3B9002B91C5 /* Operations */,
 			);
@@ -368,12 +368,12 @@
 			path = .github/workflows;
 			sourceTree = SOURCE_ROOT;
 		};
-		D20DF7E723F86468007C0522 /* Utils */ = {
+		D20DF7E823F88096007C0522 /* Utils */ = {
 			isa = PBXGroup;
 			children = (
+				23A1B87821B81C710018D9D5 /* UnfairLock.swift */,
 				23A1B87E21B8307F0018D9D5 /* Atomic.swift */,
 				067C482523D60EE800F73096 /* KVOCrashWorkaround.swift */,
-				23A1B87821B81C710018D9D5 /* UnfairLock.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
