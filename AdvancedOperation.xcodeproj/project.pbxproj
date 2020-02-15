@@ -316,6 +316,7 @@
 		234130921F960612002BE7FC /* Sources */ = {
 			isa = PBXGroup;
 			children = (
+				D20DF7E723F86468007C0522 /* Utils */,
 				D25DB58423F4A3CB002B91C5 /* Core */,
 				D25DB58323F4A3B9002B91C5 /* Operations */,
 			);
@@ -367,6 +368,16 @@
 			path = .github/workflows;
 			sourceTree = SOURCE_ROOT;
 		};
+		D20DF7E723F86468007C0522 /* Utils */ = {
+			isa = PBXGroup;
+			children = (
+				23A1B87E21B8307F0018D9D5 /* Atomic.swift */,
+				067C482523D60EE800F73096 /* KVOCrashWorkaround.swift */,
+				23A1B87821B81C710018D9D5 /* UnfairLock.swift */,
+			);
+			path = Utils;
+			sourceTree = "<group>";
+		};
 		D25DB58323F4A3B9002B91C5 /* Operations */ = {
 			isa = PBXGroup;
 			children = (
@@ -382,14 +393,11 @@
 			children = (
 				06B3D10123D9E9F3005EBDD8 /* AdvancedOperation.swift */,
 				D21C5D8323D3674E005F8D51 /* AsynchronousOperation.swift */,
-				23A1B87E21B8307F0018D9D5 /* Atomic.swift */,
 				0664BF3523D5B91100B491E6 /* FailableOperation.swift */,
 				239BC52120EB7539009A36D9 /* InputConsumingOperation.swift */,
-				067C482523D60EE800F73096 /* KVOCrashWorkaround.swift */,
 				23F24D21200799B800B25A03 /* Operation+Utils.swift */,
 				060B667023C4EBC80085FCB4 /* OutputProducingOperation.swift */,
 				069731C723D71135006A51CB /* TrackableOperation.swift */,
-				23A1B87821B81C710018D9D5 /* UnfairLock.swift */,
 				064B0D9023F451F000C8331F /* GeneratorOperation.swift */,
 			);
 			path = Core;
