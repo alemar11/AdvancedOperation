@@ -112,8 +112,8 @@ open class GroupOperation: AsynchronousOperation {
   }
 
   open override func cancel() {
-    operationQueue.cancelAllOperations()
     super.cancel()
+    operationQueue.cancelAllOperations()
   }
 
   // MARK: - Private Methods
