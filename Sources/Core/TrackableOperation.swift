@@ -46,6 +46,11 @@ extension TrackableOperation {
       tracker?.start(operation: self)
     }
   }
+
+  // TODO: expose this log?
+  internal var log: OSLog? {
+    return tracker?.log
+  }
 }
 
 // MARK: - Tracker
@@ -53,7 +58,7 @@ extension TrackableOperation {
 final class Tracker {
   static let signPostIntervalName: StaticString = "Operation"
 
-  private let log: OSLog
+  fileprivate let log: OSLog
   private let signpost: OSLog
   private let poi: OSLog
   private var started: Bool = false
