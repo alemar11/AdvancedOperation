@@ -25,7 +25,9 @@ import Foundation
 
 /// An `AsynchronousOperation` subclass which produces a `Result` type output.
 open class ResultOperation<Success, Failure>: AsynchronousOperation, OutputProducingOperation, FailableOperation where Failure: Error {
-  public var onOutputProduced: ((Result<Success, Failure>) -> Void)?
+  /// The block to execute when the operation produces its result.
+  /// - Note: A ResultOperation can only procude a single `Result`.
+  public var onResultProduced: ((Result<Success, Failure>) -> Void)?
 
   public final private(set) var output: Result<Success, Failure>? {
     willSet {
@@ -35,7 +37,7 @@ open class ResultOperation<Success, Failure>: AsynchronousOperation, OutputProdu
     }
     didSet {
       if let output = self.output {
-        onOutputProduced?(output)
+        onResultProduced?(output)
       }
     }
   }
