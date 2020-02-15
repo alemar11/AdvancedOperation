@@ -1,6 +1,7 @@
 [![Swift 5.0](https://img.shields.io/badge/Swift-5.0-orange.svg?style=flat)](https://developer.apple.com/swift)
 ![Platforms](https://img.shields.io/badge/Platform-iOS%2011%2B%20|%20macOS%2010.13+%20|%20tvOS%2011+%20|%20watchOS%204+-blue.svg) 
 
+[![Build Status](https://github.com/tinrobots/AdvancedOperation/workflows/AdvancedOperation%20CI/badge.svg?branch=master)](https://github.com/tinrobots/AdvancedOperation/actions)
 [![Travis CI](https://travis-ci.org/tinrobots/AdvancedOperation.svg?branch=master)](https://travis-ci.org/tinrobots/AdvancedOperation)
 
 [![codecov](https://codecov.io/gh/tinrobots/AdvancedOperation/branch/master/graph/badge.svg)](https://codecov.io/gh/tinrobots/AdvancedOperation)
