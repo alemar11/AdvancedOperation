@@ -99,6 +99,7 @@ class ResultOperationTests: XCTestCase {
     let queue = OperationQueue()
     queue.addOperations([operation1, operation2, injection], waitUntilFinished: true)
     queue.addOperations([operation3], waitUntilFinished: false)
+    XCTAssertNotNil(operation1.output)
     XCTAssertEqual(try? operation1.output?.get(), "10")
     XCTAssertEqual(operation2.output, 10)
   }
