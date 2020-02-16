@@ -100,6 +100,26 @@ final class OperationInjectionTests: XCTestCase {
     // TODO: data race when accessing output on macOS
   }
 
+  func testSuccessfulInjectionBetweenAsyncOperationsTransformingOutput() {
+    let queue = OperationQueue()
+    let operation1 = IntToStringAsyncOperation()
+    let operation2 = IntToStringAsyncOperation()
+    let injectionOperation = operation1.injectOutput(into: operation2) { result -> Int? in
+      if let result = result {
+        return Int(result)
+      } else {
+        return nil
+      }
+    }
+    operation1.input = 10
+    XCTAssertEqual(operation1.input, 10)
+    queue.addOperations([operation1, operation2, injectionOperation], waitUntilFinished: true)
+
+    XCTAssertEqual(operation1.output, "10")
+    XCTAssertEqual(operation2.input, 10)
+    XCTAssertEqual(operation2.output, "10")
+  }
+
   func testFailingInjectionBetweenOperationsTransformingOutput() {
     let queue = OperationQueue()
     let operation1 = IntToStringOperation()
@@ -123,6 +143,7 @@ final class OperationInjectionTests: XCTestCase {
     let queue = OperationQueue()
     queue.addOperations([operation1, operation2, injection], waitUntilFinished: true)
     queue.addOperations([operation3], waitUntilFinished: false)
+    XCTAssertEqual(operation1.output, "10")
     XCTAssertEqual(operation2.output, 10)
   }
 

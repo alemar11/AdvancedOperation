@@ -33,35 +33,35 @@ final internal class SleepyAsyncOperation: AsynchronousOperation {
   private let interval1: UInt32
   private let interval2: UInt32
   private let interval3: UInt32
-
+  
   init(interval1: UInt32 = 1, interval2: UInt32 = 1, interval3: UInt32 = 1) {
     self.interval1 = interval1
     self.interval2 = interval2
     self.interval3 = interval3
     super.init()
   }
-
+  
   override func main() {
     DispatchQueue.global().async {
       if self.isCancelled {
         self.finish()
         return
       }
-
+      
       sleep(self.interval1)
-
+      
       if self.isCancelled {
         self.finish()
         return
       }
-
+      
       sleep(self.interval2)
-
+      
       if self.isCancelled {
         self.finish()
         return
       }
-
+      
       sleep(self.interval3)
       self.finish()
     }
@@ -70,22 +70,49 @@ final internal class SleepyAsyncOperation: AsynchronousOperation {
 
 // MARK: - AsynchronousInputOutputOperation
 
-/// This operation fails if the input is greater than **1000**
-/// This operation cancels itself if the input is **100**
-internal class IntToStringAsyncOperation: AsynchronousOperation, InputConsumingOperation, OutputProducingOperation {
-  var input: Int?
-  private(set) var output: String? {
-     get {
-       return _output.value
-     }
-     set {
-       _output.mutate { $0 = newValue }
-     }
-   }
-   private var _output = Atomic<String?>(nil)
+//internal class IntToStringAsyncOperation: AsynchronousOperation, InputConsumingOperation, OutputProducingOperation {
+//  var input: Int?
+//  private(set) var output: String?
+//
+//  override func main() {
+//    DispatchQueue.global().async {
+//      if let input = self.input {
+//        self.output = "\(input)"
+//      }
+//      self.finish()
+//    }
+//  }
+//}
+//
+//internal class StringToIntAsyncOperation: AsynchronousOperation, InputConsumingOperation, OutputProducingOperation {
+//  var input: String?
+//  private(set) var output: Int?
+//
+//  override func main() {
+//    DispatchQueue.global().async {
+//      if let input = self.input {
+//        self.output = Int(input)
+//      }
+//      self.finish()
+//    }
+//  }
+//}
 
+internal class IntToStringAsyncOperation: AsynchronousOperation, InputConsumingOperation, OutputProducingOperation {
+  private let queue = DispatchQueue(label: "IntToStringAsyncOperation")
+  var input: Int?
+  var output: String? {
+    get {
+      return _output.value
+    }
+    set {
+      _output.mutate { $0 = newValue }
+    }
+  }
+  private var _output = Atomic<String?>(nil)
+  
   override func main() {
-    DispatchQueue.global().async {
+    queue.async {
       if let input = self.input {
         self.output = "\(input)"
       }
@@ -95,19 +122,20 @@ internal class IntToStringAsyncOperation: AsynchronousOperation, InputConsumingO
 }
 
 internal class StringToIntAsyncOperation: AsynchronousOperation, InputConsumingOperation, OutputProducingOperation {
+  private let queue = DispatchQueue(label: "StringToIntAsyncOperation")
   var input: String?
-  private(set) var output: Int? {
-     get {
-       return _output.value
-     }
-     set {
-       _output.mutate { $0 = newValue }
-     }
-   }
-   private var _output = Atomic<Int?>(nil)
-
+  var output: Int? {
+    get {
+      return _output.value
+    }
+    set {
+      _output.mutate { $0 = newValue }
+    }
+  }
+  private var _output = Atomic<Int?>(nil)
+  
   override func main() {
-    DispatchQueue.global().async {
+    queue.async {
       if let input = self.input {
         self.output = Int(input)
       }
@@ -136,11 +164,11 @@ final internal class AutoCancellingAsyncOperation: AsynchronousOperation {
 
 final internal class RunUntilCancelledAsyncOperation: AsynchronousOperation {
   let queue: DispatchQueue
-
+  
   init(queue: DispatchQueue = DispatchQueue.global()) {
     self.queue = queue
   }
-
+  
   override func main() {
     queue.async {
       while !self.isCancelled {
@@ -152,6 +180,28 @@ final internal class RunUntilCancelledAsyncOperation: AsynchronousOperation {
 }
 
 // MARK: - Operation
+
+//internal final class IntToStringOperation: Operation & InputConsumingOperation & OutputProducingOperation {
+//  var input: Int?
+//  private(set) var output: String?
+//
+//  override func main() {
+//    if let input = self.input {
+//      output = "\(input)"
+//    }
+//  }
+//}
+//
+//internal final class StringToIntOperation: Operation & InputConsumingOperation & OutputProducingOperation  {
+//  var input: String?
+//  private(set) var output: Int?
+//
+//  override func main() {
+//    if let input = self.input {
+//      output = Int(input)
+//    }
+//  }
+//}
 
 internal final class IntToStringOperation: Operation & InputConsumingOperation & OutputProducingOperation {
   var input: Int?
@@ -198,9 +248,9 @@ internal final class FailingOperation: Operation, FailableOperation, TrackableOp
     case errorOne
     case errorTwo
   }
-
+  
   private(set) var error: FailureError?
-
+  
   override func main() {
     self.error = .errorOne
   }
@@ -211,16 +261,16 @@ internal final class FailingOperation: Operation, FailableOperation, TrackableOp
 internal final class OperationsGenerator: Operation, GeneratorOperation {
   var onOperationGenerated: ((Operation) -> Void)?
   private let builder: () -> [Operation]
-
+  
   init(operationsBuilder: @escaping () -> [Operation]) {
     self.builder = operationsBuilder
     super.init()
   }
-
+  
   override func main() {
     builder().forEach { setupOperation($0) }
   }
-
+  
   private func setupOperation(_ operation: Operation) {
     // If the operation is a producing one, we bubble up the produced operation
     if let generator = operation as? GeneratorOperation {
@@ -252,23 +302,28 @@ internal final class IntToStringResultOperation: ResultOperation<String, IntToSt
     case invalidInput
   }
 
+  private let queue = DispatchQueue(label: "IntToStringResultOperation")
   var input: Int?
-
+  
   override func main() {
     if isCancelled {
-      finish()
+      self.finish()
       return
     }
 
-    guard let input = self.input else {
-      finish(result: .failure(.missingInput))
-      return
-    }
+    queue.async { [weak self] in
+      guard let self = self else { return }
 
-    if input < 0 {
-      finish(result: .failure(.invalidInput))
-    } else {
-      finish(result: .success("\(input)"))
+      guard let input = self.input else {
+        self.finish(result: .failure(.missingInput))
+        return
+      }
+
+      if input < 0 {
+        self.finish(result: .failure(.invalidInput))
+      } else {
+        self.finish(result: .success("\(input)"))
+      }
     }
   }
 }
