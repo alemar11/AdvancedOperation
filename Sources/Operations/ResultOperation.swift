@@ -30,6 +30,7 @@ open class ResultOperation<Success, Failure>: AsynchronousOperation, OutputProdu
   public var onResultProduced: ((Result<Success, Failure>) -> Void)?
 
   public final private(set) var output: Result<Success, Failure>? {
+    // TODO: no thread safe yet
     willSet {
       // An assert is enough since finish(result:) is the only public method to set the output.
       // the operation will crash if finish(result:) method is called more than once (see finish() implementation).
