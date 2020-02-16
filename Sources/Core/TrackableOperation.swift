@@ -32,9 +32,15 @@ private var trackerKey: UInt8 = 0
 extension TrackableOperation {
   private(set) var tracker: Tracker? {
     get {
+      objc_sync_enter(self)
+      defer { objc_sync_exit(self) }
+
       return objc_getAssociatedObject(self, &trackerKey) as? Tracker
     }
     set {
+      objc_sync_enter(self)
+      defer { objc_sync_exit(self) }
+
       objc_setAssociatedObject(self, &trackerKey, newValue, objc_AssociationPolicy.OBJC_ASSOCIATION_RETAIN_NONATOMIC)
     }
   }
@@ -48,8 +54,8 @@ extension TrackableOperation {
   }
 
   // TODO: expose this log?
-  internal var log: OSLog? {
-    return tracker?.log
+  internal var log: OSLog {
+    return tracker?.log ?? .disabled
   }
 }
 
