@@ -30,29 +30,27 @@ public protocol TrackableOperation: Operation { }
 
 private var trackerKey: UInt8 = 0
 extension TrackableOperation {
-  private(set) var tracker: Tracker? {
+  private var tracker: Tracker? {
     get {
-      objc_sync_enter(self)
-      defer { objc_sync_exit(self) }
-
       return objc_getAssociatedObject(self, &trackerKey) as? Tracker
     }
     set {
-      objc_sync_enter(self)
-      defer { objc_sync_exit(self) }
-
       objc_setAssociatedObject(self, &trackerKey, newValue, objc_AssociationPolicy.OBJC_ASSOCIATION_RETAIN_NONATOMIC)
     }
   }
-
+  
   public func installTracker(log: OSLog = .default, signpost: OSLog = .disabled, poi: OSLog = .disabled) {
+    objc_sync_enter(self)
+    defer { objc_sync_exit(self) }
+    // https://github.com/ReactiveX/RxSwift/blob/6b2a406b928cc7970874dcaed0ab18e7265e41ef/RxCocoa/Foundation/NSObject%2BRx.swift
+    
     precondition(!self.isExecuting || !self.isFinished || !self.isCancelled, "The tracker should be installed before any relevant operation phases are occurred.")
     if tracker == nil {
       tracker = Tracker(log: log, signpost: signpost, poi: poi)
       tracker?.start(operation: self)
     }
   }
-
+  
   // TODO: expose this log?
   internal var log: OSLog {
     return tracker?.log ?? .disabled
@@ -63,7 +61,7 @@ extension TrackableOperation {
 
 final class Tracker {
   static let signPostIntervalName: StaticString = "Operation"
-
+  
   fileprivate let log: OSLog
   private let signpost: OSLog
   private let poi: OSLog
@@ -71,53 +69,53 @@ final class Tracker {
   private var cancelled: Bool = false
   private var finished: Bool = false
   private var tokens = [NSKeyValueObservation]()
-
+  
   init(log: OSLog, signpost: OSLog, poi: OSLog) {
     self.log = log
     self.signpost = signpost
     self.poi = poi
   }
-
+  
   @available(iOS 12.0, iOSApplicationExtension 12.0, tvOS 12.0, watchOS 5.0, macOS 10.14, OSXApplicationExtension 10.14, *)
   private lazy var signpostID = {
     return OSSignpostID(log: signpost, object: self)
   }()
-
+  
   // swiftlint:disable:next cyclomatic_complexity
   func start<T>(operation: T) where T: TrackableOperation {
     let lock = UnfairLock()
-
+    
     // uses default and poi logs
     let cancelToken = operation.observe(\.isCancelled, options: [.old, .new]) { [weak self] (operation, changes) in
       lock.lock()
       defer { lock.unlock() }
       guard let self = self else { return }
       guard let oldValue = changes.oldValue, let newValue = changes.newValue, oldValue != newValue else { return }
-
+      
       assert(!self.cancelled)
-
+      
       self.cancelled = true
-
+      
       if #available(iOS 12.0, iOSApplicationExtension 12.0, tvOS 12.0, watchOS 5.0, macOS 10.14, OSXApplicationExtension 10.14, *) {
         os_log(.info, log: self.log, "%{public}s has been cancelled.", operation.operationName)
       } else {
         os_log("%{public}s has been cancelled.", log: self.log, type: .info, operation.operationName)
       }
-
+      
       if self.started {
         if #available(iOS 12.0, iOSApplicationExtension 12.0, tvOS 12.0, watchOS 5.0, macOS 10.14, OSXApplicationExtension 10.14, *) {
           os_signpost(.event, log: self.poi, name: "Cancellation", signpostID: self.signpostID, "⏺ %{public}s has been cancelled.", operation.operationName)
         }
       }
     }
-
+    
     // uses default and signpost logs
     let executionToken = operation.observe(\.isExecuting, options: [.old, .new]) { [weak self] (operation, changes) in
       lock.lock()
       defer { lock.unlock() }
       guard let self = self else { return }
       guard let oldValue = changes.oldValue, let newValue = changes.newValue, oldValue != newValue else { return }
-
+      
       if newValue {
         assert(!self.started)
         self.started = true
@@ -129,7 +127,7 @@ final class Tracker {
         }
       }
     }
-
+    
     // uses default and signpost logs
     let finishToken = operation.observe(\.isFinished, options: [.old, .new]) { [weak self] (operation, changes) in
       lock.lock()
@@ -137,11 +135,11 @@ final class Tracker {
       guard let self = self else { return }
       guard let oldValue = changes.oldValue, let newValue = changes.newValue, oldValue != newValue else { return }
       guard newValue else { return }
-
+      
       assert(!self.finished)
-
+      
       self.finished = true
-
+      
       if #available(iOS 12.0, iOSApplicationExtension 12.0, tvOS 12.0, watchOS 5.0, macOS 10.14, OSXApplicationExtension 10.14, *) {
         if let failableOperation = operation as? _FailableOperation, failableOperation.isFailed {
           os_log(.info, log: self.log, "%{public}s has finished with an error.", operation.operationName)
@@ -155,17 +153,17 @@ final class Tracker {
           os_log("%{public}s has finished.", log: self.log, type: .info, operation.operationName)
         }
       }
-
+      
       if self.started { // the end signpost should be logged only if the operation has logged the begin signpost
         if #available(iOS 12.0, iOSApplicationExtension 12.0, tvOS 12.0, watchOS 5.0, macOS 10.14, OSXApplicationExtension 10.14, *) {
           os_signpost(.end, log: self.signpost, name: Tracker.signPostIntervalName, signpostID: self.signpostID, "🔽 %{public}s has finished.", operation.operationName)
         }
       }
     }
-
+    
     tokens = [cancelToken, executionToken, finishToken]
   }
-
+  
   deinit {
     tokens.forEach { $0.invalidate() }
     tokens = []
