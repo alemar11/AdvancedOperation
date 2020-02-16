@@ -112,13 +112,6 @@ final class OperationUtilsTests: XCTestCase {
     XCTAssertEqual(operation4.dependencies.count, 0)
   }
 
-  func testStress() {
-    (1...1000).forEach { (i) in
-      print(i)
-      testHasSomeDependenciesFailed()
-    }
-  }
-
   func testHasSomeDependenciesFailed() {
     let operation1 = BlockOperation()
     let operation2 = BlockOperation()
