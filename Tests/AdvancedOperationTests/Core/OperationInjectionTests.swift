@@ -80,9 +80,51 @@ final class OperationInjectionTests: XCTestCase {
   }
 
   func testSuccessfulInjectionBetweenOperationsTransformingOutput() {
+    // IntToStringOperation's output has its access synchronized with a lock to avoid data races while running macOS tests
+    //
+    // Data races are not detected if operations are added in this way:
+    //
+    //  queue.isSuspended = true
+    //  queue.addOperation(operation1)
+    //  queue.addOperation(operation2)
+    //  queue.addOperation(injectionOperation)
+    //  queue.isSuspended = false
+    //  queue.waitUntilAllOperationsAreFinished()
+    //
+    // or in this way:
+    //
+    // let expectation1 = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: operation1, expectedValue: true)
+    // let expectation2 = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: operation2, expectedValue: true)
+    // queue.addOperations([operation1, operation2, injectionOperation], waitUntilFinished: false)
+    // wait(for: [expectation1], timeout: 4)
+    //
+    // instead of:
+    //
+    // queue.addOperations([operation1, operation2, injectionOperation], waitUntilFinished: true)
+    
     let queue = OperationQueue()
     let operation1 = IntToStringOperation()
     let operation2 = IntToStringOperation()
+    let injectionOperation = operation1.injectOutput(into: operation2) { result -> Int? in
+      if let result = result {
+        return Int(result)
+      } else {
+        return nil
+      }
+    }
+    operation1.input = 10
+    XCTAssertEqual(operation1.input, 10)
+    queue.addOperations([operation1, operation2, injectionOperation], waitUntilFinished: true)
+
+    XCTAssertEqual(operation1.output, "10")
+    XCTAssertEqual(operation2.input, 10)
+    XCTAssertEqual(operation2.output, "10")
+  }
+
+  func testSuccessfulInjectionBetweenAsyncOperationsTransformingOutput() {
+    let queue = OperationQueue()
+    let operation1 = IntToStringAsyncOperation()
+    let operation2 = IntToStringAsyncOperation()
     let injectionOperation = operation1.injectOutput(into: operation2) { result -> Int? in
       if let result = result {
         return Int(result)
@@ -122,6 +164,7 @@ final class OperationInjectionTests: XCTestCase {
     let queue = OperationQueue()
     queue.addOperations([operation1, operation2, injection], waitUntilFinished: true)
     queue.addOperations([operation3], waitUntilFinished: false)
+    XCTAssertEqual(operation1.output, "10")
     XCTAssertEqual(operation2.output, 10)
   }
 
@@ -143,6 +186,6 @@ final class OperationInjectionTests: XCTestCase {
     let queue = OperationQueue()
     operation1.cancel()
     queue.addOperations([operation1, operation2, injection], waitUntilFinished: false)
-    wait(for: [expectation1], timeout: 10)
+    wait(for: [expectation1], timeout: 3)
   }
 }

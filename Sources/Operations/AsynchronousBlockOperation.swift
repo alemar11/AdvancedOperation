@@ -50,6 +50,11 @@ public final class AsynchronousBlockOperation: AsynchronousOperation {
   // MARK: - Overrides
 
   public final override func main() {
+    guard !isCancelled else {
+      self.finish()
+      return
+    }
+    
     block {
       self.finish()
     }

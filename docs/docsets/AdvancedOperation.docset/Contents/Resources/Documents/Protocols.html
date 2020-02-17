@@ -14,7 +14,7 @@
     <a title="Protocols  Reference"></a>
     <header>
       <div class="content-wrapper">
-        <p><a href="index.html">AdvancedOperation Docs</a> (69% documented)</p>
+        <p><a href="index.html">AdvancedOperation Docs</a> (70% documented)</p>
       </div>
     </header>
     <div class="content-wrapper">
@@ -37,7 +37,13 @@
                 <a href="Classes/AsynchronousOperation.html">AsynchronousOperation</a>
               </li>
               <li class="nav-group-task">
+                <a href="Classes/GroupOperation.html">GroupOperation</a>
+              </li>
+              <li class="nav-group-task">
                 <a href="Classes/KVOCrashWorkaround.html">KVOCrashWorkaround</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Classes/ResultOperation.html">ResultOperation</a>
               </li>
             </ul>
           </li>
@@ -59,13 +65,19 @@
                 <a href="Protocols/FailableOperation.html">FailableOperation</a>
               </li>
               <li class="nav-group-task">
+                <a href="Protocols/GeneratorOperation.html">GeneratorOperation</a>
+              </li>
+              <li class="nav-group-task">
                 <a href="Protocols/InputConsumingOperation.html">InputConsumingOperation</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Protocols/LoggableOperation.html">LoggableOperation</a>
               </li>
               <li class="nav-group-task">
                 <a href="Protocols/OutputProducingOperation.html">OutputProducingOperation</a>
               </li>
               <li class="nav-group-task">
-                <a href="Protocols/TrackableOperation.html">TrackableOperation</a>
+                <a href="Protocols/_TypeErasedErrorFailable.html">_TypeErasedErrorFailable</a>
               </li>
             </ul>
           </li>
@@ -91,6 +103,57 @@
           </section>
           <section class="section task-group-section">
             <div class="task-group">
+              <div class="task-name-container">
+                <a name="/Shadow%20protocol"></a>
+                <a name="//apple_ref/swift/Section/Shadow protocol" class="dashAnchor"></a>
+                <div class="section-name-container">
+                  <a class="section-name-link" href="#/Shadow%20protocol"></a>
+                  <h3 class="section-name"><p>Shadow protocol</p>
+</h3>
+                </div>
+              </div>
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:17AdvancedOperation24_TypeErasedErrorFailableP"></a>
+                    <a name="//apple_ref/swift/Protocol/_TypeErasedErrorFailable" class="dashAnchor"></a>
+                    <a class="token" href="#/s:17AdvancedOperation24_TypeErasedErrorFailableP">_TypeErasedErrorFailable</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Since Swift doesn&rsquo;t currently support the use of protocols with associated types as actual types,
+a &ldquo;shadow protocol&rdquo; is needed to support computed properites such as <code>isFailed</code> for operations conforming to <code><a href="Protocols/FailableOperation.html">FailableOperation</a></code>.</p>
+
+                        <a href="Protocols/_TypeErasedErrorFailable.html" class="slightly-smaller">See more</a>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">protocol</span> <span class="n">_TypeErasedErrorFailable</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <div class="task-name-container">
+                <a name="/FailableOperation"></a>
+                <a name="//apple_ref/swift/Section/FailableOperation" class="dashAnchor"></a>
+                <div class="section-name-container">
+                  <a class="section-name-link" href="#/FailableOperation"></a>
+                  <h3 class="section-name"><p>FailableOperation</p>
+</h3>
+                </div>
+              </div>
               <ul>
                 <li class="item">
                   <div>
@@ -105,7 +168,7 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Operations conformin to this protocolor may generate an error while executing.</p>
+                        <p>Operations conforming to this protocol may generate an error while executing.</p>
 
                         <a href="Protocols/FailableOperation.html" class="slightly-smaller">See more</a>
                       </div>
@@ -113,7 +176,35 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">protocol</span> <span class="kt">FailableOperation</span> <span class="p">:</span> <span class="kt">Operation</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">protocol</span> <span class="kt">FailableOperation</span> <span class="p">:</span> <span class="kt">Operation</span><span class="p">,</span> <span class="n"><a href="Protocols/_TypeErasedErrorFailable.html">_TypeErasedErrorFailable</a></span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:17AdvancedOperation09GeneratorB0P"></a>
+                    <a name="//apple_ref/swift/Protocol/GeneratorOperation" class="dashAnchor"></a>
+                    <a class="token" href="#/s:17AdvancedOperation09GeneratorB0P">GeneratorOperation</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Operations conformin to this protocolor may generate other operations while executing.</p>
+
+                        <a href="Protocols/GeneratorOperation.html" class="slightly-smaller">See more</a>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">protocol</span> <span class="kt">GeneratorOperation</span> <span class="p">:</span> <span class="kt">Operation</span></code></pre>
 
                         </div>
                       </div>
@@ -151,6 +242,39 @@
                 <li class="item">
                   <div>
                     <code>
+                    <a name="/s:17AdvancedOperation08LoggableB0P"></a>
+                    <a name="//apple_ref/swift/Protocol/LoggableOperation" class="dashAnchor"></a>
+                    <a class="token" href="#/s:17AdvancedOperation08LoggableB0P">LoggableOperation</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Operations conforming to this protcol can log their most relevant status changes.</p>
+<div class="aside aside-warning">
+    <p class="aside-title">Warning</p>
+    If using Swift 5.0 or lower run <code><a href="Classes/KVOCrashWorkaround.html#/installFix()">KVOCrashWorkaround.installFix()</a></code> to solve some  multithreading bugs in Swift&rsquo;s KVO.
+
+</div>
+
+                        <a href="Protocols/LoggableOperation.html" class="slightly-smaller">See more</a>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">protocol</span> <span class="kt">LoggableOperation</span> <span class="p">:</span> <span class="kt">Operation</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
                     <a name="/s:17AdvancedOperation015OutputProducingB0P"></a>
                     <a name="//apple_ref/swift/Protocol/OutputProducingOperation" class="dashAnchor"></a>
                     <a class="token" href="#/s:17AdvancedOperation015OutputProducingB0P">OutputProducingOperation</a>
@@ -176,45 +300,12 @@
                     </section>
                   </div>
                 </li>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:17AdvancedOperation09TrackableB0P"></a>
-                    <a name="//apple_ref/swift/Protocol/TrackableOperation" class="dashAnchor"></a>
-                    <a class="token" href="#/s:17AdvancedOperation09TrackableB0P">TrackableOperation</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>Operations conforming to this protcol can log their most relevant status changes.</p>
-<div class="aside aside-warning">
-    <p class="aside-title">Warning</p>
-    If using Swift 5.0 or lower run <code><a href="Classes/KVOCrashWorkaround.html#/installFix()">KVOCrashWorkaround.installFix()</a></code> to solve some  multithreading bugs in Swift&rsquo;s KVO.
-
-</div>
-
-                        <a href="Protocols/TrackableOperation.html" class="slightly-smaller">See more</a>
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">protocol</span> <span class="kt">TrackableOperation</span> <span class="p">:</span> <span class="kt">Operation</span></code></pre>
-
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
               </ul>
             </div>
           </section>
         </section>
         <section id="footer">
-          <p>&copy; 2020 <a class="link" href="https://github.com/tinrobots/AdvancedOperation" target="_blank" rel="external">Alessandro Marzoli</a>. All rights reserved. (Last updated: 2020-01-23)</p>
+          <p>&copy; 2020 <a class="link" href="https://github.com/tinrobots/AdvancedOperation" target="_blank" rel="external">Alessandro Marzoli</a>. All rights reserved. (Last updated: 2020-02-17)</p>
           <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.13.1</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
         </section>
       </article>

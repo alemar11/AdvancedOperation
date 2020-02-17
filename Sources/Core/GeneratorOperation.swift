@@ -1,4 +1,4 @@
-// 
+//
 // AdvancedOperation
 //
 // Copyright © 2016-2020 Tinrobots.
@@ -23,4 +23,8 @@
 
 import Foundation
 
-internal let identifier = "org.tinrobots.AdvancedOperation"
+/// Operations conformin to this protocolor may generate other operations while executing.
+public protocol GeneratorOperation: Operation {
+  /// The block to execute whenever a `GeneratorOperation` generates a new operation.
+  var onOperationGenerated: ((Operation) -> Void)? { get set }
+}

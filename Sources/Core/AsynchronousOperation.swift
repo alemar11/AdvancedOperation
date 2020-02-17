@@ -145,7 +145,7 @@ open class AsynchronousOperation: Operation {
 
   // MARK: - Private Methods
 
-  /// Call this function to finish an operation that is currently executing.
+  /// Call this method to finish an operation that is currently executing.
   public final func finish() {
     // State can also be "ready" here if the operation was cancelled before it was started.
     lock.lock()

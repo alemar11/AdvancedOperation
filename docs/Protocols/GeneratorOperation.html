@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>KVOCrashWorkaround Class Reference</title>
+    <title>GeneratorOperation Protocol Reference</title>
     <link rel="stylesheet" type="text/css" href="../css/jazzy.css" />
     <link rel="stylesheet" type="text/css" href="../css/highlight.css" />
     <meta charset='utf-8'>
@@ -10,8 +10,8 @@
     
   </head>
   <body>
-    <a name="//apple_ref/swift/Class/KVOCrashWorkaround" class="dashAnchor"></a>
-    <a title="KVOCrashWorkaround Class Reference"></a>
+    <a name="//apple_ref/swift/Protocol/GeneratorOperation" class="dashAnchor"></a>
+    <a title="GeneratorOperation Protocol Reference"></a>
     <header>
       <div class="content-wrapper">
         <p><a href="../index.html">AdvancedOperation Docs</a> (70% documented)</p>
@@ -21,7 +21,7 @@
       <p id="breadcrumbs">
         <a href="../index.html">AdvancedOperation Reference</a>
         <img id="carat" src="../img/carat.png" />
-        KVOCrashWorkaround Class Reference
+        GeneratorOperation Protocol Reference
       </p>
     </div>
     <div class="content-wrapper">
@@ -97,16 +97,14 @@
       <article class="main-content">
         <section>
           <section class="section">
-            <h1>KVOCrashWorkaround</h1>
-            <p>Workaround to solve some  multithreading bugs in Swift&rsquo;s KVO.
-This needs to execute before anything can register KVO in the background so the best way to do this is before the application ever runs</p>
+            <h1>GeneratorOperation</h1>
+              <div class="declaration">
+                <div class="language">
+                  <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">protocol</span> <span class="kt">GeneratorOperation</span> <span class="p">:</span> <span class="kt">Operation</span></code></pre>
 
-<p><code><a href="../Classes/KVOCrashWorkaround.html#/installFix()">KVOCrashWorkaround.installFix()</a></code></p>
-<div class="aside aside-note">
-    <p class="aside-title">Note</p>
-    it&rsquo;s not required for Swift 5.1 and above, see this <a href="https://github.com/apple/swift/pull/20103">Swift PR</a>
-
-</div>
+                </div>
+              </div>
+            <p>Operations conformin to this protocolor may generate other operations while executing.</p>
 
           </section>
           <section class="section task-group-section">
@@ -115,9 +113,9 @@ This needs to execute before anything can register KVO in the background so the 
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/"></a>
-                    <a name="//apple_ref/swift/Method/installFix()" class="dashAnchor"></a>
-                    <a class="token" href="#/">installFix()</a>
+                    <a name="/s:17AdvancedOperation09GeneratorB0P02onB9GeneratedySo11NSOperationCcSgvp"></a>
+                    <a name="//apple_ref/swift/Property/onOperationGenerated" class="dashAnchor"></a>
+                    <a class="token" href="#/s:17AdvancedOperation09GeneratorB0P02onB9GeneratedySo11NSOperationCcSgvp">onOperationGenerated</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -125,8 +123,16 @@ This needs to execute before anything can register KVO in the background so the 
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Install the workaround: it shoud be done from the <strong>main</strong> thread.</p>
+                        <p>The block to execute whenever a <code>GeneratorOperation</code> generates a new operation.</p>
 
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="k">var</span> <span class="nv">onOperationGenerated</span><span class="p">:</span> <span class="p">((</span><span class="kt">Operation</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)?</span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
+
+                        </div>
                       </div>
                     </section>
                   </div>
