@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>KVOCrashWorkaround Class Reference</title>
+    <title>LoggableOperation Protocol Reference</title>
     <link rel="stylesheet" type="text/css" href="../css/jazzy.css" />
     <link rel="stylesheet" type="text/css" href="../css/highlight.css" />
     <meta charset='utf-8'>
@@ -10,8 +10,8 @@
     
   </head>
   <body>
-    <a name="//apple_ref/swift/Class/KVOCrashWorkaround" class="dashAnchor"></a>
-    <a title="KVOCrashWorkaround Class Reference"></a>
+    <a name="//apple_ref/swift/Protocol/LoggableOperation" class="dashAnchor"></a>
+    <a title="LoggableOperation Protocol Reference"></a>
     <header>
       <div class="content-wrapper">
         <p><a href="../index.html">AdvancedOperation Docs</a> (70% documented)</p>
@@ -21,7 +21,7 @@
       <p id="breadcrumbs">
         <a href="../index.html">AdvancedOperation Reference</a>
         <img id="carat" src="../img/carat.png" />
-        KVOCrashWorkaround Class Reference
+        LoggableOperation Protocol Reference
       </p>
     </div>
     <div class="content-wrapper">
@@ -97,14 +97,17 @@
       <article class="main-content">
         <section>
           <section class="section">
-            <h1>KVOCrashWorkaround</h1>
-            <p>Workaround to solve some  multithreading bugs in Swift&rsquo;s KVO.
-This needs to execute before anything can register KVO in the background so the best way to do this is before the application ever runs</p>
+            <h1>LoggableOperation</h1>
+              <div class="declaration">
+                <div class="language">
+                  <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">protocol</span> <span class="kt">LoggableOperation</span> <span class="p">:</span> <span class="kt">Operation</span></code></pre>
 
-<p><code><a href="../Classes/KVOCrashWorkaround.html#/installFix()">KVOCrashWorkaround.installFix()</a></code></p>
-<div class="aside aside-note">
-    <p class="aside-title">Note</p>
-    it&rsquo;s not required for Swift 5.1 and above, see this <a href="https://github.com/apple/swift/pull/20103">Swift PR</a>
+                </div>
+              </div>
+            <p>Operations conforming to this protcol can log their most relevant status changes.</p>
+<div class="aside aside-warning">
+    <p class="aside-title">Warning</p>
+    If using Swift 5.0 or lower run <code><a href="../Classes/KVOCrashWorkaround.html#/installFix()">KVOCrashWorkaround.installFix()</a></code> to solve some  multithreading bugs in Swift&rsquo;s KVO.
 
 </div>
 
@@ -115,18 +118,29 @@ This needs to execute before anything can register KVO in the background so the 
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/"></a>
-                    <a name="//apple_ref/swift/Method/installFix()" class="dashAnchor"></a>
-                    <a class="token" href="#/">installFix()</a>
+                    <a name="/s:17AdvancedOperation08LoggableB0PAAE13installLogger3log8signpost3poiySo06OS_os_F0C_A2ItF"></a>
+                    <a name="//apple_ref/swift/Method/installLogger(log:signpost:poi:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:17AdvancedOperation08LoggableB0PAAE13installLogger3log8signpost3poiySo06OS_os_F0C_A2ItF">installLogger(log:signpost:poi:)</a>
                     </code>
+                      <span class="declaration-note">
+                        Extension method
+                      </span>
                   </div>
                   <div class="height-container">
                     <div class="pointer-container"></div>
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Install the workaround: it shoud be done from the <strong>main</strong> thread.</p>
+                        <p>Undocumented</p>
 
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">installLogger</span><span class="p">(</span><span class="nv">log</span><span class="p">:</span> <span class="kt">OSLog</span> <span class="o">=</span> <span class="o">.</span><span class="k">default</span><span class="p">,</span> <span class="nv">signpost</span><span class="p">:</span> <span class="kt">OSLog</span> <span class="o">=</span> <span class="o">.</span><span class="n">disabled</span><span class="p">,</span> <span class="nv">poi</span><span class="p">:</span> <span class="kt">OSLog</span> <span class="o">=</span> <span class="o">.</span><span class="n">disabled</span><span class="p">)</span></code></pre>
+
+                        </div>
                       </div>
                     </section>
                   </div>
