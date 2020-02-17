@@ -364,17 +364,17 @@ final class AsynchronousOperationTests: XCTestCase {
     operation3.addDependencies(gate)
 
     if #available(iOS 12.0, iOSApplicationExtension 12.0, tvOS 12.0, watchOS 5.0, macOS 10.14, OSXApplicationExtension 10.14, *){
-      operation0.installTracker(log: Log.default, signpost: Log.signpost, poi: Log.poi)
-      operation1.installTracker(log: Log.default, signpost: Log.signpost, poi: Log.poi)
-      operation2.installTracker(log: Log.default, signpost: Log.signpost, poi: Log.poi)
-      operation3.installTracker(log: Log.default, signpost: Log.signpost, poi: Log.poi)
-      gate.installTracker(log: Log.default, signpost: Log.signpost, poi: Log.poi)
+      operation0.installLogger(log: Log.default, signpost: Log.signpost, poi: Log.poi)
+      operation1.installLogger(log: Log.default, signpost: Log.signpost, poi: Log.poi)
+      operation2.installLogger(log: Log.default, signpost: Log.signpost, poi: Log.poi)
+      operation3.installLogger(log: Log.default, signpost: Log.signpost, poi: Log.poi)
+      gate.installLogger(log: Log.default, signpost: Log.signpost, poi: Log.poi)
     } else {
-      operation0.installTracker(log: Log.default, signpost: Log.signpost, poi: .disabled)
-      operation1.installTracker(log: Log.default, signpost: Log.signpost, poi: .disabled)
-      operation2.installTracker(log: Log.default, signpost: Log.signpost, poi: .disabled)
-      operation3.installTracker(log: Log.default, signpost: Log.signpost, poi: .disabled)
-      gate.installTracker(log: Log.default, signpost: Log.signpost, poi: .disabled)
+      operation0.installLogger(log: Log.default, signpost: Log.signpost, poi: .disabled)
+      operation1.installLogger(log: Log.default, signpost: Log.signpost, poi: .disabled)
+      operation2.installLogger(log: Log.default, signpost: Log.signpost, poi: .disabled)
+      operation3.installLogger(log: Log.default, signpost: Log.signpost, poi: .disabled)
+      gate.installLogger(log: Log.default, signpost: Log.signpost, poi: .disabled)
     }
 
     operation0.name = "op0"
@@ -390,7 +390,7 @@ final class AsynchronousOperationTests: XCTestCase {
   }
 }
 
-final class GateOperation: Operation, TrackableOperation {
+final class GateOperation: Operation, LoggableOperation {
   private let block: (GateOperation) -> Void
 
   init(block: @escaping (GateOperation) -> Void) {

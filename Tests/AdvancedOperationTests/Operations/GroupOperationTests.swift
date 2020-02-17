@@ -37,14 +37,14 @@ final class GroupOperationTests: XCTestCase {
     let operation3 = SleepyAsyncOperation()
     let operation4 = SleepyAsyncOperation()
 
-    operation1.installTracker()
-    operation2.installTracker()
-    operation3.installTracker()
-    operation4.installTracker()
+    operation1.installLogger()
+    operation2.installLogger()
+    operation3.installLogger()
+    operation4.installLogger()
 
     let groupOperation = GroupOperation(operations: operation1, operation2, operation3)
     groupOperation.qualityOfService = .userInitiated
-    groupOperation.installTracker()
+    groupOperation.installLogger()
     groupOperation.addOperation(operation4)
     let expectation1 = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: groupOperation, expectedValue: true)
     groupOperation.start()
@@ -62,16 +62,16 @@ final class GroupOperationTests: XCTestCase {
     let operation3 = SleepyAsyncOperation()
     let operation4 = SleepyAsyncOperation()
 
-    operation1.installTracker()
-    operation2.installTracker()
-    operation3.installTracker()
-    operation4.installTracker()
+    operation1.installLogger()
+    operation2.installLogger()
+    operation3.installLogger()
+    operation4.installLogger()
 
     let groupOperation1 = GroupOperation(operations: operation1, operation2)
     let groupOperation2 = GroupOperation(operations: operation3, operation4)
     let groupOperation3 = GroupOperation(operations: groupOperation1, groupOperation2)
     groupOperation3.qualityOfService = .userInitiated
-    groupOperation3.installTracker()
+    groupOperation3.installLogger()
 
     let expectation1 = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: groupOperation3, expectedValue: true)
     groupOperation3.start()
@@ -89,15 +89,15 @@ final class GroupOperationTests: XCTestCase {
     let operation4 = SleepyAsyncOperation(interval1: 1, interval2: 0, interval3: 0)
     let operation5 = BlockOperation()
 
-    operation1.installTracker()
-    operation2.installTracker()
-    operation3.installTracker()
-    operation4.installTracker()
-    operation5.installTracker()
+    operation1.installLogger()
+    operation2.installLogger()
+    operation3.installLogger()
+    operation4.installLogger()
+    operation5.installLogger()
 
     let groupOperation = GroupOperation(operations: operation1, operation2, operation3)
     groupOperation.maxConcurrentOperationCount = 1
-    groupOperation.installTracker()
+    groupOperation.installLogger()
     groupOperation.addOperations(operation4, operation5)
 
     let expectation1 = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: groupOperation, expectedValue: true)
@@ -116,13 +116,13 @@ final class GroupOperationTests: XCTestCase {
     let operation3 = SleepyAsyncOperation()
     let operation4 = SleepyAsyncOperation()
 
-    operation1.installTracker()
-    operation2.installTracker()
-    operation3.installTracker()
-    operation4.installTracker()
+    operation1.installLogger()
+    operation2.installLogger()
+    operation3.installLogger()
+    operation4.installLogger()
 
     let groupOperation = GroupOperation(operations: operation1, operation2, operation3)
-    groupOperation.installTracker()
+    groupOperation.installLogger()
     groupOperation.addOperation(operation4)
     let expectation1 = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: groupOperation, expectedValue: true)
     groupOperation.start()
@@ -137,13 +137,13 @@ final class GroupOperationTests: XCTestCase {
     let operation3 = SleepyAsyncOperation()
     let operation4 = SleepyAsyncOperation()
 
-    operation1.installTracker()
-    operation2.installTracker()
-    operation3.installTracker()
-    operation4.installTracker()
+    operation1.installLogger()
+    operation2.installLogger()
+    operation3.installLogger()
+    operation4.installLogger()
 
     let groupOperation = GroupOperation(operations: operation1, operation2, operation3)
-    groupOperation.installTracker()
+    groupOperation.installLogger()
     groupOperation.addOperation(operation4)
     let expectation1 = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: groupOperation, expectedValue: true)
     groupOperation.cancel()
@@ -158,9 +158,9 @@ final class GroupOperationTests: XCTestCase {
       let operation2 = SleepyAsyncOperation(interval1: 1, interval2: 0, interval3: 0)
       let operation3 = SleepyAsyncOperation(interval1: 1, interval2: 0, interval3: 0)
 
-      operation1.installTracker()
-      operation2.installTracker()
-      operation3.installTracker()
+      operation1.installLogger()
+      operation2.installLogger()
+      operation3.installLogger()
       operation3.addDependency(operation2)
 
       operation1.name = "op1"
@@ -171,25 +171,25 @@ final class GroupOperationTests: XCTestCase {
         let operation6 = OperationsGenerator { () -> [Operation] in
           let operation7 = BlockOperation { }
           operation7.name = "op7"
-          operation7.installTracker()
+          operation7.installLogger()
           return [operation7]
         }
         operation6.name = "op6"
-        operation6.installTracker()
+        operation6.installLogger()
         return [operation6]
       }
 
       operation5.name = "op5"
-      operation5.installTracker()
+      operation5.installLogger()
 
       return [operation1, operation2, operation3, operation5]
     }
 
     let operation4 = BlockOperation { }
-    operation4.installTracker()
+    operation4.installLogger()
     operation4.name = "op4"
 
-    groupOperation.installTracker()
+    groupOperation.installLogger()
     groupOperation.addOperation(operation4)
     let expectation1 = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: groupOperation, expectedValue: true)
     groupOperation.start()
@@ -203,13 +203,13 @@ final class GroupOperationTests: XCTestCase {
     let operation3 = SleepyAsyncOperation()
     let operation4 = SleepyAsyncOperation()
 
-    operation1.installTracker()
-    operation2.installTracker()
-    operation3.installTracker()
-    operation4.installTracker()
+    operation1.installLogger()
+    operation2.installLogger()
+    operation3.installLogger()
+    operation4.installLogger()
 
     let groupOperation = GroupOperation(operations: operation1, operation2, operation3)
-    groupOperation.installTracker()
+    groupOperation.installLogger()
     groupOperation.addOperation(operation4)
     let expectation1 = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: groupOperation, expectedValue: true)
     queue.addOperation(groupOperation)
@@ -224,13 +224,13 @@ final class GroupOperationTests: XCTestCase {
     let operation3 = SleepyAsyncOperation()
     let operation4 = SleepyAsyncOperation()
 
-    operation1.installTracker()
-    operation2.installTracker()
-    operation3.installTracker()
-    operation4.installTracker()
+    operation1.installLogger()
+    operation2.installLogger()
+    operation3.installLogger()
+    operation4.installLogger()
 
     let groupOperation = GroupOperation(operations: operation1, operation2, operation3)
-    groupOperation.installTracker()
+    groupOperation.installLogger()
     groupOperation.addOperation(operation4)
     let expectation1 = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: groupOperation, expectedValue: true)
     groupOperation.cancel()

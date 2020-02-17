@@ -243,7 +243,7 @@ internal final class StringToIntOperation: Operation & InputConsumingOperation &
 
 // MARK: - AsynchronousOperation
 
-internal final class FailingOperation: Operation, FailableOperation, TrackableOperation {
+internal final class FailingOperation: Operation, FailableOperation, LoggableOperation {
   enum FailureError: Error {
     case errorOne
     case errorTwo
@@ -338,10 +338,10 @@ internal enum Log {
   static var poi: OSLog = OSLog(subsystem: Log.identifier, category: .pointsOfInterest)
 }
 
-extension RunUntilCancelledAsyncOperation: TrackableOperation { }
-extension GroupOperation: TrackableOperation { }
-extension SleepyAsyncOperation: TrackableOperation { }
-extension OperationsGenerator: TrackableOperation { }
-extension AsyncBlockOperation: TrackableOperation { }
-extension AutoCancellingAsyncOperation: TrackableOperation { }
-extension BlockOperation: TrackableOperation { }
+extension RunUntilCancelledAsyncOperation: LoggableOperation { }
+extension GroupOperation: LoggableOperation { }
+extension SleepyAsyncOperation: LoggableOperation { }
+extension OperationsGenerator: LoggableOperation { }
+extension AsyncBlockOperation: LoggableOperation { }
+extension AutoCancellingAsyncOperation: LoggableOperation { }
+extension BlockOperation: LoggableOperation { }

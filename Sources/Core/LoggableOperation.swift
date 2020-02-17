@@ -26,40 +26,40 @@ import os.log
 
 /// Operations conforming to this protcol can log their most relevant status changes.
 /// - Warning: If using Swift 5.0 or lower run `KVOCrashWorkaround.installFix()` to solve some  multithreading bugs in Swift's KVO.
-public protocol TrackableOperation: Operation { }
+public protocol LoggableOperation: Operation { }
 
-private var trackerKey: UInt8 = 0
-extension TrackableOperation {
-  private var tracker: Tracker? {
+private var loggerKey: UInt8 = 0
+extension LoggableOperation {
+  private var logger: Logger? {
     get {
-      return objc_getAssociatedObject(self, &trackerKey) as? Tracker
+      return objc_getAssociatedObject(self, &loggerKey) as? Logger
     }
     set {
-      objc_setAssociatedObject(self, &trackerKey, newValue, objc_AssociationPolicy.OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+      objc_setAssociatedObject(self, &loggerKey, newValue, objc_AssociationPolicy.OBJC_ASSOCIATION_RETAIN_NONATOMIC)
     }
   }
   
-  public func installTracker(log: OSLog = .default, signpost: OSLog = .disabled, poi: OSLog = .disabled) {
+  public func installLogger(log: OSLog = .default, signpost: OSLog = .disabled, poi: OSLog = .disabled) {
     objc_sync_enter(self)
     defer { objc_sync_exit(self) }
     // https://github.com/ReactiveX/RxSwift/blob/6b2a406b928cc7970874dcaed0ab18e7265e41ef/RxCocoa/Foundation/NSObject%2BRx.swift
     
-    precondition(!self.isExecuting || !self.isFinished || !self.isCancelled, "The tracker should be installed before any relevant operation phases are occurred.")
-    if tracker == nil {
-      tracker = Tracker(log: log, signpost: signpost, poi: poi)
-      tracker?.start(operation: self)
+    precondition(!self.isExecuting || !self.isFinished || !self.isCancelled, "The logger should be installed before any relevant operation phases are occurred.")
+    if logger == nil {
+      logger = Logger(log: log, signpost: signpost, poi: poi)
+      logger?.start(operation: self)
     }
   }
   
   // TODO: expose this log?
   internal var log: OSLog {
-    return tracker?.log ?? .disabled
+    return logger?.log ?? .disabled
   }
 }
 
-// MARK: - Tracker
+// MARK: - Logger
 
-final class Tracker {
+final class Logger {
   static let signPostIntervalName: StaticString = "Operation"
   
   fileprivate let log: OSLog
@@ -82,7 +82,7 @@ final class Tracker {
   }()
   
   // swiftlint:disable:next cyclomatic_complexity
-  func start<T>(operation: T) where T: TrackableOperation {
+  func start<T>(operation: T) where T: LoggableOperation {
     let lock = UnfairLock()
     
     // uses default and poi logs
@@ -121,7 +121,7 @@ final class Tracker {
         self.started = true
         if #available(iOS 12.0, iOSApplicationExtension 12.0, tvOS 12.0, watchOS 5.0, macOS 10.14, OSXApplicationExtension 10.14, *) {
           os_log(.info, log: self.log, "%{public}s has started.", operation.operationName)
-          os_signpost(.begin, log: self.signpost, name: Tracker.signPostIntervalName, signpostID: self.signpostID, "🔼 %{public}s has started.", operation.operationName)
+          os_signpost(.begin, log: self.signpost, name: Logger.signPostIntervalName, signpostID: self.signpostID, "🔼 %{public}s has started.", operation.operationName)
         } else {
           os_log("%{public}s has started.", log: self.log, type: .info, operation.operationName)
         }
@@ -156,7 +156,7 @@ final class Tracker {
       
       if self.started { // the end signpost should be logged only if the operation has logged the begin signpost
         if #available(iOS 12.0, iOSApplicationExtension 12.0, tvOS 12.0, watchOS 5.0, macOS 10.14, OSXApplicationExtension 10.14, *) {
-          os_signpost(.end, log: self.signpost, name: Tracker.signPostIntervalName, signpostID: self.signpostID, "🔽 %{public}s has finished.", operation.operationName)
+          os_signpost(.end, log: self.signpost, name: Logger.signPostIntervalName, signpostID: self.signpostID, "🔽 %{public}s has finished.", operation.operationName)
         }
       }
     }
