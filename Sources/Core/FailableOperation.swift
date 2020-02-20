@@ -56,9 +56,16 @@ public extension FailableOperation {
 }
 
 public extension Operation {
-  /// Returns `true` if at least one dependency conforming to `FailableOperation` has generated an error.
+  /// Returns `true` if **at least one** dependency conforming to `FailableOperation` has generated an error.
   var hasSomeFailedDependencies: Bool {
-    return dependencies.first { ($0 as? _FailableOperation)?.isFailed ?? false } != nil
+    return dependencies.hasSomeFailedOperations
+  }
+}
+
+extension Collection where Element: Operation {
+  /// Returns `true` if **at least one** operation conforming to `FailableOperation` has generated an error.
+  var hasSomeFailedOperations: Bool {
+    return self.first { ($0 as? _FailableOperation)?.isFailed ?? false } != nil
   }
 }
 
