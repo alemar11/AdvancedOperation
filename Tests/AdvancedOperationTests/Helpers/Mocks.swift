@@ -282,7 +282,7 @@ internal final class OperationsGenerator: Operation, GeneratorOperation {
   }
 }
 
-/// This GroupOperation creates its operation lazily: this can be useful if the operations requires expensive work to be configured.
+/// This GroupOperation creates its operations lazily: this can be useful if the operations requires expensive work to be configured.
 internal final class LazyGroupOperation: GroupOperation {
   init(operationsBuilder: @escaping () -> [Operation]) {
     let generator = OperationsGenerator(operationsBuilder: operationsBuilder)
