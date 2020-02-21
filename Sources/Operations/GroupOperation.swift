@@ -91,9 +91,15 @@ open class GroupOperation: AsynchronousOperation {
   }
 
   public final func addOperation(_ operation: Operation) {
+    // TODO: this show be thread safe
     precondition(!isFinished || !isCancelled, "Operations can only be added if the group operation has not yet finished/canceled.")
     precondition(!finishingOperation.isExecuting || !finishingOperation.isFinished || !finishingOperation.isCancelled, "Operations can't be added while the GroupOperation is finishing.")
 
+    // TODO: what if an operation is being added right after all current child operations have completed,
+    // but *prior* to being able to process the finishingOperation?
+    
+    // TODO: what if the GroupOperation is already cancelled? we have a precondition but maybe it's better if we cancel manually
+    // those operations and then we add them
     setupOperation(operation)
   }
 
