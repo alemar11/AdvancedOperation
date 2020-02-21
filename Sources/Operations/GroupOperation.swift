@@ -47,6 +47,7 @@ open class GroupOperation: AsynchronousOperation {
       return operationQueue.qualityOfService
     }
     set {
+      super.qualityOfService = newValue
       operationQueue.qualityOfService = newValue
       // startingOperation.qualityOfService = newValue
       // finishingOperation.qualityOfService = newValue
