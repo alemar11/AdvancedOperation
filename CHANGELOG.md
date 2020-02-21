@@ -2,6 +2,11 @@
 
 ### 5.1.0
 
+- Operations cannot be ad added anymore to a `GroupOperation` after being initialized.
+- Refinements.
+
+### 5.1.0
+
 - Added `GroupOperation`.
 - Added `ResultOperation`
 - Added `GeneratorOperation` protocol.

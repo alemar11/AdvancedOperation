@@ -284,12 +284,16 @@ internal final class OperationsGenerator: Operation, GeneratorOperation {
 
 /// This GroupOperation creates its operations lazily: this can be useful if the operations requires expensive work to be configured.
 internal final class LazyGroupOperation: GroupOperation {
-  init(operationsBuilder: @escaping () -> [Operation]) {
+  init(targetQueue: OperationQueue, operationsBuilder: @escaping () -> [Operation]) {
     let generator = OperationsGenerator(operationsBuilder: operationsBuilder)
     super.init(operations: [generator])
     generator.name = "Generator<\(self.operationName)>"
     generator.onOperationGenerated = { [weak self] operation in
-      self?.addOperation(operation)
+      guard let self = self else { return }
+      
+      if !self.isCancelled {
+        targetQueue.addOperation(operation)
+      }
     }
   }
 }

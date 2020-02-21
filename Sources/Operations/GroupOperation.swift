@@ -27,7 +27,7 @@ import Foundation
 /// Use a `GroupOperation` to associate related operations together, thereby creating higher levels of abstractions.
 open class GroupOperation: AsynchronousOperation {
   // MARK: - Public Properties
-
+  
   /// The maximum number of queued operations that can execute at the same time inside the `GroupOperation`.
   ///
   /// The value in this property affects only the operations that the current GroupOperation has executing at the same time.
@@ -40,7 +40,7 @@ open class GroupOperation: AsynchronousOperation {
       operationQueue.maxConcurrentOperationCount = newValue
     }
   }
-
+  
   /// The relative amount of importance for granting system resources to the operation.
   public override var qualityOfService: QualityOfService {
     get {
@@ -53,58 +53,41 @@ open class GroupOperation: AsynchronousOperation {
       // finishingOperation.qualityOfService = newValue
     }
   }
-
+  
   // MARK: - Private Properties
-
+  
   private lazy var operationQueue: OperationQueue = {
     let queue = OperationQueue()
     queue.isSuspended = true
     return queue
   }()
-
+  
   private lazy var startingOperation: BlockOperation = {
     let operation = BlockOperation()
     operation.name = "StartingOperation<\(self.operationName)>"
     return operation
   }()
-
+  
   private lazy var finishingOperation: BlockOperation = {
     let operation = BlockOperation()
     operation.name = "FinishingOperation<\(self.operationName)>"
     operation.completionBlock = { [weak self] in self?.finish() }
     return operation
   }()
-
+  
   public convenience init(operations: Operation...) {
     self.init(operations: operations)
   }
-
+  
   public init(operations: [Operation]) {
     super.init()
     operationQueue.addOperation(startingOperation)
-
-    operations.forEach { setupOperation($0) }
-  }
-
-  public final func addOperations(_ operations: Operation...) {
+    
     operations.forEach { addOperation($0) }
   }
-
-  public final func addOperation(_ operation: Operation) {
-    // TODO: this show be thread safe
-    precondition(!isFinished || !isCancelled, "Operations can only be added if the group operation has not yet finished/canceled.")
-    precondition(!finishingOperation.isExecuting || !finishingOperation.isFinished || !finishingOperation.isCancelled, "Operations can't be added while the GroupOperation is finishing.")
-
-    // TODO: what if an operation is being added right after all current child operations have completed,
-    // but *prior* to being able to process the finishingOperation?
-    
-    // TODO: what if the GroupOperation is already cancelled? we have a precondition but maybe it's better if we cancel manually
-    // those operations and then we add them
-    setupOperation(operation)
-  }
-
+  
   // MARK: - Public Methods
-
+  
   ///  The default implementation of this method executes the scheduled operations.
   ///  If you override this method to perform the desired task,  invoke super in your implementation as last statement.
   ///  This method will automatically execute within an autorelease pool provided by Operation, so you do not need to create your own autorelease pool block in your implementation.
@@ -113,19 +96,23 @@ open class GroupOperation: AsynchronousOperation {
       self.finish()
       return
     }
-
+    
     operationQueue.addOperation(finishingOperation)
     operationQueue.isSuspended = false
   }
-
+  
   open override func cancel() {
     super.cancel()
     operationQueue.cancelAllOperations()
   }
-
+  
   // MARK: - Private Methods
-
-  private func setupOperation(_ operation: Operation) {
+  
+  private func addOperation(_ operation: Operation) {
+    assert(!isFinished && !isCancelled, "Operations can only be added if the GroupOperation has not yet finished/cancelled.")
+    //assert(!finishingOperation.isReady, "Operations can't be added once the GroupOperation is about to finish.")
+    //assert(!finishingOperation.isExecuting && !finishingOperation.isFinished && !finishingOperation.isCancelled, "Operations can't be added while the GroupOperation is finishing.")
+    
     operation.addDependency(startingOperation)
     finishingOperation.addDependency(operation)
     operationQueue.addOperation(operation)
