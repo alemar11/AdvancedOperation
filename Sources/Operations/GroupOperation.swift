@@ -71,9 +71,14 @@ open class GroupOperation: AsynchronousOperation {
   private lazy var finishingOperation: BlockOperation = {
     let operation = BlockOperation()
     operation.name = "FinishingOperation<\(self.operationName)>"
-    operation.completionBlock = { [weak self] in self?.finish() }
+    operation.completionBlock = { [weak self] in
+      self?.operationQueue.isSuspended = true
+      self?.finish()
+    }
     return operation
   }()
+
+  // MARK: - Initializers
   
   public convenience init(operations: Operation...) {
     self.init(operations: operations)
