@@ -81,7 +81,6 @@ open class GroupOperation: AsynchronousOperation {
   public init(underlyingQueue: DispatchQueue? = nil, operations: [Operation]) {
     super.init()
     operationQueue.underlyingQueue = underlyingQueue
-    //operationQueue.addOperation(startingOperation)
     operations.forEach { addOperation($0) }
   }
   
