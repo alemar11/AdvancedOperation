@@ -61,13 +61,7 @@ open class GroupOperation: AsynchronousOperation {
     queue.isSuspended = true
     return queue
   }()
-  
-  private lazy var startingOperation: BlockOperation = {
-    let operation = BlockOperation()
-    operation.name = "StartingOperation<\(self.operationName)>"
-    return operation
-  }()
-  
+    
   private lazy var finishingOperation: BlockOperation = {
     let operation = BlockOperation()
     operation.name = "FinishingOperation<\(self.operationName)>"
@@ -80,14 +74,14 @@ open class GroupOperation: AsynchronousOperation {
 
   // MARK: - Initializers
   
-  public convenience init(operations: Operation...) {
-    self.init(operations: operations)
+  public convenience init(underlyingQueue: DispatchQueue? = nil, operations: Operation...) {
+    self.init(underlyingQueue: underlyingQueue, operations: operations)
   }
   
-  public init(operations: [Operation]) {
+  public init(underlyingQueue: DispatchQueue? = nil, operations: [Operation]) {
     super.init()
-    operationQueue.addOperation(startingOperation)
-    
+    operationQueue.underlyingQueue = underlyingQueue
+    //operationQueue.addOperation(startingOperation)
     operations.forEach { addOperation($0) }
   }
   
@@ -118,7 +112,7 @@ open class GroupOperation: AsynchronousOperation {
     //assert(!finishingOperation.isReady, "Operations can't be added once the GroupOperation is about to finish.")
     //assert(!finishingOperation.isExecuting && !finishingOperation.isFinished && !finishingOperation.isCancelled, "Operations can't be added while the GroupOperation is finishing.")
     
-    operation.addDependency(startingOperation)
+    //operation.addDependency(startingOperation)
     finishingOperation.addDependency(operation)
     operationQueue.addOperation(operation)
   }
