@@ -37,3 +37,8 @@ internal let identifier = "org.tinrobots.AdvancedOperation"
 //
 // https://developer.apple.com/videos/play/wwdc2015/718/
 // https://forums.developer.apple.com/thread/51952
+//
+// Additional Tech Notes
+//
+// https://developer.apple.com/videos/play/wwdc2017/706/
+
