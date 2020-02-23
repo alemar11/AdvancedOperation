@@ -119,6 +119,13 @@
 		D25DB58623F4ADA6002B91C5 /* ResultOperationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D25DB58523F4ADA6002B91C5 /* ResultOperationTests.swift */; };
 		D25DB58723F4ADA6002B91C5 /* ResultOperationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D25DB58523F4ADA6002B91C5 /* ResultOperationTests.swift */; };
 		D25DB58823F4ADA6002B91C5 /* ResultOperationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D25DB58523F4ADA6002B91C5 /* ResultOperationTests.swift */; };
+		D2D48FC62400744400D429BC /* LoopOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2D48FC52400744400D429BC /* LoopOperation.swift */; };
+		D2D48FC72400744400D429BC /* LoopOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2D48FC52400744400D429BC /* LoopOperation.swift */; };
+		D2D48FC82400744400D429BC /* LoopOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2D48FC52400744400D429BC /* LoopOperation.swift */; };
+		D2D48FC92400744400D429BC /* LoopOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2D48FC52400744400D429BC /* LoopOperation.swift */; };
+		D2D48FCB240079BE00D429BC /* LoopOperationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2D48FCA240079BE00D429BC /* LoopOperationTests.swift */; };
+		D2D48FCC240079BE00D429BC /* LoopOperationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2D48FCA240079BE00D429BC /* LoopOperationTests.swift */; };
+		D2D48FCD240079BE00D429BC /* LoopOperationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2D48FCA240079BE00D429BC /* LoopOperationTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -190,6 +197,8 @@
 		D254E22323C3A68800A1586E /* LICENSE.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = LICENSE.md; sourceTree = SOURCE_ROOT; };
 		D25DB57E23F49EFC002B91C5 /* ResultOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultOperation.swift; sourceTree = "<group>"; };
 		D25DB58523F4ADA6002B91C5 /* ResultOperationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultOperationTests.swift; sourceTree = "<group>"; };
+		D2D48FC52400744400D429BC /* LoopOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoopOperation.swift; sourceTree = "<group>"; };
+		D2D48FCA240079BE00D429BC /* LoopOperationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoopOperationTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -254,6 +263,7 @@
 				06C92B4F23D0AAEA000D12C8 /* AsynchronousBlockOperationTests.swift */,
 				064B0D8823F4166300C8331F /* GroupOperationTests.swift */,
 				D25DB58523F4ADA6002B91C5 /* ResultOperationTests.swift */,
+				D2D48FCA240079BE00D429BC /* LoopOperationTests.swift */,
 			);
 			path = Operations;
 			sourceTree = "<group>";
@@ -381,6 +391,7 @@
 		D25DB58323F4A3B9002B91C5 /* Operations */ = {
 			isa = PBXGroup;
 			children = (
+				D2D48FC52400744400D429BC /* LoopOperation.swift */,
 				06C92B4A23D0A9FF000D12C8 /* AsynchronousBlockOperation.swift */,
 				064B0D8323F4032100C8331F /* GroupOperation.swift */,
 				D25DB57E23F49EFC002B91C5 /* ResultOperation.swift */,
@@ -745,6 +756,7 @@
 				06C92B4B23D0A9FF000D12C8 /* AsynchronousBlockOperation.swift in Sources */,
 				0664BF3623D5B91100B491E6 /* FailableOperation.swift in Sources */,
 				064B0D9123F451F000C8331F /* GeneratorOperation.swift in Sources */,
+				D2D48FC62400744400D429BC /* LoopOperation.swift in Sources */,
 				23F24D22200799B800B25A03 /* Operation+Utils.swift in Sources */,
 				239BC52220EB7539009A36D9 /* InputConsumingOperation.swift in Sources */,
 				D21C5D8423D3674E005F8D51 /* AsynchronousOperation.swift in Sources */,
@@ -766,6 +778,7 @@
 				06C92B4C23D0A9FF000D12C8 /* AsynchronousBlockOperation.swift in Sources */,
 				0664BF3723D5B91100B491E6 /* FailableOperation.swift in Sources */,
 				064B0D9223F451F000C8331F /* GeneratorOperation.swift in Sources */,
+				D2D48FC72400744400D429BC /* LoopOperation.swift in Sources */,
 				23F24D23200799B800B25A03 /* Operation+Utils.swift in Sources */,
 				239BC52320EB7539009A36D9 /* InputConsumingOperation.swift in Sources */,
 				D21C5D8523D3674E005F8D51 /* AsynchronousOperation.swift in Sources */,
@@ -787,6 +800,7 @@
 				06C92B4D23D0A9FF000D12C8 /* AsynchronousBlockOperation.swift in Sources */,
 				0664BF3823D5B91100B491E6 /* FailableOperation.swift in Sources */,
 				064B0D9323F451F000C8331F /* GeneratorOperation.swift in Sources */,
+				D2D48FC82400744400D429BC /* LoopOperation.swift in Sources */,
 				23F24D24200799B800B25A03 /* Operation+Utils.swift in Sources */,
 				239BC52420EB7539009A36D9 /* InputConsumingOperation.swift in Sources */,
 				D21C5D8623D3674E005F8D51 /* AsynchronousOperation.swift in Sources */,
@@ -808,6 +822,7 @@
 				06C92B4E23D0A9FF000D12C8 /* AsynchronousBlockOperation.swift in Sources */,
 				0664BF3923D5B91100B491E6 /* FailableOperation.swift in Sources */,
 				064B0D9423F451F000C8331F /* GeneratorOperation.swift in Sources */,
+				D2D48FC92400744400D429BC /* LoopOperation.swift in Sources */,
 				23F24D25200799B800B25A03 /* Operation+Utils.swift in Sources */,
 				239BC52520EB7539009A36D9 /* InputConsumingOperation.swift in Sources */,
 				D21C5D8723D3674E005F8D51 /* AsynchronousOperation.swift in Sources */,
@@ -820,6 +835,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				D25DB58823F4ADA6002B91C5 /* ResultOperationTests.swift in Sources */,
+				D2D48FCD240079BE00D429BC /* LoopOperationTests.swift in Sources */,
 				064B0D8F23F4168600C8331F /* GroupOperationTests.swift in Sources */,
 				D2093D38236606F400230A2A /* AsynchronousOperationTests.swift in Sources */,
 				D2093D3C2366175200230A2A /* OperationInjectionTests.swift in Sources */,
@@ -835,6 +851,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				D25DB58623F4ADA6002B91C5 /* ResultOperationTests.swift in Sources */,
+				D2D48FCB240079BE00D429BC /* LoopOperationTests.swift in Sources */,
 				064B0D8D23F4168500C8331F /* GroupOperationTests.swift in Sources */,
 				D2093D36236606F400230A2A /* AsynchronousOperationTests.swift in Sources */,
 				D2093D3A2366175200230A2A /* OperationInjectionTests.swift in Sources */,
@@ -850,6 +867,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				D25DB58723F4ADA6002B91C5 /* ResultOperationTests.swift in Sources */,
+				D2D48FCC240079BE00D429BC /* LoopOperationTests.swift in Sources */,
 				064B0D8E23F4168600C8331F /* GroupOperationTests.swift in Sources */,
 				D2093D37236606F400230A2A /* AsynchronousOperationTests.swift in Sources */,
 				D2093D3B2366175200230A2A /* OperationInjectionTests.swift in Sources */,

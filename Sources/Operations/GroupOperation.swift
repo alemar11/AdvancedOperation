@@ -73,16 +73,36 @@ open class GroupOperation: AsynchronousOperation {
   }()
 
   // MARK: - Initializers
-  
+
   public convenience init(underlyingQueue: DispatchQueue? = nil, operations: Operation...) {
     self.init(underlyingQueue: underlyingQueue, operations: operations)
   }
-  
-  public init(underlyingQueue: DispatchQueue? = nil, operations: [Operation]) {
+
+  private var ops: () -> [Operation]
+
+  public convenience init(block: @escaping () -> [Operation]) {
+    self.init(underlyingQueue: nil, operations: block())
+  }
+
+  public init(underlyingQueue: DispatchQueue? = nil, operations: @escaping @autoclosure () -> [Operation]) {
+    self.ops = operations
     super.init()
     operationQueue.underlyingQueue = underlyingQueue
-    operations.forEach { addOperation($0) }
   }
+
+//  public convenience init(underlyingQueue: OperationQueue? = nil, operations: Operation...) {
+//    self.init(underlyingQueue: underlyingQueue, operations: operations)
+//  }
+//
+//  public init(underlyingQueue: OperationQueue? = nil, operations: [Operation]) {
+//    super.init()
+//    if let uq = underlyingQueue {
+//      //operationQueue.underlyingQueue = underlyingQueue
+//      operationQueue = uq
+//    }
+//
+//    operations.forEach { addOperation($0) }
+//  }
   
   // MARK: - Public Methods
   
@@ -93,6 +113,11 @@ open class GroupOperation: AsynchronousOperation {
     guard !isCancelled else {
       self.finish()
       return
+    }
+
+    let ops = self.ops()
+    for o in ops {
+      addOperation(o)
     }
     
     operationQueue.addOperation(finishingOperation)
@@ -116,3 +141,21 @@ open class GroupOperation: AsynchronousOperation {
     operationQueue.addOperation(operation)
   }
 }
+
+// TODO: ideas...
+/**
+ public convenience init(underlyingQueue: DispatchQueue? = nil, operations: Operation...) {
+   self.init(underlyingQueue: underlyingQueue, operations: operations)
+ }
+
+ private var ops: () -> [Operation]
+
+ public convenience init(block: @escaping () -> [Operation]) {
+   self.init(underlyingQueue: nil, operations: block())
+ }
+
+ public init(underlyingQueue: DispatchQueue? = nil, operations: @escaping @autoclosure () -> [Operation]) {
+   self.ops = operations
+   super.init()
+   operationQueue.underlyingQueue = underlyingQueue
+ */

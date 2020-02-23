@@ -227,3 +227,32 @@ final class GroupOperationTests: XCTestCase {
     wait(for: [expectation1], timeout: 5)
   }
 }
+
+class IOGroupOperation: GroupOperation, InputConsumingOperation, OutputProducingOperation {
+  var input: Int? {
+    set {
+      initialOperation.input = newValue
+    }
+    get {
+      return initialOperation.input
+    }
+  }
+  var output: Int? {
+    return finalOperation.output
+  }
+
+  private let initialOperation: IntToStringOperation
+  private let finalOperation: StringToIntOperation
+
+  init(test: String) {
+    finalOperation.addDependency(initialOperation)
+    super.init(operations: initialOperation, finalOperation)
+  }
+
+//  override init(underlyingQueue: OperationQueue? = nil, operations: [Operation]) {
+//    super.init(operations: operations)
+//    let b = BlockOperation { [unowned self] in
+//      self.output = nil
+//    }
+//  }
+}
