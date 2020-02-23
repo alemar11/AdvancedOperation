@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name    = 'AdvancedOperation'
-  s.version = '5.0.0'
+  s.version = '5.1.0'
   s.license = 'MIT'
   s.documentation_url = 'http://www.tinrobots.org/AdvancedOperation'  
   s.summary   = 'Advanced operations.'
