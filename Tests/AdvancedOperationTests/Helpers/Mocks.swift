@@ -272,7 +272,7 @@ internal final class OperationsGenerator: Operation, GeneratorOperation {
   }
   
   private func setupOperation(_ operation: Operation) {
-    // If the operation is a producing one, we bubble up the produced operation
+    // If the operation is a generating one, we bubble up the produced operation
     if let generator = operation as? GeneratorOperation {
       generator.onOperationGenerated = { [weak self] op in
         self?.setupOperation(op)
@@ -282,7 +282,7 @@ internal final class OperationsGenerator: Operation, GeneratorOperation {
   }
 }
 
-/// This GroupOperation creates its operation lazily: this can be useful if the operations requires expensive work to be configured.
+/// This GroupOperation creates its operations lazily: this can be useful if the operations requires expensive work to be configured.
 internal final class LazyGroupOperation: GroupOperation {
   init(operationsBuilder: @escaping () -> [Operation]) {
     let generator = OperationsGenerator(operationsBuilder: operationsBuilder)
