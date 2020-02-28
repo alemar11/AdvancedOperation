@@ -49,60 +49,53 @@ open class GroupOperation: AsynchronousOperation {
     set {
       super.qualityOfService = newValue
       operationQueue.qualityOfService = newValue
-      // startingOperation.qualityOfService = newValue
-      // finishingOperation.qualityOfService = newValue
     }
   }
   
   // MARK: - Private Properties
   
+  /// Underlying OperationQueue
   private lazy var operationQueue: OperationQueue = {
     let queue = OperationQueue()
     queue.isSuspended = true
     return queue
   }()
-    
-  private lazy var finishingOperation: BlockOperation = {
-    let operation = BlockOperation()
-    operation.name = "FinishingOperation<\(self.operationName)>"
-    operation.completionBlock = { [weak self] in
-      self?.operationQueue.isSuspended = true
-      self?.finish()
+  
+  /// Count of not yet finished operations. This count should be used only inside `addOperation(_:)`.
+  private var pendingOperationsCount: Int = 0 {
+    didSet {
+      if pendingOperationsCount == 0 {
+        self.operationQueue.isSuspended = true
+        self.finish()
+      }
     }
-    return operation
-  }()
-
+  }
+  
+  private let lock = UnfairLock()
+  
+  private var tokens = [NSKeyValueObservation]()
+  
   // MARK: - Initializers
-
-  public convenience init(underlyingQueue: DispatchQueue? = nil, operations: Operation...) {
+  
+  public convenience init(underlyingQueue: OperationQueue? = nil, operations: Operation...) {
     self.init(underlyingQueue: underlyingQueue, operations: operations)
   }
-
-  private var ops: () -> [Operation]
-
-  public convenience init(block: @escaping () -> [Operation]) {
-    self.init(underlyingQueue: nil, operations: block())
-  }
-
-  public init(underlyingQueue: DispatchQueue? = nil, operations: @escaping @autoclosure () -> [Operation]) {
-    self.ops = operations
+  
+  public init(underlyingQueue: OperationQueue? = nil, operations: [Operation]) {
     super.init()
-    operationQueue.underlyingQueue = underlyingQueue
+    if let underlyingQueue = underlyingQueue {
+      self.operationQueue = underlyingQueue // TODO not sure about this one, maybe just pass the targetQueue
+    }
+    
+    operations.forEach { addOperation($0) }
   }
-
-//  public convenience init(underlyingQueue: OperationQueue? = nil, operations: Operation...) {
-//    self.init(underlyingQueue: underlyingQueue, operations: operations)
-//  }
-//
-//  public init(underlyingQueue: OperationQueue? = nil, operations: [Operation]) {
-//    super.init()
-//    if let uq = underlyingQueue {
-//      //operationQueue.underlyingQueue = underlyingQueue
-//      operationQueue = uq
-//    }
-//
-//    operations.forEach { addOperation($0) }
-//  }
+  
+  deinit {
+    tokens.forEach { $0.invalidate() }
+    tokens.removeAll()
+  }
+  
+  
   
   // MARK: - Public Methods
   
@@ -114,13 +107,7 @@ open class GroupOperation: AsynchronousOperation {
       self.finish()
       return
     }
-
-    let ops = self.ops()
-    for o in ops {
-      addOperation(o)
-    }
     
-    operationQueue.addOperation(finishingOperation)
     operationQueue.isSuspended = false
   }
   
@@ -129,33 +116,36 @@ open class GroupOperation: AsynchronousOperation {
     operationQueue.cancelAllOperations()
   }
   
-  // MARK: - Private Methods
-  
-  private func addOperation(_ operation: Operation) {
-    assert(!isFinished && !isCancelled, "Operations can only be added if the GroupOperation has not yet finished/cancelled.")
-    //assert(!finishingOperation.isReady, "Operations can't be added once the GroupOperation is about to finish.")
-    //assert(!finishingOperation.isExecuting && !finishingOperation.isFinished && !finishingOperation.isCancelled, "Operations can't be added while the GroupOperation is finishing.")
+  /// Adds a new `operation` to the `GroupOperation`.
+  ///
+  /// - Note: If the `GroupOperation` is already cancelled,  the new  operation will be cancelled before being added.
+  public final func addOperation(_ operation: Operation) {
+    lock.lock()
+    defer { lock.unlock() }
     
-    //operation.addDependency(startingOperation)
-    finishingOperation.addDependency(operation)
+    assert(!isFinished, "Operations can only be added if the GroupOperation has not yet finished.")
+    guard !isFinished else {
+      return
+    }
+    
+    // If the GroupOperation is cancelled, operations will be cancelled before being added to the queue.
+    if isCancelled {
+      operation.cancel()
+    }
+    
+    pendingOperationsCount += 1
+    let finishToken = operation.observe(\.isFinished, options: [.old, .new]) { [weak self] (_, changes) in
+      guard let self = self else { return }
+      guard let oldValue = changes.oldValue, let newValue = changes.newValue, oldValue != newValue else { return }
+      guard newValue else { return }
+      
+      self.lock.lock()
+      self.pendingOperationsCount -= 1
+      self.lock.unlock()
+    }
+    
+    tokens.append(finishToken)
+    
     operationQueue.addOperation(operation)
   }
 }
-
-// TODO: ideas...
-/**
- public convenience init(underlyingQueue: DispatchQueue? = nil, operations: Operation...) {
-   self.init(underlyingQueue: underlyingQueue, operations: operations)
- }
-
- private var ops: () -> [Operation]
-
- public convenience init(block: @escaping () -> [Operation]) {
-   self.init(underlyingQueue: nil, operations: block())
- }
-
- public init(underlyingQueue: DispatchQueue? = nil, operations: @escaping @autoclosure () -> [Operation]) {
-   self.ops = operations
-   super.init()
-   operationQueue.underlyingQueue = underlyingQueue
- */

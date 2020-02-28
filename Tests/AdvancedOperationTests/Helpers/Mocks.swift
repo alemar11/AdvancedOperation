@@ -179,6 +179,39 @@ final internal class RunUntilCancelledAsyncOperation: AsynchronousOperation {
   }
 }
 
+/// This operation will run indefinitely and can't be cancelled. Call `stop` to finish it.
+final internal class InfiniteOperation: AsyncOperation {
+  let isStopped = Atomic(false)
+  func stop() {
+    isStopped.mutate { $0 = true }
+  }
+  
+  override func main() {
+    while true {
+      sleep(1)
+      if isStopped.value {
+        self.finish()
+        break
+      }
+    }
+  }
+}
+
+/// Operation expected to be cancelled before starting its execution.
+final internal class CancelledOperation: Operation {
+  private let file: StaticString
+  private let line: UInt
+  init(file: StaticString = #file, line: UInt = #line) {
+    self.file = file
+    self.line = line
+    super.init()
+  }
+  
+  override func main() {
+    XCTAssert(isCancelled, "This operation is expected to be cancelled before starting its execution.", file: file, line: line)
+  }
+}
+
 // MARK: - Operation
 
 //internal final class IntToStringOperation: Operation & InputConsumingOperation & OutputProducingOperation {
@@ -258,7 +291,7 @@ internal final class FailingOperation: Operation, FailableOperation, LoggableOpe
 
 // MARK: - GroupOperation
 
-internal final class OperationsGenerator: Operation, GeneratorOperation {
+internal final class OperationsGenerator: AsyncOperation, GeneratorOperation {
   var onOperationGenerated: ((Operation) -> Void)?
   private let builder: () -> [Operation]
   
@@ -269,15 +302,43 @@ internal final class OperationsGenerator: Operation, GeneratorOperation {
   
   override func main() {
     builder().forEach { setupOperation($0) }
+    
+    if count.value == 0 {
+      self.finish()
+    }
   }
   
+  var count = Atomic(0)
+  
   private func setupOperation(_ operation: Operation) {
+    print("⏺ \(operationName) preparing: \(operation.operationName)")
+    
     // If the operation is a generating one, we bubble up the produced operation
     if let generator = operation as? GeneratorOperation {
+    
+      count.mutate { $0 += 1 }
+        print("\(count.value) for \(operationName) adding \(generator.operationName)")
+      if let block = generator.onOperationGenerated {
+        print(generator.operationName, operationName)
+         XCTAssertNil(generator.onOperationGenerated)
+      }
+        
       generator.onOperationGenerated = { [weak self] op in
-        self?.setupOperation(op)
+        guard let self = self else { return }
+        print("➡️\(self.operationName) has generated \(op.operationName)")
+        self.setupOperation(op)
+        let shouldFinish = self.count.mutate { count -> Bool in
+          count -= 1
+          //print("\(count) for \(self.operationName) inside callback for \(op.operationName)")
+          
+          return count == 0
+        }
+        if shouldFinish {
+          self.finish()
+        }
       }
     }
+
     onOperationGenerated?(operation)
   }
 }
@@ -287,10 +348,11 @@ internal final class LazyGroupOperation: GroupOperation {
   init(targetQueue: OperationQueue, operationsBuilder: @escaping () -> [Operation]) {
     let generator = OperationsGenerator(operationsBuilder: operationsBuilder)
     super.init(operations: [generator])
-    generator.name = "Generator<\(self.operationName)>"
+    generator.name = "Generator<\(self.operationName)> \(ObjectIdentifier(self))"
+    XCTAssertNil(generator.onOperationGenerated)
     generator.onOperationGenerated = { [weak self] operation in
       guard let self = self else { return }
-      
+
       if !self.isCancelled {
         targetQueue.addOperation(operation)
       }
@@ -348,4 +410,6 @@ extension SleepyAsyncOperation: LoggableOperation { }
 extension OperationsGenerator: LoggableOperation { }
 extension AsyncBlockOperation: LoggableOperation { }
 extension AutoCancellingAsyncOperation: LoggableOperation { }
+extension InfiniteOperation: LoggableOperation { }
+extension CancelledOperation: LoggableOperation { }
 extension BlockOperation: LoggableOperation { }

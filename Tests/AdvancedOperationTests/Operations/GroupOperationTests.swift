@@ -118,6 +118,29 @@ final class GroupOperationTests: XCTestCase {
 
     wait(for: [expectation1], timeout: 5)
   }
+  
+  func testAddingOperationWhileGroupOperationIsBeingCancelled() {
+    let operation1 = RunUntilCancelledAsyncOperation()
+    let operation2 = SleepyAsyncOperation()
+    let operation3 = InfiniteOperation()
+    let operation4 = CancelledOperation()
+
+    operation1.installLogger()
+    operation2.installLogger()
+    operation3.installLogger()
+    operation4.installLogger()
+
+    let groupOperation = GroupOperation(operations: operation1, operation2, operation3)
+    groupOperation.installLogger()
+    let expectation1 = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: groupOperation, expectedValue: true)
+    let expectation2 = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: operation4, expectedValue: true)
+    groupOperation.start()
+    groupOperation.cancel()
+    groupOperation.addOperation(operation4) // operation4 is added when GroupOperation is already cancelled
+    operation3.stop() // Making sure that even if GroupOperation has been cancelled there is still some added operations running
+
+    wait(for: [expectation1, expectation2], timeout: 5)
+  }
 
   func testCancelledExecutionBeforeStarting() {
     let operation1 = SleepyAsyncOperation()
@@ -160,9 +183,10 @@ final class GroupOperationTests: XCTestCase {
       operation2.completionBlock = { expectation0.fulfill() }
       operation3.completionBlock = { expectation0.fulfill() }
 
+      // op4 generates op5, op5 generates op6
       let operation4 = OperationsGenerator { () -> [Operation] in
         let operation5 = OperationsGenerator { () -> [Operation] in
-          let operation6 = BlockOperation { }
+          let operation6 = BlockOperation { print("🛑") }
           operation6.name = "op6"
           operation6.installLogger()
           operation6.completionBlock = { expectation0.fulfill() }
@@ -182,10 +206,11 @@ final class GroupOperationTests: XCTestCase {
     }
     
     groupOperation.installLogger()
+    groupOperation.name = "group"
     
     let expectation1 = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: groupOperation, expectedValue: true)
     queue.addOperation(groupOperation)
-    wait(for: [expectation0, expectation1], timeout: 5)
+    wait(for: [expectation0, expectation1], timeout: 10)
   }
 
   func testExecutionOnOperationQueue() {
@@ -228,26 +253,26 @@ final class GroupOperationTests: XCTestCase {
   }
 }
 
-class IOGroupOperation: GroupOperation, InputConsumingOperation, OutputProducingOperation {
-  var input: Int? {
-    set {
-      initialOperation.input = newValue
-    }
-    get {
-      return initialOperation.input
-    }
-  }
-  var output: Int? {
-    return finalOperation.output
-  }
-
-  private let initialOperation: IntToStringOperation
-  private let finalOperation: StringToIntOperation
-
-  init(test: String) {
-    finalOperation.addDependency(initialOperation)
-    super.init(operations: initialOperation, finalOperation)
-  }
+//class IOGroupOperation: GroupOperation, InputConsumingOperation, OutputProducingOperation {
+//  var input: Int? {
+//    set {
+//      initialOperation.input = newValue
+//    }
+//    get {
+//      return initialOperation.input
+//    }
+//  }
+//  var output: Int? {
+//    return finalOperation.output
+//  }
+//
+//  private let initialOperation: IntToStringOperation
+//  private let finalOperation: StringToIntOperation
+//
+//  init(test: String) {
+//    finalOperation.addDependency(initialOperation)
+//    super.init(operations: initialOperation, finalOperation)
+//  }
 
 //  override init(underlyingQueue: OperationQueue? = nil, operations: [Operation]) {
 //    super.init(operations: operations)
@@ -255,4 +280,4 @@ class IOGroupOperation: GroupOperation, InputConsumingOperation, OutputProducing
 //      self.output = nil
 //    }
 //  }
-}
+//}
