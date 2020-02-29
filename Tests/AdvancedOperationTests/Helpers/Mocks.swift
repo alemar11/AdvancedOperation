@@ -293,6 +293,17 @@ internal final class FailingOperation: Operation, FailableOperation, LoggableOpe
 
 // MARK: - GroupOperation
 
+internal final class ProducerGroupOperation: GroupOperation {
+  init(operation: @escaping () -> Operation) {
+    super.init(operations: [])
+    let producer = BlockOperation { [unowned self] in
+      // operation can be "produced" and added to the GroupOperation only if the producer is still running
+      self.addOperation(operation())
+    }
+    self.addOperation(producer)
+  }
+}
+
 internal final class IOGroupOperation: GroupOperation, InputConsumingOperation, OutputProducingOperation {
   var input: Int?
   private(set) var output: Int?

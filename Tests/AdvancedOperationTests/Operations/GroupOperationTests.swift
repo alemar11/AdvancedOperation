@@ -241,4 +241,14 @@ final class GroupOperationTests: XCTestCase {
     XCTAssertEqual(groupOperation.output, 10)
     XCTAssertEqual(groupOperation2.output, 11)
   }
+
+  func testAddingOperationWhileExecuting() {
+    let operation = BlockOperation {}
+    let queue = OperationQueue()
+    let group = ProducerGroupOperation { return operation }
+    let expectation1 = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: group, expectedValue: true)
+    let expectation2 = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: operation, expectedValue: true)
+    queue.addOperation(group)
+    wait(for: [expectation1, expectation2], timeout: 5)
+  }
 }
