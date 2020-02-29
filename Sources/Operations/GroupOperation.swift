@@ -53,40 +53,24 @@ open class GroupOperation: AsynchronousOperation {
   }
   
   // MARK: - Private Properties
-  
-  /// Underlying OperationQueue
-  private lazy var operationQueue: OperationQueue = {
-    let queue = OperationQueue()
-    queue.isSuspended = true
-    return queue
-  }()
-  
-  /// Count of not yet finished operations. This count should be used only inside `addOperation(_:)`.
-  private var pendingOperationsCount: Int = 0 {
-    didSet {
-      if pendingOperationsCount == 0 {
-        self.operationQueue.isSuspended = true
-        self.finish()
-      }
-    }
-  }
-  
-  private let lock = UnfairLock()
-  
+
+  private let dispatchGroup = DispatchGroup()
+  private let dispatchQueue = DispatchQueue(label: "\(identifier).GroupOperation.serialQueue")
   private var tokens = [NSKeyValueObservation]()
-  
+  private lazy var operationQueue: OperationQueue = {
+    $0.isSuspended = true
+    return $0
+  }(OperationQueue())
+
   // MARK: - Initializers
   
-  public convenience init(underlyingQueue: OperationQueue? = nil, operations: Operation...) {
+  public convenience init(underlyingQueue: DispatchQueue? = nil, operations: Operation...) {
     self.init(underlyingQueue: underlyingQueue, operations: operations)
   }
   
-  public init(underlyingQueue: OperationQueue? = nil, operations: [Operation]) {
+  public init(underlyingQueue: DispatchQueue? = nil, operations: [Operation]) {
     super.init()
-    if let underlyingQueue = underlyingQueue {
-      self.operationQueue = underlyingQueue // TODO not sure about this one, maybe just pass the targetQueue
-    }
-    
+    self.operationQueue.underlyingQueue = underlyingQueue
     operations.forEach { addOperation($0) }
   }
   
@@ -94,8 +78,6 @@ open class GroupOperation: AsynchronousOperation {
     tokens.forEach { $0.invalidate() }
     tokens.removeAll()
   }
-  
-  
   
   // MARK: - Public Methods
   
@@ -107,48 +89,45 @@ open class GroupOperation: AsynchronousOperation {
       self.finish()
       return
     }
-    
+
+    dispatchGroup.notify(queue: dispatchQueue) {
+      self.finish()
+    }
     operationQueue.isSuspended = false
   }
   
   open override func cancel() {
-    lock.lock()
-    defer { lock.unlock() }
-    
-    super.cancel()
-    operationQueue.cancelAllOperations()
+    dispatchQueue.sync {
+      super.cancel()
+      operationQueue.cancelAllOperations()
+    }
   }
   
   /// Adds a new `operation` to the `GroupOperation`.
   ///
   /// - Note: If the `GroupOperation` is already cancelled,  the new  operation will be cancelled before being added.
   public final func addOperation(_ operation: Operation) {
-    lock.lock()
-    defer { lock.unlock() }
-    
-    assert(!isFinished, "Operations can only be added if the GroupOperation has not yet finished.")
-    guard !isFinished else {
-      return
+    dispatchQueue.sync {
+      assert(!isFinished, "Operations can only be added if the GroupOperation has not yet finished.")
+      guard !isFinished else { return }
+
+      // If the GroupOperation is cancelled, operations will be cancelled before being added to the queue.
+      if isCancelled {
+        operation.cancel()
+      }
+
+      dispatchGroup.enter()
+      let finishToken = operation.observe(\.isFinished, options: [.old, .new]) { [weak self] (_, changes) in
+        guard let self = self else { return }
+        guard let oldValue = changes.oldValue, let newValue = changes.newValue, oldValue != newValue else { return }
+        guard newValue else { return }
+
+        self.dispatchGroup.leave()
+      }
+
+      tokens.append(finishToken)
+
+      operationQueue.addOperation(operation)
     }
-    
-    // If the GroupOperation is cancelled, operations will be cancelled before being added to the queue.
-    if isCancelled {
-      operation.cancel()
-    }
-    
-    pendingOperationsCount += 1
-    let finishToken = operation.observe(\.isFinished, options: [.old, .new]) { [weak self] (_, changes) in
-      guard let self = self else { return }
-      guard let oldValue = changes.oldValue, let newValue = changes.newValue, oldValue != newValue else { return }
-      guard newValue else { return }
-      
-      self.lock.lock()
-      self.pendingOperationsCount -= 1
-      self.lock.unlock()
-    }
-    
-    tokens.append(finishToken)
-    
-    operationQueue.addOperation(operation)
   }
 }
