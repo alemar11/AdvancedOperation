@@ -2,7 +2,7 @@
 
 ### 5.1.0
 
-- Operations cannot be ad added anymore to a `GroupOperation` after being initialized.
+- Improved the underlying implementawtion of  `GroupOperation`.
 - Refinements.
 
 ### 5.1.0

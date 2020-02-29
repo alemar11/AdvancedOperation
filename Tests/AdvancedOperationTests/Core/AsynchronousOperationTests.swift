@@ -103,7 +103,6 @@ final class AsynchronousOperationTests: XCTestCase {
     operation.cancel()
     queue.addOperation(operation)
     wait(for: [expectation1], timeout: 10)
-    print(operation.isFinished)
   }
   
   func testMultipleCancel() {

@@ -67,7 +67,7 @@ open class GroupOperation: AsynchronousOperation {
   public convenience init(underlyingQueue: DispatchQueue? = nil, operations: Operation...) {
     self.init(underlyingQueue: underlyingQueue, operations: operations)
   }
-  
+
   public init(underlyingQueue: DispatchQueue? = nil, operations: [Operation]) {
     super.init()
     self.operationQueue.underlyingQueue = underlyingQueue
@@ -85,15 +85,28 @@ open class GroupOperation: AsynchronousOperation {
   ///  If you override this method to perform the desired task,  invoke super in your implementation as last statement.
   ///  This method will automatically execute within an autorelease pool provided by Operation, so you do not need to create your own autorelease pool block in your implementation.
   public final override func main() {
-    guard !isCancelled else {
-      self.finish()
-      return
-    }
+    dispatchQueue.sync {
+      guard !isCancelled else {
+        self.finish()
+        return
+      }
 
-    dispatchGroup.notify(queue: dispatchQueue) { [weak self] in
-      self?.finish()
+      //  Debug only: count how many tasks have entered the dispatchGroup
+      // let entersCount = dispatchGroup.debugDescription.components(separatedBy: ",").filter({$0.contains("count")}).first?.components(separatedBy: CharacterSet.decimalDigits.inverted).compactMap{Int($0)}.first
+
+      // 1. configuration started: enter the group
+      // Without entering the group here, the notify block could be called before firing the queue if no operations were added.
+      dispatchGroup.enter()
+      // 2. setup the completion block to be called when all the operations are finished
+      dispatchGroup.notify(queue: dispatchQueue) { [weak self] in
+        self?.finish()
+        self?.operationQueue.isSuspended = true
+      }
+      // 3. start running the operations
+      operationQueue.isSuspended = false
+      // 4. configuration finished: leave the group
+      dispatchGroup.leave()
     }
-    operationQueue.isSuspended = false
   }
   
   public final override func cancel() {
@@ -102,32 +115,41 @@ open class GroupOperation: AsynchronousOperation {
       operationQueue.cancelAllOperations()
     }
   }
-  
+
+  /// Adds new `operations` to the `GroupOperation`.
+  ///
+  /// - Note: If the `GroupOperation` is already cancelled,  the new  operations will be cancelled before being added.
+  public func addOperations(_ operations: Operation...) {
+    dispatchQueue.sync {
+      //assert(!isFinished, "Operations can only be added if the GroupOperation has not yet finished.")
+      guard !isFinished else { return }
+
+      operations.forEach { operation in
+        // If the GroupOperation is cancelled, operations will be cancelled before being added to the queue.
+        if isCancelled {
+          operation.cancel()
+        }
+
+        dispatchGroup.enter()
+        let finishToken = operation.observe(\.isFinished, options: [.old, .new]) { [weak self] (operation, changes) in
+          guard let self = self else { return }
+          guard let oldValue = changes.oldValue, let newValue = changes.newValue, oldValue != newValue else { return }
+          guard newValue else { return }
+
+          self.dispatchGroup.leave()
+        }
+
+        tokens.append(finishToken)
+
+        operationQueue.addOperation(operation)
+      }
+    }
+  }
+
   /// Adds a new `operation` to the `GroupOperation`.
   ///
   /// - Note: If the `GroupOperation` is already cancelled,  the new  operation will be cancelled before being added.
   public final func addOperation(_ operation: Operation) {
-    dispatchQueue.sync {
-      assert(!isFinished, "Operations can only be added if the GroupOperation has not yet finished.")
-      guard !isFinished else { return }
-
-      // If the GroupOperation is cancelled, operations will be cancelled before being added to the queue.
-      if isCancelled {
-        operation.cancel()
-      }
-
-      dispatchGroup.enter()
-      let finishToken = operation.observe(\.isFinished, options: [.old, .new]) { [weak self] (_, changes) in
-        guard let self = self else { return }
-        guard let oldValue = changes.oldValue, let newValue = changes.newValue, oldValue != newValue else { return }
-        guard newValue else { return }
-
-        self.dispatchGroup.leave()
-      }
-
-      tokens.append(finishToken)
-
-      operationQueue.addOperation(operation)
-    }
+    addOperations(operation)
   }
 }
