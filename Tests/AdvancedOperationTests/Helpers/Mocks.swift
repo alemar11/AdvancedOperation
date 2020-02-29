@@ -29,7 +29,7 @@ import os.log
 
 // MARK: - AsynchronousBlockOperation
 
-final internal class SleepyAsyncOperation: AsynchronousOperation {
+internal final class SleepyAsyncOperation: AsynchronousOperation {
   private let interval1: UInt32
   private let interval2: UInt32
   private let interval3: UInt32
@@ -73,7 +73,7 @@ final internal class SleepyAsyncOperation: AsynchronousOperation {
 internal class IntToStringAsyncOperation: AsynchronousOperation, InputConsumingOperation, OutputProducingOperation {
   var input: Int?
   private(set) var output: String?
-
+  
   override func main() {
     DispatchQueue.global().async {
       if let input = self.input {
@@ -87,7 +87,7 @@ internal class IntToStringAsyncOperation: AsynchronousOperation, InputConsumingO
 internal class StringToIntAsyncOperation: AsynchronousOperation, InputConsumingOperation, OutputProducingOperation {
   var input: String?
   private(set) var output: Int?
-
+  
   override func main() {
     DispatchQueue.global().async {
       if let input = self.input {
@@ -146,14 +146,14 @@ internal class StringToIntAsyncOperation: AsynchronousOperation, InputConsumingO
 
 // MARK: - AsynchronousOperation
 
-final internal class NotExecutableOperation: AsynchronousOperation {
+internal final class NotExecutableOperation: AsynchronousOperation {
   override func main() {
     XCTFail("This operation shouldn't be executed.")
     self.finish()
   }
 }
 
-final internal class AutoCancellingAsyncOperation: AsynchronousOperation {
+internal final class AutoCancellingAsyncOperation: AsynchronousOperation {
   override func main() {
     DispatchQueue.global().asyncAfter(deadline: .now() + 1.0) {
       self.cancel()
@@ -162,7 +162,7 @@ final internal class AutoCancellingAsyncOperation: AsynchronousOperation {
   }
 }
 
-final internal class RunUntilCancelledAsyncOperation: AsynchronousOperation {
+internal final class RunUntilCancelledAsyncOperation: AsynchronousOperation {
   let queue: DispatchQueue
   
   init(queue: DispatchQueue = DispatchQueue.global()) {
@@ -176,6 +176,41 @@ final internal class RunUntilCancelledAsyncOperation: AsynchronousOperation {
       }
       self.finish()
     }
+  }
+}
+
+/// This operation will run indefinitely and can't be cancelled. Call `stop` to finish it.
+internal final class InfiniteOperation: AsyncOperation {
+  var onExecutionStarted: (() -> Void)?
+  let isStopped = Atomic(false)
+  func stop() {
+    isStopped.mutate { $0 = true }
+  }
+  
+  override func main() {
+    onExecutionStarted?()
+    while true {
+      sleep(1)
+      if isStopped.value {
+        self.finish()
+        break
+      }
+    }
+  }
+}
+
+/// Operation expected to be cancelled before starting its execution.
+internal final class CancelledOperation: Operation {
+  private let file: StaticString
+  private let line: UInt
+  init(file: StaticString = #file, line: UInt = #line) {
+    self.file = file
+    self.line = line
+    super.init()
+  }
+  
+  override func main() {
+    XCTAssert(isCancelled, "This operation is expected to be cancelled before starting its execution.", file: file, line: line)
   }
 }
 
@@ -214,7 +249,7 @@ internal final class IntToStringOperation: Operation & InputConsumingOperation &
     }
   }
   private var _output = Atomic<String?>(nil)
-
+  
   override func main() {
     if let input = self.input {
       output = "\(input)"
@@ -233,7 +268,7 @@ internal final class StringToIntOperation: Operation & InputConsumingOperation &
     }
   }
   private var _output = Atomic<Int?>(nil)
-
+  
   override func main() {
     if let input = self.input {
       output = Int(input)
@@ -258,43 +293,47 @@ internal final class FailingOperation: Operation, FailableOperation, LoggableOpe
 
 // MARK: - GroupOperation
 
-internal final class OperationsGenerator: Operation, GeneratorOperation {
-  var onOperationGenerated: ((Operation) -> Void)?
-  private let builder: () -> [Operation]
-  
-  init(operationsBuilder: @escaping () -> [Operation]) {
-    self.builder = operationsBuilder
-    super.init()
-  }
-  
-  override func main() {
-    builder().forEach { setupOperation($0) }
-  }
-  
-  private func setupOperation(_ operation: Operation) {
-    // If the operation is a generating one, we bubble up the produced operation
-    if let generator = operation as? GeneratorOperation {
-      generator.onOperationGenerated = { [weak self] op in
-        self?.setupOperation(op)
-      }
+internal final class ProducerGroupOperation: GroupOperation {
+  init(operation: @escaping () -> Operation) {
+    super.init(operations: [])
+    let producer = BlockOperation { [unowned self] in
+      // operation can be "produced" and added to the GroupOperation only if the producer is still running
+      self.addOperation(operation())
     }
-    onOperationGenerated?(operation)
+    self.addOperation(producer)
   }
 }
 
-/// This GroupOperation creates its operations lazily: this can be useful if the operations requires expensive work to be configured.
-internal final class LazyGroupOperation: GroupOperation {
-  init(targetQueue: OperationQueue, operationsBuilder: @escaping () -> [Operation]) {
-    let generator = OperationsGenerator(operationsBuilder: operationsBuilder)
-    super.init(operations: [generator])
-    generator.name = "Generator<\(self.operationName)>"
-    generator.onOperationGenerated = { [weak self] operation in
-      guard let self = self else { return }
-      
-      if !self.isCancelled {
-        targetQueue.addOperation(operation)
+internal final class IOGroupOperation: GroupOperation, InputConsumingOperation, OutputProducingOperation {
+  var input: Int?
+  private(set) var output: Int?
+  
+  init(input: Int? = nil) {
+    super.init(operations: [])
+    
+    let inputOperation = IntToStringOperation()
+    if let input = input {
+      inputOperation.input = input
+    } else {
+      let op = BlockOperation { [unowned self, unowned inputOperation] in
+        inputOperation.input = self.input
       }
+      inputOperation.addDependency(op)
+      self.addOperation(op)
     }
+    
+    let outputOperation = StringToIntOperation()
+    let inject = inputOperation.injectOutput(into: outputOperation)
+    
+    let exitOperation = BlockOperation { [unowned self, unowned outputOperation] in
+      self.output = outputOperation.output
+    }
+    exitOperation.addDependency(outputOperation)
+    
+    self.addOperation(inputOperation)
+    self.addOperation(inject)
+    self.addOperation(outputOperation)
+    self.addOperation(exitOperation)
   }
 }
 
@@ -305,7 +344,7 @@ internal final class IntToStringResultOperation: ResultOperation<String, IntToSt
     case missingInput
     case invalidInput
   }
-
+  
   private let queue = DispatchQueue(label: "IntToStringResultOperation")
   var input: Int?
   
@@ -314,15 +353,15 @@ internal final class IntToStringResultOperation: ResultOperation<String, IntToSt
       self.finish()
       return
     }
-
+    
     queue.async { [weak self] in
       guard let self = self else { return }
-
+      
       guard let input = self.input else {
         self.finish(result: .failure(.missingInput))
         return
       }
-
+      
       if input < 0 {
         self.finish(result: .failure(.invalidInput))
       } else {
@@ -345,7 +384,8 @@ internal enum Log {
 extension RunUntilCancelledAsyncOperation: LoggableOperation { }
 extension GroupOperation: LoggableOperation { }
 extension SleepyAsyncOperation: LoggableOperation { }
-extension OperationsGenerator: LoggableOperation { }
 extension AsyncBlockOperation: LoggableOperation { }
 extension AutoCancellingAsyncOperation: LoggableOperation { }
+extension InfiniteOperation: LoggableOperation { }
+extension CancelledOperation: LoggableOperation { }
 extension BlockOperation: LoggableOperation { }

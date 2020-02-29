@@ -43,10 +43,6 @@
 		064B0D8D23F4168500C8331F /* GroupOperationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 064B0D8823F4166300C8331F /* GroupOperationTests.swift */; };
 		064B0D8E23F4168600C8331F /* GroupOperationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 064B0D8823F4166300C8331F /* GroupOperationTests.swift */; };
 		064B0D8F23F4168600C8331F /* GroupOperationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 064B0D8823F4166300C8331F /* GroupOperationTests.swift */; };
-		064B0D9123F451F000C8331F /* GeneratorOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 064B0D9023F451F000C8331F /* GeneratorOperation.swift */; };
-		064B0D9223F451F000C8331F /* GeneratorOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 064B0D9023F451F000C8331F /* GeneratorOperation.swift */; };
-		064B0D9323F451F000C8331F /* GeneratorOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 064B0D9023F451F000C8331F /* GeneratorOperation.swift */; };
-		064B0D9423F451F000C8331F /* GeneratorOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 064B0D9023F451F000C8331F /* GeneratorOperation.swift */; };
 		0664BF3623D5B91100B491E6 /* FailableOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0664BF3523D5B91100B491E6 /* FailableOperation.swift */; };
 		0664BF3723D5B91100B491E6 /* FailableOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0664BF3523D5B91100B491E6 /* FailableOperation.swift */; };
 		0664BF3823D5B91100B491E6 /* FailableOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0664BF3523D5B91100B491E6 /* FailableOperation.swift */; };
@@ -152,7 +148,6 @@
 		0622C314239A7428004F3FA5 /* AdvancedOperation iOS.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = "AdvancedOperation iOS.xctestplan"; sourceTree = "<group>"; };
 		064B0D8323F4032100C8331F /* GroupOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupOperation.swift; sourceTree = "<group>"; };
 		064B0D8823F4166300C8331F /* GroupOperationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupOperationTests.swift; sourceTree = "<group>"; };
-		064B0D9023F451F000C8331F /* GeneratorOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneratorOperation.swift; sourceTree = "<group>"; };
 		0664BF3523D5B91100B491E6 /* FailableOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FailableOperation.swift; sourceTree = "<group>"; };
 		067C482523D60EE800F73096 /* KVOCrashWorkaround.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KVOCrashWorkaround.swift; sourceTree = "<group>"; };
 		068C554F23C8C6810043B43F /* lint.yml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; path = lint.yml; sourceTree = "<group>"; };
@@ -398,7 +393,6 @@
 				23F24D21200799B800B25A03 /* Operation+Utils.swift */,
 				060B667023C4EBC80085FCB4 /* OutputProducingOperation.swift */,
 				069731C723D71135006A51CB /* LoggableOperation.swift */,
-				064B0D9023F451F000C8331F /* GeneratorOperation.swift */,
 			);
 			path = Core;
 			sourceTree = "<group>";
@@ -744,7 +738,6 @@
 				067C482623D60EE800F73096 /* KVOCrashWorkaround.swift in Sources */,
 				06C92B4B23D0A9FF000D12C8 /* AsynchronousBlockOperation.swift in Sources */,
 				0664BF3623D5B91100B491E6 /* FailableOperation.swift in Sources */,
-				064B0D9123F451F000C8331F /* GeneratorOperation.swift in Sources */,
 				23F24D22200799B800B25A03 /* Operation+Utils.swift in Sources */,
 				239BC52220EB7539009A36D9 /* InputConsumingOperation.swift in Sources */,
 				D21C5D8423D3674E005F8D51 /* AsynchronousOperation.swift in Sources */,
@@ -765,7 +758,6 @@
 				067C482723D60EE800F73096 /* KVOCrashWorkaround.swift in Sources */,
 				06C92B4C23D0A9FF000D12C8 /* AsynchronousBlockOperation.swift in Sources */,
 				0664BF3723D5B91100B491E6 /* FailableOperation.swift in Sources */,
-				064B0D9223F451F000C8331F /* GeneratorOperation.swift in Sources */,
 				23F24D23200799B800B25A03 /* Operation+Utils.swift in Sources */,
 				239BC52320EB7539009A36D9 /* InputConsumingOperation.swift in Sources */,
 				D21C5D8523D3674E005F8D51 /* AsynchronousOperation.swift in Sources */,
@@ -786,7 +778,6 @@
 				067C482823D60EE800F73096 /* KVOCrashWorkaround.swift in Sources */,
 				06C92B4D23D0A9FF000D12C8 /* AsynchronousBlockOperation.swift in Sources */,
 				0664BF3823D5B91100B491E6 /* FailableOperation.swift in Sources */,
-				064B0D9323F451F000C8331F /* GeneratorOperation.swift in Sources */,
 				23F24D24200799B800B25A03 /* Operation+Utils.swift in Sources */,
 				239BC52420EB7539009A36D9 /* InputConsumingOperation.swift in Sources */,
 				D21C5D8623D3674E005F8D51 /* AsynchronousOperation.swift in Sources */,
@@ -807,7 +798,6 @@
 				067C482923D60EE800F73096 /* KVOCrashWorkaround.swift in Sources */,
 				06C92B4E23D0A9FF000D12C8 /* AsynchronousBlockOperation.swift in Sources */,
 				0664BF3923D5B91100B491E6 /* FailableOperation.swift in Sources */,
-				064B0D9423F451F000C8331F /* GeneratorOperation.swift in Sources */,
 				23F24D25200799B800B25A03 /* Operation+Utils.swift in Sources */,
 				239BC52520EB7539009A36D9 /* InputConsumingOperation.swift in Sources */,
 				D21C5D8723D3674E005F8D51 /* AsynchronousOperation.swift in Sources */,
