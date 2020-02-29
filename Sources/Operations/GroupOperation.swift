@@ -99,8 +99,8 @@ open class GroupOperation: AsynchronousOperation {
       dispatchGroup.enter()
       // 2. setup the completion block to be called when all the operations are finished
       dispatchGroup.notify(queue: dispatchQueue) { [weak self] in
-        self?.finish()
         self?.operationQueue.isSuspended = true
+        self?.finish()
       }
       // 3. start running the operations
       operationQueue.isSuspended = false
@@ -118,7 +118,8 @@ open class GroupOperation: AsynchronousOperation {
 
   /// Adds new `operations` to the `GroupOperation`.
   ///
-  /// - Note: If the `GroupOperation` is already cancelled,  the new  operations will be cancelled before being added.
+  /// If the `GroupOperation` is already cancelled,  the new  operations will be cancelled before being added.
+  /// If the `GroupOperation` is finished, new operations will be ignored.
   public func addOperations(_ operations: Operation...) {
     dispatchQueue.sync {
       //assert(!isFinished, "Operations can only be added if the GroupOperation has not yet finished.")
@@ -148,7 +149,8 @@ open class GroupOperation: AsynchronousOperation {
 
   /// Adds a new `operation` to the `GroupOperation`.
   ///
-  /// - Note: If the `GroupOperation` is already cancelled,  the new  operation will be cancelled before being added.
+  /// If the `GroupOperation` is already cancelled,  the new  operation will be cancelled before being added.
+  /// If the `GroupOperation` is finished, the new operation will be ignored.
   public final func addOperation(_ operation: Operation) {
     addOperations(operation)
   }
