@@ -122,7 +122,6 @@ open class GroupOperation: AsynchronousOperation {
   /// If the `GroupOperation` is finished, new operations will be ignored.
   public func addOperations(_ operations: Operation...) {
     dispatchQueue.sync {
-      //assert(!isFinished, "Operations can only be added if the GroupOperation has not yet finished.")
       guard !isFinished else { return }
 
       operations.forEach { operation in

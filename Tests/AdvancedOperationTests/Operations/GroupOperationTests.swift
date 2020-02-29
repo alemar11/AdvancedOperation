@@ -154,7 +154,7 @@ final class GroupOperationTests: XCTestCase {
     let groupOperation = GroupOperation(operations: [operation1, operation2, operation3])
     groupOperation.installLogger()
 
-    // cancellation is done while we are sure the at least one operation is running
+    // cancellation is done while at least one operation is running
     operation3.onExecutionStarted = { [unowned groupOperation] in
       groupOperation.cancel()
       groupOperation.addOperation(operation4)
