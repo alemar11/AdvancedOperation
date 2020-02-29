@@ -160,58 +160,58 @@ final class GroupOperationTests: XCTestCase {
     wait(for: [expectation1], timeout: 5)
   }
 
-  func testExecutionWhileGeneratingAdditionalOperationsOnTargetQueue() {
-    let queue = OperationQueue()
-    let expectation0 = self.expectation(description: "Generated operations completed")
-    expectation0.expectedFulfillmentCount = 6
-    
-    let groupOperation = LazyGroupOperation(targetQueue: queue) { () -> [Operation] in
-      let operation1 = SleepyAsyncOperation(interval1: 1, interval2: 0, interval3: 0)
-      let operation2 = SleepyAsyncOperation(interval1: 1, interval2: 0, interval3: 0)
-      let operation3 = SleepyAsyncOperation(interval1: 1, interval2: 0, interval3: 0)
-   
-      operation1.installLogger()
-      operation2.installLogger()
-      operation3.installLogger()
-      operation3.addDependency(operation2)
-
-      operation1.name = "op1"
-      operation2.name = "op2"
-      operation3.name = "op3"
-      
-      operation1.completionBlock = { expectation0.fulfill() }
-      operation2.completionBlock = { expectation0.fulfill() }
-      operation3.completionBlock = { expectation0.fulfill() }
-
-      // op4 generates op5, op5 generates op6
-      let operation4 = OperationsGenerator { () -> [Operation] in
-        let operation5 = OperationsGenerator { () -> [Operation] in
-          let operation6 = BlockOperation { print("🛑") }
-          operation6.name = "op6"
-          operation6.installLogger()
-          operation6.completionBlock = { expectation0.fulfill() }
-          return [operation6]
-        }
-        operation5.name = "op5"
-        operation5.installLogger()
-        operation5.completionBlock = { expectation0.fulfill() }
-        return [operation5]
-      }
-
-      operation4.name = "op4"
-      operation4.installLogger()
-      operation4.completionBlock = { expectation0.fulfill() }
-
-      return [operation1, operation2, operation3, operation4]
-    }
-    
-    groupOperation.installLogger()
-    groupOperation.name = "group"
-    
-    let expectation1 = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: groupOperation, expectedValue: true)
-    queue.addOperation(groupOperation)
-    wait(for: [expectation0, expectation1], timeout: 10)
-  }
+//  func testExecutionWhileGeneratingAdditionalOperationsOnTargetQueue() {
+//    let queue = OperationQueue()
+//    let expectation0 = self.expectation(description: "Generated operations completed")
+//    expectation0.expectedFulfillmentCount = 6
+//    
+//    let groupOperation = LazyGroupOperation(targetQueue: queue) { () -> [Operation] in
+//      let operation1 = SleepyAsyncOperation(interval1: 1, interval2: 0, interval3: 0)
+//      let operation2 = SleepyAsyncOperation(interval1: 1, interval2: 0, interval3: 0)
+//      let operation3 = SleepyAsyncOperation(interval1: 1, interval2: 0, interval3: 0)
+//   
+//      operation1.installLogger()
+//      operation2.installLogger()
+//      operation3.installLogger()
+//      operation3.addDependency(operation2)
+//
+//      operation1.name = "op1"
+//      operation2.name = "op2"
+//      operation3.name = "op3"
+//      
+//      operation1.completionBlock = { expectation0.fulfill() }
+//      operation2.completionBlock = { expectation0.fulfill() }
+//      operation3.completionBlock = { expectation0.fulfill() }
+//
+//      // op4 generates op5, op5 generates op6
+//      let operation4 = OperationsGenerator { () -> [Operation] in
+//        let operation5 = OperationsGenerator { () -> [Operation] in
+//          let operation6 = BlockOperation { print("🛑") }
+//          operation6.name = "op6"
+//          operation6.installLogger()
+//          operation6.completionBlock = { expectation0.fulfill() }
+//          return [operation6]
+//        }
+//        operation5.name = "op5"
+//        operation5.installLogger()
+//        operation5.completionBlock = { expectation0.fulfill() }
+//        return [operation5]
+//      }
+//
+//      operation4.name = "op4"
+//      operation4.installLogger()
+//      operation4.completionBlock = { expectation0.fulfill() }
+//
+//      return [operation1, operation2, operation3, operation4]
+//    }
+//    
+//    groupOperation.installLogger()
+//    groupOperation.name = "group"
+//    
+//    let expectation1 = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: groupOperation, expectedValue: true)
+//    queue.addOperation(groupOperation)
+//    wait(for: [expectation0, expectation1], timeout: 10)
+//  }
 
   func testExecutionOnOperationQueue() {
     let queue = OperationQueue()

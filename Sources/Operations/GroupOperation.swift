@@ -112,6 +112,9 @@ open class GroupOperation: AsynchronousOperation {
   }
   
   open override func cancel() {
+    lock.lock()
+    defer { lock.unlock() }
+    
     super.cancel()
     operationQueue.cancelAllOperations()
   }
