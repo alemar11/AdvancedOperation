@@ -90,13 +90,13 @@ open class GroupOperation: AsynchronousOperation {
       return
     }
 
-    dispatchGroup.notify(queue: dispatchQueue) {
-      self.finish()
+    dispatchGroup.notify(queue: dispatchQueue) { [weak self] in
+      self?.finish()
     }
     operationQueue.isSuspended = false
   }
   
-  open override func cancel() {
+  public final override func cancel() {
     dispatchQueue.sync {
       super.cancel()
       operationQueue.cancelAllOperations()
