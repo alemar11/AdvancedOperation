@@ -169,7 +169,7 @@ final class OperationUtilsTests: XCTestCase {
       XCTAssertFalse($0.dependencies.contains(operation8))
     }
   }
-  
+
   func testSerialOperationQueue() {
     let queue = OperationQueue.serial()
     XCTAssertEqual(queue.maxConcurrentOperationCount, 1)

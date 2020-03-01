@@ -54,7 +54,7 @@ public final class AsynchronousBlockOperation: AsynchronousOperation {
       self.finish()
       return
     }
-    
+
     block {
       self.finish()
     }

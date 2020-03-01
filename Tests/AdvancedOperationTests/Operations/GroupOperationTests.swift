@@ -43,7 +43,7 @@ final class GroupOperationTests: XCTestCase {
     let groupOperation = GroupOperation(operations: [operation1, operation2, operation3])
     groupOperation.qualityOfService = .userInitiated
     groupOperation.installLogger()
-    
+
     let expectation1 = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: groupOperation, expectedValue: true)
     groupOperation.start()
     wait(for: [expectation1], timeout: 5)

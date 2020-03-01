@@ -101,7 +101,7 @@ final class OperationInjectionTests: XCTestCase {
     // instead of:
     //
     // queue.addOperations([operation1, operation2, injectionOperation], waitUntilFinished: true)
-    
+
     let queue = OperationQueue()
     let operation1 = IntToStringOperation()
     let operation2 = IntToStringOperation()

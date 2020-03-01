@@ -27,7 +27,7 @@ import Foundation
 /// Use a `GroupOperation` to associate related operations together, thereby creating higher levels of abstractions.
 open class GroupOperation: AsynchronousOperation {
   // MARK: - Public Properties
-  
+
   /// The maximum number of queued operations that can execute at the same time inside the `GroupOperation`.
   ///
   /// The value in this property affects only the operations that the current GroupOperation has executing at the same time.
@@ -40,7 +40,7 @@ open class GroupOperation: AsynchronousOperation {
       operationQueue.maxConcurrentOperationCount = newValue
     }
   }
-  
+
   /// The relative amount of importance for granting system resources to the operation.
   public override var qualityOfService: QualityOfService {
     get {
@@ -51,7 +51,7 @@ open class GroupOperation: AsynchronousOperation {
       operationQueue.qualityOfService = newValue
     }
   }
-  
+
   // MARK: - Private Properties
 
   private let dispatchGroup = DispatchGroup()
@@ -63,7 +63,7 @@ open class GroupOperation: AsynchronousOperation {
   }(OperationQueue())
 
   // MARK: - Initializers
-  
+
   public convenience init(underlyingQueue: DispatchQueue? = nil, operations: Operation...) {
     self.init(underlyingQueue: underlyingQueue, operations: operations)
   }
@@ -73,14 +73,14 @@ open class GroupOperation: AsynchronousOperation {
     self.operationQueue.underlyingQueue = underlyingQueue
     operations.forEach { addOperation($0) }
   }
-  
+
   deinit {
     tokens.forEach { $0.invalidate() }
     tokens.removeAll()
   }
-  
+
   // MARK: - Public Methods
-  
+
   ///  The default implementation of this method executes the scheduled operations.
   ///  If you override this method to perform the desired task,  invoke super in your implementation as last statement.
   ///  This method will automatically execute within an autorelease pool provided by Operation, so you do not need to create your own autorelease pool block in your implementation.
@@ -92,7 +92,9 @@ open class GroupOperation: AsynchronousOperation {
       }
 
       //  Debug only: count how many tasks have entered the dispatchGroup
-      // let entersCount = dispatchGroup.debugDescription.components(separatedBy: ",").filter({$0.contains("count")}).first?.components(separatedBy: CharacterSet.decimalDigits.inverted).compactMap{Int($0)}.first
+//      let entersCount = dispatchGroup.debugDescription
+//        .components(separatedBy: ",").filter({$0.contains("count")}).first?
+//        .components(separatedBy: CharacterSet.decimalDigits.inverted).compactMap{Int($0)}.first
 
       // 1. configuration started: enter the group
       // Without entering the group here, the notify block could be called before firing the queue if no operations were added.
@@ -108,7 +110,7 @@ open class GroupOperation: AsynchronousOperation {
       dispatchGroup.leave()
     }
   }
-  
+
   public final override func cancel() {
     dispatchQueue.sync {
       super.cancel()
@@ -131,7 +133,7 @@ open class GroupOperation: AsynchronousOperation {
         }
 
         dispatchGroup.enter()
-        let finishToken = operation.observe(\.isFinished, options: [.old, .new]) { [weak self] (operation, changes) in
+        let finishToken = operation.observe(\.isFinished, options: [.old, .new]) { [weak self] (_, changes) in
           guard let self = self else { return }
           guard let oldValue = changes.oldValue, let newValue = changes.newValue, oldValue != newValue else { return }
           guard newValue else { return }
