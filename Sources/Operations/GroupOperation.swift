@@ -27,7 +27,7 @@ import Foundation
 /// Use a `GroupOperation` to associate related operations together, thereby creating higher levels of abstractions.
 open class GroupOperation: AsynchronousOperation {
   // MARK: - Public Properties
-
+  
   /// The maximum number of queued operations that can execute at the same time inside the `GroupOperation`.
   ///
   /// The value in this property affects only the operations that the current GroupOperation has executing at the same time.
@@ -40,87 +40,117 @@ open class GroupOperation: AsynchronousOperation {
       operationQueue.maxConcurrentOperationCount = newValue
     }
   }
-
+  
   /// The relative amount of importance for granting system resources to the operation.
   public override var qualityOfService: QualityOfService {
     get {
       return operationQueue.qualityOfService
     }
     set {
+      super.qualityOfService = newValue
       operationQueue.qualityOfService = newValue
-      // startingOperation.qualityOfService = newValue
-      // finishingOperation.qualityOfService = newValue
     }
   }
-
+  
   // MARK: - Private Properties
 
+  private let dispatchGroup = DispatchGroup()
+  private let dispatchQueue = DispatchQueue(label: "\(identifier).GroupOperation.serialQueue")
+  private var tokens = [NSKeyValueObservation]()
   private lazy var operationQueue: OperationQueue = {
-    let queue = OperationQueue()
-    queue.isSuspended = true
-    return queue
-  }()
+    $0.isSuspended = true
+    return $0
+  }(OperationQueue())
 
-  private lazy var startingOperation: BlockOperation = {
-    let operation = BlockOperation()
-    operation.name = "StartingOperation<\(self.operationName)>"
-    return operation
-  }()
-
-  private lazy var finishingOperation: BlockOperation = {
-    let operation = BlockOperation()
-    operation.name = "FinishingOperation<\(self.operationName)>"
-    operation.completionBlock = { [weak self] in self?.finish() }
-    return operation
-  }()
-
-  public convenience init(operations: Operation...) {
-    self.init(operations: operations)
+  // MARK: - Initializers
+  
+  public convenience init(underlyingQueue: DispatchQueue? = nil, operations: Operation...) {
+    self.init(underlyingQueue: underlyingQueue, operations: operations)
   }
 
-  public init(operations: [Operation]) {
+  public init(underlyingQueue: DispatchQueue? = nil, operations: [Operation]) {
     super.init()
-    operationQueue.addOperation(startingOperation)
-
-    operations.forEach { setupOperation($0) }
-  }
-
-  public final func addOperations(_ operations: Operation...) {
+    self.operationQueue.underlyingQueue = underlyingQueue
     operations.forEach { addOperation($0) }
   }
-
-  public final func addOperation(_ operation: Operation) {
-    precondition(!isFinished || !isCancelled, "Operations can only be added if the group operation has not yet finished/canceled.")
-    precondition(!finishingOperation.isExecuting || !finishingOperation.isFinished || !finishingOperation.isCancelled, "Operations can't be added while the GroupOperation is finishing.")
-
-    setupOperation(operation)
+  
+  deinit {
+    tokens.forEach { $0.invalidate() }
+    tokens.removeAll()
   }
-
+  
   // MARK: - Public Methods
-
+  
   ///  The default implementation of this method executes the scheduled operations.
   ///  If you override this method to perform the desired task,  invoke super in your implementation as last statement.
   ///  This method will automatically execute within an autorelease pool provided by Operation, so you do not need to create your own autorelease pool block in your implementation.
   public final override func main() {
-    guard !isCancelled else {
-      self.finish()
-      return
+    dispatchQueue.sync {
+      guard !isCancelled else {
+        self.finish()
+        return
+      }
+
+      //  Debug only: count how many tasks have entered the dispatchGroup
+      // let entersCount = dispatchGroup.debugDescription.components(separatedBy: ",").filter({$0.contains("count")}).first?.components(separatedBy: CharacterSet.decimalDigits.inverted).compactMap{Int($0)}.first
+
+      // 1. configuration started: enter the group
+      // Without entering the group here, the notify block could be called before firing the queue if no operations were added.
+      dispatchGroup.enter()
+      // 2. setup the completion block to be called when all the operations are finished
+      dispatchGroup.notify(queue: dispatchQueue) { [weak self] in
+        self?.operationQueue.isSuspended = true
+        self?.finish()
+      }
+      // 3. start running the operations
+      operationQueue.isSuspended = false
+      // 4. configuration finished: leave the group
+      dispatchGroup.leave()
     }
-
-    operationQueue.addOperation(finishingOperation)
-    operationQueue.isSuspended = false
+  }
+  
+  public final override func cancel() {
+    dispatchQueue.sync {
+      super.cancel()
+      operationQueue.cancelAllOperations()
+    }
   }
 
-  open override func cancel() {
-    super.cancel()
-    operationQueue.cancelAllOperations()
+  /// Adds new `operations` to the `GroupOperation`.
+  ///
+  /// If the `GroupOperation` is already cancelled,  the new  operations will be cancelled before being added.
+  /// If the `GroupOperation` is finished, new operations will be ignored.
+  public func addOperations(_ operations: Operation...) {
+    dispatchQueue.sync {
+      guard !isFinished else { return }
+
+      operations.forEach { operation in
+        // If the GroupOperation is cancelled, operations will be cancelled before being added to the queue.
+        if isCancelled {
+          operation.cancel()
+        }
+
+        dispatchGroup.enter()
+        let finishToken = operation.observe(\.isFinished, options: [.old, .new]) { [weak self] (operation, changes) in
+          guard let self = self else { return }
+          guard let oldValue = changes.oldValue, let newValue = changes.newValue, oldValue != newValue else { return }
+          guard newValue else { return }
+
+          self.dispatchGroup.leave()
+        }
+
+        tokens.append(finishToken)
+
+        operationQueue.addOperation(operation)
+      }
+    }
   }
 
-  // MARK: - Private Methods
-
-  private func setupOperation(_ operation: Operation) {
-    operation.addDependency(startingOperation)
-    finishingOperation.addDependency(operation)
-    operationQueue.addOperation(operation)
+  /// Adds a new `operation` to the `GroupOperation`.
+  ///
+  /// If the `GroupOperation` is already cancelled,  the new  operation will be cancelled before being added.
+  /// If the `GroupOperation` is finished, the new operation will be ignored.
+  public final func addOperation(_ operation: Operation) {
+    addOperations(operation)
   }
 }

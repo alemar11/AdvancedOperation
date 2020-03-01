@@ -38,7 +38,12 @@ extension LoggableOperation {
       objc_setAssociatedObject(self, &loggerKey, newValue, objc_AssociationPolicy.OBJC_ASSOCIATION_RETAIN_NONATOMIC)
     }
   }
-  
+
+  /// Installs a logger into the `Operation`.
+  /// - Parameters:
+  ///   - log: `OSLog` instance for general purpose logging; this log can be accessed using the var `log`.
+  ///   - signpost: `OSLog` instance to track when an Operation starts and ends.
+  ///   - poi: `OSLog` instance to track point of interests (i.e. cancellation).
   public func installLogger(log: OSLog = .default, signpost: OSLog = .disabled, poi: OSLog = .disabled) {
     objc_sync_enter(self)
     defer { objc_sync_exit(self) }
@@ -50,9 +55,10 @@ extension LoggableOperation {
       logger?.start(operation: self)
     }
   }
-  
-  // TODO: expose this log?
-  internal var log: OSLog {
+
+  /// An `OSLog` instance for general purpose logging.
+  /// - Note: `installLogger(log:signpost:poi` needs to be called before using this log.
+  public var log: OSLog {
     return logger?.log ?? .disabled
   }
 }

@@ -96,6 +96,15 @@ final class AsynchronousOperationTests: XCTestCase {
     XCTAssertTrue(operation.isFinished)
   }
   
+  func testCancelledExecutionBeforeBeingAddedToOperationQueue() {
+    let queue = OperationQueue()
+    let operation = SleepyAsyncOperation(interval1: 1, interval2: 1, interval3: 1)
+    let expectation1 = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: operation, expectedValue: true)
+    operation.cancel()
+    queue.addOperation(operation)
+    wait(for: [expectation1], timeout: 10)
+  }
+  
   func testMultipleCancel() {
     let operation = SleepyAsyncOperation()
     let expectation1 = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: operation, expectedValue: true)
@@ -291,7 +300,7 @@ final class AsynchronousOperationTests: XCTestCase {
     XCTAssertTrue(operation1.isCancelled)
     XCTAssertTrue(operation1.isFinished)
   }
-  
+    
   func testAllOperationCancelled() {
     let queue = OperationQueue()
     let expectation1 = expectation(description: "\(#function)\(#line)")
