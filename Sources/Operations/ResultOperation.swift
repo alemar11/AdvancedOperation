@@ -30,16 +30,11 @@ open class ResultOperation<Success, Failure>: AsynchronousOperation, OutputProdu
   public var onResultProduced: ((Result<Success, Failure>) -> Void)?
 
   public final private(set) var output: Result<Success, Failure>? {
-    // TODO: no thread safe yet
-    willSet {
-      // An assert is enough since finish(result:) is the only public method to set the output.
-      // the operation will crash if finish(result:) method is called more than once (see finish() implementation).
-      assert(isExecuting, "Output can only be set if \(operationName) is executing.")
+    get {
+      return _output.value
     }
-    didSet {
-      if let output = self.output {
-        onResultProduced?(output)
-      }
+    set {
+      _output.mutate { $0 = newValue }
     }
   }
 
@@ -54,9 +49,16 @@ open class ResultOperation<Success, Failure>: AsynchronousOperation, OutputProdu
     }
   }
 
+  private var _output = Atomic<Result<Success, Failure>?>(nil)
+
   /// Call this method to set the result and finish the operation.
   public final func finish(result: Result<Success, Failure>) {
-    self.output = result
+    // An assert is enough since finish(result:) is the only public method to set the output.
+    // the operation will crash if finish(result:) method is called more than once (see finish() implementation).
+    assert(isExecuting, "Output can only be set if \(operationName) is executing.")
+
+    output = result
+    onResultProduced?(result)
     finish()
   }
 }
