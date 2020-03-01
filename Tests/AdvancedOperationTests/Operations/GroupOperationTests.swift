@@ -131,7 +131,6 @@ final class GroupOperationTests: XCTestCase {
     let expectation1 = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: groupOperation, expectedValue: true)
     groupOperation.start()
     groupOperation.cancel()
-
     wait(for: [expectation1], timeout: 5)
   }
 
@@ -167,7 +166,6 @@ final class GroupOperationTests: XCTestCase {
     let expectation1 = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: groupOperation, expectedValue: true)
     let expectation2 = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: operation4, expectedValue: true)
     groupOperation.start()
-
     wait(for: [expectation1, expectation2], timeout: 5)
   }
 
@@ -185,7 +183,6 @@ final class GroupOperationTests: XCTestCase {
     let expectation1 = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: groupOperation, expectedValue: true)
     groupOperation.cancel()
     groupOperation.start()
-
     wait(for: [expectation1], timeout: 5)
   }
 
@@ -203,7 +200,19 @@ final class GroupOperationTests: XCTestCase {
     groupOperation.installLogger()
     let expectation1 = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: groupOperation, expectedValue: true)
     queue.addOperation(groupOperation)
+    wait(for: [expectation1], timeout: 5)
+  }
 
+  func testExecutionOnDispatchQueue() {
+    let queue = OperationQueue()
+    let dispatchQueue = DispatchQueue(label: "\(#function)")
+    let operation = BlockOperation {
+      dispatchPrecondition(condition: .onQueue(dispatchQueue))
+    }
+
+    let groupOperation = GroupOperation.init(underlyingQueue: dispatchQueue, operations: operation)
+    let expectation1 = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: groupOperation, expectedValue: true)
+    queue.addOperation(groupOperation)
     wait(for: [expectation1], timeout: 5)
   }
 
@@ -224,7 +233,6 @@ final class GroupOperationTests: XCTestCase {
     let expectation1 = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: groupOperation, expectedValue: true)
     groupOperation.cancel()
     queue.addOperation(groupOperation)
-
     wait(for: [expectation1], timeout: 5)
   }
 
