@@ -1,8 +1,9 @@
 # Changelog
 
-### 5.1.0
+### 5.2.0
 
 - Improved the underlying implementawtion of  `GroupOperation`.
+- `LoggableOperation` now exposes a `log` variable.
 - Refinements.
 
 ### 5.1.0
