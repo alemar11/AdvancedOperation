@@ -64,14 +64,22 @@ open class GroupOperation: AsynchronousOperation {
 
   // MARK: - Initializers
 
-  public convenience init(underlyingQueue: DispatchQueue? = nil, operations: Operation...) {
-    self.init(underlyingQueue: underlyingQueue, operations: operations)
-  }
-
+  /// Creates a new `GroupOperation`.
+  /// - Parameters:
+  ///   - underlyingQueue: The dispatch queue used to execute operations (the default value is nil).
+  ///   - operations: Operations to be executed by the `GroupOperation`
   public init(underlyingQueue: DispatchQueue? = nil, operations: [Operation]) {
     super.init()
     self.operationQueue.underlyingQueue = underlyingQueue
     operations.forEach { addOperation($0) }
+  }
+  
+  /// Creates a new `GroupOperation`.
+  /// - Parameters:
+  ///   - underlyingQueue: The dispatch queue used to execute operations (the default value is nil).
+  ///   - operations: Operations to be executed by the `GroupOperation`
+  public convenience init(underlyingQueue: DispatchQueue? = nil, operations: Operation...) {
+    self.init(underlyingQueue: underlyingQueue, operations: operations)
   }
 
   deinit {
