@@ -164,3 +164,20 @@ open class GroupOperation: AsynchronousOperation {
     addOperations(operation)
   }
 }
+
+// MARK: - Function Builder
+
+#if swift(>=5.1)
+extension GroupOperation {
+  @_functionBuilder
+  public struct Builder {
+    static func buildBlock(_ operations: Operation...) -> [Operation] {
+      operations
+    }
+  }
+  
+  public convenience init(@GroupOperation.Builder _ builder: () -> [Operation]) {
+    self.init(operations: builder())
+  }
+}
+#endif
