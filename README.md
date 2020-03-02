@@ -41,14 +41,14 @@ platform :ios, '11.0'
 use_frameworks!
 
 target '<Your Target Name>' do
-    pod 'AdvancedOperation', '~> 5.0.0'
+    pod 'AdvancedOperation', '~> 5.2.0'
 end
 ```
 
 ### Carthage
 
 ```ogdl
-github "tinrobots/AdvancedOperation" ~> 5.0.0
+github "tinrobots/AdvancedOperation" ~> 5.2.0
 ```
 
 ### Swift Package Manager
