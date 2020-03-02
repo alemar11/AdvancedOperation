@@ -78,13 +78,6 @@
       "warning": "undocumented"
     },
     {
-      "file": "/Users/amarzoli/Developer/x/AdvancedOperation/Sources/Core/LoggableOperation.swift",
-      "line": 42,
-      "symbol": "LoggableOperation.installLogger(log:signpost:poi:)",
-      "symbol_kind": "source.lang.swift.decl.function.method.instance",
-      "warning": "undocumented"
-    },
-    {
       "file": "/Users/amarzoli/Developer/x/AdvancedOperation/Sources/Core/OutputProducingOperation.swift",
       "line": 28,
       "symbol": "OutputProducingOperation.Output",
@@ -100,35 +93,7 @@
     },
     {
       "file": "/Users/amarzoli/Developer/x/AdvancedOperation/Sources/Operations/GroupOperation.swift",
-      "line": 77,
-      "symbol": "GroupOperation.init(operations:)",
-      "symbol_kind": "source.lang.swift.decl.function.method.instance",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/amarzoli/Developer/x/AdvancedOperation/Sources/Operations/GroupOperation.swift",
-      "line": 81,
-      "symbol": "GroupOperation.init(operations:)",
-      "symbol_kind": "source.lang.swift.decl.function.method.instance",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/amarzoli/Developer/x/AdvancedOperation/Sources/Operations/GroupOperation.swift",
-      "line": 88,
-      "symbol": "GroupOperation.addOperations(_:)",
-      "symbol_kind": "source.lang.swift.decl.function.method.instance",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/amarzoli/Developer/x/AdvancedOperation/Sources/Operations/GroupOperation.swift",
-      "line": 92,
-      "symbol": "GroupOperation.addOperation(_:)",
-      "symbol_kind": "source.lang.swift.decl.function.method.instance",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/amarzoli/Developer/x/AdvancedOperation/Sources/Operations/GroupOperation.swift",
-      "line": 114,
+      "line": 122,
       "symbol": "GroupOperation.cancel()",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
