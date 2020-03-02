@@ -26,7 +26,7 @@ import Foundation
 /// An `AsynchronousOperation` subclass which produces a `Result` type output.
 open class ResultOperation<Success, Failure>: AsynchronousOperation, OutputProducingOperation, FailableOperation where Failure: Error {
   /// The block to execute when the operation produces its result.
-  /// - Note: A ResultOperation can only procude a single `Result`.
+  /// - Note: A ResultOperation can only produce a single `Result`.
   public var onResultProduced: ((Result<Success, Failure>) -> Void)?
 
   public final private(set) var output: Result<Success, Failure>? {
