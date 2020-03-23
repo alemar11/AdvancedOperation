@@ -139,7 +139,7 @@ open class AsynchronousOperation: Operation {
   /// You should override this method to perform the desired task. In your implementation, do not invoke super.
   ///  This method will automatically execute within an autorelease pool provided by Operation, so you do not need to create your own autorelease pool block in your implementation.
   /// - Note: Once the task is finished you **must** call `finish()` to complete the execution.
-  public override func main() {
+  open override func main() {
     preconditionFailure("Subclasses must implement `main`.")
   }
 
