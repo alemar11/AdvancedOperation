@@ -82,10 +82,10 @@ final class Logger {
     self.poi = poi
   }
 
-  @available(iOS 12.0, iOSApplicationExtension 12.0, tvOS 12.0, watchOS 5.0, macOS 10.14, OSXApplicationExtension 10.14, *)
-  private lazy var signpostID = {
-    return OSSignpostID(log: signpost, object: self)
-  }()
+//  @available(iOS 12.0, iOSApplicationExtension 12.0, tvOS 12.0, watchOS 5.0, macOS 10.14, OSXApplicationExtension 10.14, *)
+//  private lazy var signpostID = {
+//    return OSSignpostID(log: signpost, object: self)
+//  }()
 
   // swiftlint:disable:next cyclomatic_complexity
   func start<T>(operation: T) where T: LoggableOperation {
@@ -110,7 +110,8 @@ final class Logger {
 
       if self.started {
         if #available(iOS 12.0, iOSApplicationExtension 12.0, tvOS 12.0, watchOS 5.0, macOS 10.14, OSXApplicationExtension 10.14, *) {
-          os_signpost(.event, log: self.poi, name: "Cancellation", signpostID: self.signpostID, "⏺ %{public}s has been cancelled.", operation.operationName)
+          let signpostID = OSSignpostID(log: self.signpost, object: operation)
+          os_signpost(.event, log: self.poi, name: "Cancellation", signpostID: signpostID, "⏺ %{public}s has been cancelled.", operation.operationName)
         }
       }
     }
@@ -127,7 +128,8 @@ final class Logger {
         self.started = true
         if #available(iOS 12.0, iOSApplicationExtension 12.0, tvOS 12.0, watchOS 5.0, macOS 10.14, OSXApplicationExtension 10.14, *) {
           os_log(.info, log: self.log, "%{public}s has started.", operation.operationName)
-          os_signpost(.begin, log: self.signpost, name: Logger.signPostIntervalName, signpostID: self.signpostID, "🔼 %{public}s has started.", operation.operationName)
+          let signpostID = OSSignpostID(log: self.signpost, object: operation)
+          os_signpost(.begin, log: self.signpost, name: Logger.signPostIntervalName, signpostID: signpostID, "🔼 %{public}s has started.", operation.operationName)
         } else {
           os_log("%{public}s has started.", log: self.log, type: .info, operation.operationName)
         }
@@ -162,7 +164,8 @@ final class Logger {
 
       if self.started { // the end signpost should be logged only if the operation has logged the begin signpost
         if #available(iOS 12.0, iOSApplicationExtension 12.0, tvOS 12.0, watchOS 5.0, macOS 10.14, OSXApplicationExtension 10.14, *) {
-          os_signpost(.end, log: self.signpost, name: Logger.signPostIntervalName, signpostID: self.signpostID, "🔽 %{public}s has finished.", operation.operationName)
+          let signpostID = OSSignpostID(log: self.signpost, object: operation)
+          os_signpost(.end, log: self.signpost, name: Logger.signPostIntervalName, signpostID: signpostID, "🔽 %{public}s has finished.", operation.operationName)
         }
       }
     }
