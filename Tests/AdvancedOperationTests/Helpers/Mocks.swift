@@ -192,11 +192,6 @@ internal final class InfiniteOperation: AsyncOperation {
     while true {
       sleep(1)
       if isStopped.value {
-        if #available(iOS 12.0, iOSApplicationExtension 12.0, tvOS 12.0, watchOS 5.0, macOS 10.14, OSXApplicationExtension 10.14, *) {
-          os_log(.info, log: self.log, "%{public}s has been stopped.", operationName)
-        } else {
-          os_log("%{public}s has been stopped.", log: self.log, type: .info, operationName)
-        }
         self.finish()
         break
       }
@@ -377,14 +372,6 @@ internal final class IntToStringResultOperation: ResultOperation<String, IntToSt
 }
 
 // MARK: - Log
-
-internal enum Log {
-  private static let identifier = "xctest"
-  static var `default`: OSLog = OSLog(subsystem: Log.identifier, category: "Default")
-  static var signpost: OSLog = OSLog(subsystem: Log.identifier, category: "Signpost")
-  @available(iOS 12.0, iOSApplicationExtension 12.0, tvOS 12.0, watchOS 5.0, macOS 10.14, OSXApplicationExtension 10.14, *)
-  static var poi: OSLog = OSLog(subsystem: Log.identifier, category: .pointsOfInterest)
-}
 
 extension RunUntilCancelledAsyncOperation: LoggableOperation { }
 extension GroupOperation: LoggableOperation { }
