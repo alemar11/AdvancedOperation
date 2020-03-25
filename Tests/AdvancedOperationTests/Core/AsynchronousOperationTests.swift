@@ -128,6 +128,7 @@ final class AsynchronousOperationTests: XCTestCase {
   }
   
   func testMultipleStart() {
+    // TODO: at the moment multiple starts are allowed
     let operation = SleepyAsyncOperation()
     let expectation1 = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: operation, expectedValue: true)
     let expectation2 = expectation(description: "\(#function)\(#line)")
@@ -147,7 +148,7 @@ final class AsynchronousOperationTests: XCTestCase {
     XCTAssertFalse(operation.isCancelled)
     XCTAssertTrue(operation.isFinished)
   }
-  
+
   func testMultipleStartAfterCancellation() {
     let operation = SleepyAsyncOperation()
     let expectation1 = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: operation, expectedValue: true)

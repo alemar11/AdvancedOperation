@@ -32,10 +32,6 @@ public typealias AsyncOperation = AsynchronousOperation
 open class AsynchronousOperation: Operation {
   // MARK: - Public Properties
 
-  open override var isReady: Bool {
-    return state == .ready && super.isReady
-  }
-
   public final override var isExecuting: Bool {
     return state == .executing
   }
@@ -50,17 +46,11 @@ open class AsynchronousOperation: Operation {
 
   // MARK: - Private Properties
 
-  /// Lock to ensure thread safety.
-  private let lock = UnfairLock()
-
-  /// An operation is considered as "running" from the `start()` method is called until it gets finished.
-  private var isRunning = Atomic(false)
-
   /// Serial queue for making state changes atomic under the constraint of having to send KVO willChange/didChange notifications.
   private let stateChangeQueue = DispatchQueue(label: "\(identifier).AsynchronousOperation.stateChange")
 
   /// Private backing store for `state`
-  private var _state: Atomic<State> = Atomic(.ready)
+  private var _state: Atomic<State> = Atomic(.pending)
 
   /// The state of the operation
   private var state: State {
@@ -82,37 +72,51 @@ open class AsynchronousOperation: Operation {
         let oldValue = _state.value
         guard newValue != oldValue else { return }
 
-        willChangeValue(forKey: oldValue.objcKeyPath)
-        willChangeValue(forKey: newValue.objcKeyPath)
+        if let oldKeyPath = oldValue.objcKeyPath {
+          willChangeValue(forKey: oldKeyPath)
+        }
+        if let newKeyPath = newValue.objcKeyPath {
+          willChangeValue(forKey: newKeyPath)
+        }
 
         _state.mutate {
           assert($0.canTransition(to: newValue), "Performing an invalid state transition from: \($0) to: \(newValue) for \(operationName).")
           $0 = newValue
         }
 
-        didChangeValue(forKey: oldValue.objcKeyPath)
-        didChangeValue(forKey: newValue.objcKeyPath)
+        if let oldKeyPath = oldValue.objcKeyPath {
+          didChangeValue(forKey: oldKeyPath)
+        }
+        if let newKeyPath = newValue.objcKeyPath {
+          didChangeValue(forKey: newKeyPath)
+        }
       }
     }
   }
 
   // MARK: - Foundation.Operation
 
+  private let startLock = UnfairLock()
+
   public final override func start() {
-    guard !isFinished else { return }
+    startLock.lock()
+    defer { startLock.unlock() }
 
-    let isAlreadyRunning = isRunning.mutate { running -> Bool in
-      if running {
-        return true // already running
-      } else if isReady {
-        running = true
-        return false // it will be considered as running from now on
-      } else {
-        preconditionFailure("The operation \(operationName) is not ready yet.")
-      }
+    // TODO: throw an exception if the operation is already executing?
+//    if state == .finished {
+//      return
+//    } else if state == .executing {
+//       NSException(name: .invalidArgumentException, reason: "\(#function): The operation \(operationName) is not yet ready to execute.", userInfo: nil).raise()
+//    }
+
+    guard state == .pending else { return }
+
+    guard isReady else {
+      // Emulate the same kind of exception raised by the super.start() implementation.
+      NSException(name: .invalidArgumentException, reason: "\(#function): The operation \(operationName) is not yet ready to execute.", userInfo: nil).raise()
+      return
+      //fatalError("The operation \(operationName) is not yet ready to execute")
     }
-
-    guard !isAlreadyRunning else { return }
 
     // early bailing out
     guard !isCancelled else {
@@ -125,6 +129,22 @@ open class AsynchronousOperation: Operation {
     // This method also performs several checks to ensure that the operation can actually run.
     // For example, if the receiver was cancelled or is already finished, this method simply returns without calling main().
     // If the operation is currently executing or is not ready to execute, this method throws an NSInvalidArgumentException exception.
+
+    // Investigation on how super.start() works:
+    // If start() is called on a not yet ready operation, super.start() will throw an exception.
+    // If start() is called multiple times from different threads, super.start() will throw an exception.
+    // If start() is called on an already cancelled but noy yet executed operation, super.start() will change its state to finished.
+    // The isReady value is kept to true once the Operation is finished.
+    // The operation readiness is evaluated after checking if the operation is already finished. (In fact, if a dependency is added once the operation is already finished no exceptions are thrown if we attempt to start the operation again (silly test, I know):
+    //
+    // let op1 = BlockOperation()
+    // let op2 = BlockOperation()
+    // print(op2.isReady) // true
+    // op2.start()
+    // print(op2.isFinished) // true
+    // op2.addDependency(op1)
+    // print(op2.isReady) // false
+    // op2.start() // Nothing happens (no exceptions either)
 
     state = .executing
     main()
@@ -145,16 +165,18 @@ open class AsynchronousOperation: Operation {
 
   // MARK: - Private Methods
 
+  /// Lock to ensure thread safety.
+  private let finishLock = UnfairLock()
+
   /// Call this method to finish an operation that is currently executing.
   public final func finish() {
     // State can also be "ready" here if the operation was cancelled before it was started.
-    lock.lock()
-    defer { lock.unlock() }
+    finishLock.lock()
+    defer { finishLock.unlock() }
 
     switch state {
-    case .ready, .executing:
+    case .pending, .executing:
       state = .finished
-      isRunning.mutate { $0 = false }
     case .finished:
       preconditionFailure("The finish() method shouldn't be called more than once for \(operationName).")
     }
@@ -176,14 +198,14 @@ open class AsynchronousOperation: Operation {
 extension AsynchronousOperation {
   /// Mirror of the possible states an Operation can be in.
   enum State: Int, CustomStringConvertible, CustomDebugStringConvertible {
-    case ready
+    case pending // waiting to be executed
     case executing
     case finished
 
     /// The `#keyPath` for the `Operation` property that's associated with this value.
-    var objcKeyPath: String {
+    var objcKeyPath: String? {
       switch self {
-      case .ready: return #keyPath(isReady)
+      case .pending: return nil
       case .executing: return #keyPath(isExecuting)
       case .finished: return #keyPath(isFinished)
       }
@@ -191,7 +213,7 @@ extension AsynchronousOperation {
 
     var description: String {
       switch self {
-      case .ready: return "ready"
+      case .pending: return "pending"
       case .executing: return "executing"
       case .finished: return "finished"
       }
@@ -203,8 +225,8 @@ extension AsynchronousOperation {
 
     func canTransition(to newState: State) -> Bool {
       switch (self, newState) {
-      case (.ready, .executing): return true
-      case (.ready, .finished): return true
+      case (.pending, .executing): return true
+      case (.pending, .finished): return true
       case (.executing, .finished): return true
       default: return false
       }
