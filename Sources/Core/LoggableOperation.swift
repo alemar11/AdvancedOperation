@@ -106,14 +106,11 @@ final class Logger {
 
       if #available(iOS 12.0, iOSApplicationExtension 12.0, tvOS 12.0, watchOS 5.0, macOS 10.14, OSXApplicationExtension 10.14, *) {
         os_log(.info, log: self.log, "%{public}s has been cancelled.", operation.operationName)
-      } else {
-        os_log("%{public}s has been cancelled.", log: self.log, type: .info, operation.operationName)
-      }
-
-      if self.started {
-        if #available(iOS 12.0, iOSApplicationExtension 12.0, tvOS 12.0, watchOS 5.0, macOS 10.14, OSXApplicationExtension 10.14, *) {
+        if self.started {
           os_signpost(.event, log: self.poi, name: "Operation cancellation", signpostID: self.signpostID, "%{public}s has been cancelled.", operation.operationName)
         }
+      } else {
+        os_log("%{public}s has been cancelled.", log: self.log, type: .info, operation.operationName)
       }
     }
 
@@ -128,7 +125,6 @@ final class Logger {
         self.started = true
         if #available(iOS 12.0, iOSApplicationExtension 12.0, tvOS 12.0, watchOS 5.0, macOS 10.14, OSXApplicationExtension 10.14, *) {
           os_log(.info, log: self.log, "%{public}s has started.", operation.operationName)
-          //if self.signpost.signpostsEnabled { }
           os_signpost(.begin, log: self.signpost, name: Logger.signPostName, signpostID: self.signpostID, "%{public}s has started.", operation.operationName)
         } else {
           os_log("%{public}s has started.", log: self.log, type: .info, operation.operationName)
