@@ -96,10 +96,7 @@ final class AsynchronousBlockOperationTests: XCTestCase {
         complete()
       }
     }
-    operation.addCompletionBlock {
-      expectation2.fulfill()
-    }
-    operation.installLogger()
+    operation.addCompletionBlock { expectation2.fulfill() }
     operation.start()
     wait(for: [expectation1, expectation2], timeout: 10, enforceOrder: true)
   }

@@ -373,12 +373,6 @@ final class AsynchronousOperationTests: XCTestCase {
     gate.addDependencies(operation1, operation2)
     operation3.addDependencies(gate)
 
-    operation0.installLogger()
-    operation1.installLogger()
-    operation2.installLogger()
-    operation3.installLogger()
-    gate.installLogger()
-
     operation0.name = "op0"
     operation1.name = "op1"
     operation2.name = "op2"
@@ -392,7 +386,7 @@ final class AsynchronousOperationTests: XCTestCase {
   }
 }
 
-final class GateOperation: Operation, LoggableOperation {
+final class GateOperation: Operation {
   private let block: (GateOperation) -> Void
 
   init(block: @escaping (GateOperation) -> Void) {

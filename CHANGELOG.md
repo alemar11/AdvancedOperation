@@ -4,7 +4,8 @@
 
 - The `isReady` property is not participating anymore in the AsyncOperation internal state change.
 - A `NSException` is thrown if an AsyncOperation gets started without being ready.
-- `LoggableOperation` doesn't accept anymore custom `OSLog` instances, it will use only the default ones.
+- Added `MonitorableOperation` to observe the most relevant Operation status changes (isExecuting, isFinished, isCancelled).
+- Removed `LoggableOperation`.
 
 ### 5.2.0
 

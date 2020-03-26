@@ -51,10 +51,6 @@
 		067C482723D60EE800F73096 /* KVOCrashWorkaround.swift in Sources */ = {isa = PBXBuildFile; fileRef = 067C482523D60EE800F73096 /* KVOCrashWorkaround.swift */; };
 		067C482823D60EE800F73096 /* KVOCrashWorkaround.swift in Sources */ = {isa = PBXBuildFile; fileRef = 067C482523D60EE800F73096 /* KVOCrashWorkaround.swift */; };
 		067C482923D60EE800F73096 /* KVOCrashWorkaround.swift in Sources */ = {isa = PBXBuildFile; fileRef = 067C482523D60EE800F73096 /* KVOCrashWorkaround.swift */; };
-		069731C823D71135006A51CB /* LoggableOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 069731C723D71135006A51CB /* LoggableOperation.swift */; };
-		069731C923D71135006A51CB /* LoggableOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 069731C723D71135006A51CB /* LoggableOperation.swift */; };
-		069731CA23D71135006A51CB /* LoggableOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 069731C723D71135006A51CB /* LoggableOperation.swift */; };
-		069731CB23D71135006A51CB /* LoggableOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 069731C723D71135006A51CB /* LoggableOperation.swift */; };
 		06B3D10223D9E9F3005EBDD8 /* AdvancedOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06B3D10123D9E9F3005EBDD8 /* AdvancedOperation.swift */; };
 		06B3D10323D9E9F3005EBDD8 /* AdvancedOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06B3D10123D9E9F3005EBDD8 /* AdvancedOperation.swift */; };
 		06B3D10423D9E9F3005EBDD8 /* AdvancedOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06B3D10123D9E9F3005EBDD8 /* AdvancedOperation.swift */; };
@@ -158,7 +154,6 @@
 		0664BF3523D5B91100B491E6 /* FailableOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FailableOperation.swift; sourceTree = "<group>"; };
 		067C482523D60EE800F73096 /* KVOCrashWorkaround.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KVOCrashWorkaround.swift; sourceTree = "<group>"; };
 		068C554F23C8C6810043B43F /* lint.yml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; path = lint.yml; sourceTree = "<group>"; };
-		069731C723D71135006A51CB /* LoggableOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoggableOperation.swift; sourceTree = "<group>"; };
 		06B3D10123D9E9F3005EBDD8 /* AdvancedOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdvancedOperation.swift; sourceTree = "<group>"; };
 		06C92B4A23D0A9FF000D12C8 /* AsynchronousBlockOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsynchronousBlockOperation.swift; sourceTree = "<group>"; };
 		06C92B4F23D0AAEA000D12C8 /* AsynchronousBlockOperationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsynchronousBlockOperationTests.swift; sourceTree = "<group>"; };
@@ -402,7 +397,6 @@
 				239BC52120EB7539009A36D9 /* InputConsumingOperation.swift */,
 				23F24D21200799B800B25A03 /* Operation+Utils.swift */,
 				060B667023C4EBC80085FCB4 /* OutputProducingOperation.swift */,
-				069731C723D71135006A51CB /* LoggableOperation.swift */,
 				D2D252D9242C9D730010C296 /* MonitorableOperation.swift */,
 			);
 			path = Core;
@@ -743,7 +737,6 @@
 				23A1B87921B81C710018D9D5 /* UnfairLock.swift in Sources */,
 				064B0D8423F4032100C8331F /* GroupOperation.swift in Sources */,
 				D25DB57F23F49EFC002B91C5 /* ResultOperation.swift in Sources */,
-				069731C823D71135006A51CB /* LoggableOperation.swift in Sources */,
 				23A1B87F21B8307F0018D9D5 /* Atomic.swift in Sources */,
 				06B3D10223D9E9F3005EBDD8 /* AdvancedOperation.swift in Sources */,
 				067C482623D60EE800F73096 /* KVOCrashWorkaround.swift in Sources */,
@@ -764,7 +757,6 @@
 				23A1B87A21B81C710018D9D5 /* UnfairLock.swift in Sources */,
 				064B0D8523F4032100C8331F /* GroupOperation.swift in Sources */,
 				D25DB58023F49EFC002B91C5 /* ResultOperation.swift in Sources */,
-				069731C923D71135006A51CB /* LoggableOperation.swift in Sources */,
 				23A1B88021B8307F0018D9D5 /* Atomic.swift in Sources */,
 				06B3D10323D9E9F3005EBDD8 /* AdvancedOperation.swift in Sources */,
 				067C482723D60EE800F73096 /* KVOCrashWorkaround.swift in Sources */,
@@ -785,7 +777,6 @@
 				23A1B87B21B81C710018D9D5 /* UnfairLock.swift in Sources */,
 				064B0D8623F4032200C8331F /* GroupOperation.swift in Sources */,
 				D25DB58123F49EFC002B91C5 /* ResultOperation.swift in Sources */,
-				069731CA23D71135006A51CB /* LoggableOperation.swift in Sources */,
 				23A1B88121B8307F0018D9D5 /* Atomic.swift in Sources */,
 				06B3D10423D9E9F3005EBDD8 /* AdvancedOperation.swift in Sources */,
 				067C482823D60EE800F73096 /* KVOCrashWorkaround.swift in Sources */,
@@ -806,7 +797,6 @@
 				23A1B87C21B81C710018D9D5 /* UnfairLock.swift in Sources */,
 				064B0D8723F4032200C8331F /* GroupOperation.swift in Sources */,
 				D25DB58223F49EFC002B91C5 /* ResultOperation.swift in Sources */,
-				069731CB23D71135006A51CB /* LoggableOperation.swift in Sources */,
 				23A1B88221B8307F0018D9D5 /* Atomic.swift in Sources */,
 				06B3D10523D9E9F3005EBDD8 /* AdvancedOperation.swift in Sources */,
 				067C482923D60EE800F73096 /* KVOCrashWorkaround.swift in Sources */,

@@ -278,7 +278,7 @@ internal final class StringToIntOperation: Operation & InputConsumingOperation &
 
 // MARK: - AsynchronousOperation
 
-internal final class FailingOperation: Operation, FailableOperation, LoggableOperation {
+internal final class FailingOperation: Operation, FailableOperation {
   enum FailureError: Error {
     case errorOne
     case errorTwo
@@ -370,17 +370,6 @@ internal final class IntToStringResultOperation: ResultOperation<String, IntToSt
     }
   }
 }
-
-// MARK: - Log
-
-extension RunUntilCancelledAsyncOperation: LoggableOperation { }
-extension GroupOperation: LoggableOperation { }
-extension SleepyAsyncOperation: LoggableOperation { }
-extension AsyncBlockOperation: LoggableOperation { }
-extension AutoCancellingAsyncOperation: LoggableOperation { }
-extension InfiniteOperation: LoggableOperation { }
-extension CancelledOperation: LoggableOperation { }
-extension BlockOperation: LoggableOperation { }
 
 // MARK: - Monitor
 
