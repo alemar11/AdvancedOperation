@@ -30,37 +30,19 @@ final class MonitorableOperationTests: XCTestCase {
     let expectation2 = expectation(description: "\(#function)\(#line)")
     let operation = FailingOperation()
 
-    if #available(iOS 13.0, iOSApplicationExtension 13.0, tvOS 13.0, watchOS 6.0, macOS 10.15, OSXApplicationExtension 10.15, *) {
-      operation.someMonitor.addCancelBlock { _ in
-        XCTFail("This operation hasn't been cancelled.")
-      }
-      operation.someMonitor.addStartExecutionBlock { op in
-        XCTAssertTrue(op.isExecuting)
-        XCTAssertFalse(op.isFinished)
-        expectation1.fulfill()
-      }
-      operation.someMonitor.addFinishBlock { op in
-        XCTAssertFalse(op.isExecuting)
-        XCTAssertTrue(op.isFinished)
-        let failingOp = op as! FailingOperation
-        XCTAssertTrue(failingOp.isFailed)
-        expectation2.fulfill()
-      }
-    } else {
-      operation.monitor.addCancelBlock { _ in
-        XCTFail("This operation hasn't been cancelled.")
-      }
-      operation.monitor.addStartExecutionBlock { op in
-        XCTAssertTrue(op.isExecuting)
-        XCTAssertFalse(op.isFinished)
-        expectation1.fulfill()
-      }
-      operation.monitor.addFinishBlock { op in
-        XCTAssertFalse(op.isExecuting)
-        XCTAssertTrue(op.isFinished)
-        XCTAssertTrue(op.isFailed)
-        expectation2.fulfill()
-      }
+    operation.monitor.addCancelBlock { _ in
+      XCTFail("This operation hasn't been cancelled.")
+    }
+    operation.monitor.addStartExecutionBlock { op in
+      XCTAssertTrue(op.isExecuting)
+      XCTAssertFalse(op.isFinished)
+      expectation1.fulfill()
+    }
+    operation.monitor.addFinishBlock { op in
+      XCTAssertFalse(op.isExecuting)
+      XCTAssertTrue(op.isFinished)
+      XCTAssertTrue(op.isFailed)
+      expectation2.fulfill()
     }
 
     operation.start()

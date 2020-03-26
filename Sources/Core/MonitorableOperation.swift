@@ -34,13 +34,6 @@ public protocol MonitorableOperation: Operation { }
 
 private var monitorKey: UInt8 = 117
 extension MonitorableOperation {
-  /// `Monitorable` instance listening to the operation status changes.
-  @available(iOS 13.0, iOSApplicationExtension 13.0, tvOS 13.0, watchOS 6.0, macOS 10.15, OSXApplicationExtension 10.15, *)
-  var someMonitor: some OperationMonitoring {
-    // with an opaque type, we loose the Self info (we get OperationMonitoring.T instead)
-    return monitor
-  }
-
   /// `Monitorable` instance listening to the operation  most relevant status changes.
   var monitor: Monitor<Self> {
     return prepareMonitor()
