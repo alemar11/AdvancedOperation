@@ -115,7 +115,7 @@ open class AsynchronousOperation: Operation {
       // Emulate the same kind of exception raised by the super.start() implementation.
       NSException(name: .invalidArgumentException, reason: "\(#function): The operation \(operationName) is not yet ready to execute.", userInfo: nil).raise()
       return
-      //fatalError("The operation \(operationName) is not yet ready to execute")
+      // fatalError("The operation \(operationName) is not yet ready to execute")
     }
 
     // early bailing out
@@ -135,7 +135,9 @@ open class AsynchronousOperation: Operation {
     // If start() is called multiple times from different threads, super.start() will throw an exception.
     // If start() is called on an already cancelled but noy yet executed operation, super.start() will change its state to finished.
     // The isReady value is kept to true once the Operation is finished.
-    // The operation readiness is evaluated after checking if the operation is already finished. (In fact, if a dependency is added once the operation is already finished no exceptions are thrown if we attempt to start the operation again (silly test, I know):
+    // The operation readiness is evaluated after checking if the operation is already finished.
+    // (In fact, if a dependency is added once the operation is already finished no exceptions are thrown if we attempt to start the operation again
+    // (silly test, I know):
     //
     // let op1 = BlockOperation()
     // let op2 = BlockOperation()
