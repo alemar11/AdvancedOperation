@@ -115,9 +115,9 @@
 		D2D252DB242C9D730010C296 /* StateObservableOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2D252D9242C9D730010C296 /* StateObservableOperation.swift */; };
 		D2D252DC242C9D730010C296 /* StateObservableOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2D252D9242C9D730010C296 /* StateObservableOperation.swift */; };
 		D2D252DD242C9D730010C296 /* StateObservableOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2D252D9242C9D730010C296 /* StateObservableOperation.swift */; };
-		D2D252DF242CA00C0010C296 /* MonitorableOperationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2D252DE242CA00C0010C296 /* MonitorableOperationTests.swift */; };
-		D2D252E0242CA00C0010C296 /* MonitorableOperationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2D252DE242CA00C0010C296 /* MonitorableOperationTests.swift */; };
-		D2D252E1242CA00C0010C296 /* MonitorableOperationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2D252DE242CA00C0010C296 /* MonitorableOperationTests.swift */; };
+		D2D252DF242CA00C0010C296 /* StateObservableOperationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2D252DE242CA00C0010C296 /* StateObservableOperationTests.swift */; };
+		D2D252E0242CA00C0010C296 /* StateObservableOperationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2D252DE242CA00C0010C296 /* StateObservableOperationTests.swift */; };
+		D2D252E1242CA00C0010C296 /* StateObservableOperationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2D252DE242CA00C0010C296 /* StateObservableOperationTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -188,7 +188,7 @@
 		D25DB57E23F49EFC002B91C5 /* ResultOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultOperation.swift; sourceTree = "<group>"; };
 		D25DB58523F4ADA6002B91C5 /* ResultOperationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultOperationTests.swift; sourceTree = "<group>"; };
 		D2D252D9242C9D730010C296 /* StateObservableOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StateObservableOperation.swift; sourceTree = "<group>"; };
-		D2D252DE242CA00C0010C296 /* MonitorableOperationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MonitorableOperationTests.swift; sourceTree = "<group>"; };
+		D2D252DE242CA00C0010C296 /* StateObservableOperationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StateObservableOperationTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -264,7 +264,7 @@
 				D2093D392366175200230A2A /* OperationInjectionTests.swift */,
 				235D08D0206A941B00F70142 /* OperationStateTests.swift */,
 				23AC3ADC2038A050003E1B15 /* OperationUtilsTests.swift */,
-				D2D252DE242CA00C0010C296 /* MonitorableOperationTests.swift */,
+				D2D252DE242CA00C0010C296 /* StateObservableOperationTests.swift */,
 			);
 			path = Core;
 			sourceTree = "<group>";
@@ -822,7 +822,7 @@
 				235D08D3206A941B00F70142 /* OperationStateTests.swift in Sources */,
 				23AC3ADF2038A050003E1B15 /* OperationUtilsTests.swift in Sources */,
 				2385617B200A873C0061BAA1 /* Mocks.swift in Sources */,
-				D2D252E1242CA00C0010C296 /* MonitorableOperationTests.swift in Sources */,
+				D2D252E1242CA00C0010C296 /* StateObservableOperationTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -838,7 +838,7 @@
 				235D08D1206A941B00F70142 /* OperationStateTests.swift in Sources */,
 				23AC3ADD2038A050003E1B15 /* OperationUtilsTests.swift in Sources */,
 				23856179200A873C0061BAA1 /* Mocks.swift in Sources */,
-				D2D252DF242CA00C0010C296 /* MonitorableOperationTests.swift in Sources */,
+				D2D252DF242CA00C0010C296 /* StateObservableOperationTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -854,7 +854,7 @@
 				235D08D2206A941B00F70142 /* OperationStateTests.swift in Sources */,
 				23AC3ADE2038A050003E1B15 /* OperationUtilsTests.swift in Sources */,
 				2385617A200A873C0061BAA1 /* Mocks.swift in Sources */,
-				D2D252E0242CA00C0010C296 /* MonitorableOperationTests.swift in Sources */,
+				D2D252E0242CA00C0010C296 /* StateObservableOperationTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

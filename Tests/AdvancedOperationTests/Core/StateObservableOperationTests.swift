@@ -24,8 +24,8 @@
 import XCTest
 @testable import AdvancedOperation
 
-final class MonitorableOperationTests: XCTestCase {
-  func testMonitorExecutionStates() {
+final class StateObservableOperationTests: XCTestCase {
+  func testObserveExecutionStates() {
     let expectation1 = expectation(description: "\(#function)\(#line)")
     let expectation2 = expectation(description: "\(#function)\(#line)")
     let operation = FailingOperation()
@@ -44,7 +44,7 @@ final class MonitorableOperationTests: XCTestCase {
     wait(for: [expectation1, expectation2], timeout: 5)
   }
 
-  func testMonitorExecutionAndFinishStates() {
+  func testObserveExecutionAndFinishStates() {
     let expectation1 = expectation(description: "\(#function)\(#line)")
     let expectation2 = expectation(description: "\(#function)\(#line)")
     let operation = FailingOperation()
@@ -54,7 +54,6 @@ final class MonitorableOperationTests: XCTestCase {
     }
     operation.state.observe(.executing) { op in
       if op.isExecuting {
-        XCTAssertTrue(op.isExecuting)
         XCTAssertFalse(op.isFinished)
         expectation1.fulfill()
       }
@@ -71,7 +70,36 @@ final class MonitorableOperationTests: XCTestCase {
     wait(for: [expectation1, expectation2], timeout: 5)
   }
 
-  func testMonitorStartAndFinishStatesWhenRunningOnQueue() {
+  func testNestedObservers() {
+    let expectation1 = expectation(description: "\(#function)\(#line)")
+    expectation1.expectedFulfillmentCount = 2
+    let expectation2 = expectation(description: "\(#function)\(#line)")
+    let expectation3 = expectation(description: "\(#function)\(#line)")
+    let operation = RunUntilCancelledAsyncOperation()
+
+    operation.state.observe(.executing) { op in
+      guard op.isExecuting else { return }
+      expectation1.fulfill()
+    }
+
+    operation.state.observe(.executing) { op in
+      guard op.isExecuting else { return }
+
+      expectation1.fulfill()
+      op.state.observe(.cancelled) { op in
+        expectation2.fulfill()
+        op.state.observe(.finished) { op in
+          expectation3.fulfill()
+        }
+      }
+      op.cancel()
+    }
+
+    operation.start()
+    wait(for: [expectation1, expectation2, expectation3], timeout: 5)
+  }
+
+  func testObserveStartAndFinishStatesWhenRunningOnQueue() {
     let expectation1 = expectation(description: "\(#function)\(#line)")
     let expectation2 = expectation(description: "\(#function)\(#line)")
     expectation1.expectedFulfillmentCount = 2
@@ -113,7 +141,7 @@ final class MonitorableOperationTests: XCTestCase {
     wait(for: [expectation1, expectation2], timeout: 5)
   }
 
-  func testMonitorCancelAndFinishStates() {
+  func testObserveCancelAndFinishStates() {
     let expectation1 = expectation(description: "\(#function)\(#line)")
     let expectation2 = expectation(description: "\(#function)\(#line)")
     let operation = SleepyAsyncOperation()
@@ -136,7 +164,7 @@ final class MonitorableOperationTests: XCTestCase {
     wait(for: [expectation1, expectation2], timeout: 5)
   }
 
-  func testMonitorCancelAndFinishStatesWhenRunningOnQueue() {
+  func testObserveCancelAndFinishStatesWhenRunningOnQueue() {
     let expectation1 = expectation(description: "\(#function)\(#line)")
     let expectation2 = expectation(description: "\(#function)\(#line)")
     let operation = BlockOperation()

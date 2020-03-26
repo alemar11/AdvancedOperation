@@ -107,14 +107,10 @@ public final class StateObserver<T: StateObservableOperation> {
 
     guard let key = keyPath._kvcKeyPathString else { return }
 
-    // Creates a NSKeyValueObservation if it's not already there.
+    // Creates a NSKeyValueObservation for the observed keyPath if it's not already there.
     if !tokensByKey.keys.contains(key) {
       let token = operation?.observe(keyPath, options: [.old, .new]) { [weak self] (operation, changes) in
         guard let self = self else { return }
-
-        self.lock.lock()
-        defer { self.lock.unlock() }
-
         guard self.operation === operation else { return }
         guard let oldValue = changes.oldValue, let newValue = changes.newValue, oldValue != newValue else { return } // only real changes are evaluated
 
