@@ -75,7 +75,7 @@ public final class StateObserver<T: StateObservableOperation> {
   private var handlersByKey = [String: [(T) -> Void]]()
   private var tokensByKey = [String: NSKeyValueObservation]()
 
-  public init(operation: T) {
+  internal init(operation: T) {
     self.operation = operation
   }
 
