@@ -1,5 +1,12 @@
 # Changelog
 
+### 5.3.0
+
+- The `isReady` property is not participating anymore in the AsyncOperation internal state change.
+- A `NSException` is thrown if an AsyncOperation gets started without being ready.
+- Added `StateObservableOperation` to observe easily the most relevant `Operation` status changes (isReady, isExecuting, isFinished, isCancelled).
+- Removed `LoggableOperation`.
+
 ### 5.2.0
 
 - Improved the underlying implementawtion of  `GroupOperation`.

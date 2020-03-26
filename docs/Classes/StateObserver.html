@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>KVOCrashWorkaround Class Reference</title>
+    <title>StateObserver Class Reference</title>
     <link rel="stylesheet" type="text/css" href="../css/jazzy.css" />
     <link rel="stylesheet" type="text/css" href="../css/highlight.css" />
     <meta charset='utf-8'>
@@ -10,8 +10,8 @@
     
   </head>
   <body>
-    <a name="//apple_ref/swift/Class/KVOCrashWorkaround" class="dashAnchor"></a>
-    <a title="KVOCrashWorkaround Class Reference"></a>
+    <a name="//apple_ref/swift/Class/StateObserver" class="dashAnchor"></a>
+    <a title="StateObserver Class Reference"></a>
     <header>
       <div class="content-wrapper">
         <p><a href="../index.html">AdvancedOperation Docs</a> (70% documented)</p>
@@ -21,7 +21,7 @@
       <p id="breadcrumbs">
         <a href="../index.html">AdvancedOperation Reference</a>
         <img id="carat" src="../img/carat.png" />
-        KVOCrashWorkaround Class Reference
+        StateObserver Class Reference
       </p>
     </div>
     <div class="content-wrapper">
@@ -106,16 +106,14 @@
       <article class="main-content">
         <section>
           <section class="section">
-            <h1>KVOCrashWorkaround</h1>
-            <p>Workaround to solve some  multithreading bugs in Swift&rsquo;s KVO.
-This needs to execute before anything can register KVO in the background so the best way to do this is before the application ever runs</p>
+            <h1>StateObserver</h1>
+              <div class="declaration">
+                <div class="language">
+                  <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">final</span> <span class="kd">class</span> <span class="kt">StateObserver</span><span class="o">&lt;</span><span class="kt">T</span><span class="o">&gt;</span> <span class="k">where</span> <span class="kt">T</span> <span class="p">:</span> <span class="kt"><a href="../Protocols/StateObservableOperation.html">StateObservableOperation</a></span></code></pre>
 
-<p><code><a href="../Classes/KVOCrashWorkaround.html#/installFix()">KVOCrashWorkaround.installFix()</a></code></p>
-<div class="aside aside-note">
-    <p class="aside-title">Note</p>
-    it&rsquo;s not required for Swift 5.1 and above, see this <a href="https://github.com/apple/swift/pull/20103">Swift PR</a>
-
-</div>
+                </div>
+              </div>
+            <p>Undocumented</p>
 
           </section>
           <section class="section task-group-section">
@@ -124,9 +122,9 @@ This needs to execute before anything can register KVO in the background so the 
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/"></a>
-                    <a name="//apple_ref/swift/Method/installFix()" class="dashAnchor"></a>
-                    <a class="token" href="#/">installFix()</a>
+                    <a name="/s:17AdvancedOperation13StateObserverC08ObservedC0O"></a>
+                    <a name="//apple_ref/swift/Enum/ObservedState" class="dashAnchor"></a>
+                    <a class="token" href="#/s:17AdvancedOperation13StateObserverC08ObservedC0O">ObservedState</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -134,8 +132,75 @@ This needs to execute before anything can register KVO in the background so the 
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Install the workaround: it shoud be done from the <strong>main</strong> thread.</p>
+                        <p>Undocumented</p>
 
+                        <a href="../Classes/StateObserver/ObservedState.html" class="slightly-smaller">See more</a>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">enum</span> <span class="kt">ObservedState</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:17AdvancedOperation13StateObserverC7observe_7handleryAC08ObservedC0Oyx_G_yxctF"></a>
+                    <a name="//apple_ref/swift/Method/observe(_:handler:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:17AdvancedOperation13StateObserverC7observe_7handleryAC08ObservedC0Oyx_G_yxctF">observe(_:handler:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Observes changes for a given state.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">observe</span><span class="p">(</span><span class="n">_</span> <span class="nv">state</span><span class="p">:</span> <span class="kt"><a href="../Classes/StateObserver/ObservedState.html">ObservedState</a></span><span class="p">,</span> <span class="nv">handler</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="p">(</span><span class="kt">T</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>state</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The <code>Operation</code> state to observe.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>handler</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The block to be executed once the observed <code>Operation</code> state changes.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
                       </div>
                     </section>
                   </div>

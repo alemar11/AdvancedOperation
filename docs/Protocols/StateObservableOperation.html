@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>KVOCrashWorkaround Class Reference</title>
+    <title>StateObservableOperation Protocol Reference</title>
     <link rel="stylesheet" type="text/css" href="../css/jazzy.css" />
     <link rel="stylesheet" type="text/css" href="../css/highlight.css" />
     <meta charset='utf-8'>
@@ -10,8 +10,8 @@
     
   </head>
   <body>
-    <a name="//apple_ref/swift/Class/KVOCrashWorkaround" class="dashAnchor"></a>
-    <a title="KVOCrashWorkaround Class Reference"></a>
+    <a name="//apple_ref/swift/Protocol/StateObservableOperation" class="dashAnchor"></a>
+    <a title="StateObservableOperation Protocol Reference"></a>
     <header>
       <div class="content-wrapper">
         <p><a href="../index.html">AdvancedOperation Docs</a> (70% documented)</p>
@@ -21,7 +21,7 @@
       <p id="breadcrumbs">
         <a href="../index.html">AdvancedOperation Reference</a>
         <img id="carat" src="../img/carat.png" />
-        KVOCrashWorkaround Class Reference
+        StateObservableOperation Protocol Reference
       </p>
     </div>
     <div class="content-wrapper">
@@ -106,36 +106,64 @@
       <article class="main-content">
         <section>
           <section class="section">
-            <h1>KVOCrashWorkaround</h1>
-            <p>Workaround to solve some  multithreading bugs in Swift&rsquo;s KVO.
-This needs to execute before anything can register KVO in the background so the best way to do this is before the application ever runs</p>
+            <h1>StateObservableOperation</h1>
+              <div class="declaration">
+                <div class="language">
+                  <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">protocol</span> <span class="kt">StateObservableOperation</span> <span class="p">:</span> <span class="kt">Operation</span></code></pre>
 
-<p><code><a href="../Classes/KVOCrashWorkaround.html#/installFix()">KVOCrashWorkaround.installFix()</a></code></p>
-<div class="aside aside-note">
-    <p class="aside-title">Note</p>
-    it&rsquo;s not required for Swift 5.1 and above, see this <a href="https://github.com/apple/swift/pull/20103">Swift PR</a>
+                </div>
+              </div>
+            <p>Operations conforming to this protcol can easily observe to their most relevant status changes.</p>
+<div class="aside aside-warning">
+    <p class="aside-title">Warning</p>
+    If using Swift 5.0 or lower run <code><a href="../Classes/KVOCrashWorkaround.html#/installFix()">KVOCrashWorkaround.installFix()</a></code> to solve some  multithreading bugs in Swift&rsquo;s KVO.
 
 </div>
 
           </section>
           <section class="section task-group-section">
             <div class="task-group">
+              <div class="task-name-container">
+                <a name="/StateObservableOperation"></a>
+                <a name="//apple_ref/swift/Section/StateObservableOperation" class="dashAnchor"></a>
+                <div class="section-name-container">
+                  <a class="section-name-link" href="#/StateObservableOperation"></a>
+                  <h3 class="section-name"><p>StateObservableOperation</p>
+</h3>
+                </div>
+              </div>
               <ul>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/"></a>
-                    <a name="//apple_ref/swift/Method/installFix()" class="dashAnchor"></a>
-                    <a class="token" href="#/">installFix()</a>
+                    <a name="/s:17AdvancedOperation015StateObservableB0PAAE5stateAA0C8ObserverCyxGvp"></a>
+                    <a name="//apple_ref/swift/Property/state" class="dashAnchor"></a>
+                    <a class="token" href="#/s:17AdvancedOperation015StateObservableB0PAAE5stateAA0C8ObserverCyxGvp">state</a>
                     </code>
+                      <span class="declaration-note">
+                        Extension method
+                      </span>
                   </div>
                   <div class="height-container">
                     <div class="pointer-container"></div>
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Install the workaround: it shoud be done from the <strong>main</strong> thread.</p>
+                        <p><code><a href="../Classes/StateObserver.html">StateObserver</a></code> instance listening to the operation state changes.</p>
+<div class="aside aside-warning">
+    <p class="aside-title">Warning</p>
+    &ldquo;The observer should be used before any relevant operation phases are occurred.&rdquo;
 
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="k">var</span> <span class="nv">state</span><span class="p">:</span> <span class="kt"><a href="../Classes/StateObserver.html">StateObserver</a></span><span class="o">&lt;</span><span class="k">Self</span><span class="o">&gt;</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
+
+                        </div>
                       </div>
                     </section>
                   </div>

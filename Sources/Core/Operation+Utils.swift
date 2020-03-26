@@ -100,7 +100,7 @@ extension OperationQueue {
   }
 }
 
-extension Collection where Element: Operation {
+internal extension Collection where Element: Operation {
   /// Returns `true` if **at least one** operation has been cancelled.
   var hasSomeCancelledOperations: Bool {
     return first { $0.isCancelled } != nil
