@@ -34,28 +34,27 @@ public protocol StateObservableOperation: Operation { }
 
 private var monitorKey: UInt8 = 117
 extension StateObservableOperation {
-  /// `Monitorable` instance listening to the operation  most relevant status changes.
-  var monitor: StateMonitor<Self> {
-    return prepareMonitor()
+  /// `StateObserver` instance listening to the operation state changes.
+  /// - Warning: "The observer should be used before any relevant operation phases are occurred."
+  var state: StateObserver<Self> {
+    return prepareObserver()
   }
 
-  private func prepareMonitor() -> StateMonitor<Self> {
+  private func prepareObserver() -> StateObserver<Self> {
     objc_sync_enter(self)
     defer { objc_sync_exit(self) }
 
-    precondition(!self.isExecuting || !self.isFinished || !self.isCancelled, "The monitor should be used before any relevant operation phases are occurred.")
-
-    if let monitor = _monitor {
-      return monitor
+    if let observer = _observer {
+      return observer
     } else {
-      _monitor = Observer(operation: self)
-      return _monitor!
+      _observer = StateObserver(operation: self)
+      return _observer!
     }
   }
 
-  private var _monitor: StateMonitor<Self>? {
+  private var _observer: StateObserver<Self>? {
     get {
-      return objc_getAssociatedObject(self, &monitorKey) as? Observer
+      return objc_getAssociatedObject(self, &monitorKey) as? StateObserver
     }
     set {
       objc_setAssociatedObject(self, &monitorKey, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
@@ -63,7 +62,7 @@ extension StateObservableOperation {
   }
 }
 
-public final class StateMonitor<T: StateObservableOperation> {
+public final class StateObserver<T: StateObservableOperation> {
   public enum ObservedState {
     case ready
     case cancelled

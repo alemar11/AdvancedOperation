@@ -371,14 +371,14 @@ internal final class IntToStringResultOperation: ResultOperation<String, IntToSt
   }
 }
 
-// MARK: - Monitor
+// MARK: - StateObservableOperation
 
-extension RunUntilCancelledAsyncOperation: MonitorableOperation { }
-extension GroupOperation: MonitorableOperation { }
-extension SleepyAsyncOperation: MonitorableOperation { }
-extension AsyncBlockOperation: MonitorableOperation { }
-extension AutoCancellingAsyncOperation: MonitorableOperation { }
-extension InfiniteOperation: MonitorableOperation { }
-extension CancelledOperation: MonitorableOperation { }
-extension FailingOperation: MonitorableOperation { }
-extension BlockOperation: MonitorableOperation { }
+extension RunUntilCancelledAsyncOperation: StateObservableOperation { }
+extension GroupOperation: StateObservableOperation { }
+extension SleepyAsyncOperation: StateObservableOperation { }
+extension AsyncBlockOperation: StateObservableOperation { }
+extension AutoCancellingAsyncOperation: StateObservableOperation { }
+extension InfiniteOperation: StateObservableOperation { }
+extension CancelledOperation: StateObservableOperation { }
+extension FailingOperation: StateObservableOperation { }
+extension BlockOperation: StateObservableOperation { }

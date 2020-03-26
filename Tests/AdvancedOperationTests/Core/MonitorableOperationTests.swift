@@ -25,20 +25,41 @@ import XCTest
 @testable import AdvancedOperation
 
 final class MonitorableOperationTests: XCTestCase {
-  func testMonitorStartAndFinishStates() {
+  func testMonitorExecutionStates() {
     let expectation1 = expectation(description: "\(#function)\(#line)")
     let expectation2 = expectation(description: "\(#function)\(#line)")
     let operation = FailingOperation()
 
-    operation.monitor.addCancelBlock { _ in
+    operation.state.observe(.executing) { op in
+      if op.isExecuting {
+        XCTAssertFalse(op.isFinished)
+        expectation1.fulfill()
+      } else {
+        XCTAssertTrue(op.isFinished)
+        expectation2.fulfill()
+      }
+    }
+    operation.start()
+
+    wait(for: [expectation1, expectation2], timeout: 5)
+  }
+
+  func testMonitorExecutionAndFinishStates() {
+    let expectation1 = expectation(description: "\(#function)\(#line)")
+    let expectation2 = expectation(description: "\(#function)\(#line)")
+    let operation = FailingOperation()
+
+    operation.state.observe(.cancelled) { _ in
       XCTFail("This operation hasn't been cancelled.")
     }
-    operation.monitor.addStartExecutionBlock { op in
-      XCTAssertTrue(op.isExecuting)
-      XCTAssertFalse(op.isFinished)
-      expectation1.fulfill()
+    operation.state.observe(.executing) { op in
+      if op.isExecuting {
+        XCTAssertTrue(op.isExecuting)
+        XCTAssertFalse(op.isFinished)
+        expectation1.fulfill()
+      }
     }
-    operation.monitor.addFinishBlock { op in
+    operation.state.observe(.finished) { op in
       XCTAssertFalse(op.isExecuting)
       XCTAssertTrue(op.isFinished)
       XCTAssertTrue(op.isFailed)
@@ -58,30 +79,30 @@ final class MonitorableOperationTests: XCTestCase {
     let operation = BlockOperation()
     let queue = OperationQueue()
 
-    operation.monitor.addCancelBlock { _ in
+    operation.state.observe(.cancelled) { _ in
       XCTFail("This operation hasn't been cancelled.")
     }
-    operation.monitor.addStartExecutionBlock { op in
-      XCTAssertTrue(op.isExecuting)
+    operation.state.observe(.executing) { op in
+      guard op.isExecuting else { return }
       XCTAssertFalse(op.isFinished)
       expectation1.fulfill()
     }
-    operation.monitor.addStartExecutionBlock { op in
-      XCTAssertTrue(op.isExecuting)
+    operation.state.observe(.executing) { op in
+      guard op.isExecuting else { return }
       XCTAssertFalse(op.isFinished)
       expectation1.fulfill()
     }
-    operation.monitor.addFinishBlock { op in
+    operation.state.observe(.finished) { op in
       XCTAssertFalse(op.isExecuting)
       XCTAssertTrue(op.isFinished)
       expectation2.fulfill()
     }
-    operation.monitor.addFinishBlock { op in
+    operation.state.observe(.finished) { op in
       XCTAssertFalse(op.isExecuting)
       XCTAssertTrue(op.isFinished)
       expectation2.fulfill()
     }
-    operation.monitor.addFinishBlock { op in
+    operation.state.observe(.finished) { op in
       XCTAssertFalse(op.isExecuting)
       XCTAssertTrue(op.isFinished)
       expectation2.fulfill()
@@ -97,13 +118,13 @@ final class MonitorableOperationTests: XCTestCase {
     let expectation2 = expectation(description: "\(#function)\(#line)")
     let operation = SleepyAsyncOperation()
 
-    operation.monitor.addCancelBlock { _ in
+    operation.state.observe(.cancelled) { _ in
       expectation1.fulfill()
     }
-    operation.monitor.addStartExecutionBlock { op in
+    operation.state.observe(.executing) { op in
       XCTFail("This operation shouldn't execute its task.")
     }
-    operation.monitor.addFinishBlock { op in
+    operation.state.observe(.finished) { op in
       XCTAssertFalse(op.isExecuting)
       XCTAssertTrue(op.isFinished)
       expectation2.fulfill()
@@ -121,13 +142,13 @@ final class MonitorableOperationTests: XCTestCase {
     let operation = BlockOperation()
     let queue = OperationQueue()
 
-    operation.monitor.addCancelBlock { _ in
+    operation.state.observe(.cancelled) { _ in
       expectation1.fulfill()
     }
-    operation.monitor.addStartExecutionBlock { op in
+    operation.state.observe(.executing) { op in
       XCTFail("This operation shouldn't execute its task.")
     }
-    operation.monitor.addFinishBlock { op in
+    operation.state.observe(.finished) { op in
       XCTAssertFalse(op.isExecuting)
       XCTAssertTrue(op.isFinished)
       expectation2.fulfill()
@@ -139,16 +160,36 @@ final class MonitorableOperationTests: XCTestCase {
     wait(for: [expectation1, expectation2], timeout: 5)
   }
 
+  func testReadiness() {
+    let expectation1 = expectation(description: "\(#function)\(#line)")
+    let expectation2 = expectation(description: "\(#function)\(#line)")
+    let operation1 = BlockOperation()
+    let operation2 = BlockOperation()
+    let queue = OperationQueue()
+
+    operation2.state.observe(.ready) { op in
+      if op.isReady { // once the operation1 depedency has been finished
+        expectation1.fulfill()
+      } else { // setting operation1 as dependecy
+        expectation2.fulfill()
+      }
+    }
+
+    operation2.addDependency(operation1)
+    queue.addOperations([operation1, operation2], waitUntilFinished: false)
+    wait(for: [expectation1, expectation2], timeout: 5)
+  }
+
   func testMemoryLeak() {
     var operation: BlockOperation? = BlockOperation()
     weak var weakOperation: Operation? = operation
 
-    operation!.monitor.addStartExecutionBlock { _ in }
-    operation!.monitor.addStartExecutionBlock { _ in }
+    operation!.state.observe(.executing) { _ in }
+    operation!.state.observe(.executing) { _ in }
 
-    weak var weakMonitor = operation!.monitor
+    weak var weakObserver = operation!.state
     operation = nil
     XCTAssertNil(weakOperation)
-    XCTAssertNil(weakMonitor)
+    XCTAssertNil(weakObserver)
   }
 }
