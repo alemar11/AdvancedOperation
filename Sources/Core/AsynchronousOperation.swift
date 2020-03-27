@@ -171,6 +171,7 @@ open class AsynchronousOperation: Operation {
   private let finishLock = UnfairLock()
 
   /// Call this method to finish an operation that is currently executing.
+  /// - Warning: You should never call this method outside the operation main execution scope.
   public final func finish() {
     // State can also be "ready" here if the operation was cancelled before it was started.
     finishLock.lock()

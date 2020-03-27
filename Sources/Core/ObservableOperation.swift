@@ -21,21 +21,32 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 //
-// https://github.com/ReactiveX/RxSwift/blob/6b2a406b928cc7970874dcaed0ab18e7265e41ef/RxCocoa/Foundation/NSObject%2BRx.swift
+// The NSOperation class is key-value coding (KVC) and key-value observing (KVO) compliant for several of its properties.
+// As needed, you can observe these properties to control other parts of your application.
+// To observe the properties, use the following key paths:
+//
+// isCancelled
+// isAsynchronous
+// isExecuting
+// isFinished
+// isReady
+// dependencies
+// queuePriority
+// completionBlock
 
 import Foundation
 import os.log
 
 // MARK: - StateObservableOperation
 
-/// Operations conforming to this protcol can easily observe to their most relevant status changes.
+/// Operations conforming to this protcol can have their KVC compliant property easily observed until the operation itself gets deinited.
+/// 
 /// - Warning: If using Swift 5.0 or lower run `KVOCrashWorkaround.installFix()` to solve some  multithreading bugs in Swift's KVO.
 public protocol ObservableOperation: Operation { }
 
 private var observerKey: UInt8 = 117
 extension ObservableOperation {
-  /// `StateObserver` instance listening to the operation state changes.
-  /// - Warning: "The observer should be used before any relevant operation phases are occurred."
+  /// `KVOOperationObserver` instance listening to the operation KVC compliant properties changes until the operation gets deinited.
   var kvo: KVOOperationObserver<Self> {
     return prepareObserver()
   }
@@ -43,6 +54,7 @@ extension ObservableOperation {
   private func prepareObserver() -> KVOOperationObserver<Self> {
     objc_sync_enter(self)
     defer { objc_sync_exit(self) }
+    // https://github.com/ReactiveX/RxSwift/blob/6b2a406b928cc7970874dcaed0ab18e7265e41ef/RxCocoa/Foundation/NSObject%2BRx.swift
 
     if let observer = _observer {
       return observer
@@ -62,6 +74,7 @@ extension ObservableOperation {
   }
 }
 
+/// Observes `Operation` KVC compliant properties until the observed operation gets deinited.
 public final class KVOOperationObserver<T: ObservableOperation> {
   private weak var operation: T?
   private let lock = UnfairLock()

@@ -180,7 +180,7 @@ internal final class RunUntilCancelledAsyncOperation: AsynchronousOperation {
 }
 
 /// This operation will run indefinitely and can't be cancelled. Call `stop` to finish it.
-internal final class InfiniteOperation: AsyncOperation {
+internal final class InfiniteAsyncOperation: AsyncOperation {
   var onExecutionStarted: (() -> Void)?
   let isStopped = Atomic(false)
   func stop() {
@@ -188,12 +188,14 @@ internal final class InfiniteOperation: AsyncOperation {
   }
 
   override func main() {
-    onExecutionStarted?()
-    while true {
-      sleep(1)
-      if isStopped.value {
-        self.finish()
-        break
+    DispatchQueue(label: "InfiniteOperationQueue").async {
+      self.onExecutionStarted?()
+      while true {
+        sleep(1)
+        if self.isStopped.value {
+          self.finish()
+          break
+        }
       }
     }
   }
@@ -373,12 +375,12 @@ internal final class IntToStringResultOperation: ResultOperation<String, IntToSt
 
 // MARK: - StateObservableOperation
 
-extension RunUntilCancelledAsyncOperation: StateObservableOperation { }
-extension GroupOperation: StateObservableOperation { }
-extension SleepyAsyncOperation: StateObservableOperation { }
-extension AsyncBlockOperation: StateObservableOperation { }
-extension AutoCancellingAsyncOperation: StateObservableOperation { }
-extension InfiniteOperation: StateObservableOperation { }
-extension CancelledOperation: StateObservableOperation { }
-extension FailingOperation: StateObservableOperation { }
-extension BlockOperation: StateObservableOperation { }
+extension RunUntilCancelledAsyncOperation: ObservableOperation { }
+extension GroupOperation: ObservableOperation { }
+extension SleepyAsyncOperation: ObservableOperation { }
+extension AsyncBlockOperation: ObservableOperation { }
+extension AutoCancellingAsyncOperation: ObservableOperation { }
+extension InfiniteAsyncOperation: ObservableOperation { }
+extension CancelledOperation: ObservableOperation { }
+extension FailingOperation: ObservableOperation { }
+extension BlockOperation: ObservableOperation { }

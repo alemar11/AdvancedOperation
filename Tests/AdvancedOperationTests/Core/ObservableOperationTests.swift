@@ -24,13 +24,14 @@
 import XCTest
 @testable import AdvancedOperation
 
-final class StateObservableOperationTests: XCTestCase {
+final class ObservableOperationTests: XCTestCase {
   func testObserveExecutionStates() {
     let expectation1 = expectation(description: "\(#function)\(#line)")
     let expectation2 = expectation(description: "\(#function)\(#line)")
     let operation = FailingOperation()
 
-    operation.state.observe(.executing) { op in
+    operation.kvo.observe(\.isExecuting, options: [.old, .new]) { (op, change) in
+      print(change)
       if op.isExecuting {
         XCTAssertFalse(op.isFinished)
         expectation1.fulfill()
@@ -49,16 +50,17 @@ final class StateObservableOperationTests: XCTestCase {
     let expectation2 = expectation(description: "\(#function)\(#line)")
     let operation = FailingOperation()
 
-    operation.state.observe(.cancelled) { _ in
+    operation.kvo.observe(\.isCancelled, options: [.old, .new]) { (op, change) in
       XCTFail("This operation hasn't been cancelled.")
     }
-    operation.state.observe(.executing) { op in
+
+    operation.kvo.observe(\.isExecuting, options: [.old, .new]) { op, _ in
       if op.isExecuting {
         XCTAssertFalse(op.isFinished)
         expectation1.fulfill()
       }
     }
-    operation.state.observe(.finished) { op in
+    operation.kvo.observe(\.isFinished, options: [.old, .new]) { (op, change) in
       XCTAssertFalse(op.isExecuting)
       XCTAssertTrue(op.isFinished)
       XCTAssertTrue(op.isFailed)
@@ -77,18 +79,19 @@ final class StateObservableOperationTests: XCTestCase {
     let expectation3 = expectation(description: "\(#function)\(#line)")
     let operation = RunUntilCancelledAsyncOperation()
 
-    operation.state.observe(.executing) { op in
+    operation.kvo.observe(\.isExecuting, options: [.old, .new]) { op, _ in
       guard op.isExecuting else { return }
       expectation1.fulfill()
     }
 
-    operation.state.observe(.executing) { op in
+    operation.kvo.observe(\.isExecuting, options: [.old, .new]) { op, _ in
       guard op.isExecuting else { return }
 
       expectation1.fulfill()
-      op.state.observe(.cancelled) { op in
+      op.kvo.observe(\.isCancelled, options: [.old, .new]) { (op, change) in
         expectation2.fulfill()
-        op.state.observe(.finished) { op in
+        op.kvo.observe(\.isFinished, options: [.old, .new]) { (op, change) in
+          XCTAssertFalse(op.isExecuting)
           expectation3.fulfill()
         }
       }
@@ -99,6 +102,25 @@ final class StateObservableOperationTests: XCTestCase {
     wait(for: [expectation1, expectation2, expectation3], timeout: 5)
   }
 
+  func testNestedObservers2() {
+    let expectation1 = expectation(description: "\(#function)\(#line)")
+    let expectation2 = expectation(description: "\(#function)\(#line)")
+    let operation = InfiniteAsyncOperation()
+
+    operation.kvo.observe(\.isExecuting, options: [.old, .new]) { op, _ in
+      guard op.isExecuting else { return }
+      expectation1.fulfill()
+
+      op.kvo.observe(\.isFinished, options: [.old, .new]) { (op, change) in
+        expectation2.fulfill()
+      }
+      op.stop()
+    }
+
+    operation.start()
+    wait(for: [expectation1, expectation2], timeout: 5)
+  }
+
   func testObserveStartAndFinishStatesWhenRunningOnQueue() {
     let expectation1 = expectation(description: "\(#function)\(#line)")
     let expectation2 = expectation(description: "\(#function)\(#line)")
@@ -107,30 +129,30 @@ final class StateObservableOperationTests: XCTestCase {
     let operation = BlockOperation()
     let queue = OperationQueue()
 
-    operation.state.observe(.cancelled) { _ in
+    operation.kvo.observe(\.isCancelled, options: [.old, .new]) { (op, change) in
       XCTFail("This operation hasn't been cancelled.")
     }
-    operation.state.observe(.executing) { op in
+    operation.kvo.observe(\.isExecuting, options: [.old, .new]) { op, _ in
       guard op.isExecuting else { return }
       XCTAssertFalse(op.isFinished)
       expectation1.fulfill()
     }
-    operation.state.observe(.executing) { op in
+    operation.kvo.observe(\.isExecuting, options: [.old, .new]) { op, _ in
       guard op.isExecuting else { return }
       XCTAssertFalse(op.isFinished)
       expectation1.fulfill()
     }
-    operation.state.observe(.finished) { op in
+    operation.kvo.observe(\.isFinished, options: [.old, .new]) { op, _ in
       XCTAssertFalse(op.isExecuting)
       XCTAssertTrue(op.isFinished)
       expectation2.fulfill()
     }
-    operation.state.observe(.finished) { op in
+    operation.kvo.observe(\.isFinished, options: [.old, .new]) { op, _ in
       XCTAssertFalse(op.isExecuting)
       XCTAssertTrue(op.isFinished)
       expectation2.fulfill()
     }
-    operation.state.observe(.finished) { op in
+    operation.kvo.observe(\.isFinished, options: [.old, .new]) { op, _ in
       XCTAssertFalse(op.isExecuting)
       XCTAssertTrue(op.isFinished)
       expectation2.fulfill()
@@ -146,13 +168,13 @@ final class StateObservableOperationTests: XCTestCase {
     let expectation2 = expectation(description: "\(#function)\(#line)")
     let operation = SleepyAsyncOperation()
 
-    operation.state.observe(.cancelled) { _ in
+    operation.kvo.observe(\.isCancelled, options: [.old, .new]) { (op, change) in
       expectation1.fulfill()
     }
-    operation.state.observe(.executing) { op in
+    operation.kvo.observe(\.isExecuting) { op in
       XCTFail("This operation shouldn't execute its task.")
     }
-    operation.state.observe(.finished) { op in
+    operation.kvo.observe(\.isFinished) { op in
       XCTAssertFalse(op.isExecuting)
       XCTAssertTrue(op.isFinished)
       expectation2.fulfill()
@@ -170,13 +192,13 @@ final class StateObservableOperationTests: XCTestCase {
     let operation = BlockOperation()
     let queue = OperationQueue()
 
-    operation.state.observe(.cancelled) { _ in
+    operation.kvo.observe(\.isCancelled, options: [.old, .new]) { op, change in
       expectation1.fulfill()
     }
-    operation.state.observe(.executing) { op in
+    operation.kvo.observe(\.isExecuting, options: [.old, .new]) { op, _ in
       XCTFail("This operation shouldn't execute its task.")
     }
-    operation.state.observe(.finished) { op in
+    operation.kvo.observe(\.isFinished, options: [.old, .new]) { op, change in
       XCTAssertFalse(op.isExecuting)
       XCTAssertTrue(op.isFinished)
       expectation2.fulfill()
@@ -195,7 +217,7 @@ final class StateObservableOperationTests: XCTestCase {
     let operation2 = BlockOperation()
     let queue = OperationQueue()
 
-    operation2.state.observe(.ready) { op in
+    operation2.kvo.observe(\.isReady, options: [.old, .new]) { op, change in
       if op.isReady { // once the operation1 depedency has been finished
         expectation1.fulfill()
       } else { // setting operation1 as dependecy
@@ -208,14 +230,50 @@ final class StateObservableOperationTests: XCTestCase {
     wait(for: [expectation1, expectation2], timeout: 5)
   }
 
+  func testOtherKVOCompliantsProperties() {
+    let expectation1 = expectation(description: "\(#function)\(#line)")
+    expectation1.expectedFulfillmentCount = 3
+    let expectation2 = expectation(description: "\(#function)\(#line)")
+    expectation2.expectedFulfillmentCount = 3
+    let expectation3 = expectation(description: "\(#function)\(#line)")
+    expectation3.expectedFulfillmentCount = 2
+    let operation = SleepyAsyncOperation()
+    let dep1 = BlockOperation()
+    let dep2 = BlockOperation()
+
+    operation.kvo.observe(\.isReady, options: [.old, .new]) { (op, changes) in
+      expectation1.fulfill()
+    }
+    operation.kvo.observe(\.dependencies, options: [.old, .new]) { (op, changes) in
+      // NOTE: it seems that this obsever works only if we start observing the isReady property first (fb opened)
+      expectation2.fulfill()
+    }
+    operation.kvo.observe(\.queuePriority, options: [.old, .new]) { (op, changes) in
+      // NOTE: it seems that changes doesn't contains any values (fb opened)
+      XCTAssertNil(changes.oldValue)
+      XCTAssertNil(changes.newValue)
+      expectation3.fulfill()
+    }
+
+    operation.queuePriority = .high //
+    operation.queuePriority = .high
+    operation.queuePriority = .low
+
+    operation.addDependency(dep1) // ready: true -> false; dependencies: nil -> [dep1]
+    operation.addDependency(dep1) // ready: false -> false; dependencies: [dep1] -> [dep1]
+    operation.addDependency(dep2) // ready: false -> false; dependencies: [dep1] -> [dep1, dep2]
+
+    wait(for: [expectation1, expectation2, expectation3], timeout: 5)
+  }
+
   func testMemoryLeak() {
     var operation: BlockOperation? = BlockOperation()
     weak var weakOperation: Operation? = operation
 
-    operation!.state.observe(.executing) { _ in }
-    operation!.state.observe(.executing) { _ in }
+    operation!.kvo.observe(\.isExecuting, options: [.old, .new]) { _, _ in }
+    operation!.kvo.observe(\.isExecuting) { _ in }
 
-    weak var weakObserver = operation!.state
+    weak var weakObserver = operation!.kvo
     operation = nil
     XCTAssertNil(weakOperation)
     XCTAssertNil(weakObserver)
