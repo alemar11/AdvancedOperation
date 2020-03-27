@@ -73,7 +73,7 @@ open class GroupOperation: AsynchronousOperation {
     self.operationQueue.underlyingQueue = underlyingQueue
     operations.forEach { addOperation($0) }
   }
-  
+
   /// Creates a new `GroupOperation`.
   /// - Parameters:
   ///   - underlyingQueue: The dispatch queue used to execute operations (the default value is nil).

@@ -24,8 +24,6 @@
 import XCTest
 @testable import AdvancedOperation
 
-// TODO: https://forums.swift.org/t/xctunwrap-not-available-during-swift-test/28878/4
-
 final class AsynchronousOperationTests: XCTestCase {
   override class func setUp() {
     #if swift(<5.1)
@@ -127,26 +125,27 @@ final class AsynchronousOperationTests: XCTestCase {
     XCTAssertTrue(operation.isFinished)
   }
 
-  func testMultipleStart() {
-    let operation = SleepyAsyncOperation()
-    let expectation1 = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: operation, expectedValue: true)
-    let expectation2 = expectation(description: "\(#function)\(#line)")
-
-    XCTAssertTrue(operation.isReady)
-    XCTAssertFalse(operation.isExecuting)
-
-    DispatchQueue.global().async {
-      operation.start()
-      expectation2.fulfill()
-    }
-
-    operation.start()
-    operation.start()
-
-    wait(for: [expectation1, expectation2], timeout: 10)
-    XCTAssertFalse(operation.isCancelled)
-    XCTAssertTrue(operation.isFinished)
-  }
+  // Multiple start aren't allowed anymore
+//  func testMultipleStart() {
+//    let operation = SleepyAsyncOperation()
+//    let expectation1 = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: operation, expectedValue: true)
+//    let expectation2 = expectation(description: "\(#function)\(#line)")
+//
+//    XCTAssertTrue(operation.isReady)
+//    XCTAssertFalse(operation.isExecuting)
+//
+//    DispatchQueue.global().async {
+//      operation.start()
+//      expectation2.fulfill()
+//    }
+//
+//    operation.start()
+//    operation.start()
+//
+//    wait(for: [expectation1, expectation2], timeout: 10)
+//    XCTAssertFalse(operation.isCancelled)
+//    XCTAssertTrue(operation.isFinished)
+//  }
 
   func testMultipleStartAfterCancellation() {
     let operation = SleepyAsyncOperation()
@@ -372,20 +371,6 @@ final class AsynchronousOperationTests: XCTestCase {
     gate.addDependencies(operation1, operation2)
     operation3.addDependencies(gate)
 
-    if #available(iOS 12.0, iOSApplicationExtension 12.0, tvOS 12.0, watchOS 5.0, macOS 10.14, OSXApplicationExtension 10.14, *){
-      operation0.installLogger(log: Log.default, signpost: Log.signpost, poi: Log.poi)
-      operation1.installLogger(log: Log.default, signpost: Log.signpost, poi: Log.poi)
-      operation2.installLogger(log: Log.default, signpost: Log.signpost, poi: Log.poi)
-      operation3.installLogger(log: Log.default, signpost: Log.signpost, poi: Log.poi)
-      gate.installLogger(log: Log.default, signpost: Log.signpost, poi: Log.poi)
-    } else {
-      operation0.installLogger(log: Log.default, signpost: Log.signpost, poi: .disabled)
-      operation1.installLogger(log: Log.default, signpost: Log.signpost, poi: .disabled)
-      operation2.installLogger(log: Log.default, signpost: Log.signpost, poi: .disabled)
-      operation3.installLogger(log: Log.default, signpost: Log.signpost, poi: .disabled)
-      gate.installLogger(log: Log.default, signpost: Log.signpost, poi: .disabled)
-    }
-
     operation0.name = "op0"
     operation1.name = "op1"
     operation2.name = "op2"
@@ -399,7 +384,7 @@ final class AsynchronousOperationTests: XCTestCase {
   }
 }
 
-final class GateOperation: Operation, LoggableOperation {
+final class GateOperation: Operation {
   private let block: (GateOperation) -> Void
 
   init(block: @escaping (GateOperation) -> Void) {

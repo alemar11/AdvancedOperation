@@ -33,35 +33,35 @@ internal final class SleepyAsyncOperation: AsynchronousOperation {
   private let interval1: UInt32
   private let interval2: UInt32
   private let interval3: UInt32
-  
+
   init(interval1: UInt32 = 1, interval2: UInt32 = 1, interval3: UInt32 = 1) {
     self.interval1 = interval1
     self.interval2 = interval2
     self.interval3 = interval3
     super.init()
   }
-  
+
   override func main() {
     DispatchQueue.global().async {
       if self.isCancelled {
         self.finish()
         return
       }
-      
+
       sleep(self.interval1)
-      
+
       if self.isCancelled {
         self.finish()
         return
       }
-      
+
       sleep(self.interval2)
-      
+
       if self.isCancelled {
         self.finish()
         return
       }
-      
+
       sleep(self.interval3)
       self.finish()
     }
@@ -73,7 +73,7 @@ internal final class SleepyAsyncOperation: AsynchronousOperation {
 internal class IntToStringAsyncOperation: AsynchronousOperation, InputConsumingOperation, OutputProducingOperation {
   var input: Int?
   private(set) var output: String?
-  
+
   override func main() {
     DispatchQueue.global().async {
       if let input = self.input {
@@ -87,7 +87,7 @@ internal class IntToStringAsyncOperation: AsynchronousOperation, InputConsumingO
 internal class StringToIntAsyncOperation: AsynchronousOperation, InputConsumingOperation, OutputProducingOperation {
   var input: String?
   private(set) var output: Int?
-  
+
   override func main() {
     DispatchQueue.global().async {
       if let input = self.input {
@@ -164,11 +164,11 @@ internal final class AutoCancellingAsyncOperation: AsynchronousOperation {
 
 internal final class RunUntilCancelledAsyncOperation: AsynchronousOperation {
   let queue: DispatchQueue
-  
+
   init(queue: DispatchQueue = DispatchQueue.global()) {
     self.queue = queue
   }
-  
+
   override func main() {
     queue.async {
       while !self.isCancelled {
@@ -180,25 +180,22 @@ internal final class RunUntilCancelledAsyncOperation: AsynchronousOperation {
 }
 
 /// This operation will run indefinitely and can't be cancelled. Call `stop` to finish it.
-internal final class InfiniteOperation: AsyncOperation {
+internal final class InfiniteAsyncOperation: AsyncOperation {
   var onExecutionStarted: (() -> Void)?
   let isStopped = Atomic(false)
   func stop() {
     isStopped.mutate { $0 = true }
   }
-  
+
   override func main() {
-    onExecutionStarted?()
-    while true {
-      sleep(1)
-      if isStopped.value {
-        if #available(iOS 12.0, iOSApplicationExtension 12.0, tvOS 12.0, watchOS 5.0, macOS 10.14, OSXApplicationExtension 10.14, *) {
-          os_log(.info, log: self.log, "%{public}s has been stopped.", operationName)
-        } else {
-          os_log("%{public}s has been stopped.", log: self.log, type: .info, operationName)
+    DispatchQueue(label: "InfiniteOperationQueue").async {
+      self.onExecutionStarted?()
+      while true {
+        sleep(1)
+        if self.isStopped.value {
+          self.finish()
+          break
         }
-        self.finish()
-        break
       }
     }
   }
@@ -213,7 +210,7 @@ internal final class CancelledOperation: Operation {
     self.line = line
     super.init()
   }
-  
+
   override func main() {
     XCTAssert(isCancelled, "This operation is expected to be cancelled before starting its execution.", file: file, line: line)
   }
@@ -254,7 +251,7 @@ internal final class IntToStringOperation: Operation & InputConsumingOperation &
     }
   }
   private var _output = Atomic<String?>(nil)
-  
+
   override func main() {
     if let input = self.input {
       output = "\(input)"
@@ -273,7 +270,7 @@ internal final class StringToIntOperation: Operation & InputConsumingOperation &
     }
   }
   private var _output = Atomic<Int?>(nil)
-  
+
   override func main() {
     if let input = self.input {
       output = Int(input)
@@ -283,14 +280,14 @@ internal final class StringToIntOperation: Operation & InputConsumingOperation &
 
 // MARK: - AsynchronousOperation
 
-internal final class FailingOperation: Operation, FailableOperation, LoggableOperation {
+internal final class FailingOperation: Operation, FailableOperation {
   enum FailureError: Error {
     case errorOne
     case errorTwo
   }
-  
+
   private(set) var error: FailureError?
-  
+
   override func main() {
     self.error = .errorOne
   }
@@ -312,10 +309,10 @@ internal final class ProducerGroupOperation: GroupOperation {
 internal final class IOGroupOperation: GroupOperation, InputConsumingOperation, OutputProducingOperation {
   var input: Int?
   private(set) var output: Int?
-  
+
   init(input: Int? = nil) {
     super.init(operations: [])
-    
+
     let inputOperation = IntToStringOperation()
     if let input = input {
       inputOperation.input = input
@@ -326,15 +323,15 @@ internal final class IOGroupOperation: GroupOperation, InputConsumingOperation, 
       inputOperation.addDependency(op)
       self.addOperation(op)
     }
-    
+
     let outputOperation = StringToIntOperation()
     let inject = inputOperation.injectOutput(into: outputOperation)
-    
+
     let exitOperation = BlockOperation { [unowned self, unowned outputOperation] in
       self.output = outputOperation.output
     }
     exitOperation.addDependency(outputOperation)
-    
+
     self.addOperation(inputOperation)
     self.addOperation(inject)
     self.addOperation(outputOperation)
@@ -349,24 +346,24 @@ internal final class IntToStringResultOperation: ResultOperation<String, IntToSt
     case missingInput
     case invalidInput
   }
-  
+
   private let queue = DispatchQueue(label: "IntToStringResultOperation")
   var input: Int?
-  
+
   override func main() {
     if isCancelled {
       self.finish()
       return
     }
-    
+
     queue.async { [weak self] in
       guard let self = self else { return }
-      
+
       guard let input = self.input else {
         self.finish(result: .failure(.missingInput))
         return
       }
-      
+
       if input < 0 {
         self.finish(result: .failure(.invalidInput))
       } else {
@@ -376,21 +373,14 @@ internal final class IntToStringResultOperation: ResultOperation<String, IntToSt
   }
 }
 
-// MARK: - Log
+// MARK: - StateObservableOperation
 
-internal enum Log {
-  private static let identifier = "xctest"
-  static var `default`: OSLog = OSLog(subsystem: Log.identifier, category: "Default")
-  static var signpost: OSLog = OSLog(subsystem: Log.identifier, category: "Signpost")
-  @available(iOS 12.0, iOSApplicationExtension 12.0, tvOS 12.0, watchOS 5.0, macOS 10.14, OSXApplicationExtension 10.14, *)
-  static var poi: OSLog = OSLog(subsystem: Log.identifier, category: .pointsOfInterest)
-}
-
-extension RunUntilCancelledAsyncOperation: LoggableOperation { }
-extension GroupOperation: LoggableOperation { }
-extension SleepyAsyncOperation: LoggableOperation { }
-extension AsyncBlockOperation: LoggableOperation { }
-extension AutoCancellingAsyncOperation: LoggableOperation { }
-extension InfiniteOperation: LoggableOperation { }
-extension CancelledOperation: LoggableOperation { }
-extension BlockOperation: LoggableOperation { }
+extension RunUntilCancelledAsyncOperation: ObservableOperation { }
+extension GroupOperation: ObservableOperation { }
+extension SleepyAsyncOperation: ObservableOperation { }
+extension AsyncBlockOperation: ObservableOperation { }
+extension AutoCancellingAsyncOperation: ObservableOperation { }
+extension InfiniteAsyncOperation: ObservableOperation { }
+extension CancelledOperation: ObservableOperation { }
+extension FailingOperation: ObservableOperation { }
+extension BlockOperation: ObservableOperation { }
