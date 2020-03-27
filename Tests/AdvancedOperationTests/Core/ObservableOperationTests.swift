@@ -31,7 +31,6 @@ final class ObservableOperationTests: XCTestCase {
     let operation = FailingOperation()
 
     operation.kvo.observe(\.isExecuting, options: [.old, .new]) { (op, change) in
-      print(change)
       if op.isExecuting {
         XCTAssertFalse(op.isFinished)
         expectation1.fulfill()
@@ -53,7 +52,6 @@ final class ObservableOperationTests: XCTestCase {
     operation.kvo.observe(\.isCancelled, options: [.old, .new]) { (op, change) in
       XCTFail("This operation hasn't been cancelled.")
     }
-
     operation.kvo.observe(\.isExecuting, options: [.old, .new]) { op, _ in
       if op.isExecuting {
         XCTAssertFalse(op.isFinished)
@@ -95,6 +93,7 @@ final class ObservableOperationTests: XCTestCase {
           expectation3.fulfill()
         }
       }
+      // op.finish() This will cause a crash (deadlock) but it shouldn't be used this way
       op.cancel()
     }
 
@@ -137,8 +136,8 @@ final class ObservableOperationTests: XCTestCase {
       XCTAssertFalse(op.isFinished)
       expectation1.fulfill()
     }
-    operation.kvo.observe(\.isExecuting, options: [.old, .new]) { op, _ in
-      guard op.isExecuting else { return }
+    operation.kvo.observe(\.isExecuting, options: [.old, .new]) { op, change in
+      guard let newValue = change.newValue, newValue else { return }
       XCTAssertFalse(op.isFinished)
       expectation1.fulfill()
     }
@@ -245,19 +244,19 @@ final class ObservableOperationTests: XCTestCase {
       expectation1.fulfill()
     }
     operation.kvo.observe(\.dependencies, options: [.old, .new]) { (op, changes) in
-      // NOTE: it seems that this obsever works only if we start observing the isReady property first (fb opened)
+      // NOTE: it seems that this obsever works only if we start observing the isReady property first (FB7586936)
       expectation2.fulfill()
     }
     operation.kvo.observe(\.queuePriority, options: [.old, .new]) { (op, changes) in
-      // NOTE: it seems that changes doesn't contains any values (fb opened)
+      // NOTE: it seems that changes doesn't contains any values (FB7642042)
       XCTAssertNil(changes.oldValue)
       XCTAssertNil(changes.newValue)
       expectation3.fulfill()
     }
 
-    operation.queuePriority = .high //
-    operation.queuePriority = .high
-    operation.queuePriority = .low
+    operation.queuePriority = .high // "default" -> high
+    operation.queuePriority = .high // it doesn't trigger any KVO changes
+    operation.queuePriority = .low  // high -> low
 
     operation.addDependency(dep1) // ready: true -> false; dependencies: nil -> [dep1]
     operation.addDependency(dep1) // ready: false -> false; dependencies: [dep1] -> [dep1]

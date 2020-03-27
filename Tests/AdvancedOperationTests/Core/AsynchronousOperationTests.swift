@@ -24,8 +24,6 @@
 import XCTest
 @testable import AdvancedOperation
 
-// TODO: https://forums.swift.org/t/xctunwrap-not-available-during-swift-test/28878/4
-
 final class AsynchronousOperationTests: XCTestCase {
   override class func setUp() {
     #if swift(<5.1)
@@ -127,27 +125,27 @@ final class AsynchronousOperationTests: XCTestCase {
     XCTAssertTrue(operation.isFinished)
   }
 
-  func testMultipleStart() {
-    // TODO: at the moment multiple starts are allowed
-    let operation = SleepyAsyncOperation()
-    let expectation1 = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: operation, expectedValue: true)
-    let expectation2 = expectation(description: "\(#function)\(#line)")
-
-    XCTAssertTrue(operation.isReady)
-    XCTAssertFalse(operation.isExecuting)
-
-    DispatchQueue.global().async {
-      operation.start()
-      expectation2.fulfill()
-    }
-
-    operation.start()
-    operation.start()
-
-    wait(for: [expectation1, expectation2], timeout: 10)
-    XCTAssertFalse(operation.isCancelled)
-    XCTAssertTrue(operation.isFinished)
-  }
+  // Multiple start aren't allowed anymore
+//  func testMultipleStart() {
+//    let operation = SleepyAsyncOperation()
+//    let expectation1 = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: operation, expectedValue: true)
+//    let expectation2 = expectation(description: "\(#function)\(#line)")
+//
+//    XCTAssertTrue(operation.isReady)
+//    XCTAssertFalse(operation.isExecuting)
+//
+//    DispatchQueue.global().async {
+//      operation.start()
+//      expectation2.fulfill()
+//    }
+//
+//    operation.start()
+//    operation.start()
+//
+//    wait(for: [expectation1, expectation2], timeout: 10)
+//    XCTAssertFalse(operation.isCancelled)
+//    XCTAssertTrue(operation.isFinished)
+//  }
 
   func testMultipleStartAfterCancellation() {
     let operation = SleepyAsyncOperation()
