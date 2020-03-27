@@ -102,57 +102,55 @@ open class AsynchronousOperation: Operation {
     startLock.lock()
     defer { startLock.unlock() }
 
-    // TODO: throw an exception if the operation is already executing?
-//    if state == .finished {
-//      return
-//    } else if state == .executing {
-//       NSException(name: .invalidArgumentException, reason: "\(#function): The operation \(operationName) is not yet ready to execute.", userInfo: nil).raise()
-//    }
-
-    guard state == .pending else { return }
-
-    guard isReady else {
-      // Emulate the same kind of exception raised by the super.start() implementation.
-      NSException(name: .invalidArgumentException, reason: "\(#function): The operation \(operationName) is not yet ready to execute.", userInfo: nil).raise()
+    switch state {
+    case .finished:
       return
-      // fatalError("The operation \(operationName) is not yet ready to execute")
-    }
-
-    // early bailing out
-    guard !isCancelled else {
-      finish()
+    case .executing:
+      NSException(name: .invalidArgumentException, reason: "\(#function): The operation \(operationName) is already executing.", userInfo: nil).raise()
       return
+    case .pending:
+      guard isReady else {
+        // Emulate the same kind of exception raised by the super.start() implementation.
+        NSException(name: .invalidArgumentException, reason: "\(#function): The operation \(operationName) is not yet ready to execute.", userInfo: nil).raise()
+        return
+      }
+
+      // early bailing out
+      guard !isCancelled else {
+        finish()
+        return
+      }
+
+      // Calling super.start() here causes some KVO issues (the doc says "Your (concurrent) custom implementation must not call super at any time").
+      // The default implementation of this method ("start") updates the execution state of the operation and calls the receiver’s main() method.
+      // This method also performs several checks to ensure that the operation can actually run.
+      // For example, if the receiver was cancelled or is already finished, this method simply returns without calling main().
+      // If the operation is currently executing or is not ready to execute, this method throws an NSInvalidArgumentException exception.
+
+      // Investigation on how super.start() works:
+      // If start() is called on a not yet ready operation, super.start() will throw an exception.
+      // If start() is called multiple times from different threads, super.start() will throw an exception.
+      // If start() is called on an already cancelled but noy yet executed operation, super.start() will change its state to finished.
+      // The isReady value is kept to true once the Operation is finished.
+      // The operation readiness is evaluated after checking if the operation is already finished.
+      // (In fact, if a dependency is added once the operation is already finished no exceptions are thrown if we attempt to start the operation again
+      // (silly test, I know):
+      //
+      // let op1 = BlockOperation()
+      // let op2 = BlockOperation()
+      // print(op2.isReady) // true
+      // op2.start()
+      // print(op2.isFinished) // true
+      // op2.addDependency(op1)
+      // print(op2.isReady) // false
+      // op2.start() // Nothing happens (no exceptions either)
+
+      state = .executing
+      main()
+
+      // At this point main() has already returned but it doesn't mean that the operation is finished.
+      // Only calling `finish()` will finish the operation at this point.
     }
-
-    // Calling super.start() here causes some KVO issues (the doc says "Your (concurrent) custom implementation must not call super at any time").
-    // The default implementation of this method ("start") updates the execution state of the operation and calls the receiver’s main() method.
-    // This method also performs several checks to ensure that the operation can actually run.
-    // For example, if the receiver was cancelled or is already finished, this method simply returns without calling main().
-    // If the operation is currently executing or is not ready to execute, this method throws an NSInvalidArgumentException exception.
-
-    // Investigation on how super.start() works:
-    // If start() is called on a not yet ready operation, super.start() will throw an exception.
-    // If start() is called multiple times from different threads, super.start() will throw an exception.
-    // If start() is called on an already cancelled but noy yet executed operation, super.start() will change its state to finished.
-    // The isReady value is kept to true once the Operation is finished.
-    // The operation readiness is evaluated after checking if the operation is already finished.
-    // (In fact, if a dependency is added once the operation is already finished no exceptions are thrown if we attempt to start the operation again
-    // (silly test, I know):
-    //
-    // let op1 = BlockOperation()
-    // let op2 = BlockOperation()
-    // print(op2.isReady) // true
-    // op2.start()
-    // print(op2.isFinished) // true
-    // op2.addDependency(op1)
-    // print(op2.isReady) // false
-    // op2.start() // Nothing happens (no exceptions either)
-
-    state = .executing
-    main()
-
-    // At this point main() has already returned but it doesn't mean that the operation is finished.
-    // Only calling `finish()` will finish the operation at this point.
   }
 
   // MARK: - Public Methods
@@ -171,6 +169,7 @@ open class AsynchronousOperation: Operation {
   private let finishLock = UnfairLock()
 
   /// Call this method to finish an operation that is currently executing.
+  /// - Warning: You should never call this method outside the operation main execution scope.
   public final func finish() {
     // State can also be "ready" here if the operation was cancelled before it was started.
     finishLock.lock()

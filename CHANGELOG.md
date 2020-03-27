@@ -3,8 +3,9 @@
 ### 5.3.0
 
 - The `isReady` property is not participating anymore in the AsyncOperation internal state change.
-- A `NSException` is thrown if an AsyncOperation gets started without being ready.
-- Added `StateObservableOperation` to observe easily the most relevant `Operation` status changes (isReady, isExecuting, isFinished, isCancelled).
+- A `NSException` will be thrown if an AsyncOperation gets started without being ready.
+- A `NSException` will be thrown if an AsyncOperation gets started multiple times.
+- Added `ObservableOperation` to easily observe all KVC compliant Operation properties.
 - Removed `LoggableOperation`.
 
 ### 5.2.0

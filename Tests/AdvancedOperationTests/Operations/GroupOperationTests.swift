@@ -114,7 +114,7 @@ final class GroupOperationTests: XCTestCase {
   func testAddingOperationWhileGroupOperationIsBeingCancelled() {
     let operation1 = RunUntilCancelledAsyncOperation()
     let operation2 = SleepyAsyncOperation(interval1: 1, interval2: 0, interval3: 0)
-    let operation3 = InfiniteOperation()
+    let operation3 = InfiniteAsyncOperation()
     let operation4 = CancelledOperation()
 
     operation1.name = "op1"
