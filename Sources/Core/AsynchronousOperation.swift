@@ -144,6 +144,9 @@ open class AsynchronousOperation: Operation {
       // op2.addDependency(op1)
       // print(op2.isReady) // false
       // op2.start() // Nothing happens (no exceptions either)
+      //
+      // Additional considerations:
+      // If an operation has finished, calling cancel() on it won't change its isCancelled value to true.
 
       state = .executing
       main()
