@@ -37,7 +37,7 @@
 import Foundation
 import os.log
 
-// MARK: - StateObservableOperation
+// MARK: - ObservableOperation
 
 /// Operations conforming to this protcol can have their KVC compliant property easily observed until the operation itself gets deinited.
 /// 
