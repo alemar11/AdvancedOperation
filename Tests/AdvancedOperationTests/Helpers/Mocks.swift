@@ -103,6 +103,7 @@ internal class StringToIntAsyncOperation: AsynchronousOperation, InputConsumingO
 }
 
 //internal class IntToStringAsyncOperation: AsynchronousOperation, InputConsumingOperation, OutputProducingOperation {
+//  var onOutputProduced: ((String) -> Void)?
 //  private let queue = DispatchQueue(label: "IntToStringAsyncOperation")
 //  var input: Int?
 //  var output: String? {
@@ -119,6 +120,7 @@ internal class StringToIntAsyncOperation: AsynchronousOperation, InputConsumingO
 //    queue.async {
 //      if let input = self.input {
 //        self.output = "\(input)"
+//        self.onOutputProduced?(self.output!)
 //      }
 //      self.finish()
 //    }
@@ -126,6 +128,7 @@ internal class StringToIntAsyncOperation: AsynchronousOperation, InputConsumingO
 //}
 //
 //internal class StringToIntAsyncOperation: AsynchronousOperation, InputConsumingOperation, OutputProducingOperation {
+//  var onOutputProduced: ((Int) -> Void)?
 //  private let queue = DispatchQueue(label: "StringToIntAsyncOperation")
 //  var input: String?
 //  var output: Int? {
@@ -142,6 +145,7 @@ internal class StringToIntAsyncOperation: AsynchronousOperation, InputConsumingO
 //    queue.async {
 //      if let input = self.input {
 //        self.output = Int(input)
+//        self.onOutputProduced?(self.output!)
 //      }
 //      self.finish()
 //    }
