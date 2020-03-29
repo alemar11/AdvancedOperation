@@ -73,11 +73,13 @@ internal final class SleepyAsyncOperation: AsynchronousOperation {
 internal class IntToStringAsyncOperation: AsynchronousOperation, InputConsumingOperation, OutputProducingOperation {
   var input: Int?
   private(set) var output: String?
+  var onOutputProduced: ((String) -> Void)?
 
   override func main() {
     DispatchQueue.global().async {
       if let input = self.input {
         self.output = "\(input)"
+        self.onOutputProduced?(self.output!)
       }
       self.finish()
     }
@@ -87,11 +89,13 @@ internal class IntToStringAsyncOperation: AsynchronousOperation, InputConsumingO
 internal class StringToIntAsyncOperation: AsynchronousOperation, InputConsumingOperation, OutputProducingOperation {
   var input: String?
   private(set) var output: Int?
+  var onOutputProduced: ((Int) -> Void)?
 
   override func main() {
     DispatchQueue.global().async {
       if let input = self.input {
         self.output = Int(input)
+        self.onOutputProduced?(self.output!)
       }
       self.finish()
     }
@@ -241,6 +245,7 @@ internal final class CancelledOperation: Operation {
 //}
 
 internal final class IntToStringOperation: Operation & InputConsumingOperation & OutputProducingOperation {
+  var onOutputProduced: ((String) -> Void)?
   var input: Int?
   private(set) var output: String? {
     get {
@@ -255,11 +260,13 @@ internal final class IntToStringOperation: Operation & InputConsumingOperation &
   override func main() {
     if let input = self.input {
       output = "\(input)"
+      onOutputProduced?(self.output!)
     }
   }
 }
 
 internal final class StringToIntOperation: Operation & InputConsumingOperation & OutputProducingOperation  {
+  var onOutputProduced: ((Int) -> Void)?
   var input: String?
   private(set) var output: Int? {
     get {
@@ -274,6 +281,7 @@ internal final class StringToIntOperation: Operation & InputConsumingOperation &
   override func main() {
     if let input = self.input {
       output = Int(input)
+      self.onOutputProduced?(output!)
     }
   }
 }
@@ -309,6 +317,7 @@ internal final class ProducerGroupOperation: GroupOperation {
 internal final class IOGroupOperation: GroupOperation, InputConsumingOperation, OutputProducingOperation {
   var input: Int?
   private(set) var output: Int?
+  var onOutputProduced: ((Int) -> Void)?
 
   init(input: Int? = nil) {
     super.init(operations: [])
@@ -329,6 +338,9 @@ internal final class IOGroupOperation: GroupOperation, InputConsumingOperation, 
 
     let exitOperation = BlockOperation { [unowned self, unowned outputOperation] in
       self.output = outputOperation.output
+      if let output = self.output {
+        self.onOutputProduced?(output)
+      }
     }
     exitOperation.addDependency(outputOperation)
 

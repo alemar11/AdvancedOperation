@@ -45,7 +45,7 @@ class ResultOperationTests: XCTestCase {
     let operation = IntToStringResultOperation()
     let resultProducedExpectation = self.expectation(description: "Result produced")
     operation.input = -10
-    operation.onResultProduced = { output in
+    operation.onOutputProduced = { output in
       switch output {
       case .failure(let error):
         XCTAssertEqual(error, .invalidInput)
@@ -69,7 +69,7 @@ class ResultOperationTests: XCTestCase {
     let resultProducedExpectation = self.expectation(description: "Result produced")
     resultProducedExpectation.isInverted = true
     operation.input = -10
-    operation.onResultProduced = { output in
+    operation.onOutputProduced = { output in
       resultProducedExpectation.fulfill()
     }
     let finishedExpectation = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: operation, expectedValue: true)

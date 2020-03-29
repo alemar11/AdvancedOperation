@@ -28,6 +28,9 @@ public protocol OutputProducingOperation: Operation {
   associatedtype Output
   /// Produced output
   var output: Output? { get }
+  /// The block to execute when the operation produces its output.
+  /// - Note: An OutputProducingOperation should produce only a single `Output`.
+  var onOutputProduced: ((Output) -> Void)? { get set }
 }
 
 public extension OutputProducingOperation {

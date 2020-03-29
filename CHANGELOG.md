@@ -7,6 +7,7 @@
 - A `NSException` will be thrown if an AsyncOperation gets started multiple times.
 - Added `ObservableOperation` to easily observe all KVC compliant Operation properties.
 - Removed `LoggableOperation`.
+- `OutputProducingOperation` operations must now impement the `onOutputProduced` variable.
 
 ### 5.2.0
 
