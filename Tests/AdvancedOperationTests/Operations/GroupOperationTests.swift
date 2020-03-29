@@ -194,11 +194,20 @@ final class GroupOperationTests: XCTestCase {
     let groupOperation = IOGroupOperation(input: 10)
     let groupOperation2 = IOGroupOperation()
     groupOperation2.input = 11
-
+    let outputExepectation = expectation(description: "Output Produced")
+    outputExepectation.expectedFulfillmentCount = 2
+    groupOperation.onOutputProduced = { output in
+      XCTAssertEqual(output, 10)
+      outputExepectation.fulfill()
+    }
+    groupOperation2.onOutputProduced = { output in
+      XCTAssertEqual(output, 11)
+      outputExepectation.fulfill()
+    }
     let expectation1 = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: groupOperation, expectedValue: true)
     let expectation2 = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: groupOperation2, expectedValue: true)
     queue.addOperations([groupOperation, groupOperation2], waitUntilFinished: false)
-    wait(for: [expectation1, expectation2], timeout: 5)
+    wait(for: [expectation1, expectation2, outputExepectation], timeout: 5)
     XCTAssertEqual(groupOperation.output, 10)
     XCTAssertEqual(groupOperation2.output, 11)
   }
