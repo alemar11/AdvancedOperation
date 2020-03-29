@@ -44,35 +44,35 @@
     },
     {
       "file": "/Users/alessandro/Developer/AdvancedOperation/Sources/Core/AsynchronousOperation.swift",
-      "line": 189,
+      "line": 191,
       "symbol": "AsynchronousOperation.description",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/alessandro/Developer/AdvancedOperation/Sources/Core/AsynchronousOperation.swift",
-      "line": 193,
+      "line": 195,
       "symbol": "AsynchronousOperation.debugDescription",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/alessandro/Developer/AdvancedOperation/Sources/Core/AsynchronousOperation.swift",
-      "line": 203,
+      "line": 205,
       "symbol": "AsynchronousOperation.State.pending",
       "symbol_kind": "source.lang.swift.decl.enumelement",
       "warning": "undocumented"
     },
     {
       "file": "/Users/alessandro/Developer/AdvancedOperation/Sources/Core/AsynchronousOperation.swift",
-      "line": 204,
+      "line": 206,
       "symbol": "AsynchronousOperation.State.executing",
       "symbol_kind": "source.lang.swift.decl.enumelement",
       "warning": "undocumented"
     },
     {
       "file": "/Users/alessandro/Developer/AdvancedOperation/Sources/Core/AsynchronousOperation.swift",
-      "line": 205,
+      "line": 207,
       "symbol": "AsynchronousOperation.State.finished",
       "symbol_kind": "source.lang.swift.decl.enumelement",
       "warning": "undocumented"
@@ -96,48 +96,6 @@
       "line": 28,
       "symbol": "OutputProducingOperation.Output",
       "symbol_kind": "source.lang.swift.decl.associatedtype",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/alessandro/Developer/AdvancedOperation/Sources/Core/StateObservableOperation.swift",
-      "line": 65,
-      "symbol": "StateObserver",
-      "symbol_kind": "source.lang.swift.decl.class",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/alessandro/Developer/AdvancedOperation/Sources/Core/StateObservableOperation.swift",
-      "line": 66,
-      "symbol": "StateObserver.ObservedState",
-      "symbol_kind": "source.lang.swift.decl.enum",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/alessandro/Developer/AdvancedOperation/Sources/Core/StateObservableOperation.swift",
-      "line": 67,
-      "symbol": "StateObserver.ObservedState.ready",
-      "symbol_kind": "source.lang.swift.decl.enumelement",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/alessandro/Developer/AdvancedOperation/Sources/Core/StateObservableOperation.swift",
-      "line": 68,
-      "symbol": "StateObserver.ObservedState.cancelled",
-      "symbol_kind": "source.lang.swift.decl.enumelement",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/alessandro/Developer/AdvancedOperation/Sources/Core/StateObservableOperation.swift",
-      "line": 69,
-      "symbol": "StateObserver.ObservedState.executing",
-      "symbol_kind": "source.lang.swift.decl.enumelement",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/alessandro/Developer/AdvancedOperation/Sources/Core/StateObservableOperation.swift",
-      "line": 70,
-      "symbol": "StateObserver.ObservedState.finished",
-      "symbol_kind": "source.lang.swift.decl.enumelement",
       "warning": "undocumented"
     },
     {

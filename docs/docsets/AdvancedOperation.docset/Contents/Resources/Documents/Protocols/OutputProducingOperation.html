@@ -14,7 +14,7 @@
     <a title="OutputProducingOperation Protocol Reference"></a>
     <header>
       <div class="content-wrapper">
-        <p><a href="../index.html">AdvancedOperation Docs</a> (70% documented)</p>
+        <p><a href="../index.html">AdvancedOperation Docs</a> (77% documented)</p>
       </div>
     </header>
     <div class="content-wrapper">
@@ -46,13 +46,10 @@
                 <a href="../Classes/KVOCrashWorkaround.html">KVOCrashWorkaround</a>
               </li>
               <li class="nav-group-task">
+                <a href="../Classes/KVOOperationObserver.html">KVOOperationObserver</a>
+              </li>
+              <li class="nav-group-task">
                 <a href="../Classes/ResultOperation.html">ResultOperation</a>
-              </li>
-              <li class="nav-group-task">
-                <a href="../Classes/StateObserver.html">StateObserver</a>
-              </li>
-              <li class="nav-group-task">
-                <a href="../Classes/StateObserver/ObservedState.html">– ObservedState</a>
               </li>
             </ul>
           </li>
@@ -80,10 +77,10 @@
                 <a href="../Protocols/InputConsumingOperation.html">InputConsumingOperation</a>
               </li>
               <li class="nav-group-task">
-                <a href="../Protocols/OutputProducingOperation.html">OutputProducingOperation</a>
+                <a href="../Protocols/ObservableOperation.html">ObservableOperation</a>
               </li>
               <li class="nav-group-task">
-                <a href="../Protocols/StateObservableOperation.html">StateObservableOperation</a>
+                <a href="../Protocols/OutputProducingOperation.html">OutputProducingOperation</a>
               </li>
               <li class="nav-group-task">
                 <a href="../Protocols/_TypeErasedErrorFailable.html">_TypeErasedErrorFailable</a>
@@ -167,6 +164,38 @@
                         <div class="language">
                           <p class="aside-title">Swift</p>
                           <pre class="highlight swift"><code><span class="k">var</span> <span class="nv">output</span><span class="p">:</span> <span class="kt"><a href="../Protocols/OutputProducingOperation.html#/s:17AdvancedOperation015OutputProducingB0P0C0Qa">Output</a></span><span class="p">?</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:17AdvancedOperation015OutputProducingB0P02onC8Producedy0C0QzcSgvp"></a>
+                    <a name="//apple_ref/swift/Property/onOutputProduced" class="dashAnchor"></a>
+                    <a class="token" href="#/s:17AdvancedOperation015OutputProducingB0P02onC8Producedy0C0QzcSgvp">onOutputProduced</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The block to execute when the operation produces its output.</p>
+<div class="aside aside-note">
+    <p class="aside-title">Note</p>
+    An OutputProducingOperation should produce only a single <code><a href="../Protocols/OutputProducingOperation.html#/s:17AdvancedOperation015OutputProducingB0P0C0Qa">Output</a></code>.
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="k">var</span> <span class="nv">onOutputProduced</span><span class="p">:</span> <span class="p">((</span><span class="kt"><a href="../Protocols/OutputProducingOperation.html#/s:17AdvancedOperation015OutputProducingB0P0C0Qa">Output</a></span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)?</span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
 
                         </div>
                       </div>
@@ -296,7 +325,7 @@
           </section>
         </section>
         <section id="footer">
-          <p>&copy; 2020 <a class="link" href="https://github.com/tinrobots/AdvancedOperation" target="_blank" rel="external">Alessandro Marzoli</a>. All rights reserved. (Last updated: 2020-03-26)</p>
+          <p>&copy; 2020 <a class="link" href="https://github.com/tinrobots/AdvancedOperation" target="_blank" rel="external">Alessandro Marzoli</a>. All rights reserved. (Last updated: 2020-03-29)</p>
           <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.13.1</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
         </section>
       </article>
