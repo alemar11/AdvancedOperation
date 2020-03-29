@@ -226,40 +226,10 @@ internal final class CancelledOperation: Operation {
 
 // MARK: - Operation
 
-//internal final class IntToStringOperation: Operation & InputConsumingOperation & OutputProducingOperation {
-//  var input: Int?
-//  private(set) var output: String?
-//
-//  override func main() {
-//    if let input = self.input {
-//      output = "\(input)"
-//    }
-//  }
-//}
-//
-//internal final class StringToIntOperation: Operation & InputConsumingOperation & OutputProducingOperation  {
-//  var input: String?
-//  private(set) var output: Int?
-//
-//  override func main() {
-//    if let input = self.input {
-//      output = Int(input)
-//    }
-//  }
-//}
-
 internal final class IntToStringOperation: Operation & InputConsumingOperation & OutputProducingOperation {
   var onOutputProduced: ((String) -> Void)?
   var input: Int?
-  private(set) var output: String? {
-    get {
-      return _output.value
-    }
-    set {
-      _output.mutate { $0 = newValue }
-    }
-  }
-  private var _output = Atomic<String?>(nil)
+  private(set) var output: String?
 
   override func main() {
     if let input = self.input {
@@ -272,23 +242,57 @@ internal final class IntToStringOperation: Operation & InputConsumingOperation &
 internal final class StringToIntOperation: Operation & InputConsumingOperation & OutputProducingOperation  {
   var onOutputProduced: ((Int) -> Void)?
   var input: String?
-  private(set) var output: Int? {
-    get {
-      return _output.value
-    }
-    set {
-      _output.mutate { $0 = newValue }
-    }
-  }
-  private var _output = Atomic<Int?>(nil)
+  private(set) var output: Int?
 
   override func main() {
     if let input = self.input {
       output = Int(input)
-      self.onOutputProduced?(output!)
+      onOutputProduced?(self.output!)
     }
   }
 }
+
+//internal final class IntToStringOperation: Operation & InputConsumingOperation & OutputProducingOperation {
+//  var onOutputProduced: ((String) -> Void)?
+//  var input: Int?
+//  private(set) var output: String? {
+//    get {
+//      return _output.value
+//    }
+//    set {
+//      _output.mutate { $0 = newValue }
+//    }
+//  }
+//  private var _output = Atomic<String?>(nil)
+//
+//  override func main() {
+//    if let input = self.input {
+//      output = "\(input)"
+//      onOutputProduced?(self.output!)
+//    }
+//  }
+//}
+//
+//internal final class StringToIntOperation: Operation & InputConsumingOperation & OutputProducingOperation  {
+//  var onOutputProduced: ((Int) -> Void)?
+//  var input: String?
+//  private(set) var output: Int? {
+//    get {
+//      return _output.value
+//    }
+//    set {
+//      _output.mutate { $0 = newValue }
+//    }
+//  }
+//  private var _output = Atomic<Int?>(nil)
+//
+//  override func main() {
+//    if let input = self.input {
+//      output = Int(input)
+//      self.onOutputProduced?(output!)
+//    }
+//  }
+//}
 
 // MARK: - AsynchronousOperation
 
@@ -357,7 +361,7 @@ internal final class IOGroupOperation: GroupOperation, InputConsumingOperation, 
 
 // MARK: - ResultOperation
 
-internal final class IntToStringResultOperation: ResultOperation<String, IntToStringResultOperation.ResultError>, InputConsumingOperation {
+internal final class IntToStringResultOperation: AsynchronousResultOperation<String, IntToStringResultOperation.ResultError>, InputConsumingOperation {
   enum ResultError: Error {
     case missingInput
     case invalidInput
