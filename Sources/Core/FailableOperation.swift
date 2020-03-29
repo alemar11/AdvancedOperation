@@ -62,7 +62,7 @@ public extension Operation {
   }
 }
 
-extension Collection where Element: Operation {
+private extension Collection where Element: Operation {
   /// Returns `true` if **at least one** operation conforming to `FailableOperation` has generated an error.
   var hasSomeFailedOperations: Bool {
     return self.first { ($0 as? _FailableOperation)?.isFailed ?? false } != nil

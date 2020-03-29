@@ -31,23 +31,6 @@ final class AsynchronousBlockOperationTests: XCTestCase {
     #endif
   }
 
-//  func testCancelledExecution() {
-//    let operation = AsynchronousBlockOperation { complete in
-//      DispatchQueue(label: "\(identifier).\(#function)", attributes: .concurrent).asyncAfter(deadline: .now() + 2) {
-//        complete()
-//      }
-//    }
-//    XCTAssertTrue(operation.isAsynchronous)
-//    XCTAssertTrue(operation.isConcurrent)
-//    let expectation1 = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: operation, expectedValue: true)
-//    operation.installLogger()
-//    operation.start()
-//    operation.cancel()
-//    wait(for: [expectation1], timeout: 4)
-//    XCTAssertTrue(operation.isCancelled)
-//    XCTAssertEqual(operation.name, "AsynchronousBlockOperation")
-//  }
-
   func testCancelledExecutionBeforeStarting() {
     let operation = AsynchronousBlockOperation { complete in
       DispatchQueue(label: "\(identifier).\(#function)", attributes: .concurrent).asyncAfter(deadline: .now() + 2) {
@@ -62,15 +45,6 @@ final class AsynchronousBlockOperationTests: XCTestCase {
     wait(for: [expectation1], timeout: 4)
     XCTAssertTrue(operation.isCancelled)
   }
-
-//  func testEarlyBailOut() {
-//    let operation = AsynchronousBlockOperation { $0() }
-//    let expectation1 = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: operation, expectedValue: true)
-//    operation.cancel()
-//    operation.start()
-//    wait(for: [expectation1], timeout: 4)
-//    XCTAssertTrue(operation.isCancelled)
-//  }
 
   func testBlockOperationCompletedInAsyncQueue() {
     let operation = AsynchronousBlockOperation { complete in
@@ -94,10 +68,7 @@ final class AsynchronousBlockOperationTests: XCTestCase {
         complete()
       }
     }
-    operation.addCompletionBlock {
-      expectation2.fulfill()
-    }
-    operation.installLogger()
+    operation.addCompletionBlock { expectation2.fulfill() }
     operation.start()
     wait(for: [expectation1, expectation2], timeout: 10, enforceOrder: true)
   }

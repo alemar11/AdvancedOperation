@@ -25,9 +25,7 @@ import Foundation
 
 /// An `AsynchronousOperation` subclass which produces a `Result` type output.
 open class ResultOperation<Success, Failure>: AsynchronousOperation, OutputProducingOperation, FailableOperation where Failure: Error {
-  /// The block to execute when the operation produces its result.
-  /// - Note: A ResultOperation can only produce a single `Result`.
-  public var onResultProduced: ((Result<Success, Failure>) -> Void)?
+  public var onOutputProduced: ((Result<Success, Failure>) -> Void)?
 
   public final private(set) var output: Result<Success, Failure>? {
     get {
@@ -58,7 +56,7 @@ open class ResultOperation<Success, Failure>: AsynchronousOperation, OutputProdu
     assert(isExecuting, "Output can only be set if \(operationName) is executing.")
 
     output = result
-    onResultProduced?(result)
+    onOutputProduced?(result)
     finish()
   }
 }
