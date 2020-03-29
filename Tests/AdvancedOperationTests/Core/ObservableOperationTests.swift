@@ -93,7 +93,7 @@ final class ObservableOperationTests: XCTestCase {
           expectation3.fulfill()
         }
       }
-      // op.finish() This will cause a crash (deadlock) but it shouldn't be used this way
+      // op.finish() This will cause a crash (deadlock) but it shouldn't be called anyway
       op.cancel()
     }
 
