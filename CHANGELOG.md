@@ -1,5 +1,9 @@
 # Changelog
 
+### 5.4.0
+
+- `ResultOperation` has been renamed `AsyncResultOperation`.
+
 ### 5.3.0
 
 - The `isReady` property is not participating anymore in the AsyncOperation internal state change.

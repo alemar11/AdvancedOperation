@@ -36,13 +36,13 @@ final class Atomic<T> {
     return internalValue
   }
 
-  var isMutating: Bool {
-    if mutex.try() {
-      mutex.unlock()
-      return false
-    }
-    return true
-  }
+//  var isMutating: Bool {
+//    if mutex.try() {
+//      mutex.unlock()
+//      return false
+//    }
+//    return true
+//  }
 
   init(_ value: T) {
     internalValue = value

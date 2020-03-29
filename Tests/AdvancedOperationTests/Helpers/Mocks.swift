@@ -72,8 +72,8 @@ internal final class SleepyAsyncOperation: AsynchronousOperation {
 
 internal class IntToStringAsyncOperation: AsynchronousOperation, InputConsumingOperation, OutputProducingOperation {
   var input: Int?
-  private(set) var output: String?
   var onOutputProduced: ((String) -> Void)?
+  private(set) var output: String?
 
   override func main() {
     DispatchQueue.global().async {
@@ -88,8 +88,8 @@ internal class IntToStringAsyncOperation: AsynchronousOperation, InputConsumingO
 
 internal class StringToIntAsyncOperation: AsynchronousOperation, InputConsumingOperation, OutputProducingOperation {
   var input: String?
-  private(set) var output: Int?
   var onOutputProduced: ((Int) -> Void)?
+  private(set) var output: Int?
 
   override func main() {
     DispatchQueue.global().async {
@@ -101,56 +101,6 @@ internal class StringToIntAsyncOperation: AsynchronousOperation, InputConsumingO
     }
   }
 }
-
-//internal class IntToStringAsyncOperation: AsynchronousOperation, InputConsumingOperation, OutputProducingOperation {
-//  var onOutputProduced: ((String) -> Void)?
-//  private let queue = DispatchQueue(label: "IntToStringAsyncOperation")
-//  var input: Int?
-//  var output: String? {
-//    get {
-//      return _output.value
-//    }
-//    set {
-//      _output.mutate { $0 = newValue }
-//    }
-//  }
-//  private var _output = Atomic<String?>(nil)
-//
-//  override func main() {
-//    queue.async {
-//      if let input = self.input {
-//        self.output = "\(input)"
-//        self.onOutputProduced?(self.output!)
-//      }
-//      self.finish()
-//    }
-//  }
-//}
-//
-//internal class StringToIntAsyncOperation: AsynchronousOperation, InputConsumingOperation, OutputProducingOperation {
-//  var onOutputProduced: ((Int) -> Void)?
-//  private let queue = DispatchQueue(label: "StringToIntAsyncOperation")
-//  var input: String?
-//  var output: Int? {
-//    get {
-//      return _output.value
-//    }
-//    set {
-//      _output.mutate { $0 = newValue }
-//    }
-//  }
-//  private var _output = Atomic<Int?>(nil)
-//
-//  override func main() {
-//    queue.async {
-//      if let input = self.input {
-//        self.output = Int(input)
-//        self.onOutputProduced?(self.output!)
-//      }
-//      self.finish()
-//    }
-//  }
-//}
 
 // MARK: - AsynchronousOperation
 
@@ -226,28 +176,6 @@ internal final class CancelledOperation: Operation {
 
 // MARK: - Operation
 
-//internal final class IntToStringOperation: Operation & InputConsumingOperation & OutputProducingOperation {
-//  var input: Int?
-//  private(set) var output: String?
-//
-//  override func main() {
-//    if let input = self.input {
-//      output = "\(input)"
-//    }
-//  }
-//}
-//
-//internal final class StringToIntOperation: Operation & InputConsumingOperation & OutputProducingOperation  {
-//  var input: String?
-//  private(set) var output: Int?
-//
-//  override func main() {
-//    if let input = self.input {
-//      output = Int(input)
-//    }
-//  }
-//}
-
 internal final class IntToStringOperation: Operation & InputConsumingOperation & OutputProducingOperation {
   var onOutputProduced: ((String) -> Void)?
   var input: Int?
@@ -259,6 +187,8 @@ internal final class IntToStringOperation: Operation & InputConsumingOperation &
       _output.mutate { $0 = newValue }
     }
   }
+
+  // To fix data race error on macOS tests: see testSuccessfulInjectionBetweenOperationsTransformingOutput
   private var _output = Atomic<String?>(nil)
 
   override func main() {
@@ -280,6 +210,8 @@ internal final class StringToIntOperation: Operation & InputConsumingOperation &
       _output.mutate { $0 = newValue }
     }
   }
+
+  // To fix data race error on macOS tests: see testSuccessfulInjectionBetweenOperationsTransformingOutput
   private var _output = Atomic<Int?>(nil)
 
   override func main() {
@@ -355,15 +287,15 @@ internal final class IOGroupOperation: GroupOperation, InputConsumingOperation, 
   }
 }
 
-// MARK: - ResultOperation
+// MARK: - AsynchronousResultOperation
 
-internal final class IntToStringResultOperation: ResultOperation<String, IntToStringResultOperation.ResultError>, InputConsumingOperation {
-  enum ResultError: Error {
+internal final class IntToStringAsyncResultOperation: AsynchronousResultOperation<String, IntToStringAsyncResultOperation.Error>, InputConsumingOperation {
+  enum Error: Swift.Error {
     case missingInput
     case invalidInput
   }
 
-  private let queue = DispatchQueue(label: "IntToStringResultOperation")
+  private let queue = DispatchQueue(label: "IntToStringAsyncResultOperation")
   var input: Int?
 
   override func main() {

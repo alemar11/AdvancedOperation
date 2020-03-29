@@ -81,6 +81,7 @@ final class OperationInjectionTests: XCTestCase {
 
   func testSuccessfulInjectionBetweenOperationsTransformingOutput() {
     // IntToStringOperation's output has its access synchronized with a lock to avoid data races while running macOS tests
+    // This problem doesn't occur using AsyncOperation subclasses
     //
     // Data races are not detected if operations are added in this way:
     //
@@ -119,6 +120,29 @@ final class OperationInjectionTests: XCTestCase {
     XCTAssertEqual(operation1.output, "10")
     XCTAssertEqual(operation2.input, 10)
     XCTAssertEqual(operation2.output, "10")
+  }
+
+  func testSuccessfulInjectionBetweenOperationsTransformingOutputUsingAsyncResultOperationSubclasses() {
+    // This test doesn't have the data race problem described in testSuccessfulInjectionBetweenOperationsTransformingOutput(),
+    // probably because the operation is a subclass of AsyncOperation.
+    let queue = OperationQueue()
+    let operation1 = IntToStringAsyncResultOperation()
+    let operation2 = IntToStringAsyncResultOperation()
+    let injectionOperation = operation1.injectOutput(into: operation2) { (result) -> Int? in
+      guard let result = result else { return nil }
+      switch result {
+      case .failure:
+        return nil
+      case .success(let value):
+        return Int(value)
+      }
+    }
+    operation1.input = 10
+    XCTAssertEqual(operation1.input, 10)
+    queue.addOperations([operation1, operation2, injectionOperation], waitUntilFinished: true)
+    XCTAssertEqual(operation1.output?.value, "10")
+    XCTAssertEqual(operation2.input, 10)
+    XCTAssertEqual(operation2.output?.value, "10")
   }
 
   func testSuccessfulInjectionBetweenAsyncOperationsTransformingOutput() {
@@ -187,5 +211,16 @@ final class OperationInjectionTests: XCTestCase {
     operation1.cancel()
     queue.addOperations([operation1, operation2, injection], waitUntilFinished: false)
     wait(for: [expectation1], timeout: 3)
+  }
+}
+
+extension Result {
+  var value: Success? {
+    switch self {
+    case .success(let success):
+      return success
+    case .failure:
+      return nil
+    }
   }
 }

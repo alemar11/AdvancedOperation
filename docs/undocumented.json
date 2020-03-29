@@ -106,6 +106,13 @@
       "warning": "undocumented"
     },
     {
+      "file": "/Users/alessandro/Developer/AdvancedOperation/Sources/Operations/AsynchronousResultOperation.swift",
+      "line": 26,
+      "symbol": "AsyncResultOperation",
+      "symbol_kind": "source.lang.swift.decl.typealias",
+      "warning": "undocumented"
+    },
+    {
       "file": "/Users/alessandro/Developer/AdvancedOperation/Sources/Operations/GroupOperation.swift",
       "line": 122,
       "symbol": "GroupOperation.cancel()",
