@@ -289,8 +289,8 @@ internal final class IOGroupOperation: GroupOperation, InputConsumingOperation, 
 
 // MARK: - AsynchronousResultOperation
 
-internal final class IntToStringAsyncResultOperation: AsynchronousResultOperation<String, IntToStringAsyncResultOperation.ResultError>, InputConsumingOperation {
-  enum ResultError: Error {
+internal final class IntToStringAsyncResultOperation: AsynchronousResultOperation<String, IntToStringAsyncResultOperation.Error>, InputConsumingOperation {
+  enum Error: Swift.Error {
     case missingInput
     case invalidInput
   }

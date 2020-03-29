@@ -29,14 +29,7 @@ public typealias AsyncResultOperation = AsynchronousResultOperation
 open class AsynchronousResultOperation<Success, Failure>: AsynchronousOperation, OutputProducingOperation, FailableOperation where Failure: Error {
   public var onOutputProduced: ((Result<Success, Failure>) -> Void)?
 
-  public final private(set) var output: Result<Success, Failure>? {
-    get {
-      return _output.value
-    }
-    set {
-      _output.mutate { $0 = newValue }
-    }
-  }
+  public final private(set) var output: Result<Success, Failure>?
 
   public final var error: Failure? {
     guard let result = self.output else { return nil }
@@ -48,8 +41,6 @@ open class AsynchronousResultOperation<Success, Failure>: AsynchronousOperation,
       return nil
     }
   }
-
-  private var _output = Atomic<Result<Success, Failure>?>(nil)
 
   /// Call this method to set the result and finish the operation.
   public final func finish(result: Result<Success, Failure>) {
