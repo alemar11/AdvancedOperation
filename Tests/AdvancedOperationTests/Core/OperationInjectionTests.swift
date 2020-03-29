@@ -81,6 +81,7 @@ final class OperationInjectionTests: XCTestCase {
 
   func testSuccessfulInjectionBetweenOperationsTransformingOutput() {
     // IntToStringOperation's output has its access synchronized with a lock to avoid data races while running macOS tests
+    // This problem doesn't occur using AsyncOperation subclasses
     //
     // Data races are not detected if operations are added in this way:
     //
