@@ -367,7 +367,7 @@ internal final class IntToStringAsyncResultOperation: AsynchronousResultOperatio
     case invalidInput
   }
 
-  private let queue = DispatchQueue(label: "IntToStringResultOperation")
+  private let queue = DispatchQueue(label: "IntToStringAsyncResultOperation")
   var input: Int?
 
   override func main() {
