@@ -24,7 +24,7 @@
 import XCTest
 @testable import AdvancedOperation
 
-class ResultOperationTests: XCTestCase {
+class AsynchronousResultOperationTests: XCTestCase {
   override class func setUp() {
     #if swift(<5.1)
     AdvancedOperation.KVOCrashWorkaround.installFix()
@@ -32,7 +32,7 @@ class ResultOperationTests: XCTestCase {
   }
 
   func testSuccess() {
-    let operation = IntToStringResultOperation()
+    let operation = IntToStringAsyncResultOperation()
     operation.input = 10
     let finishedExpectation = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: operation, expectedValue: true)
     operation.start()
@@ -42,7 +42,7 @@ class ResultOperationTests: XCTestCase {
   }
 
   func testFailure() {
-    let operation = IntToStringResultOperation()
+    let operation = IntToStringAsyncResultOperation()
     let resultProducedExpectation = self.expectation(description: "Result produced")
     operation.input = -10
     operation.onOutputProduced = { output in
@@ -65,7 +65,7 @@ class ResultOperationTests: XCTestCase {
   }
 
   func testCancelledExecutionBeforeStart() {
-    let operation = IntToStringResultOperation()
+    let operation = IntToStringAsyncResultOperation()
     let resultProducedExpectation = self.expectation(description: "Result produced")
     resultProducedExpectation.isInverted = true
     operation.input = -10
@@ -82,7 +82,7 @@ class ResultOperationTests: XCTestCase {
   }
 
   func testSuccessfulInjectionTransformingOutput() {
-    let operation1 = IntToStringResultOperation()
+    let operation1 = IntToStringAsyncResultOperation()
     let operation2 = StringToIntAsyncOperation()
     let operation3 = BlockOperation() // noise
     operation3.addDependency(operation2)
@@ -105,7 +105,7 @@ class ResultOperationTests: XCTestCase {
   }
 
   func testFailingInjectionTransforminOutput() {
-    let operation1 = IntToStringResultOperation()
+    let operation1 = IntToStringAsyncResultOperation()
     let operation2 = StringToIntAsyncOperation()
     let operation3 = BlockOperation() // noise
     operation3.addDependency(operation2)

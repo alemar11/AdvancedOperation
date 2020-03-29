@@ -359,9 +359,9 @@ internal final class IOGroupOperation: GroupOperation, InputConsumingOperation, 
   }
 }
 
-// MARK: - ResultOperation
+// MARK: - AsynchronousResultOperation
 
-internal final class IntToStringResultOperation: AsynchronousResultOperation<String, IntToStringResultOperation.ResultError>, InputConsumingOperation {
+internal final class IntToStringAsyncResultOperation: AsynchronousResultOperation<String, IntToStringAsyncResultOperation.ResultError>, InputConsumingOperation {
   enum ResultError: Error {
     case missingInput
     case invalidInput
