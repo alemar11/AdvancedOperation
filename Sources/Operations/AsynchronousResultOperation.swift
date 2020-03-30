@@ -26,30 +26,35 @@ import Foundation
 public typealias AsyncResultOperation = AsynchronousResultOperation
 
 /// An `AsynchronousOperation` subclass which produces a `Result` type output.
-open class AsynchronousResultOperation<Success, Failure>: AsynchronousOperation, OutputProducingOperation, FailableOperation where Failure: Error {
-  public var onOutputProduced: ((Result<Success, Failure>) -> Void)?
-
-  public final private(set) var output: Result<Success, Failure>?
-
-  public final var error: Failure? {
-    guard let result = self.output else { return nil }
-
-    switch result {
-    case .failure(let error):
-      return error
-    default:
-      return nil
+///
+/// Subclasses should override cancel() TODO
+open class AsynchronousResultOperation<Success, Failure>: AsynchronousOperation where Failure: Error {
+  public var onResultProduced: ((Result<Success, Failure>) -> Void)?
+  public final private(set) var result: Result<Success, Failure>! {
+    willSet {
+      precondition(result == nil, "\(operationName) can only produce a single result.")
+    }
+    didSet {
+       onResultProduced?(result)
     }
   }
 
+  open override func cancel() {
+    fatalError("Subclasses must implement `cancel()` to ensure a result. (i.e. calling call cancel(with:))")
+  }
+
+  public final func cancel(with error: Failure) {
+    self.result = .failure(error)
+    super.cancel()
+  }
+
   /// Call this method to set the result and finish the operation.
-  public final func finish(result: Result<Success, Failure>) {
+  public final func finish(with result: Result<Success, Failure>) {
     // An assert is enough since finish(result:) is the only public method to set the output.
     // the operation will crash if finish(result:) method is called more than once (see finish() implementation).
-    assert(isExecuting, "Output can only be set if \(operationName) is executing.")
+    assert(isExecuting, "result can only be set if \(operationName) is executing.")
+    self.result = result
 
-    output = result
-    onOutputProduced?(result)
     finish()
   }
 }
