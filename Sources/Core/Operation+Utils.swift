@@ -45,7 +45,7 @@ extension Operation {
       completionBlock = block
       return
     }
-    
+
     completionBlock = {
       if asEndingBlock {
         existingBlock()

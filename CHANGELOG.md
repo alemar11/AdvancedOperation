@@ -1,5 +1,12 @@
 # Changelog
 
+### 6.0.0 ⭐
+
+- This release aims to be super lightweight offering just a few basic operations:
+  - `AsyncOperation`
+  - `AsyncBlockOperation`
+  - `AsyncGroupOperation`   
+
 ### 5.4.0
 
 - `ResultOperation` has been renamed `AsyncResultOperation`.

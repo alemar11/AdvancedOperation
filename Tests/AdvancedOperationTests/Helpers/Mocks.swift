@@ -68,40 +68,6 @@ internal final class SleepyAsyncOperation: AsynchronousOperation {
   }
 }
 
-// MARK: - AsynchronousInputOutputOperation
-
-internal class IntToStringAsyncOperation: AsynchronousOperation {
-  var input: Int?
-  var onOutputProduced: ((String) -> Void)?
-  private(set) var output: String?
-
-  override func main() {
-    DispatchQueue.global().async {
-      if let input = self.input {
-        self.output = "\(input)"
-        self.onOutputProduced?(self.output!)
-      }
-      self.finish()
-    }
-  }
-}
-
-internal class StringToIntAsyncOperation: AsynchronousOperation {
-  var input: String?
-  var onOutputProduced: ((Int) -> Void)?
-  private(set) var output: Int?
-
-  override func main() {
-    DispatchQueue.global().async {
-      if let input = self.input {
-        self.output = Int(input)
-        self.onOutputProduced?(self.output!)
-      }
-      self.finish()
-    }
-  }
-}
-
 // MARK: - AsynchronousOperation
 
 internal final class NotExecutableOperation: AsynchronousOperation {
@@ -289,45 +255,5 @@ internal final class IOGroupOperation: GroupOperation {
     self.addOperation(inject)
     self.addOperation(outputOperation)
     self.addOperation(exitOperation)
-  }
-}
-
-// MARK: - AsynchronousResultOperation
-
-internal final class IntToStringAsyncResultOperation: AsynchronousResultOperation<String, IntToStringAsyncResultOperation.Error> {
-  enum Error: OperationError {
-    // TODO: Swift 5.3 https://github.com/apple/swift-evolution/blob/master/proposals/0280-enum-cases-as-protocol-witnesses.md
-    static var cancelled: IntToStringAsyncResultOperation.Error { return _cancelled }
-    static var notExecuted: IntToStringAsyncResultOperation.Error { return _notExecuted }
-    case missingInput
-    case invalidInput
-    case _cancelled
-    case _notExecuted
-  }
-
-  private let queue = DispatchQueue(label: "IntToStringAsyncResultOperation")
-  var input: Int?
-
-  override func main() {
-    if isCancelled {
-      // using finish(with:) here will trigger a precondition error because the operation has already produced a result (failure).
-      self.finish()
-      return
-    }
-
-    queue.async { [weak self] in
-      guard let self = self else { return }
-
-      guard let input = self.input else {
-        self.finish(with: .failure(.missingInput))
-        return
-      }
-
-      if input < 0 {
-        self.finish(with: .failure(.invalidInput))
-      } else {
-        self.finish(with: .success("\(input)"))
-      }
-    }
   }
 }
