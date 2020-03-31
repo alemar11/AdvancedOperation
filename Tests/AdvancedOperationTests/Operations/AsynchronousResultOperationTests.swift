@@ -41,6 +41,28 @@ class AsynchronousResultOperationTests: XCTestCase {
     XCTAssertNoThrow(try operation.result.get())
   }
 
+  func testMultipleCancellationsWillNotGenerateMultipleResults() {
+    let operation = IntToStringAsyncResultOperation()
+    let expectation1 = self.expectation(description: "\(#function)\(#file)")
+    expectation1.expectedFulfillmentCount = 1
+    let expectation2 = self.expectation(description: "\(#function)\(#file)")
+    operation.onResultProduced = { output in
+      expectation1.fulfill()
+    }
+
+    DispatchQueue.concurrentPerform(iterations: 100) { [unowned operation] _ in
+       operation.cancel()
+    }
+
+    let queue = OperationQueue()
+    operation.completionBlock = {
+      expectation2.fulfill()
+    }
+    queue.addOperation(operation)
+
+    wait(for: [expectation1, expectation2], timeout: 2, enforceOrder: true)
+  }
+
   func testFailure() {
     let operation = IntToStringAsyncResultOperation()
     let resultProducedExpectation = self.expectation(description: "Result produced")
@@ -70,10 +92,16 @@ class AsynchronousResultOperationTests: XCTestCase {
   func testCancelledExecutionBeforeStart() {
     let operation = IntToStringAsyncResultOperation()
     let resultProducedExpectation = self.expectation(description: "Result produced")
-    resultProducedExpectation.isInverted = true
     operation.input = -10
     operation.onResultProduced = { output in
-      resultProducedExpectation.fulfill()
+      do {
+        _ = try output.get()
+      } catch let e as IntToStringAsyncResultOperation.Error {
+        XCTAssertEqual(e, .cancelled)
+      } catch {
+        XCTFail("Wrong error type.")
+      }
+      resultProducedExpectation.fulfill() // the procuded result is a failuare
     }
     let finishedExpectation = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: operation, expectedValue: true)
     operation.cancel()
@@ -113,7 +141,7 @@ class AsynchronousResultOperationTests: XCTestCase {
       queue.addOperations([operation1, operation2, injection], waitUntilFinished: true)
       queue.addOperations([operation3], waitUntilFinished: false)
       XCTAssertNotNil(operation1.result)
-      XCTAssertEqual(try? operation1.result?.get(), "10")
+      XCTAssertEqual(try? operation1.result.get(), "10")
       XCTAssertEqual(operation2.output, 10)
     }
 

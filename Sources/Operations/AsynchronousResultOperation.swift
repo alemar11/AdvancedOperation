@@ -25,34 +25,53 @@ import Foundation
 
 public typealias AsyncResultOperation = AsynchronousResultOperation
 
+/// Errors conforming to this protocol have some pre-defined cases.
+///
+/// - Warning: To support this protocol prior Swift 5.3 use the workaround described here: https://github.com/apple/swift-evolution/blob/master/proposals/0280-enum-cases-as-protocol-witnesses.md
+public protocol OperationError: Error {
+  static var notExecuted: Self { get }
+  static var cancelled: Self { get }
+}
+
 /// An `AsynchronousOperation` subclass which produces a `Result` type output.
 ///
-/// Subclasses should override cancel() TODO
-open class AsynchronousResultOperation<Success, Failure>: AsynchronousOperation where Failure: Error {
+/// If the operation gets cancelled, its result will be set immediatly to `.cancelled` error and the `onResultProduced` will be called.
+open class AsynchronousResultOperation<Success, Failure>: AsynchronousOperation where Failure: OperationError {
   public var onResultProduced: ((Result<Success, Failure>) -> Void)?
+
   public final private(set) var result: Result<Success, Failure>! {
-    willSet {
-      precondition(result == nil, "\(operationName) can only produce a single result.")
+    get {
+      return _result.value
     }
-    didSet {
-       onResultProduced?(result)
+    set {
+      _result.mutate { [weak self] output -> Void in
+        output = newValue
+        self?.onResultProduced?(newValue)
+      }
     }
   }
+
+  /// Underlying synchronized result to avoid data races when setting the result from both cancel() or finish(with:) at the same time.
+  private var _result = Atomic<Result<Success, Failure>>(.failure(.notExecuted))
+  private let cancelLock = UnfairLock()
 
   open override func cancel() {
-    fatalError("Subclasses must implement `cancel()` to ensure a result. (i.e. calling call cancel(with:))")
-  }
+    cancelLock.lock()
+    defer { cancelLock.unlock() }
 
-  public final func cancel(with error: Failure) {
-    self.result = .failure(error)
+    if !isCancelled {
+      self.result = .failure(.cancelled)
+    }
     super.cancel()
   }
 
-  /// Call this method to set the result and finish the operation.
+  /// Finishes the operation with a `result`.
+  /// - Important: You should never call this method outside the operation main execution scope.
   public final func finish(with result: Result<Success, Failure>) {
     // An assert is enough since finish(result:) is the only public method to set the output.
     // the operation will crash if finish(result:) method is called more than once (see finish() implementation).
     assert(isExecuting, "result can only be set if \(operationName) is executing.")
+    precondition(!isCancelled, "\(operationName) is cancelled therefore the result contains already a .cancelled error, use finish() instead.")
     self.result = result
 
     finish()

@@ -295,21 +295,22 @@ internal final class IOGroupOperation: GroupOperation {
 // MARK: - AsynchronousResultOperation
 
 internal final class IntToStringAsyncResultOperation: AsynchronousResultOperation<String, IntToStringAsyncResultOperation.Error> {
-  enum Error: Swift.Error {
+  enum Error: OperationError {
+    // TODO: Swift 5.3 https://github.com/apple/swift-evolution/blob/master/proposals/0280-enum-cases-as-protocol-witnesses.md
+    static var cancelled: IntToStringAsyncResultOperation.Error { return _cancelled }
+    static var notExecuted: IntToStringAsyncResultOperation.Error { return _notExecuted }
     case missingInput
     case invalidInput
-    case cancelled
+    case _cancelled
+    case _notExecuted
   }
 
   private let queue = DispatchQueue(label: "IntToStringAsyncResultOperation")
   var input: Int?
 
-  override func cancel() {
-    cancel(with: .cancelled)
-  }
-
   override func main() {
     if isCancelled {
+      // using finish(with:) here will trigger a precondition error because the operation has already produced a result (failure).
       self.finish()
       return
     }
