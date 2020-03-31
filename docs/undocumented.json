@@ -78,37 +78,9 @@
       "warning": "undocumented"
     },
     {
-      "file": "/Users/alessandro/Developer/AdvancedOperation/Sources/Core/FailableOperation.swift",
-      "line": 49,
-      "symbol": "FailableOperation.ErrorType",
-      "symbol_kind": "source.lang.swift.decl.associatedtype",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/alessandro/Developer/AdvancedOperation/Sources/Core/InputConsumingOperation.swift",
-      "line": 28,
-      "symbol": "InputConsumingOperation.Input",
-      "symbol_kind": "source.lang.swift.decl.associatedtype",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/alessandro/Developer/AdvancedOperation/Sources/Core/OutputProducingOperation.swift",
-      "line": 28,
-      "symbol": "OutputProducingOperation.Output",
-      "symbol_kind": "source.lang.swift.decl.associatedtype",
-      "warning": "undocumented"
-    },
-    {
       "file": "/Users/alessandro/Developer/AdvancedOperation/Sources/Operations/AsynchronousBlockOperation.swift",
       "line": 26,
       "symbol": "AsyncBlockOperation",
-      "symbol_kind": "source.lang.swift.decl.typealias",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/alessandro/Developer/AdvancedOperation/Sources/Operations/AsynchronousResultOperation.swift",
-      "line": 26,
-      "symbol": "AsyncResultOperation",
       "symbol_kind": "source.lang.swift.decl.typealias",
       "warning": "undocumented"
     },
