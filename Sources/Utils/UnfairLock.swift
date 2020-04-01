@@ -40,9 +40,9 @@ final class UnfairLock: NSLocking {
     os_unfair_lock_unlock(unfairLock)
   }
 
-  func `try`() -> Bool {
-    return os_unfair_lock_trylock(unfairLock)
-  }
+//  func `try`() -> Bool {
+//    return os_unfair_lock_trylock(unfairLock)
+//  }
 
   deinit {
     unfairLock.deinitialize(count: 1)

@@ -68,40 +68,6 @@ internal final class SleepyAsyncOperation: AsynchronousOperation {
   }
 }
 
-// MARK: - AsynchronousInputOutputOperation
-
-internal class IntToStringAsyncOperation: AsynchronousOperation, InputConsumingOperation, OutputProducingOperation {
-  var input: Int?
-  var onOutputProduced: ((String) -> Void)?
-  private(set) var output: String?
-
-  override func main() {
-    DispatchQueue.global().async {
-      if let input = self.input {
-        self.output = "\(input)"
-        self.onOutputProduced?(self.output!)
-      }
-      self.finish()
-    }
-  }
-}
-
-internal class StringToIntAsyncOperation: AsynchronousOperation, InputConsumingOperation, OutputProducingOperation {
-  var input: String?
-  var onOutputProduced: ((Int) -> Void)?
-  private(set) var output: Int?
-
-  override func main() {
-    DispatchQueue.global().async {
-      if let input = self.input {
-        self.output = Int(input)
-        self.onOutputProduced?(self.output!)
-      }
-      self.finish()
-    }
-  }
-}
-
 // MARK: - AsynchronousOperation
 
 internal final class NotExecutableOperation: AsynchronousOperation {
@@ -176,7 +142,7 @@ internal final class CancelledOperation: Operation {
 
 // MARK: - Operation
 
-internal final class IntToStringOperation: Operation & InputConsumingOperation & OutputProducingOperation {
+internal final class IntToStringOperation: Operation {
   var onOutputProduced: ((String) -> Void)?
   var input: Int?
   private(set) var output: String? {
@@ -199,7 +165,7 @@ internal final class IntToStringOperation: Operation & InputConsumingOperation &
   }
 }
 
-internal final class StringToIntOperation: Operation & InputConsumingOperation & OutputProducingOperation  {
+internal final class StringToIntOperation: Operation  {
   var onOutputProduced: ((Int) -> Void)?
   var input: String?
   private(set) var output: Int? {
@@ -224,7 +190,7 @@ internal final class StringToIntOperation: Operation & InputConsumingOperation &
 
 // MARK: - AsynchronousOperation
 
-internal final class FailingOperation: Operation, FailableOperation {
+internal final class FailingOperation: Operation {
   enum FailureError: Error {
     case errorOne
     case errorTwo
@@ -250,7 +216,7 @@ internal final class ProducerGroupOperation: GroupOperation {
   }
 }
 
-internal final class IOGroupOperation: GroupOperation, InputConsumingOperation, OutputProducingOperation {
+internal final class IOGroupOperation: GroupOperation {
   var input: Int?
   private(set) var output: Int?
   var onOutputProduced: ((Int) -> Void)?
@@ -270,7 +236,12 @@ internal final class IOGroupOperation: GroupOperation, InputConsumingOperation, 
     }
 
     let outputOperation = StringToIntOperation()
-    let inject = inputOperation.injectOutput(into: outputOperation)
+    let inject = BlockOperation { [unowned inputOperation, unowned outputOperation] in
+      outputOperation.input = inputOperation.output
+    }
+
+    inject.addDependency(inputOperation)
+    outputOperation.addDependency(inject)
 
     let exitOperation = BlockOperation { [unowned self, unowned outputOperation] in
       self.output = outputOperation.output
@@ -286,49 +257,3 @@ internal final class IOGroupOperation: GroupOperation, InputConsumingOperation, 
     self.addOperation(exitOperation)
   }
 }
-
-// MARK: - AsynchronousResultOperation
-
-internal final class IntToStringAsyncResultOperation: AsynchronousResultOperation<String, IntToStringAsyncResultOperation.Error>, InputConsumingOperation {
-  enum Error: Swift.Error {
-    case missingInput
-    case invalidInput
-  }
-
-  private let queue = DispatchQueue(label: "IntToStringAsyncResultOperation")
-  var input: Int?
-
-  override func main() {
-    if isCancelled {
-      self.finish()
-      return
-    }
-
-    queue.async { [weak self] in
-      guard let self = self else { return }
-
-      guard let input = self.input else {
-        self.finish(result: .failure(.missingInput))
-        return
-      }
-
-      if input < 0 {
-        self.finish(result: .failure(.invalidInput))
-      } else {
-        self.finish(result: .success("\(input)"))
-      }
-    }
-  }
-}
-
-// MARK: - StateObservableOperation
-
-extension RunUntilCancelledAsyncOperation: ObservableOperation { }
-extension GroupOperation: ObservableOperation { }
-extension SleepyAsyncOperation: ObservableOperation { }
-extension AsyncBlockOperation: ObservableOperation { }
-extension AutoCancellingAsyncOperation: ObservableOperation { }
-extension InfiniteAsyncOperation: ObservableOperation { }
-extension CancelledOperation: ObservableOperation { }
-extension FailingOperation: ObservableOperation { }
-extension BlockOperation: ObservableOperation { }

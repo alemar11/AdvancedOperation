@@ -363,8 +363,10 @@ final class AsynchronousOperationTests: XCTestCase {
       complete()
     }
     let gate = GateOperation { [unowned operation3] gate in
-      if gate.hasSomeFailedDependencies {
-        operation3.cancel()
+      for op in gate.dependencies {
+        if let failingOperation = op  as? FailingOperation, failingOperation.error != nil {
+          operation3.cancel()
+        }
       }
     }
 
