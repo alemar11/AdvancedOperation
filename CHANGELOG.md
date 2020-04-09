@@ -1,5 +1,9 @@
 # Changelog
 
+### 6.0.1
+
+- Minor refinements
+
 ### 6.0.0 ⭐
 
 - This release aims to be super lightweight offering just a few basic operations:
