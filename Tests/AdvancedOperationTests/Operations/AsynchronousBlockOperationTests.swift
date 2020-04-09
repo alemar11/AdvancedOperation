@@ -23,7 +23,7 @@
 
 import XCTest
 @testable import AdvancedOperation
-import os.log
+
 final class AsynchronousBlockOperationTests: XCTestCase {
   override class func setUp() {
     #if swift(<5.1)

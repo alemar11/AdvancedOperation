@@ -24,7 +24,6 @@
 import Foundation
 import Dispatch
 import XCTest
-import os.log
 @testable import AdvancedOperation
 
 // MARK: - AsynchronousBlockOperation
