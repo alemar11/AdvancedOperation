@@ -22,7 +22,7 @@ Operation usefull extensions.
 ## Requirements
 
 - iOS 11.0+ / macOS 10.13+ / tvOS 11.0+ / watchOS 4.0+
-- Xcode 12.2
+- Xcode 11.4
 - Swift 5.0
 
 ## Documentation
@@ -41,21 +41,21 @@ platform :ios, '11.0'
 use_frameworks!
 
 target '<Your Target Name>' do
-    pod 'AdvancedOperation', '~> 5.2.0'
+    pod 'AdvancedOperation', '~> 6.0.0'
 end
 ```
 
 ### Carthage
 
 ```ogdl
-github "tinrobots/AdvancedOperation" ~> 5.2.0
+github "tinrobots/AdvancedOperation" ~> 6.0.0
 ```
 
 ### Swift Package Manager
 
 ```swift
 dependencies: [
-    .package(url: "https://github.com/tinrobots/AdvancedOperation.git", from: "5.0.0")
+    .package(url: "https://github.com/tinrobots/AdvancedOperation.git", from: "6.0.0")
 ]
 ```
 
