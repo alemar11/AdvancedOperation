@@ -195,7 +195,7 @@ open class AsynchronousOperation: Operation {
 // MARK: - State
 
 extension AsynchronousOperation {
-  /// Mirror of the possible states an Operation can be in.
+  /// All the possible states an Operation can be in.
   enum State: Int, CustomStringConvertible, CustomDebugStringConvertible {
     case pending // waiting to be executed
     case executing
