@@ -95,12 +95,7 @@ open class AsynchronousOperation: Operation {
 
   // MARK: - Foundation.Operation
 
-  private let startLock = UnfairLock()
-
   public final override func start() {
-    startLock.lock()
-    defer { startLock.unlock() }
-
     switch state {
     case .finished:
       return
@@ -147,6 +142,9 @@ open class AsynchronousOperation: Operation {
       // Additional considerations:
       // If an operation has finished, calling cancel() on it won't change its isCancelled value to true.
 
+      // If multiple calls are made to start() from different threads at the same time
+      // setting the same state will trigger an assert in the state setter.
+      // A lock isn't required.
       state = .executing
       main()
 
@@ -167,18 +165,16 @@ open class AsynchronousOperation: Operation {
 
   // MARK: - Private Methods
 
-  /// Lock to ensure thread safety.
-  private let finishLock = UnfairLock()
-
   /// Finishes the operation.
   /// - Important: You should never call this method outside the operation main execution scope.
   public final func finish() {
     // State can also be "pending" here if the operation was cancelled before it was started.
-    finishLock.lock()
-    defer { finishLock.unlock() }
 
     switch state {
     case .pending, .executing:
+      // If multiple calls are made to finish() from different threads at the same time
+      // setting the same state will trigger an assert in the state setter.
+      // A lock isn't required.
       state = .finished
     case .finished:
       preconditionFailure("The finish() method shouldn't be called more than once for \(operationName).")
