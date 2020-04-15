@@ -192,7 +192,7 @@ open class AsynchronousOperation: Operation {
   }
 
   open override var debugDescription: String {
-    return "\(operationName) – \(isCancelled ? "cancelled" : String(describing: state))"
+    return "\(operationName) – \(isCancelled ? "cancelled (\(state))" : "\(state)")"
   }
 }
 
