@@ -99,10 +99,10 @@ open class GroupOperation: AsynchronousOperation {
         return
       }
 
-      //  Debug only: count how many tasks have entered the dispatchGroup
-//      let entersCount = dispatchGroup.debugDescription
-//        .components(separatedBy: ",").filter({$0.contains("count")}).first?
-//        .components(separatedBy: CharacterSet.decimalDigits.inverted).compactMap{Int($0)}.first
+      // Debug only: count how many tasks have entered the dispatchGroup
+      // let entersCount = dispatchGroup.debugDescription
+      // .components(separatedBy: ",").filter({$0.contains("count")}).first?
+      // .components(separatedBy: CharacterSet.decimalDigits.inverted).compactMap{Int($0)}.first
 
       // 1. configuration started: enter the group
       // Without entering the group here, the notify block could be called before firing the queue if no operations were added.
