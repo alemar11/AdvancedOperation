@@ -95,7 +95,7 @@ internal final class RunUntilCancelledAsyncOperation: AsynchronousOperation {
   override func main() {
     queue.async {
       while !self.isCancelled {
-        sleep(1)
+        //sleep(1)
       }
       self.finish()
     }
@@ -114,7 +114,7 @@ internal final class InfiniteAsyncOperation: AsyncOperation {
     DispatchQueue(label: "InfiniteOperationQueue").async {
       self.onExecutionStarted?()
       while true {
-        sleep(1)
+        //sleep(1)
         if self.isStopped.value {
           self.finish()
           break
