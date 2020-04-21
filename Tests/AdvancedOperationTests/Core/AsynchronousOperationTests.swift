@@ -140,43 +140,36 @@ final class AsynchronousOperationTests: XCTestCase {
 
   }
 
-  func testMultipleStartsOnTheSameThreadRaiseAnException() {
-    let operation = InfiniteAsyncOperation()
-    operation.start()
+//  func testMultipleStartsOnTheSameThreadRaiseAnException() {
+//    let operation = InfiniteAsyncOperation()
+//    operation.start()
+//
+//    XCTAssertThrowsError( try ObjectiveC.catchException { operation.start() }, "The operation should raise an already executing exception") { (error) in
+//      let nsError = error as NSError
+//      let info = nsError.userInfo
+//      if let reason = info["reason"] as? String {
+//        XCTAssertEqual(reason, "The operation InfiniteAsyncOperation is already executing.")
+//      } else {
+//        XCTFail("Missing error reason.")
+//      }
+//    }
+//  }
 
-    XCTAssertThrowsError( try ObjectiveC.catchException { operation.start() }, "The operation should raise an already executing exception") { (error) in
-      let nsError = error as NSError
-      let info = nsError.userInfo
-      if let reason = info["reason"] as? String {
-        XCTAssertEqual(reason, "The operation InfiniteAsyncOperation is already executing.")
-      } else {
-        XCTFail("Missing error reason.")
-      }
-    }
-  }
-
-  func testInvestigationStartFromMultipleThreads2() {// TODO
-    let op = Operation()
-    let q = OperationQueue()
-    q.addOperations([op], waitUntilFinished: true)
-    op.start()
-  }
-
-  func testStartNotReadyOperation() {
-    let operation = SleepyAsyncOperation()
-    let operation2 = BlockOperation()
-    operation.addDependency(operation2)
-
-    XCTAssertThrowsError( try ObjectiveC.catchException { operation.start() }, "The operation should raise a not yet ready exception") { (error) in
-      let nsError = error as NSError
-      let info = nsError.userInfo
-      if let reason = info["reason"] as? String {
-        XCTAssertEqual(reason, "The operation SleepyAsyncOperation is not yet ready to execute.")
-      } else {
-        XCTFail("Missing error reason.")
-      }
-    }
-  }
+//  func testStartNotReadyOperation() {
+//    let operation = SleepyAsyncOperation()
+//    let operation2 = BlockOperation()
+//    operation.addDependency(operation2)
+//
+//    XCTAssertThrowsError( try ObjectiveC.catchException { operation.start() }, "The operation should raise a not yet ready exception") { (error) in
+//      let nsError = error as NSError
+//      let info = nsError.userInfo
+//      if let reason = info["reason"] as? String {
+//        XCTAssertEqual(reason, "The operation SleepyAsyncOperation is not yet ready to execute.")
+//      } else {
+//        XCTFail("Missing error reason.")
+//      }
+//    }
+//  }
 
   // The readiness of operations is determined by their dependencies on other operations and potentially by custom conditions that you define.
   func testReadiness() {

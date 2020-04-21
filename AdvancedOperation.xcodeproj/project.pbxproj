@@ -90,9 +90,6 @@
 		D21C5D8523D3674E005F8D51 /* AsynchronousOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = D21C5D8323D3674E005F8D51 /* AsynchronousOperation.swift */; };
 		D21C5D8623D3674E005F8D51 /* AsynchronousOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = D21C5D8323D3674E005F8D51 /* AsynchronousOperation.swift */; };
 		D21C5D8723D3674E005F8D51 /* AsynchronousOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = D21C5D8323D3674E005F8D51 /* AsynchronousOperation.swift */; };
-		D2B71967244EFEC10071B5D7 /* Objective-C.m in Sources */ = {isa = PBXBuildFile; fileRef = D2B71966244EFEC10071B5D7 /* Objective-C.m */; };
-		D2B71968244EFEC10071B5D7 /* Objective-C.m in Sources */ = {isa = PBXBuildFile; fileRef = D2B71966244EFEC10071B5D7 /* Objective-C.m */; };
-		D2B71969244EFEC10071B5D7 /* Objective-C.m in Sources */ = {isa = PBXBuildFile; fileRef = D2B71966244EFEC10071B5D7 /* Objective-C.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -156,11 +153,6 @@
 		D20C3012242E4D300007341B /* TECHNOTES.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = TECHNOTES.md; sourceTree = SOURCE_ROOT; };
 		D21C5D8323D3674E005F8D51 /* AsynchronousOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsynchronousOperation.swift; sourceTree = "<group>"; };
 		D254E22323C3A68800A1586E /* LICENSE.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = LICENSE.md; sourceTree = SOURCE_ROOT; };
-		D2B71963244EFEC00071B5D7 /* AdvancedOperation Tests iOS-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "AdvancedOperation Tests iOS-Bridging-Header.h"; sourceTree = "<group>"; };
-		D2B71964244EFEC00071B5D7 /* AdvancedOperation Tests tvOS-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "AdvancedOperation Tests tvOS-Bridging-Header.h"; sourceTree = "<group>"; };
-		D2B71965244EFEC00071B5D7 /* AdvancedOperation Tests macOS-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "AdvancedOperation Tests macOS-Bridging-Header.h"; sourceTree = "<group>"; };
-		D2B71966244EFEC10071B5D7 /* Objective-C.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "Objective-C.m"; sourceTree = "<group>"; };
-		D2B7196A244EFEDF0071B5D7 /* Objective-C.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Objective-C.h"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -322,11 +314,6 @@
 		23BAA53E236B42BA00411F5B /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
-				D2B71966244EFEC10071B5D7 /* Objective-C.m */,
-				D2B71963244EFEC00071B5D7 /* AdvancedOperation Tests iOS-Bridging-Header.h */,
-				D2B71964244EFEC00071B5D7 /* AdvancedOperation Tests tvOS-Bridging-Header.h */,
-				D2B71965244EFEC00071B5D7 /* AdvancedOperation Tests macOS-Bridging-Header.h */,
-				D2B7196A244EFEDF0071B5D7 /* Objective-C.h */,
 				23856178200A873C0061BAA1 /* Mocks.swift */,
 			);
 			path = Helpers;
@@ -764,7 +751,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D2B71969244EFEC10071B5D7 /* Objective-C.m in Sources */,
 				064B0D8F23F4168600C8331F /* GroupOperationTests.swift in Sources */,
 				D2093D38236606F400230A2A /* AsynchronousOperationTests.swift in Sources */,
 				06C92B5623D0AB07000D12C8 /* AsynchronousBlockOperationTests.swift in Sources */,
@@ -778,7 +764,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D2B71967244EFEC10071B5D7 /* Objective-C.m in Sources */,
 				064B0D8D23F4168500C8331F /* GroupOperationTests.swift in Sources */,
 				D2093D36236606F400230A2A /* AsynchronousOperationTests.swift in Sources */,
 				06C92B5423D0AB06000D12C8 /* AsynchronousBlockOperationTests.swift in Sources */,
@@ -792,7 +777,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D2B71968244EFEC10071B5D7 /* Objective-C.m in Sources */,
 				064B0D8E23F4168600C8331F /* GroupOperationTests.swift in Sources */,
 				D2093D37236606F400230A2A /* AsynchronousOperationTests.swift in Sources */,
 				06C92B5523D0AB06000D12C8 /* AsynchronousBlockOperationTests.swift in Sources */,
@@ -1215,7 +1199,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				RUN_CLANG_STATIC_ANALYZER = YES;
 				SDKROOT = macosx;
-				SWIFT_OBJC_BRIDGING_HEADER = "Tests/AdvancedOperationTests/Helpers/AdvancedOperation Tests macOS-Bridging-Header.h";
+				SWIFT_OBJC_BRIDGING_HEADER = "";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				TVOS_DEPLOYMENT_TARGET = 11.0;
@@ -1240,7 +1224,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				RUN_CLANG_STATIC_ANALYZER = YES;
 				SDKROOT = macosx;
-				SWIFT_OBJC_BRIDGING_HEADER = "Tests/AdvancedOperationTests/Helpers/AdvancedOperation Tests macOS-Bridging-Header.h";
+				SWIFT_OBJC_BRIDGING_HEADER = "";
 				SWIFT_VERSION = 5.0;
 				TVOS_DEPLOYMENT_TARGET = 11.0;
 				WATCHOS_DEPLOYMENT_TARGET = 4.0;
@@ -1262,7 +1246,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "org.tinrobots.AdvancedOperation-Tests-iOS";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				RUN_CLANG_STATIC_ANALYZER = YES;
-				SWIFT_OBJC_BRIDGING_HEADER = "Tests/AdvancedOperationTests/Helpers/AdvancedOperation Tests iOS-Bridging-Header.h";
+				SWIFT_OBJC_BRIDGING_HEADER = "";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -1286,7 +1270,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "org.tinrobots.AdvancedOperation-Tests-iOS";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				RUN_CLANG_STATIC_ANALYZER = YES;
-				SWIFT_OBJC_BRIDGING_HEADER = "Tests/AdvancedOperationTests/Helpers/AdvancedOperation Tests iOS-Bridging-Header.h";
+				SWIFT_OBJC_BRIDGING_HEADER = "";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TVOS_DEPLOYMENT_TARGET = 11.0;
@@ -1309,7 +1293,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				RUN_CLANG_STATIC_ANALYZER = YES;
 				SDKROOT = appletvos;
-				SWIFT_OBJC_BRIDGING_HEADER = "Tests/AdvancedOperationTests/Helpers/AdvancedOperation Tests tvOS-Bridging-Header.h";
+				SWIFT_OBJC_BRIDGING_HEADER = "";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 3;
@@ -1333,7 +1317,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				RUN_CLANG_STATIC_ANALYZER = YES;
 				SDKROOT = appletvos;
-				SWIFT_OBJC_BRIDGING_HEADER = "Tests/AdvancedOperationTests/Helpers/AdvancedOperation Tests tvOS-Bridging-Header.h";
+				SWIFT_OBJC_BRIDGING_HEADER = "";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 3;
 				TVOS_DEPLOYMENT_TARGET = 11.0;
