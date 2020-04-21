@@ -298,10 +298,10 @@ final class AsynchronousOperationTests: XCTestCase {
     let operation4 = SleepyAsyncOperation(interval1: 1, interval2: 1, interval3: 1)
     operation4.name = "operation4"
     
-    operation1.addCompletionBlock { expectation1.fulfill() }
-    operation2.addCompletionBlock { expectation2.fulfill() }
-    operation3.addCompletionBlock { expectation3.fulfill() }
-    operation4.addCompletionBlock { expectation4.fulfill() }
+    operation1.completionBlock = { expectation1.fulfill() }
+    operation2.completionBlock = { expectation2.fulfill() }
+    operation3.completionBlock = { expectation3.fulfill() }
+    operation4.completionBlock = { expectation4.fulfill() }
     
     let conditionsOperationToLetOperationOneRun = BlockOperation { [unowned operation2, unowned operation3] in
       if operation2.isCancelled || operation3.isCancelled {

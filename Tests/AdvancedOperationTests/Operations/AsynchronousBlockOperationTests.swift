@@ -68,7 +68,7 @@ final class AsynchronousBlockOperationTests: XCTestCase {
         complete()
       }
     }
-    operation.addCompletionBlock { expectation2.fulfill() }
+    operation.completionBlock = { expectation2.fulfill() }
     operation.start()
     wait(for: [expectation1, expectation2], timeout: 10, enforceOrder: true)
   }
@@ -79,7 +79,7 @@ final class AsynchronousBlockOperationTests: XCTestCase {
     let operation2 = SleepyAsyncOperation()
     let operation3 = SleepyAsyncOperation()
 
-    operation3.addCompletionBlock { expectation3.fulfill() }
+    operation3.completionBlock = { expectation3.fulfill() }
     let adapterOperation = AsynchronousBlockOperation { complete in
       operation2.cancel()
       complete()
@@ -111,7 +111,7 @@ final class AsynchronousBlockOperationTests: XCTestCase {
       }
 
       let expectation1 = expectation(description: "\(#function)\(#line)")
-      operation.addCompletionBlock { expectation1.fulfill() }
+      operation.completionBlock = { expectation1.fulfill() }
       operation.start()
 
       waitForExpectations(timeout: 3)
