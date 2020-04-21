@@ -125,33 +125,32 @@ final class AsynchronousOperationTests: XCTestCase {
     XCTAssertTrue(operation.isFinished)
   }
   
-  func testSecondStartAfterFinishOnSameThread() {
-    let operation = SleepyAsyncOperation(interval1: 0, interval2: 0, interval3: 0)
-    let expectation1 = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: operation, expectedValue: true)
-    
-    XCTAssertTrue(operation.isReady)
-    operation.start()
-    wait(for: [expectation1], timeout: 10)
-    XCTAssertFalse(operation.isCancelled)
-    XCTAssertTrue(operation.isFinished)
-    DispatchQueue.global().async {
-      operation.start() // There shouldn't be any crash
-    }
-    
-  }
-  
-  func testMultipleStartsOnTheSameThreadRaiseAnException() {
-    let operation = InfiniteAsyncOperation()
-    operation.start()
-    operation.start()
-  }
-  
-  func testStartNotReadyOperation() {
-    let operation = SleepyAsyncOperation()
-    let operation2 = BlockOperation()
-    operation.addDependency(operation2)
-    operation.start()
-  }
+//  func testSecondStartAfterFinishOnSameThread() {
+//    let operation = SleepyAsyncOperation(interval1: 0, interval2: 0, interval3: 0)
+//    let expectation1 = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: operation, expectedValue: true)
+//    
+//    XCTAssertTrue(operation.isReady)
+//    operation.start()
+//    wait(for: [expectation1], timeout: 10)
+//    XCTAssertFalse(operation.isCancelled)
+//    XCTAssertTrue(operation.isFinished)
+//    DispatchQueue.global().async {
+//      operation.start() // There shouldn't be any crash
+//    }
+//  }
+//  
+//  func testMultipleStartsOnTheSameThreadRaiseAnException() {
+//    let operation = InfiniteAsyncOperation()
+//    operation.start()
+//    operation.start()
+//  }
+//  
+//  func testStartNotReadyOperation() {
+//    let operation = SleepyAsyncOperation()
+//    let operation2 = BlockOperation()
+//    operation.addDependency(operation2)
+//    operation.start()
+//  }
   
   // The readiness of operations is determined by their dependencies on other operations and potentially by custom conditions that you define.
   func testReadiness() {
