@@ -30,27 +30,27 @@ public typealias AsyncOperation = AsynchronousOperation
 /// Subclasses must override `main` to perform any work and, if they are asynchronous, call the `finish()` method to complete the execution.
 open class AsynchronousOperation: Operation {
   // MARK: - Public Properties
-
+  
   public final override var isExecuting: Bool {
     return state == .executing
   }
-
+  
   public final override var isFinished: Bool {
     return state == .finished
   }
-
+  
   public final override var isAsynchronous: Bool { return isConcurrent }
-
+  
   public final override var isConcurrent: Bool { return true }
-
+  
   // MARK: - Private Properties
-
+  
   /// Serial queue for making state changes atomic under the constraint of having to send KVO willChange/didChange notifications.
   private let stateChangeQueue = DispatchQueue(label: "\(identifier).AsynchronousOperation.stateChange")
-
+  
   /// Private backing store for `state`
   private var _state: Atomic<State> = Atomic(.pending)
-
+  
   /// The state of the operation
   private var state: State {
     get {
@@ -70,19 +70,19 @@ open class AsynchronousOperation: Operation {
         // willChange/didChange notifications only for the key paths that actually change.
         let oldValue = _state.value
         guard newValue != oldValue else { return }
-
+        
         if let oldKeyPath = oldValue.objcKeyPath {
           willChangeValue(forKey: oldKeyPath)
         }
         if let newKeyPath = newValue.objcKeyPath {
           willChangeValue(forKey: newKeyPath)
         }
-
+        
         _state.mutate {
           assert($0.canTransition(to: newValue), "Performing an invalid state transition from: \($0) to: \(newValue) for \(operationName).")
           $0 = newValue
         }
-
+        
         if let oldKeyPath = oldValue.objcKeyPath {
           didChangeValue(forKey: oldKeyPath)
         }
@@ -92,35 +92,37 @@ open class AsynchronousOperation: Operation {
       }
     }
   }
-
+  
   // MARK: - Foundation.Operation
-
+  
+  private let startLock = UnfairLock()
+  
   public final override func start() {
+    startLock.lock()
+    defer { startLock.unlock() }
+    
     switch state {
     case .finished:
       return
     case .executing:
-      NSException(name: .invalidArgumentException, reason: "\(#function): The operation \(operationName) is already executing.", userInfo: nil).raise()
-      return
+      fatalError("The operation \(operationName) is already executing.")
     case .pending:
       guard isReady else {
-        // Emulate the same kind of exception raised by the super.start() implementation.
-        NSException(name: .invalidArgumentException, reason: "\(#function): The operation \(operationName) is not yet ready to execute.", userInfo: nil).raise()
-        return
+        fatalError("The operation \(operationName) is not yet ready to execute.")
       }
-
+      
       // early bailing out
       guard !isCancelled else {
         finish()
         return
       }
-
+      
       // Calling super.start() here causes some KVO issues (the doc says "Your (concurrent) custom implementation must not call super at any time").
       // The default implementation of this method ("start") updates the execution state of the operation and calls the receiver’s main() method.
       // This method also performs several checks to ensure that the operation can actually run.
       // For example, if the receiver was cancelled or is already finished, this method simply returns without calling main().
       // If the operation is currently executing or is not ready to execute, this method throws an NSInvalidArgumentException exception.
-
+      
       // Investigation on how super.start() works:
       // If start() is called on a not yet ready operation, super.start() will throw an exception.
       // If start() is called multiple times from different threads, super.start() will throw an exception.
@@ -141,35 +143,33 @@ open class AsynchronousOperation: Operation {
       //
       // Additional considerations:
       // If an operation has finished, calling cancel() on it won't change its isCancelled value to true.
-
+      
       // If multiple calls are made to start() from different threads at the same time
       // setting the same state will trigger an assert in the state setter.
       // A lock isn't required.
       state = .executing
       main()
-
-      // At this point main() has already returned but it doesn't mean that the operation is finished.
+      
+      // At this point `main()` has already returned but it doesn't mean that the operation is finished.
       // Only calling `finish()` will finish the operation at this point.
     }
   }
-
+  
   // MARK: - Public Methods
-
+  
   ///  The default implementation of this method does nothing.
   /// You should override this method to perform the desired task. In your implementation, do not invoke super.
   ///  This method will automatically execute within an autorelease pool provided by Operation, so you do not need to create your own autorelease pool block in your implementation.
   /// - Note: Once the task is finished you **must** call `finish()` to complete the execution.
   open override func main() {
-    preconditionFailure("Subclasses must implement `main`.")
+    preconditionFailure("Subclasses must implement `main()`.")
   }
-
-  // MARK: - Private Methods
-
+  
   /// Finishes the operation.
   /// - Important: You should never call this method outside the operation main execution scope.
   public final func finish() {
     // State can also be "pending" here if the operation was cancelled before it was started.
-
+    
     switch state {
     case .pending, .executing:
       // If multiple calls are made to finish() from different threads at the same time
@@ -180,13 +180,13 @@ open class AsynchronousOperation: Operation {
       preconditionFailure("The finish() method shouldn't be called more than once for \(operationName).")
     }
   }
-
+  
   // MARK: - Debug
-
+  
   open override var description: String {
     return debugDescription
   }
-
+  
   open override var debugDescription: String {
     return "\(operationName) – \(isCancelled ? "cancelled (\(state))" : "\(state)")"
   }
@@ -200,7 +200,7 @@ extension AsynchronousOperation {
     case pending // waiting to be executed
     case executing
     case finished
-
+    
     /// The `#keyPath` for the `Operation` property that's associated with this value.
     var objcKeyPath: String? {
       switch self {
@@ -209,7 +209,7 @@ extension AsynchronousOperation {
       case .finished: return #keyPath(isFinished)
       }
     }
-
+    
     var description: String {
       switch self {
       case .pending: return "pending"
@@ -217,11 +217,11 @@ extension AsynchronousOperation {
       case .finished: return "finished"
       }
     }
-
+    
     var debugDescription: String {
       return description
     }
-
+    
     func canTransition(to newState: State) -> Bool {
       switch (self, newState) {
       case (.pending, .executing): return true

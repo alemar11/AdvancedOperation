@@ -37,7 +37,7 @@
     },
     {
       "file": "/Users/alessandro/Developer/AdvancedOperation/Sources/Core/AsynchronousOperation.swift",
-      "line": 98,
+      "line": 100,
       "symbol": "AsynchronousOperation.start()",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"

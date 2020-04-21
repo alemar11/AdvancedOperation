@@ -34,29 +34,6 @@ extension Operation {
     return dependencies.hasSomeCancelledOperations
   }
 
-  /// Adds a completion block to be executed after the `Operation` enters the "finished" state.
-  /// If there is already a completion block, they are chained together.
-  ///
-  /// - Parameters:
-  ///   - asEndingBlock: The block can be executed before the current completion block (`asEndingBlock` = false) or after (`asEndingBlock` = true).
-  ///   - block: The block to be executed after the `Operation` enters the "finished" state.
-  public func addCompletionBlock(asEndingBlock: Bool = true, block: @escaping () -> Void) {
-    guard let existingBlock = completionBlock else {
-      completionBlock = block
-      return
-    }
-
-    completionBlock = {
-      if asEndingBlock {
-        existingBlock()
-        block()
-      } else {
-        block()
-        existingBlock()
-      }
-    }
-  }
-
   /// Adds multiple dependencies to the operation.
   /// If the receiver is already executing its task, adding dependencies has no practical effect.
   public func addDependencies(_ dependencies: [Operation]) {

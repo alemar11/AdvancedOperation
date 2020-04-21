@@ -130,7 +130,7 @@ final class GroupOperationTests: XCTestCase {
       groupOperation.addOperation(operation4)
     }
 
-    operation4.addCompletionBlock { [unowned operation3] in
+    operation4.completionBlock = { [unowned operation3] in
       operation3.stop()
     }
 

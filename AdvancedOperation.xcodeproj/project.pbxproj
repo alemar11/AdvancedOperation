@@ -558,17 +558,17 @@
 					};
 					23725070200522820000A442 = {
 						CreatedOnToolsVersion = 9.2;
-						LastSwiftMigration = 0920;
+						LastSwiftMigration = 1140;
 						ProvisioningStyle = Automatic;
 					};
 					2372B42D1F960DBA00189A32 = {
 						CreatedOnToolsVersion = 9.1;
-						LastSwiftMigration = 1020;
+						LastSwiftMigration = 1140;
 						ProvisioningStyle = Automatic;
 					};
 					2372B43C1F960DCB00189A32 = {
 						CreatedOnToolsVersion = 9.1;
-						LastSwiftMigration = 0920;
+						LastSwiftMigration = 1140;
 						ProvisioningStyle = Automatic;
 					};
 					23DC2C7E2014F5DB00270CA3 = {
@@ -1199,6 +1199,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				RUN_CLANG_STATIC_ANALYZER = YES;
 				SDKROOT = macosx;
+				SWIFT_OBJC_BRIDGING_HEADER = "";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				TVOS_DEPLOYMENT_TARGET = 11.0;
@@ -1223,6 +1224,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				RUN_CLANG_STATIC_ANALYZER = YES;
 				SDKROOT = macosx;
+				SWIFT_OBJC_BRIDGING_HEADER = "";
 				SWIFT_VERSION = 5.0;
 				TVOS_DEPLOYMENT_TARGET = 11.0;
 				WATCHOS_DEPLOYMENT_TARGET = 4.0;
@@ -1244,6 +1246,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "org.tinrobots.AdvancedOperation-Tests-iOS";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				RUN_CLANG_STATIC_ANALYZER = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = "";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -1267,6 +1270,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "org.tinrobots.AdvancedOperation-Tests-iOS";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				RUN_CLANG_STATIC_ANALYZER = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = "";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TVOS_DEPLOYMENT_TARGET = 11.0;
@@ -1289,6 +1293,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				RUN_CLANG_STATIC_ANALYZER = YES;
 				SDKROOT = appletvos;
+				SWIFT_OBJC_BRIDGING_HEADER = "";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 3;
@@ -1312,6 +1317,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				RUN_CLANG_STATIC_ANALYZER = YES;
 				SDKROOT = appletvos;
+				SWIFT_OBJC_BRIDGING_HEADER = "";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 3;
 				TVOS_DEPLOYMENT_TARGET = 11.0;
