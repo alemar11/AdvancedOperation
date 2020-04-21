@@ -95,17 +95,22 @@ open class AsynchronousOperation: Operation {
 
   // MARK: - Foundation.Operation
 
+  private let startLock = UnfairLock()
+
   public final override func start() {
+    startLock.lock()
+    defer { startLock.unlock() }
+    
     switch state {
     case .finished:
       return
     case .executing:
-      NSException(name: .invalidArgumentException, reason: "\(#function): The operation \(operationName) is already executing.", userInfo: nil).raise()
+      NSException(name: .invalidArgumentException, reason: "The operation \(operationName) is already executing.", userInfo: nil).raise()
       return
     case .pending:
       guard isReady else {
         // Emulate the same kind of exception raised by the super.start() implementation.
-        NSException(name: .invalidArgumentException, reason: "\(#function): The operation \(operationName) is not yet ready to execute.", userInfo: nil).raise()
+        NSException(name: .invalidArgumentException, reason: "The operation \(operationName) is not yet ready to execute.", userInfo: nil).raise()
         return
       }
 
@@ -148,7 +153,7 @@ open class AsynchronousOperation: Operation {
       state = .executing
       main()
 
-      // At this point main() has already returned but it doesn't mean that the operation is finished.
+      // At this point `main()` has already returned but it doesn't mean that the operation is finished.
       // Only calling `finish()` will finish the operation at this point.
     }
   }
@@ -160,10 +165,8 @@ open class AsynchronousOperation: Operation {
   ///  This method will automatically execute within an autorelease pool provided by Operation, so you do not need to create your own autorelease pool block in your implementation.
   /// - Note: Once the task is finished you **must** call `finish()` to complete the execution.
   open override func main() {
-    preconditionFailure("Subclasses must implement `main`.")
+    preconditionFailure("Subclasses must implement `main()`.")
   }
-
-  // MARK: - Private Methods
 
   /// Finishes the operation.
   /// - Important: You should never call this method outside the operation main execution scope.

@@ -1,5 +1,10 @@
 # Changelog
 
+### 6.0.3
+
+- Fix multi-thread issues when calling the start() method.
+- More tests.
+
 ### 6.0.2
 
 - Minor refinements
