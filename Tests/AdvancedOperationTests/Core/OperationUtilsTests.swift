@@ -84,6 +84,66 @@ final class OperationUtilsTests: XCTestCase {
     }
   }
 
+  @available(OSX 10.15, *)
+  func testExplicitProgressUsingSerialQueue() {
+    let currentProgress = Progress(totalUnitCount: 1)
+    let queue = OperationQueue()
+    queue.maxConcurrentOperationCount = 1
+    queue.isSuspended = true
+
+//    let operation1 = BlockOperation { sleep(1); print("operation 1 executed") }
+//    let operation2 = BlockOperation { sleep(1); print("operation 2 executed") }
+//    let operation3 = BlockOperation { sleep(1); print("operation 3 executed") }
+
+
+
+    let operation1 = AsyncBlockOperation { complete in
+      sleep(1)
+      complete()
+    }
+
+
+
+    let operation3 = AsyncBlockOperation { complete in
+      sleep(1)
+      complete()
+    }
+
+    let operation2 = AsyncBlockOperation { complete in
+      sleep(1)
+      operation3.cancel()
+      complete()
+    }
+
+    //operation1.cancel()
+    //operation2.cancel()
+    //operation3.cancel()
+
+    let expectation0 = self.expectation(description: "Progress is completed")
+    let expectation1 = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: operation1, expectedValue: true)
+    let expectation2 = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: operation2, expectedValue: true)
+    let expectation3 = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: operation3, expectedValue: true)
+
+    queue.progress.totalUnitCount = 3
+    queue.addOperation(operation1)
+    queue.addOperation(operation2)
+    queue.addOperation(operation3)
+
+    currentProgress.addChild(queue.progress, withPendingUnitCount: 1)
+
+    let token = currentProgress.observe(\.fractionCompleted, options: [.initial, .old, .new]) { (progress, change) in
+      print(progress.fractionCompleted, progress.localizedAdditionalDescription ?? "")
+
+      if progress.completedUnitCount == 1 && progress.fractionCompleted == 1.0 {
+        expectation0.fulfill()
+      }
+    }
+
+    queue.isSuspended = false
+    wait(for: [expectation1, expectation2, expectation3, expectation0], timeout: 10)
+    token.invalidate()
+  }
+
   func testSerialOperationQueue() {
     let queue = OperationQueue.serial()
     XCTAssertEqual(queue.maxConcurrentOperationCount, 1)

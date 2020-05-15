@@ -113,14 +113,15 @@ open class AsynchronousOperation: Operation {
       
       // early bailing out
       guard !isCancelled else {
+        super.start()
         finish()
         return
       }
       
       // Calling super.start() here causes some KVO issues (the doc says "Your (concurrent) custom implementation must not call super at any time").
-      // The default implementation of this method ("start") updates the execution state of the operation and calls the receiver’s main() method.
+      // The default implementation of this method ("start") updates the execution state of the operation and calls the receiver’s execute() method.
       // This method also performs several checks to ensure that the operation can actually run.
-      // For example, if the receiver was cancelled or is already finished, this method simply returns without calling main().
+      // For example, if the receiver was cancelled or is already finished, this method simply returns without calling execute().
       // If the operation is currently executing or is not ready to execute, this method throws an NSInvalidArgumentException exception.
       
       // Investigation on how super.start() works:
@@ -147,22 +148,27 @@ open class AsynchronousOperation: Operation {
       // If multiple calls are made to start() from different threads at the same time
       // setting the same state will trigger an assert in the state setter.
       // A lock isn't required.
-      state = .executing
-      main()
+
+      super.start()
       
-      // At this point `main()` has already returned but it doesn't mean that the operation is finished.
+      // At this point `execute()` has already returned but it doesn't mean that the operation is finished.
       // Only calling `finish()` will finish the operation at this point.
     }
   }
   
   // MARK: - Public Methods
-  
+
+  open override func main() {
+    state = .executing
+    execute()
+  }
+
   ///  The default implementation of this method does nothing.
   /// You should override this method to perform the desired task. In your implementation, do not invoke super.
   ///  This method will automatically execute within an autorelease pool provided by Operation, so you do not need to create your own autorelease pool block in your implementation.
   /// - Note: Once the task is finished you **must** call `finish()` to complete the execution.
-  open override func main() {
-    preconditionFailure("Subclasses must implement `main()`.")
+  open func execute() {
+    preconditionFailure("Subclasses must implement `execute()`.")
   }
   
   /// Finishes the operation.

@@ -40,7 +40,7 @@ internal final class SleepyAsyncOperation: AsynchronousOperation {
     super.init()
   }
 
-  override func main() {
+  override func execute() {
     DispatchQueue.global().async {
       if self.isCancelled {
         self.finish()
@@ -70,14 +70,14 @@ internal final class SleepyAsyncOperation: AsynchronousOperation {
 // MARK: - AsynchronousOperation
 
 internal final class NotExecutableOperation: AsynchronousOperation {
-  override func main() {
+  override func execute() {
     XCTFail("This operation shouldn't be executed.")
     self.finish()
   }
 }
 
 internal final class AutoCancellingAsyncOperation: AsynchronousOperation {
-  override func main() {
+  override func execute() {
     DispatchQueue.global().asyncAfter(deadline: .now() + 1.0) {
       self.cancel()
       self.finish()
@@ -92,7 +92,7 @@ internal final class RunUntilCancelledAsyncOperation: AsynchronousOperation {
     self.queue = queue
   }
 
-  override func main() {
+  override func execute() {
     queue.async {
       while !self.isCancelled {
         //sleep(1)
@@ -110,7 +110,7 @@ internal final class InfiniteAsyncOperation: AsyncOperation {
     isStopped.mutate { $0 = true }
   }
 
-  override func main() {
+  override func execute() {
     DispatchQueue(label: "InfiniteOperationQueue").async {
       self.onExecutionStarted?()
       while true {

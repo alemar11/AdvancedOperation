@@ -92,7 +92,7 @@ open class GroupOperation: AsynchronousOperation {
   ///  The default implementation of this method executes the scheduled operations.
   ///  If you override this method to perform the desired task,  invoke super in your implementation as last statement.
   ///  This method will automatically execute within an autorelease pool provided by Operation, so you do not need to create your own autorelease pool block in your implementation.
-  public final override func main() {
+  public final override func execute() {
     guard !isCancelled else {
       self.finish()
       return
