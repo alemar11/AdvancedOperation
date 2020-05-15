@@ -30,6 +30,13 @@ public typealias AsyncOperation = AsynchronousOperation
 /// Subclasses must override `main` to perform any work and, if they are asynchronous, call the `finish()` method to complete the execution.
 open class AsynchronousOperation: Operation {
   // MARK: - Public Properties
+
+  /// A Boolean value indicating whether the async operation is currently waiting to be executed.
+  /// The initial value is always *true*.
+  @objc
+  public dynamic final var isPending: Bool {
+    return state == .pending
+  }
   
   public final override var isExecuting: Bool {
     return state == .executing
@@ -70,90 +77,38 @@ open class AsynchronousOperation: Operation {
         // willChange/didChange notifications only for the key paths that actually change.
         let oldValue = _state.value
         guard newValue != oldValue else { return }
-        
-        if let oldKeyPath = oldValue.objcKeyPath {
-          willChangeValue(forKey: oldKeyPath)
-        }
-        if let newKeyPath = newValue.objcKeyPath {
-          willChangeValue(forKey: newKeyPath)
-        }
-        
+
+        willChangeValue(forKey: oldValue.objcKeyPath)
+        willChangeValue(forKey: newValue.objcKeyPath)
+
         _state.mutate {
           assert($0.canTransition(to: newValue), "Performing an invalid state transition from: \($0) to: \(newValue) for \(operationName).")
           $0 = newValue
         }
-        
-        if let oldKeyPath = oldValue.objcKeyPath {
-          didChangeValue(forKey: oldKeyPath)
-        }
-        if let newKeyPath = newValue.objcKeyPath {
-          didChangeValue(forKey: newKeyPath)
-        }
+
+        didChangeValue(forKey: oldValue.objcKeyPath)
+        didChangeValue(forKey: newValue.objcKeyPath)
+
       }
     }
   }
   
   // MARK: - Foundation.Operation
-  
-  private let startLock = UnfairLock()
-  
-  public final override func start() {
-    startLock.lock()
-    defer { startLock.unlock() }
-    
-    switch state {
-    case .finished:
-      return
-    case .executing:
-      fatalError("The operation \(operationName) is already executing.")
-    case .pending:
-      guard isReady else {
-        fatalError("The operation \(operationName) is not yet ready to execute.")
-      }
-      
-      // early bailing out
-      guard !isCancelled else {
-        super.start()
-        finish()
-        return
-      }
-      
-      // Calling super.start() here causes some KVO issues (the doc says "Your (concurrent) custom implementation must not call super at any time").
-      // The default implementation of this method ("start") updates the execution state of the operation and calls the receiver’s execute() method.
-      // This method also performs several checks to ensure that the operation can actually run.
-      // For example, if the receiver was cancelled or is already finished, this method simply returns without calling execute().
-      // If the operation is currently executing or is not ready to execute, this method throws an NSInvalidArgumentException exception.
-      
-      // Investigation on how super.start() works:
-      // If start() is called on a not yet ready operation, super.start() will throw an exception.
-      // If start() is called multiple times from different threads, super.start() will throw an exception.
-      // If start() is called on an already cancelled but noy yet executed operation, super.start() will change its state to finished.
-      // The isReady value is kept to true once the Operation is finished.
-      // The operation readiness is evaluated after checking if the operation is already finished.
-      // (In fact, if a dependency is added once the operation is already finished no exceptions are thrown if we attempt to start the operation again
-      // (silly test, I know):
-      //
-      // let op1 = BlockOperation()
-      // let op2 = BlockOperation()
-      // print(op2.isReady) // true
-      // op2.start()
-      // print(op2.isFinished) // true
-      // op2.addDependency(op1)
-      // print(op2.isReady) // false
-      // op2.start() // Nothing happens (no exceptions either)
-      //
-      // Additional considerations:
-      // If an operation has finished, calling cancel() on it won't change its isCancelled value to true.
-      
-      // If multiple calls are made to start() from different threads at the same time
-      // setting the same state will trigger an assert in the state setter.
-      // A lock isn't required.
 
-      super.start()
-      
-      // At this point `execute()` has already returned but it doesn't mean that the operation is finished.
-      // Only calling `finish()` will finish the operation at this point.
+  public final override func start() {
+    // early bailing out if the operation is already cancelled
+    //
+    // checking if the state is pending avoids calling finish() multiple times if start() gets called wrongly more than once.
+    if isCancelled && state == .pending {
+      finish()
     }
+
+    // even if the documentation suggests to not call `super.start()`, as iOS 13 it contains important logic
+    // for progress reporting that shouldn't be bypassed
+    //
+    // `super.start()` is also used to throw exceptions if the operation is misused
+    super.start()
+    // At this point `main()` has already returned but it doesn't mean that the operation is finished.
   }
   
   // MARK: - Public Methods
@@ -175,7 +130,6 @@ open class AsynchronousOperation: Operation {
   /// - Important: You should never call this method outside the operation main execution scope.
   public final func finish() {
     // State can also be "pending" here if the operation was cancelled before it was started.
-    
     switch state {
     case .pending, .executing:
       // If multiple calls are made to finish() from different threads at the same time
@@ -208,9 +162,9 @@ extension AsynchronousOperation {
     case finished
     
     /// The `#keyPath` for the `Operation` property that's associated with this value.
-    var objcKeyPath: String? {
+    var objcKeyPath: String {
       switch self {
-      case .pending: return nil
+      case .pending: return #keyPath(isPending)
       case .executing: return #keyPath(isExecuting)
       case .finished: return #keyPath(isFinished)
       }

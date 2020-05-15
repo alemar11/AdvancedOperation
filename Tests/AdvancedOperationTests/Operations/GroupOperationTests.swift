@@ -126,7 +126,7 @@ final class GroupOperationTests: XCTestCase {
 
     // cancellation is done while at least one operation is running
     operation3.onExecutionStarted = { [unowned groupOperation] in
-      groupOperation.cancel()
+      groupOperation.cancel() // this will cancel op3
       groupOperation.addOperation(operation4)
     }
 

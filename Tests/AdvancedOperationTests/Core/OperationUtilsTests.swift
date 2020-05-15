@@ -83,9 +83,11 @@ final class OperationUtilsTests: XCTestCase {
       XCTAssertFalse($0.dependencies.contains(operation8))
     }
   }
-
-  @available(OSX 10.15, *)
+  
+  @available(iOS 13.0, iOSApplicationExtension 13.0, tvOS 13.0, watchOS 6.0, macOS 10.15, *)
   func testExplicitProgressUsingSerialQueue() {
+    // AsyncOperation implementation needs to call super.start() in order to enable progress reporting
+    // even if the Operation documentation says to not call super.start()
     let currentProgress = Progress(totalUnitCount: 1)
     let queue = OperationQueue()
     queue.maxConcurrentOperationCount = 1
@@ -95,29 +97,23 @@ final class OperationUtilsTests: XCTestCase {
 //    let operation2 = BlockOperation { sleep(1); print("operation 2 executed") }
 //    let operation3 = BlockOperation { sleep(1); print("operation 3 executed") }
 
-
-
     let operation1 = AsyncBlockOperation { complete in
       sleep(1)
       complete()
     }
-
-
 
     let operation3 = AsyncBlockOperation { complete in
       sleep(1)
       complete()
     }
 
-    let operation2 = AsyncBlockOperation { complete in
+    let operation2 = AsyncBlockOperation { [unowned queue] complete in
       sleep(1)
+      // if we cancel an operation we need to be sure to reduce the progress totalUnitCount
+      queue.progress.totalUnitCount -= 1
       operation3.cancel()
       complete()
     }
-
-    //operation1.cancel()
-    //operation2.cancel()
-    //operation3.cancel()
 
     let expectation0 = self.expectation(description: "Progress is completed")
     let expectation1 = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: operation1, expectedValue: true)
