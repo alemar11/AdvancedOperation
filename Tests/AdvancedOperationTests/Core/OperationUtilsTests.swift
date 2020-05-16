@@ -88,4 +88,115 @@ final class OperationUtilsTests: XCTestCase {
     let queue = OperationQueue.serial()
     XCTAssertEqual(queue.maxConcurrentOperationCount, 1)
   }
+
+  @available(iOS 13.0, iOSApplicationExtension 13.0, tvOS 13.0, watchOS 6.0, macOS 10.15, *)
+  func testExplicitProgressUsingSerialQueueAndGroupOperation() {
+    let currentProgress = Progress(totalUnitCount: 1)
+
+    let operation1 = AsyncBlockOperation { complete in
+      sleep(1)
+      complete()
+    }
+
+    let operation3 = AsyncBlockOperation { complete in
+      sleep(1)
+      complete()
+    }
+
+    let operation2 = AsyncBlockOperation { complete in
+      sleep(1)
+      // if we cancel an operation we need to be sure to reduce the progress totalUnitCount
+      //OperationQueue.current?.progress.totalUnitCount -= 1
+      //operation3.cancel()
+      complete()
+    }
+
+    let operation4 = BlockOperation { sleep(1); print("operation 4 executed") }
+
+    let expectation0 = self.expectation(description: "Progress is completed")
+    let expectation1 = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: operation1, expectedValue: true)
+    let expectation2 = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: operation2, expectedValue: true)
+    let expectation3 = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: operation3, expectedValue: true)
+
+    let operation = GroupOperation(operations: [operation1, operation2, operation3, operation4])
+
+    currentProgress.addChild(operation.progress, withPendingUnitCount: 1)
+
+    let token = currentProgress.observe(\.fractionCompleted, options: [.initial, .old, .new]) { (progress, change) in
+      print(progress.fractionCompleted, progress.localizedAdditionalDescription ?? "")
+
+      if progress.completedUnitCount == 1 && progress.fractionCompleted == 1.0 {
+        expectation0.fulfill()
+      }
+    }
+
+    operation.maxConcurrentOperationCount = 1 // TODO, test with a concurrent group operation too
+    operation.start()
+    wait(for: [expectation1, expectation2, expectation3, expectation0], timeout: 10)
+    token.invalidate()
+  }
+
+  @available(iOS 13.0, iOSApplicationExtension 13.0, tvOS 13.0, watchOS 6.0, macOS 10.15, *)
+  func testExplicitProgressUsingSerialQueue() {
+    // AsyncOperation implementation needs to call super.start() in order to enable progress reporting
+    // even if the Operation documentation says to not call super.start()
+    let currentProgress = Progress(totalUnitCount: 1)
+    let queue = OperationQueue()
+    queue.maxConcurrentOperationCount = 1
+    queue.isSuspended = true
+
+    // -[NSProgress addChild:withPendingUnitCount:]
+    // po ((_NSOperationQueueProgress*)$arg1)->_queue
+    // for operation4:
+    // po ((NSBlockOperation*)((NSOperationQueue*)((_NSOperationQueueProgress*)$arg1)->_queue).operations[0])
+
+    //    let operation1 = BlockOperation { sleep(1); print("operation 1 executed") }
+    //    let operation2 = BlockOperation { sleep(1); print("operation 2 executed") }
+    //    let operation3 = BlockOperation { sleep(1); print("operation 3 executed") }
+
+    let operation1 = AsyncBlockOperation { complete in
+      sleep(1)
+      complete()
+    }
+
+    let operation3 = AsyncBlockOperation { complete in
+      sleep(1)
+      complete()
+    }
+
+    let operation2 = AsyncBlockOperation { complete in
+      sleep(1)
+      // if we cancel an operation we need to be sure to reduce the progress totalUnitCount
+      //OperationQueue.current?.progress.totalUnitCount -= 1
+      //operation3.cancel()
+      complete()
+    }
+
+    let operation4 = BlockOperation { sleep(1); print("operation 4 executed") }
+
+    let expectation0 = self.expectation(description: "Progress is completed")
+    let expectation1 = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: operation1, expectedValue: true)
+    let expectation2 = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: operation2, expectedValue: true)
+    let expectation3 = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: operation3, expectedValue: true)
+
+    queue.progress.totalUnitCount = 4
+    queue.addOperation(operation1)
+    queue.addOperation(operation2)
+    queue.addOperation(operation3)
+    queue.addOperation(operation4)
+
+    currentProgress.addChild(queue.progress, withPendingUnitCount: 1)
+
+    let token = currentProgress.observe(\.fractionCompleted, options: [.initial, .old, .new]) { (progress, change) in
+      print(progress.fractionCompleted, progress.localizedAdditionalDescription ?? "")
+
+      if progress.completedUnitCount == 1 && progress.fractionCompleted == 1.0 {
+        expectation0.fulfill()
+      }
+    }
+
+    queue.isSuspended = false
+    wait(for: [expectation1, expectation2, expectation3, expectation0], timeout: 10)
+    token.invalidate()
+  }
 }

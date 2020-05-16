@@ -27,6 +27,20 @@ import Foundation
 /// Use a `GroupOperation` to associate related operations together, thereby creating higher levels of abstractions.
 open class GroupOperation: AsynchronousOperation {
   // MARK: - Public Properties
+
+  //TODO: test it
+  public final override private(set) var progress: Progress {
+    get {
+      if #available(iOS 13.0, iOSApplicationExtension 13.0, tvOS 13.0, watchOS 6.0, macOS 10.15, *) {
+        return operationQueue.progress
+      } else {
+        return super.progress
+      }
+    }
+    set {
+
+    }
+  }
   
   /// The maximum number of queued operations that can execute at the same time inside the `GroupOperation`.
   ///
@@ -148,7 +162,9 @@ open class GroupOperation: AsynchronousOperation {
         }
         
         tokens.append(finishToken)
-        
+        if #available(iOS 13.0, iOSApplicationExtension 13.0, tvOS 13.0, watchOS 6.0, macOS 10.15, *) {
+        operationQueue.progress.totalUnitCount += 1
+        }
         operationQueue.addOperation(operation)
       }
     }

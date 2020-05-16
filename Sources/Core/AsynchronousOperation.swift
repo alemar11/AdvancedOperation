@@ -28,8 +28,23 @@ public typealias AsyncOperation = AsynchronousOperation
 /// An abstract thread safe subclass of `Operation` to support asynchronous operations.
 ///
 /// Subclasses must override `main` to perform any work and, if they are asynchronous, call the `finish()` method to complete the execution.
-open class AsynchronousOperation: Operation {
+open class AsynchronousOperation: Operation, ProgressReporting {
   // MARK: - Public Properties
+
+  // TODO: add a @objc dynamic isPending + tests
+  // TODO: test progress cancel method
+  // TODO: add a setCompletedCount method? not sure
+  // TODO: make progress privte? not sure
+  @objc
+  public lazy private(set) var progress: Progress = {
+    let progress = Progress(totalUnitCount: 1)
+    progress.isPausable = false
+    progress.isCancellable = true
+    progress.cancellationHandler = { [weak self] in
+      self?.cancel()
+    }
+    return progress
+  }()
   
   public final override var isExecuting: Bool {
     return state == .executing
@@ -148,6 +163,14 @@ open class AsynchronousOperation: Operation {
       // setting the same state will trigger an assert in the state setter.
       // A lock isn't required.
       state = .executing
+      // TODO: move these comments into the TECHNOTES.md
+      if #available(iOS 13.0, iOSApplicationExtension 13.0, tvOS 13.0, watchOS 6.0, macOS 10.15, *) {
+        if let currentQueue = OperationQueue.current, currentQueue.progress.totalUnitCount > 0 {
+          currentQueue.progress.addChild(progress, withPendingUnitCount: 1)
+        }
+      } else {
+        // Fallback on earlier versions
+      }
       main()
       
       // At this point `main()` has already returned but it doesn't mean that the operation is finished.
@@ -172,6 +195,9 @@ open class AsynchronousOperation: Operation {
     
     switch state {
     case .pending, .executing:
+      if progress.completedUnitCount != progress.totalUnitCount {
+       progress.completedUnitCount = progress.totalUnitCount
+      }
       // If multiple calls are made to finish() from different threads at the same time
       // setting the same state will trigger an assert in the state setter.
       // A lock isn't required.
