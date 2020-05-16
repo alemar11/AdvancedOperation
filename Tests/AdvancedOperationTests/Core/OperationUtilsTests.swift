@@ -107,10 +107,10 @@ final class OperationUtilsTests: XCTestCase {
       complete()
     }
 
-    let operation2 = AsyncBlockOperation { [unowned queue] complete in
+    let operation2 = AsyncBlockOperation { complete in
       sleep(1)
       // if we cancel an operation we need to be sure to reduce the progress totalUnitCount
-      queue.progress.totalUnitCount -= 1
+      OperationQueue.current?.progress.totalUnitCount -= 1
       operation3.cancel()
       complete()
     }
