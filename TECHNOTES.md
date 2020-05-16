@@ -22,9 +22,9 @@ The default implementation of this method updates the execution state of the ope
 
 Investigation on how super.start() works:
 - If `start()` is called on a not yet ready operation, `super.start()` will throw an exception.
-- If `start()` is called multiple times from different threads, `super.start()` will throw an exception.
+- If `start()` is called multiple times from different threads, `super.start()` will throw an exception (if the operation wasn't already cancelled).
 - If `start()` is called on an already cancelled but noy yet executed operation, `super.start()` will change its state to finished.
--  The isReady value is kept to *true* once the Operation is finished.
+- The `isReady` value is kept to *true* once the Operation is finished.
 
 The operation readiness is evaluated after checking if the operation is already finished.
 (In fact, if a dependency is added once the operation is already finished no exceptions are thrown if we attempt to start the operation again
