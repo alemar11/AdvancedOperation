@@ -37,27 +37,27 @@ open class AsynchronousOperation: Operation {
   public dynamic final var isPending: Bool {
     return state == .pending
   }
-  
+
   public final override var isExecuting: Bool {
     return state == .executing
   }
-  
+
   public final override var isFinished: Bool {
     return state == .finished
   }
-  
+
   public final override var isAsynchronous: Bool { return isConcurrent }
-  
+
   public final override var isConcurrent: Bool { return true }
-  
+
   // MARK: - Private Properties
-  
+
   /// Serial queue for making state changes atomic under the constraint of having to send KVO willChange/didChange notifications.
   private let stateChangeQueue = DispatchQueue(label: "\(identifier).AsynchronousOperation.stateChange")
-  
+
   /// Private backing store for `state`
   private var _state: Atomic<State> = Atomic(.pending)
-  
+
   /// The state of the operation
   private var state: State {
     get {
@@ -88,11 +88,10 @@ open class AsynchronousOperation: Operation {
 
         didChangeValue(forKey: oldValue.objcKeyPath)
         didChangeValue(forKey: newValue.objcKeyPath)
-
       }
     }
   }
-  
+
   // MARK: - Foundation.Operation
 
   public final override func start() {
@@ -110,7 +109,7 @@ open class AsynchronousOperation: Operation {
     super.start()
     // At this point `main()` has already returned but it doesn't mean that the operation is finished.
   }
-  
+
   // MARK: - Public Methods
 
   open override func main() {
@@ -125,7 +124,7 @@ open class AsynchronousOperation: Operation {
   open func execute() {
     preconditionFailure("Subclasses must implement `execute()`.")
   }
-  
+
   /// Finishes the operation.
   /// - Important: You should never call this method outside the operation main execution scope.
   public final func finish() {
@@ -140,13 +139,13 @@ open class AsynchronousOperation: Operation {
       preconditionFailure("The finish() method shouldn't be called more than once for \(operationName).")
     }
   }
-  
+
   // MARK: - Debug
-  
+
   open override var description: String {
     return debugDescription
   }
-  
+
   open override var debugDescription: String {
     return "\(operationName) – \(isCancelled ? "cancelled (\(state))" : "\(state)")"
   }
@@ -160,7 +159,7 @@ extension AsynchronousOperation {
     case pending // waiting to be executed
     case executing
     case finished
-    
+
     /// The `#keyPath` for the `Operation` property that's associated with this value.
     var objcKeyPath: String {
       switch self {
@@ -169,7 +168,7 @@ extension AsynchronousOperation {
       case .finished: return #keyPath(isFinished)
       }
     }
-    
+
     var description: String {
       switch self {
       case .pending: return "pending"
@@ -177,11 +176,11 @@ extension AsynchronousOperation {
       case .finished: return "finished"
       }
     }
-    
+
     var debugDescription: String {
       return description
     }
-    
+
     func canTransition(to newState: State) -> Bool {
       switch (self, newState) {
       case (.pending, .executing): return true

@@ -83,7 +83,7 @@ final class OperationUtilsTests: XCTestCase {
       XCTAssertFalse($0.dependencies.contains(operation8))
     }
   }
-  
+
   @available(iOS 13.0, iOSApplicationExtension 13.0, tvOS 13.0, watchOS 6.0, macOS 10.15, *)
   func testExplicitProgressUsingSerialQueue() {
     // AsyncOperation implementation needs to call super.start() in order to enable progress reporting
