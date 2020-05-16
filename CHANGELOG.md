@@ -1,5 +1,10 @@
 # Changelog
 
+### 6.1.0
+
+- OperationQueue progress now works with AsyncOperations too.
+- AsyncOperation now requires to override `execute()` insted of `main()`.
+
 ### 6.0.3
 
 - Fix multi-thread issues when calling the start() method.
