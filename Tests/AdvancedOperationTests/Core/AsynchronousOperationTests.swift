@@ -139,11 +139,11 @@ final class AsynchronousOperationTests: XCTestCase {
   }
 
   func testMultipleConcurrentStartAfterCancellation() {
-      let operation = SleepyAsyncOperation(interval1: 2, interval2: 2, interval3: 2)
-      operation.cancel()
-      DispatchQueue.concurrentPerform(iterations: 100) { _ in
-        operation.start()
-      }
+    let operation = SleepyAsyncOperation(interval1: 2, interval2: 2, interval3: 2)
+    operation.cancel()
+    DispatchQueue.concurrentPerform(iterations: 100) { _ in
+      operation.start()
+    }
     XCTAssertTrue(operation.isCancelled)
     XCTAssertTrue(operation.isFinished)
   }
@@ -162,34 +162,34 @@ final class AsynchronousOperationTests: XCTestCase {
     }
   }
 
-//  func testSecondStartOnDifferentThreadAfterCancellation() {
-//    let operation = SleepyAsyncOperation(interval1: 2, interval2: 2, interval3: 2)
-//    let expectation1 = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: operation, expectedValue: true)
-//
-//    XCTAssertTrue(operation.isReady)
-//
-//    operation.start()
-//    operation.cancel()
-//    DispatchQueue.global().sync {
-//      operation.start()
-//    }
-//    wait(for: [expectation1], timeout: 10)
-//    XCTAssertTrue(operation.isFinished)
-//    operation.start()
-//  }
+  //  func testSecondStartOnDifferentThreadAfterCancellation() {
+  //    let operation = SleepyAsyncOperation(interval1: 2, interval2: 2, interval3: 2)
+  //    let expectation1 = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: operation, expectedValue: true)
+  //
+  //    XCTAssertTrue(operation.isReady)
+  //
+  //    operation.start()
+  //    operation.cancel()
+  //    DispatchQueue.global().sync {
+  //      operation.start()
+  //    }
+  //    wait(for: [expectation1], timeout: 10)
+  //    XCTAssertTrue(operation.isFinished)
+  //    operation.start()
+  //  }
 
-//  func testMultipleStartsOnTheSameThreadRaiseAnException() {
-//    let operation = InfiniteAsyncOperation()
-//    operation.start()
-//    operation.start()
-//  }
+  //  func testMultipleStartsOnTheSameThreadRaiseAnException() {
+  //    let operation = InfiniteAsyncOperation()
+  //    operation.start()
+  //    operation.start()
+  //  }
   
-//  func testStartNotReadyOperation() {
-//    let operation = SleepyAsyncOperation()
-//    let operation2 = BlockOperation()
-//    operation.addDependency(operation2)
-//    operation.start()
-//  }
+  //  func testStartNotReadyOperation() {
+  //    let operation = SleepyAsyncOperation()
+  //    let operation2 = BlockOperation()
+  //    operation.addDependency(operation2)
+  //    operation.start()
+  //  }
   
   // The readiness of operations is determined by their dependencies on other operations and potentially by custom conditions that you define.
   func testReadiness() {
