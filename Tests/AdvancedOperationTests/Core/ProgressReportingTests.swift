@@ -29,6 +29,8 @@ import XCTest
 @available(iOS 13.0, iOSApplicationExtension 13.0, tvOS 13.0, watchOS 6.0, macOS 10.15, *)
 final class ProgressReportingTests: XCTestCase {
 
+  // MARK: - GroupOperation
+
   @available(iOS 13.0, iOSApplicationExtension 13.0, tvOS 13.0, watchOS 6.0, macOS 10.15, *)
   func testProgressReportingWhenAddingOperationsWhileGroupOperationIsExecuting() {
     // ⚠️ backwards moving progress scenario.
@@ -289,6 +291,8 @@ final class ProgressReportingTests: XCTestCase {
     token.invalidate()
   }
 
+  // MARK: AsyncOperation
+
   @available(iOS 13.0, iOSApplicationExtension 13.0, tvOS 13.0, watchOS 6.0, macOS 10.15, *)
   func testExplicitProgressUsingSerialQueue() {
     // AsyncOperation implementation needs to call super.start() in order to enable progress reporting
@@ -376,6 +380,9 @@ final class ProgressReportingTests: XCTestCase {
     let operation1 = AsyncBlockOperation { $0() }
     let operation3 = AsyncBlockOperation { $0() }
     let operation2 = AsyncBlockOperation { $0() }
+    // let operation1 = BlockOperation { sleep(1); print("operation 1 executed") }
+    // let operation2 = BlockOperation { sleep(1); print("operation 2 executed") }
+    // let operation3 = BlockOperation { sleep(1); print("operation 3 executed") }
     let operation4 = BlockOperation { sleep(1); print("operation 4 executed") }
 
     queue.progress.totalUnitCount = 4
@@ -386,7 +393,7 @@ final class ProgressReportingTests: XCTestCase {
 
     queue.isSuspended = false
     // ➡️ resign immediately when the queue resumes work
-    // TODO: It seems that with implicit progress fractionCompleted isn't reported
+    // TODO: It seems that with implicit progress fractionCompleted isn't reported (even using standard BlockOperation)
     currentProgress.resignCurrent()
     wait(for: [expectation0], timeout: 10)
     token.invalidate()
