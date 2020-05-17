@@ -106,6 +106,7 @@ open class AsynchronousOperation: Operation, ProgressReporting {
 
   // MARK: - Foundation.Operation
 
+  // Lock used to prevent data races if start() gest called from different threads multiple times
   private let startLock = UnfairLock()
 
   public final override func start() {
