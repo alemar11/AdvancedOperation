@@ -31,10 +31,11 @@ public typealias AsyncOperation = AsynchronousOperation
 open class AsynchronousOperation: Operation, ProgressReporting {
   // MARK: - Public Properties
 
-  // TODO: add a @objc dynamic isPending + tests
   // TODO: test progress cancel method
   // TODO: add a setCompletedCount method? not sure
   // TODO: make progress privte? not sure
+  
+  /// The `progress` property represents a total progress of the operation during its execution.
   @objc
   public final lazy private(set) var progress: Progress = {
     let progress = Progress(totalUnitCount: 1)
@@ -45,7 +46,14 @@ open class AsynchronousOperation: Operation, ProgressReporting {
     }
     return progress
   }()
-  
+
+  /// A Boolean value indicating whether the async operation is currently waiting to be executed.
+  /// The initial value is always *true*.
+  @objc
+  public dynamic final var isPending: Bool {
+    return state == .pending
+  }
+
   public final override var isExecuting: Bool {
     return state == .executing
   }
@@ -85,25 +93,17 @@ open class AsynchronousOperation: Operation, ProgressReporting {
         // willChange/didChange notifications only for the key paths that actually change.
         let oldValue = _state.value
         guard newValue != oldValue else { return }
-        
-        if let oldKeyPath = oldValue.objcKeyPath {
-          willChangeValue(forKey: oldKeyPath)
-        }
-        if let newKeyPath = newValue.objcKeyPath {
-          willChangeValue(forKey: newKeyPath)
-        }
-        
+
+        willChangeValue(forKey: oldValue.objcKeyPath)
+        willChangeValue(forKey: newValue.objcKeyPath)
+
         _state.mutate {
           assert($0.canTransition(to: newValue), "Performing an invalid state transition from: \($0) to: \(newValue) for \(operationName).")
           $0 = newValue
         }
-        
-        if let oldKeyPath = oldValue.objcKeyPath {
-          didChangeValue(forKey: oldKeyPath)
-        }
-        if let newKeyPath = newValue.objcKeyPath {
-          didChangeValue(forKey: newKeyPath)
-        }
+
+        didChangeValue(forKey: oldValue.objcKeyPath)
+        didChangeValue(forKey: newValue.objcKeyPath)
       }
     }
   }
@@ -131,45 +131,16 @@ open class AsynchronousOperation: Operation, ProgressReporting {
         finish()
         return
       }
-      
-      // Calling super.start() here causes some KVO issues (the doc says "Your (concurrent) custom implementation must not call super at any time").
-      // The default implementation of this method ("start") updates the execution state of the operation and calls the receiver’s main() method.
-      // This method also performs several checks to ensure that the operation can actually run.
-      // For example, if the receiver was cancelled or is already finished, this method simply returns without calling main().
-      // If the operation is currently executing or is not ready to execute, this method throws an NSInvalidArgumentException exception.
-      
-      // Investigation on how super.start() works:
-      // If start() is called on a not yet ready operation, super.start() will throw an exception.
-      // If start() is called multiple times from different threads, super.start() will throw an exception.
-      // If start() is called on an already cancelled but noy yet executed operation, super.start() will change its state to finished.
-      // The isReady value is kept to true once the Operation is finished.
-      // The operation readiness is evaluated after checking if the operation is already finished.
-      // (In fact, if a dependency is added once the operation is already finished no exceptions are thrown if we attempt to start the operation again
-      // (silly test, I know):
-      //
-      // let op1 = BlockOperation()
-      // let op2 = BlockOperation()
-      // print(op2.isReady) // true
-      // op2.start()
-      // print(op2.isFinished) // true
-      // op2.addDependency(op1)
-      // print(op2.isReady) // false
-      // op2.start() // Nothing happens (no exceptions either)
-      //
-      // Additional considerations:
-      // If an operation has finished, calling cancel() on it won't change its isCancelled value to true.
-      
-      // If multiple calls are made to start() from different threads at the same time
-      // setting the same state will trigger an assert in the state setter.
-      // A lock isn't required.
+
       state = .executing
-      // TODO: move these comments into the TECHNOTES.md
+
+      // The OperationQueue progress reporting works correcly only is used with super.start()
+      // that it shouldn't be called when implementing custom concurrent operations.
+      // To fix that we use a different progress instance
       if #available(iOS 13.0, iOSApplicationExtension 13.0, tvOS 13.0, watchOS 6.0, macOS 10.15, *) {
         if let currentQueue = OperationQueue.current, currentQueue.progress.totalUnitCount > 0 {
           currentQueue.progress.addChild(progress, withPendingUnitCount: 1)
         }
-      } else {
-        // Fallback on earlier versions
       }
       main()
       
@@ -196,7 +167,7 @@ open class AsynchronousOperation: Operation, ProgressReporting {
     switch state {
     case .pending, .executing:
       if progress.completedUnitCount != progress.totalUnitCount {
-       progress.completedUnitCount = progress.totalUnitCount
+        progress.completedUnitCount = progress.totalUnitCount
       }
       // If multiple calls are made to finish() from different threads at the same time
       // setting the same state will trigger an assert in the state setter.
@@ -228,9 +199,9 @@ extension AsynchronousOperation {
     case finished
     
     /// The `#keyPath` for the `Operation` property that's associated with this value.
-    var objcKeyPath: String? {
+    var objcKeyPath: String {
       switch self {
-      case .pending: return nil
+      case .pending: return #keyPath(isPending)
       case .executing: return #keyPath(isExecuting)
       case .finished: return #keyPath(isFinished)
       }

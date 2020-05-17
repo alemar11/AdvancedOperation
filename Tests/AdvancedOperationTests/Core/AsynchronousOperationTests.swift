@@ -30,7 +30,20 @@ final class AsynchronousOperationTests: XCTestCase {
     KVOCrashWorkaround.installFix()
     #endif
   }
-  
+
+  func testPendingKVO() {
+    let operation = SleepyAsyncOperation()
+    XCTAssertTrue(operation.isPending)
+    let expectation1 = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: operation, expectedValue: true)
+    let expectation2 = XCTKVOExpectation(keyPath: #keyPath(AsyncOperation.isPending), object: operation, expectedValue: false)
+    operation.start()
+    XCTAssertTrue(operation.isExecuting)
+
+    wait(for: [expectation1, expectation2], timeout: 10)
+    XCTAssertTrue(operation.isFinished)
+    XCTAssertFalse(operation.isPending)
+  }
+
   func testEarlyBailOut() {
     let operation = RunUntilCancelledAsyncOperation()
     let expectation1 = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: operation, expectedValue: true)
@@ -124,27 +137,53 @@ final class AsynchronousOperationTests: XCTestCase {
     XCTAssertTrue(operation.isCancelled)
     XCTAssertTrue(operation.isFinished)
   }
+
+  func testMultipleConcurrentStartAfterCancellation() {
+    let operation = SleepyAsyncOperation(interval1: 2, interval2: 2, interval3: 2)
+    operation.cancel()
+    DispatchQueue.concurrentPerform(iterations: 100) { _ in
+      operation.start()
+    }
+    XCTAssertTrue(operation.isCancelled)
+    XCTAssertTrue(operation.isFinished)
+  }
+
+  func testSecondStartAfterFinishOnDifferentThread() {
+    let operation = SleepyAsyncOperation(interval1: 0, interval2: 0, interval3: 0)
+    let expectation1 = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: operation, expectedValue: true)
+
+    XCTAssertTrue(operation.isReady)
+    operation.start()
+    wait(for: [expectation1], timeout: 10)
+    XCTAssertFalse(operation.isCancelled)
+    XCTAssertTrue(operation.isFinished)
+    DispatchQueue.global().async {
+      operation.start() // There shouldn't be any crash
+    }
+  }
   
-//  func testSecondStartAfterFinishOnSameThread() {
-//    let operation = SleepyAsyncOperation(interval1: 0, interval2: 0, interval3: 0)
+//  func testSecondStartOnDifferentThreadAfterCancellation() {
+//    let operation = SleepyAsyncOperation(interval1: 2, interval2: 2, interval3: 2)
 //    let expectation1 = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: operation, expectedValue: true)
-//    
+//
 //    XCTAssertTrue(operation.isReady)
+//
 //    operation.start()
-//    wait(for: [expectation1], timeout: 10)
-//    XCTAssertFalse(operation.isCancelled)
-//    XCTAssertTrue(operation.isFinished)
-//    DispatchQueue.global().async {
-//      operation.start() // There shouldn't be any crash
+//    operation.cancel()
+//    DispatchQueue.global().sync {
+//      operation.start()
 //    }
+//    wait(for: [expectation1], timeout: 10)
+//    XCTAssertTrue(operation.isFinished)
+//    operation.start()
 //  }
-//  
+//
 //  func testMultipleStartsOnTheSameThreadRaiseAnException() {
 //    let operation = InfiniteAsyncOperation()
 //    operation.start()
 //    operation.start()
 //  }
-//  
+//
 //  func testStartNotReadyOperation() {
 //    let operation = SleepyAsyncOperation()
 //    let operation2 = BlockOperation()

@@ -26,47 +26,54 @@
 import XCTest
 @testable import AdvancedOperation
 
+@available(iOS 13.0, iOSApplicationExtension 13.0, tvOS 13.0, watchOS 6.0, macOS 10.15, *)
 final class ProgressReportingTests: XCTestCase {
 
-//  @available(iOS 13.0, iOSApplicationExtension 13.0, tvOS 13.0, watchOS 6.0, macOS 10.15, *)
-//  func testAddingOperationsWhileGroupOperationIsExecuting() {
-//    let currentProgress = Progress(totalUnitCount: 1)
-//    let operation1 = InfiniteAsyncOperation()
-//    let groupOperation = GroupOperation(operations: [operation1])
-//    let operation2 = AsyncBlockOperation { complete in
-//      sleep(1)
-//      complete()
-//    }
-//    let operation3 = BlockOperation { [unowned operation1] in
-//      sleep(1)
-//      operation1.stop()
-//    }
-//
-//    operation1.onExecutionStarted = { [unowned groupOperation] in
-//      groupOperation.addOperation(operation2)
-//      groupOperation.addOperation(BlockOperation())
-//      groupOperation.addOperation(BlockOperation())
-//      groupOperation.addOperation(BlockOperation())
-//      groupOperation.addOperation(BlockOperation())
-//      groupOperation.addOperation(operation3)
-//    }
-//
-//    currentProgress.addChild(groupOperation.progress, withPendingUnitCount: 1)
-//
-//    let expectation0 = self.expectation(description: "Progress is completed")
-//    let token = currentProgress.observe(\.fractionCompleted, options: [.initial, .old, .new]) { (progress, change) in
-//      print(progress.fractionCompleted, progress.localizedAdditionalDescription ?? "")
-//
-//      if progress.completedUnitCount == 1 && progress.fractionCompleted == 1.0 {
-//        expectation0.fulfill()
-//      }
-//    }
-//
-//    groupOperation.maxConcurrentOperationCount = 3
-//    groupOperation.start()
-//    wait(for: [expectation0], timeout: 5)
-//    token.invalidate()
-//  }
+  @available(iOS 13.0, iOSApplicationExtension 13.0, tvOS 13.0, watchOS 6.0, macOS 10.15, *)
+  func testProgressReportingWhenAddingOperationsWhileGroupOperationIsExecuting() {
+    // ⚠️ backwards moving progress scenario.
+    let currentProgress = Progress(totalUnitCount: 1)
+    let groupOperation = GroupOperation()
+
+    let operation1 = BlockOperation { [unowned groupOperation] in
+      groupOperation.addOperation(BlockOperation())
+      groupOperation.addOperation(BlockOperation())
+      groupOperation.addOperation(BlockOperation())
+      groupOperation.addOperation(AsyncBlockOperation { $0() })
+      groupOperation.addOperation(AsyncBlockOperation { $0() })
+      groupOperation.addOperation(AsyncBlockOperation { $0() })
+    }
+
+    groupOperation.addOperation(operation1)
+
+    currentProgress.addChild(groupOperation.progress, withPendingUnitCount: 1)
+
+    let expectation0 = self.expectation(description: "Progress is completed")
+    let expectation1 = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: groupOperation, expectedValue: true)
+    expectation0.assertForOverFulfill = false
+    let token = currentProgress.observe(\.fractionCompleted, options: [.initial, .old, .new]) { (progress, change) in
+      print("fraction: \(progress.fractionCompleted)", "-", progress.localizedAdditionalDescription ?? "")
+
+      if progress.completedUnitCount == 1 && progress.fractionCompleted == 1.0 {
+        expectation0.fulfill()
+      }
+    }
+
+    groupOperation.maxConcurrentOperationCount = 3
+    groupOperation.start()
+    wait(for: [expectation0, expectation1], timeout: 5)
+    print(groupOperation.isFinished)
+    token.invalidate()
+  }
+
+  @available(iOS 13.0, iOSApplicationExtension 13.0, tvOS 13.0, watchOS 6.0, macOS 10.15, *)
+  func testCancel() {
+    let operation = AsyncBlockOperation { $0() }
+    operation.progress.cancel()
+    XCTAssertTrue(operation.progress.isCancellable)
+    XCTAssertTrue(operation.progress.isCancelled)
+    XCTAssertTrue(operation.isCancelled)
+  }
 
   @available(iOS 13.0, iOSApplicationExtension 13.0, tvOS 13.0, watchOS 6.0, macOS 10.15, *)
   func testProgressReportingWhenAddingCancelledOperationsToGroupOperation() {
@@ -84,7 +91,7 @@ final class ProgressReportingTests: XCTestCase {
 
     let expectation0 = self.expectation(description: "Progress is completed")
     let token = currentProgress.observe(\.fractionCompleted, options: [.initial, .old, .new]) { (progress, change) in
-      print(progress.fractionCompleted, progress.localizedAdditionalDescription ?? "")
+      print("fraction: \(progress.fractionCompleted)", "-", progress.localizedAdditionalDescription ?? "")
 
       if progress.completedUnitCount == 1 && progress.fractionCompleted == 1.0 {
         expectation0.fulfill()
@@ -131,7 +138,7 @@ final class ProgressReportingTests: XCTestCase {
     currentProgress.addChild(groupOperation.progress, withPendingUnitCount: 1)
 
     let token = currentProgress.observe(\.fractionCompleted, options: [.initial, .old, .new]) { (progress, change) in
-      print(progress.fractionCompleted, progress.localizedAdditionalDescription ?? "")
+      print("fraction: \(progress.fractionCompleted)", "-", progress.localizedAdditionalDescription ?? "")
 
       if progress.completedUnitCount == 1 && progress.fractionCompleted == 1.0 {
         expectation0.fulfill()
@@ -171,7 +178,7 @@ final class ProgressReportingTests: XCTestCase {
     currentProgress.addChild(groupOperation.progress, withPendingUnitCount: 1)
 
     let token = currentProgress.observe(\.fractionCompleted, options: [.initial, .old, .new]) { (progress, change) in
-      print(progress.fractionCompleted, progress.localizedAdditionalDescription ?? "")
+      print("fraction: \(progress.fractionCompleted)", "-", progress.localizedAdditionalDescription ?? "")
 
       if progress.completedUnitCount == 1 && progress.fractionCompleted == 1.0 {
         expectation0.fulfill()
@@ -217,7 +224,7 @@ final class ProgressReportingTests: XCTestCase {
     currentProgress.addChild(groupOperation.progress, withPendingUnitCount: 1)
 
     let token = currentProgress.observe(\.fractionCompleted, options: [.initial, .old, .new]) { (progress, change) in
-      print(progress.fractionCompleted, progress.localizedAdditionalDescription ?? "")
+      print("fraction: \(progress.fractionCompleted)", "-", progress.localizedAdditionalDescription ?? "")
 
       if progress.completedUnitCount == 1 && progress.fractionCompleted == 1.0 {
         expectation0.fulfill()
@@ -263,7 +270,7 @@ final class ProgressReportingTests: XCTestCase {
     currentProgress.addChild(queue.progress, withPendingUnitCount: 1)
 
     let token = currentProgress.observe(\.fractionCompleted, options: [.initial, .old, .new]) { (progress, change) in
-      print(progress.fractionCompleted, progress.localizedAdditionalDescription ?? "")
+      print("fraction: \(progress.fractionCompleted)", "-", progress.localizedAdditionalDescription ?? "")
 
       if progress.completedUnitCount == 1 && progress.fractionCompleted == 1.0 {
         expectation0.fulfill()
@@ -331,7 +338,7 @@ final class ProgressReportingTests: XCTestCase {
     currentProgress.addChild(queue.progress, withPendingUnitCount: 1)
 
     let token = currentProgress.observe(\.fractionCompleted, options: [.initial, .old, .new]) { (progress, change) in
-      print(progress.fractionCompleted, progress.localizedAdditionalDescription ?? "")
+      print("fraction: \(progress.fractionCompleted)", "-", progress.localizedAdditionalDescription ?? "")
 
       if progress.completedUnitCount == 1 && progress.fractionCompleted == 1.0 {
         expectation0.fulfill()
@@ -348,7 +355,7 @@ final class ProgressReportingTests: XCTestCase {
     let expectation0 = self.expectation(description: "Progress is completed")
     let currentProgress = Progress(totalUnitCount: 1)
     let token = currentProgress.observe(\.fractionCompleted, options: [.initial, .old, .new]) { (progress, change) in
-      print(progress.fractionCompleted, progress.localizedAdditionalDescription ?? "")
+      print("fraction: \(progress.fractionCompleted)", "-", progress.localizedAdditionalDescription ?? "")
 
       if progress.completedUnitCount == 1 && progress.fractionCompleted == 1.0 {
         expectation0.fulfill()
@@ -381,12 +388,4 @@ final class ProgressReportingTests: XCTestCase {
     token.invalidate()
   }
 }
-
-
-/**
-
- symbolic bp NSProgress alloc init
-
- */
-
 
