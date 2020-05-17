@@ -28,20 +28,6 @@ import Foundation
 open class GroupOperation: AsynchronousOperation {
   // MARK: - Public Properties
 
-  //TODO: test it
-  public final override private(set) var progress: Progress {
-    get {
-      if #available(iOS 13.0, iOSApplicationExtension 13.0, tvOS 13.0, watchOS 6.0, macOS 10.15, *) {
-        return operationQueue.progress
-      } else {
-        return super.progress
-      }
-    }
-    set {
-
-    }
-  }
-  
   /// The maximum number of queued operations that can execute at the same time inside the `GroupOperation`.
   ///
   /// The value in this property affects only the operations that the current GroupOperation has executing at the same time.
@@ -107,6 +93,10 @@ open class GroupOperation: AsynchronousOperation {
   ///  If you override this method to perform the desired task,  invoke super in your implementation as last statement.
   ///  This method will automatically execute within an autorelease pool provided by Operation, so you do not need to create your own autorelease pool block in your implementation.
   public final override func main() {
+    if #available(iOS 13.0, iOSApplicationExtension 13.0, tvOS 13.0, watchOS 6.0, macOS 10.15, *) {
+      progress.addChild(operationQueue.progress, withPendingUnitCount: 1)
+    }
+
     guard !isCancelled else {
       self.finish()
       return
@@ -151,7 +141,8 @@ open class GroupOperation: AsynchronousOperation {
         if isCancelled {
           operation.cancel()
         }
-        
+
+        // 1. observe when the operation finishes
         dispatchGroup.enter()
         let finishToken = operation.observe(\.isFinished, options: [.old, .new]) { [weak self] (_, changes) in
           guard let self = self else { return }
@@ -160,16 +151,36 @@ open class GroupOperation: AsynchronousOperation {
           
           self.dispatchGroup.leave()
         }
-        
         tokens.append(finishToken)
-        if #available(iOS 13.0, iOSApplicationExtension 13.0, tvOS 13.0, watchOS 6.0, macOS 10.15, *) {
-        operationQueue.progress.totalUnitCount += 1
+
+        // 2. observe when the operation gets cancelled if it's not cancelled yet
+        if !operation.isCancelled {
+          let cancelToken = operation.observe(\.isCancelled, options: [.old, .new]) { [weak self] (operation, changes) in
+            guard let self = self else { return }
+            guard let oldValue = changes.oldValue, let newValue = changes.newValue, oldValue != newValue else { return }
+            guard newValue else { return }
+
+            if #available(iOS 13.0, iOSApplicationExtension 13.0, tvOS 13.0, watchOS 6.0, macOS 10.15, *) {
+              // if the cancelled operation is executing, the queue progress will be updated when the operation finishes
+              if !operation.isExecuting && self.operationQueue.progress.totalUnitCount > 0 {
+                self.operationQueue.progress.totalUnitCount -= 1
+              }
+            }
+          }
+
+          tokens.append(cancelToken)
+
+          // the progress totalUnitCount is increased by 1 only if the operation is not cancelled
+          if #available(iOS 13.0, iOSApplicationExtension 13.0, tvOS 13.0, watchOS 6.0, macOS 10.15, *) {
+            operationQueue.progress.totalUnitCount += 1
+          }
         }
+
         operationQueue.addOperation(operation)
       }
     }
   }
-  
+
   /// Adds a new `operation` to the `GroupOperation`.
   ///
   /// If the `GroupOperation` is already cancelled,  the new  operation will be cancelled before being added.
