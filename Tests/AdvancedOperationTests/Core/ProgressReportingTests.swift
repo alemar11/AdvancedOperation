@@ -69,7 +69,7 @@ final class ProgressReportingTests: XCTestCase {
 //  }
 
   @available(iOS 13.0, iOSApplicationExtension 13.0, tvOS 13.0, watchOS 6.0, macOS 10.15, *)
-  func testProgressReportingWhenAddingCancelledOperationToGroupOperation() {
+  func testProgressReportingWhenAddingCancelledOperationsToGroupOperation() {
     let currentProgress = Progress(totalUnitCount: 1)
     let operation1 = AsyncBlockOperation { $0() }
     let operation2 = BlockOperation { }
@@ -98,7 +98,7 @@ final class ProgressReportingTests: XCTestCase {
   }
 
   @available(iOS 13.0, iOSApplicationExtension 13.0, tvOS 13.0, watchOS 6.0, macOS 10.15, *)
-  func testProgressReportingWhenAddingOperationWhileGroupOperationIsBeingCancelled() {
+  func testProgressReportingWhenAddingOperationsToGroupOperationWhileIsBeingCancelled() {
     let currentProgress = Progress(totalUnitCount: 1)
     let operation1 = RunUntilCancelledAsyncOperation()
     let operation2 = SleepyAsyncOperation(interval1: 1, interval2: 0, interval3: 0)
@@ -145,7 +145,7 @@ final class ProgressReportingTests: XCTestCase {
 
 
   @available(iOS 13.0, iOSApplicationExtension 13.0, tvOS 13.0, watchOS 6.0, macOS 10.15, *)
-  func testProgressReportingGroupOperationCancelledBeforeStarting() {
+  func testProgressReportingOnGroupOperationCancelledBeforeStarting() {
     let currentProgress = Progress(totalUnitCount: 1)
 
     let operation1 = AsyncBlockOperation { complete in
@@ -166,11 +166,6 @@ final class ProgressReportingTests: XCTestCase {
     let operation4 = BlockOperation { sleep(1) }
 
     let expectation0 = self.expectation(description: "Progress is completed")
-    //    let expectation1 = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: operation1, expectedValue: true)
-    //    let expectation2 = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: operation2, expectedValue: true)
-    //    let expectation3 = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: operation3, expectedValue: true)
-    //    let expectation4 = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: operation4, expectedValue: true)
-
     let groupOperation = GroupOperation(operations: [operation1, operation2, operation3, operation4])
 
     currentProgress.addChild(groupOperation.progress, withPendingUnitCount: 1)
@@ -191,7 +186,7 @@ final class ProgressReportingTests: XCTestCase {
   }
 
   @available(iOS 13.0, iOSApplicationExtension 13.0, tvOS 13.0, watchOS 6.0, macOS 10.15, *)
-  func testProgressReportingGroupOperationHavingAnInternalSerialQueue() {
+  func testProgressReportingOnGroupOperationHavingAnInternalSerialQueue() {
     let currentProgress = Progress(totalUnitCount: 1)
 
     let operation1 = AsyncBlockOperation { complete in
@@ -236,7 +231,7 @@ final class ProgressReportingTests: XCTestCase {
   }
 
   @available(iOS 13.0, iOSApplicationExtension 13.0, tvOS 13.0, watchOS 6.0, macOS 10.15, *)
-  func testProgressReportingWhenGroupOperationRunInAnOperationQueue() {
+  func testProgressReportingOnGroupOperationRunningInAnOperationQueue() {
     let queue = OperationQueue()
     let currentProgress = Progress(totalUnitCount: 1)
 
@@ -350,7 +345,15 @@ final class ProgressReportingTests: XCTestCase {
 
   @available(iOS 13.0, iOSApplicationExtension 13.0, tvOS 13.0, watchOS 6.0, macOS 10.15, *)
   func testImplicitProgressUsingSerialQueue() {
+    let expectation0 = self.expectation(description: "Progress is completed")
     let currentProgress = Progress(totalUnitCount: 1)
+    let token = currentProgress.observe(\.fractionCompleted, options: [.initial, .old, .new]) { (progress, change) in
+      print(progress.fractionCompleted, progress.localizedAdditionalDescription ?? "")
+
+      if progress.completedUnitCount == 1 && progress.fractionCompleted == 1.0 {
+        expectation0.fulfill()
+      }
+    }
 
     // ➡️ the rule of thumb for implicit progress is to call becomeCurrent() and resignCurrent() as closely a possible around the code which you want to track.
     // ➡️ Note: Only the first progress attached to the parent during that window will be tracked; the rest will be ignored.
@@ -363,7 +366,6 @@ final class ProgressReportingTests: XCTestCase {
     let operation3 = AsyncBlockOperation { $0() }
     let operation2 = AsyncBlockOperation { $0() }
     let operation4 = BlockOperation { sleep(1); print("operation 4 executed") }
-    let expectation0 = self.expectation(description: "Progress is completed")
 
     queue.progress.totalUnitCount = 4
     queue.addOperation(operation1)
@@ -371,16 +373,9 @@ final class ProgressReportingTests: XCTestCase {
     queue.addOperation(operation3)
     queue.addOperation(operation4)
 
-    let token = currentProgress.observe(\.fractionCompleted, options: [.initial, .old, .new]) { (progress, change) in
-      print(progress.fractionCompleted, progress.localizedAdditionalDescription ?? "")
-
-      if progress.completedUnitCount == 1 && progress.fractionCompleted == 1.0 {
-        expectation0.fulfill()
-      }
-    }
-
     queue.isSuspended = false
     // ➡️ resign immediately when the queue resumes work
+    // TODO: It seems that with implicit progress fractionCompleted isn't reported
     currentProgress.resignCurrent()
     wait(for: [expectation0], timeout: 10)
     token.invalidate()
