@@ -71,8 +71,6 @@ final class ProgressReportingTests: XCTestCase {
   @available(iOS 13.0, iOSApplicationExtension 13.0, tvOS 13.0, watchOS 6.0, macOS 10.15, *)
   func testProgressReportingWhenAddingCancelledOperationToGroupOperation() {
     let currentProgress = Progress(totalUnitCount: 1)
-
-
     let operation1 = AsyncBlockOperation { $0() }
     let operation2 = BlockOperation { }
     let operation3 = BlockOperation { }
@@ -231,7 +229,7 @@ final class ProgressReportingTests: XCTestCase {
       }
     }
 
-    groupOperation.maxConcurrentOperationCount = 1 // TODO, test with a concurrent group operation too
+    groupOperation.maxConcurrentOperationCount = 1
     groupOperation.start()
     wait(for: [expectation1, expectation2, expectation3, expectation4, expectation0], timeout: 10)
     token.invalidate()

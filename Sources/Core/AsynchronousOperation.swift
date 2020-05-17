@@ -36,7 +36,7 @@ open class AsynchronousOperation: Operation, ProgressReporting {
   // TODO: add a setCompletedCount method? not sure
   // TODO: make progress privte? not sure
   @objc
-  public lazy private(set) var progress: Progress = {
+  public final lazy private(set) var progress: Progress = {
     let progress = Progress(totalUnitCount: 1)
     progress.isPausable = false
     progress.isCancellable = true
