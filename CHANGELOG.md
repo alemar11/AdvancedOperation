@@ -1,5 +1,10 @@
 # Changelog
 
+### 6.1.0
+
+- AsyncOperation now conforms to `ProgressReporting`.
+- AsyncOperation progress now gets successfully reported by the OperationQueue running the operation.
+
 ### 6.0.3
 
 - Fix multi-thread issues when calling the start() method.
