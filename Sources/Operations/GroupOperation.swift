@@ -141,8 +141,7 @@ open class GroupOperation: AsynchronousOperation {
         dispatchGroup.enter()
         let finishToken = operation.observe(\.isFinished, options: [.old, .new]) { [weak self] (_, changes) in
           guard let self = self else { return }
-          guard let oldValue = changes.oldValue, let newValue = changes.newValue, oldValue != newValue else { return }
-          guard newValue else { return }
+          guard let oldValue = changes.oldValue, let newValue = changes.newValue, oldValue != newValue, newValue else { return }
 
           self.dispatchGroup.leave()
         }
@@ -151,38 +150,37 @@ open class GroupOperation: AsynchronousOperation {
         // If the GroupOperation is cancelled, operations will be cancelled before being added to the queue.
         if isCancelled {
           operation.cancel()
-        } else
-        // 2. observe when the operation gets cancelled if it's not cancelled yet
-        let cancelToken = operation.observe(\.isCancelled, options: [.old, .new]) { [weak self] (operation, changes) in
-          guard let self = self else { return }
-          guard let oldValue = changes.oldValue, let newValue = changes.newValue, oldValue != newValue else { return }
-          guard newValue else { return }
+        } else {
+          // 2. observe when the operation gets cancelled if it's not cancelled yet
+          let cancelToken = operation.observe(\.isCancelled, options: [.old, .new]) { [weak self] (operation, changes) in
+            guard let self = self else { return }
+            guard let oldValue = changes.oldValue, let newValue = changes.newValue, oldValue != newValue, newValue else { return }
 
-          if #available(iOS 13.0, iOSApplicationExtension 13.0, tvOS 13.0, watchOS 6.0, macOS 10.15, *) {
-            // if the cancelled operation is executing, the queue progress will be updated when the operation finishes
-            if !operation.isExecuting && self.operationQueue.progress.totalUnitCount > 0 {
-              self.operationQueue.progress.totalUnitCount -= 1
+            if #available(iOS 13.0, iOSApplicationExtension 13.0, tvOS 13.0, watchOS 6.0, macOS 10.15, *) {
+              // if the cancelled operation is executing, the queue progress will be updated when the operation finishes
+              if !operation.isExecuting && self.operationQueue.progress.totalUnitCount > 0 {
+                self.operationQueue.progress.totalUnitCount -= 1
+              }
             }
           }
-        }
-        tokens.append(cancelToken)
+          tokens.append(cancelToken)
 
-        // the progress totalUnitCount is increased by 1 only if the operation is not cancelled
-        if #available(iOS 13.0, iOSApplicationExtension 13.0, tvOS 13.0, watchOS 6.0, macOS 10.15, *) {
-          operationQueue.progress.totalUnitCount += 1
+          // the progress totalUnitCount is increased by 1 only if the operation is not cancelled
+          if #available(iOS 13.0, iOSApplicationExtension 13.0, tvOS 13.0, watchOS 6.0, macOS 10.15, *) {
+            operationQueue.progress.totalUnitCount += 1
+          }
         }
+
+        operationQueue.addOperation(operation)
       }
-
-      operationQueue.addOperation(operation)
     }
   }
-}
 
-/// Adds a new `operation` to the `GroupOperation`.
-///
-/// If the `GroupOperation` is already cancelled,  the new  operation will be cancelled before being added.
-/// If the `GroupOperation` is finished, the new operation will be ignored.
-public final func addOperation(_ operation: Operation) {
-  addOperations(operation)
-}
+  /// Adds a new `operation` to the `GroupOperation`.
+  ///
+  /// If the `GroupOperation` is already cancelled,  the new  operation will be cancelled before being added.
+  /// If the `GroupOperation` is finished, the new operation will be ignored.
+  public final func addOperation(_ operation: Operation) {
+    addOperations(operation)
+  }
 }
