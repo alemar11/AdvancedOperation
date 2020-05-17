@@ -30,7 +30,7 @@ public typealias AsyncOperation = AsynchronousOperation
 /// Subclasses must override `main` to perform any work and, if they are asynchronous, call the `finish()` method to complete the execution.
 open class AsynchronousOperation: Operation, ProgressReporting {
   // MARK: - Public Properties
-  
+
   /// The `progress` property represents a total progress of the operation during its execution.
   @objc
   public final lazy private(set) var progress: Progress = {
@@ -53,23 +53,23 @@ open class AsynchronousOperation: Operation, ProgressReporting {
   public final override var isExecuting: Bool {
     return state == .executing
   }
-  
+
   public final override var isFinished: Bool {
     return state == .finished
   }
-  
+
   public final override var isAsynchronous: Bool { return isConcurrent }
-  
+
   public final override var isConcurrent: Bool { return true }
-  
+
   // MARK: - Private Properties
-  
+
   /// Serial queue for making state changes atomic under the constraint of having to send KVO willChange/didChange notifications.
   private let stateChangeQueue = DispatchQueue(label: "\(identifier).AsynchronousOperation.stateChange")
-  
+
   /// Private backing store for `state`
   private var _state: Atomic<State> = Atomic(.pending)
-  
+
   /// The state of the operation
   private var state: State {
     get {
@@ -103,15 +103,15 @@ open class AsynchronousOperation: Operation, ProgressReporting {
       }
     }
   }
-  
+
   // MARK: - Foundation.Operation
-  
+
   private let startLock = UnfairLock()
-  
+
   public final override func start() {
     startLock.lock()
     defer { startLock.unlock() }
-    
+
     switch state {
     case .finished:
       return
@@ -121,7 +121,7 @@ open class AsynchronousOperation: Operation, ProgressReporting {
       guard isReady else {
         fatalError("The operation \(operationName) is not yet ready to execute.")
       }
-      
+
       // early bailing out
       guard !isCancelled else {
         finish()
@@ -139,14 +139,14 @@ open class AsynchronousOperation: Operation, ProgressReporting {
         }
       }
       main()
-      
+
       // At this point `main()` has already returned but it doesn't mean that the operation is finished.
       // Only calling `finish()` will finish the operation at this point.
     }
   }
-  
+
   // MARK: - Public Methods
-  
+
   ///  The default implementation of this method does nothing.
   /// You should override this method to perform the desired task. In your implementation, do not invoke super.
   ///  This method will automatically execute within an autorelease pool provided by Operation, so you do not need to create your own autorelease pool block in your implementation.
@@ -154,12 +154,12 @@ open class AsynchronousOperation: Operation, ProgressReporting {
   open override func main() {
     preconditionFailure("Subclasses must implement `main()`.")
   }
-  
+
   /// Finishes the operation.
   /// - Important: You should never call this method outside the operation main execution scope.
   public final func finish() {
     // State can also be "pending" here if the operation was cancelled before it was started.
-    
+
     switch state {
     case .pending, .executing:
       if progress.completedUnitCount != progress.totalUnitCount {
@@ -173,13 +173,13 @@ open class AsynchronousOperation: Operation, ProgressReporting {
       preconditionFailure("The finish() method shouldn't be called more than once for \(operationName).")
     }
   }
-  
+
   // MARK: - Debug
-  
+
   open override var description: String {
     return debugDescription
   }
-  
+
   open override var debugDescription: String {
     return "\(operationName) – \(isCancelled ? "cancelled (\(state))" : "\(state)")"
   }
@@ -193,7 +193,7 @@ extension AsynchronousOperation {
     case pending // waiting to be executed
     case executing
     case finished
-    
+
     /// The `#keyPath` for the `Operation` property that's associated with this value.
     var objcKeyPath: String {
       switch self {
@@ -202,7 +202,7 @@ extension AsynchronousOperation {
       case .finished: return #keyPath(isFinished)
       }
     }
-    
+
     var description: String {
       switch self {
       case .pending: return "pending"
@@ -210,11 +210,11 @@ extension AsynchronousOperation {
       case .finished: return "finished"
       }
     }
-    
+
     var debugDescription: String {
       return description
     }
-    
+
     func canTransition(to newState: State) -> Bool {
       switch (self, newState) {
       case (.pending, .executing): return true
