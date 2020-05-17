@@ -73,12 +73,11 @@ final class ProgressReportingTests: XCTestCase {
   }
 
   @available(iOS 13.0, iOSApplicationExtension 13.0, tvOS 13.0, watchOS 6.0, macOS 10.15, *)
-  func testCancel() {
+  func testCancelProgressReport() {
     let operation = AsyncBlockOperation { $0() }
+    let expectation = XCTKVOExpectation(keyPath: #keyPath(Operation.isCancelled), object: operation, expectedValue: true)
     operation.progress.cancel()
-    XCTAssertTrue(operation.progress.isCancellable)
-    XCTAssertTrue(operation.progress.isCancelled)
-    XCTAssertTrue(operation.isCancelled)
+    wait(for: [expectation], timeout: 3)
   }
 
   @available(iOS 13.0, iOSApplicationExtension 13.0, tvOS 13.0, watchOS 6.0, macOS 10.15, *)
