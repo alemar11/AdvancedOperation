@@ -32,6 +32,9 @@ final class ProgressReportingTests: XCTestCase {
   @available(iOS 13.0, iOSApplicationExtension 13.0, tvOS 13.0, watchOS 6.0, macOS 10.15, *)
   func testProgressReportingWhenAddingOperationsWhileGroupOperationIsExecuting() {
     // ⚠️ backwards moving progress scenario.
+    //
+    // if the queue is serial, the fractionCompleted doesn't surpass 1.0
+    // if the queue is concurrent, the fractionCompleted may surpass 1.0
     let currentProgress = Progress(totalUnitCount: 1)
     let groupOperation = GroupOperation()
 
@@ -39,9 +42,10 @@ final class ProgressReportingTests: XCTestCase {
       groupOperation.addOperation(BlockOperation())
       groupOperation.addOperation(BlockOperation())
       groupOperation.addOperation(BlockOperation())
-      groupOperation.addOperation(AsyncBlockOperation { $0() })
-      groupOperation.addOperation(AsyncBlockOperation { $0() })
-      groupOperation.addOperation(AsyncBlockOperation { $0() })
+      groupOperation.addOperation(AsyncBlockOperation {
+        groupOperation.addOperation(AsyncBlockOperation { $0() })
+        groupOperation.addOperation(AsyncBlockOperation { $0() })
+        $0() })
     }
 
     groupOperation.addOperation(operation1)
@@ -59,7 +63,7 @@ final class ProgressReportingTests: XCTestCase {
       }
     }
 
-    groupOperation.maxConcurrentOperationCount = 3
+    groupOperation.maxConcurrentOperationCount = 1
     groupOperation.start()
     wait(for: [expectation0, expectation1], timeout: 5)
     print(groupOperation.isFinished)

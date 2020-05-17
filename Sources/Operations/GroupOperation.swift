@@ -167,7 +167,6 @@ open class GroupOperation: AsynchronousOperation {
               }
             }
           }
-
           tokens.append(cancelToken)
 
           // the progress totalUnitCount is increased by 1 only if the operation is not cancelled

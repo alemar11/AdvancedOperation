@@ -30,10 +30,6 @@ public typealias AsyncOperation = AsynchronousOperation
 /// Subclasses must override `main` to perform any work and, if they are asynchronous, call the `finish()` method to complete the execution.
 open class AsynchronousOperation: Operation, ProgressReporting {
   // MARK: - Public Properties
-
-  // TODO: test progress cancel method
-  // TODO: add a setCompletedCount method? not sure
-  // TODO: make progress privte? not sure
   
   /// The `progress` property represents a total progress of the operation during its execution.
   @objc
