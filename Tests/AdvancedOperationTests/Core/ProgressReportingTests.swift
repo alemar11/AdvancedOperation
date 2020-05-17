@@ -292,6 +292,43 @@ final class ProgressReportingTests: XCTestCase {
 
   // MARK: AsyncOperation
 
+    @available(iOS 13.0, iOSApplicationExtension 13.0, tvOS 13.0, watchOS 6.0, macOS 10.15, *)
+    func testCustomProgressReporting() {
+      let currentProgress = Progress(totalUnitCount: 1)
+      let queue = OperationQueue()
+      queue.maxConcurrentOperationCount = 1
+      queue.isSuspended = true
+
+      let operation1 = ProgressReportingAsyncOperation()
+      let operation2 = ProgressReportingAsyncOperation()
+
+      let expectation0 = self.expectation(description: "Progress is completed")
+      let expectation1 = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: operation1, expectedValue: true)
+      let expectation2 = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: operation2, expectedValue: true)
+
+      queue.progress.totalUnitCount = 2
+      queue.addOperation(operation1)
+      queue.addOperation(operation2)
+
+      currentProgress.addChild(queue.progress, withPendingUnitCount: 1)
+
+      var fractions = [Double]()
+      let expectedFractions = [0.0, 0.125, 0.25, 0.375, 0.5, 0.625, 0.75, 0.875,  1.0]
+      let token = currentProgress.observe(\.fractionCompleted, options: [.initial, .old, .new]) { (progress, change) in
+        print("fraction: \(progress.fractionCompleted)", "-", progress.localizedAdditionalDescription ?? "")
+        fractions.append(progress.fractionCompleted
+        )
+        if progress.completedUnitCount == 1 && progress.fractionCompleted == 1.0 {
+          expectation0.fulfill()
+        }
+      }
+
+      queue.isSuspended = false
+      wait(for: [expectation1, expectation2, expectation0], timeout: 10)
+      XCTAssertEqual(expectedFractions, fractions)
+      token.invalidate()
+    }
+
   @available(iOS 13.0, iOSApplicationExtension 13.0, tvOS 13.0, watchOS 6.0, macOS 10.15, *)
   func testExplicitProgressUsingSerialQueue() {
     // AsyncOperation implementation needs to call super.start() in order to enable progress reporting
