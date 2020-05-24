@@ -77,6 +77,7 @@ open class AsynchronousOperation: Operation, ProgressReporting {
     }
     set {
       // credits: https://gist.github.com/ole/5034ce19c62d248018581b1db0eabb2b
+      // credits: https://github.com/radianttap/Swift-Essentials/issues/4
       // A state mutation should be a single atomic transaction. We can't simply perform
       // everything on the isolation queue for `_state` because the KVO willChange/didChange
       // notifications have to be sent from outside the isolation queue.
