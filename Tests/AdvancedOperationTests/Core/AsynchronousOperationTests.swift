@@ -405,6 +405,45 @@ final class AsynchronousOperationTests: XCTestCase {
     XCTAssertTrue(operation3.isCancelled)
     XCTAssertTrue(operation3.isFinished)
   }
+
+  func testStateChangeKVOSequenceIsEqualToOperation() {
+    // Ensures that KVO events sequence for base Operation and AsyncOperation is the same
+    struct Event: Equatable {
+      let isPrior: Bool
+      let oldValue: Bool?
+      let newValue: Bool?
+    }
+
+    let operation = BlockOperation()
+    let operation2 = AsynchronousBlockOperation { complete in complete() }
+    let expectation = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: operation2, expectedValue: true)
+
+    var eventsForOperation = [Event]()
+    var eventsForOperation2 = [Event]()
+
+    let tokenExecuting = operation.observe(\.isExecuting, options: [.prior,.old, .new]) { (op, change) in
+      eventsForOperation.append(Event(isPrior: change.isPrior, oldValue: change.oldValue, newValue: change.newValue))
+    }
+    let tokenFinishing = operation.observe(\.isFinished, options: [.prior, .old, .new]) { (op, change) in
+       eventsForOperation.append(Event(isPrior: change.isPrior, oldValue: change.oldValue, newValue: change.newValue))
+    }
+
+    let tokenExecuting2 = operation.observe(\.isExecuting, options: [.prior,.old, .new]) { (op, change) in
+      eventsForOperation2.append(Event(isPrior: change.isPrior, oldValue: change.oldValue, newValue: change.newValue))
+    }
+    let tokenFinishing2 = operation.observe(\.isFinished, options: [.prior, .old, .new]) { (op, change) in
+       eventsForOperation2.append(Event(isPrior: change.isPrior, oldValue: change.oldValue, newValue: change.newValue))
+    }
+    operation.start()
+    operation2.start()
+
+    wait(for: [expectation], timeout: 2)
+    XCTAssertEqual(eventsForOperation, eventsForOperation2)
+    tokenExecuting.invalidate()
+    tokenExecuting2.invalidate()
+    tokenFinishing.invalidate()
+    tokenFinishing2.invalidate()
+  }
 }
 
 final class GateOperation: Operation {
