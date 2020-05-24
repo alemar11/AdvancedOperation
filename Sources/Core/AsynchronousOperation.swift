@@ -90,8 +90,8 @@ open class AsynchronousOperation: Operation, ProgressReporting {
         let oldValue = _state.value
         guard newValue != oldValue else { return }
 
-        willChangeValue(forKey: oldValue.objcKeyPath)
         willChangeValue(forKey: newValue.objcKeyPath)
+        willChangeValue(forKey: oldValue.objcKeyPath)
 
         _state.mutate {
           assert($0.canTransition(to: newValue), "Performing an invalid state transition from: \($0) to: \(newValue) for \(operationName).")
