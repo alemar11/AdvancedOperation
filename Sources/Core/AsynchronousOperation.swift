@@ -43,16 +43,16 @@ open class AsynchronousOperation: Operation, ProgressReporting {
     return progress
   }()
 
+  open override var isReady: Bool {
+    return state == .ready && super.isReady
+  }
+
   public final override var isExecuting: Bool {
     return state == .executing
   }
 
   public final override var isFinished: Bool {
     return state == .finished
-  }
-
-  open override var isReady: Bool {
-    return state == .ready && super.isReady
   }
 
   public final override var isAsynchronous: Bool { return isConcurrent }
