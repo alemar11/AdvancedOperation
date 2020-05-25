@@ -45,3 +45,6 @@ op2.start() // Nothing happens (no exceptions either)
 
 If an operation is finished, calling `cancel()`  won't change its `isCancelled` value to *true*.
 
+### OperationQueue Progress Reporting
+ 
+ Calling `cancel()` on the  OperationQueue progress doesn't cancel all the running operations.
