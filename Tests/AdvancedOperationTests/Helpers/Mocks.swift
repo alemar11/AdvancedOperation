@@ -276,3 +276,29 @@ internal final class IOGroupOperation: GroupOperation {
     self.addOperation(exitOperation)
   }
 }
+
+public extension Operation {
+  func printStateChanges() -> [NSKeyValueObservation] {
+    let cancel = observe(\.isCancelled, options: [.old, .new]) { (operation, changes) in
+      guard let oldValue = changes.oldValue, let newValue = changes.newValue else { return }
+      guard oldValue != newValue else { return }
+      guard newValue else { return }
+      print("\(operation.operationName) is cancelled.")
+    }
+
+    let executing = observe(\.isExecuting, options: [.old, .new]) { (operation, changes) in
+      guard let oldValue = changes.oldValue, let newValue = changes.newValue else { return }
+      guard oldValue != newValue else { return }
+      guard newValue else { return }
+      print("\(operation.operationName) is executing.")
+    }
+
+    let finish = observe(\.isFinished, options: [.old, .new]) { (operation, changes) in
+      guard let oldValue = changes.oldValue, let newValue = changes.newValue else { return }
+      guard oldValue != newValue else { return }
+      guard newValue else { return }
+      print("\(operation.operationName) is finished.")
+    }
+    return [cancel, executing, finish]
+  }
+}
