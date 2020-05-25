@@ -4,8 +4,6 @@
 [![Build Status](https://github.com/tinrobots/AdvancedOperation/workflows/AdvancedOperation%20CI/badge.svg?branch=master)](https://github.com/tinrobots/AdvancedOperation/actions)
 [![Travis CI](https://travis-ci.org/tinrobots/AdvancedOperation.svg?branch=master)](https://travis-ci.org/tinrobots/AdvancedOperation)
 
-[![codecov](https://codecov.io/gh/tinrobots/AdvancedOperation/branch/master/graph/badge.svg)](https://codecov.io/gh/tinrobots/AdvancedOperation)
-
 ## AdvancedOperation
 [![GitHub release](https://img.shields.io/github/release/tinrobots/AdvancedOperation.svg)](https://github.com/tinrobots/AdvancedOperation/releases) 
 
@@ -39,21 +37,21 @@ platform :ios, '11.0'
 use_frameworks!
 
 target '<Your Target Name>' do
-    pod 'AdvancedOperation', '~> 6.0.3'
+    pod 'AdvancedOperation', '~> 6.1.0'
 end
 ```
 
 ### Carthage
 
 ```ogdl
-github "tinrobots/AdvancedOperation" ~> 6.0.3
+github "tinrobots/AdvancedOperation" ~> 6.1.0
 ```
 
 ### Swift Package Manager
 
 ```swift
 dependencies: [
-    .package(url: "https://github.com/tinrobots/AdvancedOperation.git", from: "6.0.3")
+    .package(url: "https://github.com/tinrobots/AdvancedOperation.git", from: "6.1.0")
 ]
 ```
 

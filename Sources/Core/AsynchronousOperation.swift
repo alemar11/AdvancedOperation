@@ -28,29 +28,51 @@ public typealias AsyncOperation = AsynchronousOperation
 /// An abstract thread safe subclass of `Operation` to support asynchronous operations.
 ///
 /// Subclasses must override `main` to perform any work and, if they are asynchronous, call the `finish()` method to complete the execution.
-open class AsynchronousOperation: Operation {
+open class AsynchronousOperation: Operation, ProgressReporting {
   // MARK: - Public Properties
-  
+
+  /// The `progress` property represents a total progress of the operation during its execution.
+  @objc
+  public final lazy private(set) var progress: Progress = {
+    let progress = Progress(totalUnitCount: 1)
+    progress.isPausable = false
+    progress.isCancellable = true
+    progress.cancellationHandler = { [weak self] in
+      if let self = self, !self.isCancelled {
+        print(progress.isCancelled)
+        self.cancel()
+      }
+    }
+    return progress
+  }()
+
+  open override var isReady: Bool {
+    return state == .ready && super.isReady
+  }
+
   public final override var isExecuting: Bool {
     return state == .executing
   }
-  
+
   public final override var isFinished: Bool {
     return state == .finished
   }
-  
+
   public final override var isAsynchronous: Bool { return isConcurrent }
-  
+
   public final override var isConcurrent: Bool { return true }
-  
+
   // MARK: - Private Properties
-  
+
+  /// Lock used to prevent data races when updating the progress.
+  private let progressLock = UnfairLock()
+
   /// Serial queue for making state changes atomic under the constraint of having to send KVO willChange/didChange notifications.
   private let stateChangeQueue = DispatchQueue(label: "\(identifier).AsynchronousOperation.stateChange")
-  
+
   /// Private backing store for `state`
-  private var _state: Atomic<State> = Atomic(.pending)
-  
+  private var _state: Atomic<State> = Atomic(.ready)
+
   /// The state of the operation
   private var state: State {
     get {
@@ -58,6 +80,7 @@ open class AsynchronousOperation: Operation {
     }
     set {
       // credits: https://gist.github.com/ole/5034ce19c62d248018581b1db0eabb2b
+      // credits: https://github.com/radianttap/Swift-Essentials/issues/4
       // A state mutation should be a single atomic transaction. We can't simply perform
       // everything on the isolation queue for `_state` because the KVO willChange/didChange
       // notifications have to be sent from outside the isolation queue.
@@ -70,93 +93,68 @@ open class AsynchronousOperation: Operation {
         // willChange/didChange notifications only for the key paths that actually change.
         let oldValue = _state.value
         guard newValue != oldValue else { return }
-        
-        if let oldKeyPath = oldValue.objcKeyPath {
-          willChangeValue(forKey: oldKeyPath)
-        }
-        if let newKeyPath = newValue.objcKeyPath {
-          willChangeValue(forKey: newKeyPath)
-        }
-        
+
+        willChangeValue(forKey: newValue.objcKeyPath)
+        willChangeValue(forKey: oldValue.objcKeyPath)
+
         _state.mutate {
           assert($0.canTransition(to: newValue), "Performing an invalid state transition from: \($0) to: \(newValue) for \(operationName).")
           $0 = newValue
         }
-        
-        if let oldKeyPath = oldValue.objcKeyPath {
-          didChangeValue(forKey: oldKeyPath)
-        }
-        if let newKeyPath = newValue.objcKeyPath {
-          didChangeValue(forKey: newKeyPath)
-        }
+
+        didChangeValue(forKey: oldValue.objcKeyPath)
+        didChangeValue(forKey: newValue.objcKeyPath)
       }
     }
   }
-  
+
   // MARK: - Foundation.Operation
-  
+
+  // Lock used to prevent data races if start() gets called multiple times from different threads
   private let startLock = UnfairLock()
-  
+
   public final override func start() {
     startLock.lock()
     defer { startLock.unlock() }
-    
+
     switch state {
     case .finished:
       return
     case .executing:
       fatalError("The operation \(operationName) is already executing.")
-    case .pending:
+    case .ready:
+      // the internal state is ready but the isReady variable can be overidden by subclasses
       guard isReady else {
         fatalError("The operation \(operationName) is not yet ready to execute.")
       }
-      
+
       // early bailing out
       guard !isCancelled else {
         finish()
         return
       }
-      
-      // Calling super.start() here causes some KVO issues (the doc says "Your (concurrent) custom implementation must not call super at any time").
-      // The default implementation of this method ("start") updates the execution state of the operation and calls the receiver’s main() method.
-      // This method also performs several checks to ensure that the operation can actually run.
-      // For example, if the receiver was cancelled or is already finished, this method simply returns without calling main().
-      // If the operation is currently executing or is not ready to execute, this method throws an NSInvalidArgumentException exception.
-      
-      // Investigation on how super.start() works:
-      // If start() is called on a not yet ready operation, super.start() will throw an exception.
-      // If start() is called multiple times from different threads, super.start() will throw an exception.
-      // If start() is called on an already cancelled but noy yet executed operation, super.start() will change its state to finished.
-      // The isReady value is kept to true once the Operation is finished.
-      // The operation readiness is evaluated after checking if the operation is already finished.
-      // (In fact, if a dependency is added once the operation is already finished no exceptions are thrown if we attempt to start the operation again
-      // (silly test, I know):
-      //
-      // let op1 = BlockOperation()
-      // let op2 = BlockOperation()
-      // print(op2.isReady) // true
-      // op2.start()
-      // print(op2.isFinished) // true
-      // op2.addDependency(op1)
-      // print(op2.isReady) // false
-      // op2.start() // Nothing happens (no exceptions either)
-      //
-      // Additional considerations:
-      // If an operation has finished, calling cancel() on it won't change its isCancelled value to true.
-      
-      // If multiple calls are made to start() from different threads at the same time
-      // setting the same state will trigger an assert in the state setter.
-      // A lock isn't required.
+
       state = .executing
+
+      // The OperationQueue progress reporting works correcly only if used with super.start()
+      // but calling super.start() shouldn't be done when implementing custom concurrent operations.
+      // To fix that we use a different progress instance
+      if #available(iOS 13.0, iOSApplicationExtension 13.0, tvOS 13.0, watchOS 6.0, macOS 10.15, *) {
+        progressLock.lock()
+        if let currentQueue = OperationQueue.current, currentQueue.progress.totalUnitCount > 0 {
+          currentQueue.progress.addChild(progress, withPendingUnitCount: 1)
+        }
+        progressLock.unlock()
+      }
       main()
-      
+
       // At this point `main()` has already returned but it doesn't mean that the operation is finished.
       // Only calling `finish()` will finish the operation at this point.
     }
   }
-  
+
   // MARK: - Public Methods
-  
+
   ///  The default implementation of this method does nothing.
   /// You should override this method to perform the desired task. In your implementation, do not invoke super.
   ///  This method will automatically execute within an autorelease pool provided by Operation, so you do not need to create your own autorelease pool block in your implementation.
@@ -164,29 +162,43 @@ open class AsynchronousOperation: Operation {
   open override func main() {
     preconditionFailure("Subclasses must implement `main()`.")
   }
-  
+
   /// Finishes the operation.
   /// - Important: You should never call this method outside the operation main execution scope.
   public final func finish() {
-    // State can also be "pending" here if the operation was cancelled before it was started.
-    
-    switch state {
-    case .pending, .executing:
+    // State can also be "ready" here if the operation was cancelled before it was started.
+    if !isFinished {
+      progressLock.lock()
+      if progress.completedUnitCount != progress.totalUnitCount {
+        progress.completedUnitCount = progress.totalUnitCount
+      }
+      progressLock.unlock()
+
       // If multiple calls are made to finish() from different threads at the same time
       // setting the same state will trigger an assert in the state setter.
       // A lock isn't required.
       state = .finished
-    case .finished:
+    } else {
       preconditionFailure("The finish() method shouldn't be called more than once for \(operationName).")
     }
   }
-  
+
+  open override func cancel() {
+    super.cancel()
+
+    progressLock.lock()
+    if !progress.isCancelled {
+      progress.cancel()
+    }
+    progressLock.unlock()
+  }
+
   // MARK: - Debug
-  
+
   open override var description: String {
     return debugDescription
   }
-  
+
   open override var debugDescription: String {
     return "\(operationName) – \(isCancelled ? "cancelled (\(state))" : "\(state)")"
   }
@@ -197,35 +209,35 @@ open class AsynchronousOperation: Operation {
 extension AsynchronousOperation {
   /// All the possible states an Operation can be in.
   enum State: Int, CustomStringConvertible, CustomDebugStringConvertible {
-    case pending // waiting to be executed
+    case ready // waiting to be executed
     case executing
     case finished
-    
+
     /// The `#keyPath` for the `Operation` property that's associated with this value.
-    var objcKeyPath: String? {
+    var objcKeyPath: String {
       switch self {
-      case .pending: return nil
+      case .ready: return #keyPath(isReady)
       case .executing: return #keyPath(isExecuting)
       case .finished: return #keyPath(isFinished)
       }
     }
-    
+
     var description: String {
       switch self {
-      case .pending: return "pending"
+      case .ready: return "ready"
       case .executing: return "executing"
       case .finished: return "finished"
       }
     }
-    
+
     var debugDescription: String {
       return description
     }
-    
+
     func canTransition(to newState: State) -> Bool {
       switch (self, newState) {
-      case (.pending, .executing): return true
-      case (.pending, .finished): return true
+      case (.ready, .executing): return true
+      case (.ready, .finished): return true
       case (.executing, .finished): return true
       default: return false
       }

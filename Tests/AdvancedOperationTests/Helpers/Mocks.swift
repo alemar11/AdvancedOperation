@@ -67,6 +67,26 @@ internal final class SleepyAsyncOperation: AsynchronousOperation {
   }
 }
 
+final class ProgressReportingAsyncOperation: AsyncOperation {
+  override func main() {
+    DispatchQueue.global().async {
+      if self.isCancelled {
+        self.finish()
+        return
+      }
+      self.progress.totalUnitCount = 4
+      usleep(1_000_000) // 1 sec
+      self.progress.completedUnitCount = 1
+      usleep(500_000) // 0,5 sec
+      self.progress.completedUnitCount = 2
+      usleep(100_000) // 0,1 sec
+      self.progress.completedUnitCount = 3
+      usleep(1000) // 0,001 sec
+      self.finish()
+    }
+  }
+}
+
 // MARK: - AsynchronousOperation
 
 internal final class NotExecutableOperation: AsynchronousOperation {
@@ -254,5 +274,31 @@ internal final class IOGroupOperation: GroupOperation {
     self.addOperation(inject)
     self.addOperation(outputOperation)
     self.addOperation(exitOperation)
+  }
+}
+
+public extension Operation {
+  func printStateChanges() -> [NSKeyValueObservation] {
+    let cancel = observe(\.isCancelled, options: [.old, .new]) { (operation, changes) in
+      guard let oldValue = changes.oldValue, let newValue = changes.newValue else { return }
+      guard oldValue != newValue else { return }
+      guard newValue else { return }
+      print("\(operation.operationName) is cancelled.")
+    }
+
+    let executing = observe(\.isExecuting, options: [.old, .new]) { (operation, changes) in
+      guard let oldValue = changes.oldValue, let newValue = changes.newValue else { return }
+      guard oldValue != newValue else { return }
+      guard newValue else { return }
+      print("\(operation.operationName) is executing.")
+    }
+
+    let finish = observe(\.isFinished, options: [.old, .new]) { (operation, changes) in
+      guard let oldValue = changes.oldValue, let newValue = changes.newValue else { return }
+      guard oldValue != newValue else { return }
+      guard newValue else { return }
+      print("\(operation.operationName) is finished.")
+    }
+    return [cancel, executing, finish]
   }
 }
