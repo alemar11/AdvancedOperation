@@ -125,6 +125,8 @@ open class GroupOperation: AsynchronousOperation {
     dispatchQueue.sync {
       super.cancel()
       operationQueue.cancelAllOperations()
+      // If the GroupOperation gets cancelled before being executed, the underlying operation queue is still suspended
+      // and the operations will be cancelled without having the chance to finish
     }
   }
 
