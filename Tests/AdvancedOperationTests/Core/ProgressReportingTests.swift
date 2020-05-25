@@ -78,6 +78,16 @@ final class ProgressReportingTests: XCTestCase {
     let expectation = XCTKVOExpectation(keyPath: #keyPath(Operation.isCancelled), object: operation, expectedValue: true)
     operation.progress.cancel()
     wait(for: [expectation], timeout: 3)
+    XCTAssertTrue(operation.progress.isCancelled)
+  }
+
+  @available(iOS 13.0, iOSApplicationExtension 13.0, tvOS 13.0, watchOS 6.0, macOS 10.15, *)
+  func testOperationCancellationShouldSetProgressReportToCancelled() {
+    let operation = AsyncBlockOperation { $0() }
+    let expectation = XCTKVOExpectation(keyPath: #keyPath(Operation.isCancelled), object: operation, expectedValue: true)
+    operation.cancel()
+    wait(for: [expectation], timeout: 3)
+    XCTAssertTrue(operation.progress.isCancelled)
   }
 
   @available(iOS 13.0, iOSApplicationExtension 13.0, tvOS 13.0, watchOS 6.0, macOS 10.15, *)
@@ -434,5 +444,16 @@ final class ProgressReportingTests: XCTestCase {
     wait(for: [expectation0], timeout: 10)
     token.invalidate()
   }
+
+  // TODO
+//  func testInvestigationMultipleFinish() {
+//    let op = AsyncBlockOperation { (complete) in
+//      complete()
+//    }
+//
+//    DispatchQueue.concurrentPerform(iterations: 100) { (i) in
+//      op.finish()
+//    }
+//  }
 }
 

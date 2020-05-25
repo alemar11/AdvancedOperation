@@ -38,7 +38,10 @@ open class AsynchronousOperation: Operation, ProgressReporting {
     progress.isPausable = false
     progress.isCancellable = true
     progress.cancellationHandler = { [weak self] in
-      self?.cancel()
+      if let self = self, !self.isCancelled {
+        print(progress.isCancelled)
+        self.cancel()
+      }
     }
     return progress
   }()
@@ -104,7 +107,7 @@ open class AsynchronousOperation: Operation, ProgressReporting {
 
   // MARK: - Foundation.Operation
 
-  // Lock used to prevent data races if start() gest called from different threads multiple times
+  // Lock used to prevent data races if start() gets called multiple times from different threads
   private let startLock = UnfairLock()
 
   public final override func start() {
@@ -117,6 +120,7 @@ open class AsynchronousOperation: Operation, ProgressReporting {
     case .executing:
       fatalError("The operation \(operationName) is already executing.")
     case .ready:
+      // the internal state is ready but the isReady variable can be overidden by subclasses
       guard isReady else {
         fatalError("The operation \(operationName) is not yet ready to execute.")
       }
@@ -133,9 +137,11 @@ open class AsynchronousOperation: Operation, ProgressReporting {
       // but calling super.start() shouldn't be done when implementing custom concurrent operations.
       // To fix that we use a different progress instance
       if #available(iOS 13.0, iOSApplicationExtension 13.0, tvOS 13.0, watchOS 6.0, macOS 10.15, *) {
+        progressLock.lock()
         if let currentQueue = OperationQueue.current, currentQueue.progress.totalUnitCount > 0 {
           currentQueue.progress.addChild(progress, withPendingUnitCount: 1)
         }
+        progressLock.unlock()
       }
       main()
 
@@ -154,23 +160,37 @@ open class AsynchronousOperation: Operation, ProgressReporting {
     preconditionFailure("Subclasses must implement `main()`.")
   }
 
+  // Lock used to prevent data races when updating the progress
+  private let progressLock = UnfairLock()
+
   /// Finishes the operation.
   /// - Important: You should never call this method outside the operation main execution scope.
   public final func finish() {
-    // State can also be "pending" here if the operation was cancelled before it was started.
-
-    switch state {
-    case .ready, .executing:
+    // State can also be "ready" here if the operation was cancelled before it was started.
+    if !isFinished {
+      progressLock.lock()
       if progress.completedUnitCount != progress.totalUnitCount {
         progress.completedUnitCount = progress.totalUnitCount
       }
+      progressLock.unlock()
+
       // If multiple calls are made to finish() from different threads at the same time
       // setting the same state will trigger an assert in the state setter.
       // A lock isn't required.
       state = .finished
-    case .finished:
+    } else {
       preconditionFailure("The finish() method shouldn't be called more than once for \(operationName).")
     }
+  }
+
+  open override func cancel() {
+    super.cancel()
+
+    progressLock.lock()
+    if !progress.isCancelled {
+      progress.cancel()
+    }
+    progressLock.unlock()
   }
 
   // MARK: - Debug
