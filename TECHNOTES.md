@@ -47,4 +47,5 @@ If an operation is finished, calling `cancel()`  won't change its `isCancelled` 
 
 ### OperationQueue Progress Reporting
  
- Calling `cancel()` on the  OperationQueue progress doesn't cancel all the running operations.
+- Calling `cancel()` on the  OperationQueue progress doesn't cancel all the running operations.
+- [NSProgress Documentation Conflicts](https://mjtsai.com/blog/2020/05/04/nsprogress-documentation-conflicts/)
