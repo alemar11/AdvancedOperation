@@ -444,16 +444,5 @@ final class ProgressReportingTests: XCTestCase {
     wait(for: [expectation0], timeout: 10)
     token.invalidate()
   }
-
-  // TODO
-//  func testInvestigationMultipleFinish() {
-//    let op = AsyncBlockOperation { (complete) in
-//      complete()
-//    }
-//
-//    DispatchQueue.concurrentPerform(iterations: 100) { (i) in
-//      op.finish()
-//    }
-//  }
 }
 
