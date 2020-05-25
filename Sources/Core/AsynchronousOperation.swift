@@ -64,6 +64,9 @@ open class AsynchronousOperation: Operation, ProgressReporting {
 
   // MARK: - Private Properties
 
+  /// Lock used to prevent data races when updating the progress.
+  private let progressLock = UnfairLock()
+
   /// Serial queue for making state changes atomic under the constraint of having to send KVO willChange/didChange notifications.
   private let stateChangeQueue = DispatchQueue(label: "\(identifier).AsynchronousOperation.stateChange")
 
@@ -159,9 +162,6 @@ open class AsynchronousOperation: Operation, ProgressReporting {
   open override func main() {
     preconditionFailure("Subclasses must implement `main()`.")
   }
-
-  // Lock used to prevent data races when updating the progress
-  private let progressLock = UnfairLock()
 
   /// Finishes the operation.
   /// - Important: You should never call this method outside the operation main execution scope.
