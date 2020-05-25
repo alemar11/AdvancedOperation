@@ -31,19 +31,6 @@ final class AsynchronousOperationTests: XCTestCase {
     #endif
   }
 
-  func testPendingKVO() {
-    let operation = SleepyAsyncOperation()
-    XCTAssertTrue(operation.isPending)
-    let expectation1 = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: operation, expectedValue: true)
-    let expectation2 = XCTKVOExpectation(keyPath: #keyPath(AsyncOperation.isPending), object: operation, expectedValue: false)
-    operation.start()
-    XCTAssertTrue(operation.isExecuting)
-
-    wait(for: [expectation1, expectation2], timeout: 10)
-    XCTAssertTrue(operation.isFinished)
-    XCTAssertFalse(operation.isPending)
-  }
-
   func testEarlyBailOut() {
     let operation = RunUntilCancelledAsyncOperation()
     let expectation1 = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: operation, expectedValue: true)
@@ -198,7 +185,7 @@ final class AsynchronousOperationTests: XCTestCase {
     let expectation1 = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: operation1, expectedValue: true)
     XCTAssertTrue(operation1.isReady)
 
-    let operation2 = BlockOperation(block: { } )
+    let operation2 = BlockOperation { }
     let expectation2 = expectation(description: "\(#function)\(#line)")
     operation2.addExecutionBlock { expectation2.fulfill() }
 
@@ -214,6 +201,8 @@ final class AsynchronousOperationTests: XCTestCase {
     wait(for: [expectation1, expectation2], timeout: 10)
 
     XCTAssertTrue(operation1.isFinished)
+    XCTAssertFalse(operation1.isReady) // For an AsyncOperation, once it's started it won't be ready anymore
+    XCTAssertTrue(operation2.isReady) // For a standard NSOperation, isReady is only determined by its depedendencies
   }
 
   // MARK: - OperationQueue

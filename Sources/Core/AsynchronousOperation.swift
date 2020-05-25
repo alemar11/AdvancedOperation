@@ -43,19 +43,16 @@ open class AsynchronousOperation: Operation, ProgressReporting {
     return progress
   }()
 
-  /// A Boolean value indicating whether the async operation is currently waiting to be executed.
-  /// The initial value is always *true*.
-  @objc
-  public dynamic final var isPending: Bool {
-    return state == .pending
-  }
-
   public final override var isExecuting: Bool {
     return state == .executing
   }
 
   public final override var isFinished: Bool {
     return state == .finished
+  }
+
+  open override var isReady: Bool {
+    return state == .ready && super.isReady
   }
 
   public final override var isAsynchronous: Bool { return isConcurrent }
@@ -68,7 +65,7 @@ open class AsynchronousOperation: Operation, ProgressReporting {
   private let stateChangeQueue = DispatchQueue(label: "\(identifier).AsynchronousOperation.stateChange")
 
   /// Private backing store for `state`
-  private var _state: Atomic<State> = Atomic(.pending)
+  private var _state: Atomic<State> = Atomic(.ready)
 
   /// The state of the operation
   private var state: State {
@@ -119,7 +116,7 @@ open class AsynchronousOperation: Operation, ProgressReporting {
       return
     case .executing:
       fatalError("The operation \(operationName) is already executing.")
-    case .pending:
+    case .ready:
       guard isReady else {
         fatalError("The operation \(operationName) is not yet ready to execute.")
       }
@@ -163,7 +160,7 @@ open class AsynchronousOperation: Operation, ProgressReporting {
     // State can also be "pending" here if the operation was cancelled before it was started.
 
     switch state {
-    case .pending, .executing:
+    case .ready, .executing:
       if progress.completedUnitCount != progress.totalUnitCount {
         progress.completedUnitCount = progress.totalUnitCount
       }
@@ -192,14 +189,14 @@ open class AsynchronousOperation: Operation, ProgressReporting {
 extension AsynchronousOperation {
   /// All the possible states an Operation can be in.
   enum State: Int, CustomStringConvertible, CustomDebugStringConvertible {
-    case pending // waiting to be executed
+    case ready // waiting to be executed
     case executing
     case finished
 
     /// The `#keyPath` for the `Operation` property that's associated with this value.
     var objcKeyPath: String {
       switch self {
-      case .pending: return #keyPath(isPending)
+      case .ready: return #keyPath(isReady)
       case .executing: return #keyPath(isExecuting)
       case .finished: return #keyPath(isFinished)
       }
@@ -207,7 +204,7 @@ extension AsynchronousOperation {
 
     var description: String {
       switch self {
-      case .pending: return "pending"
+      case .ready: return "ready"
       case .executing: return "executing"
       case .finished: return "finished"
       }
@@ -219,8 +216,8 @@ extension AsynchronousOperation {
 
     func canTransition(to newState: State) -> Bool {
       switch (self, newState) {
-      case (.pending, .executing): return true
-      case (.pending, .finished): return true
+      case (.ready, .executing): return true
+      case (.ready, .finished): return true
       case (.executing, .finished): return true
       default: return false
       }
