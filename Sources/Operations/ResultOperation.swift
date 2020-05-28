@@ -49,14 +49,13 @@ open class ResultOperation<Success, Failure>: AsynchronousOperation where Failur
   }
 
   public final override func finish() {
-    if isExecuting {
+    // If an operation starts but it's already cancelled, if won't be executed;
+    // instead finish() will be called.
+    // In that case the ResultOperation will finish with a failure result.
+    if !isExecuting && isCancelled {
+      finish(with: .failure(.cancelled))
+    } else {
       fatalError("Use finish(with:) instead.")
-    } else { // ready or finished
-      if isCancelled {
-        finish(with: .failure(.cancelled))
-      } else {
-        super.finish()
-      }
     }
   }
 }

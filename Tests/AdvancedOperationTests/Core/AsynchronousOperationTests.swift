@@ -149,34 +149,34 @@ final class AsynchronousOperationTests: XCTestCase {
     }
   }
 
-//  func testSecondStartOnDifferentThreadAfterCancellation() {
-//    let operation = SleepyAsyncOperation(interval1: 2, interval2: 2, interval3: 2)
-//    let expectation1 = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: operation, expectedValue: true)
-//
-//    XCTAssertTrue(operation.isReady)
-//
-//    operation.start()
-//    operation.cancel()
-//    DispatchQueue.global().sync {
-//      operation.start()
-//    }
-//    wait(for: [expectation1], timeout: 10)
-//    XCTAssertTrue(operation.isFinished)
-//    operation.start()
-//  }
-//
-//  func testMultipleStartsOnTheSameThreadRaiseAnException() {
-//    let operation = InfiniteAsyncOperation()
-//    operation.start()
-//    operation.start()
-//  }
-//
-//  func testStartNotReadyOperation() {
-//    let operation = SleepyAsyncOperation()
-//    let operation2 = BlockOperation()
-//    operation.addDependency(operation2)
-//    operation.start()
-//  }
+  //  func testSecondStartOnDifferentThreadAfterCancellation() {
+  //    let operation = SleepyAsyncOperation(interval1: 2, interval2: 2, interval3: 2)
+  //    let expectation1 = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: operation, expectedValue: true)
+  //
+  //    XCTAssertTrue(operation.isReady)
+  //
+  //    operation.start()
+  //    operation.cancel()
+  //    DispatchQueue.global().sync {
+  //      operation.start()
+  //    }
+  //    wait(for: [expectation1], timeout: 10)
+  //    XCTAssertTrue(operation.isFinished)
+  //    operation.start()
+  //  }
+  //
+  //  func testMultipleStartsOnTheSameThreadRaiseAnException() {
+  //    let operation = InfiniteAsyncOperation()
+  //    operation.start()
+  //    operation.start()
+  //  }
+  //
+  //  func testStartNotReadyOperation() {
+  //    let operation = SleepyAsyncOperation()
+  //    let operation2 = BlockOperation()
+  //    operation.addDependency(operation2)
+  //    operation.start()
+  //  }
 
   // The readiness of operations is determined by their dependencies on other operations and potentially by custom conditions that you define.
   func testReadiness() {
@@ -414,14 +414,14 @@ final class AsynchronousOperationTests: XCTestCase {
       eventsForOperation.append(Event(isPrior: change.isPrior, oldValue: change.oldValue, newValue: change.newValue))
     }
     let tokenFinishing = operation.observe(\.isFinished, options: [.prior, .old, .new]) { (op, change) in
-       eventsForOperation.append(Event(isPrior: change.isPrior, oldValue: change.oldValue, newValue: change.newValue))
+      eventsForOperation.append(Event(isPrior: change.isPrior, oldValue: change.oldValue, newValue: change.newValue))
     }
 
     let tokenExecuting2 = operation.observe(\.isExecuting, options: [.prior,.old, .new]) { (op, change) in
       eventsForOperation2.append(Event(isPrior: change.isPrior, oldValue: change.oldValue, newValue: change.newValue))
     }
     let tokenFinishing2 = operation.observe(\.isFinished, options: [.prior, .old, .new]) { (op, change) in
-       eventsForOperation2.append(Event(isPrior: change.isPrior, oldValue: change.oldValue, newValue: change.newValue))
+      eventsForOperation2.append(Event(isPrior: change.isPrior, oldValue: change.oldValue, newValue: change.newValue))
     }
     operation.start()
     operation2.start()

@@ -37,9 +37,8 @@ final class FailableAsynchronousOperationTests: XCTestCase {
 //  func testFinishBeforeExecuting() {
 //    let operation = DummyFailableOperation(shouldFail: false)
 //    let finishExpectation = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: operation, expectedValue: true)
-//    operation.cancel()
-//    operation.finish()
-//    operation.start()
+//    //operation.cancel()
+//    operation.finish() // ⚠️ finish() must not for any reason called outside the main() scope
 //    wait(for: [finishExpectation], timeout: 2)
 //  }
 

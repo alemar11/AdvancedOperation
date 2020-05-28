@@ -113,14 +113,9 @@ open class AsynchronousOperation: Operation, ProgressReporting {
   // Lock used to prevent data races if start() gets called multiple times from different threads
   private let startLock = UnfairLock()
 
-  /// Wheter or not the finish() method can be called.
-  private var canBeFinished = false
-
   public final override func start() {
     startLock.lock()
     defer { startLock.unlock() }
-
-    canBeFinished = true
 
     switch state {
     case .finished:
@@ -151,6 +146,7 @@ open class AsynchronousOperation: Operation, ProgressReporting {
         }
         progressLock.unlock()
       }
+
       main()
 
       // At this point `main()` has already returned but it doesn't mean that the operation is finished.
@@ -171,10 +167,6 @@ open class AsynchronousOperation: Operation, ProgressReporting {
   /// Finishes the operation.
   /// - Important: You should never call this method outside the operation main() execution scope.
   public func finish() {
-    guard canBeFinished else {
-      fatalError("finish() should be called inside \(operationName) main() execution scope.")
-    }
-
     // State can also be "ready" here if the operation was cancelled before it was started.
     if !isFinished {
       progressLock.lock()

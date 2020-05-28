@@ -55,8 +55,8 @@ final class ResultOperationTests: XCTestCase {
 //        XCTFail("Expected a cancelled error.")
 //      }
 //    }
-//    //operation.cancel()
-//    operation.finish()
+//    operation.cancel()
+//    operation.finish() // ⚠️ finish() must not for any reason called outside the main() scope
 //    operation.start()
 //    wait(for: [resultProducedExpectation, finishExpectation], timeout: 2)
 //  }
