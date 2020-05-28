@@ -1,4 +1,4 @@
-// 
+//
 // AdvancedOperation
 //
 // Copyright © 2016-2020 Tinrobots.
@@ -60,7 +60,6 @@ open class ResultOperation<Success, Failure>: AsynchronousOperation where Failur
     }
   }
 }
-
 
 public typealias FailableAsyncOperation = FailableAsynchronousOperation
 

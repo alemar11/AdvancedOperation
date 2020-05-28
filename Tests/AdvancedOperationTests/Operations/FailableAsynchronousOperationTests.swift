@@ -1,4 +1,4 @@
-// 
+//
 // AdvancedOperation
 //
 // Copyright © 2016-2020 Tinrobots.
@@ -33,7 +33,7 @@ final class FailableAsynchronousOperationTests: XCTestCase {
     wait(for: [finishExpectation], timeout: 2)
     XCTAssertEqual(operation.error, DummyFailableOperation.Error.cancelled)
   }
-  
+
 //  func testFinishBeforeExecuting() {
 //    let operation = DummyFailableOperation(shouldFail: false)
 //    let finishExpectation = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: operation, expectedValue: true)
@@ -42,7 +42,7 @@ final class FailableAsynchronousOperationTests: XCTestCase {
 //    operation.start()
 //    wait(for: [finishExpectation], timeout: 2)
 //  }
-  
+
   func testSuccessFulExecution() {
     let queue = OperationQueue()
     let operation = DummyFailableOperation(shouldFail: false)

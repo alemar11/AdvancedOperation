@@ -1,4 +1,4 @@
-// 
+//
 // AdvancedOperation
 //
 // Copyright © 2016-2020 Tinrobots.
@@ -86,4 +86,3 @@ final class UnfairLock: NSLocking {
     unfairLock.deallocate()
   }
 }
-
