@@ -93,6 +93,16 @@
 		D268F3F52471338100003666 /* ProgressReportingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D268F3F42471338100003666 /* ProgressReportingTests.swift */; };
 		D268F3F62471338100003666 /* ProgressReportingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D268F3F42471338100003666 /* ProgressReportingTests.swift */; };
 		D268F3F72471338100003666 /* ProgressReportingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D268F3F42471338100003666 /* ProgressReportingTests.swift */; };
+		D29FE43D24801A7900DA97AA /* FailableAsynchronousOperationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D29FE43924801A7900DA97AA /* FailableAsynchronousOperationTests.swift */; };
+		D29FE43E24801A7900DA97AA /* FailableAsynchronousOperationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D29FE43924801A7900DA97AA /* FailableAsynchronousOperationTests.swift */; };
+		D29FE43F24801A7900DA97AA /* FailableAsynchronousOperationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D29FE43924801A7900DA97AA /* FailableAsynchronousOperationTests.swift */; };
+		D29FE44124801AE600DA97AA /* ResultOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = D29FE44024801AE600DA97AA /* ResultOperation.swift */; };
+		D29FE44224801AE600DA97AA /* ResultOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = D29FE44024801AE600DA97AA /* ResultOperation.swift */; };
+		D29FE44324801AE600DA97AA /* ResultOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = D29FE44024801AE600DA97AA /* ResultOperation.swift */; };
+		D29FE44424801AE600DA97AA /* ResultOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = D29FE44024801AE600DA97AA /* ResultOperation.swift */; };
+		D29FE44624801D2000DA97AA /* ResultOperationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D29FE44524801D1F00DA97AA /* ResultOperationTests.swift */; };
+		D29FE44724801D2000DA97AA /* ResultOperationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D29FE44524801D1F00DA97AA /* ResultOperationTests.swift */; };
+		D29FE44824801D2000DA97AA /* ResultOperationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D29FE44524801D1F00DA97AA /* ResultOperationTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -157,6 +167,9 @@
 		D21C5D8323D3674E005F8D51 /* AsynchronousOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsynchronousOperation.swift; sourceTree = "<group>"; };
 		D254E22323C3A68800A1586E /* LICENSE.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = LICENSE.md; sourceTree = SOURCE_ROOT; };
 		D268F3F42471338100003666 /* ProgressReportingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressReportingTests.swift; sourceTree = "<group>"; };
+		D29FE43924801A7900DA97AA /* FailableAsynchronousOperationTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FailableAsynchronousOperationTests.swift; sourceTree = "<group>"; };
+		D29FE44024801AE600DA97AA /* ResultOperation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ResultOperation.swift; sourceTree = "<group>"; };
+		D29FE44524801D1F00DA97AA /* ResultOperationTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ResultOperationTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -219,7 +232,9 @@
 			isa = PBXGroup;
 			children = (
 				06C92B4F23D0AAEA000D12C8 /* AsynchronousBlockOperationTests.swift */,
+				D29FE43924801A7900DA97AA /* FailableAsynchronousOperationTests.swift */,
 				064B0D8823F4166300C8331F /* GroupOperationTests.swift */,
+				D29FE44524801D1F00DA97AA /* ResultOperationTests.swift */,
 			);
 			path = Operations;
 			sourceTree = "<group>";
@@ -347,6 +362,7 @@
 		D25DB58323F4A3B9002B91C5 /* Operations */ = {
 			isa = PBXGroup;
 			children = (
+				D29FE44024801AE600DA97AA /* ResultOperation.swift */,
 				06C92B4A23D0A9FF000D12C8 /* AsynchronousBlockOperation.swift */,
 				064B0D8323F4032100C8331F /* GroupOperation.swift */,
 			);
@@ -697,6 +713,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				23A1B87921B81C710018D9D5 /* UnfairLock.swift in Sources */,
+				D29FE44124801AE600DA97AA /* ResultOperation.swift in Sources */,
 				064B0D8423F4032100C8331F /* GroupOperation.swift in Sources */,
 				23A1B87F21B8307F0018D9D5 /* Atomic.swift in Sources */,
 				06B3D10223D9E9F3005EBDD8 /* AdvancedOperation.swift in Sources */,
@@ -712,6 +729,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				23A1B87A21B81C710018D9D5 /* UnfairLock.swift in Sources */,
+				D29FE44224801AE600DA97AA /* ResultOperation.swift in Sources */,
 				064B0D8523F4032100C8331F /* GroupOperation.swift in Sources */,
 				23A1B88021B8307F0018D9D5 /* Atomic.swift in Sources */,
 				06B3D10323D9E9F3005EBDD8 /* AdvancedOperation.swift in Sources */,
@@ -727,6 +745,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				23A1B87B21B81C710018D9D5 /* UnfairLock.swift in Sources */,
+				D29FE44324801AE600DA97AA /* ResultOperation.swift in Sources */,
 				064B0D8623F4032200C8331F /* GroupOperation.swift in Sources */,
 				23A1B88121B8307F0018D9D5 /* Atomic.swift in Sources */,
 				06B3D10423D9E9F3005EBDD8 /* AdvancedOperation.swift in Sources */,
@@ -742,6 +761,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				23A1B87C21B81C710018D9D5 /* UnfairLock.swift in Sources */,
+				D29FE44424801AE600DA97AA /* ResultOperation.swift in Sources */,
 				064B0D8723F4032200C8331F /* GroupOperation.swift in Sources */,
 				23A1B88221B8307F0018D9D5 /* Atomic.swift in Sources */,
 				06B3D10523D9E9F3005EBDD8 /* AdvancedOperation.swift in Sources */,
@@ -763,6 +783,8 @@
 				235D08D3206A941B00F70142 /* OperationStateTests.swift in Sources */,
 				23AC3ADF2038A050003E1B15 /* OperationUtilsTests.swift in Sources */,
 				2385617B200A873C0061BAA1 /* Mocks.swift in Sources */,
+				D29FE44824801D2000DA97AA /* ResultOperationTests.swift in Sources */,
+				D29FE43F24801A7900DA97AA /* FailableAsynchronousOperationTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -777,6 +799,8 @@
 				235D08D1206A941B00F70142 /* OperationStateTests.swift in Sources */,
 				23AC3ADD2038A050003E1B15 /* OperationUtilsTests.swift in Sources */,
 				23856179200A873C0061BAA1 /* Mocks.swift in Sources */,
+				D29FE44624801D2000DA97AA /* ResultOperationTests.swift in Sources */,
+				D29FE43D24801A7900DA97AA /* FailableAsynchronousOperationTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -791,6 +815,8 @@
 				235D08D2206A941B00F70142 /* OperationStateTests.swift in Sources */,
 				23AC3ADE2038A050003E1B15 /* OperationUtilsTests.swift in Sources */,
 				2385617A200A873C0061BAA1 /* Mocks.swift in Sources */,
+				D29FE44724801D2000DA97AA /* ResultOperationTests.swift in Sources */,
+				D29FE43E24801A7900DA97AA /* FailableAsynchronousOperationTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

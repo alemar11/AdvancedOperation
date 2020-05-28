@@ -170,7 +170,7 @@ open class AsynchronousOperation: Operation, ProgressReporting {
 
   /// Finishes the operation.
   /// - Important: You should never call this method outside the operation main() execution scope.
-  public final func finish() {
+  public func finish() {
     guard canBeFinished else {
       fatalError("finish() should be called inside \(operationName) main() execution scope.")
     }

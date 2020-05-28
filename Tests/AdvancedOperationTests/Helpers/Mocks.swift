@@ -222,6 +222,55 @@ internal final class FailingOperation: Operation {
   }
 }
 
+// MARK: - ResultOperation
+
+internal final class DummyResultOperation: ResultOperation<String,DummyResultOperation.Error> {
+  enum Error: OperationError { // TODO: Swift 5.3
+    static var cancelled: DummyResultOperation.Error { return .operationCancelled }
+    case operationCancelled
+  }
+
+  override func main() {
+    if isCancelled {
+      finish(with: .failure(.operationCancelled))
+      return
+    }
+    DispatchQueue.global().async {
+      self.finish(with: .success("Success"))
+    }
+  }
+}
+
+// MARK: - FailableAsyncOperation
+
+internal final class DummyFailableOperation: FailableAsyncOperation<DummyFailableOperation.Error> {
+  enum Error: OperationError { // TODO: Swift 5.3
+    static var cancelled: DummyFailableOperation.Error { return .operationCancelled }
+    case operationCancelled
+    case operationFailed
+  }
+
+  let shouldFail: Bool
+
+  init(shouldFail: Bool) {
+    self.shouldFail = shouldFail
+  }
+
+  override func main() {
+    if isCancelled {
+      finish(with: .operationCancelled)
+      return
+    }
+    DispatchQueue.global().async {
+      if self.shouldFail {
+        self.finish(with: .operationFailed)
+      } else {
+        self.finish()
+      }
+    }
+  }
+}
+
 // MARK: - GroupOperation
 
 internal final class ProducerGroupOperation: GroupOperation {

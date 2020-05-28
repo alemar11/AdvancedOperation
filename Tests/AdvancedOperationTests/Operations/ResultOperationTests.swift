@@ -69,10 +69,10 @@ final class ResultOperationTests: XCTestCase {
 
     operation.onResultProduced = { result in
       switch result {
-      case .success(let value) where value == "Finish":
+      case .success(let value) where value == "Success":
         resultProducedExpectation.fulfill()
       default:
-        XCTFail("Expected a success value.")
+        XCTFail(#"Expected a "Success" value."#)
       }
     }
     queue.addOperation(operation)
