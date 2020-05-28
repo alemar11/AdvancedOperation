@@ -30,7 +30,7 @@ public typealias AsyncOperation = AsynchronousOperation
 /// Subclasses must override `main` to perform any work and, if they are asynchronous, call the `finish()` method to complete the execution.
 open class AsynchronousOperation: Operation, ProgressReporting {
   // MARK: - Public Properties
-
+  
   /// The `progress` property represents a total progress of the operation during its execution.
   @objc
   public final lazy private(set) var progress: Progress = {
@@ -45,11 +45,11 @@ open class AsynchronousOperation: Operation, ProgressReporting {
     }
     return progress
   }()
-
+  
   open override var isReady: Bool {
     return state == .ready && super.isReady
   }
-
+  
   public final override var isExecuting: Bool {
     return state == .executing
   }
@@ -63,16 +63,16 @@ open class AsynchronousOperation: Operation, ProgressReporting {
   public final override var isConcurrent: Bool { return true }
 
   // MARK: - Private Properties
-
+  
   /// Lock used to prevent data races when updating the progress.
   private let progressLock = UnfairLock()
-
+  
   /// Serial queue for making state changes atomic under the constraint of having to send KVO willChange/didChange notifications.
   private let stateChangeQueue = DispatchQueue(label: "\(identifier).AsynchronousOperation.stateChange")
 
   /// Private backing store for `state`
   private var _state: Atomic<State> = Atomic(.ready)
-
+  
   /// The state of the operation
   private var state: State {
     get {
@@ -93,15 +93,15 @@ open class AsynchronousOperation: Operation, ProgressReporting {
         // willChange/didChange notifications only for the key paths that actually change.
         let oldValue = _state.value
         guard newValue != oldValue else { return }
-
+        
         willChangeValue(forKey: newValue.objcKeyPath)
         willChangeValue(forKey: oldValue.objcKeyPath)
-
+        
         _state.mutate {
           assert($0.canTransition(to: newValue), "Performing an invalid state transition from: \($0) to: \(newValue) for \(operationName).")
           $0 = newValue
         }
-
+        
         didChangeValue(forKey: oldValue.objcKeyPath)
         didChangeValue(forKey: newValue.objcKeyPath)
       }
@@ -109,8 +109,8 @@ open class AsynchronousOperation: Operation, ProgressReporting {
   }
 
   // MARK: - Foundation.Operation
-
-  /// Lock used to prevent data races if start() gets called multiple times from different threads
+  
+  // Lock used to prevent data races if start() gets called multiple times from different threads
   private let startLock = UnfairLock()
 
   /// Wheter or not the finish() method can be called.
@@ -138,9 +138,9 @@ open class AsynchronousOperation: Operation, ProgressReporting {
         finish()
         return
       }
-
+      
       state = .executing
-
+      
       // The OperationQueue progress reporting works correcly only if used with super.start()
       // but calling super.start() shouldn't be done when implementing custom concurrent operations.
       // To fix that we use a different progress instance
@@ -182,7 +182,7 @@ open class AsynchronousOperation: Operation, ProgressReporting {
         progress.completedUnitCount = progress.totalUnitCount
       }
       progressLock.unlock()
-
+      
       // If multiple calls are made to finish() from different threads at the same time
       // setting the same state will trigger an assert in the state setter.
       // A lock isn't required.
@@ -191,17 +191,17 @@ open class AsynchronousOperation: Operation, ProgressReporting {
       preconditionFailure("The finish() method shouldn't be called more than once for \(operationName).")
     }
   }
-
+  
   open override func cancel() {
     super.cancel()
-
+    
     progressLock.lock()
     if !progress.isCancelled {
       progress.cancel()
     }
     progressLock.unlock()
   }
-
+  
   // MARK: - Debug
 
   open override var description: String {
@@ -213,7 +213,7 @@ open class AsynchronousOperation: Operation, ProgressReporting {
   }
 }
 
-// MARK: - State
+// MARK: - AsynchronousOperation State
 
 extension AsynchronousOperation {
   /// All the possible states an Operation can be in.
