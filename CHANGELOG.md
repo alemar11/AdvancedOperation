@@ -2,10 +2,9 @@
 
 ### 6.2.0
 
-- Calling `finish()` outside the `main()` execution scope will end up in a fatal error.
 - Added `ResultOperation`, an `AsynchronousOperation` that produces a `result` once finished.
 - Added `FailableAsynchronousOperation`, an `AsynchronousOperation` that can finish with an error conforming to `OperationError`.
-- Added `OperationErro` protocol.
+- Added `OperationError` protocol.
 
 ### 6.1.0
 
