@@ -3,23 +3,6 @@
 //
 // Copyright © 2016-2020 Tinrobots.
 //
-// Permission is hereby granted, free of charge, to any person obtaining a copy
-// of this software and associated documentation files (the "Software"), to deal
-// in the Software without restriction, including without limitation the rights
-// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-// copies of the Software, and to permit persons to whom the Software is
-// furnished to do so, subject to the following conditions:
-//
-// The above copyright notice and this permission notice shall be included in all
-// copies or substantial portions of the Software.
-//
-// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-// SOFTWARE.
 
 import XCTest
 @testable import AdvancedOperation
@@ -149,34 +132,34 @@ final class AsynchronousOperationTests: XCTestCase {
     }
   }
 
-//  func testSecondStartOnDifferentThreadAfterCancellation() {
-//    let operation = SleepyAsyncOperation(interval1: 2, interval2: 2, interval3: 2)
-//    let expectation1 = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: operation, expectedValue: true)
-//
-//    XCTAssertTrue(operation.isReady)
-//
-//    operation.start()
-//    operation.cancel()
-//    DispatchQueue.global().sync {
-//      operation.start()
-//    }
-//    wait(for: [expectation1], timeout: 10)
-//    XCTAssertTrue(operation.isFinished)
-//    operation.start()
-//  }
-//
-//  func testMultipleStartsOnTheSameThreadRaiseAnException() {
-//    let operation = InfiniteAsyncOperation()
-//    operation.start()
-//    operation.start()
-//  }
-//
-//  func testStartNotReadyOperation() {
-//    let operation = SleepyAsyncOperation()
-//    let operation2 = BlockOperation()
-//    operation.addDependency(operation2)
-//    operation.start()
-//  }
+  //  func testSecondStartOnDifferentThreadAfterCancellation() {
+  //    let operation = SleepyAsyncOperation(interval1: 2, interval2: 2, interval3: 2)
+  //    let expectation1 = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: operation, expectedValue: true)
+  //
+  //    XCTAssertTrue(operation.isReady)
+  //
+  //    operation.start()
+  //    operation.cancel()
+  //    DispatchQueue.global().sync {
+  //      operation.start()
+  //    }
+  //    wait(for: [expectation1], timeout: 10)
+  //    XCTAssertTrue(operation.isFinished)
+  //    operation.start()
+  //  }
+  //
+  //  func testMultipleStartsOnTheSameThreadRaiseAnException() {
+  //    let operation = InfiniteAsyncOperation()
+  //    operation.start()
+  //    operation.start()
+  //  }
+  //
+  //  func testStartNotReadyOperation() {
+  //    let operation = SleepyAsyncOperation()
+  //    let operation2 = BlockOperation()
+  //    operation.addDependency(operation2)
+  //    operation.start()
+  //  }
 
   // The readiness of operations is determined by their dependencies on other operations and potentially by custom conditions that you define.
   func testReadiness() {
@@ -414,14 +397,14 @@ final class AsynchronousOperationTests: XCTestCase {
       eventsForOperation.append(Event(isPrior: change.isPrior, oldValue: change.oldValue, newValue: change.newValue))
     }
     let tokenFinishing = operation.observe(\.isFinished, options: [.prior, .old, .new]) { (op, change) in
-       eventsForOperation.append(Event(isPrior: change.isPrior, oldValue: change.oldValue, newValue: change.newValue))
+      eventsForOperation.append(Event(isPrior: change.isPrior, oldValue: change.oldValue, newValue: change.newValue))
     }
 
     let tokenExecuting2 = operation.observe(\.isExecuting, options: [.prior,.old, .new]) { (op, change) in
       eventsForOperation2.append(Event(isPrior: change.isPrior, oldValue: change.oldValue, newValue: change.newValue))
     }
     let tokenFinishing2 = operation.observe(\.isFinished, options: [.prior, .old, .new]) { (op, change) in
-       eventsForOperation2.append(Event(isPrior: change.isPrior, oldValue: change.oldValue, newValue: change.newValue))
+      eventsForOperation2.append(Event(isPrior: change.isPrior, oldValue: change.oldValue, newValue: change.newValue))
     }
     operation.start()
     operation2.start()

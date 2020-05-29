@@ -14,7 +14,7 @@
     <a title="Classes  Reference"></a>
     <header>
       <div class="content-wrapper">
-        <p><a href="index.html">AdvancedOperation Docs</a> (64% documented)</p>
+        <p><a href="index.html">AdvancedOperation Docs</a> (69% documented)</p>
       </div>
     </header>
     <div class="content-wrapper">
@@ -40,10 +40,16 @@
                 <a href="Classes/AsynchronousOperation/State.html">– State</a>
               </li>
               <li class="nav-group-task">
+                <a href="Classes/FailableAsynchronousOperation.html">FailableAsynchronousOperation</a>
+              </li>
+              <li class="nav-group-task">
                 <a href="Classes/GroupOperation.html">GroupOperation</a>
               </li>
               <li class="nav-group-task">
                 <a href="Classes/KVOCrashWorkaround.html">KVOCrashWorkaround</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Classes/ResultOperation.html">ResultOperation</a>
               </li>
             </ul>
           </li>
@@ -69,6 +75,9 @@
               </li>
               <li class="nav-group-task">
                 <a href="Typealiases.html#/s:17AdvancedOperation05AsyncB0a">AsyncOperation</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Typealiases.html#/s:17AdvancedOperation013FailableAsyncB0a">FailableAsyncOperation</a>
               </li>
             </ul>
           </li>
@@ -145,6 +154,34 @@
                 <li class="item">
                   <div>
                     <code>
+                    <a name="/s:17AdvancedOperation020FailableAsynchronousB0C"></a>
+                    <a name="//apple_ref/swift/Class/FailableAsynchronousOperation" class="dashAnchor"></a>
+                    <a class="token" href="#/s:17AdvancedOperation020FailableAsynchronousB0C">FailableAsynchronousOperation</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>An <code><a href="Classes/AsynchronousOperation.html">AsynchronousOperation</a></code> that can finish with an error conforming to <code>OperationError</code>.</p>
+
+                        <a href="Classes/FailableAsynchronousOperation.html" class="slightly-smaller">See more</a>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">open</span> <span class="kd">class</span> <span class="kt">FailableAsynchronousOperation</span><span class="o">&lt;</span><span class="kt">Failure</span><span class="o">&gt;</span> <span class="p">:</span> <span class="kt"><a href="Classes/AsynchronousOperation.html">AsynchronousOperation</a></span> <span class="k">where</span> <span class="kt">Failure</span> <span class="p">:</span> <span class="kt">Error</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
                     <a name="/c:@M@AdvancedOperation@objc(cs)GroupOperation"></a>
                     <a name="//apple_ref/swift/Class/GroupOperation" class="dashAnchor"></a>
                     <a class="token" href="#/c:@M@AdvancedOperation@objc(cs)GroupOperation">GroupOperation</a>
@@ -165,6 +202,36 @@ Use a <code>GroupOperation</code> to associate related operations together, ther
                         <div class="language">
                           <p class="aside-title">Swift</p>
                           <pre class="highlight swift"><code><span class="kd">open</span> <span class="kd">class</span> <span class="kt">GroupOperation</span> <span class="p">:</span> <span class="kt"><a href="Classes/AsynchronousOperation.html">AsynchronousOperation</a></span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:17AdvancedOperation06ResultB0C"></a>
+                    <a name="//apple_ref/swift/Class/ResultOperation" class="dashAnchor"></a>
+                    <a class="token" href="#/s:17AdvancedOperation06ResultB0C">ResultOperation</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>An <code><a href="Classes/AsynchronousOperation.html">AsynchronousOperation</a></code> that produces a <code>result</code> once finished.</p>
+
+<p>If a <code>ResultOperation</code> gets cancelled before being executed, no result will be produced by default.</p>
+
+                        <a href="Classes/ResultOperation.html" class="slightly-smaller">See more</a>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">open</span> <span class="kd">class</span> <span class="kt">ResultOperation</span><span class="o">&lt;</span><span class="kt">Success</span><span class="p">,</span> <span class="kt">Failure</span><span class="o">&gt;</span> <span class="p">:</span> <span class="kt"><a href="Classes/AsynchronousOperation.html">AsynchronousOperation</a></span> <span class="k">where</span> <span class="kt">Failure</span> <span class="p">:</span> <span class="kt">Error</span></code></pre>
 
                         </div>
                       </div>
@@ -204,7 +271,7 @@ This needs to execute before anything can register KVO in the background so the 
           </section>
         </section>
         <section id="footer">
-          <p>&copy; 2020 <a class="link" href="https://github.com/tinrobots/AdvancedOperation" target="_blank" rel="external">Alessandro Marzoli</a>. All rights reserved. (Last updated: 2020-05-25)</p>
+          <p>&copy; 2020 <a class="link" href="https://github.com/tinrobots/AdvancedOperation" target="_blank" rel="external">Alessandro Marzoli</a>. All rights reserved. (Last updated: 2020-05-29)</p>
           <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.13.1</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
         </section>
       </article>

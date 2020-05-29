@@ -1,5 +1,10 @@
 # Changelog
 
+### 6.2.0
+
+- Added `ResultOperation`, an `AsynchronousOperation` that produces a `result` once finished.
+- Added `FailableAsynchronousOperation`, an `AsynchronousOperation` that can finish with an error.
+
 ### 6.1.0
 
 - AsyncOperation now conforms to `ProgressReporting`.

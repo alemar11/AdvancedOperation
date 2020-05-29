@@ -3,23 +3,6 @@
 //
 // Copyright © 2016-2020 Tinrobots.
 //
-// Permission is hereby granted, free of charge, to any person obtaining a copy
-// of this software and associated documentation files (the "Software"), to deal
-// in the Software without restriction, including without limitation the rights
-// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-// copies of the Software, and to permit persons to whom the Software is
-// furnished to do so, subject to the following conditions:
-//
-// The above copyright notice and this permission notice shall be included in all
-// copies or substantial portions of the Software.
-//
-// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-// SOFTWARE.
 
 import Foundation
 
@@ -33,19 +16,13 @@ open class GroupOperation: AsynchronousOperation {
   /// The value in this property affects only the operations that the current GroupOperation has executing at the same time.
   /// Reducing the number of concurrent operations does not affect any operations that are currently executing.
   public var maxConcurrentOperationCount: Int {
-    get {
-      return operationQueue.maxConcurrentOperationCount
-    }
-    set {
-      operationQueue.maxConcurrentOperationCount = newValue
-    }
+    get { operationQueue.maxConcurrentOperationCount }
+    set { operationQueue.maxConcurrentOperationCount = newValue }
   }
 
   /// The relative amount of importance for granting system resources to the operation.
   public override var qualityOfService: QualityOfService {
-    get {
-      return operationQueue.qualityOfService
-    }
+    get { operationQueue.qualityOfService }
     set {
       super.qualityOfService = newValue
       operationQueue.qualityOfService = newValue

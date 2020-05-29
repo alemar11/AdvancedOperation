@@ -3,23 +3,6 @@
 //
 // Copyright © 2016-2020 Tinrobots.
 //
-// Permission is hereby granted, free of charge, to any person obtaining a copy
-// of this software and associated documentation files (the "Software"), to deal
-// in the Software without restriction, including without limitation the rights
-// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-// copies of the Software, and to permit persons to whom the Software is
-// furnished to do so, subject to the following conditions:
-//
-// The above copyright notice and this permission notice shall be included in all
-// copies or substantial portions of the Software.
-//
-// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-// SOFTWARE.
 
 import Foundation
 import Dispatch
@@ -165,12 +148,8 @@ internal final class IntToStringOperation: Operation {
   var onOutputProduced: ((String) -> Void)?
   var input: Int?
   private(set) var output: String? {
-    get {
-      return _output.value
-    }
-    set {
-      _output.mutate { $0 = newValue }
-    }
+    get { _output.value }
+    set { _output.mutate { $0 = newValue } }
   }
 
   // To fix data race error on macOS tests: see testSuccessfulInjectionBetweenOperationsTransformingOutput
@@ -188,12 +167,8 @@ internal final class StringToIntOperation: Operation  {
   var onOutputProduced: ((Int) -> Void)?
   var input: String?
   private(set) var output: Int? {
-    get {
-      return _output.value
-    }
-    set {
-      _output.mutate { $0 = newValue }
-    }
+    get { _output.value }
+    set { _output.mutate { $0 = newValue } }
   }
 
   // To fix data race error on macOS tests: see testSuccessfulInjectionBetweenOperationsTransformingOutput
@@ -219,6 +194,76 @@ internal final class FailingOperation: Operation {
 
   override func main() {
     self.error = .errorOne
+  }
+}
+
+// MARK: - ResultOperation
+
+internal final class DummyResultOperation: ResultOperation<String,DummyResultOperation.Error> {
+  enum Error: Swift.Error {
+    case cancelled
+  }
+
+  let setFailureOnEarlyBailOut: Bool
+
+  init(setFailureOnEarlyBailOut: Bool = true) {
+    self.setFailureOnEarlyBailOut = setFailureOnEarlyBailOut
+  }
+
+  override func main() {
+    if isCancelled {
+      finish(with: .failure(.cancelled))
+      return
+    }
+    DispatchQueue.global().async {
+      self.finish(with: .success("Success"))
+    }
+  }
+
+  override func cancel() {
+    if setFailureOnEarlyBailOut {
+      // makes sure that, even if the operation is cancelled before getting executed,
+      // there always be a result when it finishes
+      cancel(with: .cancelled)
+    } else {
+      super.cancel()
+    }
+  }
+}
+
+// MARK: - FailableAsyncOperation
+
+internal final class DummyFailableOperation: FailableAsyncOperation<DummyFailableOperation.Error> {
+  enum Error: Swift.Error {
+    case cancelled
+    case failed
+    case other
+  }
+
+  let shouldFail: Bool
+
+  init(shouldFail: Bool) {
+    self.shouldFail = shouldFail
+  }
+
+  override func main() {
+    if isCancelled {
+      finish(with: .cancelled)
+      return
+    }
+    DispatchQueue.global().async {
+      if self.shouldFail {
+        self.finish(with: .failed)
+      } else {
+        self.finish()
+      }
+    }
+  }
+
+  override func cancel() {
+    // makes sure that, even if the operation is cancelled before getting executed,
+    // there always be a result when it finishes
+    cancel(with: .cancelled)
   }
 }
 
