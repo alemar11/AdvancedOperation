@@ -25,14 +25,10 @@ import Foundation
 
 extension Operation {
   /// Returns the `Operation` name or its type if the name is nil.
-  public var operationName: String {
-    return name ?? "\(type(of: self))"
-  }
+  public var operationName: String { name ?? "\(type(of: self))" }
 
   /// Returns `true` if **at least one** dependency has been cancelled.
-  public var hasSomeCancelledDependencies: Bool {
-    return dependencies.hasSomeCancelledOperations
-  }
+  public var hasSomeCancelledDependencies: Bool { dependencies.hasSomeCancelledOperations }
 
   /// Adds multiple dependencies to the operation.
   /// If the receiver is already executing its task, adding dependencies has no practical effect.
@@ -79,7 +75,5 @@ extension OperationQueue {
 
 extension Collection where Element: Operation {
   /// Returns `true` if **at least one** operation has been cancelled.
-  fileprivate var hasSomeCancelledOperations: Bool {
-    return first { $0.isCancelled } != nil
-  }
+  fileprivate var hasSomeCancelledOperations: Bool { first { $0.isCancelled } != nil }
 }

@@ -33,7 +33,7 @@ open class ResultOperation<Success, Failure>: AsynchronousOperation where Failur
 
   /// The result produced by the operation.
   public final private(set) var result: Result<Success, Failure>? {
-    get { return _result.value }
+    get { _result.value }
     set { _result.mutate { $0 = newValue } }
   }
 

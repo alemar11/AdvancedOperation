@@ -31,7 +31,7 @@ open class FailableAsynchronousOperation<Failure: Error>: AsynchronousOperation 
 
   /// Failure error.
   public final private(set) var error: Failure? {
-    get { return _error.value }
+    get { _error.value }
     set { _error.mutate { $0 = newValue } }
   }
 

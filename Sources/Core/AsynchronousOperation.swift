@@ -45,21 +45,15 @@ open class AsynchronousOperation: Operation, ProgressReporting {
     return progress
   }()
 
-  open override var isReady: Bool {
-    return state == .ready && super.isReady
-  }
+  open override var isReady: Bool { state == .ready && super.isReady }
 
-  public final override var isExecuting: Bool {
-    return state == .executing
-  }
+  public final override var isExecuting: Bool { state == .executing }
 
-  public final override var isFinished: Bool {
-    return state == .finished
-  }
+  public final override var isFinished: Bool { state == .finished }
 
-  public final override var isAsynchronous: Bool { return isConcurrent }
+  public final override var isAsynchronous: Bool { isConcurrent }
 
-  public final override var isConcurrent: Bool { return true }
+  public final override var isConcurrent: Bool { true }
 
   // MARK: - Private Properties
 
@@ -195,12 +189,10 @@ open class AsynchronousOperation: Operation, ProgressReporting {
 
   // MARK: - Debug
 
-  open override var description: String {
-    return debugDescription
-  }
+  open override var description: String { debugDescription }
 
   open override var debugDescription: String {
-    return "\(operationName) – \(isCancelled ? "cancelled (\(state))" : "\(state)")"
+    "\(operationName) – \(isCancelled ? "cancelled (\(state))" : "\(state)")"
   }
 }
 

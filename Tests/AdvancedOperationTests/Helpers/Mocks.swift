@@ -165,12 +165,8 @@ internal final class IntToStringOperation: Operation {
   var onOutputProduced: ((String) -> Void)?
   var input: Int?
   private(set) var output: String? {
-    get {
-      return _output.value
-    }
-    set {
-      _output.mutate { $0 = newValue }
-    }
+    get { _output.value }
+    set { _output.mutate { $0 = newValue } }
   }
 
   // To fix data race error on macOS tests: see testSuccessfulInjectionBetweenOperationsTransformingOutput
@@ -188,12 +184,8 @@ internal final class StringToIntOperation: Operation  {
   var onOutputProduced: ((Int) -> Void)?
   var input: String?
   private(set) var output: Int? {
-    get {
-      return _output.value
-    }
-    set {
-      _output.mutate { $0 = newValue }
-    }
+    get { _output.value }
+    set { _output.mutate { $0 = newValue } }
   }
 
   // To fix data race error on macOS tests: see testSuccessfulInjectionBetweenOperationsTransformingOutput

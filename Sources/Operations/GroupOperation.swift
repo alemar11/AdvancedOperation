@@ -33,19 +33,13 @@ open class GroupOperation: AsynchronousOperation {
   /// The value in this property affects only the operations that the current GroupOperation has executing at the same time.
   /// Reducing the number of concurrent operations does not affect any operations that are currently executing.
   public var maxConcurrentOperationCount: Int {
-    get {
-      return operationQueue.maxConcurrentOperationCount
-    }
-    set {
-      operationQueue.maxConcurrentOperationCount = newValue
-    }
+    get { operationQueue.maxConcurrentOperationCount }
+    set { operationQueue.maxConcurrentOperationCount = newValue }
   }
 
   /// The relative amount of importance for granting system resources to the operation.
   public override var qualityOfService: QualityOfService {
-    get {
-      return operationQueue.qualityOfService
-    }
+    get { operationQueue.qualityOfService }
     set {
       super.qualityOfService = newValue
       operationQueue.qualityOfService = newValue
