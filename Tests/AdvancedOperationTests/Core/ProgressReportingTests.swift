@@ -405,6 +405,45 @@ final class ProgressReportingTests: XCTestCase {
   }
 
   @available(iOS 13.0, iOSApplicationExtension 13.0, tvOS 13.0, watchOS 6.0, macOS 10.15, *)
+  func testExplicitProgressWithRsultAndFailableOperationsUsingSerialQueue() {
+    let currentProgress = Progress(totalUnitCount: 1)
+    let queue = OperationQueue()
+    queue.maxConcurrentOperationCount = 1
+    queue.isSuspended = true
+
+    let operation1 = DummyResultOperation()
+    let operation2 = DummyFailableOperation(shouldFail: false)
+    let operation3 = DummyFailableOperation(shouldFail: true)
+    let operation4 = BlockOperation { }
+
+    let expectation0 = self.expectation(description: "Progress is completed")
+    let expectation1 = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: operation1, expectedValue: true)
+    let expectation2 = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: operation2, expectedValue: true)
+    let expectation3 = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: operation3, expectedValue: true)
+    let expectation4 = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: operation4, expectedValue: true)
+
+    queue.progress.totalUnitCount = 4
+    queue.addOperation(operation1)
+    queue.addOperation(operation2)
+    queue.addOperation(operation3)
+    queue.addOperation(operation4)
+
+    currentProgress.addChild(queue.progress, withPendingUnitCount: 1)
+
+    let token = currentProgress.observe(\.fractionCompleted, options: [.initial, .old, .new]) { (progress, change) in
+      print("fraction: \(progress.fractionCompleted)", "-", progress.localizedAdditionalDescription ?? "")
+
+      if progress.completedUnitCount == 1 && progress.fractionCompleted == 1.0 {
+        expectation0.fulfill()
+      }
+    }
+
+    queue.isSuspended = false
+    wait(for: [expectation1, expectation2, expectation3, expectation4, expectation0], timeout: 10)
+    token.invalidate()
+  }
+
+  @available(iOS 13.0, iOSApplicationExtension 13.0, tvOS 13.0, watchOS 6.0, macOS 10.15, *)
   func testImplicitProgressUsingSerialQueue() {
     let expectation0 = self.expectation(description: "Progress is completed")
     let currentProgress = Progress(totalUnitCount: 1)
