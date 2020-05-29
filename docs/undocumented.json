@@ -9,42 +9,42 @@
     },
     {
       "file": "/Users/alessandro/Developer/AdvancedOperation/Sources/Core/AsynchronousOperation.swift",
-      "line": 49,
+      "line": 48,
       "symbol": "AsynchronousOperation.isReady",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/alessandro/Developer/AdvancedOperation/Sources/Core/AsynchronousOperation.swift",
-      "line": 53,
+      "line": 52,
       "symbol": "AsynchronousOperation.isExecuting",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/alessandro/Developer/AdvancedOperation/Sources/Core/AsynchronousOperation.swift",
-      "line": 57,
+      "line": 56,
       "symbol": "AsynchronousOperation.isFinished",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/alessandro/Developer/AdvancedOperation/Sources/Core/AsynchronousOperation.swift",
-      "line": 61,
+      "line": 60,
       "symbol": "AsynchronousOperation.isAsynchronous",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/alessandro/Developer/AdvancedOperation/Sources/Core/AsynchronousOperation.swift",
-      "line": 63,
+      "line": 62,
       "symbol": "AsynchronousOperation.isConcurrent",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/alessandro/Developer/AdvancedOperation/Sources/Core/AsynchronousOperation.swift",
-      "line": 116,
+      "line": 115,
       "symbol": "AsynchronousOperation.start()",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
@@ -95,6 +95,13 @@
       "file": "/Users/alessandro/Developer/AdvancedOperation/Sources/Operations/AsynchronousBlockOperation.swift",
       "line": 26,
       "symbol": "AsyncBlockOperation",
+      "symbol_kind": "source.lang.swift.decl.typealias",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/alessandro/Developer/AdvancedOperation/Sources/Operations/FailableAsyncOperation.swift",
+      "line": 26,
+      "symbol": "FailableAsyncOperation",
       "symbol_kind": "source.lang.swift.decl.typealias",
       "warning": "undocumented"
     },
