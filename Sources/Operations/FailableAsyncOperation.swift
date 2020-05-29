@@ -1,4 +1,4 @@
-// 
+//
 // AdvancedOperation
 //
 // Copyright © 2016-2020 Tinrobots.
@@ -48,4 +48,3 @@ open class FailableAsynchronousOperation<Failure: Error>: AsynchronousOperation 
     super.cancel()
   }
 }
-
