@@ -18,7 +18,7 @@ Operation usefull extensions.
 ## Requirements
 
 - iOS 11.0+ / macOS 10.13+ / tvOS 11.0+ / watchOS 4.0+
-- Xcode 11.4
+- Xcode 11.5
 - Swift 5.0
 
 ## Documentation
