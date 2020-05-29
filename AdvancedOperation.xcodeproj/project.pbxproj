@@ -85,6 +85,10 @@
 		D268F3F52471338100003666 /* ProgressReportingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D268F3F42471338100003666 /* ProgressReportingTests.swift */; };
 		D268F3F62471338100003666 /* ProgressReportingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D268F3F42471338100003666 /* ProgressReportingTests.swift */; };
 		D268F3F72471338100003666 /* ProgressReportingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D268F3F42471338100003666 /* ProgressReportingTests.swift */; };
+		D26DBDEA2481060200A69E28 /* FailableAsyncOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = D26DBDE92481060200A69E28 /* FailableAsyncOperation.swift */; };
+		D26DBDEB2481060200A69E28 /* FailableAsyncOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = D26DBDE92481060200A69E28 /* FailableAsyncOperation.swift */; };
+		D26DBDEC2481060200A69E28 /* FailableAsyncOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = D26DBDE92481060200A69E28 /* FailableAsyncOperation.swift */; };
+		D26DBDED2481060200A69E28 /* FailableAsyncOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = D26DBDE92481060200A69E28 /* FailableAsyncOperation.swift */; };
 		D29FE43D24801A7900DA97AA /* FailableAsynchronousOperationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D29FE43924801A7900DA97AA /* FailableAsynchronousOperationTests.swift */; };
 		D29FE43E24801A7900DA97AA /* FailableAsynchronousOperationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D29FE43924801A7900DA97AA /* FailableAsynchronousOperationTests.swift */; };
 		D29FE43F24801A7900DA97AA /* FailableAsynchronousOperationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D29FE43924801A7900DA97AA /* FailableAsynchronousOperationTests.swift */; };
@@ -161,6 +165,7 @@
 		D21C5D8323D3674E005F8D51 /* AsynchronousOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsynchronousOperation.swift; sourceTree = "<group>"; };
 		D254E22323C3A68800A1586E /* LICENSE.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = LICENSE.md; sourceTree = SOURCE_ROOT; };
 		D268F3F42471338100003666 /* ProgressReportingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressReportingTests.swift; sourceTree = "<group>"; };
+		D26DBDE92481060200A69E28 /* FailableAsyncOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FailableAsyncOperation.swift; sourceTree = "<group>"; };
 		D29FE43924801A7900DA97AA /* FailableAsynchronousOperationTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FailableAsynchronousOperationTests.swift; sourceTree = "<group>"; };
 		D29FE44024801AE600DA97AA /* ResultOperation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ResultOperation.swift; sourceTree = "<group>"; };
 		D29FE44524801D1F00DA97AA /* ResultOperationTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ResultOperationTests.swift; sourceTree = "<group>"; };
@@ -358,6 +363,7 @@
 				D29FE44024801AE600DA97AA /* ResultOperation.swift */,
 				06C92B4A23D0A9FF000D12C8 /* AsynchronousBlockOperation.swift */,
 				064B0D8323F4032100C8331F /* GroupOperation.swift */,
+				D26DBDE92481060200A69E28 /* FailableAsyncOperation.swift */,
 			);
 			path = Operations;
 			sourceTree = "<group>";
@@ -713,6 +719,7 @@
 				06C92B4B23D0A9FF000D12C8 /* AsynchronousBlockOperation.swift in Sources */,
 				23F24D22200799B800B25A03 /* Operation+Utils.swift in Sources */,
 				D2CA6BA4247D59A200A71630 /* Atomic.swift in Sources */,
+				D26DBDEA2481060200A69E28 /* FailableAsyncOperation.swift in Sources */,
 				D21C5D8423D3674E005F8D51 /* AsynchronousOperation.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -728,6 +735,7 @@
 				06C92B4C23D0A9FF000D12C8 /* AsynchronousBlockOperation.swift in Sources */,
 				23F24D23200799B800B25A03 /* Operation+Utils.swift in Sources */,
 				D2CA6BA5247D59A200A71630 /* Atomic.swift in Sources */,
+				D26DBDEB2481060200A69E28 /* FailableAsyncOperation.swift in Sources */,
 				D21C5D8523D3674E005F8D51 /* AsynchronousOperation.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -743,6 +751,7 @@
 				06C92B4D23D0A9FF000D12C8 /* AsynchronousBlockOperation.swift in Sources */,
 				23F24D24200799B800B25A03 /* Operation+Utils.swift in Sources */,
 				D2CA6BA6247D59A200A71630 /* Atomic.swift in Sources */,
+				D26DBDEC2481060200A69E28 /* FailableAsyncOperation.swift in Sources */,
 				D21C5D8623D3674E005F8D51 /* AsynchronousOperation.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -758,6 +767,7 @@
 				06C92B4E23D0A9FF000D12C8 /* AsynchronousBlockOperation.swift in Sources */,
 				23F24D25200799B800B25A03 /* Operation+Utils.swift in Sources */,
 				D2CA6BA7247D59A200A71630 /* Atomic.swift in Sources */,
+				D26DBDED2481060200A69E28 /* FailableAsyncOperation.swift in Sources */,
 				D21C5D8723D3674E005F8D51 /* AsynchronousOperation.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

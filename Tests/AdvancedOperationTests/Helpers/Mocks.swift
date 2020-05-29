@@ -32,35 +32,35 @@ internal final class SleepyAsyncOperation: AsynchronousOperation {
   private let interval1: UInt32
   private let interval2: UInt32
   private let interval3: UInt32
-
+  
   init(interval1: UInt32 = 1, interval2: UInt32 = 1, interval3: UInt32 = 1) {
     self.interval1 = interval1
     self.interval2 = interval2
     self.interval3 = interval3
     super.init()
   }
-
+  
   override func main() {
     DispatchQueue.global().async {
       if self.isCancelled {
         self.finish()
         return
       }
-
+      
       sleep(self.interval1)
-
+      
       if self.isCancelled {
         self.finish()
         return
       }
-
+      
       sleep(self.interval2)
-
+      
       if self.isCancelled {
         self.finish()
         return
       }
-
+      
       sleep(self.interval3)
       self.finish()
     }
@@ -107,11 +107,11 @@ internal final class AutoCancellingAsyncOperation: AsynchronousOperation {
 
 internal final class RunUntilCancelledAsyncOperation: AsynchronousOperation {
   let queue: DispatchQueue
-
+  
   init(queue: DispatchQueue = DispatchQueue.global()) {
     self.queue = queue
   }
-
+  
   override func main() {
     queue.async {
       while !self.isCancelled {
@@ -129,7 +129,7 @@ internal final class InfiniteAsyncOperation: AsyncOperation {
   func stop() {
     isStopped.mutate { $0 = true }
   }
-
+  
   override func main() {
     DispatchQueue(label: "InfiniteOperationQueue").async {
       self.onExecutionStarted?()
@@ -153,7 +153,7 @@ internal final class CancelledOperation: Operation {
     self.line = line
     super.init()
   }
-
+  
   override func main() {
     XCTAssert(isCancelled, "This operation is expected to be cancelled before starting its execution.", file: file, line: line)
   }
@@ -172,10 +172,10 @@ internal final class IntToStringOperation: Operation {
       _output.mutate { $0 = newValue }
     }
   }
-
+  
   // To fix data race error on macOS tests: see testSuccessfulInjectionBetweenOperationsTransformingOutput
   private var _output = Atomic<String?>(nil)
-
+  
   override func main() {
     if let input = self.input {
       output = "\(input)"
@@ -195,10 +195,10 @@ internal final class StringToIntOperation: Operation  {
       _output.mutate { $0 = newValue }
     }
   }
-
+  
   // To fix data race error on macOS tests: see testSuccessfulInjectionBetweenOperationsTransformingOutput
   private var _output = Atomic<Int?>(nil)
-
+  
   override func main() {
     if let input = self.input {
       output = Int(input)
@@ -214,9 +214,9 @@ internal final class FailingOperation: Operation {
     case errorOne
     case errorTwo
   }
-
+  
   private(set) var error: FailureError?
-
+  
   override func main() {
     self.error = .errorOne
   }
@@ -225,18 +225,33 @@ internal final class FailingOperation: Operation {
 // MARK: - ResultOperation
 
 internal final class DummyResultOperation: ResultOperation<String,DummyResultOperation.Error> {
-  enum Error: OperationError { // TODO: Swift 5.3
-    static var cancelled: DummyResultOperation.Error { return .operationCancelled }
-    case operationCancelled
+  enum Error: Swift.Error {
+    case cancelled
   }
-
+  
+  let setFailureOnEarlyBailOut: Bool
+  
+  init(setFailureOnEarlyBailOut: Bool = true) {
+    self.setFailureOnEarlyBailOut = setFailureOnEarlyBailOut
+  }
+  
   override func main() {
     if isCancelled {
-      finish(with: .failure(.operationCancelled))
+      finish(with: .failure(.cancelled))
       return
     }
     DispatchQueue.global().async {
       self.finish(with: .success("Success"))
+    }
+  }
+  
+  override func cancel() {
+    if setFailureOnEarlyBailOut {
+      // makes sure that, even if the operation is cancelled before getting executed,
+      // there always be a result when it finishes
+      cancel(with: .cancelled)
+    } else {
+      super.cancel()
     }
   }
 }
@@ -244,30 +259,36 @@ internal final class DummyResultOperation: ResultOperation<String,DummyResultOpe
 // MARK: - FailableAsyncOperation
 
 internal final class DummyFailableOperation: FailableAsyncOperation<DummyFailableOperation.Error> {
-  enum Error: OperationError { // TODO: Swift 5.3
-    static var cancelled: DummyFailableOperation.Error { return .operationCancelled }
-    case operationCancelled
-    case operationFailed
+  enum Error: Swift.Error {
+    case cancelled
+    case failed
+    case other
   }
-
+  
   let shouldFail: Bool
-
+  
   init(shouldFail: Bool) {
     self.shouldFail = shouldFail
   }
-
+  
   override func main() {
     if isCancelled {
-      finish(with: .operationCancelled)
+      finish(with: .cancelled)
       return
     }
     DispatchQueue.global().async {
       if self.shouldFail {
-        self.finish(with: .operationFailed)
+        self.finish(with: .failed)
       } else {
         self.finish()
       }
     }
+  }
+  
+  override func cancel() {
+    // makes sure that, even if the operation is cancelled before getting executed,
+    // there always be a result when it finishes
+    cancel(with: .cancelled)
   }
 }
 
@@ -288,10 +309,10 @@ internal final class IOGroupOperation: GroupOperation {
   var input: Int?
   private(set) var output: Int?
   var onOutputProduced: ((Int) -> Void)?
-
+  
   init(input: Int? = nil) {
     super.init(operations: [])
-
+    
     let inputOperation = IntToStringOperation()
     if let input = input {
       inputOperation.input = input
@@ -302,15 +323,15 @@ internal final class IOGroupOperation: GroupOperation {
       inputOperation.addDependency(op)
       self.addOperation(op)
     }
-
+    
     let outputOperation = StringToIntOperation()
     let inject = BlockOperation { [unowned inputOperation, unowned outputOperation] in
       outputOperation.input = inputOperation.output
     }
-
+    
     inject.addDependency(inputOperation)
     outputOperation.addDependency(inject)
-
+    
     let exitOperation = BlockOperation { [unowned self, unowned outputOperation] in
       self.output = outputOperation.output
       if let output = self.output {
@@ -318,7 +339,7 @@ internal final class IOGroupOperation: GroupOperation {
       }
     }
     exitOperation.addDependency(outputOperation)
-
+    
     self.addOperation(inputOperation)
     self.addOperation(inject)
     self.addOperation(outputOperation)
@@ -334,14 +355,14 @@ public extension Operation {
       guard newValue else { return }
       print("\(operation.operationName) is cancelled.")
     }
-
+    
     let executing = observe(\.isExecuting, options: [.old, .new]) { (operation, changes) in
       guard let oldValue = changes.oldValue, let newValue = changes.newValue else { return }
       guard oldValue != newValue else { return }
       guard newValue else { return }
       print("\(operation.operationName) is executing.")
     }
-
+    
     let finish = observe(\.isFinished, options: [.old, .new]) { (operation, changes) in
       guard let oldValue = changes.oldValue, let newValue = changes.newValue else { return }
       guard oldValue != newValue else { return }

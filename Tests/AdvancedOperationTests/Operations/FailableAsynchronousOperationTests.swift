@@ -57,6 +57,19 @@ final class FailableAsynchronousOperationTests: XCTestCase {
     let finishExpectation = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: operation, expectedValue: true)
     queue.addOperation(operation)
     wait(for: [finishExpectation], timeout: 2)
-    XCTAssertEqual(operation.error, DummyFailableOperation.Error.operationFailed)
+    XCTAssertEqual(operation.error, DummyFailableOperation.Error.failed)
+  }
+
+  func testChainFailedExecution() {
+    let queue = OperationQueue()
+    let operation1 = BlockOperation()
+    let operation2 = DummyFailableOperation(shouldFail: false)
+    let adapter = BlockOperation { [unowned operation2] in
+      operation2.cancel(with: .other)
+    }
+    adapter.addDependency(operation1)
+    operation2.addDependency(adapter)
+    queue.addOperations([operation1, operation2, adapter], waitUntilFinished: true)
+    XCTAssertEqual(operation2.error, DummyFailableOperation.Error.other)
   }
 }
