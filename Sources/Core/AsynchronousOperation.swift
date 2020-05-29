@@ -39,7 +39,6 @@ open class AsynchronousOperation: Operation, ProgressReporting {
     progress.isCancellable = true
     progress.cancellationHandler = { [weak self] in
       if let self = self, !self.isCancelled {
-        print(progress.isCancelled)
         self.cancel()
       }
     }
