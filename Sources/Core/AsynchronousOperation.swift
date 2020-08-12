@@ -112,7 +112,7 @@ open class AsynchronousOperation: Operation, ProgressReporting {
 
       state = .executing
 
-      // The OperationQueue progress reporting works correcly only if used with super.start()
+      // The OperationQueue progress reporting works correctly only if used with super.start()
       // but calling super.start() shouldn't be done when implementing custom concurrent operations.
       // To fix that we use a different progress instance
       if #available(iOS 13.0, iOSApplicationExtension 13.0, tvOS 13.0, watchOS 6.0, macOS 10.15, *) {
