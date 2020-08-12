@@ -47,6 +47,7 @@
   "defaultOptions" : {
     "mainThreadCheckerEnabled" : false,
     "testExecutionOrdering" : "random",
+    "testTimeoutsEnabled" : true,
     "userAttachmentLifetime" : "keepNever"
   },
   "testTargets" : [

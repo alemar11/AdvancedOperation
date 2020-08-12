@@ -44,6 +44,7 @@
       "name" : "AdvancedOperation macOS"
     },
     "testExecutionOrdering" : "random",
+    "testTimeoutsEnabled" : true,
     "threadSanitizerEnabled" : true,
     "uiTestingScreenshotsLifetime" : "keepNever",
     "undefinedBehaviorSanitizerEnabled" : true,
