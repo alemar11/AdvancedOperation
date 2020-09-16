@@ -1002,7 +1002,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.14;
-				PRODUCT_BUNDLE_IDENTIFIER = org.tinrobots.AdvancedOperation;
+				PRODUCT_BUNDLE_IDENTIFIER = com.alessandromarzoli.AdvancedOperation;
 				PRODUCT_NAME = AdvancedOperation;
 				RUN_CLANG_STATIC_ANALYZER = YES;
 				SKIP_INSTALL = YES;
@@ -1033,7 +1033,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.14;
-				PRODUCT_BUNDLE_IDENTIFIER = org.tinrobots.AdvancedOperation;
+				PRODUCT_BUNDLE_IDENTIFIER = com.alessandromarzoli.AdvancedOperation;
 				PRODUCT_NAME = AdvancedOperation;
 				RUN_CLANG_STATIC_ANALYZER = YES;
 				SKIP_INSTALL = YES;
@@ -1062,7 +1062,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.14;
-				PRODUCT_BUNDLE_IDENTIFIER = org.tinrobots.AdvancedOperation;
+				PRODUCT_BUNDLE_IDENTIFIER = com.alessandromarzoli.AdvancedOperation;
 				PRODUCT_NAME = AdvancedOperation;
 				RUN_CLANG_STATIC_ANALYZER = YES;
 				SDKROOT = macosx;
@@ -1092,7 +1092,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.14;
-				PRODUCT_BUNDLE_IDENTIFIER = org.tinrobots.AdvancedOperation;
+				PRODUCT_BUNDLE_IDENTIFIER = com.alessandromarzoli.AdvancedOperation;
 				PRODUCT_NAME = AdvancedOperation;
 				RUN_CLANG_STATIC_ANALYZER = YES;
 				SDKROOT = macosx;
@@ -1119,7 +1119,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.14;
-				PRODUCT_BUNDLE_IDENTIFIER = org.tinrobots.AdvancedOperation;
+				PRODUCT_BUNDLE_IDENTIFIER = com.alessandromarzoli.AdvancedOperation;
 				PRODUCT_NAME = AdvancedOperation;
 				RUN_CLANG_STATIC_ANALYZER = YES;
 				SDKROOT = appletvos;
@@ -1149,7 +1149,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.14;
-				PRODUCT_BUNDLE_IDENTIFIER = org.tinrobots.AdvancedOperation;
+				PRODUCT_BUNDLE_IDENTIFIER = com.alessandromarzoli.AdvancedOperation;
 				PRODUCT_NAME = AdvancedOperation;
 				RUN_CLANG_STATIC_ANALYZER = YES;
 				SDKROOT = appletvos;
@@ -1177,7 +1177,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.14;
-				PRODUCT_BUNDLE_IDENTIFIER = org.tinrobots.AdvancedOperation;
+				PRODUCT_BUNDLE_IDENTIFIER = com.alessandromarzoli.AdvancedOperation;
 				PRODUCT_NAME = AdvancedOperation;
 				RUN_CLANG_STATIC_ANALYZER = YES;
 				SDKROOT = watchos;
@@ -1206,7 +1206,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.14;
-				PRODUCT_BUNDLE_IDENTIFIER = org.tinrobots.AdvancedOperation;
+				PRODUCT_BUNDLE_IDENTIFIER = com.alessandromarzoli.AdvancedOperation;
 				PRODUCT_NAME = AdvancedOperation;
 				RUN_CLANG_STATIC_ANALYZER = YES;
 				SDKROOT = watchos;
@@ -1231,7 +1231,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.14;
-				PRODUCT_BUNDLE_IDENTIFIER = "org.tinrobots.AdvancedOperation-Tests-macOS";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.alessandromarzoli.AdvancedOperation-Tests-macOS";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				RUN_CLANG_STATIC_ANALYZER = YES;
 				SDKROOT = macosx;
@@ -1256,7 +1256,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.14;
-				PRODUCT_BUNDLE_IDENTIFIER = "org.tinrobots.AdvancedOperation-Tests-macOS";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.alessandromarzoli.AdvancedOperation-Tests-macOS";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				RUN_CLANG_STATIC_ANALYZER = YES;
 				SDKROOT = macosx;
@@ -1279,7 +1279,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.14;
-				PRODUCT_BUNDLE_IDENTIFIER = "org.tinrobots.AdvancedOperation-Tests-iOS";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.alessandromarzoli.AdvancedOperation-Tests-iOS";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				RUN_CLANG_STATIC_ANALYZER = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "";
@@ -1303,7 +1303,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.14;
-				PRODUCT_BUNDLE_IDENTIFIER = "org.tinrobots.AdvancedOperation-Tests-iOS";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.alessandromarzoli.AdvancedOperation-Tests-iOS";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				RUN_CLANG_STATIC_ANALYZER = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "";
@@ -1325,7 +1325,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.14;
-				PRODUCT_BUNDLE_IDENTIFIER = "org.tinrobots.AdvancedOperation-Tests-tvOS";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.alessandromarzoli.AdvancedOperation-Tests-tvOS";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				RUN_CLANG_STATIC_ANALYZER = YES;
 				SDKROOT = appletvos;
@@ -1349,7 +1349,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.14;
-				PRODUCT_BUNDLE_IDENTIFIER = "org.tinrobots.AdvancedOperation-Tests-tvOS";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.alessandromarzoli.AdvancedOperation-Tests-tvOS";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				RUN_CLANG_STATIC_ANALYZER = YES;
 				SDKROOT = appletvos;
