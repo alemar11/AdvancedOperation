@@ -36,6 +36,7 @@
       "name" : "AdvancedOperation tvOS"
     },
     "testExecutionOrdering" : "random",
+    "testTimeoutsEnabled" : true,
     "userAttachmentLifetime" : "keepNever"
   },
   "testTargets" : [

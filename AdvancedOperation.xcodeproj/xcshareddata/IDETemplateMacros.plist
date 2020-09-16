@@ -3,12 +3,8 @@
 <plist version="1.0">
 <dict>
 	<key>FILEHEADER</key>
-	<string> 
-// AdvancedOperation
-___NSHUMANREADABLECOPYRIGHTPLIST___</string>
+	<string>___NSHUMANREADABLECOPYRIGHTPLIST___</string>
 	<key>NSHUMANREADABLECOPYRIGHTPLIST</key>
-	<string>//
-// Copyright © 2016-2020 Tinrobots.
-//</string>
+	<string>AdvancedOperation</string>
 </dict>
 </plist>

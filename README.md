@@ -1,8 +1,4 @@
-[![Swift 5.0](https://img.shields.io/badge/Swift-5.0-orange.svg?style=flat)](https://developer.apple.com/swift)
-![Platforms](https://img.shields.io/badge/Platform-iOS%2011%2B%20|%20macOS%2010.13+%20|%20tvOS%2011+%20|%20watchOS%204+-blue.svg) 
-
-[![Build Status](https://github.com/tinrobots/AdvancedOperation/workflows/AdvancedOperation%20CI/badge.svg?branch=master)](https://github.com/tinrobots/AdvancedOperation/actions)
-[![Travis CI](https://travis-ci.org/tinrobots/AdvancedOperation.svg?branch=master)](https://travis-ci.org/tinrobots/AdvancedOperation)
+![AdvancedOperation CI](https://github.com/tinrobots/AdvancedOperation/workflows/AdvancedOperation%20CI/badge.svg?branch=master)
 
 ## AdvancedOperation
 [![GitHub release](https://img.shields.io/github/release/tinrobots/AdvancedOperation.svg)](https://github.com/tinrobots/AdvancedOperation/releases) 
@@ -17,9 +13,12 @@ Operation usefull extensions.
 
 ## Requirements
 
-- iOS 11.0+ / macOS 10.13+ / tvOS 11.0+ / watchOS 4.0+
-- Xcode 11.5
-- Swift 5.0
+[![Swift 5.2](https://img.shields.io/badge/Swift-5.2-orange.svg?style=flat)](https://developer.apple.com/swift)
+![Platforms](https://img.shields.io/badge/Platform-iOS%2010%2B%20|%20macOS%2010.12+%20|%20tvOS%2010+%20|%20watchOS%203+-blue.svg) 
+![Xcode](https://img.shields.io/badge/Xcode-12-blue.svg) 
+
+[![Carthage Compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage)
+[![CocoaPods Compatible](https://img.shields.io/cocoapods/v/AdvancedOperation.svg)](https://cocoapods.org/pods/AdvancedOperation)
 
 ## Documentation
 
@@ -33,7 +32,7 @@ Documentation is [available online](http://www.tinrobots.org/AdvancedOperation/)
 
 ```ruby
 source 'https://github.com/CocoaPods/Specs.git'
-platform :ios, '11.0'
+platform :ios, '12.0'
 use_frameworks!
 
 target '<Your Target Name>' do
@@ -51,7 +50,7 @@ github "tinrobots/AdvancedOperation" ~> 6.2.0
 
 ```swift
 dependencies: [
-    .package(url: "https://github.com/tinrobots/AdvancedOperation.git", from: "6.2.0")
+    .package(url: "https://github.com/tinrobots/AdvancedOperation.git", .upToNextMajor(from: "6.2.0"))
 ]
 ```
 

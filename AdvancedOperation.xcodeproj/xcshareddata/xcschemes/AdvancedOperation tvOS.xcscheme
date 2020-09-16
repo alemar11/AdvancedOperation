@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Scheme
-   LastUpgradeVersion = "0930"
+   LastUpgradeVersion = "1200"
    version = "1.7">
    <BuildAction
       parallelizeBuildables = "YES"
@@ -31,15 +31,6 @@
       enableASanStackUseAfterReturn = "YES"
       enableUBSanitizer = "YES"
       codeCoverageEnabled = "YES">
-      <MacroExpansion>
-         <BuildableReference
-            BuildableIdentifier = "primary"
-            BlueprintIdentifier = "234130A61F9606B8002BE7FC"
-            BuildableName = "AdvancedOperation.framework"
-            BlueprintName = "AdvancedOperation tvOS"
-            ReferencedContainer = "container:AdvancedOperation.xcodeproj">
-         </BuildableReference>
-      </MacroExpansion>
       <TestPlans>
          <TestPlanReference
             reference = "container:Tests/TestPlans/AdvancedOperation tvOS.xctestplan"

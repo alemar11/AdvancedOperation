@@ -1,7 +1,4 @@
-//
 // AdvancedOperation
-//
-// Copyright © 2016-2020 Tinrobots.
 //
 // https://developer.apple.com/videos/play/wwdc2015/232/
 
