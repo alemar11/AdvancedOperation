@@ -8,7 +8,7 @@ on:
     paths:
       - '.github/workflows/lint.yml'
       - '.swiftlint.yml'
-      - '**/*.swift'    
+      - '**/*.swift'
   pull_request:
     branches:
       - master
@@ -21,6 +21,8 @@ on:
 jobs:
   SwiftLint:
     runs-on: macOS-latest
+    env:
+      DEVELOPER_DIR: /Applications/Xcode_12_beta.app/Contents/Developer
     steps:
       - uses: actions/checkout@v1
       - name: GitHub Action for SwiftLint
@@ -29,5 +31,3 @@ jobs:
           brew update
           brew upgrade swiftlint
           swiftlint --reporter github-actions-logging
-
-
