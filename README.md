@@ -18,7 +18,7 @@ Operation usefull extensions.
 ![Xcode](https://img.shields.io/badge/Xcode-12-blue.svg) 
 
 [![Carthage Compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage)
-[![CocoaPods Compatible](https://img.shields.io/cocoapods/v/CoreDataPlus.svg)](https://cocoapods.org/pods/CoreDataPlus)
+[![CocoaPods Compatible](https://img.shields.io/cocoapods/v/AdvancedOperation.svg)](https://cocoapods.org/pods/AdvancedOperation)
 
 ## Documentation
 
