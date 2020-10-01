@@ -116,7 +116,11 @@ open class GroupOperation: AsynchronousOperation {
         dispatchGroup.enter()
         let finishToken = operation.observe(\.isFinished, options: [.old, .new]) { [weak self] (_, changes) in
           guard let self = self else { return }
-          guard let oldValue = changes.oldValue, let newValue = changes.newValue, oldValue != newValue, newValue else { return }
+          guard
+            let oldValue = changes.oldValue,
+            let newValue = changes.newValue,
+            oldValue != newValue, newValue
+          else { return }
 
           self.dispatchGroup.leave()
         }

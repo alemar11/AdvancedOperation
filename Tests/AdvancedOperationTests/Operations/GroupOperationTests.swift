@@ -77,6 +77,13 @@ final class GroupOperationTests: XCTestCase {
     XCTAssertTrue(operation3.isFinished)
     XCTAssertEqual(groupOperation.maxConcurrentOperationCount, 1)
   }
+  
+  func testStress() {
+    (1...1000).forEach { (i) in
+      print(i)
+      testCancelledExecution()
+    }
+  }
 
   func testCancelledExecution() {
     let operation1 = RunUntilCancelledAsyncOperation()
