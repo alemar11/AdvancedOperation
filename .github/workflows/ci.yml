@@ -73,8 +73,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: tvOS - ${{ matrix.destination }}
-        run: set -o pipefail && env NSUnbufferedIO=YES xcodebuild -project "AdvancedOperation.xcodeproj" -scheme "AdvancedOperation tvOS" -destination "${{ matrix.destination }}" clean test -quiet 
-
+        run: set -o pipefail && env NSUnbufferedIO=YES xcodebuild -project "AdvancedOperation.xcodeproj" -scheme "AdvancedOperation tvOS" -destination "${{ matrix.destination }}" clean test -quiet -resultBundlePath '~/Downloads/report.xcresult'
       - name: The job has failed
         if: ${{ failure() }}
         run: echo FAILURE
@@ -88,7 +87,8 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: iOS tests log
-          path: /Users/runner/Library/Developer/Xcode/DerivedData/        
+          #path: /Users/runner/Library/Developer/Xcode/DerivedData/        
+          path: ~/Downloads/report.xcresult        
   watchOS:
     name: Build watchOS
     runs-on: macOS-latest
