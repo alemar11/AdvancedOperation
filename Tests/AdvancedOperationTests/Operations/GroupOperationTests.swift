@@ -207,4 +207,14 @@ final class GroupOperationTests: XCTestCase {
     queue.addOperation(group)
     wait(for: [expectation1, expectation2], timeout: 5)
   }
+  
+  func testMainProgressTotalUnitCountShouldNotBeAffectedByChildOperations() {
+    let operation1 = BlockOperation {}
+    let operation2 = BlockOperation {}
+    let group = GroupOperation(operations: operation1, operation2)
+    XCTAssertEqual(group.progress.totalUnitCount, 1, "The main progress shouldn't be affected by child operations")
+    operation1.cancel()
+    operation1.cancel()
+    XCTAssertEqual(group.progress.totalUnitCount, 1, "The main progress shouldn't be affected by child operations")
+  }
 }
