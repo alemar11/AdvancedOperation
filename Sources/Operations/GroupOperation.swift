@@ -64,6 +64,7 @@ open class GroupOperation: AsynchronousOperation {
     //    that's why we need to do so)
     // 2. we invalidate ad deinit all the tokens.
     // 3. we remove all the operations.
+    
     tokens.forEach { $0.invalidate() }
     tokens.removeAll()
     _operations.removeAll()
