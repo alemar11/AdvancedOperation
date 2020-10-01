@@ -52,7 +52,7 @@ jobs:
         if: ${{ always() }} # to run it only if the previous step fails use ${{ failure() }}
         uses: actions/upload-artifact@v2
         with:
-          name: iOS failure tests report
+          name: iOS tests report
           path: ~/Downloads/Report 
   tvOS:
     name: Test tvOS
