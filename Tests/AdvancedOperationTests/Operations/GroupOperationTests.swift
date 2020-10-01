@@ -78,11 +78,11 @@ final class GroupOperationTests: XCTestCase {
     XCTAssertEqual(groupOperation.maxConcurrentOperationCount, 1)
   }
   
-  func testStress() {
-    (1...1000).forEach { (i) in
-      testCancelledExecution()
-    }
-  }
+//  func testStress() {
+//    (1...1000).forEach { (i) in
+//      testCancelledExecution()
+//    }
+//  }
 
   func testCancelledExecution() {
     let operation1 = RunUntilCancelledAsyncOperation()
