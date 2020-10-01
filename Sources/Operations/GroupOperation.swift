@@ -106,7 +106,6 @@ open class GroupOperation: AsynchronousOperation {
     }
   }
 
-  
   /// Adds new `operations` to the `GroupOperation`.
   ///
   /// If the `GroupOperation` is already cancelled,  the new  operations will be cancelled before being added.
