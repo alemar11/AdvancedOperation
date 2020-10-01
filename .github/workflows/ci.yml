@@ -34,7 +34,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: macOS
-        run: set -o pipefail && env NSUnbufferedIO=YES xcodebuild -project "AdvancedOperation.xcodeproj" -scheme "AdvancedOperation macOS" -destination "platform=macOS" clean test -quiet
+        run: set -o pipefail && env NSUnbufferedIO=YES xcodebuild -project "AdvancedOperation.xcodeproj" -scheme "AdvancedOperation macOS" -destination "platform=macOS" clean test -quiet -resultBundlePath '~/Downloads/Report/report.xcresult'
   iOS:
     name: Test iOS
     runs-on: macOS-latest
@@ -46,22 +46,14 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: iOS - ${{ matrix.destination }}
-        run: set -o pipefail && env NSUnbufferedIO=YES xcodebuild -project "AdvancedOperation.xcodeproj" -scheme "AdvancedOperation iOS" -destination "${{ matrix.destination }}" clean test -quiet
+        run: set -o pipefail && env NSUnbufferedIO=YES xcodebuild -project "AdvancedOperation.xcodeproj" -scheme "AdvancedOperation iOS" -destination "${{ matrix.destination }}" clean test -quiet -resultBundlePath '~/Downloads/Report/report.xcresult'
 
-      - name: The job has failed
-        if: ${{ failure() }}
-        run: echo FAILURE
-
-      - name: The job has failed
-        if: ${{ always() }}
-        run: echo ALWAYS  
-
-      - name: Upload failure tests report
-        if: ${{ always() }}
+      - name: Upload tests report
+        if: ${{ always() }} # to run it only if the previous step fails use ${{ failure() }}
         uses: actions/upload-artifact@v2
         with:
-          name: iOS tests log
-          path: /Users/runner/Library/Developer/Xcode/DerivedData/
+          name: iOS failure tests report
+          path: ~/Downloads/Report 
   tvOS:
     name: Test tvOS
     runs-on: macOS-latest
@@ -74,20 +66,12 @@ jobs:
       - uses: actions/checkout@v2
       - name: tvOS - ${{ matrix.destination }}
         run: set -o pipefail && env NSUnbufferedIO=YES xcodebuild -project "AdvancedOperation.xcodeproj" -scheme "AdvancedOperation tvOS" -destination "${{ matrix.destination }}" clean test -quiet -resultBundlePath '~/Downloads/Report/report.xcresult'
-      - name: The job has failed
-        if: ${{ failure() }}
-        run: echo FAILURE
-
-      - name: The job has failed
-        if: ${{ always() }}
-        run: echo ALWAYS  
-
-      - name: Upload failure tests report
-        if: ${{ always() }}
+      
+      - name: Upload tests report
+        if: ${{ always() }} # to run it only if the previous step fails use ${{ failure() }}
         uses: actions/upload-artifact@v2
         with:
-          name: tvOS tests log
-          #path: /Users/runner/Library/Developer/Xcode/DerivedData/        
+          name: tvOS tests report    
           path: ~/Downloads/Report       
   watchOS:
     name: Build watchOS
