@@ -148,8 +148,17 @@ open class GroupOperation: AsynchronousOperation {
             if #available(iOS 13.0, iOSApplicationExtension 13.0, tvOS 13.0, watchOS 6.0, macOS 10.15, *) {
               // if the cancelled operation is executing, the queue progress will be updated when the operation finishes
               
-              if !operation.isExecuting && self.operationQueue.progress.totalUnitCount > 0 {
-                self.operationQueue.progress.totalUnitCount -= 1
+//              if !operation.isExecuting && self.operationQueue.progress.totalUnitCount > 0 {
+//                self.operationQueue.progress.totalUnitCount -= 1
+//              }
+              
+              // TODO: this implementation is the same as before but it asserts if the total unit count value is unexpected
+              if !operation.isExecuting {
+                if self.operationQueue.progress.totalUnitCount > 0 {
+                  self.operationQueue.progress.totalUnitCount -= 1
+                } else {
+                  assertionFailure("The total count should be greater than 0")
+                }
               }
             }
           }
