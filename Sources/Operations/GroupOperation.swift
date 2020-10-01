@@ -34,7 +34,7 @@ open class GroupOperation: AsynchronousOperation {
     $0.isSuspended = true
     return $0
   }(OperationQueue())
-  private var _operations = [Operation]()
+  private var _operations = [Operation]() // see deinit() implementation
 
   // MARK: - Initializers
 
@@ -57,6 +57,13 @@ open class GroupOperation: AsynchronousOperation {
   }
 
   deinit {
+    // An observation token may cause crashes during its deinit phase if its observed object (an Operation)
+    // has been already deallocated
+    // To fix this issue:
+    // 1. we store all the operations in a private array (the internal OperationQueue will release them once finished,
+    //    that's why we need to do so)
+    // 2. we invalidate ad deinit all the tokens.
+    // 3. we remove all the operations.
     tokens.forEach { $0.invalidate() }
     tokens.removeAll()
     _operations.removeAll()
