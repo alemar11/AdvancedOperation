@@ -48,6 +48,11 @@ jobs:
       - name: iOS - ${{ matrix.destination }}
         run: set -o pipefail && env NSUnbufferedIO=YES xcodebuild -project "AdvancedOperation.xcodeproj" -scheme "AdvancedOperation iOS" -destination "${{ matrix.destination }}" clean test -quiet
 
+        uses: actions/upload-artifact@v2
+        with:
+          name: iOS tests log
+          path: /Users/runner/Library/Developer/Xcode/DerivedData/
+
       # - name: Upload failure tests report
       #   #if: failure()
       #   uses: actions/upload-artifact@v2
