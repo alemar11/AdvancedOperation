@@ -65,14 +65,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: tvOS - ${{ matrix.destination }}
-        run: set -o pipefail && env NSUnbufferedIO=YES xcodebuild -project "AdvancedOperation.xcodeproj" -scheme "AdvancedOperation tvOS" -destination "${{ matrix.destination }}" clean test -quiet
-      
-    # name: Upload failure tests report
-    #   #if: failure()
-    #   uses: actions/upload-artifact@v2
-    #   with:
-    #     name: tvOS tests log
-    #     path: /Users/runner/Library/Developer/Xcode/DerivedData/  
+        run: set -o pipefail && env NSUnbufferedIO=YES xcodebuild -project "AdvancedOperation.xcodeproj" -scheme "AdvancedOperation tvOS" -destination "${{ matrix.destination }}" clean test -quiet 
   watchOS:
     name: Build watchOS
     runs-on: macOS-latest
