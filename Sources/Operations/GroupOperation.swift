@@ -24,6 +24,8 @@ open class GroupOperation: AsynchronousOperation {
       operationQueue.qualityOfService = newValue
     }
   }
+  
+  private var _operations = [Operation]()
 
   // MARK: - Private Properties
 
@@ -58,6 +60,7 @@ open class GroupOperation: AsynchronousOperation {
   deinit {
     tokens.forEach { $0.invalidate() }
     tokens.removeAll()
+    _operations.removeAll()
   }
 
   // MARK: - Public Methods
@@ -112,6 +115,7 @@ open class GroupOperation: AsynchronousOperation {
       guard !isFinished else { return }
 
       operations.forEach { operation in
+        _operations.append(operation)
         // 1. observe when the operation finishes
         dispatchGroup.enter()
         let finishToken = operation.observe(\.isFinished, options: [.old, .new]) { [weak self] (_, changes) in
