@@ -48,11 +48,12 @@ jobs:
       - name: iOS - ${{ matrix.destination }}
         run: set -o pipefail && env NSUnbufferedIO=YES xcodebuild -project "AdvancedOperation.xcodeproj" -scheme "AdvancedOperation iOS" -destination "${{ matrix.destination }}" clean test -quiet
 
-      - name: Upload Core Tests
+      - name: Upload failure tests report
+        if: failure()
         uses: actions/upload-artifact@v2
         with:
           name: tests
-          path: derivedData/Build/Products/Debug-iphonesimulator/AdvancedOperationTests.xctest
+          path: Users/runner/Library/Developer/Xcode/DerivedData/
   tvOS:
     name: Test tvOS
     runs-on: macOS-latest
@@ -65,6 +66,14 @@ jobs:
       - uses: actions/checkout@v2
       - name: tvOS - ${{ matrix.destination }}
         run: set -o pipefail && env NSUnbufferedIO=YES xcodebuild -project "AdvancedOperation.xcodeproj" -scheme "AdvancedOperation tvOS" -destination "${{ matrix.destination }}" clean test -quiet
+
+      - name: Upload failure tests report
+        if: failure()
+        uses: actions/upload-artifact@v2
+        with:
+          name: tests
+          path: Users/runner/Library/Developer/Xcode/DerivedData/  
+
   watchOS:
     name: Build watchOS
     runs-on: macOS-latest
