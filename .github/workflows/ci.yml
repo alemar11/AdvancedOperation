@@ -52,7 +52,7 @@ jobs:
         if: failure()
         uses: actions/upload-artifact@v2
         with:
-          name: tests log
+          name: iOS tests log
           path: /Users/runner/Library/Developer/Xcode/DerivedData/
   tvOS:
     name: Test tvOS
@@ -71,7 +71,7 @@ jobs:
         if: failure()
         uses: actions/upload-artifact@v2
         with:
-          name: tests log
+          name: tvOS tests log
           path: /Users/runner/Library/Developer/Xcode/DerivedData/  
   watchOS:
     name: Build watchOS
