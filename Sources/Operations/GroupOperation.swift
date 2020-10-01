@@ -157,7 +157,7 @@ open class GroupOperation: AsynchronousOperation {
                 if self.operationQueue.progress.totalUnitCount > 0 {
                   self.operationQueue.progress.totalUnitCount -= 1
                 } else {
-                  assertionFailure("The total count should be greater than 0")
+                  assertionFailure("The total unit count should be greater than 0")
                 }
               }
             }
