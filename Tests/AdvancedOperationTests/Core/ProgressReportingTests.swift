@@ -108,13 +108,13 @@ final class ProgressReportingTests: XCTestCase {
     token.invalidate()
   }
 
-  @available(iOS 13.0, iOSApplicationExtension 13.0, macCatalyst 13.0, tvOS 13.0, watchOS 6.0, macOS 10.15, *)
-  func testStress() throws {
-    try (1...100).forEach { (i) in
-      print(i)
-      try testProgressReportingWhenAddingOperationsToGroupOperationWhileIsBeingCancelled()
-    }
-  }
+//  @available(iOS 13.0, iOSApplicationExtension 13.0, macCatalyst 13.0, tvOS 13.0, watchOS 6.0, macOS 10.15, *)
+//  func testStress() throws {
+//    try (1...100).forEach { (i) in
+//      print(i)
+//      try testProgressReportingWhenAddingOperationsToGroupOperationWhileIsBeingCancelled()
+//    }
+//  }
   
  @available(iOS 13.0, iOSApplicationExtension 13.0, macCatalyst 13.0, tvOS 13.0, watchOS 6.0, macOS 10.15, *)
   func testProgressReportingWhenAddingOperationsToGroupOperationWhileIsBeingCancelled() throws {
