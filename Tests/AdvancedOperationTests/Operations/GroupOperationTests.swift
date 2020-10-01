@@ -79,7 +79,7 @@ final class GroupOperationTests: XCTestCase {
   }
   
   func testStress() {
-    (1...100).forEach { (i) in
+    (1...1000).forEach { (i) in
       testCancelledExecution()
     }
   }
