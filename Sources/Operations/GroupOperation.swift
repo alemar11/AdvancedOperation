@@ -86,6 +86,7 @@ open class GroupOperation: AsynchronousOperation {
     // 2. setup the completion block to be called when all the operations are finished
     dispatchGroup.notify(queue: dispatchQueue) { [weak self] in
       self?.operationQueue.isSuspended = true
+      print("▶️ is being finished")
       self?.finish()
     }
     // 3. start running the operations
