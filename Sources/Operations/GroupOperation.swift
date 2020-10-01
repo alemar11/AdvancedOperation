@@ -24,8 +24,6 @@ open class GroupOperation: AsynchronousOperation {
       operationQueue.qualityOfService = newValue
     }
   }
-  
-  private var _operations = [Operation]()
 
   // MARK: - Private Properties
 
@@ -36,6 +34,7 @@ open class GroupOperation: AsynchronousOperation {
     $0.isSuspended = true
     return $0
   }(OperationQueue())
+  private var _operations = [Operation]()
 
   // MARK: - Initializers
 
