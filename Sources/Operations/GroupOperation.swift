@@ -34,7 +34,7 @@ open class GroupOperation: AsynchronousOperation {
     $0.isSuspended = true
     return $0
   }(OperationQueue())
-  private var _operations = [Operation]() // see deinit() implementation
+  private var _operations = ContiguousArray<Operation>() // see deinit() implementation
 
   // MARK: - Initializers
 
