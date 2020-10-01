@@ -82,6 +82,7 @@ final class GroupOperationTests: XCTestCase {
     (1...100).forEach { (i) in
       print(i)
       testCancelledExecution()
+
     }
   }
 
