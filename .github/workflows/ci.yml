@@ -48,8 +48,16 @@ jobs:
       - name: iOS - ${{ matrix.destination }}
         run: set -o pipefail && env NSUnbufferedIO=YES xcodebuild -project "AdvancedOperation.xcodeproj" -scheme "AdvancedOperation iOS" -destination "${{ matrix.destination }}" clean test -quiet
 
+      - name: The job has failed
+        if: ${{ failure() }}
+        run: echo FAILURE
+
+      - name: The job has failed
+        if: ${{ always() }}
+        run: echo ALWAYS  
+
       - name: Upload failure tests report
-        #if: failure()
+        if: ${{ always() }}
         uses: actions/upload-artifact@v2
         with:
           name: iOS tests log
