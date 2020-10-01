@@ -86,7 +86,7 @@ jobs:
         if: ${{ always() }}
         uses: actions/upload-artifact@v2
         with:
-          name: iOS tests log
+          name: tvOS tests log
           #path: /Users/runner/Library/Developer/Xcode/DerivedData/        
           path: ~/Downloads/report.xcresult        
   watchOS:
