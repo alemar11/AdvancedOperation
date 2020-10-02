@@ -1,117 +1,96 @@
 {
   "warnings": [
     {
-      "file": "/Users/alessandro/Developer/AdvancedOperation/Sources/Core/AsynchronousOperation.swift",
-      "line": 26,
+      "file": "/Users/amarzoli/Developer/AdvancedOperation/Sources/Core/AsynchronousOperation.swift",
+      "line": 5,
       "symbol": "AsyncOperation",
       "symbol_kind": "source.lang.swift.decl.typealias",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/alessandro/Developer/AdvancedOperation/Sources/Core/AsynchronousOperation.swift",
-      "line": 48,
+      "file": "/Users/amarzoli/Developer/AdvancedOperation/Sources/Core/AsynchronousOperation.swift",
+      "line": 27,
       "symbol": "AsynchronousOperation.isReady",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/alessandro/Developer/AdvancedOperation/Sources/Core/AsynchronousOperation.swift",
-      "line": 52,
+      "file": "/Users/amarzoli/Developer/AdvancedOperation/Sources/Core/AsynchronousOperation.swift",
+      "line": 29,
       "symbol": "AsynchronousOperation.isExecuting",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/alessandro/Developer/AdvancedOperation/Sources/Core/AsynchronousOperation.swift",
-      "line": 56,
+      "file": "/Users/amarzoli/Developer/AdvancedOperation/Sources/Core/AsynchronousOperation.swift",
+      "line": 31,
       "symbol": "AsynchronousOperation.isFinished",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/alessandro/Developer/AdvancedOperation/Sources/Core/AsynchronousOperation.swift",
-      "line": 60,
+      "file": "/Users/amarzoli/Developer/AdvancedOperation/Sources/Core/AsynchronousOperation.swift",
+      "line": 33,
       "symbol": "AsynchronousOperation.isAsynchronous",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/alessandro/Developer/AdvancedOperation/Sources/Core/AsynchronousOperation.swift",
-      "line": 62,
+      "file": "/Users/amarzoli/Developer/AdvancedOperation/Sources/Core/AsynchronousOperation.swift",
+      "line": 35,
       "symbol": "AsynchronousOperation.isConcurrent",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/alessandro/Developer/AdvancedOperation/Sources/Core/AsynchronousOperation.swift",
-      "line": 115,
+      "file": "/Users/amarzoli/Developer/AdvancedOperation/Sources/Core/AsynchronousOperation.swift",
+      "line": 88,
       "symbol": "AsynchronousOperation.start()",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/alessandro/Developer/AdvancedOperation/Sources/Core/AsynchronousOperation.swift",
-      "line": 186,
+      "file": "/Users/amarzoli/Developer/AdvancedOperation/Sources/Core/AsynchronousOperation.swift",
+      "line": 159,
       "symbol": "AsynchronousOperation.cancel()",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/alessandro/Developer/AdvancedOperation/Sources/Core/AsynchronousOperation.swift",
-      "line": 198,
+      "file": "/Users/amarzoli/Developer/AdvancedOperation/Sources/Core/AsynchronousOperation.swift",
+      "line": 171,
       "symbol": "AsynchronousOperation.description",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/alessandro/Developer/AdvancedOperation/Sources/Core/AsynchronousOperation.swift",
-      "line": 202,
+      "file": "/Users/amarzoli/Developer/AdvancedOperation/Sources/Core/AsynchronousOperation.swift",
+      "line": 173,
       "symbol": "AsynchronousOperation.debugDescription",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/alessandro/Developer/AdvancedOperation/Sources/Core/AsynchronousOperation.swift",
-      "line": 212,
-      "symbol": "AsynchronousOperation.State.ready",
-      "symbol_kind": "source.lang.swift.decl.enumelement",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/alessandro/Developer/AdvancedOperation/Sources/Core/AsynchronousOperation.swift",
-      "line": 213,
-      "symbol": "AsynchronousOperation.State.executing",
-      "symbol_kind": "source.lang.swift.decl.enumelement",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/alessandro/Developer/AdvancedOperation/Sources/Core/AsynchronousOperation.swift",
-      "line": 214,
-      "symbol": "AsynchronousOperation.State.finished",
-      "symbol_kind": "source.lang.swift.decl.enumelement",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/alessandro/Developer/AdvancedOperation/Sources/Operations/AsynchronousBlockOperation.swift",
-      "line": 26,
+      "file": "/Users/amarzoli/Developer/AdvancedOperation/Sources/Operations/AsynchronousBlockOperation.swift",
+      "line": 5,
       "symbol": "AsyncBlockOperation",
       "symbol_kind": "source.lang.swift.decl.typealias",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/alessandro/Developer/AdvancedOperation/Sources/Operations/FailableAsyncOperation.swift",
-      "line": 26,
+      "file": "/Users/amarzoli/Developer/AdvancedOperation/Sources/Operations/FailableAsyncOperation.swift",
+      "line": 5,
       "symbol": "FailableAsyncOperation",
       "symbol_kind": "source.lang.swift.decl.typealias",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/alessandro/Developer/AdvancedOperation/Sources/Operations/GroupOperation.swift",
-      "line": 124,
+      "file": "/Users/amarzoli/Developer/AdvancedOperation/Sources/Operations/GroupOperation.swift",
+      "line": 111,
       "symbol": "GroupOperation.cancel()",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     }
   ],
-  "source_directory": "/Users/alessandro/Developer/AdvancedOperation"
+  "source_directory": "/Users/amarzoli/Developer/AdvancedOperation"
 }
