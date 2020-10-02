@@ -36,21 +36,21 @@ platform :ios, '12.0'
 use_frameworks!
 
 target '<Your Target Name>' do
-    pod 'AdvancedOperation', '~> 6.2.0'
+    pod 'AdvancedOperation', '~> 6.2.1'
 end
 ```
 
 ### Carthage
 
 ```ogdl
-github "tinrobots/AdvancedOperation" ~> 6.2.0
+github "tinrobots/AdvancedOperation" ~> 6.2.1
 ```
 
 ### Swift Package Manager
 
 ```swift
 dependencies: [
-    .package(url: "https://github.com/tinrobots/AdvancedOperation.git", .upToNextMajor(from: "6.2.0"))
+    .package(url: "https://github.com/tinrobots/AdvancedOperation.git", .upToNextMajor(from: "6.2.1"))
 ]
 ```
 
