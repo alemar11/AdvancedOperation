@@ -3,6 +3,7 @@
 ### 6.2.1
 
 - Fix a KVO crash in `GroupOperation`.`
+- Fix memory leak in `GroupOperation`.`
 
 ### 6.2.0
 
