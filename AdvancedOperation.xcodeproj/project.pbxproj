@@ -54,6 +54,9 @@
 		06C92B5423D0AB06000D12C8 /* AsynchronousBlockOperationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06C92B4F23D0AAEA000D12C8 /* AsynchronousBlockOperationTests.swift */; };
 		06C92B5523D0AB06000D12C8 /* AsynchronousBlockOperationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06C92B4F23D0AAEA000D12C8 /* AsynchronousBlockOperationTests.swift */; };
 		06C92B5623D0AB07000D12C8 /* AsynchronousBlockOperationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06C92B4F23D0AAEA000D12C8 /* AsynchronousBlockOperationTests.swift */; };
+		06E3140125272222003ED9E3 /* XCTestCase+Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06E3140025272222003ED9E3 /* XCTestCase+Utils.swift */; };
+		06E3140225272222003ED9E3 /* XCTestCase+Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06E3140025272222003ED9E3 /* XCTestCase+Utils.swift */; };
+		06E3140325272222003ED9E3 /* XCTestCase+Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06E3140025272222003ED9E3 /* XCTestCase+Utils.swift */; };
 		2341308C1F9605F5002BE7FC /* AdvancedOperation.h in Headers */ = {isa = PBXBuildFile; fileRef = 2341308A1F9605F5002BE7FC /* AdvancedOperation.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		234130BC1F96076A002BE7FC /* AdvancedOperation.h in Headers */ = {isa = PBXBuildFile; fileRef = 2341308A1F9605F5002BE7FC /* AdvancedOperation.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		234130BD1F96076D002BE7FC /* AdvancedOperation.h in Headers */ = {isa = PBXBuildFile; fileRef = 2341308A1F9605F5002BE7FC /* AdvancedOperation.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -140,6 +143,7 @@
 		06B3D10123D9E9F3005EBDD8 /* AdvancedOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdvancedOperation.swift; sourceTree = "<group>"; };
 		06C92B4A23D0A9FF000D12C8 /* AsynchronousBlockOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsynchronousBlockOperation.swift; sourceTree = "<group>"; };
 		06C92B4F23D0AAEA000D12C8 /* AsynchronousBlockOperationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsynchronousBlockOperationTests.swift; sourceTree = "<group>"; };
+		06E3140025272222003ED9E3 /* XCTestCase+Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "XCTestCase+Utils.swift"; sourceTree = "<group>"; };
 		234130871F9605F5002BE7FC /* AdvancedOperation.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = AdvancedOperation.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		2341308A1F9605F5002BE7FC /* AdvancedOperation.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AdvancedOperation.h; sourceTree = "<group>"; };
 		2341308B1F9605F5002BE7FC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -335,6 +339,7 @@
 			isa = PBXGroup;
 			children = (
 				23856178200A873C0061BAA1 /* Mocks.swift */,
+				06E3140025272222003ED9E3 /* XCTestCase+Utils.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -780,6 +785,7 @@
 				D2093D38236606F400230A2A /* AsynchronousOperationTests.swift in Sources */,
 				06C92B5623D0AB07000D12C8 /* AsynchronousBlockOperationTests.swift in Sources */,
 				D268F3F72471338100003666 /* ProgressReportingTests.swift in Sources */,
+				06E3140325272222003ED9E3 /* XCTestCase+Utils.swift in Sources */,
 				235D08D3206A941B00F70142 /* OperationStateTests.swift in Sources */,
 				23AC3ADF2038A050003E1B15 /* OperationUtilsTests.swift in Sources */,
 				2385617B200A873C0061BAA1 /* Mocks.swift in Sources */,
@@ -796,6 +802,7 @@
 				D2093D36236606F400230A2A /* AsynchronousOperationTests.swift in Sources */,
 				06C92B5423D0AB06000D12C8 /* AsynchronousBlockOperationTests.swift in Sources */,
 				D268F3F52471338100003666 /* ProgressReportingTests.swift in Sources */,
+				06E3140125272222003ED9E3 /* XCTestCase+Utils.swift in Sources */,
 				235D08D1206A941B00F70142 /* OperationStateTests.swift in Sources */,
 				23AC3ADD2038A050003E1B15 /* OperationUtilsTests.swift in Sources */,
 				23856179200A873C0061BAA1 /* Mocks.swift in Sources */,
@@ -812,6 +819,7 @@
 				D2093D37236606F400230A2A /* AsynchronousOperationTests.swift in Sources */,
 				06C92B5523D0AB06000D12C8 /* AsynchronousBlockOperationTests.swift in Sources */,
 				D268F3F62471338100003666 /* ProgressReportingTests.swift in Sources */,
+				06E3140225272222003ED9E3 /* XCTestCase+Utils.swift in Sources */,
 				235D08D2206A941B00F70142 /* OperationStateTests.swift in Sources */,
 				23AC3ADE2038A050003E1B15 /* OperationUtilsTests.swift in Sources */,
 				2385617A200A873C0061BAA1 /* Mocks.swift in Sources */,

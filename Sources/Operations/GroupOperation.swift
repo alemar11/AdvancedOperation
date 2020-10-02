@@ -67,6 +67,11 @@ open class GroupOperation: AsynchronousOperation {
     tokens.forEach { $0.invalidate() }
     tokens.removeAll()
     _operations.removeAll()
+    
+    // https://stackoverflow.com/questions/4681937/properly-dealloc-nsoperationqueue
+    // The queue won't release its operations if it's suspended
+    operationQueue.cancelAllOperations()
+    operationQueue.isSuspended = false
   }
 
   // MARK: - Public Methods
