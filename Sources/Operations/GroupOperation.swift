@@ -34,6 +34,7 @@ open class GroupOperation: AsynchronousOperation {
     $0.isSuspended = true
     return $0
   }(OperationQueue())
+  private var _operations = ContiguousArray<Operation>() // see deinit() implementation TODO: array?
 
   // MARK: - Initializers
 
@@ -56,8 +57,21 @@ open class GroupOperation: AsynchronousOperation {
   }
 
   deinit {
+    // An observation token may cause crashes during its deinit phase if its observed object (an Operation)
+    // has been already deallocated
+    // To fix this issue:
+    // 1. we store all the operations in a private array (the internal OperationQueue will release them once finished,
+    //    that's why we need to do so)
+    // 2. we invalidate ad deinit all the tokens.
+    // 3. we remove all the operations.
     tokens.forEach { $0.invalidate() }
     tokens.removeAll()
+    _operations.removeAll()
+
+    // https://stackoverflow.com/questions/4681937/properly-dealloc-nsoperationqueue
+    // The queue won't release its operations if it's suspended
+    operationQueue.cancelAllOperations()
+    operationQueue.isSuspended = false
   }
 
   // MARK: - Public Methods
@@ -112,6 +126,7 @@ open class GroupOperation: AsynchronousOperation {
       guard !isFinished else { return }
 
       operations.forEach { operation in
+        _operations.append(operation)
         // 1. observe when the operation finishes
         dispatchGroup.enter()
         let finishToken = operation.observe(\.isFinished, options: [.old, .new]) { [weak self] (_, changes) in
@@ -137,8 +152,13 @@ open class GroupOperation: AsynchronousOperation {
 
             if #available(iOS 13.0, iOSApplicationExtension 13.0, tvOS 13.0, watchOS 6.0, macOS 10.15, *) {
               // if the cancelled operation is executing, the queue progress will be updated when the operation finishes
-              if !operation.isExecuting && self.operationQueue.progress.totalUnitCount > 0 {
-                self.operationQueue.progress.totalUnitCount -= 1
+
+              if !operation.isExecuting {
+                if self.operationQueue.progress.totalUnitCount > 0 {
+                  self.operationQueue.progress.totalUnitCount -= 1
+                } else {
+                  assertionFailure("The progress total unit count should be greater than 0.")
+                }
               }
             }
           }

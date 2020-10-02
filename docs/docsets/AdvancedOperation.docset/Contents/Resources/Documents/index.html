@@ -8,12 +8,20 @@
     <script src="js/jquery.min.js" defer></script>
     <script src="js/jazzy.js" defer></script>
     
+    <script src="js/lunr.min.js" defer></script>
+    <script src="js/typeahead.jquery.js" defer></script>
+    <script src="js/jazzy.search.js" defer></script>
   </head>
   <body>
     <a title="AdvancedOperation  Reference"></a>
     <header>
       <div class="content-wrapper">
-        <p><a href="index.html">AdvancedOperation Docs</a> (69% documented)</p>
+        <p><a href="index.html">AdvancedOperation 6.2.0 Docs</a> (72% documented)</p>
+        <p class="header-right">
+          <form role="search" action="search.json">
+            <input type="text" placeholder="Search documentation" data-typeahead>
+          </form>
+        </p>
       </div>
     </header>
     <div class="content-wrapper">
@@ -34,9 +42,6 @@
               </li>
               <li class="nav-group-task">
                 <a href="Classes/AsynchronousOperation.html">AsynchronousOperation</a>
-              </li>
-              <li class="nav-group-task">
-                <a href="Classes/AsynchronousOperation/State.html">– State</a>
               </li>
               <li class="nav-group-task">
                 <a href="Classes/FailableAsynchronousOperation.html">FailableAsynchronousOperation</a>
@@ -86,11 +91,7 @@
         <section>
           <section class="section">
             
-            <p><a href="https://developer.apple.com/swift"><img src="https://img.shields.io/badge/Swift-5.0-orange.svg?style=flat" alt="Swift 5.0"></a>
-<img src="https://img.shields.io/badge/Platform-iOS%2011%2B%20%7C%20macOS%2010.13+%20%7C%20tvOS%2011+%20%7C%20watchOS%204+-blue.svg" alt="Platforms"> </p>
-
-<p><a href="https://github.com/tinrobots/AdvancedOperation/actions"><img src="https://github.com/tinrobots/AdvancedOperation/workflows/AdvancedOperation%20CI/badge.svg?branch=master" alt="Build Status"></a>
-<a href="https://travis-ci.org/tinrobots/AdvancedOperation"><img src="https://travis-ci.org/tinrobots/AdvancedOperation.svg?branch=master" alt="Travis CI"></a></p>
+            <p><img src="https://github.com/tinrobots/AdvancedOperation/workflows/AdvancedOperation%20CI/badge.svg?branch=master" alt="AdvancedOperation CI"></p>
 <h2 id='advancedoperation' class='heading'>AdvancedOperation</h2>
 
 <p><a href="https://github.com/tinrobots/AdvancedOperation/releases"><img src="https://img.shields.io/github/release/tinrobots/AdvancedOperation.svg" alt="GitHub release"></a> </p>
@@ -106,11 +107,12 @@
 </ul>
 <h2 id='requirements' class='heading'>Requirements</h2>
 
-<ul>
-<li>iOS 11.0+ / macOS 10.13+ / tvOS 11.0+ / watchOS 4.0+</li>
-<li>Xcode 11.4</li>
-<li>Swift 5.0</li>
-</ul>
+<p><a href="https://developer.apple.com/swift"><img src="https://img.shields.io/badge/Swift-5.2-orange.svg?style=flat" alt="Swift 5.2"></a>
+<img src="https://img.shields.io/badge/Platform-iOS%2010%2B%20%7C%20macOS%2010.12+%20%7C%20tvOS%2010+%20%7C%20watchOS%203+-blue.svg" alt="Platforms"> 
+<img src="https://img.shields.io/badge/Xcode-12-blue.svg" alt="Xcode"> </p>
+
+<p><a href="https://github.com/Carthage/Carthage"><img src="https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat" alt="Carthage Compatible"></a>
+<a href="https://cocoapods.org/pods/AdvancedOperation"><img src="https://img.shields.io/cocoapods/v/AdvancedOperation.svg" alt="CocoaPods Compatible"></a></p>
 <h2 id='documentation' class='heading'>Documentation</h2>
 
 <p>Documentation is <a href="http://www.tinrobots.org/AdvancedOperation/">available online</a>.</p>
@@ -121,19 +123,19 @@
 <h2 id='installation' class='heading'>Installation</h2>
 <h3 id='cocoapods' class='heading'>CocoaPods</h3>
 <pre class="highlight ruby"><code><span class="n">source</span> <span class="s1">'https://github.com/CocoaPods/Specs.git'</span>
-<span class="n">platform</span> <span class="ss">:ios</span><span class="p">,</span> <span class="s1">'11.0'</span>
+<span class="n">platform</span> <span class="ss">:ios</span><span class="p">,</span> <span class="s1">'12.0'</span>
 <span class="n">use_frameworks!</span>
 
 <span class="n">target</span> <span class="s1">'&lt;Your Target Name&gt;'</span> <span class="k">do</span>
-    <span class="n">pod</span> <span class="s1">'AdvancedOperation'</span><span class="p">,</span> <span class="s1">'~&gt; 6.2.0'</span>
+    <span class="n">pod</span> <span class="s1">'AdvancedOperation'</span><span class="p">,</span> <span class="s1">'~&gt; 6.2.1'</span>
 <span class="k">end</span>
 </code></pre>
 <h3 id='carthage' class='heading'>Carthage</h3>
-<pre class="highlight plaintext"><code>github "tinrobots/AdvancedOperation" ~&gt; 6.2.0
+<pre class="highlight plaintext"><code>github "tinrobots/AdvancedOperation" ~&gt; 6.2.1
 </code></pre>
 <h3 id='swift-package-manager' class='heading'>Swift Package Manager</h3>
 <pre class="highlight swift"><code><span class="nv">dependencies</span><span class="p">:</span> <span class="p">[</span>
-    <span class="o">.</span><span class="nf">package</span><span class="p">(</span><span class="nv">url</span><span class="p">:</span> <span class="s">"https://github.com/tinrobots/AdvancedOperation.git"</span><span class="p">,</span> <span class="nv">from</span><span class="p">:</span> <span class="s">"6.2.0"</span><span class="p">)</span>
+    <span class="o">.</span><span class="nf">package</span><span class="p">(</span><span class="nv">url</span><span class="p">:</span> <span class="s">"https://github.com/tinrobots/AdvancedOperation.git"</span><span class="p">,</span> <span class="o">.</span><span class="nf">upToNextMajor</span><span class="p">(</span><span class="nv">from</span><span class="p">:</span> <span class="s">"6.2.1"</span><span class="p">))</span>
 <span class="p">]</span>
 </code></pre>
 <h2 id='license' class='heading'>License</h2>
@@ -149,8 +151,8 @@
           </section>
         </section>
         <section id="footer">
-          <p>&copy; 2020 <a class="link" href="https://github.com/tinrobots/AdvancedOperation" target="_blank" rel="external">Alessandro Marzoli</a>. All rights reserved. (Last updated: 2020-05-29)</p>
-          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.13.1</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+          <p>&copy; 2020 <a class="link" href="https://github.com/tinrobots/AdvancedOperation" target="_blank" rel="external">Alessandro Marzoli</a>. All rights reserved. (Last updated: 2020-10-02)</p>
+          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.13.5</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
         </section>
       </article>
     </div>
