@@ -2,11 +2,11 @@ Pod::Spec.new do |s|
   s.name    = 'AdvancedOperation'
   s.version = '6.2.1'
   s.license = 'MIT'
-  s.documentation_url = 'http://www.tinrobots.org/AdvancedOperation'  
+  s.documentation_url = 'http://www.alessandromarzoli.com/AdvancedOperation'  
   s.summary   = 'Advanced operations.'
-  s.homepage  = 'https://github.com/tinrobots/AdvancedOperation'
+  s.homepage  = 'https://github.com/alemar11/AdvancedOperation'
   s.authors   = { 'Alessandro Marzoli' => 'me@alessandromarzoli.com' }
-  s.source    = { :git => 'https://github.com/tinrobots/AdvancedOperation.git', :tag => s.version }
+  s.source    = { :git => 'https://github.com/alemar11/AdvancedOperation.git', :tag => s.version }
   s.requires_arc = true
   s.pod_target_xcconfig = { 'SWIFT_VERSION' => '5.2'}
   s.swift_version = "5.2"
