@@ -87,12 +87,25 @@ jobs:
         run: set -o pipefail && env NSUnbufferedIO=YES xcodebuild -project "AdvancedOperation.xcodeproj" -scheme "AdvancedOperation watchOS" -destination "${{ matrix.destination }}" clean build -quiet
   spm:
     name: Test SPM Integration
-    runs-on: macOS-latest
+    runs-on: macos-11.0
     env:
-      DEVELOPER_DIR: /Applications/Xcode_12.app/Contents/Developer
+      DEVELOPER_DIR: /Applications/Xcode_12.2.0.app/Contents/Developer
     steps:
       - uses: actions/checkout@v2
       - name: SPM Test
         run: |
           swift --version
           swift test
+  lint:
+    name: Swift Lint
+    runs-on: macos-11.0
+    env:
+      DEVELOPER_DIR: /Applications/Xcode_12.2.0.app/Contents/Developer
+    steps:
+      - uses: actions/checkout@v2
+      - name: GitHub Action for SwiftLint
+        run: |
+          swift --version
+          brew update
+          brew upgrade swiftlint
+          swiftlint --reporter github-actions-logging
