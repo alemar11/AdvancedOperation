@@ -138,9 +138,12 @@ final class GroupOperationTests: XCTestCase {
     let operation3 = SleepyAsyncOperation()
     
     let groupOperation = GroupOperation(operations: [operation1, operation2, operation3])
-    let expectation1 = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: groupOperation, expectedValue: true)
+    let expectation1 = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: operation1, expectedValue: true)
+    let expectation2 = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: operation2, expectedValue: true)
+    let expectation3 = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: operation3, expectedValue: true)
+    let expectation4 = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: groupOperation, expectedValue: true)
     queue.addOperation(groupOperation)
-    wait(for: [expectation1], timeout: 5)
+    wait(for: [expectation1, expectation2, expectation3, expectation4], timeout: 10)
   }
   
   func testExecutionOnDispatchQueue() {
