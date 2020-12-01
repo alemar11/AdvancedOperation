@@ -143,7 +143,7 @@ final class GroupOperationTests: XCTestCase {
     let expectation3 = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: operation3, expectedValue: true)
     let expectation4 = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: groupOperation, expectedValue: true)
     queue.addOperation(groupOperation)
-    wait(for: [expectation1, expectation2, expectation3, expectation4], timeout: 10)
+    wait(for: [expectation1, expectation2, expectation3, expectation4], timeout: 15)
   }
   
   func testExecutionOnDispatchQueue() {
