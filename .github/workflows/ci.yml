@@ -103,9 +103,7 @@ jobs:
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v2
-      - name: GitHub Action for SwiftLint
+      - name: Run SwiftLint
         run: |
           swift --version
-          brew update
-          brew upgrade swiftlint
           swiftlint --reporter github-actions-logging
