@@ -1,0 +1,73 @@
+{
+  "configurations" : [
+    {
+      "id" : "9A5EF707-2D3A-41DD-B382-34D2E147981D",
+      "name" : "Memory Checking",
+      "options" : {
+        "addressSanitizer" : {
+          "enabled" : true
+        },
+        "nsZombieEnabled" : true,
+        "targetForVariableExpansion" : {
+          "containerPath" : "container:AdvancedOperation.xcodeproj",
+          "identifier" : "234130861F9605F5002BE7FC",
+          "name" : "AdvancedOperation iOS"
+        }
+      }
+    },
+    {
+      "id" : "FC201CB4-2F5A-4E25-9DD2-447248C97553",
+      "name" : "Concurrency",
+      "options" : {
+        "targetForVariableExpansion" : {
+          "containerPath" : "container:AdvancedOperation.xcodeproj",
+          "identifier" : "234130861F9605F5002BE7FC",
+          "name" : "AdvancedOperation iOS"
+        },
+        "threadSanitizerEnabled" : true,
+        "undefinedBehaviorSanitizerEnabled" : true
+      }
+    },
+    {
+      "id" : "A5C0939C-6462-4A7F-AB00-A381F891E684",
+      "name" : "Extra Diagnostics",
+      "options" : {
+        "environmentVariableEntries" : [
+
+        ],
+        "mainThreadCheckerEnabled" : true,
+        "targetForVariableExpansion" : {
+          "containerPath" : "container:AdvancedOperation.xcodeproj",
+          "identifier" : "234130861F9605F5002BE7FC",
+          "name" : "AdvancedOperation iOS"
+        }
+      }
+    }
+  ],
+  "defaultOptions" : {
+    "mainThreadCheckerEnabled" : false,
+    "testExecutionOrdering" : "random",
+    "testTimeoutsEnabled" : true,
+    "userAttachmentLifetime" : "keepNever"
+  },
+  "testTargets" : [
+    {
+      "enabled" : false,
+      "parallelizable" : true,
+      "target" : {
+        "containerPath" : "container:AdvancedOperation.xcodeproj",
+        "identifier" : "2372B42D1F960DBA00189A32",
+        "name" : "AdvancedOperation Tests iOS"
+      }
+    },
+    {
+      "parallelizable" : true,
+      "target" : {
+        "containerPath" : "container:AdvancedOperation.xcodeproj",
+        "identifier" : "D2F96AAA25FE53630085641B",
+        "name" : "AdvancedOperation Tests watchOS"
+      }
+    }
+  ],
+  "version" : 1
+}
