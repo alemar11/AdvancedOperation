@@ -91,7 +91,7 @@ jobs:
     name: Test SPM Integration
     runs-on: macos-11.0
     env:
-      DEVELOPER_DIR: /Applications/Xcode_12.3.app/Contents/Developer
+      DEVELOPER_DIR: /Applications/Xcode_12.5.app/Contents/Developer
     steps:
       - uses: actions/checkout@v2
       - name: SPM Test

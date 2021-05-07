@@ -13,16 +13,16 @@ extension XCTestCase {
     let end = Date().addingTimeInterval(timeout)
     var value: Bool = false
     let closure: () -> Void = { value = condition() }
-    
+
     while !value && 0 < end.timeIntervalSinceNow {
       if RunLoop.current.run(mode: .default, before: Date(timeIntervalSinceNow: 0.002)) {
         Thread.sleep(forTimeInterval: 0.002)
       }
       closure()
     }
-    
+
     closure()
-    
+
     let message = description ?? "Timed out waiting for condition to be true"
     XCTAssertTrue(value, message, file: file, line: line)
   }
