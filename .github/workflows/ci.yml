@@ -16,9 +16,9 @@ on:
 jobs:
   info:
     name: Show macOS and Xcode versions
-    runs-on: macOS-latest
+    runs-on: macos-11.0
     env:
-      DEVELOPER_DIR: /Applications/Xcode_12.3.app/Contents/Developer
+      DEVELOPER_DIR: /Applications/Xcode_12.5.app/Contents/Developer
     steps:
       - name: stats
         run: |
@@ -39,12 +39,12 @@ jobs:
         run: set -o pipefail && env NSUnbufferedIO=YES xcodebuild -project "AdvancedOperation.xcodeproj" -scheme "AdvancedOperation macOS" -destination "platform=macOS" clean test -quiet -resultBundlePath '~/Downloads/Report/report.xcresult'
   iOS:
     name: Test iOS
-    runs-on: macOS-latest
+    runs-on: macOS-11.0
     env:
-      DEVELOPER_DIR: /Applications/Xcode_12.3.app/Contents/Developer
+      DEVELOPER_DIR: /Applications/Xcode_12.5.app/Contents/Developer
     strategy:
       matrix:
-        destination: ["OS=14.3,name=iPhone 11 Pro"]
+        destination: ["OS=14.5,name=iPhone 11 Pro"]
     steps:
       - uses: actions/checkout@v2
       - name: iOS - ${{ matrix.destination }}
@@ -58,12 +58,12 @@ jobs:
           path: ~/Downloads/Report 
   tvOS:
     name: Test tvOS
-    runs-on: macOS-latest
+    runs-on: macOS-11.0
     env:
-      DEVELOPER_DIR: /Applications/Xcode_12.3.app/Contents/Developer
+      DEVELOPER_DIR: /Applications/Xcode_12.5.app/Contents/Developer
     strategy:
       matrix:
-        destination: ["OS=14.3,name=Apple TV 4K"]
+        destination: ["OS=14.5,name=Apple TV 4K"]
     steps:
       - uses: actions/checkout@v2
       - name: tvOS - ${{ matrix.destination }}
@@ -77,12 +77,12 @@ jobs:
           path: ~/Downloads/Report       
   watchOS:
     name: Build watchOS
-    runs-on: macOS-latest
+    runs-on: macOS-11.0
     env:
-      DEVELOPER_DIR: /Applications/Xcode_12.3.app/Contents/Developer
+      DEVELOPER_DIR: /Applications/Xcode_12.5.app/Contents/Developer
     strategy:
       matrix:
-        destination: ["OS=7.2,name=Apple Watch Series 5 - 44mm"]
+        destination: ["OS=7.3,name=Apple Watch Series 5 - 44mm"]
     steps:
       - uses: actions/checkout@v2
       - name: watchOS - ${{ matrix.destination }}
