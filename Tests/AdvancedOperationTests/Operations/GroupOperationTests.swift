@@ -9,14 +9,14 @@ final class GroupOperationTests: XCTestCase {
     AdvancedOperation.KVOCrashWorkaround.installFix()
     #endif
   }
-  
+
   func testSuccessfulExecution() {
     let operation1 = SleepyAsyncOperation()
     let operation2 = SleepyAsyncOperation()
     let operation3 = SleepyAsyncOperation()
     let groupOperation = GroupOperation(operations: [operation1, operation2, operation3])
     groupOperation.qualityOfService = .userInitiated
-    
+
     let expectation1 = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: groupOperation, expectedValue: true)
     groupOperation.start()
     wait(for: [expectation1], timeout: 5)
@@ -25,13 +25,13 @@ final class GroupOperationTests: XCTestCase {
     XCTAssertTrue(operation3.isFinished)
     XCTAssertEqual(groupOperation.qualityOfService, .userInitiated)
   }
-  
+
   func testAddingOperationAfterExecution() {
     let groupOperation = GroupOperation(operations: [])
     let operation = BlockOperation {
       XCTFail("It shouldn't be executed because GroupOperation is already finished at this point")
     }
-    
+
     let expectation1 = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: groupOperation, expectedValue: true)
     let expectation2 = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: operation, expectedValue: true)
     expectation2.isInverted = true
@@ -40,18 +40,18 @@ final class GroupOperationTests: XCTestCase {
     groupOperation.addOperation(operation)
     wait(for: [expectation2], timeout: 5)
   }
-  
+
   func testExecutionWithNestedGroupOperation() {
     let operation1 = SleepyAsyncOperation()
     let operation2 = SleepyAsyncOperation()
     let operation3 = SleepyAsyncOperation()
     let operation4 = SleepyAsyncOperation()
-    
+
     let groupOperation1 = GroupOperation(operations: [operation1, operation2])
     let groupOperation2 = GroupOperation(operations: [operation3, operation4])
     let groupOperation3 = GroupOperation(operations: [groupOperation1, groupOperation2])
     groupOperation3.qualityOfService = .userInitiated
-    
+
     let expectation1 = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: groupOperation3, expectedValue: true)
     groupOperation3.start()
     wait(for: [expectation1], timeout: 5)
@@ -60,15 +60,15 @@ final class GroupOperationTests: XCTestCase {
     XCTAssertTrue(operation3.isFinished)
     XCTAssertTrue(operation4.isFinished)
   }
-  
+
   func testSuccessfulExecutionWithMaxConcurrentOperationCountToOne() {
     let operation1 = SleepyAsyncOperation(interval1: 1, interval2: 0, interval3: 0)
     let operation2 = SleepyAsyncOperation(interval1: 1, interval2: 0, interval3: 0)
     let operation3 = BlockOperation()
-    
+
     let groupOperation = GroupOperation(operations: [operation1, operation2, operation3])
     groupOperation.maxConcurrentOperationCount = 1
-    
+
     let expectation1 = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: groupOperation, expectedValue: true)
     groupOperation.start()
     wait(for: [expectation1], timeout: 15)
@@ -77,66 +77,66 @@ final class GroupOperationTests: XCTestCase {
     XCTAssertTrue(operation3.isFinished)
     XCTAssertEqual(groupOperation.maxConcurrentOperationCount, 1)
   }
-  
+
   func testCancelledExecution() {
     let operation1 = RunUntilCancelledAsyncOperation()
     let operation2 = SleepyAsyncOperation()
     let operation3 = SleepyAsyncOperation()
-    
+
     let groupOperation = GroupOperation(operations: [operation1, operation2, operation3])
     let expectation1 = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: groupOperation, expectedValue: true)
     groupOperation.start()
     groupOperation.cancel()
     wait(for: [expectation1], timeout: 5)
   }
-  
+
   func testAddingOperationWhileGroupOperationIsBeingCancelled() {
     let operation1 = RunUntilCancelledAsyncOperation()
     let operation2 = SleepyAsyncOperation(interval1: 1, interval2: 0, interval3: 0)
     let operation3 = InfiniteAsyncOperation()
     let operation4 = CancelledOperation()
-    
+
     operation1.name = "op1"
     operation2.name = "op2"
     operation3.name = "op3"
     operation4.name = "op4"
-    
+
     let groupOperation = GroupOperation(operations: [operation1, operation2, operation3])
-    
+
     // cancellation is done while at least one operation is running
     operation3.onExecutionStarted = { [unowned groupOperation] in
       groupOperation.cancel()
       groupOperation.addOperation(operation4)
     }
-    
+
     operation4.completionBlock = { [unowned operation3] in
       operation3.stop()
     }
-    
+
     let expectation1 = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: groupOperation, expectedValue: true)
     let expectation2 = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: operation4, expectedValue: true)
     groupOperation.start()
     wait(for: [expectation1, expectation2], timeout: 5)
   }
-  
+
   func testCancelledExecutionBeforeStarting() {
     let operation1 = SleepyAsyncOperation()
     let operation2 = SleepyAsyncOperation()
     let operation3 = SleepyAsyncOperation()
-    
+
     let groupOperation = GroupOperation(operations: [operation1, operation2, operation3])
     let expectation1 = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: groupOperation, expectedValue: true)
     groupOperation.cancel()
     groupOperation.start()
     wait(for: [expectation1], timeout: 5)
   }
-  
+
   func testExecutionOnOperationQueue() {
     let queue = OperationQueue()
     let operation1 = SleepyAsyncOperation()
     let operation2 = SleepyAsyncOperation()
     let operation3 = SleepyAsyncOperation()
-    
+
     let groupOperation = GroupOperation(operations: [operation1, operation2, operation3])
     let expectation1 = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: operation1, expectedValue: true)
     let expectation2 = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: operation2, expectedValue: true)
@@ -145,20 +145,20 @@ final class GroupOperationTests: XCTestCase {
     queue.addOperation(groupOperation)
     wait(for: [expectation1, expectation2, expectation3, expectation4], timeout: 15)
   }
-  
+
   func testExecutionOnDispatchQueue() {
     let queue = OperationQueue()
     let dispatchQueue = DispatchQueue(label: "\(#function)")
     let operation = BlockOperation {
       dispatchPrecondition(condition: .onQueue(dispatchQueue))
     }
-    
+
     let groupOperation = GroupOperation.init(underlyingQueue: dispatchQueue, operations: operation)
     let expectation1 = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: groupOperation, expectedValue: true)
     queue.addOperation(groupOperation)
     wait(for: [expectation1], timeout: 5)
   }
-  
+
   func testCancelledExecutionOnOperationQueue() {
     let queue = OperationQueue()
     let operation1 = SleepyAsyncOperation()
@@ -170,7 +170,7 @@ final class GroupOperationTests: XCTestCase {
     queue.addOperation(groupOperation)
     wait(for: [expectation1], timeout: 5)
   }
-  
+
   func testCustomGroupOperationWithInputAndOutput() {
     let queue = OperationQueue()
     let groupOperation = IOGroupOperation(input: 10)
@@ -193,7 +193,7 @@ final class GroupOperationTests: XCTestCase {
     XCTAssertEqual(groupOperation.output, 10)
     XCTAssertEqual(groupOperation2.output, 11)
   }
-  
+
   func testAddingOperationWhileExecuting() {
     let operation = BlockOperation {}
     let queue = OperationQueue()
@@ -203,7 +203,7 @@ final class GroupOperationTests: XCTestCase {
     queue.addOperation(group)
     wait(for: [expectation1, expectation2], timeout: 5)
   }
-  
+
   func testMainProgressTotalUnitCountShouldNotBeAffectedByChildOperations() {
     let operation1 = BlockOperation {}
     let operation2 = BlockOperation {}
@@ -213,7 +213,7 @@ final class GroupOperationTests: XCTestCase {
     operation1.cancel()
     XCTAssertEqual(group.progress.totalUnitCount, 1, "The main progress shouldn't be affected by child operations")
   }
-  
+
   func testMemoryLeakWhenGroupOperationIsDeallocatedBeforeBeingExecuted() {
     weak var weakOperation: Operation? = nil
     autoreleasepool {
@@ -227,7 +227,7 @@ final class GroupOperationTests: XCTestCase {
     //XCTAssertNil(weakOperation)
     wait(for: weakOperation == nil, timeout: 5, description: "The operation wasn't deallocated.")
   }
-  
+
   func testMemoryLeakWhenGroupOperationIsDeallocatedAfterBeingExecuted() {
     weak var weakOperation: Operation? = nil
     autoreleasepool {
