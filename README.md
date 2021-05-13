@@ -1,7 +1,7 @@
-![AdvancedOperation CI](https://github.com/tinrobots/AdvancedOperation/workflows/AdvancedOperation%20CI/badge.svg?branch=master)
+![AdvancedOperation CI](https://github.com/alemar11/AdvancedOperation/workflows/AdvancedOperation%20CI/badge.svg?branch=master)
 
 ## AdvancedOperation
-[![GitHub release](https://img.shields.io/github/release/tinrobots/AdvancedOperation.svg)](https://github.com/tinrobots/AdvancedOperation/releases) 
+[![GitHub release](https://img.shields.io/github/release/alemar11/AdvancedOperation.svg)](https://github.com/alemar11/AdvancedOperation/releases) 
 
 Operation usefull extensions.
 
@@ -22,9 +22,9 @@ Operation usefull extensions.
 
 ## Documentation
 
-Documentation is [available online](http://www.tinrobots.org/AdvancedOperation/).
+Documentation is [available online](http://www.alessandromarzoli.com/AdvancedOperation/).
 
-> [http://www.tinrobots.org/AdvancedOperation/](http://www.tinrobots.org/AdvancedOperation/)
+> [http://www.alessandromarzoli.com/AdvancedOperation/](http://www.alessandromarzoli.com/AdvancedOperation/)
 
 ## Installation
 
@@ -50,17 +50,17 @@ github "tinrobots/AdvancedOperation" ~> 6.2.1
 
 ```swift
 dependencies: [
-    .package(url: "https://github.com/tinrobots/AdvancedOperation.git", .upToNextMajor(from: "6.2.1"))
+    .package(url: "https://github.com/alemar11/AdvancedOperation.git", .upToNextMajor(from: "6.2.1"))
 ]
 ```
 
 ## License
 
-[![License MIT](https://img.shields.io/badge/License-MIT-lightgrey.svg?style=flat)](https://github.com/tinrobots/AdvancedOperation/blob/master/LICENSE.md)
+[![License MIT](https://img.shields.io/badge/License-MIT-lightgrey.svg?style=flat)](https://github.com/alemar11/AdvancedOperation/blob/master/LICENSE.md)
 
 AdvancedOperation is released under the MIT license. See [LICENSE](./LICENSE.md) for details.
 
 ## Contributing
 
 Pull requests are welcome!  
-[Show your ❤ with a ★](https://github.com/tinrobots/AdvancedOperation/stargazers)
+[Show your ❤ with a ★](https://github.com/alemar11/AdvancedOperation/stargazers)
