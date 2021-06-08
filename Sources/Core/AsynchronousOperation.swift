@@ -122,7 +122,7 @@ open class AsynchronousOperation: Operation, ProgressReporting {
       main()
 
       // At this point `main()` has already returned but it doesn't mean that the operation is finished.
-      // Only calling `finish()` will finish the operation at this point.
+      // Only calling `finish()` will finish the operation.
     }
   }
 
