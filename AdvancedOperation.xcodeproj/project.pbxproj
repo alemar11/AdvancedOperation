@@ -615,7 +615,7 @@
 			attributes = {
 				LastSwiftUpdateCheck = 1250;
 				LastUpgradeCheck = 1200;
-				ORGANIZATIONNAME = Tinrobots;
+				ORGANIZATIONNAME = "Alessandro Marzoli";
 				TargetAttributes = {
 					230B47F8200EA87900F46852 = {
 						CreatedOnToolsVersion = 9.2;
