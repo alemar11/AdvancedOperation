@@ -137,7 +137,6 @@
 		D2CA6BA5247D59A200A71630 /* Atomic.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2CA6BA3247D59A200A71630 /* Atomic.swift */; };
 		D2CA6BA6247D59A200A71630 /* Atomic.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2CA6BA3247D59A200A71630 /* Atomic.swift */; };
 		D2CA6BA7247D59A200A71630 /* Atomic.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2CA6BA3247D59A200A71630 /* Atomic.swift */; };
-		D2F96AAE25FE53630085641B /* AdvancedOperation_Tests_watchOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2F96AAD25FE53630085641B /* AdvancedOperation_Tests_watchOS.swift */; };
 		D2F96AB025FE53630085641B /* AdvancedOperation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 234130B41F9606CD002BE7FC /* AdvancedOperation.framework */; };
 		D2F96AB725FE54270085641B /* GroupOperationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 064B0D8823F4166300C8331F /* GroupOperationTests.swift */; };
 		D2F96AB825FE54270085641B /* ResultOperationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D29FE44524801D1F00DA97AA /* ResultOperationTests.swift */; };
@@ -236,8 +235,6 @@
 		D29FE44524801D1F00DA97AA /* ResultOperationTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ResultOperationTests.swift; sourceTree = "<group>"; };
 		D2CA6BA3247D59A200A71630 /* Atomic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Atomic.swift; sourceTree = "<group>"; };
 		D2F96AAB25FE53630085641B /* AdvancedOperation Tests watchOS.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "AdvancedOperation Tests watchOS.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
-		D2F96AAD25FE53630085641B /* AdvancedOperation_Tests_watchOS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdvancedOperation_Tests_watchOS.swift; sourceTree = "<group>"; };
-		D2F96AAF25FE53630085641B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D2F96AB625FE53A90085641B /* AdvancedOperation watchOS.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = "AdvancedOperation watchOS.xctestplan"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -368,7 +365,6 @@
 		2341307D1F9605F5002BE7FC = {
 			isa = PBXGroup;
 			children = (
-				D2F96AAC25FE53630085641B /* AdvancedOperation Tests watchOS */,
 				234130881F9605F5002BE7FC /* Products */,
 				234130921F960612002BE7FC /* Sources */,
 				234130941F96061E002BE7FC /* Support */,
@@ -477,15 +473,6 @@
 				D2CA6BA3247D59A200A71630 /* Atomic.swift */,
 			);
 			path = Core;
-			sourceTree = "<group>";
-		};
-		D2F96AAC25FE53630085641B /* AdvancedOperation Tests watchOS */ = {
-			isa = PBXGroup;
-			children = (
-				D2F96AAD25FE53630085641B /* AdvancedOperation_Tests_watchOS.swift */,
-				D2F96AAF25FE53630085641B /* Info.plist */,
-			);
-			path = "AdvancedOperation Tests watchOS";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -1076,7 +1063,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D2F96AAE25FE53630085641B /* AdvancedOperation_Tests_watchOS.swift in Sources */,
 				D2F96ABE25FE542B0085641B /* OperationStateTests.swift in Sources */,
 				D2F96AB825FE54270085641B /* ResultOperationTests.swift in Sources */,
 				D2F96ABA25FE54270085641B /* FailableAsynchronousOperationTests.swift in Sources */,
@@ -1787,7 +1773,7 @@
 			buildSettings = {
 				CLANG_ENABLE_OBJC_WEAK = YES;
 				CODE_SIGN_STYLE = Automatic;
-				INFOPLIST_FILE = "AdvancedOperation Tests watchOS/Info.plist";
+				INFOPLIST_FILE = Support/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
@@ -1805,7 +1791,7 @@
 			buildSettings = {
 				CLANG_ENABLE_OBJC_WEAK = YES;
 				CODE_SIGN_STYLE = Automatic;
-				INFOPLIST_FILE = "AdvancedOperation Tests watchOS/Info.plist";
+				INFOPLIST_FILE = Support/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MTL_FAST_MATH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.alessandromarzoli.AdvancedOperation-Tests-watchOS";
