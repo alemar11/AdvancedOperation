@@ -43,6 +43,14 @@
 		067C482723D60EE800F73096 /* KVOCrashWorkaround.swift in Sources */ = {isa = PBXBuildFile; fileRef = 067C482523D60EE800F73096 /* KVOCrashWorkaround.swift */; };
 		067C482823D60EE800F73096 /* KVOCrashWorkaround.swift in Sources */ = {isa = PBXBuildFile; fileRef = 067C482523D60EE800F73096 /* KVOCrashWorkaround.swift */; };
 		067C482923D60EE800F73096 /* KVOCrashWorkaround.swift in Sources */ = {isa = PBXBuildFile; fileRef = 067C482523D60EE800F73096 /* KVOCrashWorkaround.swift */; };
+		06AF61B426F0B3410090A61B /* TaskOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06AF61B326F0B3410090A61B /* TaskOperation.swift */; };
+		06AF61B526F0B3410090A61B /* TaskOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06AF61B326F0B3410090A61B /* TaskOperation.swift */; };
+		06AF61B626F0B3410090A61B /* TaskOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06AF61B326F0B3410090A61B /* TaskOperation.swift */; };
+		06AF61B726F0B3410090A61B /* TaskOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06AF61B326F0B3410090A61B /* TaskOperation.swift */; };
+		06AF61B926F0CB110090A61B /* TaskOperationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06AF61B826F0CB110090A61B /* TaskOperationTests.swift */; };
+		06AF61BA26F0CB110090A61B /* TaskOperationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06AF61B826F0CB110090A61B /* TaskOperationTests.swift */; };
+		06AF61BB26F0CB110090A61B /* TaskOperationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06AF61B826F0CB110090A61B /* TaskOperationTests.swift */; };
+		06AF61BC26F0CB110090A61B /* TaskOperationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06AF61B826F0CB110090A61B /* TaskOperationTests.swift */; };
 		06B3D10223D9E9F3005EBDD8 /* AdvancedOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06B3D10123D9E9F3005EBDD8 /* AdvancedOperation.swift */; };
 		06B3D10323D9E9F3005EBDD8 /* AdvancedOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06B3D10123D9E9F3005EBDD8 /* AdvancedOperation.swift */; };
 		06B3D10423D9E9F3005EBDD8 /* AdvancedOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06B3D10123D9E9F3005EBDD8 /* AdvancedOperation.swift */; };
@@ -158,6 +166,8 @@
 		064B0D8323F4032100C8331F /* GroupOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupOperation.swift; sourceTree = "<group>"; };
 		064B0D8823F4166300C8331F /* GroupOperationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupOperationTests.swift; sourceTree = "<group>"; };
 		067C482523D60EE800F73096 /* KVOCrashWorkaround.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KVOCrashWorkaround.swift; sourceTree = "<group>"; };
+		06AF61B326F0B3410090A61B /* TaskOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskOperation.swift; sourceTree = "<group>"; };
+		06AF61B826F0CB110090A61B /* TaskOperationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskOperationTests.swift; sourceTree = "<group>"; };
 		06B3D10123D9E9F3005EBDD8 /* AdvancedOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdvancedOperation.swift; sourceTree = "<group>"; };
 		06C92B4A23D0A9FF000D12C8 /* AsynchronousBlockOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsynchronousBlockOperation.swift; sourceTree = "<group>"; };
 		06C92B4F23D0AAEA000D12C8 /* AsynchronousBlockOperationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsynchronousBlockOperationTests.swift; sourceTree = "<group>"; };
@@ -269,6 +279,7 @@
 				D29FE43924801A7900DA97AA /* FailableAsynchronousOperationTests.swift */,
 				064B0D8823F4166300C8331F /* GroupOperationTests.swift */,
 				D29FE44524801D1F00DA97AA /* ResultOperationTests.swift */,
+				06AF61B826F0CB110090A61B /* TaskOperationTests.swift */,
 			);
 			path = Operations;
 			sourceTree = "<group>";
@@ -401,6 +412,7 @@
 				06C92B4A23D0A9FF000D12C8 /* AsynchronousBlockOperation.swift */,
 				064B0D8323F4032100C8331F /* GroupOperation.swift */,
 				D26DBDE92481060200A69E28 /* FailableAsyncOperation.swift */,
+				06AF61B326F0B3410090A61B /* TaskOperation.swift */,
 			);
 			path = Operations;
 			sourceTree = "<group>";
@@ -794,6 +806,7 @@
 				067C482623D60EE800F73096 /* KVOCrashWorkaround.swift in Sources */,
 				06C92B4B23D0A9FF000D12C8 /* AsynchronousBlockOperation.swift in Sources */,
 				23F24D22200799B800B25A03 /* Operation+Utils.swift in Sources */,
+				06AF61B426F0B3410090A61B /* TaskOperation.swift in Sources */,
 				D2CA6BA4247D59A200A71630 /* Atomic.swift in Sources */,
 				D26DBDEA2481060200A69E28 /* FailableAsyncOperation.swift in Sources */,
 				D21C5D8423D3674E005F8D51 /* AsynchronousOperation.swift in Sources */,
@@ -810,6 +823,7 @@
 				067C482723D60EE800F73096 /* KVOCrashWorkaround.swift in Sources */,
 				06C92B4C23D0A9FF000D12C8 /* AsynchronousBlockOperation.swift in Sources */,
 				23F24D23200799B800B25A03 /* Operation+Utils.swift in Sources */,
+				06AF61B526F0B3410090A61B /* TaskOperation.swift in Sources */,
 				D2CA6BA5247D59A200A71630 /* Atomic.swift in Sources */,
 				D26DBDEB2481060200A69E28 /* FailableAsyncOperation.swift in Sources */,
 				D21C5D8523D3674E005F8D51 /* AsynchronousOperation.swift in Sources */,
@@ -826,6 +840,7 @@
 				067C482823D60EE800F73096 /* KVOCrashWorkaround.swift in Sources */,
 				06C92B4D23D0A9FF000D12C8 /* AsynchronousBlockOperation.swift in Sources */,
 				23F24D24200799B800B25A03 /* Operation+Utils.swift in Sources */,
+				06AF61B626F0B3410090A61B /* TaskOperation.swift in Sources */,
 				D2CA6BA6247D59A200A71630 /* Atomic.swift in Sources */,
 				D26DBDEC2481060200A69E28 /* FailableAsyncOperation.swift in Sources */,
 				D21C5D8623D3674E005F8D51 /* AsynchronousOperation.swift in Sources */,
@@ -842,6 +857,7 @@
 				067C482923D60EE800F73096 /* KVOCrashWorkaround.swift in Sources */,
 				06C92B4E23D0A9FF000D12C8 /* AsynchronousBlockOperation.swift in Sources */,
 				23F24D25200799B800B25A03 /* Operation+Utils.swift in Sources */,
+				06AF61B726F0B3410090A61B /* TaskOperation.swift in Sources */,
 				D2CA6BA7247D59A200A71630 /* Atomic.swift in Sources */,
 				D26DBDED2481060200A69E28 /* FailableAsyncOperation.swift in Sources */,
 				D21C5D8723D3674E005F8D51 /* AsynchronousOperation.swift in Sources */,
@@ -862,6 +878,7 @@
 				2385617B200A873C0061BAA1 /* Mocks.swift in Sources */,
 				D29FE44824801D2000DA97AA /* ResultOperationTests.swift in Sources */,
 				D29FE43F24801A7900DA97AA /* FailableAsynchronousOperationTests.swift in Sources */,
+				06AF61BB26F0CB110090A61B /* TaskOperationTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -879,6 +896,7 @@
 				23856179200A873C0061BAA1 /* Mocks.swift in Sources */,
 				D29FE44624801D2000DA97AA /* ResultOperationTests.swift in Sources */,
 				D29FE43D24801A7900DA97AA /* FailableAsynchronousOperationTests.swift in Sources */,
+				06AF61B926F0CB110090A61B /* TaskOperationTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -896,6 +914,7 @@
 				2385617A200A873C0061BAA1 /* Mocks.swift in Sources */,
 				D29FE44724801D2000DA97AA /* ResultOperationTests.swift in Sources */,
 				D29FE43E24801A7900DA97AA /* FailableAsynchronousOperationTests.swift in Sources */,
+				06AF61BA26F0CB110090A61B /* TaskOperationTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -909,6 +928,7 @@
 				D2F96ABA25FE54270085641B /* FailableAsynchronousOperationTests.swift in Sources */,
 				D2F96ABC25FE542B0085641B /* ProgressReportingTests.swift in Sources */,
 				D2F96AC025FE54300085641B /* XCTestCase+Utils.swift in Sources */,
+				06AF61BC26F0CB110090A61B /* TaskOperationTests.swift in Sources */,
 				D2F96AB725FE54270085641B /* GroupOperationTests.swift in Sources */,
 				D2F96AB925FE54270085641B /* AsynchronousBlockOperationTests.swift in Sources */,
 				D2F96ABD25FE542B0085641B /* AsynchronousOperationTests.swift in Sources */,
@@ -1104,6 +1124,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.14;
+				MARKETING_VERSION = 6.3.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.alessandromarzoli.AdvancedOperation;
 				PRODUCT_NAME = AdvancedOperation;
 				RUN_CLANG_STATIC_ANALYZER = YES;
@@ -1135,6 +1156,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.14;
+				MARKETING_VERSION = 6.3.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.alessandromarzoli.AdvancedOperation;
 				PRODUCT_NAME = AdvancedOperation;
 				RUN_CLANG_STATIC_ANALYZER = YES;
@@ -1164,6 +1186,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.14;
+				MARKETING_VERSION = 6.3.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.alessandromarzoli.AdvancedOperation;
 				PRODUCT_NAME = AdvancedOperation;
 				RUN_CLANG_STATIC_ANALYZER = YES;
@@ -1194,6 +1217,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.14;
+				MARKETING_VERSION = 6.3.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.alessandromarzoli.AdvancedOperation;
 				PRODUCT_NAME = AdvancedOperation;
 				RUN_CLANG_STATIC_ANALYZER = YES;
@@ -1221,6 +1245,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.14;
+				MARKETING_VERSION = 6.3.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.alessandromarzoli.AdvancedOperation;
 				PRODUCT_NAME = AdvancedOperation;
 				RUN_CLANG_STATIC_ANALYZER = YES;
@@ -1251,6 +1276,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.14;
+				MARKETING_VERSION = 6.3.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.alessandromarzoli.AdvancedOperation;
 				PRODUCT_NAME = AdvancedOperation;
 				RUN_CLANG_STATIC_ANALYZER = YES;
@@ -1279,6 +1305,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.14;
+				MARKETING_VERSION = 6.3.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.alessandromarzoli.AdvancedOperation;
 				PRODUCT_NAME = AdvancedOperation;
 				RUN_CLANG_STATIC_ANALYZER = YES;
@@ -1308,6 +1335,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.14;
+				MARKETING_VERSION = 6.3.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.alessandromarzoli.AdvancedOperation;
 				PRODUCT_NAME = AdvancedOperation;
 				RUN_CLANG_STATIC_ANALYZER = YES;
