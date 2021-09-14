@@ -61,6 +61,7 @@ final class ProgressReportingTests: XCTestCase {
   @available(iOS 13.0, iOSApplicationExtension 13.0, macCatalyst 13.0, tvOS 13.0, watchOS 6.0, macOS 10.15, *)
   func testCancelProgressReport() throws {
     try XCTSkipIf(!Self.isTestAvailable, "Test unavailable")
+
     let operation = AsyncBlockOperation { $0() }
     let expectation = XCTKVOExpectation(keyPath: #keyPath(Operation.isCancelled), object: operation, expectedValue: true)
     operation.progress.cancel()
@@ -81,6 +82,7 @@ final class ProgressReportingTests: XCTestCase {
  @available(iOS 13.0, iOSApplicationExtension 13.0, macCatalyst 13.0, tvOS 13.0, watchOS 6.0, macOS 10.15, *)
   func testProgressReportingWhenAddingCancelledOperationsToGroupOperation() throws {
     try XCTSkipIf(!Self.isTestAvailable, "Test unavailable")
+
     let currentProgress = Progress(totalUnitCount: 1)
     let operation1 = AsyncBlockOperation { $0() }
     let operation2 = BlockOperation { }
@@ -111,6 +113,7 @@ final class ProgressReportingTests: XCTestCase {
  @available(iOS 13.0, iOSApplicationExtension 13.0, macCatalyst 13.0, tvOS 13.0, watchOS 6.0, macOS 10.15, *)
   func testProgressReportingWhenAddingOperationsToGroupOperationWhileIsBeingCancelled() throws {
     try XCTSkipIf(!Self.isTestAvailable, "Test unavailable")
+
     let currentProgress = Progress(totalUnitCount: 1)
     let operation1 = RunUntilCancelledAsyncOperation()
     let operation2 = SleepyAsyncOperation(interval1: 1, interval2: 0, interval3: 0)
@@ -159,6 +162,7 @@ final class ProgressReportingTests: XCTestCase {
  @available(iOS 13.0, iOSApplicationExtension 13.0, macCatalyst 13.0, tvOS 13.0, watchOS 6.0, macOS 10.15, *)
   func testProgressReportingOnGroupOperationCancelledBeforeStarting() throws {
     try XCTSkipIf(!Self.isTestAvailable, "Test unavailable")
+
     let currentProgress = Progress(totalUnitCount: 1)
 
     let operation1 = AsyncBlockOperation { complete in
@@ -201,6 +205,7 @@ final class ProgressReportingTests: XCTestCase {
  @available(iOS 13.0, iOSApplicationExtension 13.0, macCatalyst 13.0, tvOS 13.0, watchOS 6.0, macOS 10.15, *)
   func testProgressReportingOnGroupOperationHavingAnInternalSerialQueue() throws {
     try XCTSkipIf(!Self.isTestAvailable, "Test unavailable")
+
     let currentProgress = Progress(totalUnitCount: 1)
 
     let operation1 = AsyncBlockOperation { complete in
@@ -247,6 +252,7 @@ final class ProgressReportingTests: XCTestCase {
  @available(iOS 13.0, iOSApplicationExtension 13.0, macCatalyst 13.0, tvOS 13.0, watchOS 6.0, macOS 10.15, *)
   func testProgressReportingOnGroupOperationRunningInAnOperationQueue() throws {
     try XCTSkipIf(!Self.isTestAvailable, "Test unavailable")
+
     let queue = OperationQueue()
     let currentProgress = Progress(totalUnitCount: 1)
     let sleepTime: UInt32 = 1
@@ -304,6 +310,7 @@ final class ProgressReportingTests: XCTestCase {
  @available(iOS 13.0, iOSApplicationExtension 13.0, macCatalyst 13.0, tvOS 13.0, watchOS 6.0, macOS 10.15, *)
   func testCustomProgressReporting() throws {
     try XCTSkipIf(!Self.isTestAvailable, "Test unavailable")
+
     let currentProgress = Progress(totalUnitCount: 1)
     let queue = OperationQueue()
     queue.maxConcurrentOperationCount = 1
@@ -342,6 +349,7 @@ final class ProgressReportingTests: XCTestCase {
  @available(iOS 13.0, iOSApplicationExtension 13.0, macCatalyst 13.0, tvOS 13.0, watchOS 6.0, macOS 10.15, *)
   func testExplicitProgressUsingSerialQueue() throws {
     try XCTSkipIf(!Self.isTestAvailable, "Test unavailable")
+
     // AsyncOperation implementation needs to call super.start() in order to enable progress reporting
     // even if the Operation documentation says to not call super.start()
     let currentProgress = Progress(totalUnitCount: 1)
@@ -408,6 +416,7 @@ final class ProgressReportingTests: XCTestCase {
  @available(iOS 13.0, iOSApplicationExtension 13.0, macCatalyst 13.0, tvOS 13.0, watchOS 6.0, macOS 10.15, *)
   func testExplicitProgressWithRsultAndFailableOperationsUsingSerialQueue() throws {
     try XCTSkipIf(!Self.isTestAvailable, "Test unavailable")
+
     let currentProgress = Progress(totalUnitCount: 1)
     let queue = OperationQueue()
     queue.maxConcurrentOperationCount = 1
@@ -448,6 +457,7 @@ final class ProgressReportingTests: XCTestCase {
  @available(iOS 13.0, iOSApplicationExtension 13.0, macCatalyst 13.0, tvOS 13.0, watchOS 6.0, macOS 10.15, *)
   func testImplicitProgressUsingSerialQueue() throws {
     try XCTSkipIf(!Self.isTestAvailable, "Test unavailable")
+
     let expectation0 = self.expectation(description: "Progress is completed")
     let currentProgress = Progress(totalUnitCount: 1)
     let token = currentProgress.observe(\.fractionCompleted, options: [.initial, .old, .new]) { (progress, change) in

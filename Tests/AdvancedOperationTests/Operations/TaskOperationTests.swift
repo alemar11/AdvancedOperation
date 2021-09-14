@@ -16,7 +16,7 @@ final class TaskOperationTests: XCTestCase {
     operation.start()
     wait(for: [expection1, finishExpectation], timeout: 2)
   }
-  
+
   func testExecutionInQueue() {
     let queue = OperationQueue()
     queue.maxConcurrentOperationCount = 2
@@ -31,7 +31,7 @@ final class TaskOperationTests: XCTestCase {
     queue.isSuspended = false
     wait(for: [expection1, finishExpectation], timeout: 2)
   }
-  
+
   func testCancel() {
     let operation = TaskOperation { XCTFail("The underlying task should be cancelled.") }
     let finishExpectation = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: operation, expectedValue: true)
@@ -39,7 +39,7 @@ final class TaskOperationTests: XCTestCase {
     operation.start()
     wait(for: [finishExpectation], timeout: 2)
   }
-  
+
   func testCancelInQueue() {
     let queue = OperationQueue()
     queue.maxConcurrentOperationCount = 2
