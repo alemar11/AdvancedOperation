@@ -8,7 +8,7 @@ import Foundation
 public final class TaskOperation: AsynchronousOperation {
   public typealias Block =  @Sendable () async -> Void
 
-  public let priority: _Concurrency.TaskPriority
+  public let priority: TaskPriority
 
   // MARK: - Private Properties
 
@@ -21,7 +21,7 @@ public final class TaskOperation: AsynchronousOperation {
   ///
   /// - Parameters:
   ///   - block: The closure to run when the operation executes.
-  public init(priority: _Concurrency.TaskPriority = .medium, block: @escaping Block) {
+  public init(priority: TaskPriority = .medium, block: @escaping Block) {
     self.priority = priority
     self.block = block
     super.init()
