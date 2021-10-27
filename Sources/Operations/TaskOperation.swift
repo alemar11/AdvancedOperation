@@ -33,8 +33,8 @@ public final class TaskOperation: AsynchronousOperation {
       return
     }
 
+    // TODO: priority or detached?
     task = Task {
-      print(Task.currentPriority)
       if !Task.isCancelled {
         await block()
       }
