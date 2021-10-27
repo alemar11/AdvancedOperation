@@ -8,6 +8,8 @@ import Foundation
 public final class TaskOperation: AsynchronousOperation {
   public typealias Block =  @Sendable () async -> Void
 
+  public let priority: _Concurrency.TaskPriority
+
   // MARK: - Private Properties
 
   private var block: Block
@@ -19,7 +21,8 @@ public final class TaskOperation: AsynchronousOperation {
   ///
   /// - Parameters:
   ///   - block: The closure to run when the operation executes.
-  public init(block: @escaping Block) {
+  public init(priority: _Concurrency.TaskPriority = .medium, block: @escaping Block) {
+    self.priority = priority
     self.block = block
     super.init()
     self.name = "\(type(of: self))"
@@ -33,8 +36,7 @@ public final class TaskOperation: AsynchronousOperation {
       return
     }
 
-    // TODO: priority or detached?
-    task = Task {
+    task = Task(priority: priority) {
       if !Task.isCancelled {
         await block()
       }

@@ -10,6 +10,7 @@ final class TaskOperationTests: XCTestCase {
     let expection1 = expectation(description: "\(#function)\(#line)")
     @Sendable func test() async -> Void { expection1.fulfill() }
     let operation = TaskOperation {
+      XCTAssertEqual(Task.currentPriority, .medium)
       await test()
     }
     let finishExpectation = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: operation, expectedValue: true)
@@ -23,7 +24,8 @@ final class TaskOperationTests: XCTestCase {
     queue.isSuspended = true
     let expection1 = expectation(description: "\(#function)\(#line)")
     @Sendable func test() async -> Void { expection1.fulfill() }
-    let operation = TaskOperation {
+    let operation = TaskOperation(priority: .userInitiated) {
+      XCTAssertEqual(Task.currentPriority, .userInitiated)
       await test()
     }
     let finishExpectation = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: operation, expectedValue: true)
