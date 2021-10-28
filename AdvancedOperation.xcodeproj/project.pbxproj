@@ -74,11 +74,7 @@
 		06AD3287272A988300F2CD60 /* TaskOperationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06AD3284272A988200F2CD60 /* TaskOperationTests.swift */; };
 		06AD3288272A988300F2CD60 /* TaskOperationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06AD3284272A988200F2CD60 /* TaskOperationTests.swift */; };
 		06AD3289272A988300F2CD60 /* TaskOperationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06AD3284272A988200F2CD60 /* TaskOperationTests.swift */; };
-		06AD328A272AA4E100F2CD60 /* AdvancedOperation.h in Headers */ = {isa = PBXBuildFile; fileRef = 06AD3258272A93FB00F2CD60 /* AdvancedOperation.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		06AD328B272AA4E200F2CD60 /* AdvancedOperation.h in Headers */ = {isa = PBXBuildFile; fileRef = 06AD3258272A93FB00F2CD60 /* AdvancedOperation.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		06AD328C272AA4E200F2CD60 /* AdvancedOperation.h in Headers */ = {isa = PBXBuildFile; fileRef = 06AD3258272A93FB00F2CD60 /* AdvancedOperation.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		06AD328D272AA4E200F2CD60 /* AdvancedOperation.h in Headers */ = {isa = PBXBuildFile; fileRef = 06AD3258272A93FB00F2CD60 /* AdvancedOperation.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		06AD328E272AA4E300F2CD60 /* AdvancedOperation.h in Headers */ = {isa = PBXBuildFile; fileRef = 06AD3258272A93FB00F2CD60 /* AdvancedOperation.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		06AD3296272AA94700F2CD60 /* AdvancedOperation.h in Headers */ = {isa = PBXBuildFile; fileRef = 2341308A1F9605F5002BE7FC /* AdvancedOperation.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		06B3D10223D9E9F3005EBDD8 /* AdvancedOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06B3D10123D9E9F3005EBDD8 /* AdvancedOperation.swift */; };
 		06B3D10323D9E9F3005EBDD8 /* AdvancedOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06B3D10123D9E9F3005EBDD8 /* AdvancedOperation.swift */; };
 		06B3D10423D9E9F3005EBDD8 /* AdvancedOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06B3D10123D9E9F3005EBDD8 /* AdvancedOperation.swift */; };
@@ -203,7 +199,6 @@
 		067C482523D60EE800F73096 /* KVOCrashWorkaround.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KVOCrashWorkaround.swift; sourceTree = "<group>"; };
 		06AD3250272A93C800F2CD60 /* AdvancedOperation.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = AdvancedOperation.xctestplan; sourceTree = "<group>"; };
 		06AD3256272A93FB00F2CD60 /* AdvancedOperation.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = AdvancedOperation.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		06AD3258272A93FB00F2CD60 /* AdvancedOperation.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AdvancedOperation.h; sourceTree = "<group>"; };
 		06AD3261272A941500F2CD60 /* AdvancedOperation Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "AdvancedOperation Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		06AD3263272A941500F2CD60 /* AdvancedOperation_Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdvancedOperation_Tests.swift; sourceTree = "<group>"; };
 		06AD327E272A986800F2CD60 /* TaskOperation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TaskOperation.swift; sourceTree = "<group>"; };
@@ -362,14 +357,6 @@
 			path = TestPlans;
 			sourceTree = "<group>";
 		};
-		06AD3257272A93FB00F2CD60 /* AdvancedOperation */ = {
-			isa = PBXGroup;
-			children = (
-				06AD3258272A93FB00F2CD60 /* AdvancedOperation.h */,
-			);
-			path = AdvancedOperation;
-			sourceTree = "<group>";
-		};
 		06AD3262272A941500F2CD60 /* AdvancedOperation Tests */ = {
 			isa = PBXGroup;
 			children = (
@@ -392,7 +379,6 @@
 			isa = PBXGroup;
 			children = (
 				D2F96AAC25FE53630085641B /* AdvancedOperation Tests watchOS */,
-				06AD3257272A93FB00F2CD60 /* AdvancedOperation */,
 				06AD3262272A941500F2CD60 /* AdvancedOperation Tests */,
 				234130881F9605F5002BE7FC /* Products */,
 				234130921F960612002BE7FC /* Sources */,
@@ -520,7 +506,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				06AD328A272AA4E100F2CD60 /* AdvancedOperation.h in Headers */,
+				06AD3296272AA94700F2CD60 /* AdvancedOperation.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -528,7 +514,6 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				06AD328B272AA4E200F2CD60 /* AdvancedOperation.h in Headers */,
 				2341308C1F9605F5002BE7FC /* AdvancedOperation.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -537,7 +522,6 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				06AD328C272AA4E200F2CD60 /* AdvancedOperation.h in Headers */,
 				234130BC1F96076A002BE7FC /* AdvancedOperation.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -546,7 +530,6 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				06AD328D272AA4E200F2CD60 /* AdvancedOperation.h in Headers */,
 				234130BD1F96076D002BE7FC /* AdvancedOperation.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -555,7 +538,6 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				06AD328E272AA4E300F2CD60 /* AdvancedOperation.h in Headers */,
 				234130BE1F960770002BE7FC /* AdvancedOperation.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
