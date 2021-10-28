@@ -10,6 +10,7 @@ import Foundation
 public final class TaskOperation: AsynchronousOperation {
   public typealias Block =  @Sendable () async -> Void
 
+  /// Priority to determine how e when the task gets scheduled.
   public let priority: TaskPriority
 
   // MARK: - Private Properties
@@ -39,6 +40,7 @@ public final class TaskOperation: AsynchronousOperation {
     }
 
     task = Task(priority: priority) {
+      // without setting a priority, it seems it gets High (25)
       if !Task.isCancelled {
         await block()
       }
