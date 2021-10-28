@@ -90,6 +90,20 @@
       "symbol": "GroupOperation.cancel()",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
+    },
+    {
+      "file": "/Users/amarzoli/Developer/AdvancedOperation/Sources/Operations/TaskOperation.swift",
+      "line": 11,
+      "symbol": "TaskOperation.Block",
+      "symbol_kind": "source.lang.swift.decl.typealias",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/amarzoli/Developer/AdvancedOperation/Sources/Operations/TaskOperation.swift",
+      "line": 51,
+      "symbol": "TaskOperation.cancel()",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
     }
   ],
   "source_directory": "/Users/amarzoli/Developer/AdvancedOperation"
