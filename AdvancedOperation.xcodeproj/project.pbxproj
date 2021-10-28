@@ -43,7 +43,6 @@
 		067C482723D60EE800F73096 /* KVOCrashWorkaround.swift in Sources */ = {isa = PBXBuildFile; fileRef = 067C482523D60EE800F73096 /* KVOCrashWorkaround.swift */; };
 		067C482823D60EE800F73096 /* KVOCrashWorkaround.swift in Sources */ = {isa = PBXBuildFile; fileRef = 067C482523D60EE800F73096 /* KVOCrashWorkaround.swift */; };
 		067C482923D60EE800F73096 /* KVOCrashWorkaround.swift in Sources */ = {isa = PBXBuildFile; fileRef = 067C482523D60EE800F73096 /* KVOCrashWorkaround.swift */; };
-		06AD3264272A941500F2CD60 /* AdvancedOperation_Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06AD3263272A941500F2CD60 /* AdvancedOperation_Tests.swift */; };
 		06AD3265272A941500F2CD60 /* AdvancedOperation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 06AD3256272A93FB00F2CD60 /* AdvancedOperation.framework */; };
 		06AD326B272A956F00F2CD60 /* FailableAsynchronousOperationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D29FE43924801A7900DA97AA /* FailableAsynchronousOperationTests.swift */; };
 		06AD326C272A956F00F2CD60 /* GroupOperationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 064B0D8823F4166300C8331F /* GroupOperationTests.swift */; };
@@ -138,7 +137,6 @@
 		D2CA6BA5247D59A200A71630 /* Atomic.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2CA6BA3247D59A200A71630 /* Atomic.swift */; };
 		D2CA6BA6247D59A200A71630 /* Atomic.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2CA6BA3247D59A200A71630 /* Atomic.swift */; };
 		D2CA6BA7247D59A200A71630 /* Atomic.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2CA6BA3247D59A200A71630 /* Atomic.swift */; };
-		D2F96AAE25FE53630085641B /* AdvancedOperation_Tests_watchOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2F96AAD25FE53630085641B /* AdvancedOperation_Tests_watchOS.swift */; };
 		D2F96AB025FE53630085641B /* AdvancedOperation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 234130B41F9606CD002BE7FC /* AdvancedOperation.framework */; };
 		D2F96AB725FE54270085641B /* GroupOperationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 064B0D8823F4166300C8331F /* GroupOperationTests.swift */; };
 		D2F96AB825FE54270085641B /* ResultOperationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D29FE44524801D1F00DA97AA /* ResultOperationTests.swift */; };
@@ -200,7 +198,6 @@
 		06AD3250272A93C800F2CD60 /* AdvancedOperation.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = AdvancedOperation.xctestplan; sourceTree = "<group>"; };
 		06AD3256272A93FB00F2CD60 /* AdvancedOperation.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = AdvancedOperation.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		06AD3261272A941500F2CD60 /* AdvancedOperation Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "AdvancedOperation Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
-		06AD3263272A941500F2CD60 /* AdvancedOperation_Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdvancedOperation_Tests.swift; sourceTree = "<group>"; };
 		06AD327E272A986800F2CD60 /* TaskOperation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TaskOperation.swift; sourceTree = "<group>"; };
 		06AD3284272A988200F2CD60 /* TaskOperationTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TaskOperationTests.swift; sourceTree = "<group>"; };
 		06B3D10123D9E9F3005EBDD8 /* AdvancedOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdvancedOperation.swift; sourceTree = "<group>"; };
@@ -238,8 +235,6 @@
 		D29FE44524801D1F00DA97AA /* ResultOperationTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ResultOperationTests.swift; sourceTree = "<group>"; };
 		D2CA6BA3247D59A200A71630 /* Atomic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Atomic.swift; sourceTree = "<group>"; };
 		D2F96AAB25FE53630085641B /* AdvancedOperation Tests watchOS.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "AdvancedOperation Tests watchOS.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
-		D2F96AAD25FE53630085641B /* AdvancedOperation_Tests_watchOS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdvancedOperation_Tests_watchOS.swift; sourceTree = "<group>"; };
-		D2F96AAF25FE53630085641B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D2F96AB625FE53A90085641B /* AdvancedOperation watchOS.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = "AdvancedOperation watchOS.xctestplan"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -357,14 +352,6 @@
 			path = TestPlans;
 			sourceTree = "<group>";
 		};
-		06AD3262272A941500F2CD60 /* AdvancedOperation Tests */ = {
-			isa = PBXGroup;
-			children = (
-				06AD3263272A941500F2CD60 /* AdvancedOperation_Tests.swift */,
-			);
-			path = "AdvancedOperation Tests";
-			sourceTree = "<group>";
-		};
 		230B47FD200EABEE00F46852 /* AdvancedOperationTests */ = {
 			isa = PBXGroup;
 			children = (
@@ -378,8 +365,6 @@
 		2341307D1F9605F5002BE7FC = {
 			isa = PBXGroup;
 			children = (
-				D2F96AAC25FE53630085641B /* AdvancedOperation Tests watchOS */,
-				06AD3262272A941500F2CD60 /* AdvancedOperation Tests */,
 				234130881F9605F5002BE7FC /* Products */,
 				234130921F960612002BE7FC /* Sources */,
 				234130941F96061E002BE7FC /* Support */,
@@ -488,15 +473,6 @@
 				D2CA6BA3247D59A200A71630 /* Atomic.swift */,
 			);
 			path = Core;
-			sourceTree = "<group>";
-		};
-		D2F96AAC25FE53630085641B /* AdvancedOperation Tests watchOS */ = {
-			isa = PBXGroup;
-			children = (
-				D2F96AAD25FE53630085641B /* AdvancedOperation_Tests_watchOS.swift */,
-				D2F96AAF25FE53630085641B /* Info.plist */,
-			);
-			path = "AdvancedOperation Tests watchOS";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -950,7 +926,6 @@
 				06AD3274272A957700F2CD60 /* Mocks.swift in Sources */,
 				06AD326F272A957300F2CD60 /* AsynchronousOperationTests.swift in Sources */,
 				06AD3271272A957300F2CD60 /* OperationUtilsTests.swift in Sources */,
-				06AD3264272A941500F2CD60 /* AdvancedOperation_Tests.swift in Sources */,
 				06AD326B272A956F00F2CD60 /* FailableAsynchronousOperationTests.swift in Sources */,
 				06AD3273272A957700F2CD60 /* XCTestCase+Utils.swift in Sources */,
 				06AD3285272A988300F2CD60 /* TaskOperationTests.swift in Sources */,
@@ -1088,7 +1063,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D2F96AAE25FE53630085641B /* AdvancedOperation_Tests_watchOS.swift in Sources */,
 				D2F96ABE25FE542B0085641B /* OperationStateTests.swift in Sources */,
 				D2F96AB825FE54270085641B /* ResultOperationTests.swift in Sources */,
 				D2F96ABA25FE54270085641B /* FailableAsynchronousOperationTests.swift in Sources */,
@@ -1791,7 +1765,7 @@
 			buildSettings = {
 				CLANG_ENABLE_OBJC_WEAK = YES;
 				CODE_SIGN_STYLE = Automatic;
-				INFOPLIST_FILE = "AdvancedOperation Tests watchOS/Info.plist";
+				INFOPLIST_FILE = "Support/Info-Tests.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
@@ -1809,7 +1783,7 @@
 			buildSettings = {
 				CLANG_ENABLE_OBJC_WEAK = YES;
 				CODE_SIGN_STYLE = Automatic;
-				INFOPLIST_FILE = "AdvancedOperation Tests watchOS/Info.plist";
+				INFOPLIST_FILE = "Support/Info-Tests.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MTL_FAST_MATH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.alessandromarzoli.AdvancedOperation-Tests-watchOS";
