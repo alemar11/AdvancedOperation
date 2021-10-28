@@ -74,6 +74,11 @@
 		06AD3287272A988300F2CD60 /* TaskOperationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06AD3284272A988200F2CD60 /* TaskOperationTests.swift */; };
 		06AD3288272A988300F2CD60 /* TaskOperationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06AD3284272A988200F2CD60 /* TaskOperationTests.swift */; };
 		06AD3289272A988300F2CD60 /* TaskOperationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06AD3284272A988200F2CD60 /* TaskOperationTests.swift */; };
+		06AD328A272AA4E100F2CD60 /* AdvancedOperation.h in Headers */ = {isa = PBXBuildFile; fileRef = 06AD3258272A93FB00F2CD60 /* AdvancedOperation.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		06AD328B272AA4E200F2CD60 /* AdvancedOperation.h in Headers */ = {isa = PBXBuildFile; fileRef = 06AD3258272A93FB00F2CD60 /* AdvancedOperation.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		06AD328C272AA4E200F2CD60 /* AdvancedOperation.h in Headers */ = {isa = PBXBuildFile; fileRef = 06AD3258272A93FB00F2CD60 /* AdvancedOperation.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		06AD328D272AA4E200F2CD60 /* AdvancedOperation.h in Headers */ = {isa = PBXBuildFile; fileRef = 06AD3258272A93FB00F2CD60 /* AdvancedOperation.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		06AD328E272AA4E300F2CD60 /* AdvancedOperation.h in Headers */ = {isa = PBXBuildFile; fileRef = 06AD3258272A93FB00F2CD60 /* AdvancedOperation.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		06B3D10223D9E9F3005EBDD8 /* AdvancedOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06B3D10123D9E9F3005EBDD8 /* AdvancedOperation.swift */; };
 		06B3D10323D9E9F3005EBDD8 /* AdvancedOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06B3D10123D9E9F3005EBDD8 /* AdvancedOperation.swift */; };
 		06B3D10423D9E9F3005EBDD8 /* AdvancedOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06B3D10123D9E9F3005EBDD8 /* AdvancedOperation.swift */; };
@@ -515,6 +520,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				06AD328A272AA4E100F2CD60 /* AdvancedOperation.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -522,6 +528,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				06AD328B272AA4E200F2CD60 /* AdvancedOperation.h in Headers */,
 				2341308C1F9605F5002BE7FC /* AdvancedOperation.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -530,6 +537,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				06AD328C272AA4E200F2CD60 /* AdvancedOperation.h in Headers */,
 				234130BC1F96076A002BE7FC /* AdvancedOperation.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -538,6 +546,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				06AD328D272AA4E200F2CD60 /* AdvancedOperation.h in Headers */,
 				234130BD1F96076D002BE7FC /* AdvancedOperation.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -546,6 +555,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				06AD328E272AA4E300F2CD60 /* AdvancedOperation.h in Headers */,
 				234130BE1F960770002BE7FC /* AdvancedOperation.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
