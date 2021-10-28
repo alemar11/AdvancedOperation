@@ -11,7 +11,7 @@ public final class TaskOperation: AsynchronousOperation {
   public typealias Block =  @Sendable () async -> Void
 
   /// Priority to determine how e when the task gets scheduled.
-  public let priority: TaskPriority
+  public let priority: _Concurrency.TaskPriority
 
   // MARK: - Private Properties
 
@@ -24,7 +24,7 @@ public final class TaskOperation: AsynchronousOperation {
   ///
   /// - Parameters:
   ///   - block: The closure to run when the operation executes.
-  public init(priority: TaskPriority = .medium, block: @escaping Block) {
+  public init(priority: _Concurrency.TaskPriority = .medium, block: @escaping Block) {
     self.priority = priority
     self.block = block
     super.init()
