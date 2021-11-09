@@ -8,8 +8,6 @@ import Foundation
 public final class TaskOperation: AsynchronousOperation {
   public typealias Block =  @Sendable () async -> Void
 
-  public let priority: TaskPriority
-
   // MARK: - Private Properties
 
   private var block: Block
@@ -21,8 +19,7 @@ public final class TaskOperation: AsynchronousOperation {
   ///
   /// - Parameters:
   ///   - block: The closure to run when the operation executes.
-  public init(priority: TaskPriority = .medium, block: @escaping Block) {
-    self.priority = priority
+  public init(block: @escaping Block) {
     self.block = block
     super.init()
     self.name = "\(type(of: self))"
@@ -36,6 +33,7 @@ public final class TaskOperation: AsynchronousOperation {
       return
     }
 
+    let priority = priority()
     task = Task(priority: priority) {
       if !Task.isCancelled {
         await block()
@@ -47,5 +45,22 @@ public final class TaskOperation: AsynchronousOperation {
   public override func cancel() {
     task?.cancel()
     super.cancel()
+  }
+
+  private func priority() -> TaskPriority {
+    switch qualityOfService {
+      case .background:
+        return TaskPriority.background
+      case .default:
+        return TaskPriority.medium
+      case .userInitiated:
+        return TaskPriority.userInitiated
+      case .userInteractive:
+        return TaskPriority.high
+      case .utility:
+        return TaskPriority.utility
+      @unknown default:
+        return TaskPriority.medium
+    }
   }
 }

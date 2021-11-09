@@ -24,10 +24,11 @@ final class TaskOperationTests: XCTestCase {
     queue.isSuspended = true
     let expection1 = expectation(description: "\(#function)\(#line)")
     @Sendable func test() async -> Void { expection1.fulfill() }
-    let operation = TaskOperation(priority: .userInitiated) {
+    let operation = TaskOperation() {
       XCTAssertEqual(Task.currentPriority, .userInitiated)
       await test()
     }
+    operation.qualityOfService = .userInitiated
     let finishExpectation = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: operation, expectedValue: true)
     queue.addOperation(operation)
     queue.isSuspended = false
