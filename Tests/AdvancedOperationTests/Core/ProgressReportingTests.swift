@@ -37,24 +37,36 @@ final class ProgressReportingTests: XCTestCase {
     }
 
     groupOperation.addOperation(operation1)
+    let expectation = XCTestExpectation(description: "Group operation is completed.")
+    groupOperation.completionBlock = {
+      expectation.fulfill()
+    }
 
     currentProgress.addChild(groupOperation.progress, withPendingUnitCount: 1)
 
-    let expectation0 = self.expectation(description: "Progress is completed")
-    let expectation1 = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: groupOperation, expectedValue: true)
-    expectation0.assertForOverFulfill = false
-    let token = currentProgress.observe(\.fractionCompleted, options: [.initial, .old, .new]) { (progress, change) in
-      print("fraction: \(progress.fractionCompleted)", "-", progress.localizedAdditionalDescription ?? "")
-
-      if progress.completedUnitCount == 1 && progress.fractionCompleted == 1.0 {
-        expectation0.fulfill()
-      }
+    var logs = [String]()
+    let token = currentProgress.observe(\.fractionCompleted, options: [.initial, .old, .new]) { progress, _ in
+      // gather some progress data to be used if the test fails
+      let log = "fraction: \(progress.fractionCompleted), completed unit count: \(progress.completedUnitCount), progress: \(progress.localizedAdditionalDescription ?? "")"
+      logs.append(log)
     }
 
     groupOperation.maxConcurrentOperationCount = 1
     groupOperation.start()
-    wait(for: [expectation0, expectation1], timeout: 5)
-    print(groupOperation.isFinished)
+    wait(for: [expectation], timeout: 5)
+    XCTAssertEqual(currentProgress.completedUnitCount, 1)
+    XCTAssertEqual(currentProgress.fractionCompleted, 1.0)
+
+    if currentProgress.completedUnitCount != 1 || currentProgress.fractionCompleted != 1.0 {
+      var issue = XCTIssue(type: .assertionFailure, compactDescription: "Progress should be completed.")
+      logs.forEach { log in
+        let attachment = XCTAttachment(string: log)
+        issue.add(attachment)
+      }
+      let location = XCTSourceCodeLocation(filePath: #filePath, lineNumber: #line)
+      issue.sourceCodeContext = XCTSourceCodeContext(location: location)
+      record(issue)
+    }
     token.invalidate()
   }
 
