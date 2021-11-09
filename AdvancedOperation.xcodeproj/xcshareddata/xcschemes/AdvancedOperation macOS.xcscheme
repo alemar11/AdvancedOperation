@@ -46,7 +46,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "23725070200522820000A442"
-               BuildableName = "AdvancedOperation Tests macOS.xctest"
+               BuildableName = "_AdvancedOperation Tests macOS.xctest"
                BlueprintName = "AdvancedOperation Tests macOS"
                ReferencedContainer = "container:AdvancedOperation.xcodeproj">
             </BuildableReference>
@@ -75,13 +75,6 @@
             ReferencedContainer = "container:AdvancedOperation.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
-      <EnvironmentVariables>
-         <EnvironmentVariable
-            key = "org.tinrobots.AdvancedOperation.LOG_ENABLED"
-            value = "1"
-            isEnabled = "YES">
-         </EnvironmentVariable>
-      </EnvironmentVariables>
    </LaunchAction>
    <ProfileAction
       buildConfiguration = "Release"

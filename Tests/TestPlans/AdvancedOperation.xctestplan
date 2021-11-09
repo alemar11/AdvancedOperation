@@ -7,12 +7,7 @@
         "addressSanitizer" : {
           "enabled" : true
         },
-        "nsZombieEnabled" : true,
-        "targetForVariableExpansion" : {
-          "containerPath" : "container:AdvancedOperation.xcodeproj",
-          "identifier" : "234130861F9605F5002BE7FC",
-          "name" : "AdvancedOperation iOS"
-        }
+        "nsZombieEnabled" : true
       }
     },
     {
@@ -21,8 +16,8 @@
       "options" : {
         "targetForVariableExpansion" : {
           "containerPath" : "container:AdvancedOperation.xcodeproj",
-          "identifier" : "234130861F9605F5002BE7FC",
-          "name" : "AdvancedOperation iOS"
+          "identifier" : "06AF61C126F0D2430090A61B",
+          "name" : "AdvancedOperation"
         },
         "threadSanitizerEnabled" : true,
         "undefinedBehaviorSanitizerEnabled" : true
@@ -38,14 +33,19 @@
         "mainThreadCheckerEnabled" : true,
         "targetForVariableExpansion" : {
           "containerPath" : "container:AdvancedOperation.xcodeproj",
-          "identifier" : "234130861F9605F5002BE7FC",
-          "name" : "AdvancedOperation iOS"
+          "identifier" : "06AF61C126F0D2430090A61B",
+          "name" : "AdvancedOperation"
         }
       }
     }
   ],
   "defaultOptions" : {
     "mainThreadCheckerEnabled" : false,
+    "targetForVariableExpansion" : {
+      "containerPath" : "container:AdvancedOperation.xcodeproj",
+      "identifier" : "06AF61C126F0D2430090A61B",
+      "name" : "AdvancedOperation"
+    },
     "testExecutionOrdering" : "random",
     "testTimeoutsEnabled" : true,
     "userAttachmentLifetime" : "keepNever"
