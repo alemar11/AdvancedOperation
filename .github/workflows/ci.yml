@@ -16,7 +16,7 @@ on:
 jobs:
   info:
     name: Show macOS and Xcode versions
-    runs-on: macOS-12.0
+    runs-on: macOS-11.0
     env:
       DEVELOPER_DIR: /Applications/Xcode_13.1.app/Contents/Developer
     steps:
@@ -30,7 +30,7 @@ jobs:
           brew info swiftlint
   macOS:
     name: Test macOS
-    runs-on: macOS-12.0
+    runs-on: macOS-11.0
     env:
       DEVELOPER_DIR: /Applications/Xcode_13.1.app/Contents/Developer
     steps:
@@ -39,7 +39,7 @@ jobs:
         run: set -o pipefail && env NSUnbufferedIO=YES xcodebuild -project "AdvancedOperation.xcodeproj" -scheme "AdvancedOperation macOS" -destination "platform=macOS" clean test -quiet -resultBundlePath '~/Downloads/Report/report.xcresult'
   iOS:
     name: Test iOS
-    runs-on: macOS-12.0
+    runs-on: macOS-11.0
     env:
       DEVELOPER_DIR: /Applications/Xcode_13.1.app/Contents/Developer
     strategy:
@@ -58,7 +58,7 @@ jobs:
           path: ~/Downloads/Report 
   tvOS:
     name: Test tvOS
-    runs-on: macOS-12.0
+    runs-on: macOS-11.0
     env:
       DEVELOPER_DIR: /Applications/Xcode_13.1.app/Contents/Developer
     strategy:
@@ -77,7 +77,7 @@ jobs:
           path: ~/Downloads/Report       
   watchOS:
     name: Build watchOS
-    runs-on: macOS-12.0
+    runs-on: macOS-11.0
     env:
       DEVELOPER_DIR: /Applications/Xcode_13.1.app/Contents/Developer
     strategy:
@@ -96,7 +96,7 @@ jobs:
           path: ~/Downloads/Report
   spm:
     name: Test SPM Integration
-    runs-on: macOS-12.0
+    runs-on: macOS-11.0
     env:
       DEVELOPER_DIR: /Applications/Xcode_13.1.app/Contents/Developer
     steps:
@@ -107,7 +107,7 @@ jobs:
           swift test
   lint:
     name: Swift Lint
-    runs-on: macOS-12.0
+    runs-on: macOS-11.0
     steps:
       - uses: actions/checkout@v2
       - name: Run SwiftLint
