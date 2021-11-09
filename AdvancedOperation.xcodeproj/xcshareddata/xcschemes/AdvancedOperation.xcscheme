@@ -29,7 +29,7 @@
       shouldUseLaunchSchemeArgsEnv = "YES">
       <TestPlans>
          <TestPlanReference
-            reference = "container:Tests/TestPlans/AdvancedOperation macOS.xctestplan"
+            reference = "container:Tests/TestPlans/AdvancedOperation.xctestplan"
             default = "YES">
          </TestPlanReference>
       </TestPlans>
