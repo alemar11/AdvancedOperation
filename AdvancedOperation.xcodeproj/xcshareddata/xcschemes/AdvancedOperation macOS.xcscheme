@@ -46,7 +46,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "23725070200522820000A442"
-               BuildableName = "_AdvancedOperation Tests macOS.xctest"
+               BuildableName = "AdvancedOperation Tests macOS.xctest"
                BlueprintName = "AdvancedOperation Tests macOS"
                ReferencedContainer = "container:AdvancedOperation.xcodeproj">
             </BuildableReference>
