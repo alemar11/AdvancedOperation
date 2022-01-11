@@ -2,9 +2,10 @@
 
 import Foundation
 
+#if compiler(>=5.5.2) && canImport(_Concurrency)
+
 /// An `AsynchronousOperation` that supports Swift concurrency.
-@available(swift 5.5)
-@available(iOS 15.0, iOSApplicationExtension 15.0, macCatalyst 15.0, tvOS 15.0, watchOS 8.0, macOS 12, *)
+@available(iOS 13.0, iOSApplicationExtension 13.0, macCatalyst 13.0, tvOS 13.0, watchOS 6.0, macOS 10.15, *)
 public final class TaskOperation: AsynchronousOperation {
   public typealias Block =  @Sendable () async -> Void
 
@@ -64,3 +65,5 @@ public final class TaskOperation: AsynchronousOperation {
     }
   }
 }
+
+#endif
