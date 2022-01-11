@@ -3,7 +3,6 @@
 ### 6.3.0
 
 - Xcode 13
-- Added `TaskOperation` that supports Swift Concurrency (async/await)
 - Added AdvancedOperation multi-platform framework.
 
 ### 6.2.1
