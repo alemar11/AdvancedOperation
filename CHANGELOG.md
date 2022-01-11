@@ -1,5 +1,10 @@
 # Changelog
 
+### 6.3.0
+
+- Xcode 13
+- Added AdvancedOperation multi-platform framework.
+
 ### 6.2.1
 
 - Fix a KVO crash in `GroupOperation`.
