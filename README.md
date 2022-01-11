@@ -13,7 +13,7 @@ Operation usefull extensions.
 
 ## Requirements
 
-[![Swift 5.2](https://img.shields.io/badge/Swift-5.2-orange.svg?style=flat)](https://developer.apple.com/swift)
+[![Swift 5.5](https://img.shields.io/badge/Swift-5.2-orange.svg?style=flat)](https://developer.apple.com/swift)
 ![Platforms](https://img.shields.io/badge/Platform-iOS%2010%2B%20|%20macOS%2010.12+%20|%20tvOS%2010+%20|%20watchOS%203+-blue.svg) 
 ![Xcode](https://img.shields.io/badge/Xcode-12-blue.svg) 
 
@@ -36,21 +36,21 @@ platform :ios, '12.0'
 use_frameworks!
 
 target '<Your Target Name>' do
-    pod 'AdvancedOperation', '~> 6.2.1'
+    pod 'AdvancedOperation', '~> 6.3.0'
 end
 ```
 
 ### Carthage
 
 ```ogdl
-github "tinrobots/AdvancedOperation" ~> 6.2.1
+github "tinrobots/AdvancedOperation" ~> 6.3.0
 ```
 
 ### Swift Package Manager
 
 ```swift
 dependencies: [
-    .package(url: "https://github.com/alemar11/AdvancedOperation.git", .upToNextMajor(from: "6.2.1"))
+    .package(url: "https://github.com/alemar11/AdvancedOperation.git", .upToNextMajor(from: "6.3.0"))
 ]
 ```
 
