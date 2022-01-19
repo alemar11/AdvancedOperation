@@ -13,9 +13,9 @@ Operation usefull extensions.
 
 ## Requirements
 
-[![Swift 5.5](https://img.shields.io/badge/Swift-5.2-orange.svg?style=flat)](https://developer.apple.com/swift)
+[![Swift 5.5](https://img.shields.io/badge/Swift-5.5-orange.svg?style=flat)](https://developer.apple.com/swift)
 ![Platforms](https://img.shields.io/badge/Platform-iOS%2010%2B%20|%20macOS%2010.12+%20|%20tvOS%2010+%20|%20watchOS%203+-blue.svg) 
-![Xcode](https://img.shields.io/badge/Xcode-12-blue.svg) 
+![Xcode](https://img.shields.io/badge/Xcode-13-blue.svg) 
 
 [![Carthage Compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage)
 [![CocoaPods Compatible](https://img.shields.io/cocoapods/v/AdvancedOperation.svg)](https://cocoapods.org/pods/AdvancedOperation)
