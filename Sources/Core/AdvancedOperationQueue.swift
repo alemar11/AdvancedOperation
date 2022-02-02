@@ -26,7 +26,7 @@ import Foundation
 // MARK: - AdvancedOperationQueueDelegate
 
 /// Classes conforming to this protocol received updates about the life-cycle of an `AdvancedOperationQueueDelegate`.
-public protocol AdvancedOperationQueueDelegate: class {
+public protocol AdvancedOperationQueueDelegate: AnyObject {
   // An operation is being added to the queue.
   func operationQueue(operationQueue: AdvancedOperationQueue, willAddOperation operation: Operation)
   // An operation is going to be executed (but it's not yet executing).

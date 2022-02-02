@@ -123,7 +123,7 @@ public typealias OperationInputHaving = InputRequiring
 public typealias OperationOutputHaving = OutputProducing
 
 // Deprecations
-extension OutputProducing where Self: AdvancedOperation {
+extension OutputProducing {
   @available(*, deprecated, message: "Use injectOutput(into:) instead.")
   public func inject<E: InputRequiring>(into operation: E) -> AdvancedOperation where Output == E.Input {
     return injectOutput(into: operation)
