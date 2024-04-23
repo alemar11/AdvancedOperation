@@ -39,13 +39,8 @@
 		064B0D8D23F4168500C8331F /* GroupOperationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 064B0D8823F4166300C8331F /* GroupOperationTests.swift */; };
 		064B0D8E23F4168600C8331F /* GroupOperationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 064B0D8823F4166300C8331F /* GroupOperationTests.swift */; };
 		064B0D8F23F4168600C8331F /* GroupOperationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 064B0D8823F4166300C8331F /* GroupOperationTests.swift */; };
-		067C482623D60EE800F73096 /* KVOCrashWorkaround.swift in Sources */ = {isa = PBXBuildFile; fileRef = 067C482523D60EE800F73096 /* KVOCrashWorkaround.swift */; };
-		067C482723D60EE800F73096 /* KVOCrashWorkaround.swift in Sources */ = {isa = PBXBuildFile; fileRef = 067C482523D60EE800F73096 /* KVOCrashWorkaround.swift */; };
-		067C482823D60EE800F73096 /* KVOCrashWorkaround.swift in Sources */ = {isa = PBXBuildFile; fileRef = 067C482523D60EE800F73096 /* KVOCrashWorkaround.swift */; };
-		067C482923D60EE800F73096 /* KVOCrashWorkaround.swift in Sources */ = {isa = PBXBuildFile; fileRef = 067C482523D60EE800F73096 /* KVOCrashWorkaround.swift */; };
 		06AF61CA26F0D2440090A61B /* AdvancedOperation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 06AF61C226F0D2430090A61B /* AdvancedOperation.framework */; };
 		06AF61D726F0D2BF0090A61B /* AdvancedOperation.h in Headers */ = {isa = PBXBuildFile; fileRef = 2341308A1F9605F5002BE7FC /* AdvancedOperation.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		06AF61D826F0D2C80090A61B /* KVOCrashWorkaround.swift in Sources */ = {isa = PBXBuildFile; fileRef = 067C482523D60EE800F73096 /* KVOCrashWorkaround.swift */; };
 		06AF61D926F0D2CB0090A61B /* AdvancedOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06B3D10123D9E9F3005EBDD8 /* AdvancedOperation.swift */; };
 		06AF61DA26F0D2CB0090A61B /* Operation+Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23F24D21200799B800B25A03 /* Operation+Utils.swift */; };
 		06AF61DB26F0D2CB0090A61B /* Atomic.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2CA6BA3247D59A200A71630 /* Atomic.swift */; };
@@ -184,7 +179,6 @@
 		0622C314239A7428004F3FA5 /* AdvancedOperation iOS.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = "AdvancedOperation iOS.xctestplan"; sourceTree = "<group>"; };
 		064B0D8323F4032100C8331F /* GroupOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupOperation.swift; sourceTree = "<group>"; };
 		064B0D8823F4166300C8331F /* GroupOperationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupOperationTests.swift; sourceTree = "<group>"; };
-		067C482523D60EE800F73096 /* KVOCrashWorkaround.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KVOCrashWorkaround.swift; sourceTree = "<group>"; };
 		06AF61C226F0D2430090A61B /* AdvancedOperation.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = AdvancedOperation.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		06AF61C926F0D2430090A61B /* AdvancedOperation Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "AdvancedOperation Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		06AF61ED26F0D6DA0090A61B /* AdvancedOperation.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = AdvancedOperation.xctestplan; sourceTree = "<group>"; };
@@ -381,7 +375,6 @@
 			children = (
 				D25DB58423F4A3CB002B91C5 /* Core */,
 				D25DB58323F4A3B9002B91C5 /* Operations */,
-				D20DF7E823F88096007C0522 /* Utils */,
 			);
 			path = Sources;
 			sourceTree = "<group>";
@@ -430,14 +423,6 @@
 			name = workflows;
 			path = .github/workflows;
 			sourceTree = SOURCE_ROOT;
-		};
-		D20DF7E823F88096007C0522 /* Utils */ = {
-			isa = PBXGroup;
-			children = (
-				067C482523D60EE800F73096 /* KVOCrashWorkaround.swift */,
-			);
-			path = Utils;
-			sourceTree = "<group>";
 		};
 		D25DB58323F4A3B9002B91C5 /* Operations */ = {
 			isa = PBXGroup;
@@ -895,7 +880,6 @@
 				06AF61DF26F0D2CF0090A61B /* ResultOperation.swift in Sources */,
 				06AF61DB26F0D2CB0090A61B /* Atomic.swift in Sources */,
 				06AF61E026F0D2CF0090A61B /* AsynchronousBlockOperation.swift in Sources */,
-				06AF61D826F0D2C80090A61B /* KVOCrashWorkaround.swift in Sources */,
 				06AF61DC26F0D2CB0090A61B /* AsynchronousOperation.swift in Sources */,
 				06AF61DA26F0D2CB0090A61B /* Operation+Utils.swift in Sources */,
 				06AF61DE26F0D2CF0090A61B /* GroupOperation.swift in Sources */,
@@ -928,7 +912,6 @@
 				D29FE44124801AE600DA97AA /* ResultOperation.swift in Sources */,
 				064B0D8423F4032100C8331F /* GroupOperation.swift in Sources */,
 				06B3D10223D9E9F3005EBDD8 /* AdvancedOperation.swift in Sources */,
-				067C482623D60EE800F73096 /* KVOCrashWorkaround.swift in Sources */,
 				06C92B4B23D0A9FF000D12C8 /* AsynchronousBlockOperation.swift in Sources */,
 				23F24D22200799B800B25A03 /* Operation+Utils.swift in Sources */,
 				D2CA6BA4247D59A200A71630 /* Atomic.swift in Sources */,
@@ -944,7 +927,6 @@
 				D29FE44224801AE600DA97AA /* ResultOperation.swift in Sources */,
 				064B0D8523F4032100C8331F /* GroupOperation.swift in Sources */,
 				06B3D10323D9E9F3005EBDD8 /* AdvancedOperation.swift in Sources */,
-				067C482723D60EE800F73096 /* KVOCrashWorkaround.swift in Sources */,
 				06C92B4C23D0A9FF000D12C8 /* AsynchronousBlockOperation.swift in Sources */,
 				23F24D23200799B800B25A03 /* Operation+Utils.swift in Sources */,
 				D2CA6BA5247D59A200A71630 /* Atomic.swift in Sources */,
@@ -960,7 +942,6 @@
 				D29FE44324801AE600DA97AA /* ResultOperation.swift in Sources */,
 				064B0D8623F4032200C8331F /* GroupOperation.swift in Sources */,
 				06B3D10423D9E9F3005EBDD8 /* AdvancedOperation.swift in Sources */,
-				067C482823D60EE800F73096 /* KVOCrashWorkaround.swift in Sources */,
 				06C92B4D23D0A9FF000D12C8 /* AsynchronousBlockOperation.swift in Sources */,
 				23F24D24200799B800B25A03 /* Operation+Utils.swift in Sources */,
 				D2CA6BA6247D59A200A71630 /* Atomic.swift in Sources */,
@@ -976,7 +957,6 @@
 				D29FE44424801AE600DA97AA /* ResultOperation.swift in Sources */,
 				064B0D8723F4032200C8331F /* GroupOperation.swift in Sources */,
 				06B3D10523D9E9F3005EBDD8 /* AdvancedOperation.swift in Sources */,
-				067C482923D60EE800F73096 /* KVOCrashWorkaround.swift in Sources */,
 				06C92B4E23D0A9FF000D12C8 /* AsynchronousBlockOperation.swift in Sources */,
 				23F24D25200799B800B25A03 /* Operation+Utils.swift in Sources */,
 				D2CA6BA7247D59A200A71630 /* Atomic.swift in Sources */,

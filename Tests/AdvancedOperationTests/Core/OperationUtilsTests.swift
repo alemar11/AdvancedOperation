@@ -5,12 +5,6 @@ import XCTest
 @testable import AdvancedOperation
 
 final class OperationUtilsTests: XCTestCase {
-  override class func setUp() {
-    #if swift(<5.1)
-      AdvancedOperation.KVOCrashWorkaround.installFix()
-    #endif
-  }
-
   func testRemoveDependencies() {
     let operation1 = AsynchronousBlockOperation { $0() }
     let operation2 = SleepyAsyncOperation()

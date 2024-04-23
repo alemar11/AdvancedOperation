@@ -5,12 +5,6 @@ import XCTest
 @testable import AdvancedOperation
 
 final class AsynchronousOperationTests: XCTestCase {
-  override class func setUp() {
-    #if swift(<5.1)
-      KVOCrashWorkaround.installFix()
-    #endif
-  }
-
   func testEarlyBailOut() {
     let operation = RunUntilCancelledAsyncOperation()
     let expectation1 = XCTKVOExpectation(

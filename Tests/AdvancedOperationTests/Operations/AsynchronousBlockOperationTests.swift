@@ -5,12 +5,6 @@ import XCTest
 @testable import AdvancedOperation
 
 final class AsynchronousBlockOperationTests: XCTestCase {
-  override class func setUp() {
-    #if swift(<5.1)
-      KVOCrashWorkaround.installFix()
-    #endif
-  }
-
   func testCancelledExecutionBeforeStarting() {
     let operation = AsynchronousBlockOperation { complete in
       DispatchQueue(label: "\(identifier).\(#function)", attributes: .concurrent).asyncAfter(deadline: .now() + 2) {
