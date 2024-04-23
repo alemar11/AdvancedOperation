@@ -1,8 +1,9 @@
 // AdvancedOperation
 
-import Foundation
 import Dispatch
+import Foundation
 import XCTest
+
 @testable import AdvancedOperation
 
 // MARK: - AsynchronousBlockOperation
@@ -54,13 +55,13 @@ final class ProgressReportingAsyncOperation: AsyncOperation {
         return
       }
       self.progress.totalUnitCount = 4
-      usleep(1_000_000) // 1 sec
+      usleep(1_000_000)  // 1 sec
       self.progress.completedUnitCount = 1
-      usleep(500_000) // 0,5 sec
+      usleep(500_000)  // 0,5 sec
       self.progress.completedUnitCount = 2
-      usleep(100_000) // 0,1 sec
+      usleep(100_000)  // 0,1 sec
       self.progress.completedUnitCount = 3
-      usleep(1000) // 0,001 sec
+      usleep(1000)  // 0,001 sec
       self.finish()
     }
   }
@@ -134,7 +135,8 @@ internal final class CancelledOperation: Operation {
   }
 
   override func main() {
-    XCTAssert(isCancelled, "This operation is expected to be cancelled before starting its execution.", file: file, line: line)
+    XCTAssert(
+      isCancelled, "This operation is expected to be cancelled before starting its execution.", file: file, line: line)
   }
 }
 
@@ -159,7 +161,7 @@ internal final class IntToStringOperation: Operation {
   }
 }
 
-internal final class StringToIntOperation: Operation  {
+internal final class StringToIntOperation: Operation {
   var onOutputProduced: ((Int) -> Void)?
   var input: String?
   private(set) var output: Int? {
@@ -195,7 +197,7 @@ internal final class FailingOperation: Operation {
 
 // MARK: - ResultOperation
 
-internal final class DummyResultOperation: ResultOperation<String,DummyResultOperation.Error> {
+internal final class DummyResultOperation: ResultOperation<String, DummyResultOperation.Error> {
   enum Error: Swift.Error {
     case cancelled
   }
@@ -318,8 +320,8 @@ internal final class IOGroupOperation: GroupOperation {
   }
 }
 
-public extension Operation {
-  func printStateChanges() -> [NSKeyValueObservation] {
+extension Operation {
+  public func printStateChanges() -> [NSKeyValueObservation] {
     let cancel = observe(\.isCancelled, options: [.old, .new]) { (operation, changes) in
       guard let oldValue = changes.oldValue, let newValue = changes.newValue else { return }
       guard oldValue != newValue else { return }

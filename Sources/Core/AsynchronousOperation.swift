@@ -48,7 +48,7 @@ open class AsynchronousOperation: Operation, ProgressReporting {
   /// The state of the operation
   private var state: State {
     get {
-      return _state.value
+      _state.value
     }
     set {
       // credits: https://gist.github.com/ole/5034ce19c62d248018581b1db0eabb2b
@@ -70,7 +70,9 @@ open class AsynchronousOperation: Operation, ProgressReporting {
         willChangeValue(forKey: oldValue.objcKeyPath)
 
         _state.mutate {
-          assert($0.canTransition(to: newValue), "Performing an invalid state transition from: \($0) to: \(newValue) for \(operationName).")
+          assert(
+            $0.canTransition(to: newValue),
+            "Performing an invalid state transition from: \($0) to: \(newValue) for \(operationName).")
           $0 = newValue
         }
 
@@ -121,8 +123,8 @@ open class AsynchronousOperation: Operation, ProgressReporting {
 
       main()
 
-      // At this point `main()` has already returned but it doesn't mean that the operation is finished.
-      // Only calling `finish()` will finish the operation.
+    // At this point `main()` has already returned but it doesn't mean that the operation is finished.
+    // Only calling `finish()` will finish the operation.
     }
   }
 
@@ -180,7 +182,7 @@ open class AsynchronousOperation: Operation, ProgressReporting {
 extension AsynchronousOperation {
   /// All the possible states an Operation can be in.
   enum State: Int, CustomStringConvertible, CustomDebugStringConvertible {
-    case ready // waiting to be executed
+    case ready  // waiting to be executed
     case executing
     case finished
 
@@ -202,7 +204,7 @@ extension AsynchronousOperation {
     }
 
     var debugDescription: String {
-      return description
+      description
     }
 
     func canTransition(to newState: State) -> Bool {

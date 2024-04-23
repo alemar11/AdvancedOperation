@@ -9,7 +9,13 @@ extension XCTestCase {
   ///   - condition: The condition to be evaluated.
   ///   - timeout: The timeout in which the callback should return true.
   ///   - description: An optional description of a failure.
-  func wait(for condition: @autoclosure @escaping () -> Bool, timeout: TimeInterval, description: String?, file: StaticString = #file, line: UInt = #line) {
+  func wait(
+    for condition: @autoclosure @escaping () -> Bool,
+    timeout: TimeInterval,
+    description: String?,
+    file: StaticString = #file,
+    line: UInt = #line
+  ) {
     let end = Date().addingTimeInterval(timeout)
     var value: Bool = false
     let closure: () -> Void = { value = condition() }

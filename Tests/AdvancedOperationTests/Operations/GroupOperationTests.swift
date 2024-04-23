@@ -1,12 +1,13 @@
 // AdvancedOperation
 
 import XCTest
+
 @testable import AdvancedOperation
 
 final class GroupOperationTests: XCTestCase {
   override class func setUp() {
     #if swift(<5.1)
-    AdvancedOperation.KVOCrashWorkaround.installFix()
+      AdvancedOperation.KVOCrashWorkaround.installFix()
     #endif
   }
 
@@ -17,7 +18,10 @@ final class GroupOperationTests: XCTestCase {
     let groupOperation = GroupOperation(operations: [operation1, operation2, operation3])
     groupOperation.qualityOfService = .userInitiated
 
-    let expectation1 = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: groupOperation, expectedValue: true)
+    let expectation1 = XCTKVOExpectation(
+      keyPath: #keyPath(Operation.isFinished),
+      object: groupOperation,
+      expectedValue: true)
     groupOperation.start()
     wait(for: [expectation1], timeout: 5)
     XCTAssertTrue(operation1.isFinished)
@@ -32,8 +36,14 @@ final class GroupOperationTests: XCTestCase {
       XCTFail("It shouldn't be executed because GroupOperation is already finished at this point")
     }
 
-    let expectation1 = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: groupOperation, expectedValue: true)
-    let expectation2 = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: operation, expectedValue: true)
+    let expectation1 = XCTKVOExpectation(
+      keyPath: #keyPath(Operation.isFinished),
+      object: groupOperation,
+      expectedValue: true)
+    let expectation2 = XCTKVOExpectation(
+      keyPath: #keyPath(Operation.isFinished),
+      object: operation,
+      expectedValue: true)
     expectation2.isInverted = true
     groupOperation.start()
     wait(for: [expectation1], timeout: 5)
@@ -52,7 +62,10 @@ final class GroupOperationTests: XCTestCase {
     let groupOperation3 = GroupOperation(operations: [groupOperation1, groupOperation2])
     groupOperation3.qualityOfService = .userInitiated
 
-    let expectation1 = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: groupOperation3, expectedValue: true)
+    let expectation1 = XCTKVOExpectation(
+      keyPath: #keyPath(Operation.isFinished),
+      object: groupOperation3,
+      expectedValue: true)
     groupOperation3.start()
     wait(for: [expectation1], timeout: 5)
     XCTAssertTrue(operation1.isFinished)
@@ -69,7 +82,10 @@ final class GroupOperationTests: XCTestCase {
     let groupOperation = GroupOperation(operations: [operation1, operation2, operation3])
     groupOperation.maxConcurrentOperationCount = 1
 
-    let expectation1 = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: groupOperation, expectedValue: true)
+    let expectation1 = XCTKVOExpectation(
+      keyPath: #keyPath(Operation.isFinished),
+      object: groupOperation,
+      expectedValue: true)
     groupOperation.start()
     wait(for: [expectation1], timeout: 15)
     XCTAssertTrue(operation1.isFinished)
@@ -84,7 +100,10 @@ final class GroupOperationTests: XCTestCase {
     let operation3 = SleepyAsyncOperation()
 
     let groupOperation = GroupOperation(operations: [operation1, operation2, operation3])
-    let expectation1 = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: groupOperation, expectedValue: true)
+    let expectation1 = XCTKVOExpectation(
+      keyPath: #keyPath(Operation.isFinished),
+      object: groupOperation,
+      expectedValue: true)
     groupOperation.start()
     groupOperation.cancel()
     wait(for: [expectation1], timeout: 5)
@@ -113,8 +132,14 @@ final class GroupOperationTests: XCTestCase {
       operation3.stop()
     }
 
-    let expectation1 = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: groupOperation, expectedValue: true)
-    let expectation2 = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: operation4, expectedValue: true)
+    let expectation1 = XCTKVOExpectation(
+      keyPath: #keyPath(Operation.isFinished),
+      object: groupOperation,
+      expectedValue: true)
+    let expectation2 = XCTKVOExpectation(
+      keyPath: #keyPath(Operation.isFinished),
+      object: operation4,
+      expectedValue: true)
     groupOperation.start()
     wait(for: [expectation1, expectation2], timeout: 5)
   }
@@ -125,7 +150,8 @@ final class GroupOperationTests: XCTestCase {
     let operation3 = SleepyAsyncOperation()
 
     let groupOperation = GroupOperation(operations: [operation1, operation2, operation3])
-    let expectation1 = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: groupOperation, expectedValue: true)
+    let expectation1 = XCTKVOExpectation(
+      keyPath: #keyPath(Operation.isFinished), object: groupOperation, expectedValue: true)
     groupOperation.cancel()
     groupOperation.start()
     wait(for: [expectation1], timeout: 5)
@@ -138,10 +164,14 @@ final class GroupOperationTests: XCTestCase {
     let operation3 = SleepyAsyncOperation()
 
     let groupOperation = GroupOperation(operations: [operation1, operation2, operation3])
-    let expectation1 = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: operation1, expectedValue: true)
-    let expectation2 = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: operation2, expectedValue: true)
-    let expectation3 = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: operation3, expectedValue: true)
-    let expectation4 = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: groupOperation, expectedValue: true)
+    let expectation1 = XCTKVOExpectation(
+      keyPath: #keyPath(Operation.isFinished), object: operation1, expectedValue: true)
+    let expectation2 = XCTKVOExpectation(
+      keyPath: #keyPath(Operation.isFinished), object: operation2, expectedValue: true)
+    let expectation3 = XCTKVOExpectation(
+      keyPath: #keyPath(Operation.isFinished), object: operation3, expectedValue: true)
+    let expectation4 = XCTKVOExpectation(
+      keyPath: #keyPath(Operation.isFinished), object: groupOperation, expectedValue: true)
     queue.addOperation(groupOperation)
     wait(for: [expectation1, expectation2, expectation3, expectation4], timeout: 15)
   }
@@ -154,7 +184,8 @@ final class GroupOperationTests: XCTestCase {
     }
 
     let groupOperation = GroupOperation.init(underlyingQueue: dispatchQueue, operations: operation)
-    let expectation1 = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: groupOperation, expectedValue: true)
+    let expectation1 = XCTKVOExpectation(
+      keyPath: #keyPath(Operation.isFinished), object: groupOperation, expectedValue: true)
     queue.addOperation(groupOperation)
     wait(for: [expectation1], timeout: 5)
   }
@@ -165,7 +196,8 @@ final class GroupOperationTests: XCTestCase {
     let operation2 = SleepyAsyncOperation()
     let operation3 = SleepyAsyncOperation()
     let groupOperation = GroupOperation(operations: [operation1, operation2, operation3])
-    let expectation1 = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: groupOperation, expectedValue: true)
+    let expectation1 = XCTKVOExpectation(
+      keyPath: #keyPath(Operation.isFinished), object: groupOperation, expectedValue: true)
     groupOperation.cancel()
     queue.addOperation(groupOperation)
     wait(for: [expectation1], timeout: 5)
@@ -186,8 +218,14 @@ final class GroupOperationTests: XCTestCase {
       XCTAssertEqual(output, 11)
       outputExepectation.fulfill()
     }
-    let expectation1 = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: groupOperation, expectedValue: true)
-    let expectation2 = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: groupOperation2, expectedValue: true)
+    let expectation1 = XCTKVOExpectation(
+      keyPath: #keyPath(Operation.isFinished),
+      object: groupOperation,
+      expectedValue: true)
+    let expectation2 = XCTKVOExpectation(
+      keyPath: #keyPath(Operation.isFinished),
+      object: groupOperation2,
+      expectedValue: true)
     queue.addOperations([groupOperation, groupOperation2], waitUntilFinished: false)
     wait(for: [expectation1, expectation2, outputExepectation], timeout: 5)
     XCTAssertEqual(groupOperation.output, 10)
@@ -199,7 +237,8 @@ final class GroupOperationTests: XCTestCase {
     let queue = OperationQueue()
     let group = ProducerGroupOperation { return operation }
     let expectation1 = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: group, expectedValue: true)
-    let expectation2 = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: operation, expectedValue: true)
+    let expectation2 = XCTKVOExpectation(
+      keyPath: #keyPath(Operation.isFinished), object: operation, expectedValue: true)
     queue.addOperation(group)
     wait(for: [expectation1, expectation2], timeout: 5)
   }
@@ -237,7 +276,8 @@ final class GroupOperationTests: XCTestCase {
       XCTAssertNotNil(weakOperation)
       let groupOperation: GroupOperation? = GroupOperation(operations: operation!)
       operation = nil
-      let expectation = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: groupOperation!, expectedValue: true)
+      let expectation = XCTKVOExpectation(
+        keyPath: #keyPath(Operation.isFinished), object: groupOperation!, expectedValue: true)
       groupOperation!.start()
       wait(for: [expectation], timeout: 5)
     }

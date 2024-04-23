@@ -1,12 +1,13 @@
 // AdvancedOperation
 
 import XCTest
+
 @testable import AdvancedOperation
 
 final class AsynchronousBlockOperationTests: XCTestCase {
   override class func setUp() {
     #if swift(<5.1)
-    KVOCrashWorkaround.installFix()
+      KVOCrashWorkaround.installFix()
     #endif
   }
 
@@ -18,7 +19,10 @@ final class AsynchronousBlockOperationTests: XCTestCase {
     }
     XCTAssertTrue(operation.isAsynchronous)
     XCTAssertTrue(operation.isConcurrent)
-    let expectation1 = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: operation, expectedValue: true)
+    let expectation1 = XCTKVOExpectation(
+      keyPath: #keyPath(Operation.isFinished),
+      object: operation,
+      expectedValue: true)
     operation.cancel()
     operation.start()
     wait(for: [expectation1], timeout: 4)
@@ -32,7 +36,8 @@ final class AsynchronousBlockOperationTests: XCTestCase {
         complete()
       }
     }
-    let expectation1 = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: operation, expectedValue: true)
+    let expectation1 = XCTKVOExpectation(
+      keyPath: #keyPath(Operation.isFinished), object: operation, expectedValue: true)
     operation.start()
     wait(for: [expectation1], timeout: 4)
   }
@@ -40,7 +45,7 @@ final class AsynchronousBlockOperationTests: XCTestCase {
   func testBlockOperationWithAnAsyncQueueInside() {
     let expectation1 = expectation(description: "\(#function)\(#line)")
     let expectation2 = expectation(description: "\(#function)\(#line)")
-    let operation = AsynchronousBlockOperation() { complete in
+    let operation = AsynchronousBlockOperation { complete in
       DispatchQueue.global().async {
         sleep(1)
         expectation1.fulfill()
@@ -103,4 +108,3 @@ final class AsynchronousBlockOperationTests: XCTestCase {
     XCTAssertNil(weakObject, "Memory leak: the object should have been deallocated at this point.")
   }
 }
-

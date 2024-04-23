@@ -34,7 +34,7 @@ open class GroupOperation: AsynchronousOperation {
     $0.isSuspended = true
     return $0
   }(OperationQueue())
-  private var _operations = ContiguousArray<Operation>() // see deinit() implementation TODO: array?
+  private var _operations = ContiguousArray<Operation>()  // see deinit() implementation TODO: array?
 
   // MARK: - Initializers
 
@@ -146,9 +146,11 @@ open class GroupOperation: AsynchronousOperation {
           operation.cancel()
         } else {
           // 2. observe when the operation gets cancelled if it's not cancelled yet
-          let cancelToken = operation.observe(\.isCancelled, options: [.old, .new]) { [weak self] (operation, changes) in
+          let cancelToken = operation.observe(\.isCancelled, options: [.old, .new]) {
+            [weak self] (operation, changes) in
             guard let self = self else { return }
-            guard let oldValue = changes.oldValue, let newValue = changes.newValue, oldValue != newValue, newValue else { return }
+            guard let oldValue = changes.oldValue, let newValue = changes.newValue, oldValue != newValue, newValue
+            else { return }
 
             if #available(iOS 13.0, iOSApplicationExtension 13.0, tvOS 13.0, watchOS 6.0, macOS 10.15, *) {
               // if the cancelled operation is executing, the queue progress will be updated when the operation finishes

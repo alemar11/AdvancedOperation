@@ -1,26 +1,29 @@
 // AdvancedOperation
 
 import XCTest
+
 @testable import AdvancedOperation
 
 final class AsynchronousOperationTests: XCTestCase {
   override class func setUp() {
     #if swift(<5.1)
-    KVOCrashWorkaround.installFix()
+      KVOCrashWorkaround.installFix()
     #endif
   }
 
   func testEarlyBailOut() {
     let operation = RunUntilCancelledAsyncOperation()
-    let expectation1 = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: operation, expectedValue: true)
+    let expectation1 = XCTKVOExpectation(
+      keyPath: #keyPath(Operation.isFinished), object: operation, expectedValue: true)
     operation.cancel()
     operation.start()
     wait(for: [expectation1], timeout: 3)
   }
 
   func testSuccessfulExecution() {
-    let operation = SleepyAsyncOperation() // by default is 3 second long
-    let expectation1 = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: operation, expectedValue: true)
+    let operation = SleepyAsyncOperation()  // by default is 3 second long
+    let expectation1 = XCTKVOExpectation(
+      keyPath: #keyPath(Operation.isFinished), object: operation, expectedValue: true)
     XCTAssertTrue(operation.isReady)
 
     operation.start()
@@ -32,7 +35,8 @@ final class AsynchronousOperationTests: XCTestCase {
 
   func testCancelledExecution() {
     let operation = SleepyAsyncOperation()
-    let expectation1 = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: operation, expectedValue: true)
+    let expectation1 = XCTKVOExpectation(
+      keyPath: #keyPath(Operation.isFinished), object: operation, expectedValue: true)
 
     XCTAssertTrue(operation.isReady)
 
@@ -51,7 +55,8 @@ final class AsynchronousOperationTests: XCTestCase {
     let operation = SleepyAsyncOperation()
 
     XCTAssertTrue(operation.isReady)
-    let expectation = XCTKVOExpectation(keyPath: #keyPath(Operation.isCancelled), object: operation, expectedValue: true)
+    let expectation = XCTKVOExpectation(
+      keyPath: #keyPath(Operation.isCancelled), object: operation, expectedValue: true)
     operation.cancel()
 
     wait(for: [expectation], timeout: 10)
@@ -76,7 +81,8 @@ final class AsynchronousOperationTests: XCTestCase {
   func testCancelledExecutionBeforeBeingAddedToOperationQueue() {
     let queue = OperationQueue()
     let operation = SleepyAsyncOperation(interval1: 1, interval2: 1, interval3: 1)
-    let expectation1 = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: operation, expectedValue: true)
+    let expectation1 = XCTKVOExpectation(
+      keyPath: #keyPath(Operation.isFinished), object: operation, expectedValue: true)
     operation.cancel()
     queue.addOperation(operation)
     wait(for: [expectation1], timeout: 10)
@@ -84,7 +90,8 @@ final class AsynchronousOperationTests: XCTestCase {
 
   func testMultipleCancel() {
     let operation = SleepyAsyncOperation()
-    let expectation1 = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: operation, expectedValue: true)
+    let expectation1 = XCTKVOExpectation(
+      keyPath: #keyPath(Operation.isFinished), object: operation, expectedValue: true)
     let expectation2 = expectation(description: "\(#function)\(#line)")
 
     XCTAssertTrue(operation.isReady)
@@ -116,7 +123,8 @@ final class AsynchronousOperationTests: XCTestCase {
 
   func testSecondStartAfterFinishOnDifferentThread() {
     let operation = SleepyAsyncOperation(interval1: 0, interval2: 0, interval3: 0)
-    let expectation1 = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: operation, expectedValue: true)
+    let expectation1 = XCTKVOExpectation(
+      keyPath: #keyPath(Operation.isFinished), object: operation, expectedValue: true)
 
     XCTAssertTrue(operation.isReady)
     operation.start()
@@ -124,7 +132,7 @@ final class AsynchronousOperationTests: XCTestCase {
     XCTAssertFalse(operation.isCancelled)
     XCTAssertTrue(operation.isFinished)
     DispatchQueue.global().async {
-      operation.start() // There shouldn't be any crash
+      operation.start()  // There shouldn't be any crash
     }
   }
 
@@ -161,10 +169,11 @@ final class AsynchronousOperationTests: XCTestCase {
   func testReadiness() {
     // Given
     let operation1 = SleepyAsyncOperation()
-    let expectation1 = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: operation1, expectedValue: true)
+    let expectation1 = XCTKVOExpectation(
+      keyPath: #keyPath(Operation.isFinished), object: operation1, expectedValue: true)
     XCTAssertTrue(operation1.isReady)
 
-    let operation2 = BlockOperation { }
+    let operation2 = BlockOperation {}
     let expectation2 = expectation(description: "\(#function)\(#line)")
     operation2.addExecutionBlock { expectation2.fulfill() }
 
@@ -180,8 +189,8 @@ final class AsynchronousOperationTests: XCTestCase {
     wait(for: [expectation1, expectation2], timeout: 10)
 
     XCTAssertTrue(operation1.isFinished)
-    XCTAssertFalse(operation1.isReady) // For an AsyncOperation, once it's started it won't be ready anymore
-    XCTAssertTrue(operation2.isReady) // For a standard NSOperation, isReady is only determined by its depedendencies
+    XCTAssertFalse(operation1.isReady)  // For an AsyncOperation, once it's started it won't be ready anymore
+    XCTAssertTrue(operation2.isReady)  // For a standard NSOperation, isReady is only determined by its depedendencies
   }
 
   // MARK: - OperationQueue
@@ -190,7 +199,8 @@ final class AsynchronousOperationTests: XCTestCase {
     let queue = OperationQueue()
     queue.isSuspended = true
     let operation = RunUntilCancelledAsyncOperation()
-    let expectation1 = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: operation, expectedValue: true)
+    let expectation1 = XCTKVOExpectation(
+      keyPath: #keyPath(Operation.isFinished), object: operation, expectedValue: true)
     queue.addOperation(operation)
     operation.cancel()
     queue.isSuspended = false
@@ -267,7 +277,6 @@ final class AsynchronousOperationTests: XCTestCase {
     conditionsOperationToLetOperationOneRun.addDependencies(operation2, operation3)
     operation1.addDependencies(conditionsOperationToLetOperationOneRun)
 
-
     let conditionsOperationToLetOperationThreeRun = BlockOperation { [unowned operation4] in
       // this condition will fail and operation3 won't be executed
       if operation4.isCancelled {
@@ -281,7 +290,11 @@ final class AsynchronousOperationTests: XCTestCase {
 
     operation4.cancel()
 
-    queue.addOperations([operation1, operation2, operation3, operation4, conditionsOperationToLetOperationOneRun, conditionsOperationToLetOperationThreeRun], waitUntilFinished: true)
+    queue.addOperations(
+      [
+        operation1, operation2, operation3, operation4, conditionsOperationToLetOperationOneRun,
+        conditionsOperationToLetOperationThreeRun,
+      ], waitUntilFinished: true)
 
     XCTAssertTrue(operation4.isCancelled)
     XCTAssertFalse(operation2.isCancelled)
@@ -333,7 +346,11 @@ final class AsynchronousOperationTests: XCTestCase {
     operation3.cancel()
     operation2.cancel()
     operation1.cancel()
-    queue.addOperations([operation1, operation2, operation3, operation4, conditionsOperationToLetOperationOneRun, conditionsOperationToLetOperationFourRun], waitUntilFinished: false)
+    queue.addOperations(
+      [
+        operation1, operation2, operation3, operation4, conditionsOperationToLetOperationOneRun,
+        conditionsOperationToLetOperationFourRun,
+      ], waitUntilFinished: false)
 
     waitForExpectations(timeout: 10)
 
@@ -353,7 +370,7 @@ final class AsynchronousOperationTests: XCTestCase {
     }
     let gate = GateOperation { [unowned operation3] gate in
       for op in gate.dependencies {
-        if let failingOperation = op  as? FailingOperation, failingOperation.error != nil {
+        if let failingOperation = op as? FailingOperation, failingOperation.error != nil {
           operation3.cancel()
         }
       }
@@ -384,24 +401,28 @@ final class AsynchronousOperationTests: XCTestCase {
 
     let operation = BlockOperation()
     let operation2 = AsynchronousBlockOperation { complete in complete() }
-    let expectation = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: operation2, expectedValue: true)
+    let expectation = XCTKVOExpectation(
+      keyPath: #keyPath(Operation.isFinished), object: operation2, expectedValue: true)
 
     var eventsForOperation = [Event]()
     var eventsForOperation2 = [Event]()
 
-    let tokenExecuting = operation.observe(\.isExecuting, options: [.prior,.old, .new]) { (op, change) in
+    let tokenExecuting = operation.observe(\.isExecuting, options: [.prior, .old, .new]) { (op, change) in
       eventsForOperation.append(Event(isPrior: change.isPrior, oldValue: change.oldValue, newValue: change.newValue))
     }
+
     let tokenFinishing = operation.observe(\.isFinished, options: [.prior, .old, .new]) { (op, change) in
       eventsForOperation.append(Event(isPrior: change.isPrior, oldValue: change.oldValue, newValue: change.newValue))
     }
 
-    let tokenExecuting2 = operation.observe(\.isExecuting, options: [.prior,.old, .new]) { (op, change) in
+    let tokenExecuting2 = operation.observe(\.isExecuting, options: [.prior, .old, .new]) { (op, change) in
       eventsForOperation2.append(Event(isPrior: change.isPrior, oldValue: change.oldValue, newValue: change.newValue))
     }
+
     let tokenFinishing2 = operation.observe(\.isFinished, options: [.prior, .old, .new]) { (op, change) in
       eventsForOperation2.append(Event(isPrior: change.isPrior, oldValue: change.oldValue, newValue: change.newValue))
     }
+
     operation.start()
     operation2.start()
 
