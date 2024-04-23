@@ -5,6 +5,7 @@
 - Xcode 15
 - Swift 5.10
 - Swift Concurrency support
+- VisionOS support
 
 ### 6.3.0
 
