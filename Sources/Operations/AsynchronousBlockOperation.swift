@@ -7,7 +7,7 @@ public typealias AsyncBlockOperation = AsynchronousBlockOperation
 /// A  sublcass of `AsynchronousOperation` to execute a closure.
 public final class AsynchronousBlockOperation: AsynchronousOperation {
   /// A closure type that takes a closure as its parameter.
-  public typealias Block = (@escaping () -> Void) -> Void
+  public typealias Block = (@Sendable @escaping () -> Void) -> Void
 
   // MARK: - Private Properties
 

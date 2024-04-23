@@ -269,7 +269,7 @@ internal final class DummyFailableOperation: FailableAsyncOperation<DummyFailabl
 // MARK: - GroupOperation
 
 internal final class ProducerGroupOperation: GroupOperation {
-  init(operation: @escaping () -> Operation) {
+  init(operation: @Sendable @escaping () -> Operation) {
     super.init(operations: [])
     let producer = BlockOperation { [unowned self] in
       // operation can be "produced" and added to the GroupOperation only if the producer is still running

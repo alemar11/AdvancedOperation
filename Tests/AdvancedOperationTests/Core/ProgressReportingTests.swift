@@ -47,7 +47,7 @@ final class ProgressReportingTests: XCTestCase {
 
     currentProgress.addChild(groupOperation.progress, withPendingUnitCount: 1)
 
-    var logs = [String]()
+    nonisolated(unsafe) var logs = [String]()
     let token = currentProgress.observe(\.fractionCompleted, options: [.initial, .old, .new]) { progress, _ in
       // gather some progress data to be used if the test fails
       let log =
@@ -358,7 +358,7 @@ final class ProgressReportingTests: XCTestCase {
 
     currentProgress.addChild(queue.progress, withPendingUnitCount: 1)
 
-    var fractions = [Double]()
+    nonisolated(unsafe) var fractions = [Double]()
     let expectedFractions = [0.0, 0.125, 0.25, 0.375, 0.5, 0.625, 0.75, 0.875, 1.0]
     let token = currentProgress.observe(\.fractionCompleted, options: [.initial, .old, .new]) { (progress, change) in
       print("fraction: \(progress.fractionCompleted)", "-", progress.localizedAdditionalDescription ?? "")

@@ -1,5 +1,11 @@
 # Changelog
 
+### 7.0.0
+
+- Xcode 15
+- Swift 5.10
+- Swift Concurrency support
+
 ### 6.3.0
 
 - Xcode 13

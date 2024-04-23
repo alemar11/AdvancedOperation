@@ -6,7 +6,7 @@ import os.lock
 /// An `AsynchronousOperation` that produces a `result` once finished.
 ///
 /// If a `ResultOperation` gets cancelled before being executed, no result will be produced by default.
-open class ResultOperation<Success, Failure>: AsynchronousOperation where Failure: Error {
+open class ResultOperation<Success, Failure>: AsynchronousOperation where Success: Sendable, Failure: Error {
   /// Block executed after the operation is finished providing the final result (if any).
   /// - Note: `onFinish` and `completionBlock` call order is not guaranteed in any way.
   public var onFinish: ((Result<Success, Failure>?) -> Void)?

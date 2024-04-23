@@ -1,7 +1,7 @@
 // AdvancedOperation
 
 import XCTest
-
+import os.lock
 @testable import AdvancedOperation
 
 final class AsynchronousOperationTests: XCTestCase {
@@ -296,6 +296,7 @@ final class AsynchronousOperationTests: XCTestCase {
     XCTAssertTrue(operation1.isFinished)
   }
 
+  @MainActor
   func testAllOperationCancelled() {
     let queue = OperationQueue()
     let expectation1 = expectation(description: "\(#function)\(#line)")
@@ -398,30 +399,38 @@ final class AsynchronousOperationTests: XCTestCase {
     let expectation = XCTKVOExpectation(
       keyPath: #keyPath(Operation.isFinished), object: operation2, expectedValue: true)
 
-    var eventsForOperation = [Event]()
-    var eventsForOperation2 = [Event]()
+    let eventsForOperation = OSAllocatedUnfairLock(initialState: [Event]())
+    let eventsForOperation2 = OSAllocatedUnfairLock(initialState: [Event]())
 
     let tokenExecuting = operation.observe(\.isExecuting, options: [.prior, .old, .new]) { (op, change) in
-      eventsForOperation.append(Event(isPrior: change.isPrior, oldValue: change.oldValue, newValue: change.newValue))
+      eventsForOperation.withLock {
+        $0.append(Event(isPrior: change.isPrior, oldValue: change.oldValue, newValue: change.newValue))
+      }
     }
 
     let tokenFinishing = operation.observe(\.isFinished, options: [.prior, .old, .new]) { (op, change) in
-      eventsForOperation.append(Event(isPrior: change.isPrior, oldValue: change.oldValue, newValue: change.newValue))
+      eventsForOperation.withLock {
+        $0.append(Event(isPrior: change.isPrior, oldValue: change.oldValue, newValue: change.newValue))
+      }
     }
 
     let tokenExecuting2 = operation.observe(\.isExecuting, options: [.prior, .old, .new]) { (op, change) in
-      eventsForOperation2.append(Event(isPrior: change.isPrior, oldValue: change.oldValue, newValue: change.newValue))
+      eventsForOperation2.withLock {
+        $0.append(Event(isPrior: change.isPrior, oldValue: change.oldValue, newValue: change.newValue))
+      }
     }
 
     let tokenFinishing2 = operation.observe(\.isFinished, options: [.prior, .old, .new]) { (op, change) in
-      eventsForOperation2.append(Event(isPrior: change.isPrior, oldValue: change.oldValue, newValue: change.newValue))
+      eventsForOperation2.withLock {
+        $0.append(Event(isPrior: change.isPrior, oldValue: change.oldValue, newValue: change.newValue))
+      }
     }
 
     operation.start()
     operation2.start()
 
     wait(for: [expectation], timeout: 2)
-    XCTAssertEqual(eventsForOperation, eventsForOperation2)
+    XCTAssertEqual(eventsForOperation.withLock({ $0 }), eventsForOperation2.withLock({ $0 }))
     tokenExecuting.invalidate()
     tokenExecuting2.invalidate()
     tokenFinishing.invalidate()

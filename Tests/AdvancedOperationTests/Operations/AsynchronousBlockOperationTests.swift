@@ -51,6 +51,7 @@ final class AsynchronousBlockOperationTests: XCTestCase {
     wait(for: [expectation1, expectation2], timeout: 10, enforceOrder: true)
   }
 
+  @MainActor
   func testComposition() {
     let expectation3 = expectation(description: "\(#function)\(#line)")
     let operation1 = SleepyAsyncOperation()
@@ -76,8 +77,10 @@ final class AsynchronousBlockOperationTests: XCTestCase {
     XCTAssertTrue(adapterOperation.isFinished)
   }
 
+  @MainActor
   func testMemoryLeak() {
-    var object = NSObject()
+    class Dummy: @unchecked Sendable { }
+    var object = Dummy()
     weak var weakObject = object
 
     autoreleasepool {
@@ -96,7 +99,7 @@ final class AsynchronousBlockOperationTests: XCTestCase {
 
       // Memory leaks test: once the operation is released, the captured object (by reference) should be nil (weakObject)
       operation = AsynchronousBlockOperation { _ in }
-      object = NSObject()
+      object = Dummy()
     }
 
     XCTAssertNil(weakObject, "Memory leak: the object should have been deallocated at this point.")
