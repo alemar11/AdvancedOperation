@@ -1,6 +1,7 @@
 // AdvancedOperation
 
 import Foundation
+import os.lock
 
 public typealias AsyncOperation = AsynchronousOperation
 
@@ -37,18 +38,18 @@ open class AsynchronousOperation: Operation, ProgressReporting {
   // MARK: - Private Properties
 
   /// Lock used to prevent data races when updating the progress.
-  private let progressLock = UnfairLock()
+  private let progressLock = OSAllocatedUnfairLock()
 
   /// Serial queue for making state changes atomic under the constraint of having to send KVO willChange/didChange notifications.
   private let stateChangeQueue = DispatchQueue(label: "\(identifier).AsynchronousOperation.stateChange")
 
   /// Private backing store for `state`
-  private var _state: Atomic<State> = Atomic(.ready)
+  private var _state = OSAllocatedUnfairLock<State>(initialState: .ready)
 
   /// The state of the operation
   private var state: State {
     get {
-      _state.value
+      _state.withLock { $0 }
     }
     set {
       // credits: https://gist.github.com/ole/5034ce19c62d248018581b1db0eabb2b
@@ -63,13 +64,13 @@ open class AsynchronousOperation: Operation, ProgressReporting {
         // Retrieve the existing value first.
         // Necessary for sending fine-grained KVO
         // willChange/didChange notifications only for the key paths that actually change.
-        let oldValue = _state.value
+        let oldValue = _state.withLock { $0 }
         guard newValue != oldValue else { return }
 
         willChangeValue(forKey: newValue.objcKeyPath)
         willChangeValue(forKey: oldValue.objcKeyPath)
 
-        _state.mutate {
+        _state.withLock {
           assert(
             $0.canTransition(to: newValue),
             "Performing an invalid state transition from: \($0) to: \(newValue) for \(operationName).")
@@ -85,7 +86,7 @@ open class AsynchronousOperation: Operation, ProgressReporting {
   // MARK: - Foundation.Operation
 
   // Lock used to prevent data races if start() gets called multiple times from different threads
-  private let startLock = UnfairLock()
+  private let startLock = OSAllocatedUnfairLock()
 
   public final override func start() {
     startLock.lock()

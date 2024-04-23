@@ -1,6 +1,7 @@
 // AdvancedOperation
 
 import Foundation
+import os.lock
 
 /// An `AsynchronousOperation` that produces a `result` once finished.
 ///
@@ -12,11 +13,11 @@ open class ResultOperation<Success, Failure>: AsynchronousOperation where Failur
 
   /// The result produced by the operation.
   public final private(set) var result: Result<Success, Failure>? {
-    get { _result.value }
-    set { _result.mutate { $0 = newValue } }
+    get { _result.withLock { $0 } }
+    set { _result.withLock { $0 = newValue } }
   }
 
-  private var _result = Atomic<Result<Success, Failure>?>(nil)
+  private var _result = OSAllocatedUnfairLock<Result<Success, Failure>?>(initialState: nil)
 
   /// Finishes the operation with the produced `result`.
   /// - Important: You should never call this method outside the operation main execution scope.

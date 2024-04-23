@@ -3,6 +3,7 @@
 import Dispatch
 import Foundation
 import XCTest
+import os.lock
 
 @testable import AdvancedOperation
 
@@ -105,9 +106,9 @@ internal final class RunUntilCancelledAsyncOperation: AsynchronousOperation {
 /// This operation will run indefinitely and can't be cancelled. Call `stop` to finish it.
 internal final class InfiniteAsyncOperation: AsyncOperation {
   var onExecutionStarted: (() -> Void)?
-  let isStopped = Atomic(false)
+  let isStopped = OSAllocatedUnfairLock(initialState: false)
   func stop() {
-    isStopped.mutate { $0 = true }
+    isStopped.withLock { $0 = true }
   }
 
   override func main() {
@@ -115,7 +116,7 @@ internal final class InfiniteAsyncOperation: AsyncOperation {
       self.onExecutionStarted?()
       while true {
         //sleep(1)
-        if self.isStopped.value {
+        if self.isStopped.withLock({ $0 }) {
           self.finish()
           break
         }
@@ -146,12 +147,12 @@ internal final class IntToStringOperation: Operation {
   var onOutputProduced: ((String) -> Void)?
   var input: Int?
   private(set) var output: String? {
-    get { _output.value }
-    set { _output.mutate { $0 = newValue } }
+    get { _output.withLock { $0 } }
+    set { _output.withLock { $0 = newValue } }
   }
 
   // To fix data race error on macOS tests: see testSuccessfulInjectionBetweenOperationsTransformingOutput
-  private var _output = Atomic<String?>(nil)
+  private var _output = OSAllocatedUnfairLock<String?>(initialState: nil)
 
   override func main() {
     if let input = self.input {
@@ -165,12 +166,12 @@ internal final class StringToIntOperation: Operation {
   var onOutputProduced: ((Int) -> Void)?
   var input: String?
   private(set) var output: Int? {
-    get { _output.value }
-    set { _output.mutate { $0 = newValue } }
+    get { _output.withLock { $0 } }
+    set { _output.withLock { $0 = newValue } }
   }
 
   // To fix data race error on macOS tests: see testSuccessfulInjectionBetweenOperationsTransformingOutput
-  private var _output = Atomic<Int?>(nil)
+  private var _output = OSAllocatedUnfairLock<Int?>(initialState: nil)
 
   override func main() {
     if let input = self.input {

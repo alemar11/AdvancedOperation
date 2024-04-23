@@ -1,17 +1,18 @@
 // AdvancedOperation
 
 import Foundation
+import os.lock
 
 public typealias FailableAsyncOperation = FailableAsynchronousOperation
 
 /// An `AsynchronousOperation` that can finish with an error conforming to `OperationError`.
 open class FailableAsynchronousOperation<Failure: Error>: AsynchronousOperation {
-  private var _error = Atomic<Failure?>(nil)
+  private var _error = OSAllocatedUnfairLock<Failure?>(initialState: nil)
 
   /// Failure error.
   public final private(set) var error: Failure? {
-    get { _error.value }
-    set { _error.mutate { $0 = newValue } }
+    get { _error.withLock { $0 } }
+    set { _error.withLock { $0 = newValue } }
   }
 
   /// Finishes the operation with an `error`.
