@@ -1,9 +1,5 @@
 name: "AdvancedOperation CI"
 
-concurrency: 
-  group: ${{ github.ref }}
-  cancel-in-progress: true
-
 on:
   schedule:
     - cron:  '0 23 * * *' # At the end of every day
@@ -15,6 +11,10 @@ on:
     branches:
       - main
       - develop
+
+concurrency:
+  group: ${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   info:
