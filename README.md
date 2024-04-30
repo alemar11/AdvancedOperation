@@ -14,7 +14,7 @@ Operation usefull extensions.
 ## Requirements
 
 [![Swift 5.10](https://img.shields.io/badge/Swift-5.10-orange.svg?style=flat)](https://developer.apple.com/swift)
-![Platforms](https://img.shields.io/badge/Platform-iOS%2016%2B%20|%20macOS%2013+%20|%20tvOS%2016+%20|%20visionOS%2001+%20|%20watchOS%209+-blue.svg) 
+![Platforms](https://img.shields.io/badge/Platform-iOS%2016%2B%20|%20macOS%2013+%20|%20tvOS%2016+%20|%20visionOS%201+%20|%20watchOS%209+-blue.svg) 
 
 ## Documentation
 
