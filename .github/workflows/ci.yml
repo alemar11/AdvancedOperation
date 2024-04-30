@@ -97,36 +97,36 @@ jobs:
         with:
           name: tvOS tests report    
           path: ~/Downloads/Report       
-#  watchOS:
-#    name: Build watchOS
-#    runs-on: macos-14
-#    env:
-#      DEVELOPER_DIR: /Applications/Xcode_15.3.app/Contents/Developer
-#    strategy:
-#      matrix:
-#        destination: ["OS=10.0,name=Apple Watch Series 9 (45mm)"]
-#    steps:
-#      - uses: actions/checkout@v4
-#      - name: watchOS - ${{ matrix.destination }}
-#        run: set -o pipefail && env NSUnbufferedIO=YES xcodebuild -project "AdvancedOperation.xcodeproj" -scheme "AdvancedOperation" -destination "${{ matrix.destination }}" clean test -quiet -resultBundlePath '~/Downloads/Report/report.xcresult'
-#        
-#      - name: Upload tests report
-#        if: ${{ always() }} # to run it only if the previous step fails use ${{ failure() }}
-#        uses: actions/upload-artifact@v4
-#        with:
-#          name: watchOS tests report
-#          path: ~/Downloads/Report
-#  spm:
-#    name: Test SPM Integration
-#    runs-on: macos-14
-#    env:
-#      DEVELOPER_DIR: /Applications/Xcode_15.3.app/Contents/Developer
-#    steps:
-#      - uses: actions/checkout@v4
-#      - name: SPM Test
-#        run: |
-#          swift --version
-#          swift test
+  watchOS:
+    name: Build watchOS
+    runs-on: macos-14
+    env:
+      DEVELOPER_DIR: /Applications/Xcode_15.3.app/Contents/Developer
+    strategy:
+      matrix:
+        destination: ["OS=10.0,name=Apple Watch Series 9 (45mm)"]
+    steps:
+      - uses: actions/checkout@v4
+      - name: watchOS - ${{ matrix.destination }}
+        run: set -o pipefail && env NSUnbufferedIO=YES xcodebuild -project "AdvancedOperation.xcodeproj" -scheme "AdvancedOperation" -destination "${{ matrix.destination }}" clean test -quiet -resultBundlePath '~/Downloads/Report/report.xcresult'
+        
+      - name: Upload tests report
+        if: ${{ always() }} # to run it only if the previous step fails use ${{ failure() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: watchOS tests report
+          path: ~/Downloads/Report
+  SPM:
+    name: Test SPM Integration
+    runs-on: macos-14
+    env:
+      DEVELOPER_DIR: /Applications/Xcode_15.3.app/Contents/Developer
+    steps:
+      - uses: actions/checkout@v4
+      - name: SPM Test
+        run: |
+          swift --version
+          swift test
 #  lint:
 #    name: Swift Lint
 #    runs-on: macos-14
