@@ -1,7 +1,0 @@
-module: CoreDataAdvancedOperationPlus
-author: Alessandro Marzoli
-author_url: http://www.alessandromarzoli.com
-github_url: http://www.alessandromarzoli.com/AdvancedOperation/
-copyright: "©[Alessandro Marzoli](http://www.alessandromarzoli.com)"
-clean: true
-podspec: AdvancedOperation.podspec
