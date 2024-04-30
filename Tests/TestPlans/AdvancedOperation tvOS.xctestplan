@@ -43,9 +43,9 @@
     {
       "parallelizable" : true,
       "target" : {
-        "containerPath" : "container:AdvancedOperation.xcodeproj",
-        "identifier" : "2372B43C1F960DCB00189A32",
-        "name" : "AdvancedOperation Tests tvOS"
+        "containerPath" : "container:",
+        "identifier" : "AdvancedOperationTests",
+        "name" : "AdvancedOperationTests"
       }
     }
   ],

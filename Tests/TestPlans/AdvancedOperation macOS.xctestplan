@@ -53,9 +53,9 @@
   "testTargets" : [
     {
       "target" : {
-        "containerPath" : "container:AdvancedOperation.xcodeproj",
-        "identifier" : "23725070200522820000A442",
-        "name" : "AdvancedOperation Tests macOS"
+        "containerPath" : "container:",
+        "identifier" : "AdvancedOperationTests",
+        "name" : "AdvancedOperationTests"
       }
     }
   ],

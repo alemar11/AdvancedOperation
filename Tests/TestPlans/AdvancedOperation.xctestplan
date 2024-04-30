@@ -53,9 +53,9 @@
   "testTargets" : [
     {
       "target" : {
-        "containerPath" : "container:AdvancedOperation.xcodeproj",
-        "identifier" : "06AF61C826F0D2430090A61B",
-        "name" : "AdvancedOperation Tests"
+        "containerPath" : "container:",
+        "identifier" : "AdvancedOperationTests",
+        "name" : "AdvancedOperationTests"
       }
     }
   ],
