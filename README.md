@@ -1,4 +1,4 @@
-![AdvancedOperation CI](https://github.com/alemar11/AdvancedOperation/workflows/AdvancedOperation%20CI/badge.svg?branch=master)
+![AdvancedOperation CI](https://github.com/alemar11/AdvancedOperation/workflows/AdvancedOperation%20CI/badge.svg?branch=main)
 
 ## AdvancedOperation
 [![GitHub release](https://img.shields.io/github/release/alemar11/AdvancedOperation.svg)](https://github.com/alemar11/AdvancedOperation/releases) 
