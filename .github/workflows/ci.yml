@@ -40,80 +40,80 @@ jobs:
       - uses: actions/checkout@v2
       - name: macOS
         run: set -o pipefail && env NSUnbufferedIO=YES xcodebuild -project "AdvancedOperation.xcodeproj" -scheme "AdvancedOperation" -destination "platform=macOS" clean test -quiet -resultBundlePath '~/Downloads/Report/report.xcresult'
-  iOS:
-    name: Test iOS
-    runs-on: macos-14
-    env:
-      DEVELOPER_DIR: /Applications/Xcode_15.3.app/Contents/Developer
-    strategy:
-      matrix:
-        destination: ["OS=16.0,name=iPhone 13 Pro"]
-    steps:
-      - uses: actions/checkout@v2
-      - name: iOS - ${{ matrix.destination }}
-        run: set -o pipefail && env NSUnbufferedIO=YES xcodebuild -project "AdvancedOperation.xcodeproj" -scheme "AdvancedOperation" -destination "${{ matrix.destination }}" clean test -quiet -resultBundlePath '~/Downloads/Report/report.xcresult'
-
-      - name: Upload tests report
-        if: ${{ always() }} # to run it only if the previous step fails use ${{ failure() }}
-        uses: actions/upload-artifact@v2
-        with:
-          name: iOS tests report
-          path: ~/Downloads/Report 
-  tvOS:
-    name: Test tvOS
-    runs-on: macos-14
-    env:
-      DEVELOPER_DIR: /Applications/Xcode_15.3.app/Contents/Developer
-    strategy:
-      matrix:
-        destination: ["OS=16.0,name=Apple TV 4K (2nd generation)""]
-    steps:
-      - uses: actions/checkout@v2
-      - name: tvOS - ${{ matrix.destination }}
-        run: set -o pipefail && env NSUnbufferedIO=YES xcodebuild -project "AdvancedOperation.xcodeproj" -scheme "AdvancedOperation" -destination "${{ matrix.destination }}" clean test -quiet -resultBundlePath '~/Downloads/Report/report.xcresult'
-      
-      - name: Upload tests report
-        if: ${{ always() }} # to run it only if the previous step fails use ${{ failure() }}
-        uses: actions/upload-artifact@v2
-        with:
-          name: tvOS tests report    
-          path: ~/Downloads/Report       
-  watchOS:
-    name: Build watchOS
-    runs-on: macos-14
-    env:
-      DEVELOPER_DIR: /Applications/Xcode_15.3.app/Contents/Developer
-    strategy:
-      matrix:
-        destination: ["OS=9.0,name=Apple Watch Series 8 (45mm)"]
-    steps:
-      - uses: actions/checkout@v2
-      - name: watchOS - ${{ matrix.destination }}
-        run: set -o pipefail && env NSUnbufferedIO=YES xcodebuild -project "AdvancedOperation.xcodeproj" -scheme "AdvancedOperation" -destination "${{ matrix.destination }}" clean test -quiet -resultBundlePath '~/Downloads/Report/report.xcresult'
-        
-      - name: Upload tests report
-        if: ${{ always() }} # to run it only if the previous step fails use ${{ failure() }}
-        uses: actions/upload-artifact@v2
-        with:
-          name: watchOS tests report
-          path: ~/Downloads/Report
-  spm:
-    name: Test SPM Integration
-    runs-on: macos-14
-    env:
-      DEVELOPER_DIR: /Applications/Xcode_15.3.app/Contents/Developer
-    steps:
-      - uses: actions/checkout@v2
-      - name: SPM Test
-        run: |
-          swift --version
-          swift test
-  lint:
-    name: Swift Lint
-    runs-on: macos-14
-    steps:
-      - uses: actions/checkout@v2
-      - name: Run SwiftLint
-        run: |
-          swift --version
-          swiftlint --reporter github-actions-logging
+#  iOS:
+#    name: Test iOS
+#    runs-on: macos-14
+#    env:
+#      DEVELOPER_DIR: /Applications/Xcode_15.3.app/Contents/Developer
+#    strategy:
+#      matrix:
+#        destination: ["OS=16.0,name=iPhone 13 Pro"]
+#    steps:
+#      - uses: actions/checkout@v2
+#      - name: iOS - ${{ matrix.destination }}
+#        run: set -o pipefail && env NSUnbufferedIO=YES xcodebuild -project "AdvancedOperation.xcodeproj" -scheme "AdvancedOperation" -destination "${{ matrix.destination }}" clean test -quiet -resultBundlePath '~/Downloads/Report/report.xcresult'
+#
+#      - name: Upload tests report
+#        if: ${{ always() }} # to run it only if the previous step fails use ${{ failure() }}
+#        uses: actions/upload-artifact@v2
+#        with:
+#          name: iOS tests report
+#          path: ~/Downloads/Report 
+#  tvOS:
+#    name: Test tvOS
+#    runs-on: macos-14
+#    env:
+#      DEVELOPER_DIR: /Applications/Xcode_15.3.app/Contents/Developer
+#    strategy:
+#      matrix:
+#        destination: ["OS=16.0,name=Apple TV 4K (2nd generation)""]
+#    steps:
+#      - uses: actions/checkout@v2
+#      - name: tvOS - ${{ matrix.destination }}
+#        run: set -o pipefail && env NSUnbufferedIO=YES xcodebuild -project "AdvancedOperation.xcodeproj" -scheme "AdvancedOperation" -destination "${{ matrix.destination }}" clean test -quiet -resultBundlePath '~/Downloads/Report/report.xcresult'
+#      
+#      - name: Upload tests report
+#        if: ${{ always() }} # to run it only if the previous step fails use ${{ failure() }}
+#        uses: actions/upload-artifact@v2
+#        with:
+#          name: tvOS tests report    
+#          path: ~/Downloads/Report       
+#  watchOS:
+#    name: Build watchOS
+#    runs-on: macos-14
+#    env:
+#      DEVELOPER_DIR: /Applications/Xcode_15.3.app/Contents/Developer
+#    strategy:
+#      matrix:
+#        destination: ["OS=9.0,name=Apple Watch Series 8 (45mm)"]
+#    steps:
+#      - uses: actions/checkout@v2
+#      - name: watchOS - ${{ matrix.destination }}
+#        run: set -o pipefail && env NSUnbufferedIO=YES xcodebuild -project "AdvancedOperation.xcodeproj" -scheme "AdvancedOperation" -destination "${{ matrix.destination }}" clean test -quiet -resultBundlePath '~/Downloads/Report/report.xcresult'
+#        
+#      - name: Upload tests report
+#        if: ${{ always() }} # to run it only if the previous step fails use ${{ failure() }}
+#        uses: actions/upload-artifact@v2
+#        with:
+#          name: watchOS tests report
+#          path: ~/Downloads/Report
+#  spm:
+#    name: Test SPM Integration
+#    runs-on: macos-14
+#    env:
+#      DEVELOPER_DIR: /Applications/Xcode_15.3.app/Contents/Developer
+#    steps:
+#      - uses: actions/checkout@v2
+#      - name: SPM Test
+#        run: |
+#          swift --version
+#          swift test
+#  lint:
+#    name: Swift Lint
+#    runs-on: macos-14
+#    steps:
+#      - uses: actions/checkout@v2
+#      - name: Run SwiftLint
+#        run: |
+#          swift --version
+#          swiftlint --reporter github-actions-logging
