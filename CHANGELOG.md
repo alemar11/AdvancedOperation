@@ -3,9 +3,8 @@
 ### 7.0.0
 
 - SPM only
-- Xcode 15
-- Swift 5.10
-- Swift Concurrency support
+- Swift 5.10 support
+- Xcode 15 support
 - VisionOS support
 
 ### 6.3.0
