@@ -2,6 +2,7 @@
 
 ### 7.0.0
 
+- SPM only
 - Xcode 15
 - Swift 5.10
 - Swift Concurrency support
