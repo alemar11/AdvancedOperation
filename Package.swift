@@ -11,7 +11,7 @@ let swiftSettings: [SwiftSetting] = [
 
 let package = Package(
   name: "AdvancedOperation",
-  platforms: [.macOS(.v13), .iOS(.v16), .tvOS(.v16), .watchOS(.v5), .visionOS(.v1)],
+  platforms: [.macOS(.v13), .iOS(.v16), .tvOS(.v16), .watchOS(.v9), .visionOS(.v1)],
   products: [
     .library(name: "AdvancedOperation", targets: ["AdvancedOperation"])
   ],
