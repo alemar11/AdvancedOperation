@@ -1,0 +1,221 @@
+{
+  "abstract" : [
+    {
+      "text" : "Inherited from ",
+      "type" : "text"
+    },
+    {
+      "code" : "AsynchronousOperation.finish()",
+      "type" : "codeVoice"
+    },
+    {
+      "text" : ".",
+      "type" : "text"
+    }
+  ],
+  "hierarchy" : {
+    "paths" : [
+      [
+        "doc:\/\/AdvancedOperation\/documentation\/AdvancedOperation",
+        "doc:\/\/AdvancedOperation\/documentation\/AdvancedOperation\/ResultOperation"
+      ]
+    ]
+  },
+  "identifier" : {
+    "interfaceLanguage" : "swift",
+    "url" : "doc:\/\/AdvancedOperation\/documentation\/AdvancedOperation\/ResultOperation\/finish()"
+  },
+  "kind" : "symbol",
+  "metadata" : {
+    "externalID" : "s:17AdvancedOperation06ResultB0C6finishyyF",
+    "fragments" : [
+      {
+        "kind" : "keyword",
+        "text" : "func"
+      },
+      {
+        "kind" : "text",
+        "text" : " "
+      },
+      {
+        "kind" : "identifier",
+        "text" : "finish"
+      },
+      {
+        "kind" : "text",
+        "text" : "()"
+      }
+    ],
+    "modules" : [
+      {
+        "name" : "AdvancedOperation"
+      }
+    ],
+    "role" : "symbol",
+    "roleHeading" : "Instance Method",
+    "symbolKind" : "method",
+    "title" : "finish()"
+  },
+  "primaryContentSections" : [
+    {
+      "declarations" : [
+        {
+          "languages" : [
+            "swift"
+          ],
+          "platforms" : [
+            "macOS"
+          ],
+          "tokens" : [
+            {
+              "kind" : "keyword",
+              "text" : "override"
+            },
+            {
+              "kind" : "text",
+              "text" : " "
+            },
+            {
+              "kind" : "keyword",
+              "text" : "final"
+            },
+            {
+              "kind" : "text",
+              "text" : " "
+            },
+            {
+              "kind" : "keyword",
+              "text" : "func"
+            },
+            {
+              "kind" : "text",
+              "text" : " "
+            },
+            {
+              "kind" : "identifier",
+              "text" : "finish"
+            },
+            {
+              "kind" : "text",
+              "text" : "()"
+            }
+          ]
+        }
+      ],
+      "kind" : "declarations"
+    }
+  ],
+  "schemaVersion" : {
+    "major" : 0,
+    "minor" : 3,
+    "patch" : 0
+  },
+  "sections" : [
+
+  ],
+  "variants" : [
+    {
+      "paths" : [
+        "\/documentation\/advancedoperation\/resultoperation\/finish()"
+      ],
+      "traits" : [
+        {
+          "interfaceLanguage" : "swift"
+        }
+      ]
+    }
+  ]
+, 
+"references": {
+"doc://AdvancedOperation/documentation/AdvancedOperation": {
+  "abstract" : [
+
+  ],
+  "identifier" : "doc:\/\/AdvancedOperation\/documentation\/AdvancedOperation",
+  "kind" : "symbol",
+  "role" : "collection",
+  "title" : "AdvancedOperation",
+  "type" : "topic",
+  "url" : "\/documentation\/advancedoperation"
+},
+"doc://AdvancedOperation/documentation/AdvancedOperation/ResultOperation": {
+  "abstract" : [
+    {
+      "text" : "An ",
+      "type" : "text"
+    },
+    {
+      "code" : "AsynchronousOperation",
+      "type" : "codeVoice"
+    },
+    {
+      "text" : " that produces a ",
+      "type" : "text"
+    },
+    {
+      "code" : "result",
+      "type" : "codeVoice"
+    },
+    {
+      "text" : " once finished.",
+      "type" : "text"
+    }
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "class"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "ResultOperation"
+    }
+  ],
+  "identifier" : "doc:\/\/AdvancedOperation\/documentation\/AdvancedOperation\/ResultOperation",
+  "kind" : "symbol",
+  "navigatorTitle" : [
+    {
+      "kind" : "identifier",
+      "text" : "ResultOperation"
+    }
+  ],
+  "role" : "symbol",
+  "title" : "ResultOperation",
+  "type" : "topic",
+  "url" : "\/documentation\/advancedoperation\/resultoperation"
+},
+"doc://AdvancedOperation/documentation/AdvancedOperation/ResultOperation/finish()": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "func"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "finish"
+    },
+    {
+      "kind" : "text",
+      "text" : "()"
+    }
+  ],
+  "identifier" : "doc:\/\/AdvancedOperation\/documentation\/AdvancedOperation\/ResultOperation\/finish()",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "finish()",
+  "type" : "topic",
+  "url" : "\/documentation\/advancedoperation\/resultoperation\/finish()"
+}
+}
+}

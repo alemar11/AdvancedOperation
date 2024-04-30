@@ -1,0 +1,413 @@
+{
+  "abstract" : [
+    {
+      "text" : "A  sublcass of ",
+      "type" : "text"
+    },
+    {
+      "code" : "AsynchronousOperation",
+      "type" : "codeVoice"
+    },
+    {
+      "text" : " to execute a closure.",
+      "type" : "text"
+    }
+  ],
+  "hierarchy" : {
+    "paths" : [
+      [
+        "doc:\/\/AdvancedOperation\/documentation\/AdvancedOperation"
+      ]
+    ]
+  },
+  "identifier" : {
+    "interfaceLanguage" : "swift",
+    "url" : "doc:\/\/AdvancedOperation\/documentation\/AdvancedOperation\/AsynchronousBlockOperation"
+  },
+  "kind" : "symbol",
+  "metadata" : {
+    "externalID" : "c:@M@AdvancedOperation@objc(cs)AsynchronousBlockOperation",
+    "fragments" : [
+      {
+        "kind" : "keyword",
+        "text" : "class"
+      },
+      {
+        "kind" : "text",
+        "text" : " "
+      },
+      {
+        "kind" : "identifier",
+        "text" : "AsynchronousBlockOperation"
+      }
+    ],
+    "modules" : [
+      {
+        "name" : "AdvancedOperation"
+      }
+    ],
+    "navigatorTitle" : [
+      {
+        "kind" : "identifier",
+        "text" : "AsynchronousBlockOperation"
+      }
+    ],
+    "role" : "symbol",
+    "roleHeading" : "Class",
+    "symbolKind" : "class",
+    "title" : "AsynchronousBlockOperation"
+  },
+  "primaryContentSections" : [
+    {
+      "declarations" : [
+        {
+          "languages" : [
+            "swift"
+          ],
+          "platforms" : [
+            "macOS"
+          ],
+          "tokens" : [
+            {
+              "kind" : "keyword",
+              "text" : "final"
+            },
+            {
+              "kind" : "text",
+              "text" : " "
+            },
+            {
+              "kind" : "keyword",
+              "text" : "class"
+            },
+            {
+              "kind" : "text",
+              "text" : " "
+            },
+            {
+              "kind" : "identifier",
+              "text" : "AsynchronousBlockOperation"
+            }
+          ]
+        }
+      ],
+      "kind" : "declarations"
+    }
+  ],
+  "relationshipsSections" : [
+    {
+      "identifiers" : [
+        "doc:\/\/AdvancedOperation\/documentation\/AdvancedOperation\/AsynchronousOperation"
+      ],
+      "kind" : "relationships",
+      "title" : "Inherits From",
+      "type" : "inheritsFrom"
+    },
+    {
+      "identifiers" : [
+        "doc:\/\/AdvancedOperation\/objc(pl)NSProgressReporting",
+        "doc:\/\/AdvancedOperation\/objc(pl)NSObject",
+        "doc:\/\/AdvancedOperation\/s7CVarArgP",
+        "doc:\/\/AdvancedOperation\/s28CustomDebugStringConvertibleP",
+        "doc:\/\/AdvancedOperation\/s23CustomStringConvertibleP",
+        "doc:\/\/AdvancedOperation\/SQ",
+        "doc:\/\/AdvancedOperation\/SH",
+        "doc:\/\/AdvancedOperation\/s8SendableP"
+      ],
+      "kind" : "relationships",
+      "title" : "Conforms To",
+      "type" : "conformsTo"
+    }
+  ],
+  "schemaVersion" : {
+    "major" : 0,
+    "minor" : 3,
+    "patch" : 0
+  },
+  "sections" : [
+
+  ],
+  "topicSections" : [
+    {
+      "identifiers" : [
+        "doc:\/\/AdvancedOperation\/documentation\/AdvancedOperation\/AsynchronousBlockOperation\/init(block:)"
+      ],
+      "title" : "Initializers"
+    },
+    {
+      "identifiers" : [
+        "doc:\/\/AdvancedOperation\/documentation\/AdvancedOperation\/AsynchronousBlockOperation\/main()"
+      ],
+      "title" : "Instance Methods"
+    },
+    {
+      "identifiers" : [
+        "doc:\/\/AdvancedOperation\/documentation\/AdvancedOperation\/AsynchronousBlockOperation\/Block"
+      ],
+      "title" : "Type Aliases"
+    }
+  ],
+  "variants" : [
+    {
+      "paths" : [
+        "\/documentation\/advancedoperation\/asynchronousblockoperation"
+      ],
+      "traits" : [
+        {
+          "interfaceLanguage" : "swift"
+        }
+      ]
+    }
+  ]
+, 
+"references": {
+"doc://AdvancedOperation/SH": {
+  "identifier" : "doc:\/\/AdvancedOperation\/SH",
+  "title" : "Swift.Hashable",
+  "type" : "unresolvable"
+},
+"doc://AdvancedOperation/SQ": {
+  "identifier" : "doc:\/\/AdvancedOperation\/SQ",
+  "title" : "Swift.Equatable",
+  "type" : "unresolvable"
+},
+"doc://AdvancedOperation/documentation/AdvancedOperation": {
+  "abstract" : [
+
+  ],
+  "identifier" : "doc:\/\/AdvancedOperation\/documentation\/AdvancedOperation",
+  "kind" : "symbol",
+  "role" : "collection",
+  "title" : "AdvancedOperation",
+  "type" : "topic",
+  "url" : "\/documentation\/advancedoperation"
+},
+"doc://AdvancedOperation/documentation/AdvancedOperation/AsynchronousBlockOperation": {
+  "abstract" : [
+    {
+      "text" : "A  sublcass of ",
+      "type" : "text"
+    },
+    {
+      "code" : "AsynchronousOperation",
+      "type" : "codeVoice"
+    },
+    {
+      "text" : " to execute a closure.",
+      "type" : "text"
+    }
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "class"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "AsynchronousBlockOperation"
+    }
+  ],
+  "identifier" : "doc:\/\/AdvancedOperation\/documentation\/AdvancedOperation\/AsynchronousBlockOperation",
+  "kind" : "symbol",
+  "navigatorTitle" : [
+    {
+      "kind" : "identifier",
+      "text" : "AsynchronousBlockOperation"
+    }
+  ],
+  "role" : "symbol",
+  "title" : "AsynchronousBlockOperation",
+  "type" : "topic",
+  "url" : "\/documentation\/advancedoperation\/asynchronousblockoperation"
+},
+"doc://AdvancedOperation/documentation/AdvancedOperation/AsynchronousBlockOperation/Block": {
+  "abstract" : [
+    {
+      "text" : "A closure type that takes a closure as its parameter.",
+      "type" : "text"
+    }
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "typealias"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "Block"
+    }
+  ],
+  "identifier" : "doc:\/\/AdvancedOperation\/documentation\/AdvancedOperation\/AsynchronousBlockOperation\/Block",
+  "kind" : "symbol",
+  "navigatorTitle" : [
+    {
+      "kind" : "identifier",
+      "text" : "Block"
+    }
+  ],
+  "role" : "symbol",
+  "title" : "AsynchronousBlockOperation.Block",
+  "type" : "topic",
+  "url" : "\/documentation\/advancedoperation\/asynchronousblockoperation\/block"
+},
+"doc://AdvancedOperation/documentation/AdvancedOperation/AsynchronousBlockOperation/init(block:)": {
+  "abstract" : [
+    {
+      "text" : "The designated initializer.",
+      "type" : "text"
+    }
+  ],
+  "fragments" : [
+    {
+      "kind" : "identifier",
+      "text" : "init"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "externalParam",
+      "text" : "block"
+    },
+    {
+      "kind" : "text",
+      "text" : ": "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "c:@M@AdvancedOperation@objc(cs)AsynchronousBlockOperation",
+      "text" : "AsynchronousBlockOperation"
+    },
+    {
+      "kind" : "text",
+      "text" : "."
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:17AdvancedOperation017AsynchronousBlockB0C0D0a",
+      "text" : "Block"
+    },
+    {
+      "kind" : "text",
+      "text" : ")"
+    }
+  ],
+  "identifier" : "doc:\/\/AdvancedOperation\/documentation\/AdvancedOperation\/AsynchronousBlockOperation\/init(block:)",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "init(block:)",
+  "type" : "topic",
+  "url" : "\/documentation\/advancedoperation\/asynchronousblockoperation\/init(block:)"
+},
+"doc://AdvancedOperation/documentation/AdvancedOperation/AsynchronousBlockOperation/main()": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "func"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "main"
+    },
+    {
+      "kind" : "text",
+      "text" : "()"
+    }
+  ],
+  "identifier" : "doc:\/\/AdvancedOperation\/documentation\/AdvancedOperation\/AsynchronousBlockOperation\/main()",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "main()",
+  "type" : "topic",
+  "url" : "\/documentation\/advancedoperation\/asynchronousblockoperation\/main()"
+},
+"doc://AdvancedOperation/documentation/AdvancedOperation/AsynchronousOperation": {
+  "abstract" : [
+    {
+      "text" : "An abstract thread safe subclass of ",
+      "type" : "text"
+    },
+    {
+      "code" : "Operation",
+      "type" : "codeVoice"
+    },
+    {
+      "text" : " to support asynchronous operations.",
+      "type" : "text"
+    }
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "class"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "AsynchronousOperation"
+    }
+  ],
+  "identifier" : "doc:\/\/AdvancedOperation\/documentation\/AdvancedOperation\/AsynchronousOperation",
+  "kind" : "symbol",
+  "navigatorTitle" : [
+    {
+      "kind" : "identifier",
+      "text" : "AsynchronousOperation"
+    }
+  ],
+  "role" : "symbol",
+  "title" : "AsynchronousOperation",
+  "type" : "topic",
+  "url" : "\/documentation\/advancedoperation\/asynchronousoperation"
+},
+"doc://AdvancedOperation/objc(pl)NSObject": {
+  "identifier" : "doc:\/\/AdvancedOperation\/objc(pl)NSObject",
+  "title" : "ObjectiveC.NSObjectProtocol",
+  "type" : "unresolvable"
+},
+"doc://AdvancedOperation/objc(pl)NSProgressReporting": {
+  "identifier" : "doc:\/\/AdvancedOperation\/objc(pl)NSProgressReporting",
+  "title" : "Foundation.ProgressReporting",
+  "type" : "unresolvable"
+},
+"doc://AdvancedOperation/s23CustomStringConvertibleP": {
+  "identifier" : "doc:\/\/AdvancedOperation\/s23CustomStringConvertibleP",
+  "title" : "Swift.CustomStringConvertible",
+  "type" : "unresolvable"
+},
+"doc://AdvancedOperation/s28CustomDebugStringConvertibleP": {
+  "identifier" : "doc:\/\/AdvancedOperation\/s28CustomDebugStringConvertibleP",
+  "title" : "Swift.CustomDebugStringConvertible",
+  "type" : "unresolvable"
+},
+"doc://AdvancedOperation/s7CVarArgP": {
+  "identifier" : "doc:\/\/AdvancedOperation\/s7CVarArgP",
+  "title" : "Swift.CVarArg",
+  "type" : "unresolvable"
+},
+"doc://AdvancedOperation/s8SendableP": {
+  "identifier" : "doc:\/\/AdvancedOperation\/s8SendableP",
+  "title" : "Swift.Sendable",
+  "type" : "unresolvable"
+}
+}
+}

@@ -1,0 +1,200 @@
+{
+  "hierarchy" : {
+    "paths" : [
+      [
+        "doc:\/\/AdvancedOperation\/documentation\/AdvancedOperation"
+      ]
+    ]
+  },
+  "identifier" : {
+    "interfaceLanguage" : "swift",
+    "url" : "doc:\/\/AdvancedOperation\/documentation\/AdvancedOperation\/FailableAsyncOperation"
+  },
+  "kind" : "symbol",
+  "metadata" : {
+    "externalID" : "s:17AdvancedOperation013FailableAsyncB0a",
+    "fragments" : [
+      {
+        "kind" : "keyword",
+        "text" : "typealias"
+      },
+      {
+        "kind" : "text",
+        "text" : " "
+      },
+      {
+        "kind" : "identifier",
+        "text" : "FailableAsyncOperation"
+      }
+    ],
+    "modules" : [
+      {
+        "name" : "AdvancedOperation"
+      }
+    ],
+    "navigatorTitle" : [
+      {
+        "kind" : "identifier",
+        "text" : "FailableAsyncOperation"
+      }
+    ],
+    "role" : "symbol",
+    "roleHeading" : "Type Alias",
+    "symbolKind" : "typealias",
+    "title" : "FailableAsyncOperation"
+  },
+  "primaryContentSections" : [
+    {
+      "declarations" : [
+        {
+          "languages" : [
+            "swift"
+          ],
+          "platforms" : [
+            "macOS"
+          ],
+          "tokens" : [
+            {
+              "kind" : "keyword",
+              "text" : "typealias"
+            },
+            {
+              "kind" : "text",
+              "text" : " "
+            },
+            {
+              "kind" : "identifier",
+              "text" : "FailableAsyncOperation"
+            },
+            {
+              "kind" : "text",
+              "text" : " = "
+            },
+            {
+              "identifier" : "doc:\/\/AdvancedOperation\/documentation\/AdvancedOperation\/FailableAsynchronousOperation",
+              "kind" : "typeIdentifier",
+              "preciseIdentifier" : "s:17AdvancedOperation020FailableAsynchronousB0C",
+              "text" : "FailableAsynchronousOperation"
+            }
+          ]
+        }
+      ],
+      "kind" : "declarations"
+    }
+  ],
+  "schemaVersion" : {
+    "major" : 0,
+    "minor" : 3,
+    "patch" : 0
+  },
+  "sections" : [
+
+  ],
+  "variants" : [
+    {
+      "paths" : [
+        "\/documentation\/advancedoperation\/failableasyncoperation"
+      ],
+      "traits" : [
+        {
+          "interfaceLanguage" : "swift"
+        }
+      ]
+    }
+  ]
+, 
+"references": {
+"doc://AdvancedOperation/documentation/AdvancedOperation": {
+  "abstract" : [
+
+  ],
+  "identifier" : "doc:\/\/AdvancedOperation\/documentation\/AdvancedOperation",
+  "kind" : "symbol",
+  "role" : "collection",
+  "title" : "AdvancedOperation",
+  "type" : "topic",
+  "url" : "\/documentation\/advancedoperation"
+},
+"doc://AdvancedOperation/documentation/AdvancedOperation/FailableAsyncOperation": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "typealias"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "FailableAsyncOperation"
+    }
+  ],
+  "identifier" : "doc:\/\/AdvancedOperation\/documentation\/AdvancedOperation\/FailableAsyncOperation",
+  "kind" : "symbol",
+  "navigatorTitle" : [
+    {
+      "kind" : "identifier",
+      "text" : "FailableAsyncOperation"
+    }
+  ],
+  "role" : "symbol",
+  "title" : "FailableAsyncOperation",
+  "type" : "topic",
+  "url" : "\/documentation\/advancedoperation\/failableasyncoperation"
+},
+"doc://AdvancedOperation/documentation/AdvancedOperation/FailableAsynchronousOperation": {
+  "abstract" : [
+    {
+      "text" : "An ",
+      "type" : "text"
+    },
+    {
+      "code" : "AsynchronousOperation",
+      "type" : "codeVoice"
+    },
+    {
+      "text" : " that can finish with an error conforming to ",
+      "type" : "text"
+    },
+    {
+      "code" : "OperationError",
+      "type" : "codeVoice"
+    },
+    {
+      "text" : ".",
+      "type" : "text"
+    }
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "class"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "FailableAsynchronousOperation"
+    }
+  ],
+  "identifier" : "doc:\/\/AdvancedOperation\/documentation\/AdvancedOperation\/FailableAsynchronousOperation",
+  "kind" : "symbol",
+  "navigatorTitle" : [
+    {
+      "kind" : "identifier",
+      "text" : "FailableAsynchronousOperation"
+    }
+  ],
+  "role" : "symbol",
+  "title" : "FailableAsynchronousOperation",
+  "type" : "topic",
+  "url" : "\/documentation\/advancedoperation\/failableasynchronousoperation"
+}
+}
+}

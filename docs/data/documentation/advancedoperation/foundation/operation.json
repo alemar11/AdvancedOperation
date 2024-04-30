@@ -1,0 +1,409 @@
+{
+  "hierarchy" : {
+    "paths" : [
+      [
+        "doc:\/\/AdvancedOperation\/documentation\/AdvancedOperation",
+        "doc:\/\/AdvancedOperation\/documentation\/AdvancedOperation\/Foundation"
+      ]
+    ]
+  },
+  "identifier" : {
+    "interfaceLanguage" : "swift",
+    "url" : "doc:\/\/AdvancedOperation\/documentation\/AdvancedOperation\/Foundation\/Operation"
+  },
+  "kind" : "symbol",
+  "metadata" : {
+    "extendedModule" : "Foundation",
+    "externalID" : "s:e:s:So11NSOperationC17AdvancedOperationE13operationNameSSvp",
+    "fragments" : [
+      {
+        "kind" : "keyword",
+        "text" : "extension"
+      },
+      {
+        "kind" : "text",
+        "text" : " "
+      },
+      {
+        "kind" : "identifier",
+        "preciseIdentifier" : "c:objc(cs)NSOperation",
+        "text" : "Operation"
+      }
+    ],
+    "modules" : [
+      {
+        "name" : "AdvancedOperation",
+        "relatedModules" : [
+          "Foundation"
+        ]
+      }
+    ],
+    "navigatorTitle" : [
+      {
+        "kind" : "identifier",
+        "text" : "Operation"
+      }
+    ],
+    "role" : "symbol",
+    "roleHeading" : "Extended Class",
+    "symbolKind" : "extension",
+    "title" : "Operation"
+  },
+  "primaryContentSections" : [
+    {
+      "declarations" : [
+        {
+          "languages" : [
+            "swift"
+          ],
+          "platforms" : [
+            "macOS"
+          ],
+          "tokens" : [
+            {
+              "kind" : "keyword",
+              "text" : "extension"
+            },
+            {
+              "kind" : "text",
+              "text" : " "
+            },
+            {
+              "kind" : "typeIdentifier",
+              "preciseIdentifier" : "c:objc(cs)NSOperation",
+              "text" : "Operation"
+            }
+          ]
+        }
+      ],
+      "kind" : "declarations"
+    }
+  ],
+  "schemaVersion" : {
+    "major" : 0,
+    "minor" : 3,
+    "patch" : 0
+  },
+  "sections" : [
+
+  ],
+  "topicSections" : [
+    {
+      "identifiers" : [
+        "doc:\/\/AdvancedOperation\/documentation\/AdvancedOperation\/Foundation\/Operation\/hasSomeCancelledDependencies",
+        "doc:\/\/AdvancedOperation\/documentation\/AdvancedOperation\/Foundation\/Operation\/operationName"
+      ],
+      "title" : "Instance Properties"
+    },
+    {
+      "identifiers" : [
+        "doc:\/\/AdvancedOperation\/documentation\/AdvancedOperation\/Foundation\/Operation\/addDependencies(_:)-3hrze",
+        "doc:\/\/AdvancedOperation\/documentation\/AdvancedOperation\/Foundation\/Operation\/addDependencies(_:)-7hotd",
+        "doc:\/\/AdvancedOperation\/documentation\/AdvancedOperation\/Foundation\/Operation\/removeDependencies()"
+      ],
+      "title" : "Instance Methods"
+    }
+  ],
+  "variants" : [
+    {
+      "paths" : [
+        "\/documentation\/advancedoperation\/foundation\/operation"
+      ],
+      "traits" : [
+        {
+          "interfaceLanguage" : "swift"
+        }
+      ]
+    }
+  ]
+, 
+"references": {
+"doc://AdvancedOperation/documentation/AdvancedOperation": {
+  "abstract" : [
+
+  ],
+  "identifier" : "doc:\/\/AdvancedOperation\/documentation\/AdvancedOperation",
+  "kind" : "symbol",
+  "role" : "collection",
+  "title" : "AdvancedOperation",
+  "type" : "topic",
+  "url" : "\/documentation\/advancedoperation"
+},
+"doc://AdvancedOperation/documentation/AdvancedOperation/Foundation": {
+  "abstract" : [
+
+  ],
+  "identifier" : "doc:\/\/AdvancedOperation\/documentation\/AdvancedOperation\/Foundation",
+  "kind" : "symbol",
+  "role" : "collection",
+  "title" : "Foundation",
+  "type" : "topic",
+  "url" : "\/documentation\/advancedoperation\/foundation"
+},
+"doc://AdvancedOperation/documentation/AdvancedOperation/Foundation/Operation": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "extension"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "preciseIdentifier" : "c:objc(cs)NSOperation",
+      "text" : "Operation"
+    }
+  ],
+  "identifier" : "doc:\/\/AdvancedOperation\/documentation\/AdvancedOperation\/Foundation\/Operation",
+  "kind" : "symbol",
+  "navigatorTitle" : [
+    {
+      "kind" : "identifier",
+      "text" : "Operation"
+    }
+  ],
+  "role" : "symbol",
+  "title" : "Operation",
+  "type" : "topic",
+  "url" : "\/documentation\/advancedoperation\/foundation\/operation"
+},
+"doc://AdvancedOperation/documentation/AdvancedOperation/Foundation/Operation/addDependencies(_:)-3hrze": {
+  "abstract" : [
+    {
+      "text" : "Adds multiple dependencies to the operation.",
+      "type" : "text"
+    },
+    {
+      "text" : " ",
+      "type" : "text"
+    },
+    {
+      "text" : "If the receiver is already executing its task, adding dependencies has no practical effect.",
+      "type" : "text"
+    }
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "func"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "addDependencies"
+    },
+    {
+      "kind" : "text",
+      "text" : "(["
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "c:objc(cs)NSOperation",
+      "text" : "Operation"
+    },
+    {
+      "kind" : "text",
+      "text" : "])"
+    }
+  ],
+  "identifier" : "doc:\/\/AdvancedOperation\/documentation\/AdvancedOperation\/Foundation\/Operation\/addDependencies(_:)-3hrze",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "addDependencies(_:)",
+  "type" : "topic",
+  "url" : "\/documentation\/advancedoperation\/foundation\/operation\/adddependencies(_:)-3hrze"
+},
+"doc://AdvancedOperation/documentation/AdvancedOperation/Foundation/Operation/addDependencies(_:)-7hotd": {
+  "abstract" : [
+    {
+      "text" : "Adds multiple dependencies to the operation.",
+      "type" : "text"
+    },
+    {
+      "text" : " ",
+      "type" : "text"
+    },
+    {
+      "text" : "If the receiver is already executing its task, adding dependencies has no practical effect.",
+      "type" : "text"
+    }
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "func"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "addDependencies"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "c:objc(cs)NSOperation",
+      "text" : "Operation"
+    },
+    {
+      "kind" : "text",
+      "text" : "...)"
+    }
+  ],
+  "identifier" : "doc:\/\/AdvancedOperation\/documentation\/AdvancedOperation\/Foundation\/Operation\/addDependencies(_:)-7hotd",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "addDependencies(_:)",
+  "type" : "topic",
+  "url" : "\/documentation\/advancedoperation\/foundation\/operation\/adddependencies(_:)-7hotd"
+},
+"doc://AdvancedOperation/documentation/AdvancedOperation/Foundation/Operation/hasSomeCancelledDependencies": {
+  "abstract" : [
+    {
+      "text" : "Returns ",
+      "type" : "text"
+    },
+    {
+      "code" : "true",
+      "type" : "codeVoice"
+    },
+    {
+      "text" : " if ",
+      "type" : "text"
+    },
+    {
+      "inlineContent" : [
+        {
+          "text" : "at least one",
+          "type" : "text"
+        }
+      ],
+      "type" : "strong"
+    },
+    {
+      "text" : " dependency has been cancelled.",
+      "type" : "text"
+    }
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "var"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "hasSomeCancelledDependencies"
+    },
+    {
+      "kind" : "text",
+      "text" : ": "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:Sb",
+      "text" : "Bool"
+    }
+  ],
+  "identifier" : "doc:\/\/AdvancedOperation\/documentation\/AdvancedOperation\/Foundation\/Operation\/hasSomeCancelledDependencies",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "hasSomeCancelledDependencies",
+  "type" : "topic",
+  "url" : "\/documentation\/advancedoperation\/foundation\/operation\/hassomecancelleddependencies"
+},
+"doc://AdvancedOperation/documentation/AdvancedOperation/Foundation/Operation/operationName": {
+  "abstract" : [
+    {
+      "text" : "Returns the ",
+      "type" : "text"
+    },
+    {
+      "code" : "Operation",
+      "type" : "codeVoice"
+    },
+    {
+      "text" : " name or its type if the name is nil.",
+      "type" : "text"
+    }
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "var"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "operationName"
+    },
+    {
+      "kind" : "text",
+      "text" : ": "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:SS",
+      "text" : "String"
+    }
+  ],
+  "identifier" : "doc:\/\/AdvancedOperation\/documentation\/AdvancedOperation\/Foundation\/Operation\/operationName",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "operationName",
+  "type" : "topic",
+  "url" : "\/documentation\/advancedoperation\/foundation\/operation\/operationname"
+},
+"doc://AdvancedOperation/documentation/AdvancedOperation/Foundation/Operation/removeDependencies()": {
+  "abstract" : [
+    {
+      "text" : "Removes all the dependencies.",
+      "type" : "text"
+    }
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "func"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "removeDependencies"
+    },
+    {
+      "kind" : "text",
+      "text" : "()"
+    }
+  ],
+  "identifier" : "doc:\/\/AdvancedOperation\/documentation\/AdvancedOperation\/Foundation\/Operation\/removeDependencies()",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "removeDependencies()",
+  "type" : "topic",
+  "url" : "\/documentation\/advancedoperation\/foundation\/operation\/removedependencies()"
+}
+}
+}

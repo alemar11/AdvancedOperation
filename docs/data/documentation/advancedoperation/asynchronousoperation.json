@@ -1,0 +1,927 @@
+{
+  "abstract" : [
+    {
+      "text" : "An abstract thread safe subclass of ",
+      "type" : "text"
+    },
+    {
+      "code" : "Operation",
+      "type" : "codeVoice"
+    },
+    {
+      "text" : " to support asynchronous operations.",
+      "type" : "text"
+    }
+  ],
+  "hierarchy" : {
+    "paths" : [
+      [
+        "doc:\/\/AdvancedOperation\/documentation\/AdvancedOperation"
+      ]
+    ]
+  },
+  "identifier" : {
+    "interfaceLanguage" : "swift",
+    "url" : "doc:\/\/AdvancedOperation\/documentation\/AdvancedOperation\/AsynchronousOperation"
+  },
+  "kind" : "symbol",
+  "metadata" : {
+    "externalID" : "c:@M@AdvancedOperation@objc(cs)AsynchronousOperation",
+    "fragments" : [
+      {
+        "kind" : "keyword",
+        "text" : "class"
+      },
+      {
+        "kind" : "text",
+        "text" : " "
+      },
+      {
+        "kind" : "identifier",
+        "text" : "AsynchronousOperation"
+      }
+    ],
+    "modules" : [
+      {
+        "name" : "AdvancedOperation"
+      }
+    ],
+    "navigatorTitle" : [
+      {
+        "kind" : "identifier",
+        "text" : "AsynchronousOperation"
+      }
+    ],
+    "role" : "symbol",
+    "roleHeading" : "Class",
+    "symbolKind" : "class",
+    "title" : "AsynchronousOperation"
+  },
+  "primaryContentSections" : [
+    {
+      "declarations" : [
+        {
+          "languages" : [
+            "swift"
+          ],
+          "platforms" : [
+            "macOS"
+          ],
+          "tokens" : [
+            {
+              "kind" : "keyword",
+              "text" : "class"
+            },
+            {
+              "kind" : "text",
+              "text" : " "
+            },
+            {
+              "kind" : "identifier",
+              "text" : "AsynchronousOperation"
+            }
+          ]
+        }
+      ],
+      "kind" : "declarations"
+    },
+    {
+      "content" : [
+        {
+          "anchor" : "overview",
+          "level" : 2,
+          "text" : "Overview",
+          "type" : "heading"
+        },
+        {
+          "inlineContent" : [
+            {
+              "text" : "Subclasses must override ",
+              "type" : "text"
+            },
+            {
+              "code" : "main",
+              "type" : "codeVoice"
+            },
+            {
+              "text" : " to perform any work and, if they are asynchronous, call the ",
+              "type" : "text"
+            },
+            {
+              "code" : "finish()",
+              "type" : "codeVoice"
+            },
+            {
+              "text" : " method to complete the execution.",
+              "type" : "text"
+            }
+          ],
+          "type" : "paragraph"
+        }
+      ],
+      "kind" : "content"
+    }
+  ],
+  "relationshipsSections" : [
+    {
+      "identifiers" : [
+        "doc:\/\/AdvancedOperation\/objc(cs)NSOperation"
+      ],
+      "kind" : "relationships",
+      "title" : "Inherits From",
+      "type" : "inheritsFrom"
+    },
+    {
+      "identifiers" : [
+        "doc:\/\/AdvancedOperation\/documentation\/AdvancedOperation\/AsynchronousBlockOperation",
+        "doc:\/\/AdvancedOperation\/documentation\/AdvancedOperation\/FailableAsynchronousOperation",
+        "doc:\/\/AdvancedOperation\/documentation\/AdvancedOperation\/GroupOperation",
+        "doc:\/\/AdvancedOperation\/documentation\/AdvancedOperation\/ResultOperation"
+      ],
+      "kind" : "relationships",
+      "title" : "Inherited By",
+      "type" : "inheritedBy"
+    },
+    {
+      "identifiers" : [
+        "doc:\/\/AdvancedOperation\/objc(pl)NSProgressReporting",
+        "doc:\/\/AdvancedOperation\/objc(pl)NSObject",
+        "doc:\/\/AdvancedOperation\/s7CVarArgP",
+        "doc:\/\/AdvancedOperation\/s28CustomDebugStringConvertibleP",
+        "doc:\/\/AdvancedOperation\/s23CustomStringConvertibleP",
+        "doc:\/\/AdvancedOperation\/SQ",
+        "doc:\/\/AdvancedOperation\/SH",
+        "doc:\/\/AdvancedOperation\/s8SendableP"
+      ],
+      "kind" : "relationships",
+      "title" : "Conforms To",
+      "type" : "conformsTo"
+    }
+  ],
+  "schemaVersion" : {
+    "major" : 0,
+    "minor" : 3,
+    "patch" : 0
+  },
+  "sections" : [
+
+  ],
+  "topicSections" : [
+    {
+      "identifiers" : [
+        "doc:\/\/AdvancedOperation\/documentation\/AdvancedOperation\/AsynchronousOperation\/debugDescription",
+        "doc:\/\/AdvancedOperation\/documentation\/AdvancedOperation\/AsynchronousOperation\/description",
+        "doc:\/\/AdvancedOperation\/documentation\/AdvancedOperation\/AsynchronousOperation\/isAsynchronous",
+        "doc:\/\/AdvancedOperation\/documentation\/AdvancedOperation\/AsynchronousOperation\/isConcurrent",
+        "doc:\/\/AdvancedOperation\/documentation\/AdvancedOperation\/AsynchronousOperation\/isExecuting",
+        "doc:\/\/AdvancedOperation\/documentation\/AdvancedOperation\/AsynchronousOperation\/isFinished",
+        "doc:\/\/AdvancedOperation\/documentation\/AdvancedOperation\/AsynchronousOperation\/isReady",
+        "doc:\/\/AdvancedOperation\/documentation\/AdvancedOperation\/AsynchronousOperation\/progress"
+      ],
+      "title" : "Instance Properties"
+    },
+    {
+      "identifiers" : [
+        "doc:\/\/AdvancedOperation\/documentation\/AdvancedOperation\/AsynchronousOperation\/cancel()",
+        "doc:\/\/AdvancedOperation\/documentation\/AdvancedOperation\/AsynchronousOperation\/finish()",
+        "doc:\/\/AdvancedOperation\/documentation\/AdvancedOperation\/AsynchronousOperation\/main()",
+        "doc:\/\/AdvancedOperation\/documentation\/AdvancedOperation\/AsynchronousOperation\/start()"
+      ],
+      "title" : "Instance Methods"
+    }
+  ],
+  "variants" : [
+    {
+      "paths" : [
+        "\/documentation\/advancedoperation\/asynchronousoperation"
+      ],
+      "traits" : [
+        {
+          "interfaceLanguage" : "swift"
+        }
+      ]
+    }
+  ]
+, 
+"references": {
+"doc://AdvancedOperation/SH": {
+  "identifier" : "doc:\/\/AdvancedOperation\/SH",
+  "title" : "Swift.Hashable",
+  "type" : "unresolvable"
+},
+"doc://AdvancedOperation/SQ": {
+  "identifier" : "doc:\/\/AdvancedOperation\/SQ",
+  "title" : "Swift.Equatable",
+  "type" : "unresolvable"
+},
+"doc://AdvancedOperation/documentation/AdvancedOperation": {
+  "abstract" : [
+
+  ],
+  "identifier" : "doc:\/\/AdvancedOperation\/documentation\/AdvancedOperation",
+  "kind" : "symbol",
+  "role" : "collection",
+  "title" : "AdvancedOperation",
+  "type" : "topic",
+  "url" : "\/documentation\/advancedoperation"
+},
+"doc://AdvancedOperation/documentation/AdvancedOperation/AsynchronousBlockOperation": {
+  "abstract" : [
+    {
+      "text" : "A  sublcass of ",
+      "type" : "text"
+    },
+    {
+      "code" : "AsynchronousOperation",
+      "type" : "codeVoice"
+    },
+    {
+      "text" : " to execute a closure.",
+      "type" : "text"
+    }
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "class"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "AsynchronousBlockOperation"
+    }
+  ],
+  "identifier" : "doc:\/\/AdvancedOperation\/documentation\/AdvancedOperation\/AsynchronousBlockOperation",
+  "kind" : "symbol",
+  "navigatorTitle" : [
+    {
+      "kind" : "identifier",
+      "text" : "AsynchronousBlockOperation"
+    }
+  ],
+  "role" : "symbol",
+  "title" : "AsynchronousBlockOperation",
+  "type" : "topic",
+  "url" : "\/documentation\/advancedoperation\/asynchronousblockoperation"
+},
+"doc://AdvancedOperation/documentation/AdvancedOperation/AsynchronousOperation": {
+  "abstract" : [
+    {
+      "text" : "An abstract thread safe subclass of ",
+      "type" : "text"
+    },
+    {
+      "code" : "Operation",
+      "type" : "codeVoice"
+    },
+    {
+      "text" : " to support asynchronous operations.",
+      "type" : "text"
+    }
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "class"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "AsynchronousOperation"
+    }
+  ],
+  "identifier" : "doc:\/\/AdvancedOperation\/documentation\/AdvancedOperation\/AsynchronousOperation",
+  "kind" : "symbol",
+  "navigatorTitle" : [
+    {
+      "kind" : "identifier",
+      "text" : "AsynchronousOperation"
+    }
+  ],
+  "role" : "symbol",
+  "title" : "AsynchronousOperation",
+  "type" : "topic",
+  "url" : "\/documentation\/advancedoperation\/asynchronousoperation"
+},
+"doc://AdvancedOperation/documentation/AdvancedOperation/AsynchronousOperation/cancel()": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "func"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "cancel"
+    },
+    {
+      "kind" : "text",
+      "text" : "()"
+    }
+  ],
+  "identifier" : "doc:\/\/AdvancedOperation\/documentation\/AdvancedOperation\/AsynchronousOperation\/cancel()",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "cancel()",
+  "type" : "topic",
+  "url" : "\/documentation\/advancedoperation\/asynchronousoperation\/cancel()"
+},
+"doc://AdvancedOperation/documentation/AdvancedOperation/AsynchronousOperation/debugDescription": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "var"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "debugDescription"
+    },
+    {
+      "kind" : "text",
+      "text" : ": "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:SS",
+      "text" : "String"
+    }
+  ],
+  "identifier" : "doc:\/\/AdvancedOperation\/documentation\/AdvancedOperation\/AsynchronousOperation\/debugDescription",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "debugDescription",
+  "type" : "topic",
+  "url" : "\/documentation\/advancedoperation\/asynchronousoperation\/debugdescription"
+},
+"doc://AdvancedOperation/documentation/AdvancedOperation/AsynchronousOperation/description": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "var"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "description"
+    },
+    {
+      "kind" : "text",
+      "text" : ": "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:SS",
+      "text" : "String"
+    }
+  ],
+  "identifier" : "doc:\/\/AdvancedOperation\/documentation\/AdvancedOperation\/AsynchronousOperation\/description",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "description",
+  "type" : "topic",
+  "url" : "\/documentation\/advancedoperation\/asynchronousoperation\/description"
+},
+"doc://AdvancedOperation/documentation/AdvancedOperation/AsynchronousOperation/finish()": {
+  "abstract" : [
+    {
+      "text" : "Finishes the operation.",
+      "type" : "text"
+    }
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "func"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "finish"
+    },
+    {
+      "kind" : "text",
+      "text" : "()"
+    }
+  ],
+  "identifier" : "doc:\/\/AdvancedOperation\/documentation\/AdvancedOperation\/AsynchronousOperation\/finish()",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "finish()",
+  "type" : "topic",
+  "url" : "\/documentation\/advancedoperation\/asynchronousoperation\/finish()"
+},
+"doc://AdvancedOperation/documentation/AdvancedOperation/AsynchronousOperation/isAsynchronous": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "var"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "isAsynchronous"
+    },
+    {
+      "kind" : "text",
+      "text" : ": "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:Sb",
+      "text" : "Bool"
+    }
+  ],
+  "identifier" : "doc:\/\/AdvancedOperation\/documentation\/AdvancedOperation\/AsynchronousOperation\/isAsynchronous",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "isAsynchronous",
+  "type" : "topic",
+  "url" : "\/documentation\/advancedoperation\/asynchronousoperation\/isasynchronous"
+},
+"doc://AdvancedOperation/documentation/AdvancedOperation/AsynchronousOperation/isConcurrent": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "var"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "isConcurrent"
+    },
+    {
+      "kind" : "text",
+      "text" : ": "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:Sb",
+      "text" : "Bool"
+    }
+  ],
+  "identifier" : "doc:\/\/AdvancedOperation\/documentation\/AdvancedOperation\/AsynchronousOperation\/isConcurrent",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "isConcurrent",
+  "type" : "topic",
+  "url" : "\/documentation\/advancedoperation\/asynchronousoperation\/isconcurrent"
+},
+"doc://AdvancedOperation/documentation/AdvancedOperation/AsynchronousOperation/isExecuting": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "var"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "isExecuting"
+    },
+    {
+      "kind" : "text",
+      "text" : ": "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:Sb",
+      "text" : "Bool"
+    }
+  ],
+  "identifier" : "doc:\/\/AdvancedOperation\/documentation\/AdvancedOperation\/AsynchronousOperation\/isExecuting",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "isExecuting",
+  "type" : "topic",
+  "url" : "\/documentation\/advancedoperation\/asynchronousoperation\/isexecuting"
+},
+"doc://AdvancedOperation/documentation/AdvancedOperation/AsynchronousOperation/isFinished": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "var"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "isFinished"
+    },
+    {
+      "kind" : "text",
+      "text" : ": "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:Sb",
+      "text" : "Bool"
+    }
+  ],
+  "identifier" : "doc:\/\/AdvancedOperation\/documentation\/AdvancedOperation\/AsynchronousOperation\/isFinished",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "isFinished",
+  "type" : "topic",
+  "url" : "\/documentation\/advancedoperation\/asynchronousoperation\/isfinished"
+},
+"doc://AdvancedOperation/documentation/AdvancedOperation/AsynchronousOperation/isReady": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "var"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "isReady"
+    },
+    {
+      "kind" : "text",
+      "text" : ": "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:Sb",
+      "text" : "Bool"
+    }
+  ],
+  "identifier" : "doc:\/\/AdvancedOperation\/documentation\/AdvancedOperation\/AsynchronousOperation\/isReady",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "isReady",
+  "type" : "topic",
+  "url" : "\/documentation\/advancedoperation\/asynchronousoperation\/isready"
+},
+"doc://AdvancedOperation/documentation/AdvancedOperation/AsynchronousOperation/main()": {
+  "abstract" : [
+    {
+      "text" : "The default implementation of this method does nothing.",
+      "type" : "text"
+    },
+    {
+      "text" : " ",
+      "type" : "text"
+    },
+    {
+      "text" : "You should override this method to perform the desired task. In your implementation, do not invoke super.",
+      "type" : "text"
+    },
+    {
+      "text" : " ",
+      "type" : "text"
+    },
+    {
+      "text" : "This method will automatically execute within an autorelease pool provided by Operation, so you do not need to create your own autorelease pool block in your implementation.",
+      "type" : "text"
+    }
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "func"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "main"
+    },
+    {
+      "kind" : "text",
+      "text" : "()"
+    }
+  ],
+  "identifier" : "doc:\/\/AdvancedOperation\/documentation\/AdvancedOperation\/AsynchronousOperation\/main()",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "main()",
+  "type" : "topic",
+  "url" : "\/documentation\/advancedoperation\/asynchronousoperation\/main()"
+},
+"doc://AdvancedOperation/documentation/AdvancedOperation/AsynchronousOperation/progress": {
+  "abstract" : [
+    {
+      "text" : "The ",
+      "type" : "text"
+    },
+    {
+      "code" : "progress",
+      "type" : "codeVoice"
+    },
+    {
+      "text" : " property represents a total progress of the operation during its execution.",
+      "type" : "text"
+    }
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "var"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "progress"
+    },
+    {
+      "kind" : "text",
+      "text" : ": "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "c:objc(cs)NSProgress",
+      "text" : "Progress"
+    }
+  ],
+  "identifier" : "doc:\/\/AdvancedOperation\/documentation\/AdvancedOperation\/AsynchronousOperation\/progress",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "progress",
+  "type" : "topic",
+  "url" : "\/documentation\/advancedoperation\/asynchronousoperation\/progress"
+},
+"doc://AdvancedOperation/documentation/AdvancedOperation/AsynchronousOperation/start()": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "func"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "start"
+    },
+    {
+      "kind" : "text",
+      "text" : "()"
+    }
+  ],
+  "identifier" : "doc:\/\/AdvancedOperation\/documentation\/AdvancedOperation\/AsynchronousOperation\/start()",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "start()",
+  "type" : "topic",
+  "url" : "\/documentation\/advancedoperation\/asynchronousoperation\/start()"
+},
+"doc://AdvancedOperation/documentation/AdvancedOperation/FailableAsynchronousOperation": {
+  "abstract" : [
+    {
+      "text" : "An ",
+      "type" : "text"
+    },
+    {
+      "code" : "AsynchronousOperation",
+      "type" : "codeVoice"
+    },
+    {
+      "text" : " that can finish with an error conforming to ",
+      "type" : "text"
+    },
+    {
+      "code" : "OperationError",
+      "type" : "codeVoice"
+    },
+    {
+      "text" : ".",
+      "type" : "text"
+    }
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "class"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "FailableAsynchronousOperation"
+    }
+  ],
+  "identifier" : "doc:\/\/AdvancedOperation\/documentation\/AdvancedOperation\/FailableAsynchronousOperation",
+  "kind" : "symbol",
+  "navigatorTitle" : [
+    {
+      "kind" : "identifier",
+      "text" : "FailableAsynchronousOperation"
+    }
+  ],
+  "role" : "symbol",
+  "title" : "FailableAsynchronousOperation",
+  "type" : "topic",
+  "url" : "\/documentation\/advancedoperation\/failableasynchronousoperation"
+},
+"doc://AdvancedOperation/documentation/AdvancedOperation/GroupOperation": {
+  "abstract" : [
+    {
+      "text" : "An ",
+      "type" : "text"
+    },
+    {
+      "code" : "AsynchronousOperation",
+      "type" : "codeVoice"
+    },
+    {
+      "text" : " subclass which enables a finite grouping of other operations.",
+      "type" : "text"
+    },
+    {
+      "text" : " ",
+      "type" : "text"
+    },
+    {
+      "text" : "Use a ",
+      "type" : "text"
+    },
+    {
+      "code" : "GroupOperation",
+      "type" : "codeVoice"
+    },
+    {
+      "text" : " to associate related operations together, thereby creating higher levels of abstractions.",
+      "type" : "text"
+    }
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "class"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "GroupOperation"
+    }
+  ],
+  "identifier" : "doc:\/\/AdvancedOperation\/documentation\/AdvancedOperation\/GroupOperation",
+  "kind" : "symbol",
+  "navigatorTitle" : [
+    {
+      "kind" : "identifier",
+      "text" : "GroupOperation"
+    }
+  ],
+  "role" : "symbol",
+  "title" : "GroupOperation",
+  "type" : "topic",
+  "url" : "\/documentation\/advancedoperation\/groupoperation"
+},
+"doc://AdvancedOperation/documentation/AdvancedOperation/ResultOperation": {
+  "abstract" : [
+    {
+      "text" : "An ",
+      "type" : "text"
+    },
+    {
+      "code" : "AsynchronousOperation",
+      "type" : "codeVoice"
+    },
+    {
+      "text" : " that produces a ",
+      "type" : "text"
+    },
+    {
+      "code" : "result",
+      "type" : "codeVoice"
+    },
+    {
+      "text" : " once finished.",
+      "type" : "text"
+    }
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "class"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "ResultOperation"
+    }
+  ],
+  "identifier" : "doc:\/\/AdvancedOperation\/documentation\/AdvancedOperation\/ResultOperation",
+  "kind" : "symbol",
+  "navigatorTitle" : [
+    {
+      "kind" : "identifier",
+      "text" : "ResultOperation"
+    }
+  ],
+  "role" : "symbol",
+  "title" : "ResultOperation",
+  "type" : "topic",
+  "url" : "\/documentation\/advancedoperation\/resultoperation"
+},
+"doc://AdvancedOperation/objc(cs)NSOperation": {
+  "identifier" : "doc:\/\/AdvancedOperation\/objc(cs)NSOperation",
+  "title" : "Foundation.Operation",
+  "type" : "unresolvable"
+},
+"doc://AdvancedOperation/objc(pl)NSObject": {
+  "identifier" : "doc:\/\/AdvancedOperation\/objc(pl)NSObject",
+  "title" : "ObjectiveC.NSObjectProtocol",
+  "type" : "unresolvable"
+},
+"doc://AdvancedOperation/objc(pl)NSProgressReporting": {
+  "identifier" : "doc:\/\/AdvancedOperation\/objc(pl)NSProgressReporting",
+  "title" : "Foundation.ProgressReporting",
+  "type" : "unresolvable"
+},
+"doc://AdvancedOperation/s23CustomStringConvertibleP": {
+  "identifier" : "doc:\/\/AdvancedOperation\/s23CustomStringConvertibleP",
+  "title" : "Swift.CustomStringConvertible",
+  "type" : "unresolvable"
+},
+"doc://AdvancedOperation/s28CustomDebugStringConvertibleP": {
+  "identifier" : "doc:\/\/AdvancedOperation\/s28CustomDebugStringConvertibleP",
+  "title" : "Swift.CustomDebugStringConvertible",
+  "type" : "unresolvable"
+},
+"doc://AdvancedOperation/s7CVarArgP": {
+  "identifier" : "doc:\/\/AdvancedOperation\/s7CVarArgP",
+  "title" : "Swift.CVarArg",
+  "type" : "unresolvable"
+},
+"doc://AdvancedOperation/s8SendableP": {
+  "identifier" : "doc:\/\/AdvancedOperation\/s8SendableP",
+  "title" : "Swift.Sendable",
+  "type" : "unresolvable"
+}
+}
+}

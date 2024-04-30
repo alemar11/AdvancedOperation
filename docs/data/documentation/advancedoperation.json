@@ -1,0 +1,444 @@
+{
+  "hierarchy" : {
+    "paths" : [
+      [
+
+      ]
+    ]
+  },
+  "identifier" : {
+    "interfaceLanguage" : "swift",
+    "url" : "doc:\/\/AdvancedOperation\/documentation\/AdvancedOperation"
+  },
+  "kind" : "symbol",
+  "metadata" : {
+    "externalID" : "AdvancedOperation",
+    "modules" : [
+      {
+        "name" : "AdvancedOperation"
+      }
+    ],
+    "role" : "collection",
+    "roleHeading" : "Framework",
+    "symbolKind" : "module",
+    "title" : "AdvancedOperation"
+  },
+  "schemaVersion" : {
+    "major" : 0,
+    "minor" : 3,
+    "patch" : 0
+  },
+  "sections" : [
+
+  ],
+  "topicSections" : [
+    {
+      "identifiers" : [
+        "doc:\/\/AdvancedOperation\/documentation\/AdvancedOperation\/AsynchronousBlockOperation",
+        "doc:\/\/AdvancedOperation\/documentation\/AdvancedOperation\/AsynchronousOperation",
+        "doc:\/\/AdvancedOperation\/documentation\/AdvancedOperation\/FailableAsynchronousOperation",
+        "doc:\/\/AdvancedOperation\/documentation\/AdvancedOperation\/GroupOperation",
+        "doc:\/\/AdvancedOperation\/documentation\/AdvancedOperation\/ResultOperation"
+      ],
+      "title" : "Classes"
+    },
+    {
+      "identifiers" : [
+        "doc:\/\/AdvancedOperation\/documentation\/AdvancedOperation\/AsyncBlockOperation",
+        "doc:\/\/AdvancedOperation\/documentation\/AdvancedOperation\/AsyncOperation",
+        "doc:\/\/AdvancedOperation\/documentation\/AdvancedOperation\/FailableAsyncOperation"
+      ],
+      "title" : "Type Aliases"
+    },
+    {
+      "identifiers" : [
+        "doc:\/\/AdvancedOperation\/documentation\/AdvancedOperation\/Foundation",
+        "doc:\/\/AdvancedOperation\/documentation\/AdvancedOperation\/Swift"
+      ],
+      "title" : "Extended Modules"
+    }
+  ],
+  "variants" : [
+    {
+      "paths" : [
+        "\/documentation\/advancedoperation"
+      ],
+      "traits" : [
+        {
+          "interfaceLanguage" : "swift"
+        }
+      ]
+    }
+  ]
+, 
+"references": {
+"doc://AdvancedOperation/documentation/AdvancedOperation": {
+  "abstract" : [
+
+  ],
+  "identifier" : "doc:\/\/AdvancedOperation\/documentation\/AdvancedOperation",
+  "kind" : "symbol",
+  "role" : "collection",
+  "title" : "AdvancedOperation",
+  "type" : "topic",
+  "url" : "\/documentation\/advancedoperation"
+},
+"doc://AdvancedOperation/documentation/AdvancedOperation/AsyncBlockOperation": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "typealias"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "AsyncBlockOperation"
+    }
+  ],
+  "identifier" : "doc:\/\/AdvancedOperation\/documentation\/AdvancedOperation\/AsyncBlockOperation",
+  "kind" : "symbol",
+  "navigatorTitle" : [
+    {
+      "kind" : "identifier",
+      "text" : "AsyncBlockOperation"
+    }
+  ],
+  "role" : "symbol",
+  "title" : "AsyncBlockOperation",
+  "type" : "topic",
+  "url" : "\/documentation\/advancedoperation\/asyncblockoperation"
+},
+"doc://AdvancedOperation/documentation/AdvancedOperation/AsyncOperation": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "typealias"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "AsyncOperation"
+    }
+  ],
+  "identifier" : "doc:\/\/AdvancedOperation\/documentation\/AdvancedOperation\/AsyncOperation",
+  "kind" : "symbol",
+  "navigatorTitle" : [
+    {
+      "kind" : "identifier",
+      "text" : "AsyncOperation"
+    }
+  ],
+  "role" : "symbol",
+  "title" : "AsyncOperation",
+  "type" : "topic",
+  "url" : "\/documentation\/advancedoperation\/asyncoperation"
+},
+"doc://AdvancedOperation/documentation/AdvancedOperation/AsynchronousBlockOperation": {
+  "abstract" : [
+    {
+      "text" : "A  sublcass of ",
+      "type" : "text"
+    },
+    {
+      "code" : "AsynchronousOperation",
+      "type" : "codeVoice"
+    },
+    {
+      "text" : " to execute a closure.",
+      "type" : "text"
+    }
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "class"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "AsynchronousBlockOperation"
+    }
+  ],
+  "identifier" : "doc:\/\/AdvancedOperation\/documentation\/AdvancedOperation\/AsynchronousBlockOperation",
+  "kind" : "symbol",
+  "navigatorTitle" : [
+    {
+      "kind" : "identifier",
+      "text" : "AsynchronousBlockOperation"
+    }
+  ],
+  "role" : "symbol",
+  "title" : "AsynchronousBlockOperation",
+  "type" : "topic",
+  "url" : "\/documentation\/advancedoperation\/asynchronousblockoperation"
+},
+"doc://AdvancedOperation/documentation/AdvancedOperation/AsynchronousOperation": {
+  "abstract" : [
+    {
+      "text" : "An abstract thread safe subclass of ",
+      "type" : "text"
+    },
+    {
+      "code" : "Operation",
+      "type" : "codeVoice"
+    },
+    {
+      "text" : " to support asynchronous operations.",
+      "type" : "text"
+    }
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "class"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "AsynchronousOperation"
+    }
+  ],
+  "identifier" : "doc:\/\/AdvancedOperation\/documentation\/AdvancedOperation\/AsynchronousOperation",
+  "kind" : "symbol",
+  "navigatorTitle" : [
+    {
+      "kind" : "identifier",
+      "text" : "AsynchronousOperation"
+    }
+  ],
+  "role" : "symbol",
+  "title" : "AsynchronousOperation",
+  "type" : "topic",
+  "url" : "\/documentation\/advancedoperation\/asynchronousoperation"
+},
+"doc://AdvancedOperation/documentation/AdvancedOperation/FailableAsyncOperation": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "typealias"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "FailableAsyncOperation"
+    }
+  ],
+  "identifier" : "doc:\/\/AdvancedOperation\/documentation\/AdvancedOperation\/FailableAsyncOperation",
+  "kind" : "symbol",
+  "navigatorTitle" : [
+    {
+      "kind" : "identifier",
+      "text" : "FailableAsyncOperation"
+    }
+  ],
+  "role" : "symbol",
+  "title" : "FailableAsyncOperation",
+  "type" : "topic",
+  "url" : "\/documentation\/advancedoperation\/failableasyncoperation"
+},
+"doc://AdvancedOperation/documentation/AdvancedOperation/FailableAsynchronousOperation": {
+  "abstract" : [
+    {
+      "text" : "An ",
+      "type" : "text"
+    },
+    {
+      "code" : "AsynchronousOperation",
+      "type" : "codeVoice"
+    },
+    {
+      "text" : " that can finish with an error conforming to ",
+      "type" : "text"
+    },
+    {
+      "code" : "OperationError",
+      "type" : "codeVoice"
+    },
+    {
+      "text" : ".",
+      "type" : "text"
+    }
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "class"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "FailableAsynchronousOperation"
+    }
+  ],
+  "identifier" : "doc:\/\/AdvancedOperation\/documentation\/AdvancedOperation\/FailableAsynchronousOperation",
+  "kind" : "symbol",
+  "navigatorTitle" : [
+    {
+      "kind" : "identifier",
+      "text" : "FailableAsynchronousOperation"
+    }
+  ],
+  "role" : "symbol",
+  "title" : "FailableAsynchronousOperation",
+  "type" : "topic",
+  "url" : "\/documentation\/advancedoperation\/failableasynchronousoperation"
+},
+"doc://AdvancedOperation/documentation/AdvancedOperation/Foundation": {
+  "abstract" : [
+
+  ],
+  "identifier" : "doc:\/\/AdvancedOperation\/documentation\/AdvancedOperation\/Foundation",
+  "kind" : "symbol",
+  "role" : "collection",
+  "title" : "Foundation",
+  "type" : "topic",
+  "url" : "\/documentation\/advancedoperation\/foundation"
+},
+"doc://AdvancedOperation/documentation/AdvancedOperation/GroupOperation": {
+  "abstract" : [
+    {
+      "text" : "An ",
+      "type" : "text"
+    },
+    {
+      "code" : "AsynchronousOperation",
+      "type" : "codeVoice"
+    },
+    {
+      "text" : " subclass which enables a finite grouping of other operations.",
+      "type" : "text"
+    },
+    {
+      "text" : " ",
+      "type" : "text"
+    },
+    {
+      "text" : "Use a ",
+      "type" : "text"
+    },
+    {
+      "code" : "GroupOperation",
+      "type" : "codeVoice"
+    },
+    {
+      "text" : " to associate related operations together, thereby creating higher levels of abstractions.",
+      "type" : "text"
+    }
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "class"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "GroupOperation"
+    }
+  ],
+  "identifier" : "doc:\/\/AdvancedOperation\/documentation\/AdvancedOperation\/GroupOperation",
+  "kind" : "symbol",
+  "navigatorTitle" : [
+    {
+      "kind" : "identifier",
+      "text" : "GroupOperation"
+    }
+  ],
+  "role" : "symbol",
+  "title" : "GroupOperation",
+  "type" : "topic",
+  "url" : "\/documentation\/advancedoperation\/groupoperation"
+},
+"doc://AdvancedOperation/documentation/AdvancedOperation/ResultOperation": {
+  "abstract" : [
+    {
+      "text" : "An ",
+      "type" : "text"
+    },
+    {
+      "code" : "AsynchronousOperation",
+      "type" : "codeVoice"
+    },
+    {
+      "text" : " that produces a ",
+      "type" : "text"
+    },
+    {
+      "code" : "result",
+      "type" : "codeVoice"
+    },
+    {
+      "text" : " once finished.",
+      "type" : "text"
+    }
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "class"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "ResultOperation"
+    }
+  ],
+  "identifier" : "doc:\/\/AdvancedOperation\/documentation\/AdvancedOperation\/ResultOperation",
+  "kind" : "symbol",
+  "navigatorTitle" : [
+    {
+      "kind" : "identifier",
+      "text" : "ResultOperation"
+    }
+  ],
+  "role" : "symbol",
+  "title" : "ResultOperation",
+  "type" : "topic",
+  "url" : "\/documentation\/advancedoperation\/resultoperation"
+},
+"doc://AdvancedOperation/documentation/AdvancedOperation/Swift": {
+  "abstract" : [
+
+  ],
+  "identifier" : "doc:\/\/AdvancedOperation\/documentation\/AdvancedOperation\/Swift",
+  "kind" : "symbol",
+  "role" : "collection",
+  "title" : "Swift",
+  "type" : "topic",
+  "url" : "\/documentation\/advancedoperation\/swift"
+}
+}
+}

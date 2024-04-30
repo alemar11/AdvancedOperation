@@ -1,0 +1,382 @@
+{
+  "interfaceLanguages" : {
+    "swift" : [
+      {
+        "children" : [
+          {
+            "title" : "Classes",
+            "type" : "groupMarker"
+          },
+          {
+            "children" : [
+              {
+                "title" : "Initializers",
+                "type" : "groupMarker"
+              },
+              {
+                "path" : "\/documentation\/advancedoperation\/asynchronousblockoperation\/init(block:)",
+                "title" : "init(block: AsynchronousBlockOperation.Block)",
+                "type" : "init"
+              },
+              {
+                "title" : "Instance Methods",
+                "type" : "groupMarker"
+              },
+              {
+                "path" : "\/documentation\/advancedoperation\/asynchronousblockoperation\/main()",
+                "title" : "func main()",
+                "type" : "method"
+              },
+              {
+                "title" : "Type Aliases",
+                "type" : "groupMarker"
+              },
+              {
+                "path" : "\/documentation\/advancedoperation\/asynchronousblockoperation\/block",
+                "title" : "AsynchronousBlockOperation.Block",
+                "type" : "typealias"
+              }
+            ],
+            "path" : "\/documentation\/advancedoperation\/asynchronousblockoperation",
+            "title" : "AsynchronousBlockOperation",
+            "type" : "class"
+          },
+          {
+            "children" : [
+              {
+                "title" : "Instance Properties",
+                "type" : "groupMarker"
+              },
+              {
+                "path" : "\/documentation\/advancedoperation\/asynchronousoperation\/debugdescription",
+                "title" : "var debugDescription: String",
+                "type" : "property"
+              },
+              {
+                "path" : "\/documentation\/advancedoperation\/asynchronousoperation\/description",
+                "title" : "var description: String",
+                "type" : "property"
+              },
+              {
+                "path" : "\/documentation\/advancedoperation\/asynchronousoperation\/isasynchronous",
+                "title" : "var isAsynchronous: Bool",
+                "type" : "property"
+              },
+              {
+                "path" : "\/documentation\/advancedoperation\/asynchronousoperation\/isconcurrent",
+                "title" : "var isConcurrent: Bool",
+                "type" : "property"
+              },
+              {
+                "path" : "\/documentation\/advancedoperation\/asynchronousoperation\/isexecuting",
+                "title" : "var isExecuting: Bool",
+                "type" : "property"
+              },
+              {
+                "path" : "\/documentation\/advancedoperation\/asynchronousoperation\/isfinished",
+                "title" : "var isFinished: Bool",
+                "type" : "property"
+              },
+              {
+                "path" : "\/documentation\/advancedoperation\/asynchronousoperation\/isready",
+                "title" : "var isReady: Bool",
+                "type" : "property"
+              },
+              {
+                "path" : "\/documentation\/advancedoperation\/asynchronousoperation\/progress",
+                "title" : "var progress: Progress",
+                "type" : "property"
+              },
+              {
+                "title" : "Instance Methods",
+                "type" : "groupMarker"
+              },
+              {
+                "path" : "\/documentation\/advancedoperation\/asynchronousoperation\/cancel()",
+                "title" : "func cancel()",
+                "type" : "method"
+              },
+              {
+                "path" : "\/documentation\/advancedoperation\/asynchronousoperation\/finish()",
+                "title" : "func finish()",
+                "type" : "method"
+              },
+              {
+                "path" : "\/documentation\/advancedoperation\/asynchronousoperation\/main()",
+                "title" : "func main()",
+                "type" : "method"
+              },
+              {
+                "path" : "\/documentation\/advancedoperation\/asynchronousoperation\/start()",
+                "title" : "func start()",
+                "type" : "method"
+              }
+            ],
+            "path" : "\/documentation\/advancedoperation\/asynchronousoperation",
+            "title" : "AsynchronousOperation",
+            "type" : "class"
+          },
+          {
+            "children" : [
+              {
+                "title" : "Instance Properties",
+                "type" : "groupMarker"
+              },
+              {
+                "path" : "\/documentation\/advancedoperation\/failableasynchronousoperation\/error",
+                "title" : "var error: Failure?",
+                "type" : "property"
+              },
+              {
+                "title" : "Instance Methods",
+                "type" : "groupMarker"
+              },
+              {
+                "path" : "\/documentation\/advancedoperation\/failableasynchronousoperation\/cancel(with:)",
+                "title" : "func cancel(with: Failure)",
+                "type" : "method"
+              },
+              {
+                "path" : "\/documentation\/advancedoperation\/failableasynchronousoperation\/finish(with:)",
+                "title" : "func finish(with: Failure)",
+                "type" : "method"
+              }
+            ],
+            "path" : "\/documentation\/advancedoperation\/failableasynchronousoperation",
+            "title" : "FailableAsynchronousOperation",
+            "type" : "class"
+          },
+          {
+            "children" : [
+              {
+                "title" : "Initializers",
+                "type" : "groupMarker"
+              },
+              {
+                "path" : "\/documentation\/advancedoperation\/groupoperation\/init(underlyingqueue:operations:)-8j28m",
+                "title" : "init(underlyingQueue: DispatchQueue?, operations: [Operation])",
+                "type" : "init"
+              },
+              {
+                "path" : "\/documentation\/advancedoperation\/groupoperation\/init(underlyingqueue:operations:)-8v6is",
+                "title" : "convenience init(underlyingQueue: DispatchQueue?, operations: Operation...)",
+                "type" : "init"
+              },
+              {
+                "title" : "Instance Properties",
+                "type" : "groupMarker"
+              },
+              {
+                "path" : "\/documentation\/advancedoperation\/groupoperation\/maxconcurrentoperationcount",
+                "title" : "var maxConcurrentOperationCount: Int",
+                "type" : "property"
+              },
+              {
+                "path" : "\/documentation\/advancedoperation\/groupoperation\/qualityofservice",
+                "title" : "var qualityOfService: QualityOfService",
+                "type" : "property"
+              },
+              {
+                "title" : "Instance Methods",
+                "type" : "groupMarker"
+              },
+              {
+                "path" : "\/documentation\/advancedoperation\/groupoperation\/addoperation(_:)",
+                "title" : "func addOperation(Operation)",
+                "type" : "method"
+              },
+              {
+                "path" : "\/documentation\/advancedoperation\/groupoperation\/addoperations(_:)",
+                "title" : "func addOperations(Operation...)",
+                "type" : "method"
+              },
+              {
+                "path" : "\/documentation\/advancedoperation\/groupoperation\/cancel()",
+                "title" : "func cancel()",
+                "type" : "method"
+              },
+              {
+                "path" : "\/documentation\/advancedoperation\/groupoperation\/main()",
+                "title" : "func main()",
+                "type" : "method"
+              }
+            ],
+            "path" : "\/documentation\/advancedoperation\/groupoperation",
+            "title" : "GroupOperation",
+            "type" : "class"
+          },
+          {
+            "children" : [
+              {
+                "title" : "Instance Properties",
+                "type" : "groupMarker"
+              },
+              {
+                "path" : "\/documentation\/advancedoperation\/resultoperation\/onfinish",
+                "title" : "var onFinish: ((Result<Success, Failure>?) -> Void)?",
+                "type" : "property"
+              },
+              {
+                "path" : "\/documentation\/advancedoperation\/resultoperation\/result",
+                "title" : "var result: Result<Success, Failure>?",
+                "type" : "property"
+              },
+              {
+                "title" : "Instance Methods",
+                "type" : "groupMarker"
+              },
+              {
+                "path" : "\/documentation\/advancedoperation\/resultoperation\/cancel(with:)",
+                "title" : "func cancel(with: Failure)",
+                "type" : "method"
+              },
+              {
+                "path" : "\/documentation\/advancedoperation\/resultoperation\/finish()",
+                "title" : "func finish()",
+                "type" : "method"
+              },
+              {
+                "path" : "\/documentation\/advancedoperation\/resultoperation\/finish(with:)",
+                "title" : "func finish(with: Result<Success, Failure>)",
+                "type" : "method"
+              }
+            ],
+            "path" : "\/documentation\/advancedoperation\/resultoperation",
+            "title" : "ResultOperation",
+            "type" : "class"
+          },
+          {
+            "title" : "Type Aliases",
+            "type" : "groupMarker"
+          },
+          {
+            "path" : "\/documentation\/advancedoperation\/asyncblockoperation",
+            "title" : "AsyncBlockOperation",
+            "type" : "typealias"
+          },
+          {
+            "path" : "\/documentation\/advancedoperation\/asyncoperation",
+            "title" : "AsyncOperation",
+            "type" : "typealias"
+          },
+          {
+            "path" : "\/documentation\/advancedoperation\/failableasyncoperation",
+            "title" : "FailableAsyncOperation",
+            "type" : "typealias"
+          },
+          {
+            "title" : "Extended Modules",
+            "type" : "groupMarker"
+          },
+          {
+            "children" : [
+              {
+                "title" : "Extended Classes",
+                "type" : "groupMarker"
+              },
+              {
+                "children" : [
+                  {
+                    "title" : "Instance Properties",
+                    "type" : "groupMarker"
+                  },
+                  {
+                    "path" : "\/documentation\/advancedoperation\/foundation\/operation\/hassomecancelleddependencies",
+                    "title" : "var hasSomeCancelledDependencies: Bool",
+                    "type" : "property"
+                  },
+                  {
+                    "path" : "\/documentation\/advancedoperation\/foundation\/operation\/operationname",
+                    "title" : "var operationName: String",
+                    "type" : "property"
+                  },
+                  {
+                    "title" : "Instance Methods",
+                    "type" : "groupMarker"
+                  },
+                  {
+                    "path" : "\/documentation\/advancedoperation\/foundation\/operation\/adddependencies(_:)-3hrze",
+                    "title" : "func addDependencies([Operation])",
+                    "type" : "method"
+                  },
+                  {
+                    "path" : "\/documentation\/advancedoperation\/foundation\/operation\/adddependencies(_:)-7hotd",
+                    "title" : "func addDependencies(Operation...)",
+                    "type" : "method"
+                  },
+                  {
+                    "path" : "\/documentation\/advancedoperation\/foundation\/operation\/removedependencies()",
+                    "title" : "func removeDependencies()",
+                    "type" : "method"
+                  }
+                ],
+                "path" : "\/documentation\/advancedoperation\/foundation\/operation",
+                "title" : "Operation",
+                "type" : "extension"
+              },
+              {
+                "children" : [
+                  {
+                    "title" : "Type Methods",
+                    "type" : "groupMarker"
+                  },
+                  {
+                    "path" : "\/documentation\/advancedoperation\/foundation\/operationqueue\/serial()",
+                    "title" : "static func serial() -> OperationQueue",
+                    "type" : "method"
+                  }
+                ],
+                "path" : "\/documentation\/advancedoperation\/foundation\/operationqueue",
+                "title" : "OperationQueue",
+                "type" : "extension"
+              }
+            ],
+            "path" : "\/documentation\/advancedoperation\/foundation",
+            "title" : "Foundation",
+            "type" : "extension"
+          },
+          {
+            "children" : [
+              {
+                "title" : "Extended Protocols",
+                "type" : "groupMarker"
+              },
+              {
+                "children" : [
+                  {
+                    "title" : "Instance Methods",
+                    "type" : "groupMarker"
+                  },
+                  {
+                    "path" : "\/documentation\/advancedoperation\/swift\/sequence\/adddependencies(_:)-2y34o",
+                    "title" : "func addDependencies(Operation...)",
+                    "type" : "method"
+                  },
+                  {
+                    "path" : "\/documentation\/advancedoperation\/swift\/sequence\/adddependencies(_:)-6f60y",
+                    "title" : "func addDependencies([Operation])",
+                    "type" : "method"
+                  }
+                ],
+                "path" : "\/documentation\/advancedoperation\/swift\/sequence",
+                "title" : "Sequence",
+                "type" : "extension"
+              }
+            ],
+            "path" : "\/documentation\/advancedoperation\/swift",
+            "title" : "Swift",
+            "type" : "extension"
+          }
+        ],
+        "path" : "\/documentation\/advancedoperation",
+        "title" : "AdvancedOperation",
+        "type" : "module"
+      }
+    ]
+  },
+  "schemaVersion" : {
+    "major" : 0,
+    "minor" : 1,
+    "patch" : 1
+  }
+}

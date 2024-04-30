@@ -1,0 +1,338 @@
+{
+  "abstract" : [
+    {
+      "text" : "The designated initializer.",
+      "type" : "text"
+    }
+  ],
+  "hierarchy" : {
+    "paths" : [
+      [
+        "doc:\/\/AdvancedOperation\/documentation\/AdvancedOperation",
+        "doc:\/\/AdvancedOperation\/documentation\/AdvancedOperation\/AsynchronousBlockOperation"
+      ]
+    ]
+  },
+  "identifier" : {
+    "interfaceLanguage" : "swift",
+    "url" : "doc:\/\/AdvancedOperation\/documentation\/AdvancedOperation\/AsynchronousBlockOperation\/init(block:)"
+  },
+  "kind" : "symbol",
+  "metadata" : {
+    "externalID" : "s:17AdvancedOperation017AsynchronousBlockB0C5blockACyyyYbcc_tcfc",
+    "fragments" : [
+      {
+        "kind" : "identifier",
+        "text" : "init"
+      },
+      {
+        "kind" : "text",
+        "text" : "("
+      },
+      {
+        "kind" : "externalParam",
+        "text" : "block"
+      },
+      {
+        "kind" : "text",
+        "text" : ": "
+      },
+      {
+        "kind" : "typeIdentifier",
+        "preciseIdentifier" : "c:@M@AdvancedOperation@objc(cs)AsynchronousBlockOperation",
+        "text" : "AsynchronousBlockOperation"
+      },
+      {
+        "kind" : "text",
+        "text" : "."
+      },
+      {
+        "kind" : "typeIdentifier",
+        "preciseIdentifier" : "s:17AdvancedOperation017AsynchronousBlockB0C0D0a",
+        "text" : "Block"
+      },
+      {
+        "kind" : "text",
+        "text" : ")"
+      }
+    ],
+    "modules" : [
+      {
+        "name" : "AdvancedOperation"
+      }
+    ],
+    "role" : "symbol",
+    "roleHeading" : "Initializer",
+    "symbolKind" : "init",
+    "title" : "init(block:)"
+  },
+  "primaryContentSections" : [
+    {
+      "declarations" : [
+        {
+          "languages" : [
+            "swift"
+          ],
+          "platforms" : [
+            "macOS"
+          ],
+          "tokens" : [
+            {
+              "kind" : "keyword",
+              "text" : "init"
+            },
+            {
+              "kind" : "text",
+              "text" : "("
+            },
+            {
+              "kind" : "externalParam",
+              "text" : "block"
+            },
+            {
+              "kind" : "text",
+              "text" : ": "
+            },
+            {
+              "kind" : "keyword",
+              "text" : "@escaping"
+            },
+            {
+              "kind" : "text",
+              "text" : " "
+            },
+            {
+              "identifier" : "doc:\/\/AdvancedOperation\/documentation\/AdvancedOperation\/AsynchronousBlockOperation",
+              "kind" : "typeIdentifier",
+              "preciseIdentifier" : "c:@M@AdvancedOperation@objc(cs)AsynchronousBlockOperation",
+              "text" : "AsynchronousBlockOperation"
+            },
+            {
+              "kind" : "text",
+              "text" : "."
+            },
+            {
+              "identifier" : "doc:\/\/AdvancedOperation\/documentation\/AdvancedOperation\/AsynchronousBlockOperation\/Block",
+              "kind" : "typeIdentifier",
+              "preciseIdentifier" : "s:17AdvancedOperation017AsynchronousBlockB0C0D0a",
+              "text" : "Block"
+            },
+            {
+              "kind" : "text",
+              "text" : ")"
+            }
+          ]
+        }
+      ],
+      "kind" : "declarations"
+    },
+    {
+      "kind" : "parameters",
+      "parameters" : [
+        {
+          "content" : [
+            {
+              "inlineContent" : [
+                {
+                  "text" : "The closure to run when the operation executes; the parameter passed to the block ",
+                  "type" : "text"
+                },
+                {
+                  "inlineContent" : [
+                    {
+                      "text" : "MUST",
+                      "type" : "text"
+                    }
+                  ],
+                  "type" : "strong"
+                },
+                {
+                  "text" : " be invoked by your code,",
+                  "type" : "text"
+                },
+                {
+                  "text" : " ",
+                  "type" : "text"
+                },
+                {
+                  "text" : "or else the ",
+                  "type" : "text"
+                },
+                {
+                  "code" : "AsynchronousBlockOperation",
+                  "type" : "codeVoice"
+                },
+                {
+                  "text" : " will never finish executing.",
+                  "type" : "text"
+                }
+              ],
+              "type" : "paragraph"
+            }
+          ],
+          "name" : "block"
+        }
+      ]
+    }
+  ],
+  "schemaVersion" : {
+    "major" : 0,
+    "minor" : 3,
+    "patch" : 0
+  },
+  "sections" : [
+
+  ],
+  "variants" : [
+    {
+      "paths" : [
+        "\/documentation\/advancedoperation\/asynchronousblockoperation\/init(block:)"
+      ],
+      "traits" : [
+        {
+          "interfaceLanguage" : "swift"
+        }
+      ]
+    }
+  ]
+, 
+"references": {
+"doc://AdvancedOperation/documentation/AdvancedOperation": {
+  "abstract" : [
+
+  ],
+  "identifier" : "doc:\/\/AdvancedOperation\/documentation\/AdvancedOperation",
+  "kind" : "symbol",
+  "role" : "collection",
+  "title" : "AdvancedOperation",
+  "type" : "topic",
+  "url" : "\/documentation\/advancedoperation"
+},
+"doc://AdvancedOperation/documentation/AdvancedOperation/AsynchronousBlockOperation": {
+  "abstract" : [
+    {
+      "text" : "A  sublcass of ",
+      "type" : "text"
+    },
+    {
+      "code" : "AsynchronousOperation",
+      "type" : "codeVoice"
+    },
+    {
+      "text" : " to execute a closure.",
+      "type" : "text"
+    }
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "class"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "AsynchronousBlockOperation"
+    }
+  ],
+  "identifier" : "doc:\/\/AdvancedOperation\/documentation\/AdvancedOperation\/AsynchronousBlockOperation",
+  "kind" : "symbol",
+  "navigatorTitle" : [
+    {
+      "kind" : "identifier",
+      "text" : "AsynchronousBlockOperation"
+    }
+  ],
+  "role" : "symbol",
+  "title" : "AsynchronousBlockOperation",
+  "type" : "topic",
+  "url" : "\/documentation\/advancedoperation\/asynchronousblockoperation"
+},
+"doc://AdvancedOperation/documentation/AdvancedOperation/AsynchronousBlockOperation/Block": {
+  "abstract" : [
+    {
+      "text" : "A closure type that takes a closure as its parameter.",
+      "type" : "text"
+    }
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "typealias"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "Block"
+    }
+  ],
+  "identifier" : "doc:\/\/AdvancedOperation\/documentation\/AdvancedOperation\/AsynchronousBlockOperation\/Block",
+  "kind" : "symbol",
+  "navigatorTitle" : [
+    {
+      "kind" : "identifier",
+      "text" : "Block"
+    }
+  ],
+  "role" : "symbol",
+  "title" : "AsynchronousBlockOperation.Block",
+  "type" : "topic",
+  "url" : "\/documentation\/advancedoperation\/asynchronousblockoperation\/block"
+},
+"doc://AdvancedOperation/documentation/AdvancedOperation/AsynchronousBlockOperation/init(block:)": {
+  "abstract" : [
+    {
+      "text" : "The designated initializer.",
+      "type" : "text"
+    }
+  ],
+  "fragments" : [
+    {
+      "kind" : "identifier",
+      "text" : "init"
+    },
+    {
+      "kind" : "text",
+      "text" : "("
+    },
+    {
+      "kind" : "externalParam",
+      "text" : "block"
+    },
+    {
+      "kind" : "text",
+      "text" : ": "
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "c:@M@AdvancedOperation@objc(cs)AsynchronousBlockOperation",
+      "text" : "AsynchronousBlockOperation"
+    },
+    {
+      "kind" : "text",
+      "text" : "."
+    },
+    {
+      "kind" : "typeIdentifier",
+      "preciseIdentifier" : "s:17AdvancedOperation017AsynchronousBlockB0C0D0a",
+      "text" : "Block"
+    },
+    {
+      "kind" : "text",
+      "text" : ")"
+    }
+  ],
+  "identifier" : "doc:\/\/AdvancedOperation\/documentation\/AdvancedOperation\/AsynchronousBlockOperation\/init(block:)",
+  "kind" : "symbol",
+  "role" : "symbol",
+  "title" : "init(block:)",
+  "type" : "topic",
+  "url" : "\/documentation\/advancedoperation\/asynchronousblockoperation\/init(block:)"
+}
+}
+}
