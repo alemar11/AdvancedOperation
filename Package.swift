@@ -1,6 +1,9 @@
 // swift-tools-version:5.10
 
 import PackageDescription
+import Foundation
+
+let buildingDocumentation = getenv("BUILDING_FOR_DOCUMENTATION_GENERATION") != nil
 
 let swiftSettings: [SwiftSetting] = [
   .enableExperimentalFeature("StrictConcurrency")
@@ -18,3 +21,8 @@ let package = Package(
   ],
   swiftLanguageVersions: [.v5]
 )
+
+// Only require the docc plugin when building documentation
+package.dependencies += buildingDocumentation ? [
+  .package(url: "https://github.com/apple/swift-docc-plugin", from: "1.3.0"),
+] : []
