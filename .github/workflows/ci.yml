@@ -2,7 +2,7 @@ name: "AdvancedOperation CI"
 
 on:
   schedule:
-    - cron:  '0 23 * * *' # At the end of every day
+    - cron: '0 0 * * 2' # Run every Tuesday
   push:
     branches:
       - main
