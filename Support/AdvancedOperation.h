@@ -1,6 +1,6 @@
 // AdvancedOperation
 
-@import Foundation;
+#import <Foundation/Foundation.h>
 
 //! Project version number for AdvancedOperation.
 FOUNDATION_EXPORT double AdvancedOperationVersionNumber;

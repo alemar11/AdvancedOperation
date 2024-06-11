@@ -1,13 +1,17 @@
 // AdvancedOperation
 
 import XCTest
+
 @testable import AdvancedOperation
 
 final class ResultOperationTests: XCTestCase {
   func testCancelBeforeExecuting() {
     let operation = DummyResultOperation()
     let resultProducedExpectation = XCTestExpectation(description: "Result Produced")
-    let finishExpectation = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: operation, expectedValue: true)
+    let finishExpectation = XCTKVOExpectation(
+      keyPath: #keyPath(Operation.isFinished),
+      object: operation,
+      expectedValue: true)
 
     operation.onFinish = { result in
       switch result {
@@ -28,7 +32,10 @@ final class ResultOperationTests: XCTestCase {
   func testEarlyBailOutWithoutResult() {
     let operation = DummyResultOperation(setFailureOnEarlyBailOut: false)
     let resultProducedExpectation = XCTestExpectation(description: "Result Produced")
-    let finishExpectation = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: operation, expectedValue: true)
+    let finishExpectation = XCTKVOExpectation(
+      keyPath: #keyPath(Operation.isFinished),
+      object: operation,
+      expectedValue: true)
 
     operation.onFinish = { result in
       XCTAssertNil(result)
@@ -61,7 +68,10 @@ final class ResultOperationTests: XCTestCase {
     let queue = OperationQueue()
     let operation = DummyResultOperation()
     let resultProducedExpectation = XCTestExpectation(description: "Result Produced")
-    let finishExpectation = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: operation, expectedValue: true)
+    let finishExpectation = XCTKVOExpectation(
+      keyPath: #keyPath(Operation.isFinished),
+      object: operation,
+      expectedValue: true)
     operation.onFinish = { result in
       switch result {
       case .success(let value) where value == "Success":

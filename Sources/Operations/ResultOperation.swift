@@ -1,22 +1,23 @@
 // AdvancedOperation
 
 import Foundation
+import os.lock
 
 /// An `AsynchronousOperation` that produces a `result` once finished.
 ///
 /// If a `ResultOperation` gets cancelled before being executed, no result will be produced by default.
-open class ResultOperation<Success, Failure>: AsynchronousOperation where Failure: Error {
+open class ResultOperation<Success, Failure>: AsynchronousOperation where Success: Sendable, Failure: Error {
   /// Block executed after the operation is finished providing the final result (if any).
   /// - Note: `onFinish` and `completionBlock` call order is not guaranteed in any way.
   public var onFinish: ((Result<Success, Failure>?) -> Void)?
 
   /// The result produced by the operation.
   public final private(set) var result: Result<Success, Failure>? {
-    get { _result.value }
-    set { _result.mutate { $0 = newValue } }
+    get { _result.withLock { $0 } }
+    set { _result.withLock { $0 = newValue } }
   }
 
-  private var _result = Atomic<Result<Success, Failure>?>(nil)
+  private var _result = OSAllocatedUnfairLock<Result<Success, Failure>?>(initialState: nil)
 
   /// Finishes the operation with the produced `result`.
   /// - Important: You should never call this method outside the operation main execution scope.

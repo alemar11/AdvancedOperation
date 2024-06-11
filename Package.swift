@@ -1,16 +1,28 @@
-// swift-tools-version:5.5
+// swift-tools-version:5.10
 
 import PackageDescription
+import Foundation
+
+let buildingDocumentation = getenv("BUILDING_FOR_DOCUMENTATION_GENERATION") != nil
+
+let swiftSettings: [SwiftSetting] = [
+  .enableExperimentalFeature("StrictConcurrency")
+]
 
 let package = Package(
   name: "AdvancedOperation",
-  platforms: [.macOS(.v10_14), .iOS(.v12), .tvOS(.v12), .watchOS(.v5)],
+  platforms: [.macOS(.v13), .iOS(.v16), .tvOS(.v16), .watchOS(.v9), .visionOS(.v1)],
   products: [
     .library(name: "AdvancedOperation", targets: ["AdvancedOperation"])
   ],
   targets: [
-    .target(name: "AdvancedOperation", path: "Sources"),
-    .testTarget(name: "AdvancedOperationTests", dependencies: ["AdvancedOperation"])
+    .target(name: "AdvancedOperation", path: "Sources", swiftSettings: swiftSettings),
+    .testTarget(name: "AdvancedOperationTests", dependencies: ["AdvancedOperation"], swiftSettings: swiftSettings)
   ],
   swiftLanguageVersions: [.v5]
 )
+
+// Only require the docc plugin when building documentation
+package.dependencies += buildingDocumentation ? [
+  .package(url: "https://github.com/apple/swift-docc-plugin", from: "1.3.0"),
+] : []

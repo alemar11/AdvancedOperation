@@ -3,6 +3,7 @@
 // https://developer.apple.com/videos/play/wwdc2015/232/
 
 import XCTest
+
 @testable import AdvancedOperation
 
 final class ProgressReportingTests: XCTestCase {
@@ -30,10 +31,12 @@ final class ProgressReportingTests: XCTestCase {
       groupOperation.addOperation(BlockOperation())
       groupOperation.addOperation(BlockOperation())
       groupOperation.addOperation(BlockOperation())
-      groupOperation.addOperation(AsyncBlockOperation {
-        groupOperation.addOperation(AsyncBlockOperation { $0() })
-        groupOperation.addOperation(AsyncBlockOperation { $0() })
-        $0() })
+      groupOperation.addOperation(
+        AsyncBlockOperation {
+          groupOperation.addOperation(AsyncBlockOperation { $0() })
+          groupOperation.addOperation(AsyncBlockOperation { $0() })
+          $0()
+        })
     }
 
     groupOperation.addOperation(operation1)
@@ -44,10 +47,11 @@ final class ProgressReportingTests: XCTestCase {
 
     currentProgress.addChild(groupOperation.progress, withPendingUnitCount: 1)
 
-    var logs = [String]()
+    nonisolated(unsafe) var logs = [String]()
     let token = currentProgress.observe(\.fractionCompleted, options: [.initial, .old, .new]) { progress, _ in
       // gather some progress data to be used if the test fails
-      let log = "fraction: \(progress.fractionCompleted), completed unit count: \(progress.completedUnitCount), progress: \(progress.localizedAdditionalDescription ?? "")"
+      let log =
+        "fraction: \(progress.fractionCompleted), completed unit count: \(progress.completedUnitCount), progress: \(progress.localizedAdditionalDescription ?? "")"
       logs.append(log)
     }
 
@@ -75,30 +79,32 @@ final class ProgressReportingTests: XCTestCase {
     try XCTSkipIf(!Self.isTestAvailable, "Test unavailable")
 
     let operation = AsyncBlockOperation { $0() }
-    let expectation = XCTKVOExpectation(keyPath: #keyPath(Operation.isCancelled), object: operation, expectedValue: true)
+    let expectation = XCTKVOExpectation(
+      keyPath: #keyPath(Operation.isCancelled), object: operation, expectedValue: true)
     operation.progress.cancel()
     wait(for: [expectation], timeout: 3)
     XCTAssertTrue(operation.progress.isCancelled)
   }
 
- @available(iOS 13.0, iOSApplicationExtension 13.0, macCatalyst 13.0, tvOS 13.0, watchOS 6.0, macOS 10.15, *)
+  @available(iOS 13.0, iOSApplicationExtension 13.0, macCatalyst 13.0, tvOS 13.0, watchOS 6.0, macOS 10.15, *)
   func testOperationCancellationShouldSetProgressReportToCancelled() throws {
     try XCTSkipIf(!Self.isTestAvailable, "Test unavailable")
     let operation = AsyncBlockOperation { $0() }
-    let expectation = XCTKVOExpectation(keyPath: #keyPath(Operation.isCancelled), object: operation, expectedValue: true)
+    let expectation = XCTKVOExpectation(
+      keyPath: #keyPath(Operation.isCancelled), object: operation, expectedValue: true)
     operation.cancel()
     wait(for: [expectation], timeout: 3)
     XCTAssertTrue(operation.progress.isCancelled)
   }
 
- @available(iOS 13.0, iOSApplicationExtension 13.0, macCatalyst 13.0, tvOS 13.0, watchOS 6.0, macOS 10.15, *)
+  @available(iOS 13.0, iOSApplicationExtension 13.0, macCatalyst 13.0, tvOS 13.0, watchOS 6.0, macOS 10.15, *)
   func testProgressReportingWhenAddingCancelledOperationsToGroupOperation() throws {
     try XCTSkipIf(!Self.isTestAvailable, "Test unavailable")
 
     let currentProgress = Progress(totalUnitCount: 1)
     let operation1 = AsyncBlockOperation { $0() }
-    let operation2 = BlockOperation { }
-    let operation3 = BlockOperation { }
+    let operation2 = BlockOperation {}
+    let operation3 = BlockOperation {}
 
     // When added to the GroupOperation, since it's cancelled it won't increase the internal queue progress totalUnitCount
     operation1.cancel()
@@ -122,7 +128,7 @@ final class ProgressReportingTests: XCTestCase {
     token.invalidate()
   }
 
- @available(iOS 13.0, iOSApplicationExtension 13.0, macCatalyst 13.0, tvOS 13.0, watchOS 6.0, macOS 10.15, *)
+  @available(iOS 13.0, iOSApplicationExtension 13.0, macCatalyst 13.0, tvOS 13.0, watchOS 6.0, macOS 10.15, *)
   func testProgressReportingWhenAddingOperationsToGroupOperationWhileIsBeingCancelled() throws {
     try XCTSkipIf(!Self.isTestAvailable, "Test unavailable")
 
@@ -151,9 +157,11 @@ final class ProgressReportingTests: XCTestCase {
     }
 
     let expectation0 = self.expectation(description: "Progress is completed")
-    expectation0.assertForOverFulfill = false // groupOperation has a concurrent queue
-    let expectation1 = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: groupOperation, expectedValue: true)
-    let expectation2 = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: operation4, expectedValue: true)
+    expectation0.assertForOverFulfill = false  // groupOperation has a concurrent queue
+    let expectation1 = XCTKVOExpectation(
+      keyPath: #keyPath(Operation.isFinished), object: groupOperation, expectedValue: true)
+    let expectation2 = XCTKVOExpectation(
+      keyPath: #keyPath(Operation.isFinished), object: operation4, expectedValue: true)
 
     currentProgress.addChild(groupOperation.progress, withPendingUnitCount: 1)
 
@@ -170,8 +178,7 @@ final class ProgressReportingTests: XCTestCase {
     token.invalidate()
   }
 
-
- @available(iOS 13.0, iOSApplicationExtension 13.0, macCatalyst 13.0, tvOS 13.0, watchOS 6.0, macOS 10.15, *)
+  @available(iOS 13.0, iOSApplicationExtension 13.0, macCatalyst 13.0, tvOS 13.0, watchOS 6.0, macOS 10.15, *)
   func testProgressReportingOnGroupOperationCancelledBeforeStarting() throws {
     try XCTSkipIf(!Self.isTestAvailable, "Test unavailable")
 
@@ -214,7 +221,7 @@ final class ProgressReportingTests: XCTestCase {
     token.invalidate()
   }
 
- @available(iOS 13.0, iOSApplicationExtension 13.0, macCatalyst 13.0, tvOS 13.0, watchOS 6.0, macOS 10.15, *)
+  @available(iOS 13.0, iOSApplicationExtension 13.0, macCatalyst 13.0, tvOS 13.0, watchOS 6.0, macOS 10.15, *)
   func testProgressReportingOnGroupOperationHavingAnInternalSerialQueue() throws {
     try XCTSkipIf(!Self.isTestAvailable, "Test unavailable")
 
@@ -238,10 +245,14 @@ final class ProgressReportingTests: XCTestCase {
     let operation4 = BlockOperation { sleep(1) }
 
     let expectation0 = self.expectation(description: "Progress is completed")
-    let expectation1 = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: operation1, expectedValue: true)
-    let expectation2 = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: operation2, expectedValue: true)
-    let expectation3 = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: operation3, expectedValue: true)
-    let expectation4 = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: operation4, expectedValue: true)
+    let expectation1 = XCTKVOExpectation(
+      keyPath: #keyPath(Operation.isFinished), object: operation1, expectedValue: true)
+    let expectation2 = XCTKVOExpectation(
+      keyPath: #keyPath(Operation.isFinished), object: operation2, expectedValue: true)
+    let expectation3 = XCTKVOExpectation(
+      keyPath: #keyPath(Operation.isFinished), object: operation3, expectedValue: true)
+    let expectation4 = XCTKVOExpectation(
+      keyPath: #keyPath(Operation.isFinished), object: operation4, expectedValue: true)
 
     let groupOperation = GroupOperation(operations: [operation1, operation2, operation3, operation4])
 
@@ -261,7 +272,7 @@ final class ProgressReportingTests: XCTestCase {
     token.invalidate()
   }
 
- @available(iOS 13.0, iOSApplicationExtension 13.0, macCatalyst 13.0, tvOS 13.0, watchOS 6.0, macOS 10.15, *)
+  @available(iOS 13.0, iOSApplicationExtension 13.0, macCatalyst 13.0, tvOS 13.0, watchOS 6.0, macOS 10.15, *)
   func testProgressReportingOnGroupOperationRunningInAnOperationQueue() throws {
     try XCTSkipIf(!Self.isTestAvailable, "Test unavailable")
 
@@ -292,10 +303,14 @@ final class ProgressReportingTests: XCTestCase {
     operation4.name = "operation4"
 
     let expectation0 = self.expectation(description: "Progress is completed")
-    let expectation1 = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: operation1, expectedValue: true)
-    let expectation2 = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: operation2, expectedValue: true)
-    let expectation3 = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: operation3, expectedValue: true)
-    let expectation4 = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: operation4, expectedValue: true)
+    let expectation1 = XCTKVOExpectation(
+      keyPath: #keyPath(Operation.isFinished), object: operation1, expectedValue: true)
+    let expectation2 = XCTKVOExpectation(
+      keyPath: #keyPath(Operation.isFinished), object: operation2, expectedValue: true)
+    let expectation3 = XCTKVOExpectation(
+      keyPath: #keyPath(Operation.isFinished), object: operation3, expectedValue: true)
+    let expectation4 = XCTKVOExpectation(
+      keyPath: #keyPath(Operation.isFinished), object: operation4, expectedValue: true)
 
     let groupOperation = GroupOperation(operations: [operation1, operation2, operation3, operation4])
 
@@ -319,7 +334,7 @@ final class ProgressReportingTests: XCTestCase {
 
   // MARK: AsyncOperation
 
- @available(iOS 13.0, iOSApplicationExtension 13.0, macCatalyst 13.0, tvOS 13.0, watchOS 6.0, macOS 10.15, *)
+  @available(iOS 13.0, iOSApplicationExtension 13.0, macCatalyst 13.0, tvOS 13.0, watchOS 6.0, macOS 10.15, *)
   func testCustomProgressReporting() throws {
     try XCTSkipIf(!Self.isTestAvailable, "Test unavailable")
 
@@ -332,8 +347,10 @@ final class ProgressReportingTests: XCTestCase {
     let operation2 = ProgressReportingAsyncOperation()
 
     let expectation0 = self.expectation(description: "Progress is completed")
-    let expectation1 = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: operation1, expectedValue: true)
-    let expectation2 = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: operation2, expectedValue: true)
+    let expectation1 = XCTKVOExpectation(
+      keyPath: #keyPath(Operation.isFinished), object: operation1, expectedValue: true)
+    let expectation2 = XCTKVOExpectation(
+      keyPath: #keyPath(Operation.isFinished), object: operation2, expectedValue: true)
 
     queue.progress.totalUnitCount = 2
     queue.addOperation(operation1)
@@ -341,11 +358,12 @@ final class ProgressReportingTests: XCTestCase {
 
     currentProgress.addChild(queue.progress, withPendingUnitCount: 1)
 
-    var fractions = [Double]()
-    let expectedFractions = [0.0, 0.125, 0.25, 0.375, 0.5, 0.625, 0.75, 0.875,  1.0]
+    nonisolated(unsafe) var fractions = [Double]()
+    let expectedFractions = [0.0, 0.125, 0.25, 0.375, 0.5, 0.625, 0.75, 0.875, 1.0]
     let token = currentProgress.observe(\.fractionCompleted, options: [.initial, .old, .new]) { (progress, change) in
       print("fraction: \(progress.fractionCompleted)", "-", progress.localizedAdditionalDescription ?? "")
-      fractions.append(progress.fractionCompleted
+      fractions.append(
+        progress.fractionCompleted
       )
       if progress.completedUnitCount == 1 && progress.fractionCompleted == 1.0 {
         expectation0.fulfill()
@@ -358,7 +376,7 @@ final class ProgressReportingTests: XCTestCase {
     token.invalidate()
   }
 
- @available(iOS 13.0, iOSApplicationExtension 13.0, macCatalyst 13.0, tvOS 13.0, watchOS 6.0, macOS 10.15, *)
+  @available(iOS 13.0, iOSApplicationExtension 13.0, macCatalyst 13.0, tvOS 13.0, watchOS 6.0, macOS 10.15, *)
   func testExplicitProgressUsingSerialQueue() throws {
     try XCTSkipIf(!Self.isTestAvailable, "Test unavailable")
 
@@ -396,13 +414,20 @@ final class ProgressReportingTests: XCTestCase {
       complete()
     }
 
-    let operation4 = BlockOperation { sleep(1); print("operation 4 executed") }
+    let operation4 = BlockOperation {
+      sleep(1)
+      print("operation 4 executed")
+    }
 
     let expectation0 = self.expectation(description: "Progress is completed")
-    let expectation1 = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: operation1, expectedValue: true)
-    let expectation2 = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: operation2, expectedValue: true)
-    let expectation3 = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: operation3, expectedValue: true)
-    let expectation4 = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: operation4, expectedValue: true)
+    let expectation1 = XCTKVOExpectation(
+      keyPath: #keyPath(Operation.isFinished), object: operation1, expectedValue: true)
+    let expectation2 = XCTKVOExpectation(
+      keyPath: #keyPath(Operation.isFinished), object: operation2, expectedValue: true)
+    let expectation3 = XCTKVOExpectation(
+      keyPath: #keyPath(Operation.isFinished), object: operation3, expectedValue: true)
+    let expectation4 = XCTKVOExpectation(
+      keyPath: #keyPath(Operation.isFinished), object: operation4, expectedValue: true)
 
     queue.progress.totalUnitCount = 4
     queue.addOperation(operation1)
@@ -425,7 +450,7 @@ final class ProgressReportingTests: XCTestCase {
     token.invalidate()
   }
 
- @available(iOS 13.0, iOSApplicationExtension 13.0, macCatalyst 13.0, tvOS 13.0, watchOS 6.0, macOS 10.15, *)
+  @available(iOS 13.0, iOSApplicationExtension 13.0, macCatalyst 13.0, tvOS 13.0, watchOS 6.0, macOS 10.15, *)
   func testExplicitProgressWithRsultAndFailableOperationsUsingSerialQueue() throws {
     try XCTSkipIf(!Self.isTestAvailable, "Test unavailable")
 
@@ -437,13 +462,17 @@ final class ProgressReportingTests: XCTestCase {
     let operation1 = DummyResultOperation()
     let operation2 = DummyFailableOperation(shouldFail: false)
     let operation3 = DummyFailableOperation(shouldFail: true)
-    let operation4 = BlockOperation { }
+    let operation4 = BlockOperation {}
 
     let expectation0 = self.expectation(description: "Progress is completed")
-    let expectation1 = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: operation1, expectedValue: true)
-    let expectation2 = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: operation2, expectedValue: true)
-    let expectation3 = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: operation3, expectedValue: true)
-    let expectation4 = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: operation4, expectedValue: true)
+    let expectation1 = XCTKVOExpectation(
+      keyPath: #keyPath(Operation.isFinished), object: operation1, expectedValue: true)
+    let expectation2 = XCTKVOExpectation(
+      keyPath: #keyPath(Operation.isFinished), object: operation2, expectedValue: true)
+    let expectation3 = XCTKVOExpectation(
+      keyPath: #keyPath(Operation.isFinished), object: operation3, expectedValue: true)
+    let expectation4 = XCTKVOExpectation(
+      keyPath: #keyPath(Operation.isFinished), object: operation4, expectedValue: true)
 
     queue.progress.totalUnitCount = 4
     queue.addOperation(operation1)
@@ -466,7 +495,7 @@ final class ProgressReportingTests: XCTestCase {
     token.invalidate()
   }
 
- @available(iOS 13.0, iOSApplicationExtension 13.0, macCatalyst 13.0, tvOS 13.0, watchOS 6.0, macOS 10.15, *)
+  @available(iOS 13.0, iOSApplicationExtension 13.0, macCatalyst 13.0, tvOS 13.0, watchOS 6.0, macOS 10.15, *)
   func testImplicitProgressUsingSerialQueue() throws {
     try XCTSkipIf(!Self.isTestAvailable, "Test unavailable")
 
@@ -493,7 +522,10 @@ final class ProgressReportingTests: XCTestCase {
     // let operation1 = BlockOperation { sleep(1); print("operation 1 executed") }
     // let operation2 = BlockOperation { sleep(1); print("operation 2 executed") }
     // let operation3 = BlockOperation { sleep(1); print("operation 3 executed") }
-    let operation4 = BlockOperation { sleep(1); print("operation 4 executed") }
+    let operation4 = BlockOperation {
+      sleep(1)
+      print("operation 4 executed")
+    }
 
     queue.progress.totalUnitCount = 4
     queue.addOperation(operation1)
@@ -509,4 +541,3 @@ final class ProgressReportingTests: XCTestCase {
     token.invalidate()
   }
 }
-

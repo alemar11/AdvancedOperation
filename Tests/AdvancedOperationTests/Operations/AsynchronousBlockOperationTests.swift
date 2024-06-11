@@ -1,15 +1,10 @@
 // AdvancedOperation
 
 import XCTest
+
 @testable import AdvancedOperation
 
 final class AsynchronousBlockOperationTests: XCTestCase {
-  override class func setUp() {
-    #if swift(<5.1)
-    KVOCrashWorkaround.installFix()
-    #endif
-  }
-
   func testCancelledExecutionBeforeStarting() {
     let operation = AsynchronousBlockOperation { complete in
       DispatchQueue(label: "\(identifier).\(#function)", attributes: .concurrent).asyncAfter(deadline: .now() + 2) {
@@ -18,7 +13,10 @@ final class AsynchronousBlockOperationTests: XCTestCase {
     }
     XCTAssertTrue(operation.isAsynchronous)
     XCTAssertTrue(operation.isConcurrent)
-    let expectation1 = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: operation, expectedValue: true)
+    let expectation1 = XCTKVOExpectation(
+      keyPath: #keyPath(Operation.isFinished),
+      object: operation,
+      expectedValue: true)
     operation.cancel()
     operation.start()
     wait(for: [expectation1], timeout: 4)
@@ -32,7 +30,8 @@ final class AsynchronousBlockOperationTests: XCTestCase {
         complete()
       }
     }
-    let expectation1 = XCTKVOExpectation(keyPath: #keyPath(Operation.isFinished), object: operation, expectedValue: true)
+    let expectation1 = XCTKVOExpectation(
+      keyPath: #keyPath(Operation.isFinished), object: operation, expectedValue: true)
     operation.start()
     wait(for: [expectation1], timeout: 4)
   }
@@ -40,7 +39,7 @@ final class AsynchronousBlockOperationTests: XCTestCase {
   func testBlockOperationWithAnAsyncQueueInside() {
     let expectation1 = expectation(description: "\(#function)\(#line)")
     let expectation2 = expectation(description: "\(#function)\(#line)")
-    let operation = AsynchronousBlockOperation() { complete in
+    let operation = AsynchronousBlockOperation { complete in
       DispatchQueue.global().async {
         sleep(1)
         expectation1.fulfill()
@@ -52,6 +51,7 @@ final class AsynchronousBlockOperationTests: XCTestCase {
     wait(for: [expectation1, expectation2], timeout: 10, enforceOrder: true)
   }
 
+  @MainActor
   func testComposition() {
     let expectation3 = expectation(description: "\(#function)\(#line)")
     let operation1 = SleepyAsyncOperation()
@@ -77,8 +77,10 @@ final class AsynchronousBlockOperationTests: XCTestCase {
     XCTAssertTrue(adapterOperation.isFinished)
   }
 
+  @MainActor
   func testMemoryLeak() {
-    var object = NSObject()
+    class Dummy: @unchecked Sendable { }
+    var object = Dummy()
     weak var weakObject = object
 
     autoreleasepool {
@@ -97,10 +99,9 @@ final class AsynchronousBlockOperationTests: XCTestCase {
 
       // Memory leaks test: once the operation is released, the captured object (by reference) should be nil (weakObject)
       operation = AsynchronousBlockOperation { _ in }
-      object = NSObject()
+      object = Dummy()
     }
 
     XCTAssertNil(weakObject, "Memory leak: the object should have been deallocated at this point.")
   }
 }
-

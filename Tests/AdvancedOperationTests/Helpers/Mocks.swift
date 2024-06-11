@@ -1,8 +1,10 @@
 // AdvancedOperation
 
-import Foundation
 import Dispatch
+import Foundation
 import XCTest
+import os.lock
+
 @testable import AdvancedOperation
 
 // MARK: - AsynchronousBlockOperation
@@ -54,13 +56,13 @@ final class ProgressReportingAsyncOperation: AsyncOperation {
         return
       }
       self.progress.totalUnitCount = 4
-      usleep(1_000_000) // 1 sec
+      usleep(1_000_000)  // 1 sec
       self.progress.completedUnitCount = 1
-      usleep(500_000) // 0,5 sec
+      usleep(500_000)  // 0,5 sec
       self.progress.completedUnitCount = 2
-      usleep(100_000) // 0,1 sec
+      usleep(100_000)  // 0,1 sec
       self.progress.completedUnitCount = 3
-      usleep(1000) // 0,001 sec
+      usleep(1000)  // 0,001 sec
       self.finish()
     }
   }
@@ -104,9 +106,9 @@ internal final class RunUntilCancelledAsyncOperation: AsynchronousOperation {
 /// This operation will run indefinitely and can't be cancelled. Call `stop` to finish it.
 internal final class InfiniteAsyncOperation: AsyncOperation {
   var onExecutionStarted: (() -> Void)?
-  let isStopped = Atomic(false)
+  let isStopped = OSAllocatedUnfairLock(initialState: false)
   func stop() {
-    isStopped.mutate { $0 = true }
+    isStopped.withLock { $0 = true }
   }
 
   override func main() {
@@ -114,7 +116,7 @@ internal final class InfiniteAsyncOperation: AsyncOperation {
       self.onExecutionStarted?()
       while true {
         //sleep(1)
-        if self.isStopped.value {
+        if self.isStopped.withLock({ $0 }) {
           self.finish()
           break
         }
@@ -134,7 +136,8 @@ internal final class CancelledOperation: Operation {
   }
 
   override func main() {
-    XCTAssert(isCancelled, "This operation is expected to be cancelled before starting its execution.", file: file, line: line)
+    XCTAssert(
+      isCancelled, "This operation is expected to be cancelled before starting its execution.", file: file, line: line)
   }
 }
 
@@ -144,12 +147,12 @@ internal final class IntToStringOperation: Operation {
   var onOutputProduced: ((String) -> Void)?
   var input: Int?
   private(set) var output: String? {
-    get { _output.value }
-    set { _output.mutate { $0 = newValue } }
+    get { _output.withLock { $0 } }
+    set { _output.withLock { $0 = newValue } }
   }
 
   // To fix data race error on macOS tests: see testSuccessfulInjectionBetweenOperationsTransformingOutput
-  private var _output = Atomic<String?>(nil)
+  private var _output = OSAllocatedUnfairLock<String?>(initialState: nil)
 
   override func main() {
     if let input = self.input {
@@ -159,16 +162,16 @@ internal final class IntToStringOperation: Operation {
   }
 }
 
-internal final class StringToIntOperation: Operation  {
+internal final class StringToIntOperation: Operation {
   var onOutputProduced: ((Int) -> Void)?
   var input: String?
   private(set) var output: Int? {
-    get { _output.value }
-    set { _output.mutate { $0 = newValue } }
+    get { _output.withLock { $0 } }
+    set { _output.withLock { $0 = newValue } }
   }
 
   // To fix data race error on macOS tests: see testSuccessfulInjectionBetweenOperationsTransformingOutput
-  private var _output = Atomic<Int?>(nil)
+  private var _output = OSAllocatedUnfairLock<Int?>(initialState: nil)
 
   override func main() {
     if let input = self.input {
@@ -195,7 +198,7 @@ internal final class FailingOperation: Operation {
 
 // MARK: - ResultOperation
 
-internal final class DummyResultOperation: ResultOperation<String,DummyResultOperation.Error> {
+internal final class DummyResultOperation: ResultOperation<String, DummyResultOperation.Error> {
   enum Error: Swift.Error {
     case cancelled
   }
@@ -266,7 +269,7 @@ internal final class DummyFailableOperation: FailableAsyncOperation<DummyFailabl
 // MARK: - GroupOperation
 
 internal final class ProducerGroupOperation: GroupOperation {
-  init(operation: @escaping () -> Operation) {
+  init(operation: @Sendable @escaping () -> Operation) {
     super.init(operations: [])
     let producer = BlockOperation { [unowned self] in
       // operation can be "produced" and added to the GroupOperation only if the producer is still running
@@ -318,8 +321,8 @@ internal final class IOGroupOperation: GroupOperation {
   }
 }
 
-public extension Operation {
-  func printStateChanges() -> [NSKeyValueObservation] {
+extension Operation {
+  public func printStateChanges() -> [NSKeyValueObservation] {
     let cancel = observe(\.isCancelled, options: [.old, .new]) { (operation, changes) in
       guard let oldValue = changes.oldValue, let newValue = changes.newValue else { return }
       guard oldValue != newValue else { return }

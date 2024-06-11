@@ -52,6 +52,7 @@
   },
   "testTargets" : [
     {
+      "parallelizable" : true,
       "target" : {
         "containerPath" : "container:AdvancedOperation.xcodeproj",
         "identifier" : "06AF61C826F0D2430090A61B",

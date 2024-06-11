@@ -1,5 +1,12 @@
 # Changelog
 
+### 7.0.0
+
+- SPM only
+- Swift 5.10 support
+- Xcode 15 support
+- VisionOS support
+
 ### 6.3.0
 
 - Xcode 13
