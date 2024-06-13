@@ -131,10 +131,11 @@ open class AsynchronousOperation: Operation, ProgressReporting {
 
   // MARK: - Public Methods
 
-  ///  The default implementation of this method does nothing.
+  /// The default implementation of this method does nothing.
   /// You should override this method to perform the desired task. In your implementation, do not invoke super.
-  ///  This method will automatically execute within an autorelease pool provided by Operation, so you do not need to create your own autorelease pool block in your implementation.
+  ///  This method will automatically execute within an autorelease pool provided by `Operation`, so you do not need to create your own autorelease pool block in your implementation.
   /// - Note: Once the task is finished you **must** call `finish()` to complete the execution.
+  ///  - Warning: It won't be called if the operation gets cancelled before starting.
   open override func main() {
     preconditionFailure("Subclasses must implement `main()`.")
   }

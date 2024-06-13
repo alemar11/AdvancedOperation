@@ -221,8 +221,7 @@ internal final class DummyResultOperation: ResultOperation<String, DummyResultOp
 
   override func cancel() {
     if setFailureOnEarlyBailOut {
-      // makes sure that, even if the operation is cancelled before getting executed,
-      // there always be a result when it finishes
+      // makes sure that, even if the operation is cancelled before getting executed, there is a result when it finishes
       cancel(with: .cancelled)
     } else {
       super.cancel()
