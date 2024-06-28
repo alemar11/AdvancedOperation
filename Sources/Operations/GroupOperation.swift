@@ -57,8 +57,7 @@ open class GroupOperation: AsynchronousOperation {
   }
 
   deinit {
-    // An observation token may cause crashes during its deinit phase if its observed object (an Operation)
-    // has been already deallocated
+    // An observation token may cause crashes during its deinit phase if its observed object (an Operation) has been already deallocated.
     // To fix this issue:
     // 1. we store all the operations in a private array (the internal OperationQueue will release them once finished,
     //    that's why we need to do so)

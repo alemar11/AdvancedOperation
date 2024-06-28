@@ -1,5 +1,9 @@
 # Changelog
 
+### 7.1.0
+
+- Added `AsyncCancellableBlockOperation`.
+
 ### 7.0.0
 
 - SPM only

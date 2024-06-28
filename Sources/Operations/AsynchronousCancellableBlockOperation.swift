@@ -1,22 +1,25 @@
 // AdvancedOperation
 
-import Foundation
+public typealias AsyncCancellableBlockOperation = AsynchronousCancellableBlockOperation
 
-public typealias AsyncBlockOperation = AsynchronousBlockOperation
-
-/// A  sublcass of `AsynchronousOperation` to execute a closure.
+/// A  sublcass of `AsynchronousOperation` to execute a cancellable closure.
 ///  - Note: If the operation gets cancelled before being executed, the block won't be called.
 ///
-/// This operation let you run a block until *complete* is called.
+/// This operation let you run a block until *complete* is called; its cancelled state is exposed during the whole execution.
 ///   ```
-///   let operation = AsyncCancellableBlockOperation { complete in
+///   let operation = AsyncCancellableBlockOperation { isCancelled, complete in
+///    // work ...
+///    if isCancelled() {
+///      complete()
+///      return
+///    }
 ///    // work ...
 ///    complete()
 ///   }
-public final class AsynchronousBlockOperation: AsynchronousOperation {
+public final class AsynchronousCancellableBlockOperation: AsynchronousOperation {
   /// A closure type that takes a closure as its parameter.
-  public typealias Block = (@Sendable @escaping () -> Void) -> Void
-
+  public typealias Block = (@escaping @Sendable () -> Bool, @escaping @Sendable () -> Void) -> Void
+  
   // MARK: - Private Properties
 
   private var block: Block
@@ -41,8 +44,10 @@ public final class AsynchronousBlockOperation: AsynchronousOperation {
       self.finish()
       return
     }
-
-    block {
+    
+    block ({
+      self.isCancelled
+    }) {
       self.finish()
     }
   }
