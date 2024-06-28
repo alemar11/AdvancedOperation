@@ -26,6 +26,8 @@
 		06AF61EA26F0D2DD0090A61B /* OperationUtilsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23AC3ADC2038A050003E1B15 /* OperationUtilsTests.swift */; };
 		06AF61EB26F0D2E10090A61B /* XCTestCase+Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06E3140025272222003ED9E3 /* XCTestCase+Utils.swift */; };
 		06AF61EC26F0D2E10090A61B /* Mocks.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23856178200A873C0061BAA1 /* Mocks.swift */; };
+		D209DABA2C2EC26500609E5B /* AsynchronousCancellableBlockOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = D209DAB92C2EC26500609E5B /* AsynchronousCancellableBlockOperation.swift */; };
+		D209DABD2C2EC44D00609E5B /* AsynchronousCancellableBlockOperationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D209DABB2C2EC40000609E5B /* AsynchronousCancellableBlockOperationTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -62,6 +64,8 @@
 		23BAA540236B460400411F5B /* ci.yml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; path = ci.yml; sourceTree = "<group>"; };
 		23F24D21200799B800B25A03 /* Operation+Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Operation+Utils.swift"; sourceTree = "<group>"; };
 		D2093D35236606F400230A2A /* AsynchronousOperationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsynchronousOperationTests.swift; sourceTree = "<group>"; };
+		D209DAB92C2EC26500609E5B /* AsynchronousCancellableBlockOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsynchronousCancellableBlockOperation.swift; sourceTree = "<group>"; };
+		D209DABB2C2EC40000609E5B /* AsynchronousCancellableBlockOperationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsynchronousCancellableBlockOperationTests.swift; sourceTree = "<group>"; };
 		D20C3012242E4D300007341B /* TECHNOTES.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = TECHNOTES.md; sourceTree = SOURCE_ROOT; };
 		D21C5D8323D3674E005F8D51 /* AsynchronousOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsynchronousOperation.swift; sourceTree = "<group>"; };
 		D254E22323C3A68800A1586E /* LICENSE.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = LICENSE.md; sourceTree = SOURCE_ROOT; };
@@ -98,6 +102,7 @@
 				D29FE43924801A7900DA97AA /* FailableAsynchronousOperationTests.swift */,
 				064B0D8823F4166300C8331F /* GroupOperationTests.swift */,
 				D29FE44524801D1F00DA97AA /* ResultOperationTests.swift */,
+				D209DABB2C2EC40000609E5B /* AsynchronousCancellableBlockOperationTests.swift */,
 			);
 			path = Operations;
 			sourceTree = "<group>";
@@ -207,10 +212,11 @@
 		D25DB58323F4A3B9002B91C5 /* Operations */ = {
 			isa = PBXGroup;
 			children = (
-				D29FE44024801AE600DA97AA /* ResultOperation.swift */,
 				06C92B4A23D0A9FF000D12C8 /* AsynchronousBlockOperation.swift */,
-				064B0D8323F4032100C8331F /* GroupOperation.swift */,
+				D209DAB92C2EC26500609E5B /* AsynchronousCancellableBlockOperation.swift */,
 				D26DBDE92481060200A69E28 /* FailableAsyncOperation.swift */,
+				064B0D8323F4032100C8331F /* GroupOperation.swift */,
+				D29FE44024801AE600DA97AA /* ResultOperation.swift */,
 			);
 			path = Operations;
 			sourceTree = "<group>";
@@ -342,6 +348,7 @@
 				06AF61DC26F0D2CB0090A61B /* AsynchronousOperation.swift in Sources */,
 				06AF61DA26F0D2CB0090A61B /* Operation+Utils.swift in Sources */,
 				06AF61DE26F0D2CF0090A61B /* GroupOperation.swift in Sources */,
+				D209DABA2C2EC26500609E5B /* AsynchronousCancellableBlockOperation.swift in Sources */,
 				06AF61DD26F0D2CF0090A61B /* FailableAsyncOperation.swift in Sources */,
 				06AF61D926F0D2CB0090A61B /* AdvancedOperation.swift in Sources */,
 			);
@@ -360,6 +367,7 @@
 				06AF61EA26F0D2DD0090A61B /* OperationUtilsTests.swift in Sources */,
 				06AF61E326F0D2D80090A61B /* GroupOperationTests.swift in Sources */,
 				06AF61E626F0D2D80090A61B /* ResultOperationTests.swift in Sources */,
+				D209DABD2C2EC44D00609E5B /* AsynchronousCancellableBlockOperationTests.swift in Sources */,
 				06AF61E526F0D2D80090A61B /* FailableAsynchronousOperationTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
