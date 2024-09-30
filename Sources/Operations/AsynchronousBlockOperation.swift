@@ -28,7 +28,7 @@ public final class AsynchronousBlockOperation: AsynchronousOperation, @unchecked
   /// - Parameters:
   ///   - block: The closure to run when the operation executes; the parameter passed to the block **MUST** be invoked by your code,
   ///   or else the `AsynchronousBlockOperation` will never finish executing.
-  public init(block:  @escaping Block) -> Void) {
+  public init(block:  @escaping Block) {
     self.block = block
     super.init()
     self.name = "\(type(of: self))"
