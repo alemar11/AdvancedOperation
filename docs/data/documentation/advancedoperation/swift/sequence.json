@@ -89,6 +89,8 @@
   ],
   "topicSections" : [
     {
+      "anchor" : "Instance-Methods",
+      "generated" : true,
       "identifiers" : [
         "doc:\/\/AdvancedOperation\/documentation\/AdvancedOperation\/Swift\/Sequence\/addDependencies(_:)-2y34o",
         "doc:\/\/AdvancedOperation\/documentation\/AdvancedOperation\/Swift\/Sequence\/addDependencies(_:)-6f60y"

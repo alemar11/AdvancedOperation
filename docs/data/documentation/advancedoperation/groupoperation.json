@@ -137,6 +137,8 @@
   ],
   "topicSections" : [
     {
+      "anchor" : "Initializers",
+      "generated" : true,
       "identifiers" : [
         "doc:\/\/AdvancedOperation\/documentation\/AdvancedOperation\/GroupOperation\/init(underlyingQueue:operations:)-8j28m",
         "doc:\/\/AdvancedOperation\/documentation\/AdvancedOperation\/GroupOperation\/init(underlyingQueue:operations:)-8v6is"
@@ -144,6 +146,8 @@
       "title" : "Initializers"
     },
     {
+      "anchor" : "Instance-Properties",
+      "generated" : true,
       "identifiers" : [
         "doc:\/\/AdvancedOperation\/documentation\/AdvancedOperation\/GroupOperation\/maxConcurrentOperationCount",
         "doc:\/\/AdvancedOperation\/documentation\/AdvancedOperation\/GroupOperation\/qualityOfService"
@@ -151,6 +155,8 @@
       "title" : "Instance Properties"
     },
     {
+      "anchor" : "Instance-Methods",
+      "generated" : true,
       "identifiers" : [
         "doc:\/\/AdvancedOperation\/documentation\/AdvancedOperation\/GroupOperation\/addOperation(_:)",
         "doc:\/\/AdvancedOperation\/documentation\/AdvancedOperation\/GroupOperation\/addOperations(_:)",

@@ -17,7 +17,15 @@
       "type" : "text"
     },
     {
-      "text" : "This method will automatically execute within an autorelease pool provided by Operation, so you do not need to create your own autorelease pool block in your implementation.",
+      "text" : "This method will automatically execute within an autorelease pool provided by ",
+      "type" : "text"
+    },
+    {
+      "code" : "Operation",
+      "type" : "codeVoice"
+    },
+    {
+      "text" : ", so you do not need to create your own autorelease pool block in your implementation.",
       "type" : "text"
     }
   ],
@@ -148,6 +156,22 @@
           "name" : "Note",
           "style" : "note",
           "type" : "aside"
+        },
+        {
+          "content" : [
+            {
+              "inlineContent" : [
+                {
+                  "text" : "It won’t be called if the operation gets cancelled before starting.",
+                  "type" : "text"
+                }
+              ],
+              "type" : "paragraph"
+            }
+          ],
+          "name" : "Warning",
+          "style" : "warning",
+          "type" : "aside"
         }
       ],
       "kind" : "content"
@@ -247,7 +271,15 @@
       "type" : "text"
     },
     {
-      "text" : "This method will automatically execute within an autorelease pool provided by Operation, so you do not need to create your own autorelease pool block in your implementation.",
+      "text" : "This method will automatically execute within an autorelease pool provided by ",
+      "type" : "text"
+    },
+    {
+      "code" : "Operation",
+      "type" : "codeVoice"
+    },
+    {
+      "text" : ", so you do not need to create your own autorelease pool block in your implementation.",
       "type" : "text"
     }
   ],

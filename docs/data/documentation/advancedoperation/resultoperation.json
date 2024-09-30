@@ -215,6 +215,8 @@
   ],
   "topicSections" : [
     {
+      "anchor" : "Instance-Properties",
+      "generated" : true,
       "identifiers" : [
         "doc:\/\/AdvancedOperation\/documentation\/AdvancedOperation\/ResultOperation\/onFinish",
         "doc:\/\/AdvancedOperation\/documentation\/AdvancedOperation\/ResultOperation\/result"
@@ -222,6 +224,8 @@
       "title" : "Instance Properties"
     },
     {
+      "anchor" : "Instance-Methods",
+      "generated" : true,
       "identifiers" : [
         "doc:\/\/AdvancedOperation\/documentation\/AdvancedOperation\/ResultOperation\/cancel(with:)",
         "doc:\/\/AdvancedOperation\/documentation\/AdvancedOperation\/ResultOperation\/finish()",

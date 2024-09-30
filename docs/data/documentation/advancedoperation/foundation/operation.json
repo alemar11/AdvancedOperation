@@ -89,6 +89,8 @@
   ],
   "topicSections" : [
     {
+      "anchor" : "Instance-Properties",
+      "generated" : true,
       "identifiers" : [
         "doc:\/\/AdvancedOperation\/documentation\/AdvancedOperation\/Foundation\/Operation\/hasSomeCancelledDependencies",
         "doc:\/\/AdvancedOperation\/documentation\/AdvancedOperation\/Foundation\/Operation\/operationName"
@@ -96,6 +98,8 @@
       "title" : "Instance Properties"
     },
     {
+      "anchor" : "Instance-Methods",
+      "generated" : true,
       "identifiers" : [
         "doc:\/\/AdvancedOperation\/documentation\/AdvancedOperation\/Foundation\/Operation\/addDependencies(_:)-3hrze",
         "doc:\/\/AdvancedOperation\/documentation\/AdvancedOperation\/Foundation\/Operation\/addDependencies(_:)-7hotd",

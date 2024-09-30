@@ -134,6 +134,7 @@
     {
       "identifiers" : [
         "doc:\/\/AdvancedOperation\/documentation\/AdvancedOperation\/AsynchronousBlockOperation",
+        "doc:\/\/AdvancedOperation\/documentation\/AdvancedOperation\/AsynchronousCancellableBlockOperation",
         "doc:\/\/AdvancedOperation\/documentation\/AdvancedOperation\/FailableAsynchronousOperation",
         "doc:\/\/AdvancedOperation\/documentation\/AdvancedOperation\/GroupOperation",
         "doc:\/\/AdvancedOperation\/documentation\/AdvancedOperation\/ResultOperation"
@@ -168,6 +169,8 @@
   ],
   "topicSections" : [
     {
+      "anchor" : "Instance-Properties",
+      "generated" : true,
       "identifiers" : [
         "doc:\/\/AdvancedOperation\/documentation\/AdvancedOperation\/AsynchronousOperation\/debugDescription",
         "doc:\/\/AdvancedOperation\/documentation\/AdvancedOperation\/AsynchronousOperation\/description",
@@ -181,6 +184,8 @@
       "title" : "Instance Properties"
     },
     {
+      "anchor" : "Instance-Methods",
+      "generated" : true,
       "identifiers" : [
         "doc:\/\/AdvancedOperation\/documentation\/AdvancedOperation\/AsynchronousOperation\/cancel()",
         "doc:\/\/AdvancedOperation\/documentation\/AdvancedOperation\/AsynchronousOperation\/finish()",
@@ -266,6 +271,48 @@
   "title" : "AsynchronousBlockOperation",
   "type" : "topic",
   "url" : "\/documentation\/advancedoperation\/asynchronousblockoperation"
+},
+"doc://AdvancedOperation/documentation/AdvancedOperation/AsynchronousCancellableBlockOperation": {
+  "abstract" : [
+    {
+      "text" : "A  sublcass of ",
+      "type" : "text"
+    },
+    {
+      "code" : "AsynchronousOperation",
+      "type" : "codeVoice"
+    },
+    {
+      "text" : " to execute a cancellable closure.",
+      "type" : "text"
+    }
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "class"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "AsynchronousCancellableBlockOperation"
+    }
+  ],
+  "identifier" : "doc:\/\/AdvancedOperation\/documentation\/AdvancedOperation\/AsynchronousCancellableBlockOperation",
+  "kind" : "symbol",
+  "navigatorTitle" : [
+    {
+      "kind" : "identifier",
+      "text" : "AsynchronousCancellableBlockOperation"
+    }
+  ],
+  "role" : "symbol",
+  "title" : "AsynchronousCancellableBlockOperation",
+  "type" : "topic",
+  "url" : "\/documentation\/advancedoperation\/asynchronouscancellableblockoperation"
 },
 "doc://AdvancedOperation/documentation/AdvancedOperation/AsynchronousOperation": {
   "abstract" : [
@@ -627,7 +674,15 @@
       "type" : "text"
     },
     {
-      "text" : "This method will automatically execute within an autorelease pool provided by Operation, so you do not need to create your own autorelease pool block in your implementation.",
+      "text" : "This method will automatically execute within an autorelease pool provided by ",
+      "type" : "text"
+    },
+    {
+      "code" : "Operation",
+      "type" : "codeVoice"
+    },
+    {
+      "text" : ", so you do not need to create your own autorelease pool block in your implementation.",
       "type" : "text"
     }
   ],

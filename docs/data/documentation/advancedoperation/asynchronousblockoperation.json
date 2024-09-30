@@ -92,6 +92,65 @@
         }
       ],
       "kind" : "declarations"
+    },
+    {
+      "content" : [
+        {
+          "anchor" : "overview",
+          "level" : 2,
+          "text" : "Overview",
+          "type" : "heading"
+        },
+        {
+          "content" : [
+            {
+              "inlineContent" : [
+                {
+                  "text" : "If the operation gets cancelled before being executed, the block won’t be called.",
+                  "type" : "text"
+                }
+              ],
+              "type" : "paragraph"
+            }
+          ],
+          "name" : "Note",
+          "style" : "note",
+          "type" : "aside"
+        },
+        {
+          "inlineContent" : [
+            {
+              "text" : "This operation let you run a block until ",
+              "type" : "text"
+            },
+            {
+              "inlineContent" : [
+                {
+                  "text" : "complete",
+                  "type" : "text"
+                }
+              ],
+              "type" : "emphasis"
+            },
+            {
+              "text" : " is called.",
+              "type" : "text"
+            }
+          ],
+          "type" : "paragraph"
+        },
+        {
+          "code" : [
+            "let operation = AsyncCancellableBlockOperation { complete in",
+            " \/\/ work ...",
+            " complete()",
+            "}"
+          ],
+          "syntax" : null,
+          "type" : "codeListing"
+        }
+      ],
+      "kind" : "content"
     }
   ],
   "relationshipsSections" : [
@@ -129,22 +188,20 @@
   ],
   "topicSections" : [
     {
+      "anchor" : "Initializers",
+      "generated" : true,
       "identifiers" : [
         "doc:\/\/AdvancedOperation\/documentation\/AdvancedOperation\/AsynchronousBlockOperation\/init(block:)"
       ],
       "title" : "Initializers"
     },
     {
+      "anchor" : "Instance-Methods",
+      "generated" : true,
       "identifiers" : [
         "doc:\/\/AdvancedOperation\/documentation\/AdvancedOperation\/AsynchronousBlockOperation\/main()"
       ],
       "title" : "Instance Methods"
-    },
-    {
-      "identifiers" : [
-        "doc:\/\/AdvancedOperation\/documentation\/AdvancedOperation\/AsynchronousBlockOperation\/Block"
-      ],
-      "title" : "Type Aliases"
     }
   ],
   "variants" : [
@@ -224,40 +281,6 @@
   "type" : "topic",
   "url" : "\/documentation\/advancedoperation\/asynchronousblockoperation"
 },
-"doc://AdvancedOperation/documentation/AdvancedOperation/AsynchronousBlockOperation/Block": {
-  "abstract" : [
-    {
-      "text" : "A closure type that takes a closure as its parameter.",
-      "type" : "text"
-    }
-  ],
-  "fragments" : [
-    {
-      "kind" : "keyword",
-      "text" : "typealias"
-    },
-    {
-      "kind" : "text",
-      "text" : " "
-    },
-    {
-      "kind" : "identifier",
-      "text" : "Block"
-    }
-  ],
-  "identifier" : "doc:\/\/AdvancedOperation\/documentation\/AdvancedOperation\/AsynchronousBlockOperation\/Block",
-  "kind" : "symbol",
-  "navigatorTitle" : [
-    {
-      "kind" : "identifier",
-      "text" : "Block"
-    }
-  ],
-  "role" : "symbol",
-  "title" : "AsynchronousBlockOperation.Block",
-  "type" : "topic",
-  "url" : "\/documentation\/advancedoperation\/asynchronousblockoperation\/block"
-},
 "doc://AdvancedOperation/documentation/AdvancedOperation/AsynchronousBlockOperation/init(block:)": {
   "abstract" : [
     {
@@ -280,21 +303,21 @@
     },
     {
       "kind" : "text",
-      "text" : ": "
+      "text" : ": (() -> "
     },
     {
       "kind" : "typeIdentifier",
-      "preciseIdentifier" : "c:@M@AdvancedOperation@objc(cs)AsynchronousBlockOperation",
-      "text" : "AsynchronousBlockOperation"
+      "preciseIdentifier" : "s:s4Voida",
+      "text" : "Void"
     },
     {
       "kind" : "text",
-      "text" : "."
+      "text" : ") -> "
     },
     {
       "kind" : "typeIdentifier",
-      "preciseIdentifier" : "s:17AdvancedOperation017AsynchronousBlockB0C0D0a",
-      "text" : "Block"
+      "preciseIdentifier" : "s:s4Voida",
+      "text" : "Void"
     },
     {
       "kind" : "text",

@@ -19,7 +19,7 @@
   },
   "kind" : "symbol",
   "metadata" : {
-    "externalID" : "s:17AdvancedOperation017AsynchronousBlockB0C5blockACyyyYbcc_tcfc",
+    "externalID" : "s:17AdvancedOperation017AsynchronousBlockB0C5blockACyyyYbcYbc_tcfc",
     "fragments" : [
       {
         "kind" : "identifier",
@@ -35,21 +35,21 @@
       },
       {
         "kind" : "text",
-        "text" : ": "
+        "text" : ": (() -> "
       },
       {
         "kind" : "typeIdentifier",
-        "preciseIdentifier" : "c:@M@AdvancedOperation@objc(cs)AsynchronousBlockOperation",
-        "text" : "AsynchronousBlockOperation"
+        "preciseIdentifier" : "s:s4Voida",
+        "text" : "Void"
       },
       {
         "kind" : "text",
-        "text" : "."
+        "text" : ") -> "
       },
       {
         "kind" : "typeIdentifier",
-        "preciseIdentifier" : "s:17AdvancedOperation017AsynchronousBlockB0C0D0a",
-        "text" : "Block"
+        "preciseIdentifier" : "s:s4Voida",
+        "text" : "Void"
       },
       {
         "kind" : "text",
@@ -99,23 +99,29 @@
             },
             {
               "kind" : "text",
-              "text" : " "
+              "text" : " ("
             },
             {
-              "identifier" : "doc:\/\/AdvancedOperation\/documentation\/AdvancedOperation\/AsynchronousBlockOperation",
-              "kind" : "typeIdentifier",
-              "preciseIdentifier" : "c:@M@AdvancedOperation@objc(cs)AsynchronousBlockOperation",
-              "text" : "AsynchronousBlockOperation"
+              "kind" : "keyword",
+              "text" : "@escaping"
             },
             {
               "kind" : "text",
-              "text" : "."
+              "text" : " () -> "
             },
             {
-              "identifier" : "doc:\/\/AdvancedOperation\/documentation\/AdvancedOperation\/AsynchronousBlockOperation\/Block",
               "kind" : "typeIdentifier",
-              "preciseIdentifier" : "s:17AdvancedOperation017AsynchronousBlockB0C0D0a",
-              "text" : "Block"
+              "preciseIdentifier" : "s:s4Voida",
+              "text" : "Void"
+            },
+            {
+              "kind" : "text",
+              "text" : ") -> "
+            },
+            {
+              "kind" : "typeIdentifier",
+              "preciseIdentifier" : "s:s4Voida",
+              "text" : "Void"
             },
             {
               "kind" : "text",
@@ -250,40 +256,6 @@
   "type" : "topic",
   "url" : "\/documentation\/advancedoperation\/asynchronousblockoperation"
 },
-"doc://AdvancedOperation/documentation/AdvancedOperation/AsynchronousBlockOperation/Block": {
-  "abstract" : [
-    {
-      "text" : "A closure type that takes a closure as its parameter.",
-      "type" : "text"
-    }
-  ],
-  "fragments" : [
-    {
-      "kind" : "keyword",
-      "text" : "typealias"
-    },
-    {
-      "kind" : "text",
-      "text" : " "
-    },
-    {
-      "kind" : "identifier",
-      "text" : "Block"
-    }
-  ],
-  "identifier" : "doc:\/\/AdvancedOperation\/documentation\/AdvancedOperation\/AsynchronousBlockOperation\/Block",
-  "kind" : "symbol",
-  "navigatorTitle" : [
-    {
-      "kind" : "identifier",
-      "text" : "Block"
-    }
-  ],
-  "role" : "symbol",
-  "title" : "AsynchronousBlockOperation.Block",
-  "type" : "topic",
-  "url" : "\/documentation\/advancedoperation\/asynchronousblockoperation\/block"
-},
 "doc://AdvancedOperation/documentation/AdvancedOperation/AsynchronousBlockOperation/init(block:)": {
   "abstract" : [
     {
@@ -306,21 +278,21 @@
     },
     {
       "kind" : "text",
-      "text" : ": "
+      "text" : ": (() -> "
     },
     {
       "kind" : "typeIdentifier",
-      "preciseIdentifier" : "c:@M@AdvancedOperation@objc(cs)AsynchronousBlockOperation",
-      "text" : "AsynchronousBlockOperation"
+      "preciseIdentifier" : "s:s4Voida",
+      "text" : "Void"
     },
     {
       "kind" : "text",
-      "text" : "."
+      "text" : ") -> "
     },
     {
       "kind" : "typeIdentifier",
-      "preciseIdentifier" : "s:17AdvancedOperation017AsynchronousBlockB0C0D0a",
-      "text" : "Block"
+      "preciseIdentifier" : "s:s4Voida",
+      "text" : "Void"
     },
     {
       "kind" : "text",

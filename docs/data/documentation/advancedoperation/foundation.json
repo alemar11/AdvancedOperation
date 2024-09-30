@@ -33,6 +33,8 @@
   ],
   "topicSections" : [
     {
+      "anchor" : "Extended-Classes",
+      "generated" : true,
       "identifiers" : [
         "doc:\/\/AdvancedOperation\/documentation\/AdvancedOperation\/Foundation\/Operation",
         "doc:\/\/AdvancedOperation\/documentation\/AdvancedOperation\/Foundation\/OperationQueue"

@@ -1,25 +1,18 @@
 {
-  "abstract" : [
-    {
-      "text" : "A closure type that takes a closure as its parameter.",
-      "type" : "text"
-    }
-  ],
   "hierarchy" : {
     "paths" : [
       [
-        "doc:\/\/AdvancedOperation\/documentation\/AdvancedOperation",
-        "doc:\/\/AdvancedOperation\/documentation\/AdvancedOperation\/AsynchronousBlockOperation"
+        "doc:\/\/AdvancedOperation\/documentation\/AdvancedOperation"
       ]
     ]
   },
   "identifier" : {
     "interfaceLanguage" : "swift",
-    "url" : "doc:\/\/AdvancedOperation\/documentation\/AdvancedOperation\/AsynchronousBlockOperation\/Block"
+    "url" : "doc:\/\/AdvancedOperation\/documentation\/AdvancedOperation\/AsyncCancellableBlockOperation"
   },
   "kind" : "symbol",
   "metadata" : {
-    "externalID" : "s:17AdvancedOperation017AsynchronousBlockB0C0D0a",
+    "externalID" : "s:17AdvancedOperation021AsyncCancellableBlockB0a",
     "fragments" : [
       {
         "kind" : "keyword",
@@ -31,7 +24,7 @@
       },
       {
         "kind" : "identifier",
-        "text" : "Block"
+        "text" : "AsyncCancellableBlockOperation"
       }
     ],
     "modules" : [
@@ -42,13 +35,13 @@
     "navigatorTitle" : [
       {
         "kind" : "identifier",
-        "text" : "Block"
+        "text" : "AsyncCancellableBlockOperation"
       }
     ],
     "role" : "symbol",
     "roleHeading" : "Type Alias",
     "symbolKind" : "typealias",
-    "title" : "AsynchronousBlockOperation.Block"
+    "title" : "AsyncCancellableBlockOperation"
   },
   "primaryContentSections" : [
     {
@@ -71,33 +64,17 @@
             },
             {
               "kind" : "identifier",
-              "text" : "Block"
+              "text" : "AsyncCancellableBlockOperation"
             },
             {
               "kind" : "text",
-              "text" : " = ("
+              "text" : " = "
             },
             {
-              "kind" : "keyword",
-              "text" : "@escaping"
-            },
-            {
-              "kind" : "text",
-              "text" : " () -> "
-            },
-            {
+              "identifier" : "doc:\/\/AdvancedOperation\/documentation\/AdvancedOperation\/AsynchronousCancellableBlockOperation",
               "kind" : "typeIdentifier",
-              "preciseIdentifier" : "s:s4Voida",
-              "text" : "Void"
-            },
-            {
-              "kind" : "text",
-              "text" : ") -> "
-            },
-            {
-              "kind" : "typeIdentifier",
-              "preciseIdentifier" : "s:s4Voida",
-              "text" : "Void"
+              "preciseIdentifier" : "c:@M@AdvancedOperation@objc(cs)AsynchronousCancellableBlockOperation",
+              "text" : "AsynchronousCancellableBlockOperation"
             }
           ]
         }
@@ -116,7 +93,7 @@
   "variants" : [
     {
       "paths" : [
-        "\/documentation\/advancedoperation\/asynchronousblockoperation\/block"
+        "\/documentation\/advancedoperation\/asynccancellableblockoperation"
       ],
       "traits" : [
         {
@@ -138,7 +115,38 @@
   "type" : "topic",
   "url" : "\/documentation\/advancedoperation"
 },
-"doc://AdvancedOperation/documentation/AdvancedOperation/AsynchronousBlockOperation": {
+"doc://AdvancedOperation/documentation/AdvancedOperation/AsyncCancellableBlockOperation": {
+  "abstract" : [
+
+  ],
+  "fragments" : [
+    {
+      "kind" : "keyword",
+      "text" : "typealias"
+    },
+    {
+      "kind" : "text",
+      "text" : " "
+    },
+    {
+      "kind" : "identifier",
+      "text" : "AsyncCancellableBlockOperation"
+    }
+  ],
+  "identifier" : "doc:\/\/AdvancedOperation\/documentation\/AdvancedOperation\/AsyncCancellableBlockOperation",
+  "kind" : "symbol",
+  "navigatorTitle" : [
+    {
+      "kind" : "identifier",
+      "text" : "AsyncCancellableBlockOperation"
+    }
+  ],
+  "role" : "symbol",
+  "title" : "AsyncCancellableBlockOperation",
+  "type" : "topic",
+  "url" : "\/documentation\/advancedoperation\/asynccancellableblockoperation"
+},
+"doc://AdvancedOperation/documentation/AdvancedOperation/AsynchronousCancellableBlockOperation": {
   "abstract" : [
     {
       "text" : "A  sublcass of ",
@@ -149,7 +157,7 @@
       "type" : "codeVoice"
     },
     {
-      "text" : " to execute a closure.",
+      "text" : " to execute a cancellable closure.",
       "type" : "text"
     }
   ],
@@ -164,55 +172,21 @@
     },
     {
       "kind" : "identifier",
-      "text" : "AsynchronousBlockOperation"
+      "text" : "AsynchronousCancellableBlockOperation"
     }
   ],
-  "identifier" : "doc:\/\/AdvancedOperation\/documentation\/AdvancedOperation\/AsynchronousBlockOperation",
+  "identifier" : "doc:\/\/AdvancedOperation\/documentation\/AdvancedOperation\/AsynchronousCancellableBlockOperation",
   "kind" : "symbol",
   "navigatorTitle" : [
     {
       "kind" : "identifier",
-      "text" : "AsynchronousBlockOperation"
+      "text" : "AsynchronousCancellableBlockOperation"
     }
   ],
   "role" : "symbol",
-  "title" : "AsynchronousBlockOperation",
+  "title" : "AsynchronousCancellableBlockOperation",
   "type" : "topic",
-  "url" : "\/documentation\/advancedoperation\/asynchronousblockoperation"
-},
-"doc://AdvancedOperation/documentation/AdvancedOperation/AsynchronousBlockOperation/Block": {
-  "abstract" : [
-    {
-      "text" : "A closure type that takes a closure as its parameter.",
-      "type" : "text"
-    }
-  ],
-  "fragments" : [
-    {
-      "kind" : "keyword",
-      "text" : "typealias"
-    },
-    {
-      "kind" : "text",
-      "text" : " "
-    },
-    {
-      "kind" : "identifier",
-      "text" : "Block"
-    }
-  ],
-  "identifier" : "doc:\/\/AdvancedOperation\/documentation\/AdvancedOperation\/AsynchronousBlockOperation\/Block",
-  "kind" : "symbol",
-  "navigatorTitle" : [
-    {
-      "kind" : "identifier",
-      "text" : "Block"
-    }
-  ],
-  "role" : "symbol",
-  "title" : "AsynchronousBlockOperation.Block",
-  "type" : "topic",
-  "url" : "\/documentation\/advancedoperation\/asynchronousblockoperation\/block"
+  "url" : "\/documentation\/advancedoperation\/asynchronouscancellableblockoperation"
 }
 }
 }
