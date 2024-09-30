@@ -16,7 +16,7 @@ public typealias AsyncCancellableBlockOperation = AsynchronousCancellableBlockOp
 ///    // work ...
 ///    complete()
 ///   }
-public final class AsynchronousCancellableBlockOperation: AsynchronousOperation {
+public final class AsynchronousCancellableBlockOperation: AsynchronousOperation, @unchecked Sendable {
   /// A closure type that takes a closure as its parameter.
   public typealias Block = (@escaping @Sendable () -> Bool, @escaping @Sendable () -> Void) -> Void
   

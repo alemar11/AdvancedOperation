@@ -4,7 +4,7 @@ import Foundation
 
 /// An `AsynchronousOperation` subclass which enables a finite grouping of other operations.
 /// Use a `GroupOperation` to associate related operations together, thereby creating higher levels of abstractions.
-open class GroupOperation: AsynchronousOperation {
+open class GroupOperation: AsynchronousOperation, @unchecked Sendable {
   // MARK: - Public Properties
 
   /// The maximum number of queued operations that can execute at the same time inside the `GroupOperation`.

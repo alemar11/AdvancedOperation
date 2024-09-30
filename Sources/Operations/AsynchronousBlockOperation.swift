@@ -13,7 +13,7 @@ public typealias AsyncBlockOperation = AsynchronousBlockOperation
 ///    // work ...
 ///    complete()
 ///   }
-public final class AsynchronousBlockOperation: AsynchronousOperation {
+public final class AsynchronousBlockOperation: AsynchronousOperation, @unchecked Sendable {
   /// A closure type that takes a closure as its parameter.
   public typealias Block = (@Sendable @escaping () -> Void) -> Void
 
@@ -28,7 +28,7 @@ public final class AsynchronousBlockOperation: AsynchronousOperation {
   /// - Parameters:
   ///   - block: The closure to run when the operation executes; the parameter passed to the block **MUST** be invoked by your code,
   ///   or else the `AsynchronousBlockOperation` will never finish executing.
-  public init(block: @escaping Block) {
+  public init(block:  @escaping (@Sendable @escaping () -> Void) -> Void) {
     self.block = block
     super.init()
     self.name = "\(type(of: self))"
