@@ -3,6 +3,8 @@
 ### 7.1.0
 
 - Added `AsyncCancellableBlockOperation`.
+- Swift 6 support
+- Xcode 16 support
 
 ### 7.0.0
 
