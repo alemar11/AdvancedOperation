@@ -17,12 +17,9 @@ public typealias AsyncCancellableBlockOperation = AsynchronousCancellableBlockOp
 ///    complete()
 ///   }
 public final class AsynchronousCancellableBlockOperation: AsynchronousOperation, @unchecked Sendable {
-  /// A closure type that takes a closure as its parameter.
-  public typealias Block = (@escaping @Sendable () -> Bool, @escaping @Sendable () -> Void) -> Void
-  
   // MARK: - Private Properties
 
-  private var block: Block
+  private var block: (@escaping @Sendable () -> Bool, @escaping @Sendable () -> Void) -> Void
 
   // MARK: - Initializers
 
@@ -31,7 +28,7 @@ public final class AsynchronousCancellableBlockOperation: AsynchronousOperation,
   /// - Parameters:
   ///   - block: The closure to run when the operation executes; the parameter passed to the block **MUST** be invoked by your code,
   ///   or else the `AsynchronousBlockOperation` will never finish executing.
-  public init(block: @escaping Block) {
+  public init(block: @Sendable @escaping (@escaping @Sendable () -> Bool, @escaping @Sendable () -> Void) -> Void) {
     self.block = block
     super.init()
     self.name = "\(type(of: self))"

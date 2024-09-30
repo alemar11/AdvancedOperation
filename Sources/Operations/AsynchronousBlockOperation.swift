@@ -1,6 +1,7 @@
 // AdvancedOperation
 
 import Foundation
+import os.lock
 
 public typealias AsyncBlockOperation = AsynchronousBlockOperation
 
@@ -14,12 +15,9 @@ public typealias AsyncBlockOperation = AsynchronousBlockOperation
  ///    complete()
  ///   }
 public final class AsynchronousBlockOperation: AsynchronousOperation, @unchecked Sendable {
-  /// A closure type that takes a closure as its parameter.
-  public typealias Block = (@Sendable @escaping () -> Void) -> Void
-
   // MARK: - Private Properties
 
-  private var block: Block
+  private let block: (@Sendable @escaping () -> Void) -> Void
 
   // MARK: - Initializers
 
@@ -28,7 +26,8 @@ public final class AsynchronousBlockOperation: AsynchronousOperation, @unchecked
   /// - Parameters:
   ///   - block: The closure to run when the operation executes; the parameter passed to the block **MUST** be invoked by your code,
   ///   or else the `AsynchronousBlockOperation` will never finish executing.
-  public init(block:  @escaping Block) {
+  public init(block: @Sendable @escaping (@Sendable @escaping () -> Void) -> Void) {
+    // block is @Sendable because of https://github.com/swiftlang/swift/issues/75453#issuecomment-2374682664
     self.block = block
     super.init()
     self.name = "\(type(of: self))"

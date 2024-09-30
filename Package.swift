@@ -5,10 +5,7 @@ import Foundation
 
 let buildingDocumentation = getenv("BUILDING_FOR_DOCUMENTATION_GENERATION") != nil
 
-let swiftSettings: [SwiftSetting] = [
-  .enableExperimentalFeature("StrictConcurrency"),
-  .swiftLanguageMode(.v6)
-]
+let swiftSettings: [SwiftSetting] = []
 
 let package = Package(
   name: "AdvancedOperation",
@@ -20,7 +17,7 @@ let package = Package(
     .target(name: "AdvancedOperation", path: "Sources", swiftSettings: swiftSettings),
     .testTarget(name: "AdvancedOperationTests", dependencies: ["AdvancedOperation"], swiftSettings: swiftSettings)
   ],
-  swiftLanguageModes: [.v5]
+  swiftLanguageModes: [.v6]
 )
 
 // Only require the docc plugin when building documentation
