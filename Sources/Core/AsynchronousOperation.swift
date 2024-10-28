@@ -8,7 +8,7 @@ public typealias AsyncOperation = AsynchronousOperation
 /// An abstract thread safe subclass of `Operation` to support asynchronous operations.
 ///
 /// Subclasses must override `main` to perform any work and, if they are asynchronous, call the `finish()` method to complete the execution.
-open class AsynchronousOperation: Operation, ProgressReporting {
+open class AsynchronousOperation: Operation, ProgressReporting, @unchecked Sendable {
   // MARK: - Public Properties
 
   /// The `progress` property represents a total progress of the operation during its execution.

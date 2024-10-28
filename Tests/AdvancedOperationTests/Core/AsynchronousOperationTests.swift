@@ -438,7 +438,7 @@ final class AsynchronousOperationTests: XCTestCase {
   }
 }
 
-final class GateOperation: Operation {
+final class GateOperation: Operation, @unchecked Sendable {
   private let block: (GateOperation) -> Void
 
   init(block: @escaping (GateOperation) -> Void) {

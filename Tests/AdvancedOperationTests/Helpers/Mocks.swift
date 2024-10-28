@@ -9,7 +9,7 @@ import os.lock
 
 // MARK: - AsynchronousBlockOperation
 
-internal final class SleepyAsyncOperation: AsynchronousOperation {
+internal final class SleepyAsyncOperation: AsynchronousOperation, @unchecked Sendable {
   private let interval1: UInt32
   private let interval2: UInt32
   private let interval3: UInt32
@@ -48,7 +48,7 @@ internal final class SleepyAsyncOperation: AsynchronousOperation {
   }
 }
 
-final class ProgressReportingAsyncOperation: AsyncOperation {
+final class ProgressReportingAsyncOperation: AsyncOperation, @unchecked Sendable {
   override func main() {
     DispatchQueue.global().async {
       if self.isCancelled {
@@ -70,14 +70,14 @@ final class ProgressReportingAsyncOperation: AsyncOperation {
 
 // MARK: - AsynchronousOperation
 
-internal final class NotExecutableOperation: AsynchronousOperation {
+internal final class NotExecutableOperation: AsynchronousOperation, @unchecked Sendable {
   override func main() {
     XCTFail("This operation shouldn't be executed.")
     self.finish()
   }
 }
 
-internal final class AutoCancellingAsyncOperation: AsynchronousOperation {
+internal final class AutoCancellingAsyncOperation: AsynchronousOperation, @unchecked Sendable {
   override func main() {
     DispatchQueue.global().asyncAfter(deadline: .now() + 1.0) {
       self.cancel()
@@ -86,7 +86,7 @@ internal final class AutoCancellingAsyncOperation: AsynchronousOperation {
   }
 }
 
-internal final class RunUntilCancelledAsyncOperation: AsynchronousOperation {
+internal final class RunUntilCancelledAsyncOperation: AsynchronousOperation, @unchecked Sendable {
   let queue: DispatchQueue
 
   init(queue: DispatchQueue = DispatchQueue.global()) {
@@ -104,7 +104,7 @@ internal final class RunUntilCancelledAsyncOperation: AsynchronousOperation {
 }
 
 /// This operation will run indefinitely and can't be cancelled. Call `stop` to finish it.
-internal final class InfiniteAsyncOperation: AsyncOperation {
+internal final class InfiniteAsyncOperation: AsyncOperation, @unchecked Sendable {
   var onExecutionStarted: (() -> Void)?
   let isStopped = OSAllocatedUnfairLock(initialState: false)
   func stop() {
@@ -126,7 +126,7 @@ internal final class InfiniteAsyncOperation: AsyncOperation {
 }
 
 /// Operation expected to be cancelled before starting its execution.
-internal final class CancelledOperation: Operation {
+internal final class CancelledOperation: Operation, @unchecked Sendable {
   private let file: StaticString
   private let line: UInt
   init(file: StaticString = #file, line: UInt = #line) {
@@ -143,7 +143,7 @@ internal final class CancelledOperation: Operation {
 
 // MARK: - Operation
 
-internal final class IntToStringOperation: Operation {
+internal final class IntToStringOperation: Operation, @unchecked Sendable {
   var onOutputProduced: ((String) -> Void)?
   var input: Int?
   private(set) var output: String? {
@@ -162,7 +162,7 @@ internal final class IntToStringOperation: Operation {
   }
 }
 
-internal final class StringToIntOperation: Operation {
+internal final class StringToIntOperation: Operation, @unchecked Sendable {
   var onOutputProduced: ((Int) -> Void)?
   var input: String?
   private(set) var output: Int? {
@@ -183,7 +183,7 @@ internal final class StringToIntOperation: Operation {
 
 // MARK: - AsynchronousOperation
 
-internal final class FailingOperation: Operation {
+internal final class FailingOperation: Operation, @unchecked Sendable {
   enum FailureError: Error {
     case errorOne
     case errorTwo
@@ -198,7 +198,7 @@ internal final class FailingOperation: Operation {
 
 // MARK: - ResultOperation
 
-internal final class DummyResultOperation: ResultOperation<String, DummyResultOperation.Error> {
+internal final class DummyResultOperation: ResultOperation<String, DummyResultOperation.Error>, @unchecked Sendable {
   enum Error: Swift.Error {
     case cancelled
   }
@@ -231,7 +231,7 @@ internal final class DummyResultOperation: ResultOperation<String, DummyResultOp
 
 // MARK: - FailableAsyncOperation
 
-internal final class DummyFailableOperation: FailableAsyncOperation<DummyFailableOperation.Error> {
+internal final class DummyFailableOperation: FailableAsyncOperation<DummyFailableOperation.Error>, @unchecked Sendable {
   enum Error: Swift.Error {
     case cancelled
     case failed
@@ -267,7 +267,7 @@ internal final class DummyFailableOperation: FailableAsyncOperation<DummyFailabl
 
 // MARK: - GroupOperation
 
-internal final class ProducerGroupOperation: GroupOperation {
+internal final class ProducerGroupOperation: GroupOperation, @unchecked Sendable {
   init(operation: @Sendable @escaping () -> Operation) {
     super.init(operations: [])
     let producer = BlockOperation { [unowned self] in
@@ -278,7 +278,7 @@ internal final class ProducerGroupOperation: GroupOperation {
   }
 }
 
-internal final class IOGroupOperation: GroupOperation {
+internal final class IOGroupOperation: GroupOperation, @unchecked Sendable {
   var input: Int?
   private(set) var output: Int?
   var onOutputProduced: ((Int) -> Void)?

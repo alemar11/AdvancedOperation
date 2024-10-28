@@ -6,7 +6,7 @@ import os.lock
 public typealias FailableAsyncOperation = FailableAsynchronousOperation
 
 /// An `AsynchronousOperation` that can finish with an error conforming to `OperationError`.
-open class FailableAsynchronousOperation<Failure: Error>: AsynchronousOperation {
+open class FailableAsynchronousOperation<Failure: Error>: AsynchronousOperation, @unchecked Sendable {
   private var _error = OSAllocatedUnfairLock<Failure?>(initialState: nil)
 
   /// Failure error.

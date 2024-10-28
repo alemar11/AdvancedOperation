@@ -13,7 +13,7 @@ extension XCTestCase {
     for condition: @autoclosure @escaping () -> Bool,
     timeout: TimeInterval,
     description: String?,
-    file: StaticString = #file,
+    file: StaticString = #filePath,
     line: UInt = #line
   ) {
     let end = Date().addingTimeInterval(timeout)

@@ -4,7 +4,7 @@ import Foundation
 
 /// An `AsynchronousOperation` subclass which enables a finite grouping of other operations.
 /// Use a `GroupOperation` to associate related operations together, thereby creating higher levels of abstractions.
-open class GroupOperation: AsynchronousOperation {
+open class GroupOperation: AsynchronousOperation, @unchecked Sendable {
   // MARK: - Public Properties
 
   /// The maximum number of queued operations that can execute at the same time inside the `GroupOperation`.
@@ -57,8 +57,7 @@ open class GroupOperation: AsynchronousOperation {
   }
 
   deinit {
-    // An observation token may cause crashes during its deinit phase if its observed object (an Operation)
-    // has been already deallocated
+    // An observation token may cause crashes during its deinit phase if its observed object (an Operation) has been already deallocated.
     // To fix this issue:
     // 1. we store all the operations in a private array (the internal OperationQueue will release them once finished,
     //    that's why we need to do so)
